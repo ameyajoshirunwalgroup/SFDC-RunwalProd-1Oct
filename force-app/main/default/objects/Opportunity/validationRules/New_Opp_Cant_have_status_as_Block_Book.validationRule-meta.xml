@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Opp_Cant_have_status_as_Block_Book</fullName>
+    <active>false</active>
+    <errorConditionFormula>And(
+	OR(
+		ISPICKVAL(StageName, &quot;Unit Booked&quot;),
+		ISPICKVAL(StageName, &quot;Unit Blocked&quot;)
+	),
+	isnew()
+)</errorConditionFormula>
+    <errorDisplayField>StageName</errorDisplayField>
+    <errorMessage>Cannot change Opportunity Stage to Booked / Blocked manually.
+Pl change it to &quot;Qualification&quot;</errorMessage>
+</ValidationRule>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Active_Project</fullName>
+    <columns>NAME</columns>
+    <columns>Site_Head_User__c</columns>
+    <columns>Sales_Site_Head__c</columns>
+    <columns>CP_Case_L3_Escalation__c</columns>
+    <columns>Sales_Head__c</columns>
+    <columns>RW_Project_Brochure_PublicUrl__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RW_Status__c</field>
+        <operation>equals</operation>
+        <value>Active</value>
+    </filters>
+    <label>All Active Project</label>
+</ListView>

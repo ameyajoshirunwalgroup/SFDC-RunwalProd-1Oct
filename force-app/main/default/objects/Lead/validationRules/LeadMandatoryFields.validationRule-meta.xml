@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LeadMandatoryFields</fullName>
+    <active>false</active>
+    <description>If Lead status is any thing except Junk enquiries, Country, State,City and all Qualification Parameters are Mandatory.</description>
+    <errorConditionFormula>AND(
+	NOT(AND(ISPICKVAL(LeadSource,&apos;Digital&apos;),ISPICKVAL(RW_Lead_Sub_Source__c,&apos;Website_enquiry&apos;))),
+	OR(AND(RW_Corporate_Web_To_Lead__c, !ISNEW()), !RW_Corporate_Web_To_Lead__c), 
+	OR(AND(RW_Lead_From_CTI__c, !ISNEW()), !RW_Lead_From_CTI__c), 
+        OR(AND(RW_Lead_through_Email__c, !ISNEW()), !RW_Lead_through_Email__c),
+	OR(ISPICKVAL( Status,&apos;Not Sure&apos;), ISPICKVAL( Status , &apos;Interested&apos;), ISPICKVAL( Status ,&apos;Not Interested&apos;)), 
+	OR( 
+		ISBLANK(TEXT(Country__c)) , 
+		AND(ISBLANK(TEXT( RW_Budget__c ) ), ISBLANK(TEXT( RW_Budget_Rs_in_Cr__c ) )),
+		ISBLANK(TEXT( RW_Configuration__c ) ), 
+		ISBLANK(TEXT( RW_Time_line__c ) ) 
+	) 
+)</errorConditionFormula>
+    <errorMessage>Please fill the Country,State, City, Budget,Configuration, Preferred Location,Time line.</errorMessage>
+</ValidationRule>

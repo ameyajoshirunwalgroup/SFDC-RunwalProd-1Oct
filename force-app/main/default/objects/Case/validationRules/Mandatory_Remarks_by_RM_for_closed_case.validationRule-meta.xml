@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Remarks_by_RM_for_closed_case</fullName>
+    <active>true</active>
+    <description>when case status is selected as &apos;close case&apos; then  to select picklist  value from Remarks by RM 
+is mandatory.</description>
+    <errorConditionFormula>/*AND(ISPICKVAL(Status, &apos;Case Closed&apos;),
+ISPICKVAL(Remarks_by_RM__c ,&apos;&apos;)
+)*/
+AND(ISPICKVAL(Status, &apos;Case Closed&apos;),
+ISPICKVAL(Remarks_by_RM__c ,&apos;&apos;),
+ISBLANK(locobuzz__Locobuzz_ID__c),
+$Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)
+
+/*AND(ISPICKVAL(Status, &apos;Case Closed&apos;),
+ISPICKVAL(Remarks_by_RM__c ,&apos;&apos;),
+OR(
+ISBLANK(locobuzz__Locobuzz_ID__c),
+AND(NOT(ISBLANK(locobuzz__Locobuzz_ID__c)),
+NOT(LastModifiedBy.Locobuzz_Default_User__c))
+)
+)*/</errorConditionFormula>
+    <errorMessage>Please select Remarks by RM for closed case.</errorMessage>
+</ValidationRule>

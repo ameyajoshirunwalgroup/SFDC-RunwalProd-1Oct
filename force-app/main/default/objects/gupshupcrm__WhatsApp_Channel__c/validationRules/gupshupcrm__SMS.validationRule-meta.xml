@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>gupshupcrm__SMS</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(gupshupcrm__What_s_App_Channel_Type__c , &apos;SMS&apos;),OR( ISBLANK(  gupshupcrm__Password__c ), ISBLANK(  gupshupcrm__UserId__c ) ) )</errorConditionFormula>
+    <errorMessage>Please fill required fields User ID and Password</errorMessage>
+</ValidationRule>

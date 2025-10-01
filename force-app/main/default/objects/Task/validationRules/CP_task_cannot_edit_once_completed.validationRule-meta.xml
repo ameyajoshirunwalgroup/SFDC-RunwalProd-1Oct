@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_task_cannot_edit_once_completed</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(
+     NOT(ISNEW()),
+   TEXT(Status)=&apos;Completed&apos;,
+   RecordType.DeveloperName = &quot;Channel_Partner_Corporate&quot;,
+			ISCHANGED(Status) = FALSE
+)</errorConditionFormula>
+    <errorMessage>You can&apos;t edit task once completed</errorMessage>
+</ValidationRule>

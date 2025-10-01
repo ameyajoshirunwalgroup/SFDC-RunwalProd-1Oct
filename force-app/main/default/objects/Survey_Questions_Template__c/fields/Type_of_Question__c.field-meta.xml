@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_Question__c</fullName>
+    <label>Type of Question</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>PROJECT FEEDBACK</fullName>
+                <default>false</default>
+                <label>PROJECT FEEDBACK</label>
+            </value>
+            <value>
+                <fullName>SALES STAFF EXPERIENCE</fullName>
+                <default>false</default>
+                <label>SALES STAFF EXPERIENCE</label>
+            </value>
+            <value>
+                <fullName>SITE EXPERIENCE</fullName>
+                <default>false</default>
+                <label>SITE EXPERIENCE</label>
+            </value>
+            <value>
+                <fullName>OTHER FEEDBACK</fullName>
+                <default>false</default>
+                <label>OTHER FEEDBACK</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

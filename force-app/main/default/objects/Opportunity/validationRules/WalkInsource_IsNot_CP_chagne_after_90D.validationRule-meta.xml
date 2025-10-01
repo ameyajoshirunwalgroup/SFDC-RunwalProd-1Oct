@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WalkInsource_IsNot_CP_chagne_after_90D</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND( ISPICKVAL(Walkin_Source__c , &apos;Channel Partner&apos;), ISCHANGED(Walkin_Source__c), FLOOR( NOW() - CreatedDate ) &lt; 90)</errorConditionFormula>
+    <errorMessage>WalkIn Source can not be change as CP before 90 Days from date of creation</errorMessage>
+</ValidationRule>

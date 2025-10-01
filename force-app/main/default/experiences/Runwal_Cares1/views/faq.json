@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "bfa7b194-5214-4efa-a827-1cc520812678",
+  "label" : "faq",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "e747c488-701f-487f-a86a-facd528feab5",
+          "columns" : [ {
+            "UUID" : "bcb1e2f6-bbbe-4e23-99e2-36b78294b831",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "e747c488-701f-487f-a86a-facd528feab5",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalFaqs",
+          "id" : "7c5df4e2-870f-493c-9881-fb1cd66b691d",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "bcb1e2f6-bbbe-4e23-99e2-36b78294b831",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "cba80a62-5ba2-4453-b241-cf029b03cf3b",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "faq"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "3619d5c9-912c-4317-8af5-d33dcdad8a15",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "4b9be735-7391-4d91-9ed2-77c89326b9af",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-faq"
+}

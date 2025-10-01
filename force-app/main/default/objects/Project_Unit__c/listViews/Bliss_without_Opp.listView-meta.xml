@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bliss_without_Opp</fullName>
+    <columns>RW_Project__c</columns>
+    <columns>NAME</columns>
+    <columns>RW_Unit_Status__c</columns>
+    <columns>RW_Param1__c</columns>
+    <columns>RW_Param2__c</columns>
+    <columns>RW_Param3__c</columns>
+    <columns>RW_Param4__c</columns>
+    <columns>RW_Param5__c</columns>
+    <columns>RW_Seventh_Day__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>startsWith</operation>
+        <value>Bliss</value>
+    </filters>
+    <filters>
+        <field>RW_Customer__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Bliss without Opp</label>
+</ListView>

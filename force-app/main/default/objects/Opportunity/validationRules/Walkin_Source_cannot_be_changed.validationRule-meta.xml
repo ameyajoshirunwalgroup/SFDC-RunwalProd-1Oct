@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Walkin_Source_cannot_be_changed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+!ISBLANK( TEXT (PRIORVALUE(Walkin_Source__c))),
+ISCHANGED( Walkin_Source__c ),$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+$Profile.Name &lt;&gt; &quot;Channel Partner Portal Profile&quot;,/*Added by Prashant to allow convertion of source for Temp Cps from CP Portal Site Guest User - 15-9-25*/
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Walkin_Source__c</errorDisplayField>
+    <errorMessage>Walkin Source Cannot be Changed</errorMessage>
+</ValidationRule>

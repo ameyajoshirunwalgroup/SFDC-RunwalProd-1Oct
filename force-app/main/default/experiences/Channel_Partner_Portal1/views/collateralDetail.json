@@ -1,0 +1,65 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "1dd5ca9f-7adc-4fae-8741-7ec92efece01",
+  "label" : "Collateral Detail",
+  "regions" : [ {
+    "id" : "e5575a94-9c1c-404a-b859-1a5dd6b834fb",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "4310f8f6-12d8-42f0-91fd-7e6158aeed8b",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "detailsTabLabel" : "Details",
+        "discussionsTabLabel" : "Feed",
+        "recordId" : "{!recordId}",
+        "relatedTabLabel" : "Related",
+        "tab1Type" : "details",
+        "tab2Type" : "related",
+        "tab3Type" : "chatter",
+        "tab4Type" : "none",
+        "timelineTabLabel" : "Activity"
+      },
+      "componentName" : "forceCommunity:recordHomeTabs",
+      "id" : "42ac772e-6630-4314-8643-3708748d4c63",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "ccbb6e3e-554a-4a7c-857a-e5a3f1b05ac3",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "da241573-b361-4c41-a588-84ff96c93c0a",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "66ce4701-6421-4060-b35e-37e98c79daae",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "2a97b86c-9e80-4be4-87eb-f82b2772bbc6",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-a2X"
+}

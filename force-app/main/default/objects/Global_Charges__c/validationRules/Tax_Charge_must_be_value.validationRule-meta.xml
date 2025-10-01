@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tax_Charge_must_be_value</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(Charge_Type__c, &apos;tax&apos;),LEN(Tax_Charge__c)&gt;0 )</errorConditionFormula>
+    <errorDisplayField>Tax_Charge__c</errorDisplayField>
+    <errorMessage>You Cannot Select Tax Charge for Tax</errorMessage>
+</ValidationRule>

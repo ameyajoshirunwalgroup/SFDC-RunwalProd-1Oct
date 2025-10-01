@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Residential_Status__c</fullName>
+    <label>Residential Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>RW_Type_Of_Applicant__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Indian National</fullName>
+                <default>false</default>
+                <label>Indian National</label>
+            </value>
+            <value>
+                <fullName>Foreign Nationals Of Indian Origin</fullName>
+                <default>false</default>
+                <label>Foreign Nationals Of Indian Origin</label>
+            </value>
+            <value>
+                <fullName>For NRI</fullName>
+                <default>false</default>
+                <label>For NRI</label>
+            </value>
+            <value>
+                <fullName>For Company</fullName>
+                <default>false</default>
+                <label>For Company</label>
+            </value>
+            <value>
+                <fullName>Partnership Firm</fullName>
+                <default>false</default>
+                <label>Partnership Firm</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Individual Buyer</controllingFieldValue>
+            <valueName>Indian National</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Individual Buyer</controllingFieldValue>
+            <valueName>Foreign Nationals Of Indian Origin</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Individual Buyer</controllingFieldValue>
+            <valueName>For NRI</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Corporate Buyer</controllingFieldValue>
+            <valueName>For Company</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Corporate Buyer</controllingFieldValue>
+            <valueName>Partnership Firm</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

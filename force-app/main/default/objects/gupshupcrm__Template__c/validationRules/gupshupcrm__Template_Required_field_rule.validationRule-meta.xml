@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>gupshupcrm__Template_Required_field_rule</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(ISBLANK( TEXT( gupshupcrm__Template_Category__c ) ), ISBLANK(   gupshupcrm__Template_Message__c ), ISBLANK(  gupshupcrm__Channel__c  ) )</errorConditionFormula>
+    <errorMessage>Please fill required fields Template Category, Template Message and Channel.</errorMessage>
+</ValidationRule>

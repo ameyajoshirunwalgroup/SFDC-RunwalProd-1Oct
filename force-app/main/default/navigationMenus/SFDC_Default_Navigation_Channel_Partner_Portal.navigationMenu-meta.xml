@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NavigationMenu xmlns="http://soap.sforce.com/2006/04/metadata">
+    <container>Channel Partner Portal</container>
+    <containerType>Network</containerType>
+    <label>Default Navigation</label>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>My OTPs</label>
+        <position>1</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>OTP__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Walk-In</label>
+        <position>2</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Opportunity</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All1</defaultListViewId>
+        <label>My Bookings</label>
+        <position>3</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Booking__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>Brokerage Summary</label>
+        <position>4</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Brokerage_Summary__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Cases</label>
+        <position>5</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <subMenu>
+            <navigationMenuItem>
+                <defaultListViewId>MyCases</defaultListViewId>
+                <label>All Cases</label>
+                <position>0</position>
+                <publiclyAvailable>false</publiclyAvailable>
+                <target>Case</target>
+                <type>SalesforceObject</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Create New Case</label>
+                <position>1</position>
+                <publiclyAvailable>false</publiclyAvailable>
+                <target>/createnewcase</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+        </subMenu>
+        <type>MenuLabel</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Reports</label>
+        <position>6</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/report/Report/Recent</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>Invoice Details</label>
+        <position>7</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Brokerage_Invoice__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>CP Mandate</label>
+        <position>8</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/cpmandateinvoices</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All_Brokerage_Schemes</defaultListViewId>
+        <label>Ladder Scheme</label>
+        <position>9</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Brokerage_Scheme__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>Collaterals</label>
+        <position>10</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Collateral__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>FAQ</label>
+        <position>11</position>
+        <publiclyAvailable>true</publiclyAvailable>
+        <target>ShowMoreTopics</target>
+        <type>NavigationalTopic</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Help</label>
+        <position>12</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/helppage</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Upload Latest RERA</label>
+        <position>13</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/upload-latest-rera</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Upload Latest CC</label>
+        <position>14</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/upload-latest-cc</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+</NavigationMenu>

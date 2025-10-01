@@ -1,0 +1,506 @@
+<apex:page controller="CaseFeedbackForController"  showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="true" docType="html-5.0"  >
+    <style>
+        /* Your CSS styles here */
+        @page { margin: 0.25in; size: a4; }
+        element.style {
+        margin: 0 auto;
+        width: 80vw;
+        height:100vx;
+        border: 2px solid black;
+        padding: 10px;
+        }
+        .logo {
+        position: absolute;
+        top: 2px;
+        left: 11px;
+        width: 2px; 
+        z-index: 1;
+        }
+        table {
+        width: 100%;
+        border-collapse: collapse; 
+        }
+        body {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #333;
+        <!--background-image: url('{!$Resource.Runwal}');-->
+        background-size: 73.33%; 
+        background-position: center;
+        background-attachment: fixed;
+        margin:0;
+        
+        }
+        body::before {
+        content: "";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255,0.9); /* Adjust the opacity (last value) to lighten the background */
+        z-index: -1;
+        content: "";
+        
+        }
+        th {
+        border: 1px solid black; 
+        padding: 8px;
+        text-align: left;
+        }
+        
+        .signature-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        }
+        .signature-table td {
+        padding: 5px;
+        
+        text-align: center; /* Align the content in the center */
+        }
+        .signature-text {
+        font-size: 12px;
+        font-style: Arial, sans-serif;
+        }
+        .signature-line {
+        border-top: 1px solid black;
+        margin-bottom: 2px;
+        }
+        .input-container {
+        width: 100%;
+        padding-top:50px;
+        
+        }
+        .input-textarea {
+        width: 100%;
+        resize: none; 
+         border: 1px solid black; 
+        }
+        
+        .lightgreen {
+        color: #66CC66; /* Replace with your desired light green color code */
+        }
+        .rating-image{
+        filter: grayscale(0%);
+        }
+        .rating-image.selected{
+        filter: grayscale(0%);
+        }
+        .rating-image.unselected{
+        filter: grayscale(100%);
+        }
+        
+        .red{
+        fill:#EF6042 !important;
+        }
+        
+        .green{
+        fill:#42EF54 !important;
+        } 
+        .orange{
+        fill:#EFD242 !important;
+        } 
+        .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding :20px;
+        border-radius: 8px;
+        }
+        .comments-heading {
+    Font-size: 17px;
+    padding-top:15px;
+        text-align: left;
+}
+        .Remark-heading
+        {
+        Font-size: 33px;
+        padding-top:10px;
+        }
+        .content {
+    margin-bottom: 10px;
+    padding-top: 20px;
+}
+        .MainComponent
+        {
+        margin: 0 auto;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100vh ;
+        border: 2px solid black;
+        padding:10px;
+        display:flex;
+        flex-flow:column;
+        justify-content:space-between;
+        overflow-y:scroll;
+        }
+        
+        .primaryButton{
+        cursor:pointer;
+        border:0px;
+        background-color:#bc8b2e;
+        color:black;padding:10px 20px;
+        border-radius:5px;
+        transition:0.3s;
+        width: 450px; 
+        font-size:30px;
+        }
+        
+        .primaryButton:hover{
+        box-shadow:5px 5px 10px gray;
+        }
+        .primaryButton[disabled]{
+        cursor:not-allowed;
+        box-shadow:none;
+        color:black;
+        background-color:lightgray;
+        }
+        .yesnoButton{
+        cursor:pointer;
+        border:0px;background-color:#b98e33;
+        color:black;padding:10px 20px;
+        border-radius:5px;
+        transition:0.3s;
+        width: 130px;
+        height:60px;
+        margin-right:10px;
+        font-size:30px;
+        
+        }
+        .MessageBlock
+        {
+        background-color: #fbccaa; 
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+        margin-bottom:50px;
+        }
+        .yesnoButton:hover{
+        box-shadow:5px 5px 10px gray;
+        }
+        .reopenselected{
+        border: 3px solid black;
+        border-color: #04AA6D;
+        color: Black;
+        
+        
+        }
+        .Section2{
+        
+        padding-bottom:450px;
+        margin-bottom:150px;
+        
+        }
+    </style>
+    
+    <apex:form >
+         <apex:outputPanel rendered="{!isExpired}">
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #f0f0f0; padding: 20px; border: 1px solid #ccc; text-align: center;">
+                Your feedback form is expired.
+            </div>  
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!showpanel}">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #f0f0f0; padding: 20px; border: 1px solid #ccc; text-align: center;">
+                Your feedback has already been submitted.
+            </div>           
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!showpanel==false && isExpired == false }">
+            <apex:pageMessages />
+            <div class="MainComponent" >
+                
+                <div class="Section1">
+                    <!--<div> <apex:image url="{!$Resource.RunwalLogo}" width="200px;" height="240px;" />-->
+                    <div> <apex:image url="{!$Resource.RunwalLogo_New}" width="200px;" height="240px;" />
+                        
+                    </div>
+                  
+                    
+                    
+                    <div class="content">
+                        
+                        
+                        <table align="center" style="margin-top:50px;text-align: center;width: 50%;">
+                            <tr>
+                                <td style=" width: 50%; height: 100%;  text-align: center;">
+                                    <strong style="font-weight: bold;font-size: 30px;">KINDLY RATE YOUR SUPPORT EXPERIENCE</strong>
+                                </td>
+                            </tr>                 
+                            <tr>    
+                                <td style=" width: 50%; text-align: center; margin-top:100px;">
+                                    <apex:outputPanel >
+                                        <table border="0" style="border-collapse: collapse; margin-left: 10px;margin-top:30px;">
+                                            <tr>
+                                                
+                                                <td style="text-align: center;">
+                                                    <svg  height="100px" width="100px"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                         viewBox="0 0 47.94 47.94" xml:space="preserve"  onclick="Imageclick(1)">
+                                                        <path class="rating-image" style="fill:lightgrey;" d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757
+                                                                                                              c2.118,0.308,2.963,2.91,1.431,4.403l-8.749,8.528c-0.608,0.593-0.886,1.448-0.742,2.285l2.065,12.042
+                                                                                                              c0.362,2.109-1.852,3.717-3.746,2.722l-10.814-5.685c-0.752-0.395-1.651-0.395-2.403,0l-10.814,5.685
+                                                                                                              c-1.894,0.996-4.108-0.613-3.746-2.722l2.065-12.042c0.144-0.837-0.134-1.692-0.742-2.285l-8.749-8.528
+                                                                                                              c-1.532-1.494-0.687-4.096,1.431-4.403l12.091-1.757c0.841-0.122,1.568-0.65,1.944-1.412l5.407-10.956
+                                                                                                              C22.602,0.567,25.338,0.567,26.285,2.486z"/>
+                                                    </svg>                                                
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <svg height="100px" width="100px"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                         viewBox="0 0 47.94 47.94" xml:space="preserve"  onclick="Imageclick(2)">
+                                                        <path class="rating-image" style="fill:lightgrey;" d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757
+                                                                                                              c2.118,0.308,2.963,2.91,1.431,4.403l-8.749,8.528c-0.608,0.593-0.886,1.448-0.742,2.285l2.065,12.042
+                                                                                                              c0.362,2.109-1.852,3.717-3.746,2.722l-10.814-5.685c-0.752-0.395-1.651-0.395-2.403,0l-10.814,5.685
+                                                                                                              c-1.894,0.996-4.108-0.613-3.746-2.722l2.065-12.042c0.144-0.837-0.134-1.692-0.742-2.285l-8.749-8.528
+                                                                                                              c-1.532-1.494-0.687-4.096,1.431-4.403l12.091-1.757c0.841-0.122,1.568-0.65,1.944-1.412l5.407-10.956
+                                                                                                              C22.602,0.567,25.338,0.567,26.285,2.486z"/>
+                                                    </svg>                                                
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <svg  height="100px" width="100px"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                         viewBox="0 0 47.94 47.94" xml:space="preserve"  onclick="Imageclick(3)">
+                                                        <path class="rating-image" style="fill:lightgrey;" d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757
+                                                                                                              c2.118,0.308,2.963,2.91,1.431,4.403l-8.749,8.528c-0.608,0.593-0.886,1.448-0.742,2.285l2.065,12.042
+                                                                                                              c0.362,2.109-1.852,3.717-3.746,2.722l-10.814-5.685c-0.752-0.395-1.651-0.395-2.403,0l-10.814,5.685
+                                                                                                              c-1.894,0.996-4.108-0.613-3.746-2.722l2.065-12.042c0.144-0.837-0.134-1.692-0.742-2.285l-8.749-8.528
+                                                                                                              c-1.532-1.494-0.687-4.096,1.431-4.403l12.091-1.757c0.841-0.122,1.568-0.65,1.944-1.412l5.407-10.956
+                                                                                                              C22.602,0.567,25.338,0.567,26.285,2.486z"/>
+                                                    </svg>                                                   
+                                                </td>
+                                                
+                                                <td style="text-align: center;">
+                                                    <svg  height="100px" width="100px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                         viewBox="0 0 47.94 47.94" xml:space="preserve"  onclick="Imageclick(4)">
+                                                        <path class="rating-image" style="fill:lightgrey;" d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757
+                                                                                                              c2.118,0.308,2.963,2.91,1.431,4.403l-8.749,8.528c-0.608,0.593-0.886,1.448-0.742,2.285l2.065,12.042
+                                                                                                              c0.362,2.109-1.852,3.717-3.746,2.722l-10.814-5.685c-0.752-0.395-1.651-0.395-2.403,0l-10.814,5.685
+                                                                                                              c-1.894,0.996-4.108-0.613-3.746-2.722l2.065-12.042c0.144-0.837-0.134-1.692-0.742-2.285l-8.749-8.528
+                                                                                                              c-1.532-1.494-0.687-4.096,1.431-4.403l12.091-1.757c0.841-0.122,1.568-0.65,1.944-1.412l5.407-10.956
+                                                                                                              C22.602,0.567,25.338,0.567,26.285,2.486z"/>
+                                                    </svg>                                                 
+                                                </td> 
+                                                <td style="text-align: center;">
+                                                    <svg  height="100px" width="100px"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                         viewBox="0 0 47.94 47.94" xml:space="preserve"  onclick="Imageclick(5)">
+                                                        <path class="rating-image" style="fill:lightgrey;" d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757
+                                                                                                              c2.118,0.308,2.963,2.91,1.431,4.403l-8.749,8.528c-0.608,0.593-0.886,1.448-0.742,2.285l2.065,12.042
+                                                                                                              c0.362,2.109-1.852,3.717-3.746,2.722l-10.814-5.685c-0.752-0.395-1.651-0.395-2.403,0l-10.814,5.685
+                                                                                                              c-1.894,0.996-4.108-0.613-3.746-2.722l2.065-12.042c0.144-0.837-0.134-1.692-0.742-2.285l-8.749-8.528
+                                                                                                              c-1.532-1.494-0.687-4.096,1.431-4.403l12.091-1.757c0.841-0.122,1.568-0.65,1.944-1.412l5.407-10.956
+                                                                                                              C22.602,0.567,25.338,0.567,26.285,2.486z"/>
+                                                    </svg>                                                 
+                                                </td>           
+                                            </tr>
+                                        </table>
+                                    </apex:outputPanel>
+                                </td>   
+                            </tr>
+                        </table>
+                        <div id="SelectedRating"  style="display: flex; justify-content: center; font-size: 23px; font-weight: bold;">
+                            <strong></strong> 
+                            
+                        </div>
+                    </div>
+                    
+                    <div id="fillRemark"  class="reopensection" style="display:none;font-size:20px;">
+                        
+                        <div  > 
+                            <table  class="signature-table page-break-after" style="width: 100%;">
+                                <tr>
+                                    <td col="3" style="width: 40%;font-size: 30px;">
+                                        <div style="margin-bottom:50px;" class="comments-heading">Thank you for your feedback. We noticed you rated your experience with us as "Unhappy." We're sorry it didn't meet your expectations. Can you share what went wrong and what we could have done differently to enhance your experience?</div>
+                                        <div>
+                                            
+                                            <button type="button" onclick="confirmAction('yes')" class="yesnoButton">Yes</button>
+                                            <button type="button" onclick="confirmAction('no')" class="yesnoButton">No</button>
+                                            
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <div class="Section2">
+                    
+                    <div class="Remark-heading"><strong>Remarks</strong></div>
+                    <div class="input-container">
+                        <apex:inputTextarea id="comments" value="{!userInput}" styleClass="input-textarea" rows="20" onkeyup="trackInputChange()"/>
+                    </div>
+                    <div id="limit" class="comments-error" style="color: red; display: none;">Character limit exceeded</div>
+                    <apex:actionFunction name="saveRemark" action="{!updateRemark}">
+                        <apex:param name="remarkValue" value="" assignTo="{!remark}" />
+                    </apex:actionFunction>
+                    
+                    <apex:actionFunction name="saveRatingValue" action="{!updateRating1}" rerender="hiddenRatingValues">
+                        <apex:param name="ratingValue" value="" assignTo="{!rating1}" />
+                    </apex:actionFunction>
+                    <div class="center"> 
+                        <apex:commandButton value="Submit Feedback" action="{!SubmitFeedback}" styleClass="primaryButton"  />
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>
+    </apex:form>
+    <script>
+    let ratingValue = '{!rating1}';
+    let feedbackChoice=null ;
+    
+    function showAlert(message) {
+        alert(message);
+    }
+    
+    PreserveRatingImage1({!rating1})
+    function PreserveRatingImage1(selectedRating) {
+        //alert('selectedRating'+selectedRating)
+        
+        if(selectedRating == undefined ){
+            return null;
+        }
+        console.log('selectedRating',selectedRating);
+        console.log(typeof selectedRating)
+        var ratingImages = document.querySelectorAll(".rating-image");
+        for (var j = 0; j < ratingImages.length; j++) {
+            var rating = j + 1;
+            if (rating ===selectedRating){
+                ratingImages[j].classList.remove("unselected");
+                ratingImages[j].classList.add("selected");
+                
+                
+            } else {
+                ratingImages[j].classList.remove("selected");
+                ratingImages[j].classList.add("unselected");
+                
+            }
+        }
+    }
+    function Imageclick(selectedRating) {
+        if(selectedRating==1 || selectedRating==2)
+        {   console.log('inner selectedRating text');
+         document.querySelector('#SelectedRating').innerHTML='Unhappy';
+        }
+        if(selectedRating==3)
+        {   console.log('inner selectedRating text');
+         document.querySelector('#SelectedRating').innerHTML='Fair';
+        }
+        if(selectedRating>=4)
+        {   console.log('inner selectedRating text');
+         document.querySelector('#SelectedRating').innerHTML='Happy';
+        }
+        ratingValue=selectedRating;
+        console.log('selectedRating :: ',selectedRating)
+        if(selectedRating <=2)
+        {
+            document.querySelector(".primaryButton").disabled = true;
+            document.getElementById("fillRemark").style.display = "block";
+        }
+        else
+            
+        {
+            feedbackChoice='';
+            document.getElementById("fillRemark").style.display = "none";
+            console.log(document.querySelector(".primaryButton"));
+            console.log(document.querySelector(".primaryButton").disabled);
+            document.querySelector(".primaryButton").disabled = false;
+        }
+        
+        var ratingImages = document.querySelectorAll(".rating-image");
+        for (var j = 0; j < ratingImages.length; j++) {
+            var rating = j + 1;
+            if (rating <=selectedRating){
+                ratingImages[j].classList.remove("unselected");
+                ratingImages[j].classList.add("selected");
+                if(selectedRating>=4)
+                {
+                    ratingImages[j].classList.add("green");
+                    ratingImages[j].classList.remove("orange");
+                    ratingImages[j].classList.remove("red");
+                }
+                if(selectedRating===3)
+                {
+                    ratingImages[j].classList.add("orange");
+                }
+                if(selectedRating<=2)
+                {
+                    ratingImages[j].classList.remove("orange");
+                    ratingImages[j].classList.remove("green");
+                    ratingImages[j].classList.add("red");
+                }
+            } else {
+                ratingImages[j].classList.remove("selected");
+                ratingImages[j].classList.add("unselected");
+                
+            }
+        }
+        saveRatingValue(selectedRating);
+        
+    }
+    function confirmAction(choice) {
+        //alert('inside 1');
+        if (choice === 'yes') {
+        const textarea = document.querySelector(".input-textarea");    
+        textarea.focus();
+   
+            feedbackChoice=choice;
+            //alert('inside 2');
+            //saveRemark('yes');
+            var reopenbutton = document.querySelectorAll(".yesnoButton");        
+            reopenbutton[1].classList.remove("reopenselected");
+            reopenbutton[0].classList.add("reopenselected");
+            if (document.querySelector(".input-textarea").value != '' && document.querySelector(".input-textarea").value != null) {
+                document.querySelector(".primaryButton").disabled = false;
+            }else{
+                document.querySelector(".primaryButton").disabled = true;
+                
+            }
+            
+            //alert('inside 3');
+        } else {
+            feedbackChoice=choice;
+            //alert('inside 4');
+            //saveRemark('no');
+            var reopenbutton = document.querySelectorAll(".yesnoButton");        
+            reopenbutton[0].classList.remove("reopenselected");
+            reopenbutton[1].classList.add("reopenselected");
+            document.querySelector(".primaryButton").disabled = false;
+            // alert('inside 5');
+        }
+    } 
+    
+    function trackInputChange(){
+        console.log('feedbackChoice',feedbackChoice);
+        console.log('ratingValue' , ratingValue);
+        if(ratingValue ){
+            if(feedbackChoice == 'yes'){
+                console.log(document.querySelector(".input-textarea").value)
+                if (document.querySelector(".input-textarea").value != '' && document.querySelector(".input-textarea").value != null) {
+                    document.querySelector(".primaryButton").disabled = false;
+                }
+                else{
+                    document.querySelector(".primaryButton").disabled = true;
+                    
+                }
+            }
+            checkTextarea();
+        }
+        function checkTextarea() {
+            
+            var textareaValue = document.querySelector(".input-textarea").value;
+            console.log(textareaValue.length);
+            var button = document.querySelector(".primaryButton");
+            
+            if (textareaValue && textareaValue.trim().length >= 0 && textareaValue.length <= 500) {
+                button.disabled = false;
+                document.getElementById("limit").style.display = "none";
+            } else {
+                button.disabled = true;
+                document.getElementById("limit").style.display = "block";
+            }
+        }
+        
+    }
+    
+    
+    </script>
+</apex:page>

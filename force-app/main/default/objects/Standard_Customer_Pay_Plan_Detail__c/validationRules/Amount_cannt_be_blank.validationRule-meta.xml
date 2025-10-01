@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Amount_cannt_be_blank</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(ISPICKVAL( Amount__c ,&apos;Amount&apos;) , ISPICKVAL( Amount__c , &apos;Percentage&apos;)) ,  ISBLANK( Calculate_Installment_Amount_as__c ), ISBLANK( Total_Charge_Value_Minus__c ), ISBLANK( Amount_Value__c ) )</errorConditionFormula>
+    <errorDisplayField>Amount__c</errorDisplayField>
+    <errorMessage>% Amount Value cannot be blank,When Calculate Installment Amount as(%) or Total Charge Value Minus are blank</errorMessage>
+</ValidationRule>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Lifecycle_Touchpoint__c</fullName>
+    <label>Customer Lifecycle Touchpoint</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>RW_Case_Type__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Cancellation Related</fullName>
+                <default>false</default>
+                <label>Cancellation Related</label>
+            </value>
+            <value>
+                <fullName>Home Loan Related</fullName>
+                <default>false</default>
+                <label>Home Loan Related</label>
+            </value>
+            <value>
+                <fullName>Payment Related</fullName>
+                <default>false</default>
+                <label>Payment Related</label>
+            </value>
+            <value>
+                <fullName>Post-Possession</fullName>
+                <default>false</default>
+                <label>Post-Possession</label>
+            </value>
+            <value>
+                <fullName>Pre-Booking Experience</fullName>
+                <default>false</default>
+                <label>Pre-Booking Experience</label>
+            </value>
+            <value>
+                <fullName>Registration</fullName>
+                <default>false</default>
+                <label>Registration</label>
+            </value>
+            <value>
+                <fullName>Routine Operations</fullName>
+                <default>false</default>
+                <label>Routine Operations</label>
+            </value>
+            <value>
+                <fullName>Self-Service Options</fullName>
+                <default>false</default>
+                <label>Self-Service Options</label>
+            </value>
+            <value>
+                <fullName>Welcome Call</fullName>
+                <default>false</default>
+                <label>Welcome Call</label>
+            </value>
+            <value>
+                <fullName>Possession</fullName>
+                <default>false</default>
+                <label>Possession</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Cancellation Related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Home Loan Related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Payment Related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Post-Possession</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Pre-Booking Experience</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Registration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Routine Operations</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Self-Service Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Welcome Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Complaint</controllingFieldValue>
+            <valueName>Possession</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

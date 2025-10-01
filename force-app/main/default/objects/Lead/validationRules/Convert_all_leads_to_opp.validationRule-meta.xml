@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Convert_all_leads_to_opp</fullName>
+    <active>true</active>
+    <description>Convert all the leads to opp</description>
+    <errorConditionFormula>AND(IsConverted=true, ConvertedOpportunityId=&quot;&quot;, ISPICKVAL(Status, &quot;Interested&quot;),$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>All converted leads must have an opportunity. Please uncheck the Do not create a new opportunity box and try again.</errorMessage>
+</ValidationRule>

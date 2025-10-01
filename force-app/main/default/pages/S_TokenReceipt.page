@@ -1,0 +1,366 @@
+<apex:page controller="S_TokenReceiptController"  showHeader="false" standardStylesheets="true" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0"  action="{!validate}">
+    <html
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <title>Receipt Module</title>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <script src="/soap/ajax/54.0/connection.js"></script>
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+            <link href="https://fonts.googleapis.com/css?family=Buda:300" rel="stylesheet" type="text/css"/>
+        </head>
+        <style>
+    .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th, .slds td {
+        font-family: 'Lato';
+    }
+    .slds .slds-theme--shade {
+    background-color: aliceblue;
+    }
+    .slds .slds-button {
+        background-color:#838B8B;
+    }
+    body .bPageBlock .pbBody .pbSubheader {
+        background-color:#838B8B;
+        border-color:#838B8B;
+    }
+    .slds table {
+        font-size: 11px;
+        empty-cells:show;
+    }
+    .slds td {
+        text-align:left;
+    }
+    div.fadeMe {
+      opacity:    0.5; 
+      background: #D9E9FF; 
+      width:      100%;
+      height:     100%; 
+      z-index:    1000;
+      top:        0; 
+      left:       0; 
+      position:   fixed; 
+    }
+    .readOnly {
+        background-color: aliceblue;
+        border-color: #003F87;
+        padding: 2.5px;
+        color: #333366;
+    }
+    .penalties {
+        background-color: aliceblue;
+        border-color: #003F87;
+        padding: 2.5px;
+        color: #FC1501 !important;
+    }
+    .Edit {
+        border-color:#ff69b4;
+        border-width: 1px;
+        border-style: dotted dotted dotted dotted;
+    }.error {
+        border-color: red !important;
+        background-color: light blue;
+        border-width: 2px;
+    }
+    .settled {
+        color: green;
+        font-weight:bold;
+    }
+    .due {
+        color: red;
+        font-weight:bold;
+    }
+    .info {
+        color: green; font-weight: strong;
+        border-color: green !important;
+    }
+    .styled-button-5 {
+    background-color:#ed8223;
+    color:#fff;
+    font-size:9px;
+    line-height:30px;
+    border-radius:20px;
+    -webkit-border-radius:20px;
+    -moz-border-radius:20px;
+    border:0;
+    text-shadow:#C17C3A 0 -1px 0;
+    width:120px;
+    height:32px
+    }              
+    </style>
+        <body>
+         <a href="/home/home.jsp"><img src="{!$Resource.Home}" style="float:left; width:4%; height:4%;"></img></a>
+        <br/><br/>
+            <!-- REQUIRED SLDS WRAPPER -->
+            <div class="slds">
+                <!-- PRIMARY CONTENT WRAPPER -->
+                <div class="myapp">
+                    <!-- CREATE TOKEN RECEIPT -->
+                    <div aria-labelledby="newreceiptform">
+                        <!-- BOXED AREA -->
+                        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+                            <legend id="newreceiptformA" class="slds-text-heading--medium slds-p-vertical--medium">New Token Amount Receipt</legend>
+                            <!-- CREATE NEW TOKEN RECEIPT FORM -->
+                            <apex:form id="newreceiptform" styleClass="slds-form--inline">
+                                <apex:actionStatus id="status">
+                                    <apex:facet name="start">
+                                        <div class="fadeMe">
+                                            &nbsp;
+                                        </div>
+                                        <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                                            <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                                                <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                                                <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                                            </div>
+                                        </div>
+                                    </apex:facet>
+                                </apex:actionStatus>
+                                                                   
+                                    <apex:outputPanel id="messages">
+                                        <apex:PageMessages id="pageMsgs" />
+                                    </apex:outputPanel>
+                                                                                                            
+                                <apex:pageBlock id="pgBlock" mode="edit">
+                                    <apex:outputPanel id="customerPanel">
+                                        <apex:pageBlockSection id="customerBlock" title="Customer Details" collapsible="false" columns="2"  rendered="{!oppList.size ==1 }">
+                                           <apex:pageBlockSectionItem >
+                                               <apex:outputLabel styleclass="slds-form-element__label"  >Customer Name </apex:outputLabel> 
+                                                <apex:outputText style="color:#1D7CF2;font-size:bold" value="{!oppList[0].Account.Salutation}{!oppList[0].Account.Name}"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label"  >Email Address</apex:outputLabel> 
+                                                <apex:outputText style="color:#1D7CF2;font-size:bold" value="{!oppList[0].Account.PersonEmail}"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label"  >Mobile Number</apex:outputLabel> 
+                                                <apex:outputText style="color:#1D7CF2;font-size:bold" value="{!oppList[0].Account.Mobile_No__c}"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label"  >Address</apex:outputLabel> 
+                                                <apex:outputText style="color:#1D7CF2;font-size:bold" value="{!address}"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label"  >Opportunity Stage</apex:outputLabel> 
+                                                <apex:outputText style="color:#1D7CF2;font-size:bold" value="{!oppList[0].StageName}"/>
+                                            </apex:pageBlockSectionItem>
+                                        </apex:pageBlockSection>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="debug" rendered="{!debug}" >
+                                        <apex:pageBlockSection title="debug info">
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputText value="{!error}" label="error" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputText value="{!receiptSaved}" label="receipt saved" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputText value="{!unitPresent}" label="unit present" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputText value="{!unitHeld}" label="unit held" />
+                                            </apex:pageBlockSectionItem>
+                                        </apex:pageBlockSection>
+                                    </apex:outputPanel>
+                                   <apex:outputPanel id="unitDetailPanel" rendered="{!NOT(ReceiptSaved)}">
+                                        <!--  Main block for capturing project and instrument type and rerender the next section -->
+                                        <apex:pageBlockSection id="mainBlock" title="Project and Unit Details" collapsible="false" columns="1">
+                                            <apex:pageBlockSectionItem >
+                                                    <apex:outputLabel styleclass="slds-form-element__label" rendered="{!r.Project_Unit__c == null}">Project</apex:outputLabel>
+                                                    <apex:inputField id="projLookup" styleClass="disableField" value="{!r.Project__c}" rendered="{!r.Project_Unit__c == null}" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                    <apex:outputLabel styleclass="slds-form-element__label" rendered="{!r.Project_Unit__c != null}" >Project</apex:outputLabel>
+                                                    <apex:outputField id="proj1" value="{!r.Project__c}" rendered="{!r.Project_Unit__c != null}" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                    <apex:outputLabel styleclass="slds-form-element__label"  rendered="{!r.Project_Unit__c != null && unitPresent}">Project Unit</apex:outputLabel>
+                                                    <apex:outputField id="unitId1" value="{!r.Project_Unit__c}" rendered="{!r.Project_Unit__c != null && unitPresent}" />
+                                            </apex:pageBlockSectionItem>
+                                           <apex:actionRegion >
+                                            <apex:pageBlockSectionItem rendered="{!NOT(unitPresent)}" >
+                                                    <apex:outputLabel styleclass="slds-form-element__label"  >Do you want to hold an unit against this receipt?</apex:outputLabel>
+                                                        <apex:selectRadio id="radioSelect" value="{!unitHeld}" styleClass="radio" disabled="{!unitHeld == 'YES' || unitHeld == 'NO'}">
+                                                            <apex:actionSupport event="onchange"  rerender="unitDetailPanel,debug" status="status" oncomplete="bindEvents()"/>
+                                                                <apex:selectOptions value="{!holdOptions}"/>
+                                                        </apex:selectRadio>
+                                            </apex:pageBlockSectionItem> 
+                                            </apex:actionRegion>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputPanel id="pone"  rendered="{!unitHeld == 'YES' && r.Project_Unit__c == null}">
+                                                    <apex:actionRegion >
+                                                            <apex:inputField id="unit" value="{!r.Project_Unit__c}" required="true">
+                                                                <apex:actionSupport event="onchange" action="{!unitHoldAction}" rerender="unitDetailPanel,messages,debug" oncomplete="bindEvents()" status="status"/>
+                                                            </apex:inputField>
+                                                    </apex:actionRegion>
+                                                   </apex:outputPanel>
+                                          </apex:pageBlockSectionItem>
+                                          <apex:PageBlockSectionItem >
+                                                <apex:outputPanel id="pone1"  rendered="{!unitHeld == 'YES' && r.Project_Unit__c != null}">
+                                                    <apex:outputLabel styleclass="slds-form-element__label"  ><b style="color:#1D7CF2">Unit Held</b></apex:outputLabel>
+                                                    <apex:outputField id="unit1" value="{!r.Project_Unit__c}"/>
+                                                </apex:outputPanel>
+                                          </apex:pageBlockSectionItem> 
+                                          <apex:pageBlockSectionItem >
+                                                <apex:outputPanel id="ptwo"  rendered="{!unitHeld == 'NO'}">
+                                                   <apex:outputLabel styleclass="slds-form-element__label"  ><b style="color:#1D7CF2">No Unit Held</b></apex:outputLabel>
+                                                </apex:outputPanel>
+                                         </apex:pageBlockSectionItem> 
+                                    </apex:pageBlockSection>
+                                </apex:outputPanel>
+                                    
+                                    <apex:pageBlockSection id="receiptDetailsBlock" title="Receipt Details" collapsible="false" columns="1" rendered="{!NOT(receiptSaved)}">      
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel styleclass="slds-form-element__label">Select Payment Mode</apex:outputLabel>
+                                            <apex:actionRegion >
+                                                <apex:outputPanel id="modePanel" styleclass="slds-form-element" rendered="{!oppList.size ==1}" >
+                                                    <apex:inputField id="mode" value="{!r.Mode__c}" required="true"  styleclass="slds-select">
+                                                        <apex:actionSupport event="onchange" action="{!selectInstrument}" rerender="instrumentPanel,buttonsPanel,messages,debug" oncomplete="bindEvents()" status="status"/>
+                                                    </apex:inputField>
+                                                </apex:outputPanel>
+                                            </apex:actionRegion>
+                                        </apex:pageBlockSectionItem>
+                                    </apex:pageBlockSection>
+                                    
+                                    <!-- read only version of the main block which is rendered after the save button is clicked -->
+                                    <apex:pageBlockSection id="mainBlockread" title="Receipt Details" collapsible="false" columns="2" rendered="{!receiptSaved}">
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel styleclass="slds-form-element__label">Project</apex:outputLabel>
+                                            <apex:outputField id="project" value="{!r.Project__c}" />
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel styleclass="slds-form-element__label">Unit</apex:outputLabel>
+                                            <apex:outputField id="project" value="{!r.Project_Unit__c}" />
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel styleclass="slds-form-element__label">Payment Mode</apex:outputLabel>
+                                            <apex:outputField id="mode" value="{!r.Mode__c}" styleclass="slds-select"/>
+                                        </apex:pageBlockSectionItem>
+                                    </apex:pageBlockSection>
+ 
+                                    <!--Instruments capture section -->
+                                    <apex:outputPanel id="instrumentPanel" rendered="{!NOT(ReceiptSaved)}">
+                                        <!-- Instrument Details capture for cheque, Pay order, RGTS, EFT, JV etc., -->
+                                        <apex:pageBlockSection id="ins1" title="Instrument Details" collapsible="false" columns="2" rendered="{!instrumentType =='ins1' && oppList.size ==1}">
+                                            <apex:PageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Posting Date</apex:outputLabel>
+                                                <apex:outputField value="{!r.Receipt_Date__c}"/>
+                                            </apex:PageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Instrument Date</apex:outputLabel>
+                                                <apex:inputField value="{!r.Cheque_DD_Date__c}"  required="true"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Drawee Bank</apex:outputLabel>
+                                                <apex:inputField value="{!r.DraweeBank__c}" required="true"  styleclass="slds-select"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Instrument Number</apex:outputLabel>
+                                                <apex:inputField value="{!r.Cheque_DD__c}"  required="true" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:PageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Currency</apex:outputLabel>
+                                                <apex:inputField value="{!r.Currency__c}" required="true"  styleclass="slds-select"/>
+                                            </apex:PageBlockSectionItem>
+                                            <apex:PageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Amount</apex:outputLabel>
+                                                <apex:inputField value="{!r.Amount_Rs__c}" required="true" />
+                                            </apex:PageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Drawn in favour of</apex:outputLabel>
+                                                <apex:outputPanel id="accountPanel" styleclass="slds-form-element">
+                                                    <apex:selectList id="drawnFavour" required="true" size="1" value="{!entitySelected}" styleclass="slds-select">
+                                                        <apex:selectOptions value="{!entityOptions}"/>
+                                                    </apex:selectList>
+                                                </apex:outputPanel>
+                                            </apex:pageBlockSectionItem>
+                                        </apex:pageBlockSection>
+                                     </apex:outputPanel>
+                                        
+                                    <!-- read only version of the main block which is rendered after the save button is clicked -->
+                                     <apex:pageBlockSection id="ins1readOnly" title="Instrument Details" collapsible="false" columns="2" rendered="{!oppList.size ==1 && receiptSaved}">
+                                            <apex:PageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Posting Date</apex:outputLabel>
+                                                <apex:outputField value="{!r.Receipt_Date__c}"/>
+                                            </apex:PageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Instrument Date</apex:outputLabel>
+                                                <apex:outputField value="{!r.Cheque_DD_Date__c}"/>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!instrumentType =='ins1'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Receipt Number</apex:outputLabel>
+                                                <apex:outputField value="{!r.Name}"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem rendered="{!instrumentType =='ins1'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Drawee Bank</apex:outputLabel>
+                                                <apex:outputField value="{!r.DraweeBank__c}"/>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem rendered="{!instrumentType =='ins1'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Instrument Number</apex:outputLabel>
+                                                <apex:outputField value="{!r.Cheque_DD__c}" />
+                                            </apex:pageBlockSectionItem>
+                                           
+                                            <apex:pageBlockSectionItem rendered="{!instrumentType =='ins1'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Drawn in favour of</apex:outputLabel>
+                                                <apex:outputField value="{!r.Drawn_in_favour_of__c}" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:PageBlockSectionItem rendered="{!r.Currency__c == 'Indian Rupee'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Currency</apex:outputLabel>
+                                                <apex:outputField value="{!r.Currency__c}" styleclass="slds-select"/>
+                                            </apex:PageBlockSectionItem>
+                                            <apex:PageBlockSectionItem rendered="{!r.Currency__c == 'Indian Rupee'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Amount</apex:outputLabel>
+                                                <apex:outputField value="{!r.Amount_Rs__c}" />
+                                            </apex:PageBlockSectionItem>
+                                            <apex:PageBlockSectionItem rendered="{!foreignCurrency}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Foreign Currency</apex:outputLabel>
+                                                <apex:outputField value="{!r.Foreign_Currency_Type__c}" />
+                                            </apex:PageBlockSectionItem>
+                                            <apex:PageBlockSectionItem rendered="{!foreignCurrency}">
+                                                <apex:outputLabel styleclass="slds-form-element__label">Amount in Foreign Currency</apex:outputLabel>
+                                                <apex:outputField value="{!r.Amount_in_Foreign_Currency__c}" />
+                                            </apex:PageBlockSectionItem>                                            
+                                            <apex:pageBlockSectionItem rendered="{!r.Currency__c == 'Indian Rupee'}">
+                                                <apex:outputLabel styleclass="slds-form-element__label" >On Account Money</apex:outputLabel>
+                                                <apex:outputField value="{!r.On_Account_Money__c}" />
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputLabel styleclass="slds-form-element__label">Receipt Status</apex:outputLabel>
+                                                <apex:outputField value="{!r.Receipt_Status__c}" />
+                                            </apex:pageBlockSectionItem>
+                                        </apex:pageBlockSection>
+                                       
+                                       <apex:pageBlockButtons location="bottom" styleClass="slds-button-group">
+                                        <apex:outputPanel id="buttonsPanel">
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Apply Receipt"  action="{!saveReceipt}" disabled="{!(error || receiptSaved)}" status="status"/>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Close" onclick="window.close()"/>
+                                        </apex:outputPanel>
+                                      </apex:pageBlockButtons>
+                                    </apex:pageBlock>
+                                    
+                               </apex:form>
+                            <!-- CREATE NEW TOKEN RECEIPT FORM -->
+                        </fieldset>
+                        <!-- / BOXED AREA -->
+                    </div>
+                    <!-- / CREATE TOKEN RECEIPT -->
+                </div>
+                <!-- / PRIMARY CONTENT WRAPPER -->
+            </div>
+            <!-- / REQUIRED SLDS WRAPPER -->
+            <!--  JAVA SCRIPT /JQUERY -->
+        <script>
+         var j$ = jQuery.noConflict();
+        j$(document).ready(function() {
+            bindEvents();
+        });
+        function bindEvents() {
+            j$('.disableField').prop('disabled', true);
+            j$("[id$='projLookup_lkwgt']").remove();
+        }
+     </script>
+            <!-- / JAVASCRIPT -->
+        </body>
+    </html>
+</apex:page>

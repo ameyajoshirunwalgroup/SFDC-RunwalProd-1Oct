@@ -1,0 +1,29 @@
+<apex:page controller="SAPCPPaymentAdvice" action="{!sendreq}" lightningStylesheets="True" sidebar="false" showHeader="false">
+    <apex:form >
+        <apex:iframe id="theFrame"/>
+        
+        
+        
+        
+    </apex:form>
+    <script>
+            var base64String = "{!BlobBody}";
+    
+            const byteCharacters = atob(base64String);
+    
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }    
+    
+            const byteArray = new Uint8Array(byteNumbers);
+    
+            const blob = new Blob([byteArray], {type: 'application/pdf'});
+    
+            const blobUrl = URL.createObjectURL(blob);
+    
+            document.getElementById('theFrame').setAttribute('src', blobUrl);
+            
+            document.getElementById('theFrame').height = 750;
+        </script>
+</apex:page>

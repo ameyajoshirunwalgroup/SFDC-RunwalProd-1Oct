@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Distance_To_Office__c</fullName>
+    <label>Distance To Office</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Less Than 10 Kms</fullName>
+                <default>false</default>
+                <label>Less Than 10 Kms</label>
+            </value>
+            <value>
+                <fullName>10 Kms - 20 Kms</fullName>
+                <default>false</default>
+                <label>10 Kms - 20 Kms</label>
+            </value>
+            <value>
+                <fullName>20 Kms - 30 Kms</fullName>
+                <default>false</default>
+                <label>20 Kms - 30 Kms</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

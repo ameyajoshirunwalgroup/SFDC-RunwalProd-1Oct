@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Net_Realization__c</fullName>
+    <description>Net Realization in psf</description>
+    <formula>(RW_Agreement_Value__c  -  Brokerage_amount__c  -  Interest_Cost__c  -  Other_Cost__c ) /   RW_Project_Unit__r.Actual_Area_value__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Net Realization (psf)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

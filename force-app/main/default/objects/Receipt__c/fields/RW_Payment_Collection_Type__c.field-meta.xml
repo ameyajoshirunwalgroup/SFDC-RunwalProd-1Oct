@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Payment_Collection_Type__c</fullName>
+    <label>Payment Collection Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>EOI</fullName>
+                <default>false</default>
+                <label>EOI</label>
+            </value>
+            <value>
+                <fullName>Booking</fullName>
+                <default>false</default>
+                <label>Booking</label>
+            </value>
+            <value>
+                <fullName>Customer Portal - Outstanding</fullName>
+                <default>false</default>
+                <label>Customer Portal - Outstanding</label>
+            </value>
+            <value>
+                <fullName>SAP Demands</fullName>
+                <default>false</default>
+                <label>SAP Demands</label>
+            </value>
+            <value>
+                <fullName>Customer Portal - Flat Cost</fullName>
+                <default>false</default>
+                <label>Customer Portal - Flat Cost</label>
+            </value>
+            <value>
+                <fullName>Customer Portal - GST</fullName>
+                <default>false</default>
+                <label>Customer Portal - GST</label>
+            </value>
+            <value>
+                <fullName>SAP Demands - Flat Cost</fullName>
+                <default>false</default>
+                <label>SAP Demands - Flat Cost</label>
+            </value>
+            <value>
+                <fullName>SAP Demands - GST</fullName>
+                <default>false</default>
+                <label>SAP Demands - GST</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

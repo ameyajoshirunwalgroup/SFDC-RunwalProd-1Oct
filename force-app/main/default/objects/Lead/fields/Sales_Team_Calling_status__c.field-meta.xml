@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_Team_Calling_status__c</fullName>
+    <label>Sales Team - Calling status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Booked somewhere else</fullName>
+                <default>false</default>
+                <label>Booked somewhere else</label>
+            </value>
+            <value>
+                <fullName>Budget mismatch</fullName>
+                <default>false</default>
+                <label>Budget mismatch</label>
+            </value>
+            <value>
+                <fullName>Call not answered</fullName>
+                <default>false</default>
+                <label>Call not answered</label>
+            </value>
+            <value>
+                <fullName>Follow up</fullName>
+                <default>false</default>
+                <label>Follow up</label>
+            </value>
+            <value>
+                <fullName>Interested</fullName>
+                <default>false</default>
+                <label>Interested</label>
+            </value>
+            <value>
+                <fullName>Not Interested</fullName>
+                <default>false</default>
+                <label>Not Interested</label>
+            </value>
+            <value>
+                <fullName>Number not in service</fullName>
+                <default>false</default>
+                <label>Number not in service</label>
+            </value>
+            <value>
+                <fullName>Plan dropped</fullName>
+                <default>false</default>
+                <label>Plan dropped</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

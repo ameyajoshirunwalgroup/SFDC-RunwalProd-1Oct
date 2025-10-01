@@ -1,0 +1,65 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "5c8eef3d-0e2d-49bb-82d9-46e258704b07",
+  "label" : "Opportunity Detail",
+  "regions" : [ {
+    "id" : "cea09e0b-5f33-462a-9166-d7bf1a78683c",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "68bd6ad4-c1ee-4e1a-8f2f-84290dc4ccda",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "detailsTabLabel" : "Details",
+        "discussionsTabLabel" : "Feed",
+        "recordId" : "{!recordId}",
+        "relatedTabLabel" : "Related",
+        "tab1Type" : "details",
+        "tab2Type" : "none",
+        "tab3Type" : "related",
+        "tab4Type" : "none",
+        "timelineTabLabel" : "Activity"
+      },
+      "componentName" : "forceCommunity:recordHomeTabs",
+      "id" : "0b916ed9-c65b-4dc1-ba28-5088d265fda6",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "f8373cca-b2fa-4055-85c0-a90dd2fbd527",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "5d88ed0e-24f3-4c38-9b55-ce4144e4ab80",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "5d63ad47-f7cd-4ea9-9977-2221b7ece144",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "96d3886d-2175-4040-bca0-cc9b72afb9a6",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-006"
+}

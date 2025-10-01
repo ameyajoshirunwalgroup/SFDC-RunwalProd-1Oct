@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "55132541-9fd9-458e-904c-37e31466366e",
+  "label" : "AgreementPDF",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "3d2f6303-6474-444e-9d98-e62d7f07b047",
+          "columns" : [ {
+            "UUID" : "7f891b24-817e-4ab8-82ff-99fb25c67d06",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "3d2f6303-6474-444e-9d98-e62d7f07b047",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalAgreementPdf",
+          "id" : "8134264f-026c-42dd-b7f8-937bea1fd06f",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "7f891b24-817e-4ab8-82ff-99fb25c67d06",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "8529e8b1-db2b-455b-957b-8dac3424ffe3",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "AgreementPDF"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "b7ae3eaa-9cf1-40b3-b57a-e6bb062329cc",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "743bcf2d-bbbe-47d6-990d-45cd2bb675fe",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-agreementpdf"
+}

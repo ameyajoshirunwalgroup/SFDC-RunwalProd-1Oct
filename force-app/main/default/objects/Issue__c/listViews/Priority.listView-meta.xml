@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Priority</fullName>
+    <columns>NAME</columns>
+    <columns>Module__c</columns>
+    <columns>Raised_By__c</columns>
+    <columns>Status__c</columns>
+    <columns>Priority__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Priority__c</field>
+        <operation>equals</operation>
+        <value>L1</value>
+    </filters>
+    <label>Priority</label>
+</ListView>

@@ -1,0 +1,39 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "18243ce9-f5c7-4767-8dba-146a34be6759",
+  "label" : "Brokerage Scheme Related List",
+  "regions" : [ {
+    "id" : "02ad5e00-c04f-4eb3-912c-a2e785cf16e1",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customTitle" : "",
+        "parentRecordId" : "{!recordId}",
+        "relatedListName" : "{!relationshipApiName}",
+        "showBreadCrumbs" : true,
+        "showCustomTitle" : false,
+        "showManualRefreshButton" : true,
+        "showRowNumbers" : true
+      },
+      "componentName" : "forceCommunity:relatedList",
+      "id" : "8269b88f-7769-4467-80d4-06512cb9d4d1",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "4e492d31-3612-4894-a249-fe2ebbc8a64a",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "22734270-3b38-45f5-9dac-65005a4aa2be",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "relatedlist-a2a"
+}

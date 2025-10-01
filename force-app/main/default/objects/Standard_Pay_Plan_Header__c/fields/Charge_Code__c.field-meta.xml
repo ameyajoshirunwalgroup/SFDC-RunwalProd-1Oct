@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Charge_Code__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Project Charges</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Value does not exist or does not match filter criteria.</errorMessage>
+        <filterItems>
+            <field>$Source.Project__c</field>
+            <operation>equals</operation>
+            <valueField>Project_Charges__c.Project__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>Project_Charges__c.Active__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Project_Charges__c</referenceTo>
+    <relationshipLabel>Standard Pay Plan Headers</relationshipLabel>
+    <relationshipName>Standard_Pay_Plan_Header</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

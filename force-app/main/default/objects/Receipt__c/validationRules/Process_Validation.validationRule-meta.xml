@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Process_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(  ISPICKVAL( Receipt_Status__c , &apos;Processed&apos;)  , ISPICKVAL( Receipt_Status__c , &apos;Cancelled&apos;))</errorConditionFormula>
+    <errorMessage>Once a Receipt is processed,it cann&apos;t be edit.</errorMessage>
+</ValidationRule>

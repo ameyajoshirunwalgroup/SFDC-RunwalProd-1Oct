@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Inspection_Status__c</fullName>
+    <label>Inspection Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Inspection Scheduled</fullName>
+                <default>true</default>
+                <label>Inspection Scheduled</label>
+            </value>
+            <value>
+                <fullName>Home Score Initiated</fullName>
+                <default>false</default>
+                <label>Home Score Initiated</label>
+            </value>
+            <value>
+                <fullName>Home Score Completed</fullName>
+                <default>false</default>
+                <label>Home Score Completed</label>
+            </value>
+            <value>
+                <fullName>Readiness Initiated</fullName>
+                <default>false</default>
+                <label>Readiness Initiated</label>
+            </value>
+            <value>
+                <fullName>Readiness Completed</fullName>
+                <default>false</default>
+                <label>Readiness Completed</label>
+            </value>
+            <value>
+                <fullName>Snagging Initiated</fullName>
+                <default>false</default>
+                <label>Snagging Initiated</label>
+            </value>
+            <value>
+                <fullName>Snagging Completed</fullName>
+                <default>false</default>
+                <label>Snagging Completed</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

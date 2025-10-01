@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Post_Possession_Customer_validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ NOT(ISPICKVAL(  Origin , &apos;Email&apos;)), 
+ISPICKVAL( Customer_Lifecycle_Touchpoint__c, &apos;Post-Possession&apos;),
+OR(
+/*ISBLANK(Opportunity__c),*/
+AND(
+NOT(ISBLANK(Opportunity__c)),
+ISBLANK(Opportunity__r.Booking__r.RW_Key_handover_date__c)
+)
+),
+$Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorMessage>You can not select Customer Lifecycle Touchpoint as Post-Possession for non Post Possession customers</errorMessage>
+</ValidationRule>

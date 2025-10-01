@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Validation_for_Local_Ch_Forex1</fullName>
+    <active>true</active>
+    <description>When User Local Cheque of Mode PickList and Forex of Mode Selection then not entering data in Cheque/DD No.</description>
+    <errorConditionFormula>AND( ISPICKVAL( Mode__c , &apos;Local Cheque&apos;) , ISPICKVAL( Mode_Selection__c , &apos;Forex&apos;) , ISBLANK( Cheque_DD__c  ) )</errorConditionFormula>
+    <errorMessage>After Selecting Local Cheque of Mode PickList and Forex of Mode Selection Pick List,Cheque/DD No. cann&apos;t be blank.</errorMessage>
+</ValidationRule>

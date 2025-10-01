@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Portal_User</fullName>
+    <active>true</active>
+    <description>Cannot change the data, please contact your representative.</description>
+    <errorConditionFormula>AND($Profile.Name == &quot;Community Login User Custm&quot;, !ISNEW())</errorConditionFormula>
+    <errorMessage>Cannot change the data, please contact your representative.</errorMessage>
+</ValidationRule>

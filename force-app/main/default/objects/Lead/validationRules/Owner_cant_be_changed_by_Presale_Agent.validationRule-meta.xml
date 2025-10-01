@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Owner_cant_be_changed_by_Presale_Agent</fullName>
+    <active>false</active>
+    <errorConditionFormula>And(
+	ISCHANGED(Owner_Username__c),
+	$Profile.Name = &apos;Pre Sales Executive&apos;,
+Owner_Username__c != &apos;system.admin@runwal.com&apos;
+)</errorConditionFormula>
+    <errorMessage>Owner cant be changed by Presales Agents</errorMessage>
+</ValidationRule>

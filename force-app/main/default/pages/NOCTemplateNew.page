@@ -1,0 +1,13 @@
+<apex:page controller="NOCTemplateControllerNew" showHeader="false" sidebar="false" standardStylesheets="false">
+    <apex:form >
+        <head>
+            
+        </head>
+        
+        <div class="content">
+            <p>
+                <apex:outputText style="font-size:14px;font-family:sans-serif;" escape="false" value="{!noc.RW_Template__c}"  ></apex:outputText>
+            </p>
+       </div>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Walkin_Source_ChannelPartner_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(IF(  AND(ISPICKVAL( Walkin_Source__c, &apos;Channel Partner&apos;),Walkin_Apply_Unregistered_ChannelPartner__c == false),  ISBLANK( Walkin_Channel_Partner__c) , false),
+$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Walkin_Channel_Partner__c</errorDisplayField>
+    <errorMessage>Please Select Walk in Channel Partner</errorMessage>
+</ValidationRule>

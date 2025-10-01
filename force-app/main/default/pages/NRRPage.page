@@ -1,0 +1,272 @@
+<apex:page applyHtmlTag="false" controller="NRRController"  applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="PDF" >
+	<html>
+        <head>
+            <style>
+             @page {
+             size: A4;
+             margin: 0;
+             }
+             @media print {
+             html, body {
+             width: 210mm;
+             height: 297mm;
+             }
+             }
+             body{
+             <!--font-family: samplefont;        -->
+             font-family:sans-serif;
+             font-size:15px;
+             }
+              p {
+                min-width: 100px;
+              }
+             .pagePadding{
+             padding-top:40px;
+             padding-left:60px;
+             padding-right:40px;
+             }
+             .tableBorder{
+             border-collapse: collapse;
+             }
+             .tableBorder td, .tableBorder th {
+             border: 1px solid #757575;
+             padding:2px;
+             width:145px;
+             }
+              .tableBorder td:first-child{width:200px;}
+              
+             
+          </style>
+        </head>
+        <body>
+            
+            <div class= "pagePadding">
+                <h1 style="text-align:center; font-weight: bold;">  
+                NRR
+            </h1>
+                <table class="tableBorder" width="650">
+                    <th style="width:50%;"></th>
+                    <th style="width:20%;"></th>
+                    <th style="width:10%;text-align:center;">Units</th>
+                    <th></th>
+                    <tr>
+                    	<td><b>Customer Name</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Customer_Name__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-bottom-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Project Name</td>
+                        <td style="text-align:right;">{!nrrDetails.Project_Name__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Flat No</td>
+                        <td style="text-align:right;">{!nrrDetails.Flat_No__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Type - Saleable area (in sq.ft.)</td>
+                        <td style="text-align:right;">{!nrrDetails.Saleable_Area__c}</td>
+                        <td style="text-align:center;">Sq.ft</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Booking date</td>
+                        <td style="text-align:right;">
+                             <apex:outputText value="{0, date, dd-MM-yyyy}">
+                                <apex:param value="{!nrrDetails.Booking_Date__c}" />
+                                 <!--<apex:param value="{!currentDate}" />-->
+                            </apex:outputText>
+                        </td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Base Price</td>
+                        <td style="text-align:right;">{!nrrDetails.Base_Price__c}</td>
+                        <td style="text-align:center;">PSF</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: PAGE premium</td>
+                        <td style="text-align:right;">{!nrrDetails.PAGE_premium__c}</td>
+                        <td style="text-align:center;">PSF</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: Floor Rise</td>
+                        <td style="text-align:right;">{!nrrDetails.Floor_Rise__c}</td>
+                        <td style="text-align:center;">PSF</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:yellow;">Add: Garden Premium/NPV/ any other premium</td>
+                        <td style="text-align:right;background-color:yellow;">{!nrrDetails.Garden_Premium_NPV_any_other_premium__c}</td>
+                        <td style="text-align:center;background-color:yellow;">PSF</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:yellow;">Add: Premium 1</td>
+                        <td style="text-align:right;background-color:yellow;">{!nrrDetails.Premium_1__c}</td>
+                        <td style="text-align:center;background-color:yellow;"></td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:yellow;">Add: Premium 2</td>
+                        <td style="text-align:right;background-color:yellow;">{!nrrDetails.Premium_2__c}</td>
+                        <td style="text-align:center;background-color:yellow;">PSF</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:yellow;">Less: Discount 1</td>
+                        <td style="text-align:right;background-color:yellow;">{!nrrDetails.Discount_1__c}</td>
+                        <td style="text-align:center;background-color:yellow;">PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:yellow;">Less: Discount 2</td>
+                        <td style="text-align:right;background-color:yellow;">{!nrrDetails.Discount_2__c}</td>
+                        <td style="text-align:center;background-color:yellow;"></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:#59bc55;">CP passback if Applicable</td>
+                        <td style="background-color:#59bc55;text-align:right;">{!nrrDetails.CP_passback_if_Applicable__c}</td>
+                        <td style="background-color:#59bc55;text-align:center;">Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="background-color:yellow;">Less: Discount 3 (CP Pass back)</td>
+                        <td style="text-align:right;background-color:yellow;">{!nrrDetails.Discount_3_CP_Pass_back__c}</td>
+                        <td style="text-align:center;background-color:yellow;"></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Total rate</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Total_Rate__c}</td>
+                        <td style="text-align:center;">PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Agreement Value</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Agreement_Value__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Add: Development Charges</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Development_Charges__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Add: SD in AV</b></td>
+                        <td style="text-align:right;">{!nrrDetails.SD_in_AV__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Agreement value</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Total_Agreement_Value__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <!--<tr>
+                        <td><b>Check : AV as per cost sheet</b></td>
+                        <td>{!nrrDetails.AV_as_per_cost_sheet__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>-->
+                    <tr>
+                        <td><b>AV After 2% GST discount</b></td>
+                        <td style="text-align:right;">{!nrrDetails.AV_After_2_GST_discount__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>AV for Brokerage (after deduction)</b></td>
+                        <td style="text-align:right;">{!nrrDetails.AV_for_Brokerage_after_deduction__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Passback%</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Passback__c}%</td>
+                        <td style="text-align:center;"></td>
+                        <td style="text-align:center;"><b>Base brokerage</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Brokerage to be paid</b></td>
+                        <td style="text-align:right;">{!nrrDetails.Brokerage_to_be_paid__c}%</td>
+                        <td style="text-align:center;background-color:yellow;"></td>
+                        <td style="background-color:#fac7a9;text-align:center;"><b>{!nrrDetails.Base_Brokerage__c}%</b></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: CP Pay-out/ Referral payout</td>
+                        <td style="text-align:right;">{!nrrDetails.CP_Pay_out_Referral_payout__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    	<td>Less:Interest Cost - NPV/Subvention/Deffered/Flexi Payment Cost</td>
+                        <td style="text-align:right;">{!nrrDetails.Interest_Cost_NPV_Subvention_Deffered__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td style="background-color:#df9afa;text-align:center;">{!nrrDetails.Garden_Premium_NPV_any_other_premium__c}</td>
+                    </tr>
+                    <tr>
+                    	<td>Less: Other Cost if any (Eg. SD Waiver)</td>
+                        <td style="background-color:#df9afa;text-align:right;">{!nrrDetails.Other_Cost_if_any_Eg_SD_Waiver__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: SD impact if applicable</td>
+                        <td style="text-align:right;">{!nrrDetails.SD_impact_if_applicable__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="text-align:center;">{!nrrDetails.SD_Impact_Applicable__c}</td>
+                    </tr>
+                    <tr>
+                    	<td>Add: GST ITC Benefit</td>
+                        <td style="text-align:right;">{!nrrDetails.GST_ITC_Benefit__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    	<td>Net value </td>
+                        <td style="text-align:right;">{!nrrDetails.Net_value__c}</td>
+                        <td style="text-align:center;">Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Net Realisation</b></td>
+                        <td style="text-align:right;"><b>{!nrrDetails.Net_Realisation__c}</b></td>
+                        <td style="text-align:center;"><b>PSF</b></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td><b>Approved NRR</b></td>
+                        <td style="text-align:right;"><b>{!nrrDetails.Approved_NRR__c}</b></td>
+                        <td style="text-align:center;"><b>PSF</b></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Source</td>
+                        <td style="text-align:right;">{!nrrDetails.Source__c}</td>
+                        <td style="text-align:center;"></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Payment Plan</td>
+                        <td colspan="2"  style="text-align:center;">{!nrrDetails.Payment_Plan__c}</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>	
+                </table>
+                
+            </div>
+        </body>
+    </html>
+	
+</apex:page>

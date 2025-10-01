@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Kserve_Callings</fullName>
+    <columns>LEAD.FIRST_NAME</columns>
+    <columns>LEAD.LAST_NAME</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>LEAD.UNREAD</columns>
+    <columns>RW_Project__c</columns>
+    <columns>Last_Call_Attempt_Date__c</columns>
+    <columns>Last_call_attempted_by__c</columns>
+    <columns>Last_call_attempt_status__c</columns>
+    <columns>LEAD.CONVERTED</columns>
+    <columns>Pre_Sales_User__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RW_Project__c</field>
+        <operation>contains</operation>
+        <value>Forests</value>
+    </filters>
+    <filters>
+        <field>LEAD.CREATED_DATE</field>
+        <operation>lessThan</operation>
+        <value>1/1/2019 12:00 AM</value>
+    </filters>
+    <label>Kserve Callings</label>
+    <sharedTo>
+        <group>External_call_centre</group>
+    </sharedTo>
+</ListView>

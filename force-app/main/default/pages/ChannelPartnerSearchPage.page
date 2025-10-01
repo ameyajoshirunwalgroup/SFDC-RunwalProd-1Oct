@@ -1,0 +1,134 @@
+<apex:page Controller="ChannelPartnerSearchPageController" sidebar="false" showheader="false" standardstylesheets="false" id="thePage" deferlastcommanduntilready="true" cache="false">
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Check Channel Partner</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <!-- <link rel="stylesheet" href="css/runwal.css" /> -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.RunwalCSS,'/css/runwal.css')}" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+        .spinnerBg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: 0.2;
+            z-index: 999999;
+            left: 0;
+            top: 0;
+        }
+        
+        .Assigned {
+            position: fixed;
+            background: url('{!URLFOR($Resource.CIFLoading)}');
+            background-size: 50px 50px;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+            z-index: 1004;
+            left: 0%;
+            top: 0%;
+        }
+        
+        .errorMsg {
+            color: red;
+        }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <apex:form styleclass="form">
+                <apex:actionstatus id="spinnerStatus">
+                    <apex:facet name="start">
+                        <div class="spinnerBg" />
+                        <div class="Assigned" /> </apex:facet>
+                </apex:actionstatus>
+                <div class="row mrgn_t15">
+                    <div class="col-sm-3">
+                        <!--<img src="images/runwal_greens.png" alt="Runwal Greens" width="200" />-->
+                        <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}" style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> </div>-->
+                        <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}" style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> </div>
+                    <div class="col-sm-6 text-center">
+                        <h1 class="heading1"><span>Search Channel Partner</span></h1> </div>
+                    <div class="col-sm-3 text-right">
+                        <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->&nbsp; </div>
+                </div>
+                <div style="font-size: 17px;color: red;font-weight: bold;margin-top:5px;" id="errorDiv" align="center">
+                    <apex:outputtext value="{!strError}" id="errorId" /> </div>
+                <div class="frmContainer">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">* PAN No: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputText value="{!NewCP.Broker_Pan_No__c}" styleclass="form-control" id="phoneID" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <apex:commandbutton action="{!goBack}" value="Cancel" styleclass="btn btn-danger" /> &nbsp;
+                            <apex:commandbutton action="{!searchAllChannelPartner}" value="Search" styleclass="btn btn-success" /> &nbsp;
+                            <apex:commandbutton action="{!createNew}" value="Create New" styleclass="btn btn-success" rendered="{!and(!isNew, !isCpExist)}" /> &nbsp; </div>
+                    </div>
+                    <apex:outputpanel layout="block" rendered="{!AND(isCpExist)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;"> Channel partner available in the system. </center>
+                    </apex:outputpanel>
+                </div>
+                <apex:outputpanel layout="block" rendered="{!isCpExist}">
+                    <div class="table-responsive col-sm-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Channel Partner Name</th>
+                                    <th>Channel Partner PAN </th>
+                                    <th>SAP CP Code</th>
+                                    <th>Channel Partner Email</th>
+                                    <th>CP IRIS Sync ?</th>
+                                    <th>Unregistered Channel Partner ?</th>
+                                    <th>Edit Unregistered Channel Partner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!lstCP}" var="cp">
+                                    <tr>
+                                        <td>
+                                            <apex:outputtext value="{!cp.Name}" rendered="{!if(cp.Unregistered_Channel_Partner__c == true,true,false)}" />
+                                            <apex:outputlink value="/{!cp.id}" rendered="{!if(cp.Unregistered_Channel_Partner__c== false,true,false)}">{!cp.Name}</apex:outputlink>
+                                        </td>
+                                        <td> {!cp.Broker_Pan_No__c} </td>
+                                        <td> {!cp.SAP_CP_Code__c} </td>
+                                        <td> {!cp.RW_Email__c} </td>
+                                        <td>
+                                            <apex:outputtext value="Yes" rendered="{!if(cp.RW_IRIS_Sync__c == true ,true,false)}" />
+                                            <apex:outputtext value="No" rendered="{!if(cp.RW_IRIS_Sync__c == false ,true,false)}" /> </td>
+                                        <td>
+                                            <apex:outputtext value="Yes" rendered="{!if(cp.Unregistered_Channel_Partner__c == true ,true,false)}" />
+                                            <apex:outputtext value="No" rendered="{!if(cp.Unregistered_Channel_Partner__c == false ,true,false)}" /> &nbsp; </td>
+                                        <td>
+                                            <apex:pageMessages />
+                                            <apex:inputField value="{!cp.Unregistered_Channel_Partner__c}" style="margin-bottom :10px" rendered="{!if(cp.Unregistered_Channel_Partner__c == false ,true,false)}" />
+                                            <apex:pageBlock mode="edit">
+                                                <apex:commandButton action="{!Save}" value="Save" styleclass="btn btn-success" rendered="{!if(cp.Unregistered_Channel_Partner__c == false ,true,false)}" /> </apex:pageBlock>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </apex:outputpanel>
+            </apex:form>
+        </div>
+    </body>
+
+    </html>
+</apex:page>

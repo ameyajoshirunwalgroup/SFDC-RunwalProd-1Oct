@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TodaysLeads</fullName>
+    <columns>FULL_NAME</columns>
+    <columns>LEAD.EMAIL</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>RW_Project__c</columns>
+    <columns>LEAD.STATUS</columns>
+    <columns>LEAD.LEAD_SOURCE</columns>
+    <columns>RW_Lead_Sub_Source__c</columns>
+    <columns>RDS_Country_Code__c</columns>
+    <columns>Tollfree_Number__c</columns>
+    <columns>LEAD.COUNTRY</columns>
+    <columns>Campaign_Code__c</columns>
+    <columns>CREATEDBY_USER.ALIAS</columns>
+    <columns>Lead_ID__c</columns>
+    <columns>Is_Anarock_Lead__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>LEAD.CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Today&apos;s Leads</label>
+    <sharedTo>
+        <role>Pre_Sales_Head</role>
+    </sharedTo>
+</ListView>

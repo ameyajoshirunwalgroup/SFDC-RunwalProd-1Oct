@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_on_Passport</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( RW_Passport_Received__c == true, OR(ISBLANK( RW_Passport_Number__c), ISNULL( RW_Passport_Number__c)),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>RW_Passport_Number__c</errorDisplayField>
+    <errorMessage>Please enter the Passport number.</errorMessage>
+</ValidationRule>

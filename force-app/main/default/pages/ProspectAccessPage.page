@@ -1,0 +1,273 @@
+<apex:page sidebar="false" showheader="false" standardstylesheets="false" id="thePage" deferlastcommanduntilready="true" cache="false"
+           controller="ProspectAccessController">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Prospect Check</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet"
+              href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <!-- <link rel="stylesheet" href="css/runwal.css" /> -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.RunwalCSS,'/css/runwal.css')}" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            .spinnerBg {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0.2;
+                z-index: 999999;
+                left: 0;
+                top: 0;
+            }
+
+            .Assigned {
+                position: fixed;
+                background: url('{!URLFOR($Resource.CIFLoading)}');
+                background-size: 50px 50px;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                z-index: 1004;
+                left: 0%;
+                top: 0%;
+            }
+            .errorMsg {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <apex:form styleclass="form">
+                <apex:actionstatus id="spinnerStatus">
+                    <apex:facet name="start">
+                        <div class="spinnerBg" />
+                        <div class="Assigned" />
+                    </apex:facet>
+                </apex:actionstatus>
+                <div class="row mrgn_t15">
+                    <div class="col-sm-3">
+                        <!--<img src="images/runwal_greens.png" alt="Runwal Greens" width="200" />-->
+                        <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}"
+                                    style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> -->
+                        <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}"
+                                    style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" />
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <h1 class="heading1"><span>Check Prospects</span></h1>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->
+                        &nbsp;
+                    </div>
+                </div>
+                <div style="font-size: 17px;color: red;font-weight: bold;margin-top:5px;" id="errorDiv" align="center">
+                    <apex:outputtext value="{!strError}" id="errorId" />
+                </div>
+                <div class="frmContainer">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">*Contact No: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputtext value="{!NewLead.RW_Mobile_No__c}" styleclass="form-control" id="phoneID" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">Email: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputtext value="{!NewLead.Email}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">Project: </label>
+                                <div class="frmElem">
+                                    <apex:selectList value="{!strProjectId}" size="1" multiselect="false" styleclass="form-control">
+                                        <apex:selectOptions value="{!lstProjectList}"/>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <apex:commandbutton action="{!goBack}" value="Cancel" styleclass="btn btn-danger" /> &nbsp;
+                            <apex:commandbutton action="{!searchAllLead}" value="Search" styleclass="btn btn-success" /> &nbsp;
+                            
+                                          
+
+                        </div>
+                    </div>
+
+                    <apex:outputpanel layout="block" rendered="{!AND(!isNew, !isDuplicateLeadExist, !isSameProspectExist, !isDiffProspectExist)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;">
+                            No duplicate lead found, Please create a new lead.
+                        </center>
+                    </apex:outputpanel>
+                    <apex:outputpanel layout="block" rendered="{!AND(isDuplicateLeadExist)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;">
+                             Lead Exist in the system. Please click on above Request Access to view access. 
+                        </center>
+                    </apex:outputpanel>
+                </div>
+                <apex:outputpanel layout="block" rendered="{!isDuplicateLeadExist}">
+                    <div class="table-responsive col-sm-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Lead Name</th>
+                                    <th>Project Name</th>
+                                    <apex:repeat value="{!$ObjectType.Lead.FieldSets.RWLeadSearch}" var="f">
+                                        <th>
+                                            <apex:outputtext value="{!f.Label}" /><br />
+                                        </th>
+                                    </apex:repeat>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!lstDuplicateLeads}" var="lead">
+                                    <tr>
+                                        <td>
+                                                {!lead.Name}
+                                        </td>
+                                        <td>
+                                            {!lead.RW_project__r.Name}
+                                        </td>
+                                        <apex:repeat value="{!$ObjectType.Lead.FieldSets.RWLeadSearch}" var="f">
+                                            <td>
+                                                <apex:outputfield value="{!lead[f]}" /><br />
+                                            </td>
+                                        </apex:repeat>
+                                    </tr>
+                                </apex:repeat>
+                                                
+                              <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <apex:commandbutton action="{!saveMethod}" value="Request Access" styleclass="btn btn-success"
+                                                rendered="{!and(isDuplicateLeadExist) && ! dupflag }" />
+                                    
+                               </div>
+                              </div>
+                            </tbody>
+                        </table>
+                     </div>
+                </apex:outputpanel>
+                
+                <apex:outputpanel layout="block" rendered="{!isSameProspectExist}">
+                    <div class="table-responsive col-sm-12">
+                        <table class="table table-bordered table-hover"> 
+                            <thead>
+                                <tr>
+                            <th colspan="5"> Same Project Prospect found</th>
+                            </tr>
+                                <tr>                                    
+                                    <th>Prospect Name</th>
+                                    <th>Mobile No</th>
+                                    <th> Secondary Mobile No</th>                                   
+                                    <th>Project Name</th>
+                                    <th>Assigned to SM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!sameProjectProspects}" var="Prospect">
+                                    <tr>
+                                        
+                                        <td>
+                                                {!Prospect.Name}
+                                        </td>
+                                        <td>
+                                                {!Prospect.Mobile_No__c}
+                                        </td>
+                                        <td>
+                                                {!Prospect.Secondary_Mobile_No__c}
+                                        </td>
+                                        <td>
+                                            {!Prospect.Project__r.name}
+                                        </td>
+                                        <td>
+                                            {!Prospect.User__r.name}
+                                        </td>                                  
+                                    </tr>
+                                </apex:repeat>
+                                                
+                              <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <apex:commandbutton action="{!saveMethod}" value="Request Access" styleclass="btn btn-success"
+                                                rendered="{!and(isSameProspectExist) && ! dupflag }" />
+                                   
+                               </div>
+                              </div>
+                            </tbody>
+                        </table>
+                     </div>
+                </apex:outputpanel>
+                                                
+                 <apex:outputpanel layout="block" rendered="{!isDiffProspectExist}">
+                    <div class="table-responsive col-sm-12">
+                        <table class="table table-bordered table-hover"> 
+                            <thead>
+                            <tr>
+                            <th colspan="5"> Different Project Prospect found</th>
+                            </tr>
+                                <tr>                                    
+                                    <th>Prospect Name</th>
+                                    <th>Mobile No</th>
+                                    <th> Secondary Mobile No</th>                                   
+                                    <th>Project Name</th>
+                                    <th>Assigned to SM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!diffProjectProspects}" var="Prospect">
+                                    <tr>
+                                        
+                                        <td>
+                                                {!Prospect.Name}
+                                        </td>
+                                        <td>
+                                                {!Prospect.Mobile_No__c}
+                                        </td>
+                                        <td>
+                                                {!Prospect.Secondary_Mobile_No__c}
+                                        </td>
+                                        <td>
+                                            {!Prospect.Project__r.name}
+                                        </td>
+                                        <td>
+                                            {!Prospect.User__r.name}
+                                        </td>                                  
+                                    </tr>
+                                </apex:repeat>
+                                                
+                              <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <apex:commandbutton action="{!saveMethod}" value="Request Access" styleclass="btn btn-success"
+                                                rendered="{!and(isDiffProspectExist) && ! dupflag }" />
+                                   
+                               </div>
+                              </div>
+                            </tbody>
+                        </table>
+                     </div>
+                </apex:outputpanel>                                
+            </apex:form>
+        </div>
+    </body>
+</html>
+</apex:page>

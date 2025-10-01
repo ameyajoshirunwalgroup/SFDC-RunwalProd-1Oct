@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HL_Sub_Status__c</fullName>
+    <label>HL Sub Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>HL_Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Not reachable</fullName>
+                <default>false</default>
+                <label>Not reachable</label>
+            </value>
+            <value>
+                <fullName>Not answering</fullName>
+                <default>false</default>
+                <label>Not answering</label>
+            </value>
+            <value>
+                <fullName>Documents to be received from customer</fullName>
+                <default>false</default>
+                <label>Documents to be received from customer</label>
+            </value>
+            <value>
+                <fullName>Documents submitted</fullName>
+                <default>false</default>
+                <label>Documents submitted</label>
+            </value>
+            <value>
+                <fullName>Builders subvention</fullName>
+                <default>false</default>
+                <label>Builders subvention</label>
+            </value>
+            <value>
+                <fullName>Bank Subvention</fullName>
+                <default>false</default>
+                <label>Bank Subvention</label>
+            </value>
+            <value>
+                <fullName>Yet to decide</fullName>
+                <default>false</default>
+                <label>Yet to decide</label>
+            </value>
+            <value>
+                <fullName>Customer opted self-funding</fullName>
+                <default>false</default>
+                <label>Customer opted self-funding</label>
+            </value>
+            <value>
+                <fullName>Discounts</fullName>
+                <default>false</default>
+                <label>Discounts</label>
+            </value>
+            <value>
+                <fullName>Deviations</fullName>
+                <default>false</default>
+                <label>Deviations</label>
+            </value>
+            <value>
+                <fullName>Source type</fullName>
+                <default>false</default>
+                <label>Source type</label>
+            </value>
+            <value>
+                <fullName>Financial/Income loss</fullName>
+                <default>false</default>
+                <label>Financial/Income loss</label>
+            </value>
+            <value>
+                <fullName>Medical</fullName>
+                <default>false</default>
+                <label>Medical</label>
+            </value>
+            <value>
+                <fullName>Unit transfer</fullName>
+                <default>false</default>
+                <label>Unit transfer</label>
+            </value>
+            <value>
+                <fullName>Sanction in process</fullName>
+                <default>false</default>
+                <label>Sanction in process</label>
+            </value>
+            <value>
+                <fullName>Sanction on Hold</fullName>
+                <default>false</default>
+                <label>Sanction on Hold</label>
+            </value>
+            <value>
+                <fullName>Receipt of Sanction</fullName>
+                <default>false</default>
+                <label>Receipt of Sanction</label>
+            </value>
+            <value>
+                <fullName>CIBIL Issues</fullName>
+                <default>false</default>
+                <label>CIBIL Issues</label>
+            </value>
+            <value>
+                <fullName>Eligibility issues</fullName>
+                <default>false</default>
+                <label>Eligibility issues</label>
+            </value>
+            <value>
+                <fullName>Registered Agreement awaited</fullName>
+                <default>false</default>
+                <label>Registered Agreement awaited</label>
+            </value>
+            <value>
+                <fullName>Builder NOC pending</fullName>
+                <default>false</default>
+                <label>Builder NOC pending</label>
+            </value>
+            <value>
+                <fullName>Documents  with Bank</fullName>
+                <default>false</default>
+                <label>Documents  with Bank</label>
+            </value>
+            <value>
+                <fullName>OCR Pending</fullName>
+                <default>false</default>
+                <label>OCR Pending</label>
+            </value>
+            <value>
+                <fullName>TDS Pending</fullName>
+                <default>false</default>
+                <label>TDS Pending</label>
+            </value>
+            <value>
+                <fullName>ROC Pending</fullName>
+                <default>false</default>
+                <label>ROC Pending</label>
+            </value>
+            <value>
+                <fullName>Payment awaited from Bank</fullName>
+                <default>false</default>
+                <label>Payment awaited from Bank</label>
+            </value>
+            <value>
+                <fullName>Bank name</fullName>
+                <default>false</default>
+                <label>Bank name</label>
+            </value>
+            <value>
+                <fullName>Client visit to bank pending</fullName>
+                <default>false</default>
+                <label>Client visit to bank pending</label>
+            </value>
+            <value>
+                <fullName>Customer nor responding</fullName>
+                <default>false</default>
+                <label>Customer nor responding</label>
+            </value>
+            <value>
+                <fullName>Customer out of station</fullName>
+                <default>false</default>
+                <label>Customer out of station</label>
+            </value>
+            <value>
+                <fullName>Customer will submit the docs to bank</fullName>
+                <default>false</default>
+                <label>Customer will submit the docs to bank</label>
+            </value>
+            <value>
+                <fullName>Sanction declined</fullName>
+                <default>false</default>
+                <label>Sanction declined</label>
+            </value>
+            <value>
+                <fullName>Income loss</fullName>
+                <default>false</default>
+                <label>Income loss</label>
+            </value>
+            <value>
+                <fullName>CIBIL issue</fullName>
+                <default>false</default>
+                <label>CIBIL issue</label>
+            </value>
+            <value>
+                <fullName>Non closure of other Loans</fullName>
+                <default>false</default>
+                <label>Non closure of other Loans</label>
+            </value>
+            <value>
+                <fullName>Agreement with vendor- E-Registration</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Agreement with vendor- E-Registration</label>
+            </value>
+            <value>
+                <fullName>Agreement with vendor- P-Registration</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Agreement with vendor- P-Registration</label>
+            </value>
+            <value>
+                <fullName>Awaiting Sanction</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Awaiting Sanction</label>
+            </value>
+            <value>
+                <fullName>Cibil Issue/Eligibility Issue/ Loan Closure</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Cibil Issue/Eligibility Issue/ Loan Closure</label>
+            </value>
+            <value>
+                <fullName>Docket with Customer</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Docket with Customer</label>
+            </value>
+            <value>
+                <fullName>Login For Disbursement</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Login For Disbursement</label>
+            </value>
+            <value>
+                <fullName>Medical / Hospitalization / Covid 19</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Medical / Hospitalization / Covid 19</label>
+            </value>
+            <value>
+                <fullName>NOC Done</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>NOC Done</label>
+            </value>
+            <value>
+                <fullName>NOC Done on Index II/E-SBTR</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>NOC Done on Index II/E-SBTR</label>
+            </value>
+            <value>
+                <fullName>NOC Pending</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>NOC Pending</label>
+            </value>
+            <value>
+                <fullName>No Dues</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>No Dues</label>
+            </value>
+            <value>
+                <fullName>OCR/TDS/GST Pending</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>OCR/TDS/GST Pending</label>
+            </value>
+            <value>
+                <fullName>Out of Station</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Out of Station</label>
+            </value>
+            <value>
+                <fullName>Part Disbursement</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Part Disbursement</label>
+            </value>
+            <value>
+                <fullName>Ready for Disbursement</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Ready for Disbursement</label>
+            </value>
+            <value>
+                <fullName>Rectification Deed</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rectification Deed</label>
+            </value>
+            <value>
+                <fullName>Resanction/Final Sanction Pending</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Resanction/Final Sanction Pending</label>
+            </value>
+            <value>
+                <fullName>Salary/Job/Business Loss</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Salary/Job/Business Loss</label>
+            </value>
+            <value>
+                <fullName>Sap Entry Pending</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Sap Entry Pending</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Sanction received</controllingFieldValue>
+            <valueName>Receipt of Sanction</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Decline of Sanction</controllingFieldValue>
+            <valueName>CIBIL Issues</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Decline of Sanction</controllingFieldValue>
+            <valueName>Eligibility issues</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documentation for disbursement</controllingFieldValue>
+            <valueName>Registered Agreement awaited</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documentation for disbursement</controllingFieldValue>
+            <valueName>Builder NOC pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer non-contactable</controllingFieldValue>
+            <valueName>Not reachable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer non-contactable</controllingFieldValue>
+            <valueName>Not answering</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Log in for disbursement</controllingFieldValue>
+            <valueName>Documents  with Bank</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Log in for disbursement</controllingFieldValue>
+            <valueName>OCR Pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Log in for disbursement</controllingFieldValue>
+            <valueName>TDS Pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Log in for disbursement</controllingFieldValue>
+            <valueName>ROC Pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documentation</controllingFieldValue>
+            <valueName>Documents to be received from customer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documentation</controllingFieldValue>
+            <valueName>Documents submitted</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Ready for Disbursement</controllingFieldValue>
+            <valueName>Payment awaited from Bank</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Ready for Disbursement</controllingFieldValue>
+            <valueName>Bank name</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Ready for Disbursement</controllingFieldValue>
+            <valueName>Client visit to bank pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Subvention scheme</controllingFieldValue>
+            <valueName>Builders subvention</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Subvention scheme</controllingFieldValue>
+            <valueName>Bank Subvention</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documents with customer</controllingFieldValue>
+            <valueName>Customer nor responding</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documents with customer</controllingFieldValue>
+            <valueName>Customer out of station</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Documents with customer</controllingFieldValue>
+            <valueName>Customer will submit the docs to bank</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Loan Eligibility issues</controllingFieldValue>
+            <valueName>Sanction declined</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Loan Eligibility issues</controllingFieldValue>
+            <valueName>Income loss</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Loan Eligibility issues</controllingFieldValue>
+            <valueName>CIBIL issue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Loan Eligibility issues</controllingFieldValue>
+            <valueName>Non closure of other Loans</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Funding type</controllingFieldValue>
+            <valueName>Yet to decide</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Funding type</controllingFieldValue>
+            <valueName>Customer opted self-funding</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales dispute</controllingFieldValue>
+            <valueName>Discounts</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales dispute</controllingFieldValue>
+            <valueName>Deviations</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales dispute</controllingFieldValue>
+            <valueName>Source type</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Under cancellation</controllingFieldValue>
+            <valueName>Financial/Income loss</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Under cancellation</controllingFieldValue>
+            <valueName>Medical</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Under cancellation</controllingFieldValue>
+            <valueName>Unit transfer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Login done with HFC</controllingFieldValue>
+            <valueName>Sanction in process</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Login done with HFC</controllingFieldValue>
+            <valueName>Sanction on Hold</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

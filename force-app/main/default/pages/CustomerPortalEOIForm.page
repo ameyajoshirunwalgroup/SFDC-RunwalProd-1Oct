@@ -1,0 +1,1340 @@
+<apex:page controller="CustomerPortalEOIFormData" applyHtmlTag="false"  applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="advanced_pdf" >
+    <html>
+        <head>
+            
+            <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+            
+            <style>
+                
+                @page {
+                      size: A4;
+                      margin: 0;
+                    }
+                    @media print {
+                      html, body {
+                        width: 210mm;
+                        height: 297mm;
+                      }
+                     
+                    }
+
+					
+                .sectionBackground
+                { 
+                background-color : rgb(226 226 232);
+                font-family: Montserrat;
+                display: flex;
+                align-items: center;
+                font-size: 1rem;
+                line-height: 1.875rem;
+                border: 1px solid transparent;
+                border-radius: .25rem;
+                padding-left: 20px;
+                }
+                .noWhiteSpace{
+                margin-top: 0;
+       		    padding-top: 0;
+       			border: 0;
+       			outline: 0;
+       			font-size: 100%;
+        		vertical-align: baseline;
+                padding-left:20px !important;
+                line-height: 1.875rem !important;
+                border: 1px solid transparent !important;
+                border-radius: .25rem;
+                
+                }
+                
+                .column {
+                float: left;
+                width: 25%;
+                }
+                
+                .underlineBlankText
+                {
+                  border:0px;
+   			    border-bottom:0.5px solid #9e9b9b;
+                content:"&nbsp;";
+                unicode-bidi: isolate;
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                overflow: hidden;
+                
+                border-width: 1px;
+                }
+                
+                .underlineText
+                {
+                border:0px;
+   			    border-bottom:0.4px solid  #9e9b9b;
+                display: block;
+                unicode-bidi: isolate;
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                overflow: hidden;
+                border-width: 1px;
+                }
+                
+                
+                .underlineAlternateText
+                {
+                border:0px;
+   			    border-bottom:0.4px solid #9e9b9b;
+                unicode-bidi: isolate;
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                overflow: hidden;
+                
+                border-width: 1px;
+                }
+                
+                .underlineHypenText
+                {
+                border:0px;
+   			    border-bottom:0.5px #9e9b9b;
+                display: block;
+                unicode-bidi: isolate;
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                overflow: hidden;
+                border-width: .5px;
+                border-style: dashed;
+                }
+                
+                .outermostdiv
+                {
+                  border: 1px solid black;
+                  width: 777px;
+  				  height: 5580px;
+                  
+                }
+                
+                
+                
+                .checkbox {
+  position: relative;
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  border: 1px solid;
+  cursor: pointer;
+}
+.checkboxAfter {
+  position: relative;
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  border: 1px solid;
+  cursor: pointer; 
+  text-align: center;
+  content: "✓";
+  background-color:blue;              
+}
+                
+.checkboxAfter::before{
+                content: "✓"
+                }
+                
+.imgdynamic .htmlDetailElementTable .sfdc_richtext img {
+            width:1024px;
+            height:1024px;
+            }
+                
+
+                
+.instructionFont{
+                font-size:11px;
+                padding-left : 10px;
+                }            
+                
+body {
+<!--font-family: samplefont;        -->
+font-family:sans-serif;
+font-size:13px;
+                }
+                
+            </style>
+            
+        </head>
+        <body>
+            <div styleClass="imgdynamic">
+          <apex:outputField value="{!eoi.Tower__r.Front_Page_Image__c}"  />
+                 <!-- <apex:image url="{!eoi.Tower__r.Front_Page_Image__c}"/> -->
+            
+        </div>
+            
+           
+            
+            <div class="outermostdiv" style="font-style:sans-serif !important">
+                
+                
+			<div style="height:160px;">
+                  	 <div  style="width:65%;float:left">
+                         <h3 style="padding-left:10px;color:green">
+                    		APPLICATION FOR EXPRESSION IN INTEREST
+                		</h3>
+                       
+                        <h4 style="padding-left:10px;">
+                            INSTRUCTIONS
+                        </h4>
+                        <span class="instructionFont">
+                        	1.  Kindly complete this Application for Expression of Interest ("EOI") Form in <b>BLOCK</b> letters.
+                        </span>
+                        <br/>
+                        <span class="instructionFont">
+                        	2.  All fields are mandatory.
+                        </span>
+                        <br/>
+                        <span class="instructionFont">
+                        	3.  Please read all the Terms and Conditions mentioned in this Application for EOI.
+                        </span>
+                        <br/>
+                        <span class="instructionFont">
+                        	4.  Applicants signatures are required on every page. Please do not sign on any incomplete page.
+                        </span>
+                        <br/>
+                        <span class="instructionFont">
+                            5.  Please <b> "Avoid Overwriting"</b>. Kindly countersign in case of making any overwriting/changes
+                        </span>
+                    </div>
+					 <div  style="display: flex;flex-wrap: wrap;white-space: nowrap;width:20%;float:right;text-align: left;">
+                        <h6 style="text-align: left;">
+                            FORM NO.:{!eoi.Name}
+                        </h6>
+                        <h6>
+                            TOKEN NO.:
+                        </h6>
+                        <h6>
+                            DATE.:                                                      
+                            <span style="{!If(eoiDate !=null , 'inline', 'display:none' )}">{!eoiDate}</span>
+                        
+                        </h6>
+                    </div>
+                           
+                </div>	
+              	
+                
+                  <h3 class="sectionBackground">DETAILS OF APPLICANT</h3> 
+                      
+               
+                
+                <div style="padding: 20px;padding-top:0px !important;">
+                  
+                
+            
+            <div class="row1">
+                
+                 <div style="float: left;
+                width: 19%;font-size:12px;font-weight:600;">
+                     Name of the Applicant:
+                </div>
+                <div style="float: left;
+                width: 28%;">
+                    <div>
+                        <span  class="underlineText"><span class="{!If(eoi.RW_Primary_First_Name__c == null , 'display:block', 'display:none' )}">&nbsp; </span>{!eoi.RW_Primary_First_Name__c}</span>
+                    </div>
+                    
+                    <div>
+                    <span>&nbsp; First Name</span>    
+                    </div>
+                     
+                    
+                </div>
+                <div style="float: left;
+                width: 25%;">
+                    <div>
+                        <!--<span class="{!If(eoi.RW_Primary_Middle_Name__c == null , 'display:block', 'display:none' )}"> &nbsp;</span>-->
+                        <span  class="underlineText"><span class="{!If(eoi.RW_Primary_Middle_Name__c == null , 'display:block', 'display:none' )}">&nbsp;</span> {!eoi.RW_Primary_Middle_Name__c}</span>
+                        <!-- <span  class="{!If(eoi.RW_Primary_Middle_Name__c == null , 'underlineBlankText', 'underlineText' )}"> {!eoi.RW_Primary_Middle_Name__c}</span>-->
+                    </div>
+                    
+                    <div>
+                    <span> &nbsp;&nbsp;Middle Name</span>    
+                    </div>
+                </div>
+                <div style="float: left;
+                width: 28%;">
+                    <div>
+                        <span class="underlineText" > <span class="{!If(eoi.RW_Primary_Last_Name__c == null , 'display:block', 'display:none' )}">&nbsp;</span>{!eoi.RW_Primary_Last_Name__c}</span>
+                    </div>
+                    
+                    <div>
+                    <span > &nbsp;Last Name</span>    
+                    </div>
+                </div>
+            </div>
+             
+            <div style="padding-top: 60px;">
+                <div style="float: left;
+                width: 36.5%;">
+                     Name of the Company (For Corporate Buyer):
+                </div>
+                
+                <div style="float: left;
+                width: 63.5%;">
+                    <div>
+                        <span class="underlineText"><span class="{!If(eoi.RW_Company_Name__c == null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Company_Name__c}</span>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+                 
+               <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 26%;">
+                    Residential / Company Address:
+                </div>
+                
+                <div style="float: left;
+                width: 74%;">
+                    <div>
+                        
+                        <span class="underlineText"><span class="{!If(address== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!address}</span>
+                        
+                    </div>
+                    
+                    
+                </div>
+            </div>  
+                    
+             <div style="padding-top: 40px;">
+                <div style="float: left;width:4.5%;">
+                    <span>Pin:</span>
+                </div>
+                
+                <div style="float: left;
+                width: 27%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                   <span class="{!If(eoi.RW_Pin__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Pin__c}
+                        
+                   
+                    
+                    
+                </div>
+                 
+                  <div style="float: left;width:6%;">
+                      <span>State:</span>
+                </div>
+                
+                <div style="float: left;
+                width: 28%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_State__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_State__c}
+                    
+                    
+                    
+                </div>
+                 
+                 <div style="float: left;width:6%;">
+                     <span>Country:</span>
+                </div>
+                
+                <div style="float: left;
+                width: 28.5%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Countries__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Countries__c}
+                   
+                    
+                    
+                </div>
+            </div> 
+                    
+                    
+              <div style="padding-top: 40px;">
+                <div style="float: left;width:13%;">
+                    Contact No.:(M)
+                </div>
+                
+                <div style="float: left;
+                width: 40%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Primary_Contact_No__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Primary_Contact_No__c}
+                    
+                </div>
+                 
+                  <div style="float: left;width:6%">
+                    Email:
+                </div>
+                
+                <div style="float: left;
+                width: 41%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Primary_Email__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Primary_Email__c}
+                    
+                    
+                </div>      
+                    </div> 
+                    
+                <div style="padding-top: 40px;">
+                <div style="float: left;width:11%;">
+                    PAN Details:
+                </div>
+                
+                <div style="float: left;
+                width: 36%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+                        <span class="{!If(eoi.RW_Primary_PAN_Details__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Primary_PAN_Details__c}
+                    </div>
+                    
+                    
+                </div>
+                 
+                  <div style="float: left;width:13%;">
+                    Alternate Email:
+                </div>
+                
+                <div style="float: left;
+                width: 40%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+
+                        <span class="{!If(eoi.RW_Primary_Alternate_Email__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Primary_Alternate_Email__c}
+                    </div>
+                    
+                    
+                </div>      
+                    </div>
+                    
+                    <div style="padding-top: 40px;">
+                <div style="float: left;width:13%;">
+                    Aadhar Details:
+                </div>
+                
+                <div style="float: left;
+                width: 37%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+                        <span class="{!If(eoi.RW_Primary_Aadhar_Details__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Primary_Aadhar_Details__c}
+                    </div>
+                    
+                    
+                </div>
+                 
+                  <div style="float: left;width:14%;">
+                    Passport Details:
+                </div>
+                
+                <div style="float: left;
+                width: 36%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+
+                        <span class="{!If(eoi.RW_Primary_Passport_Details__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Primary_Passport_Details__c}
+                    </div>
+                    
+                    
+                </div>      
+                    </div> 
+                    
+                    <div style="padding-top: 40px;">
+               			 <div style="float: left;width: 100%;">
+                   			 <span class="underlineHypenText"></span>
+               		 </div>
+           			 </div>
+                    
+                     <div class="row1" style="padding-top: 20px;">
+                
+                 <div style="float: left;
+                width: 25%;font-size:12px;font-weight:600;">
+                     Name of the Second Applicant:
+                </div>
+                <div style="float: left;
+                width: 25%;">
+                    <div>
+                        <span  class="underlineText"><span class="{!If(eoi.RW_Secondary_First_Name__c == null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_First_Name__c}</span>
+                    </div>
+                    
+                    <div>
+                    <span style="padding-left:4px;">First Name</span>    
+                    </div>
+                     
+                    
+                </div>
+                <div style="float: left;
+                width: 25%;">
+                    <div>
+                        <!--<span class="{!If(eoi.RW_Primary_Middle_Name__c == null , 'display:block', 'display:none' )}"> &nbsp;</span>-->
+                        <span  class="underlineText"><span class="{!If(eoi.RW_Secondary_Middle_Name__c == null , 'display:block', 'display:none' )}"> &nbsp; </span> {!eoi.RW_Secondary_Middle_Name__c}</span>
+                        <!-- <span  class="{!If(eoi.RW_Primary_Middle_Name__c == null , 'underlineBlankText', 'underlineText' )}"> {!eoi.RW_Primary_Middle_Name__c}</span>-->
+                    </div>
+                    
+                    <div>
+                    <span >&nbsp;&nbsp;Middle Name</span>    
+                    </div>
+                </div>
+                <div style="float: left;
+                width: 25%;">
+                    <div>
+                        <span class="underlineText" style="white-space:nowrap;"> <span class="{!If(eoi.RW_Secondary_Last_Name__c == null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_Last_Name__c}</span>
+                    </div>
+                    
+                    <div>
+                    <span >&nbsp;Last Name</span>    
+                    </div>
+                </div>
+            </div>
+					          <div style="padding-top: 60px;">
+                <div style="float: left;width:13%;">
+                    Contact No.:(M)
+                </div>
+                
+                <div style="float: left;
+                width: 40%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Primary_Contact_No__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_Contact_No__c}
+                    
+                </div>
+                 
+                  <div style="float: left;width:6%;">
+                    Email:
+                </div>
+                
+                <div style="float: left;
+                width: 41%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Primary_Email__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_Email__c}
+                    
+                    
+                </div>      
+                    </div> 
+                    
+                <div style="padding-top: 40px;">
+                <div style="float: left;width:11%;">
+                    PAN Details:
+                </div>
+                
+                <div style="float: left;
+                width: 36%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+                        <span class="{!If(eoi.RW_Primary_PAN_Details__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_PAN_Details__c}
+                    </div>
+                    
+                    
+                </div>
+                 
+                  <div style="float: left;width:13%;">
+                    Alternate Email:
+                </div>
+                
+                <div style="float: left;
+                width: 40%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+
+                        <span class="{!If(eoi.RW_Primary_Alternate_Email__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_Alternate_Email__c}
+                    </div>
+                    
+                    
+                </div>      
+                    </div>
+                    
+                    <div style="padding-top: 40px;">
+                <div style="float: left;width:13%;">
+                    Aadhar Details:
+                </div>
+                
+                <div style="float: left;
+                width: 37%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+                        <span class="{!If(eoi.RW_Primary_Aadhar_Details__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_Aadhar_Details__c}
+                    </div>
+                    
+                    
+                </div>
+                 
+                  <div style="float: left;width:14%;">
+                    Passport Details:
+                </div>
+                
+                <div style="float: left;
+                width: 36%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <div>
+
+                        <span class="{!If(eoi.RW_Primary_Passport_Details__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Secondary_Passport_Details__c}
+                    </div>
+                    
+                    
+                </div>      
+                    </div> 
+                    
+            </div>
+                <h3 class="sectionBackground">PROVISIONAL DETAILS OF PREFERRED RESIDENCE</h3>  
+                <div style="padding: 20px;padding-top:10px !important">
+                    
+                        <div style="float: left;font-size:12px;font-weight:600;
+                        width: 20%;">
+                             Preferred Unit Type:
+                        </div>
+                    <div style="display: flex;flex-wrap: wrap;white-space: nowrap;width:80%;float:right;">
+                     <apex:repeat var="units" value="{!UnitTypes}">
+                         <apex:outputPanel rendered="{!if(units != eoi.RW_Preferred_Unit_Type__c , true ,false)}">  
+                        	<div style="float: left;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true"></span>                         
+                       			<img src="/img/checkbox_unchecked.gif"/> -->
+                        		<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_unchecked.gif"/>
+                        		<span style="display: inline;overflow-wrap: break-word;position: relative;">{!units}</span>
+                     		</div>
+                         </apex:outputPanel> 
+                         <apex:outputPanel rendered="{!if(units == eoi.RW_Preferred_Unit_Type__c , true ,false)}"> 
+                            <div style="float: left;padding-left:5px;">
+                             <img src="/img/checkbox_checked.gif"/>                        
+                        	 <span style="display: inline;overflow-wrap: break-word;position: relative;">{!units}</span>
+                             </div>    
+                         </apex:outputPanel>
+                     </apex:repeat>
+                        
+                     </div>
+                    <div style="padding-top: 60px;">
+                    <div style="float: left;font-size:12px;font-weight:600;
+                        width: 20%;">
+                             Preferred Budget:
+                        </div>
+                    <div style="display: flex;flex-wrap: wrap;white-space: nowrap;width:80%;float:right;">
+                      
+                        
+                     <apex:repeat var="budget" value="{!budgetTypes}">
+                         <apex:outputPanel rendered="{!if(budget != eoi.RW_Preferred_Budget__c	 , true ,false)}">  
+                        <div style="float: left;padding-left:5px;min-width:15%;">
+						<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                        <img src="/img/checkbox_unchecked.gif"/>
+                        <span style="display: inline;position: relative;white-space: wrap;">{!budget}</span>
+                            
+                     </div> 
+                         </apex:outputPanel>
+                         <apex:outputPanel rendered="{!if(budget == eoi.RW_Preferred_Budget__c , true ,false)}">  
+                        <div style="float: left;min-width:15%;padding-left:5px;">
+						<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                        <img src="/img/checkbox_checked.gif"/>
+                        <span style="display: inline;position: relative;white-space: wrap;">{!budget}</span>
+                            
+                     </div> 
+                             </apex:outputPanel>
+                     </apex:repeat>
+                     </div>
+                    </div>
+                    
+                    <div style="padding-top: 50px;">
+                    <div style="float: left;font-size:12px;font-weight:600;
+                        width: 20%;">
+                             Preferred Floors:
+                        </div>
+                    <div style="display: flex;flex-wrap: wrap;white-space: nowrap;width:80%;float:right;">
+                      
+                        
+                     <apex:repeat var="floors" value="{!floorTypes}">
+                        <apex:outputPanel rendered="{!if(floors != eoi.RW_Preferred_Floors__c , true ,false)}">  
+                        	<div style="float: left;min-width:15%;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_unchecked.gif"/>
+                        		<span style="display: inline;position: relative;">{!floors}</span>
+                        	</div> 
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!if(floors == eoi.RW_Preferred_Floors__c , true ,false)}"> 
+                        	<div style="float: left;min-width: 15%;;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                        		<img src="/img/checkbox_checked.gif"/>
+                                <span style="display: inline;position: relative;">{!floors}</span>
+                        	</div>
+                         </apex:outputPanel>
+                     </apex:repeat>
+                     </div>
+                    </div>
+                    
+                     <div style="padding-top: 40px;">
+                <div style="float: left;font-size:12px;font-weight:600;
+                width: 33%;">
+                    Any Other Preference, Please specify:
+                </div>
+                
+                <div style="float: left;
+                width: 67%;">
+                    <div>
+                       <!-- <span class="{!If(eoi.RW_Preferred_Unit_No__c == null , 'display:block', 'display:none' )}"> &nbsp;</span> -->
+                        <span class="underlineText"> <span class="{!If(eoi.RW_Any_other_preference_please_specify__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Any_other_preference_please_specify__c}</span>
+                        
+                    </div>
+                    
+                    
+                </div>
+            </div>
+                    
+                    <div style="padding-top: 40px;">
+                <div style="float: left;font-size:12px;font-weight:600;
+                width: 20.5%;">
+                    Preferred Unit No.:
+                </div>
+                
+                <div style="float: left;
+                width: 79.5%;">
+                    <div>
+                       <!-- <span class="{!If(eoi.RW_Preferred_Unit_No__c == null , 'display:block', 'display:none' )}"> &nbsp;</span> -->
+                        <span class="underlineText"> <span class="{!If(eoi.RW_Preferred_Unit_No__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Preferred_Unit_No__c}</span>
+                        
+                    </div>
+                    
+                    
+                </div>
+            </div>
+                    
+                    
+                    
+                    
+                    <div style="padding-top: 40px;">
+                <div style="float: left;font-size:12px;font-weight:600;
+                width: 48%;">
+                    Tentative Agreement Value (To be filled by sales Manager):
+                </div>
+                
+                <div style="float: left;
+                width: 52%;">
+                    <div>
+
+                        <span class="underlineText"><span class="{!If(eoi.RW_Tentative_Agreement_Value__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Tentative_Agreement_Value__c}</span>
+                        
+                    </div>
+                    
+                    
+                </div>
+            </div>
+                   <div style="padding-top: 40px;">
+                <div style="float: left;font-size:12px;font-weight:600;
+                width: 48%;">
+                    Tentative All Inclusive Price (To be filled by sales Manager):
+                </div>
+                
+                <div style="float: left;
+                width: 52%;">
+                    <div>
+                        <span class="underlineText"><span class="{!If(eoi.RW_Tentative_All_Inclusive_Price__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Tentative_All_Inclusive_Price__c}</span>
+                    </div>
+                    
+                    
+                </div>
+            </div> 
+                 
+                    <div style="padding-top: 60px;">
+                <div style="float: left;
+                width: 20%;">
+                    &nbsp;
+                </div>
+                
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+						                   
+                        <span style="font-size:12px;font-weight:600;">Signature of Applicant 1</span>
+                        <div>                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                        
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Applicant 2</span>
+                        <div style="{!If(eoi.RW_Secondary_First_Name__c !=null || eoi.RW_Secondary_Last_Name__c !=null, '', 'display:none' )}">                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}
+                        </span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>        
+            </div> 
+                     
+                    
+                </div>
+                
+                <div style="page-break-after:always;">
+                        
+                    </div>
+                <div style="padding-top: 5px;">
+                    
+                
+                <h3 class="noWhiteSpace sectionBackground" style="padding-top:3px !important;padding-bottom:3px !important;">
+                SOURCE DETAILS
+                    </h3>  
+                <div style="padding: 20px;">
+                  
+                    <div style="float: left;
+                        width: 20%;font-size:12px;font-weight:600;">
+                             Application Source:
+                        </div>
+                    <div style="display: flex;flex-wrap: wrap;white-space: nowrap;width:80%;float:right;">
+                   <apex:repeat var="source" value="{!applicationSource}">
+                        <apex:outputPanel rendered="{!if((NOT(Contains(source , eoi.Opportunity__r.Walkin_Source__c)) || eoi.Opportunity__r.Walkin_Source__c == null) , true ,false)}">  
+                        	<div style="float: left;min-width:15%;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_unchecked.gif"/>
+                        		<span style="display: inline;position: relative;">{!source}</span>
+                        	</div> 
+                        </apex:outputPanel>
+                       <apex:outputPanel rendered="{!if((CONTAINS(source, eoi.Opportunity__r.Walkin_Source__c) && eoi.Opportunity__r.Walkin_Source__c != null) , true , false)}">  
+                        	<div style="float: left;min-width:15%;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_checked.gif"/>
+                        		<span style="display: inline;position: relative;">{!source}</span>
+                        	</div> 
+                        </apex:outputPanel>
+                       
+                      
+                       
+                                               
+                     </apex:repeat>
+                        <apex:outputPanel rendered="{!if(((eoi.Opportunity__r.Walkin_Source__c != 'Outstation' && eoi.Opportunity__r.Walkin_Source__c != 'NRI' ) || eoi.Opportunity__r.Walkin_Source__c == null) , true , false)}">  
+                        	<div style="float: left;min-width:15%;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_unchecked.gif"/>
+                                <span style="display: inline;position: relative;"> NRI / OS</span>
+                        	</div> 
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!if(((eoi.Opportunity__r.Walkin_Source__c == 'Outstation' || eoi.Opportunity__r.Walkin_Source__c == 'NRI' ) && eoi.Opportunity__r.Walkin_Source__c != null) , true , false)}">  
+                        	<div style="float: left;min-width:15%;padding-left:5px;">
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_checked.gif"/>
+                                <span style="display: inline;position: relative;"> NRI / OS</span>
+                        	</div> 
+                        </apex:outputPanel>
+                    </div>
+                    <div style="padding: 20px;">
+                  
+                    
+                    <div style="float:left;width:100%;margin-left:19.4%;padding-top:20px">
+                        
+                        
+                  <apex:outputPanel rendered="{!if((eoi.Opportunity__r.Walkin_Source__c != 'Channel Partner' && eoi.Opportunity__r.Walkin_Source__c != 'Direct'
+                                                   && eoi.Opportunity__r.Walkin_Source__c != 'Corporate' && eoi.Opportunity__r.Walkin_Source__c != 'Referral'
+                                                   && eoi.Opportunity__r.Walkin_Source__c != 'Loyalty' && eoi.Opportunity__r.Walkin_Source__c != 'NRI' && eoi.Opportunity__r.Walkin_Source__c != 'Outstation' && eoi.Opportunity__r.Walkin_Source__c != null) , true ,false)}">  
+                        	
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <span style="display:inline;float:left;">
+                                    <img src="/img/checkbox_checked.gif"/>
+                      			</span>
+                                <span>&nbsp;</span>
+                                
+                        		<span style="display: inline;position: relative;width:17%;float:left;">Others</span>
+                                <span class="underlineText" style="display: block;min-width:63.5% !important;float:left;">{!eoi.Opportunity__r.Walkin_Source__c}</span>
+                                
+                        	
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!if((eoi.Opportunity__r.Walkin_Source__c != 'Channel Partner' && eoi.Opportunity__r.Walkin_Source__c != 'Direct'
+                                                   && eoi.Opportunity__r.Walkin_Source__c != 'Corporate' && eoi.Opportunity__r.Walkin_Source__c != 'Referral'
+                                                   && eoi.Opportunity__r.Walkin_Source__c != 'Loyalty' && eoi.Opportunity__r.Walkin_Source__c != 'NRI'&& eoi.Opportunity__r.Walkin_Source__c != 'Outstation' && eoi.Opportunity__r.Walkin_Source__c != null) , false ,true)}">  
+                        	
+								<!--<span  class="checkbox" data-checked="true" style="width:12px;height:12px;border-color:#9e9b9b;"></span>-->
+                                <img src="/img/checkbox_unchecked.gif"/>
+                                <span>&nbsp;</span>
+                                
+                        		<span style="display: inline;position: relative;">Others</span>
+                                <span class="underlineText" style="width:63.5%;margin-left:19.8%"></span>
+                                
+                        		
+                        	
+                        </apex:outputPanel> 
+                        </div>
+                    </div>
+				<div style="padding-top: 40px;"> 
+                <div style="float: left;
+                width: 40%;font-size:12px;font-weight:600;">
+                    <b>Source Details:</b>
+                </div>
+                
+                <div style="float: left;
+                width: 60%;">
+                    <div>
+                        
+                        <span class="underlineText"><span class="{!If(eoi.RW_Sub_Source__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Sub_Source__c}</span>
+                        
+                        
+                    </div>
+                    
+                    
+                </div>
+                    </div>
+                  <div style="padding-top: 40px;">  
+                 <div style="float: left;width: 40%;font-size:12px;font-weight:600;">
+                    Closing Type:
+                </div>
+                
+                <div style="float: left;width: 60%;">
+                        
+                        <span class="underlineText"><span class="{!If(eoi.RW_Closing_Type__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Closing_Type__c}</span>
+                        
+                </div>
+                    </div>
+
+                    <div style="padding-top: 80px;">
+                        <div style="float: left;width: 100%;">
+                            <span style="font-size:12px;font-weight:600;">If Channel Partner,</span>
+		                </div>
+                    </div>
+                    
+                    <div style="padding-top: 40px;">  
+                 <div style="float: left;
+                width: 30%;">
+                    Channel Partner's Name &amp; Company:
+                </div>
+                
+                <div style="float: left;width: 70%;">
+                    <div>
+                        <span class="underlineText"><span class="{!If(eoi.RW_Channel_Partner_s_Company__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Channel_Partner_s_Name__c +' '+ eoi.RW_Channel_Partner_s_Company__c}</span>
+                        
+                    </div>
+                </div>
+                    </div>
+                    
+                    <div style="padding-top: 40px;">
+                <div style="float: left;width:10%;">
+                    Contact No:
+                </div>
+                
+                <div style="float: left;
+                width: 40%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Source_Contact_No__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Source_Contact_No__c}
+                    
+                </div>
+                 
+                  <div style="float: left;width:9%;">
+                    RERA No.:
+                </div>
+                
+                <div style="float: left;
+                width: 41%;margin: 0px;text-align: center;" class="underlineAlternateText">
+                    <span class="{!If(eoi.RW_Source_RERA_No__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Source_RERA_No__c}
+                    
+                    
+                </div>      
+                    </div>
+                    
+                    <div style="padding-top: 40px;">  
+                 <div style="float: left;
+                width: 8%;">
+                    Email Id:
+                </div>
+                
+                <div style="float: left;
+                width: 92%;">
+                    <div>
+                        
+                        <span class="underlineText"><span class="{!If(eoi.RW_Source_Email_Id__c== null , 'display:block', 'display:none' )}"> &nbsp;</span>{!eoi.RW_Source_Email_Id__c}</span>
+                        
+                    </div>
+                    
+                    
+                </div>
+                    </div>
+                    
+                    <div style="padding-top: 125px;">
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Channel Partner</span>
+                        
+                    </div>
+                </div>
+                
+                <div style="float: left;
+                width: 37%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Applicant</span>
+                        <div>                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                        
+                <div style="float: left;
+                width: 23%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Site Head</span>
+                        
+                    </div>
+                    
+                    
+                </div>        
+            </div> 
+                    
+                </div>
+                    
+                    <h3 class="sectionBackground" style="margin-top:40px;">TERMS &amp; CONDITIONS</h3>  
+                <div style="padding: 20px;padding-top:0x !important;margin-top:0px!important;">
+                      
+                   <apex:outputText value="{!eoi.Tower__r.RW_Terms_And_Conditions__c}" escape="false"></apex:outputText>
+                   <div style="padding-top: 100px;">
+                <div style="float: left;
+                width: 33%;">
+                    <span style="font-size:12px;font-weight:600;">Date</span>
+                </div>
+                
+                       
+            </div> 
+                    <div style="padding-top: 80px;">
+                <div style="float: left;
+                width: 25%;">
+                    <span style="font-size:12px;font-weight:600;">Place</span>
+                </div>
+                
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Applicant 1 </span>
+                        <div>                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                        
+                <div style="float: left;
+                width: 35%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Applicant 2</span>
+                        <div style="{!If(eoi.RW_Secondary_First_Name__c !=null || eoi.RW_Secondary_Last_Name__c !=null, '', 'display:none' )}">                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>        
+            </div>
+                    <div style="padding-top: 100px;">
+                <div style="float: left;
+                width: 25%;">
+                    <span style="font-size:12px;font-weight:600;">Signature of Channel Partner</span>
+                </div>
+                
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Sales Manager </span>
+                        
+                    </div>
+                    
+                    
+                </div>
+                        
+                <div style="float: left;
+                width: 35%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Site Head</span>
+                        
+                    </div>
+                    
+                    
+                </div>        
+            </div> 
+                    
+                    </div>
+                    
+                    <div style="page-break-after:always;">
+                        
+                    </div>
+                    
+               <!--  <h3 class="noWhiteSpace sectionBackground" style="padding-top:3px !important;padding-bottom:3px !important;">
+                     EOI ACKNOWLEDGEMENT                     
+                 </h3>   
+                   <div style="padding: 20px;">
+                    <h5>
+                        FLAT COST DETAILS
+                    </h5>
+                    
+                     <div style="padding-top: 15px;">
+                <div style="float: left;
+                width: 5%;">
+                    <span>I/We</span>
+                </div>
+                
+                <div style="float: left;
+                width: 60%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width:16%;">
+                        <span>pay a sum of INR</span>
+                </div>   
+                <div style="float: left;width: 19%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                    <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 4%;">
+                    <span>via</span>
+                </div>
+                
+                <div style="float: left;
+                width: 46%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width: 27%;">
+                 	   <span>&nbsp;</span>
+                        <span>towards Preferential Unit No.</span>
+                </div>   
+                <div style="float: left;width: 23%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                     <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 9%;">
+                    <span>drawn on</span>
+                </div>
+                
+                <div style="float: left;
+                width: 41%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width: 6%;">
+                 	   <span>&nbsp;</span>
+                        <span>bank</span>
+                </div>   
+                <div style="float: left;width: 44%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                      <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 67%;">
+                    <span>branch vide Demand Draft / Bank Draft / Pay Order / Cheque / Swipe Slip No.</span>
+                </div>
+                
+                <div style="float: left;
+                width: 18%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width: 7%;">
+                 	   <span>&nbsp;</span>
+                        <span>dated</span>
+                </div>   
+                <div style="float: left;width: 8%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                     <div style="padding-top: 40px;">
+               			 <div style="float: left;width: 100%;">
+                             <span>in favour of Evie Real Estate Private Limited Wing A/Wing B/Wing C Rera Escrow Account 1.</span>
+               		 </div>
+           			 </div>
+                    
+                    <div style="padding-top: 80px;">
+               			 <div style="float: left;width: 100%;">
+                   			 <span class="underlineHypenText"></span>
+               		 </div>
+           			 </div>
+                   
+                    <h5 style="padding-top: 50px;">
+                        GST DETAILS
+                    </h5>
+                    
+                    <div style="padding-top: 15px;">
+                <div style="float: left;
+                width: 5%;">
+                    <span>I/We</span>
+                </div>
+                
+                <div style="float: left;
+                width: 60%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width:16%;">
+                        <span>pay a sum of INR</span>
+                </div>   
+                <div style="float: left;width: 19%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                    <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 4%;">
+                    <span>via</span>
+                </div>
+                
+                <div style="float: left;
+                width: 46%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width: 27%;">
+                 	   <span>&nbsp;</span>
+                        <span>towards Preferential Unit No.</span>
+                </div>   
+                <div style="float: left;width: 23%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                     <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 9%;">
+                    <span>drawn on</span>
+                </div>
+                
+                <div style="float: left;
+                width: 41%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width: 6%;">
+                 	   <span>&nbsp;</span>
+                        <span>bank</span>
+                </div>   
+                <div style="float: left;width: 44%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                      <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 67%;">
+                    <span>branch vide Demand Draft / Bank Draft / Pay Order / Cheque / Swipe Slip No.</span>
+                </div>
+                
+                <div style="float: left;
+                width: 18%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>
+                        
+                <div style="float: left;width: 7%;">
+                 	   <span>&nbsp;</span>
+                        <span>dated</span>
+                </div>   
+                <div style="float: left;width: 8%;">
+                        <span>&nbsp;</span>
+                        <span class="underlineText"></span>
+                </div>  
+            </div>
+                     <div style="padding-top: 40px;">
+               			 <div style="float: left;width: 99%;">
+                   			 <span>towards the applicable Taxes as detailed hereunder in favour of EVIE REAL ESTATE PVT. LTD.</span>
+               		 </div>
+           			 </div> 
+                    
+                     <div style="padding-top: 80px;">
+               			 <div style="float: left;width: 100%;">
+                             <span> I/We confirm that I/We have studied and understood the attached terms and conditions of the EOI offer and the same is acceptable to me/us.</span>
+               		 </div>
+           			 </div>
+                    
+                     <div style="padding-top: 175px;">
+                <div style="float: left;
+                width: 33%;">
+                    <span style="font-size:12px;font-weight:600;">Date</span>
+                </div>
+                
+                       
+            </div> 
+                    <div style="padding-top: 40px;">
+                <div style="float: left;
+                width: 25%;">
+                    <span style="font-size:12px;font-weight:600;">Place</span>
+                </div>
+                
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+                       
+                       <span style="font-size:12px;font-weight:600;">Signature of Applicant 1 </span>
+                       <div>                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                        
+                <div style="float: left;
+                width: 35%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Applicant 2</span>
+                        <div style="{!If(eoi.RW_Secondary_First_Name__c !=null || eoi.RW_Secondary_Last_Name__c !=null, '', 'display:none' )}">                            
+                        <span style="{!If(digitallyAcceptedOn !=null , '', 'display:none' )}">Digitally Accepted On {!digitallyAcceptedOn}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>        
+            </div>
+                    <div style="padding-top: 100px;">
+                <div style="float: left;
+                width: 25%;">
+                    <span style="font-size:12px;font-weight:600;">Signature of Channel Partner</span>
+                </div>
+                
+                <div style="float: left;
+                width: 40%;">
+                    <div>
+                       
+                        <span style="font-size:12px;font-weight:600;">Signature of Sales Manager </span>
+                        
+                    </div>
+                    
+                    
+                </div>
+                        
+                <div style="float: left;
+                width: 35%;">
+                    <div>
+                       
+                       <span style="font-size:12px;font-weight:600;">Signature of Site Head</span>
+                        
+                    </div>
+                    
+                    
+                </div>        
+            </div> 
+                       
+                    </div> -->
+
+                </div>
+                
+                <div style="page-break-after:always;">
+                    
+                </div>
+                
+                <div styleClass="imgdynamic">
+          <apex:outputField value="{!eoi.Tower__r.Footer_Page_Image__c}"  /> 
+                 <!-- <apex:image url="{!eoi.Tower__r.Front_Page_Image__c}"/> -->
+            
+        </div>
+                </div>
+        </body>
+        
+        
+        
+    </html>
+</apex:page>

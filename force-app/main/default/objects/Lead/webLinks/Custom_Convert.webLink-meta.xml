@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Custom_Convert</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Convert</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/19.0/connection.js&quot;)} 
+
+var lead_record = new sforce.SObject(&quot;Lead&quot;); 
+
+lead_record.id = &quot;{!Lead.Id}&quot;; 
+
+lead_record.Status= &quot;{!Lead.Status}&quot;; 
+
+if({!OR(ISPICKVAL(Lead.Status, &quot;Not Sure&quot;), ISPICKVAL(Lead.Status, &quot;Not Interested&quot;), ISPICKVAL(Lead.Status, &quot;Junk Enquiries&quot;))})
+{ 
+alert(&apos;Only Interested leads can be converted.&apos;); 
+}
+else 
+{ 
+//alert(&apos;Bad&apos;); 
+window.location.href = &apos;/lead/leadconvert.jsp?retURL=%2F{!Lead.Id}&amp;id={!Lead.Id}&amp;nooppti=0&apos;; 
+}</url>
+</WebLink>

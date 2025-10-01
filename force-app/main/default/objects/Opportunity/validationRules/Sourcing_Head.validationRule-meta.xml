@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sourcing_Head</fullName>
+    <active>true</active>
+    <description>You can not change Sourcing Head.</description>
+    <errorConditionFormula>AND(!ISPICKVAL( PRIORVALUE( RW_Sourcing_Head__c),&apos;&apos;) , 
+ISCHANGED( RW_Sourcing_Head__c ) &amp;&amp; 
+ $Profile.Name &lt;&gt; &apos;System Administrator&apos; &amp;&amp; $Profile.Name &lt;&gt; &apos;Site Head&apos;, $Profile.Name &lt;&gt; &apos;Sales Strategy&apos; &amp;&amp;  $Profile.Name &lt;&gt; &apos;SAdmin&apos;,$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>RW_Sourcing_Head__c</errorDisplayField>
+    <errorMessage>You can not change Sourcing Head.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,65 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "5cbd1563-e335-499c-ae42-69bd28464cfa",
+  "label" : "Brokerage Scheme Detail",
+  "regions" : [ {
+    "id" : "07e1d394-83c1-463f-b227-f90dc548882b",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "e70e2f17-22c9-4902-81d9-ea4d02489585",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "detailsTabLabel" : "Details",
+        "discussionsTabLabel" : "Feed",
+        "recordId" : "{!recordId}",
+        "relatedTabLabel" : "Related",
+        "tab1Type" : "details",
+        "tab2Type" : "none",
+        "tab3Type" : "related",
+        "tab4Type" : "none",
+        "timelineTabLabel" : "Activity"
+      },
+      "componentName" : "forceCommunity:recordHomeTabs",
+      "id" : "c60e238d-fa06-4bf7-aa01-d1c25e8591e9",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "7339cbc0-5786-4c22-b299-2928e26bf84a",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "0baac24c-eb15-453d-baa8-f6c8bbbc2178",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "73a9d7ae-0c75-4c05-9c17-92ea930953fb",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "e77af217-6f0f-40c9-a9bb-bf658869a84b",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-a2a"
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Can_not_Approve_without_check_Recieve</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL(Approval_Status__c  , &quot;Approved&quot;) &amp;&amp;  Physically_Cheque_Received__c = false &amp;&amp;  ISPICKVAL( Mode__c , &quot;Cheque&quot;)</errorConditionFormula>
+    <errorMessage>Can not Approve Receipt, Your check has not been received yet.</errorMessage>
+</ValidationRule>

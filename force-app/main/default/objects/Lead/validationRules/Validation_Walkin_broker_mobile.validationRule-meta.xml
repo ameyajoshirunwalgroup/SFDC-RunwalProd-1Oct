@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_Walkin_broker_mobile</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(IF( Walkin_UnregisteredChannelPartner_Mobile__c != null, NOT(REGEX(Walkin_UnregisteredChannelPartner_Mobile__c , &quot;[0-9]{7,13}&quot;)), false)),$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Walkin_UnregisteredChannelPartner_Mobile__c</errorDisplayField>
+    <errorMessage>Please enter valid Walkin Channel Partner mobile no.</errorMessage>
+</ValidationRule>

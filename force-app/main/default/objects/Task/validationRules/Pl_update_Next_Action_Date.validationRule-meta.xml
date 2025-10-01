@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pl_update_Next_Action_Date</fullName>
+    <active>true</active>
+    <errorConditionFormula>and(
+ISPICKVAL(Call_Status__c, &apos;Follow Up&apos;),
+ISNULL(Next_Action_Date__c),
+ $Profile.Name != &quot;Receptionist&quot;,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>Next_Action_Date__c</errorDisplayField>
+    <errorMessage>Next action Date is mandatory for Follow up tasks</errorMessage>
+</ValidationRule>

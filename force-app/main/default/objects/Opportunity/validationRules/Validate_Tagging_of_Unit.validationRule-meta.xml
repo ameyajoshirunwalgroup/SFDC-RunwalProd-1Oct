@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Tagging_of_Unit</fullName>
+    <active>false</active>
+    <description>Validate_Tagging_of_Unit</description>
+    <errorConditionFormula>AND(!ISBLANK(RW_Project_Unit__c), 
+OR(ISBLANK(PRIORVALUE(RW_Project_Unit__c)), 
+ISNULL(PRIORVALUE(RW_Project_Unit__c))),
+!RW_AADHAR_Card_Received__c,
+!RW_PAN_Card_Received__c,
+!RW_Passport_Received__c
+)</errorConditionFormula>
+    <errorMessage>For tagging the unit, either Aadhar card, PAN card or Passport must be required.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Budget_Records</fullName>
+    <columns>NAME</columns>
+    <columns>Budget_in_Cr__c</columns>
+    <columns>Month__c</columns>
+    <columns>WBS_name_as_per_SAP__c</columns>
+    <columns>Year__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Budget_vs_Expenses__c.Budget</value>
+    </filters>
+    <label>Budget Records</label>
+</ListView>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Brokerage_Type__c</fullName>
+    <label>Brokerage Type</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Base Brokerage</fullName>
+                <default>false</default>
+                <label>Base Brokerage</label>
+            </value>
+            <value>
+                <fullName>Additional Brokerage</fullName>
+                <default>false</default>
+                <label>Additional Brokerage</label>
+            </value>
+            <value>
+                <fullName>Retrofit Brokerage</fullName>
+                <default>false</default>
+                <label>Retrofit Brokerage</label>
+            </value>
+            <value>
+                <fullName>Cancellation Brokerage</fullName>
+                <default>false</default>
+                <label>Cancellation Brokerage</label>
+            </value>
+            <value>
+                <fullName>Manual Override Brokerage</fullName>
+                <default>false</default>
+                <label>Manual Override Brokerage</label>
+            </value>
+            <value>
+                <fullName>Source Change Brokerage Cancellation</fullName>
+                <default>false</default>
+                <label>Source Change Brokerage Cancellation</label>
+            </value>
+            <value>
+                <fullName>Kicker Incentive</fullName>
+                <default>false</default>
+                <label>Kicker Incentive</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

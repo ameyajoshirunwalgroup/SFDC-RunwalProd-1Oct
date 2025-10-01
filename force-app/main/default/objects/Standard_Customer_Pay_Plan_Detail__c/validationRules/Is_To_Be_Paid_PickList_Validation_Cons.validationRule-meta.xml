@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_To_Be_Paid_PickList_Validation_Cons</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND( ISPICKVAL( Is_to_be_Paid__c , &apos;From Dt. of Booking&apos;) ,  NOT( ISBLANK( Project_Construction_Stages__c ) ) )</errorConditionFormula>
+    <errorDisplayField>Project_Construction_Stages__c</errorDisplayField>
+    <errorMessage>After Selecting From Dt. of Booking Picklist Value,You cannot select Project Construction Stages.</errorMessage>
+</ValidationRule>

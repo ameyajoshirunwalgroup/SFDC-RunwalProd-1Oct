@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Expenses_Records</fullName>
+    <columns>NAME</columns>
+    <columns>Actual_Expenses_EIPL__c</columns>
+    <columns>Actual_Expenses_EREPL__c</columns>
+    <columns>Actual_Expenses_HHPL__c</columns>
+    <columns>Actual_Expenses_HHPL_2__c</columns>
+    <columns>Actual_Expenses_Horizon__c</columns>
+    <columns>Actual_Expenses_REPL__c</columns>
+    <columns>Actual_Expenses_RREPL__c</columns>
+    <columns>Actual_Expenses_RRPL__c</columns>
+    <columns>Actual_Expenses_SIPL__c</columns>
+    <columns>Actual_Expenses_WACL__c</columns>
+    <columns>Actual_Expenses_WRPL__c</columns>
+    <columns>WBS_name_as_per_SAP__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Budget_vs_Expenses__c.Expenses</value>
+    </filters>
+    <label>Expenses Records</label>
+</ListView>

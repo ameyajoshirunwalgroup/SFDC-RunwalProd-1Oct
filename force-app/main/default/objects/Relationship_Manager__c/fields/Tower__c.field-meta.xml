@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tower__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Tower</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Project__c</field>
+            <operation>equals</operation>
+            <valueField>Tower__c.ProjectName__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Tower__c</referenceTo>
+    <relationshipLabel>Relationship Managers</relationshipLabel>
+    <relationshipName>Relationship_Managers</relationshipName>
+    <required>false</required>
+    <trackTrending>true</trackTrending>
+    <type>Lookup</type>
+</CustomField>

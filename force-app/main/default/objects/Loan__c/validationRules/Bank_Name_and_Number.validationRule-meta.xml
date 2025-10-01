@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bank_Name_and_Number</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Sanction_Sub_Status__c, &apos;Logged In&apos;),
+				OR(
+				    ISBLANK(RW_Banker_Name__c),
+					 		ISBLANK(RW_Banker_Number__c) 
+				)
+)</errorConditionFormula>
+    <errorMessage>Please add Banker Name &amp; Banker Number</errorMessage>
+</ValidationRule>

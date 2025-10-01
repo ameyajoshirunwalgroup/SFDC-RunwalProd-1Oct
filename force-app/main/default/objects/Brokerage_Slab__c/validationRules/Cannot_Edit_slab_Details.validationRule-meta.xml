@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Edit_slab_Details</fullName>
+    <active>true</active>
+    <description>Cannot Edit slab if Scheme is Approved by L2</description>
+    <errorConditionFormula>AND(
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+NOT(ISNEW()),
+text(Brokerage_Scheme__r.Approval_Status__c)= &apos;Approved by Level 2&apos;
+)</errorConditionFormula>
+    <errorMessage>You cannot edit slab details.</errorMessage>
+</ValidationRule>

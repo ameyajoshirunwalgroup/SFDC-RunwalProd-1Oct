@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NOC_Handover_is_mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(RW_First_Disbursement_Status__c, &apos;Docket Submitted to Bank&apos;),
+				ISBLANK(NOC_Handover_Date__c)  
+
+)</errorConditionFormula>
+    <errorMessage>Please enter NOC Handover Date</errorMessage>
+</ValidationRule>

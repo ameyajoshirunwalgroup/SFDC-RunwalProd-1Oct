@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RM_Name_req_on_case_close_if_case_not_CP</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(RW_RM_Name__c, &apos;&apos;), ISPICKVAL(Status, &apos;Case Closed&apos;),RecordType.Name != &apos;Channel Partner Portal&apos;, ISBLANK(locobuzz__Locobuzz_ID__c),
+$Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>RW_RM_Name__c</errorDisplayField>
+    <errorMessage>Please fill in the RM Name</errorMessage>
+</ValidationRule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Action_Date_is_Compulsory</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF((ISPICKVAL(Task_Type__c, &apos;Presales Call&apos;) &amp;&amp; 
+
+(ISPICKVAL( Call_Status__c ,&apos;Visit Confirmed&apos;) || 
+ISPICKVAL( Call_Status__c ,&apos;Visit Proposed&apos;) || 
+ISPICKVAL( Call_Status__c ,&apos;Meeting Proposed&apos;) || 
+ISPICKVAL( Call_Status__c ,&apos;Meeting Fixed&apos;) )) , 
+
+ISBLANK(Next_Action_Date__c), false)</errorConditionFormula>
+    <errorDisplayField>Next_Action_Date__c</errorDisplayField>
+    <errorMessage>Next Action Date is mandatory</errorMessage>
+</ValidationRule>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fill_Site_Visit_Remarks__c</fullName>
+    <externalId>false</externalId>
+    <formula>HYPERLINK(&apos;/apex/VisitFormEditPage?subject=Site Visit&amp;status=Completed&amp;tasktype=Site Visit&amp;origin=New Site Visit&amp;who_id=&apos;+Opportunity__r.AccountId+&apos;&amp;what_id=&apos;+ Opportunity__c+&apos;&amp;retURL=/&apos;+Opportunity__c+&apos;&amp;saveURL=/&apos;+Opportunity__c+&apos;&amp;cancelURL=/&apos;+Opportunity__c, &apos;Click here&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Fill Site Visit Remarks</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

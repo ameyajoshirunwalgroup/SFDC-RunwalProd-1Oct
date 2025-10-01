@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lock_lead</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    CreatedDate &gt; DATETIMEVALUE(&quot;2025-07-31 00:00:00&quot;),
+    NOT(ISCHANGED(IsActive__c)),
+    NOT(IsActive__c)
+)</errorConditionFormula>
+    <errorMessage>This Lead is inactive. No changes are allowed.</errorMessage>
+</ValidationRule>

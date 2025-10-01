@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Charge_Based_On</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISPICKVAL( Charge_Based_On__c ,&quot;Rate&quot;)  &amp;&amp; NOT( ISNULL(Percent__c)) || 
+ISPICKVAL( Charge_Based_On__c ,&quot;Lumpsum&quot;)  &amp;&amp; NOT( ISNULL(Percent__c))</errorConditionFormula>
+    <errorDisplayField>Charge_Based_On__c</errorDisplayField>
+    <errorMessage>Pick Percent from Picklist</errorMessage>
+</ValidationRule>

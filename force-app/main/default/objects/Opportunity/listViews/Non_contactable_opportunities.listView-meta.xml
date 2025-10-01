@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_contactable_opportunities</fullName>
+    <columns>RW_Project__c</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>Last_call_attempt_status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Last_call_attempt_status__c</field>
+        <operation>contains</operation>
+        <value>ringing,wrong,switched,not contactable,coverable</value>
+    </filters>
+    <filters>
+        <field>RW_Project__c</field>
+        <operation>contains</operation>
+        <value>Gardens</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notContain</operation>
+        <value>Booked,cancelled,blocked</value>
+    </filters>
+    <label>Non contactable opportunities</label>
+    <sharedTo>
+        <role>Sales_Manager</role>
+    </sharedTo>
+</ListView>

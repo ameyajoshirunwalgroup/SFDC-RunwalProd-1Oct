@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Proposed_Date_of_Visit_is_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(Task_Type__c, &apos;Presales Call&apos;),
+ISPICKVAL(Call_Status__c, &apos;Connected&apos;),
+ISPICKVAL(Call_Disposition_Custom__c, &apos;Visit Scheduled&apos;),
+ISBLANK(Call_Proposed_date_of_visit__c),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>Call_Proposed_date_of_visit__c</errorDisplayField>
+    <errorMessage>Proposed Date of visit is mandatory</errorMessage>
+</ValidationRule>

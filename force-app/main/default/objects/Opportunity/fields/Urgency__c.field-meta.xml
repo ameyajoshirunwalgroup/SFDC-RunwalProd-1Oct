@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Urgency__c</fullName>
+    <label>Decision Finalization</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>7 days</fullName>
+                <default>false</default>
+                <label>7 days</label>
+            </value>
+            <value>
+                <fullName>7 to 30 days</fullName>
+                <default>false</default>
+                <label>7 to 30 days</label>
+            </value>
+            <value>
+                <fullName>30-60 days</fullName>
+                <default>false</default>
+                <label>30-60 days</label>
+            </value>
+            <value>
+                <fullName>2-6 month</fullName>
+                <default>false</default>
+                <label>2-6 month</label>
+            </value>
+            <value>
+                <fullName>&gt; 6 month</fullName>
+                <default>false</default>
+                <label>&gt; 6 month</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

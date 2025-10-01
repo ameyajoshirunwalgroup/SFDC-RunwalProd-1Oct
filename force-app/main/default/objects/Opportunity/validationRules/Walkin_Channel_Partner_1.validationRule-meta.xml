@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Walkin_Channel_Partner_1</fullName>
+    <active>true</active>
+    <errorConditionFormula>And(
+ ISNEW(), /* Added by Vinay */
+  CreateDate__c &gt;= DATE(2021,01,01),
+IF( AND(ISPICKVAL( Walkin_Source__c , &apos;Channel Partner&apos;), !Walkin_Apply_Unregistered_ChannelPartner__c , $Profile.Name &lt;&gt; &apos;Sys Admin Integration&apos; ), ISBLANK( RW_Walkin_Channel_Partner__c) , false),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>RW_Walkin_Channel_Partner__c</errorDisplayField>
+    <errorMessage>Please enter the Walkin Channel Partner when Walkin source is Channel Partner.</errorMessage>
+</ValidationRule>

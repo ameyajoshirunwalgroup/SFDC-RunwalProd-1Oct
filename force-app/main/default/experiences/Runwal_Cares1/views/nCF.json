@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "19c84d74-55db-4238-9918-9df43777856a",
+  "label" : "NCF",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "468aaff8-1361-4542-974c-acea08e43a0e",
+          "columns" : [ {
+            "UUID" : "114787c6-8013-4820-ac7b-dd3511875af1",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "468aaff8-1361-4542-974c-acea08e43a0e",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalNCFForm",
+          "id" : "d188531a-f68e-4cd8-a838-0a1498fa5041",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "114787c6-8013-4820-ac7b-dd3511875af1",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "abce800d-1217-4ba6-ad50-fede58e632a8",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "NCF"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "2a589201-617a-4c1b-8cca-b39f09da2cb9",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "34f20c86-2244-4fe7-a7b7-0095e8989165",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-ncf"
+}

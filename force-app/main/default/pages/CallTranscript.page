@@ -1,0 +1,10 @@
+<apex:page controller="CallTranscriptController" renderAs="pdf" applyBodyTag="false">
+    
+    <head>
+    	<style type="text/css">
+         	body { font-family: Arial Unicode MS; }
+         </style>
+    </head>
+    
+    <apex:outputText value="{!transcript}" />
+</apex:page>

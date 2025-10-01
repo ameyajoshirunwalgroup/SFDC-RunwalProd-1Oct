@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Possession_Feedback</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Possession Feedback</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/26.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/apex.js&quot;)}
+ 
+var url = &apos;{!Opportunity.Possession_Feedback_Link__c }&apos;;
+if(url != &apos;&apos;)
+{
+window.open(url,&apos;windowName&apos;,&quot;width=&quot;+screen.availWidth+&quot;,height=&quot;+screen.availHeight);
+}
+else
+{
+alert(&apos;ERROR : Possession Survey Should Be Created!&apos;);
+}</url>
+</WebLink>

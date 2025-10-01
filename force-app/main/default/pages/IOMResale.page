@@ -1,0 +1,172 @@
+<apex:page applyHtmlTag="false" controller="IOMController"  applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="PDF" >
+    <html>
+   <head>
+      <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+      <style>
+         @page {
+         size: A3;
+         margin: 0;
+         }
+         @media print {
+         html, body {
+         width: 210mm;
+         height: 297mm;
+         }
+         }
+         body{
+         <!--font-family: samplefont;        -->
+         font-family:sans-serif;
+         font-size:13px;
+         }
+          p {
+  			min-width: 100px;
+		  }
+         .pagePadding{
+         padding-top:80px;
+         padding-left:30px;
+         padding-right:30px;
+         }
+         .tableBorder{
+         border-collapse: collapse;
+         }
+         .tableBorder td, .tableBorder th {
+         border: 1px solid #757575;
+         padding:2px;
+         width:145px;
+         }
+          .tableBorder td:first-child{width:200px;}
+          
+          .tableb{
+           border-collapse: collapse;
+           table-layout: auto;
+           width:145%;
+          }
+          .tableb td, .tableb th{
+           border: 1px solid #757575;
+           overflow-wrap: break-word;
+           word-break: break-all;
+           font-size:8px;
+          }
+          
+         
+      </style>
+   </head>
+        <body>
+            <apex:variable value="{!0}" var="count" />
+            <div class="pagePadding">
+            	<p style="text-align:center;font-size:20px;"><b>{!iom.Name}</b></p>
+                <p><b>Date:</b> <b><apex:outputText value="{0, date, dd-MMM-yyyy}"><apex:param value="{!NOW()}" />
+									</apex:outputText></b> <br/></p>
+                
+                <p>
+                    IOM For Release Of Inventory In SAP - Sales initiated cancellation. <br/><br/>
+                    Nature of Request :- {!iom.Nature_of_Request__c}<br/><br/>
+                    Comments: {!iom.Comments__c}<br/><br/>
+                    {!iom.Comments_2__c}<br/><br/>
+                </p>
+                <br/>
+                <table class="tableBorder"  style="position:absolute;left:10%">
+                	<th style="text-align:center;">Total Cases</th>
+                    <th style="text-align:center;">Total Agreement Value</th>
+                    <th style="text-align:center;">Amount Forfeited</th>
+                    <th style="text-align:center;">Profit &amp; Loss</th>
+                    <tr>
+                    	<td style="text-align:center;">{!totalItems}</td>
+                        <td style="text-align:center;">{!totalAgrVal}</td>
+                        <td style="text-align:center;">{!totalAmtPaid}</td>
+                        <td style="text-align:center;">{!totalOutstanding}</td>
+                    </tr>
+                </table>
+                <br/><br/><br/><br/>
+                <table class="tableb">
+                    <th>Sr.No.</th>
+                    <th>Unit</th>
+                    <th>Saleable Area</th>
+                    <th>Carpet Area</th>
+                    <th>Cancelled Customer</th>
+                    <th>Booking Date</th>
+                    <th>SAP ID</th>
+                    <th>Booking Source</th>
+                    <th>Rate PSF</th>
+                    <th>AV</th>
+                    <th>Amount Paid</th>
+                    <th>Registration Status</th>
+                    <th>Resale Status</th>
+                    <th>New Customer</th>
+                    <th>Booking Source</th>
+                    <th>Rate PSF</th>
+                    <th>AV</th>
+                    <th>Amount Paid</th>
+                    <th>P&amp;L</th>
+                    <th>Forfeited</th>
+                    <th>Refund</th>
+                    <th>1st Attempt reason for cancellation</th>
+                    <th>2nd Attempt reason for cancellation</th>
+                    <th>Cancelled Customer CIF No.</th>
+                    <th>New Customer CIF No.</th>
+                    <th>Closing SM</th>
+                    <apex:repeat value="{!iomItemList}" var="a" >
+                        <tr>
+                        	<td><apex:variable value="{!count+1}" var="count" />{!count} </td>
+                            <td><apex:outputField value="{!a.Unit__r.RW_Param4__c}"/></td>
+                            <td><apex:outputField value="{!a.Saleable_Area__c}"/></td>
+                            <td><apex:outputField value="{!a.Carpet_Area__c}"/></td>
+                            <td><apex:outputField value="{!a.Customer_Name__c}"/></td>
+                            <td><apex:outputField value="{!a.Booking_Date__c}"/></td>
+                            <td><apex:outputField value="{!a.SAP_Id__c}"/></td>
+                            <td><apex:outputField value="{!a.Booking_Source__c}"/></td>
+                            <td><apex:outputField value="{!a.Actual_Sold_Rate_Base__c}"/></td>
+                            <td><apex:outputField value="{!a.Agreement_Value__c}"/></td>
+                            <td><apex:outputField value="{!a.Amount_Paid__c}"/></td>
+                            <td><apex:outputField value="{!a.Registration_Status__c}"/></td>
+                            <td><apex:outputField value="{!a.Resale_Status__c}"/></td>
+                            <td><apex:outputField value="{!a.New_Customer__c}"/></td>
+                            <td><apex:outputField value="{!a.Booking_Source_New__c}"/></td>
+                            <td><apex:outputField value="{!a.New_Rate__c}"/></td>
+                            <td><apex:outputField value="{!a.New_Agreement_Value__c}"/></td>
+                            <td><apex:outputField value="{!a.Amount_Paid_New__c}"/></td>
+                            <td><apex:outputField value="{!a.Profit_Loss__c}"/></td>
+                            <td><apex:outputText value="{!IF((a.Refunded_Forfeited1__c == 'Forfeited'), 'Yes', 'NA')}"/></td>
+                            <td><apex:outputText value="{!IF((a.Refunded_Forfeited1__c == 'To be Refunded'), 'Yes', 'NA')}"/></td>
+                            <td><apex:outputField value="{!a.X1st_Attempt_Reason_For_Cancellation__c}"/></td>
+                            <td><apex:outputField value="{!a.X2nd_Attempt_Reason_For_Cancellation__c}"/></td>
+                            <td><apex:outputField value="{!a.Cancelled_Customer_CIF_No__c}"/></td>
+                            <td><apex:outputField value="{!a.New_Customer_CIF_No__c}"/></td>
+                            <td><apex:outputField value="{!a.Closing_SM__c}"/></td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+                
+                <br/><br/>
+                <table class="tableBorder" style="position:absolute;left:20%;text-align:center;">
+                    <th><b>Assistant Manager</b></th>
+                    <th><b>AVP • Sales</b></th>
+                    <th><b>AGM - Verifier</b></th>
+                    <th><b>C.O.O</b></th>
+                    <th><b>C.E.O</b></th>
+                    <th><b>MD</b></th>
+                    <tr style="height:50px">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{!iom.Assistant_Manager__c}</td>
+                        <td>{!iom.AVP_Sales__c}</td>
+                        <td>{!iom.AGM_Verifier__c}</td>
+                        <td>{!iom.C_O_O__c}</td>
+                        <td>{!iom.C_E_O__c}</td>
+                        <td>{!iom.MD__c}</td>
+                    </tr>
+                </table>
+                
+            </div>
+        </body>
+    </html>
+</apex:page>

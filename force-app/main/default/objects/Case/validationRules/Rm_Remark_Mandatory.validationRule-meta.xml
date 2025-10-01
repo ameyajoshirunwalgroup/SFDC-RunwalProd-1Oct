@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rm_Remark_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>/*AND(
+ISPICKVAL(Status, &quot;Case Closed&quot;),
+ISBLANK(RW_RM_Remarks__c)
+)*/
+
+AND(ISPICKVAL(Status, &quot;Case Closed&quot;),
+ISBLANK(RW_RM_Remarks__c),
+ISBLANK(locobuzz__Locobuzz_ID__c),
+$Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)
+
+/*AND(ISPICKVAL(Status, &quot;Case Closed&quot;),
+ISBLANK(RW_RM_Remarks__c),
+OR(
+ISBLANK(locobuzz__Locobuzz_ID__c),
+AND(NOT(ISBLANK(locobuzz__Locobuzz_ID__c)),
+NOT(LastModifiedBy.Locobuzz_Default_User__c))
+)
+)*/</errorConditionFormula>
+    <errorDisplayField>RW_RM_Remarks__c</errorDisplayField>
+    <errorMessage>Please provide a remark before closing the case.</errorMessage>
+</ValidationRule>

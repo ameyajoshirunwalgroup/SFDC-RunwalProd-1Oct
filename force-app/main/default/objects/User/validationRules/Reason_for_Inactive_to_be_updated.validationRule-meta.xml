@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Inactive_to_be_updated</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(
+
+ Profile.Name &lt;&gt; &apos;Runwal Customer Portal&apos;,
+
+OR(
+	And(
+		ISCHANGED(IsActive),
+		IsActive = false,
+		OR(
+			ISPICKVAL(Reason_for_deactivation__c,&quot;&quot;),
+			isblank(old_role__c)
+		)
+	),
+	And(
+		ISPICKVAL(Reason_for_deactivation__c,&quot;Resigned&quot;),
+		not(isblank( UserRole.Name )),
+		not(isblank( old_role__c))
+	),
+	And(
+		IsActive = True,
+		Not(ISPICKVAL(Reason_for_deactivation__c,&quot;&quot;))
+	)
+)
+)</errorConditionFormula>
+    <errorMessage>Reason for Deactivation is blank or the Role value is still updated</errorMessage>
+</ValidationRule>

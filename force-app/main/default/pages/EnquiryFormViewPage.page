@@ -1,0 +1,115 @@
+<apex:page standardController="Task" extensions="CustomTaskControllerClass" showHeader="false" standardStylesheets="true" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">    
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+  <title>Task Edit</title>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+  <script src="/soap/ajax/54.0/connection.js"></script>
+</head>
+<body>    
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds">    
+  <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp">   
+        <!-- CREATE/EDIT TASK -->
+      <div aria-labelledby="newtaskform">
+        <!-- BOXED AREA -->
+        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+          <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">Enquiry Form</legend>
+    
+          <!-- CREATE NEW TASK FORM -->
+            <apex:form id="newtaskform" styleClass="slds-form--inline">
+                <div class="slds-notify slds-notify--alert slds-theme--inverse-text slds-theme--alert-texture">
+                    <apex:pageMessages id="error"/>
+                </div>
+               <apex:pageBlock id="pgBlock" mode="edit">
+                    <apex:pageBlockButtons location="both" styleClass="slds-button-group">
+                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate"/>
+                    </apex:pageBlockButtons>
+                 
+                <apex:pageBlockSection id="pgBlockSectionCallInfo" title="System Details" collapsible="false" columns="2"  rendered="{!Task.Task_Type__c == 'Enquiry Received'}">
+                        <apex:pageBlockSectionItem >
+                           <apex:outputLabel >Customer Name</apex:outputLabel>
+                           <apex:outputField id="Opportunity" value="{!Task.whoId}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Opportunity Name</apex:outputLabel>
+                           <apex:outputField id="Opportunity" value="{!Task.whatId}" />
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:outputField id="Subject" value="{!Task.Subject}" />
+                        <!-- <apex:outputField id="mobile" value="{!Task.Mobile_Number_Webform__c}" /> -->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Mobile Number Webform</apex:outputLabel>
+                            <apex:outputText id="mobile" value="XXX-XXX-{!RIGHT(Task.Mobile_Number_Webform__c,4)}"></apex:outputText>
+                         </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Enquiry Date</apex:outputLabel>
+                            <apex:outputField id="DueDate" value="{!Task.ActivityDate}" />
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Enquiry Time</apex:outputLabel>
+                            <apex:outputField id="CallTime" value="{!Task.Call_Time__c}" />
+                        </apex:pageBlockSectionItem>
+                        
+               </apex:pageBlockSection>
+               <apex:pageBlockSection id="pgBlockSectionEnquiryDetails" title="Enquiry Form Details" collapsible="false" columns="2">
+                        <apex:outputField id="fullName" value="{!Task.FullName__c}" />
+                        <apex:outputField id="emailAdd" value="{!Task.Email_Id__c}" />
+                        <apex:outputField id="country" value="{!Task.country__c}"/>
+                <!--    <apex:outputField id="countryCode" value="{!Task.dialingCode__c }" />   -->
+                        <apex:outputField id="project" value="{!Task.Project__c}"/>
+                        <!-- <apex:outputField id="mobileWeb" value="{!Task.Mobile_Number_Webform__c}"/> -->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Mobile Number Webform</apex:outputLabel>
+                            <apex:outputText id="mobileWeb" value="XXX-XXX-{!RIGHT(Task.Mobile_Number_Webform__c,4)}"></apex:outputText>
+                         </apex:pageBlockSectionItem>
+                        <apex:outputField id="Sourceofenquiry" value="{!Task.Source_of_enquiry__c}"/>
+                        <apex:outputField id="Subsourceofenquiry" value="{!Task.Sub_source_of_enquiry__c}"/>
+                <!--    <apex:outputField id="budgetWeb" value="{!Task.Budget_WebForm__c}"/> -->
+                        <apex:outputField id="utmcamp" value="{!Task.UTM_Campaign__c}"/>
+                        <apex:outputField id="utmdisplay" value="{!Task.UTM_Display__c}"/>
+                        <apex:outputField id="utmmedium" value="{!Task.UTM_Medium__c}"/>
+                        <apex:outputField id="utmsource" value="{!Task.UTM_Source__c}"/>
+                        <apex:outputField id="utmterm" value="{!Task.UTM_Term__c}"/>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Enquiry Remarks</apex:outputLabel>
+                            <apex:outputField styleClass="slds-textarea" id="comments" value="{!Task.description}" />
+                        </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+       <!--         <apex:pageBlockSection id="pgBlockSectionSEODetails" title="Web Banner Details" collapsible="false" columns="2">
+                <apex:outputField id="source" value="{!Task.Web_Banner_Source__c}" />
+                <apex:outputField id="size" value="{!Task.Web_Banner_Size__c}" /> 
+                <apex:outputField id="IP" value="{!Task.IP_Address_Web2Lead__c}"/>  
+                <apex:outputField id="formlocation" value="{!Task.Capture_point__c }" />    
+                </apex:pageBlockSection> 
+             -->
+              </apex:pageBlock>
+              </apex:form>
+          <!-- CREATE NEW TASK FORM -->
+    
+        </fieldset>
+        <!-- / BOXED AREA -->
+      </div>
+  <!-- / CREATE NEW TASK -->
+    </div>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->    
+    <!-- JAVASCRIPT -->
+    <script>
+      var j$ = jQuery.noConflict();
+ 
+        j$(document).ready(function() {
+        });
+     </script>
+    <!-- / JAVASCRIPT -->
+</body>
+</html>
+</apex:page>

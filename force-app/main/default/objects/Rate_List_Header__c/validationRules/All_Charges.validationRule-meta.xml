@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Charges</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(  ISBLANK(Project_Charges__c)  ,  ISPICKVAL(Rate_list__c, &apos;All Charges&apos;)  )</errorConditionFormula>
+    <errorDisplayField>Project_Charges__c</errorDisplayField>
+    <errorMessage>You have to Choose Project Chages for All Charges</errorMessage>
+</ValidationRule>

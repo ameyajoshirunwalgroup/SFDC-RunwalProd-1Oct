@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unserviced_Leads</fullName>
+    <columns>FULL_NAME</columns>
+    <columns>RDS_Country_Code__c</columns>
+    <columns>CORE.USERS.FIRST_NAME</columns>
+    <columns>RW_Project__c</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>LEAD.LEAD_SOURCE</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>Is_Serviced__c</columns>
+    <columns>LEAD.UNREAD</columns>
+    <columns>LEAD.CONVERTED</columns>
+    <columns>Last_Call_Attempt_Date__c</columns>
+    <columns>LEAD.STATUS</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Is_Serviced__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <filters>
+        <field>LEAD.LEAD_SOURCE</field>
+        <operation>notContain</operation>
+        <value>Channel Partner</value>
+    </filters>
+    <label>Unserviced Leads</label>
+    <sharedTo>
+        <role>Pre_Sales_Head</role>
+    </sharedTo>
+</ListView>

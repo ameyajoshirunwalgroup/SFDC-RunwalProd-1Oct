@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PreSalesUsersValidation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(If(
+	!ISBLANK(Project_Name__c),
+	AND(
+		ISCHANGED( RW_Project__c ),
+		OR(
+		 PRIORVALUE(Project_Name__c) &lt;&gt; &quot;Runwal Gardens&quot;,
+		 PRIORVALUE(Project_Name__c) &lt;&gt; &quot;Runwal MyCity&quot;
+		 ),
+		 Project_Name__c &lt;&gt; &quot;Runwal Garden City&quot;,
+		$Profile.Name = &quot;Pre Sales Executive&quot;)
+		,False)
+,$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)
+
+/*If(!ISBLANK(Project_Name__c),AND( ISCHANGED( RW_Project__c ), $Profile.Name = &quot;Pre Sales Executive&quot;) ,False)*/</errorConditionFormula>
+    <errorMessage>Presales User cannot modify the Project</errorMessage>
+</ValidationRule>

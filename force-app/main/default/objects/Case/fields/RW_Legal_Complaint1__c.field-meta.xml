@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Legal_Complaint1__c</fullName>
+    <label>Legal Complaint</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>RW_Legal_Complaint__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>National Commision</fullName>
+                <default>false</default>
+                <label>National Commision</label>
+            </value>
+            <value>
+                <fullName>State  Commision</fullName>
+                <default>false</default>
+                <label>State  Commision</label>
+            </value>
+            <value>
+                <fullName>City Civil Court</fullName>
+                <default>false</default>
+                <label>City Civil Court</label>
+            </value>
+            <value>
+                <fullName>Police Complain</fullName>
+                <default>false</default>
+                <label>Police Complain</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Legal</controllingFieldValue>
+            <valueName>National Commision</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Legal</controllingFieldValue>
+            <valueName>State  Commision</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Legal</controllingFieldValue>
+            <valueName>City Civil Court</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Legal</controllingFieldValue>
+            <valueName>Police Complain</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

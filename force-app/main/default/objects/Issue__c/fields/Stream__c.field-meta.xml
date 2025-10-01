@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stream__c</fullName>
+    <label>Stream</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Sales App</fullName>
+                <default>false</default>
+                <label>Sales App</label>
+            </value>
+            <value>
+                <fullName>Customer Community</fullName>
+                <default>false</default>
+                <label>Customer Community</label>
+            </value>
+            <value>
+                <fullName>Partner Community</fullName>
+                <default>false</default>
+                <label>Partner Community</label>
+            </value>
+            <value>
+                <fullName>API Integration</fullName>
+                <default>false</default>
+                <label>API Integration</label>
+            </value>
+            <value>
+                <fullName>Payment Gateway</fullName>
+                <default>false</default>
+                <label>Payment Gateway</label>
+            </value>
+            <value>
+                <fullName>Support</fullName>
+                <default>false</default>
+                <label>Support</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

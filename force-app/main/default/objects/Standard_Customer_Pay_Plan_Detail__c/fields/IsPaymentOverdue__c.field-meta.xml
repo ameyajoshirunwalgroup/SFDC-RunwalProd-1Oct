@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsPaymentOverdue__c</fullName>
+    <formula>AND((Payment_Due_Date__c &lt;  TODAY()),OR((Charge_Amount_Due__c &gt; 0), (Service_Tax_Amount_Due__c &gt;0)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>This flag indicates if a payment is overdue.</inlineHelpText>
+    <label>IsPaymentOverdue</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

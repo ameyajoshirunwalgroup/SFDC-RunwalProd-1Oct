@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Drawee_Bank_if_others_Mnadatory</fullName>
+    <active>false</active>
+    <description>If drawee bank is other then drawee bank(if other) field mndatory</description>
+    <errorConditionFormula>AND( ISPICKVAL( DraweeBank__c , &apos;Other&apos;) , 
+ISBLANK(Drawee_Bank_If_Others__c)||    ISNULL(Drawee_Bank_If_Others__c))</errorConditionFormula>
+    <errorMessage>Please Enter Drawee Bank(If Other)</errorMessage>
+</ValidationRule>

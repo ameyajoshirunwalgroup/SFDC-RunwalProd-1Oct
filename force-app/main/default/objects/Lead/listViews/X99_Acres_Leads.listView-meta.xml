@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X99_Acres_Leads</fullName>
+    <columns>FULL_NAME</columns>
+    <columns>RW_Project__c</columns>
+    <columns>LEAD.EMAIL</columns>
+    <columns>LEAD.COMPANY</columns>
+    <columns>LEAD.STATE</columns>
+    <columns>LEAD.STATUS</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>LEAD.UNREAD</columns>
+    <columns>RW_Lead_Sub_Source__c</columns>
+    <columns>Lead_Sub_Source__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>FULL_NAME</field>
+        <operation>equals</operation>
+        <value>navin</value>
+    </filters>
+    <filters>
+        <field>Project_Name__c</field>
+        <operation>equals</operation>
+        <value>runwal garden city</value>
+    </filters>
+    <filters>
+        <field>LEAD.STATUS</field>
+        <operation>equals</operation>
+        <value>Interested</value>
+    </filters>
+    <label>99 Acres Leads</label>
+</ListView>

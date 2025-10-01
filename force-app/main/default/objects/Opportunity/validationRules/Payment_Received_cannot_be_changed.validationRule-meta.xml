@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Received_cannot_be_changed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+!ISBLANK( TEXT (PRIORVALUE(Payment_received_Zero_day__c))), 
+ISCHANGED( Payment_received_Zero_day__c),$Profile.Name &lt;&gt; &quot;System Administrator&quot;, $Profile.Name &lt;&gt; &quot;Sales Strategy&quot;  ,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Payment_received_Zero_day__c</errorDisplayField>
+    <errorMessage>Payment Received Zero Day Cannot be Changed</errorMessage>
+</ValidationRule>

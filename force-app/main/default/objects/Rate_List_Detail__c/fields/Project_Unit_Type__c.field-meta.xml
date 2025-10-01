@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Unit_Type__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Project Unit Type</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Project__c</field>
+            <operation>equals</operation>
+            <valueField>Project_Unit_Type__c.RDS_Project__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Project_Unit_Type__c</referenceTo>
+    <relationshipLabel>Rate List Details</relationshipLabel>
+    <relationshipName>Rate_List_Details</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

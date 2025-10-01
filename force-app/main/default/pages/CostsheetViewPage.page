@@ -1,0 +1,349 @@
+<apex:page showHeader="false" applyBodyTag="false" standardController="Quotation__c" extensions="CostsheetViewController">
+    <!--renderAs="PDF" -->
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <style>
+        @page {
+                size: A4;
+                margin:  2mm         //5mm;
+                @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                }
+            }
+            .page-break {
+                display:block;
+                page-break-after:always;
+            }
+@media print {
+body {-webkit-print-color-adjust: exact;}
+#nonprintable1 { display: none; }
+#printable { display: block; }
+}
+table {
+    font-family:Cambria,Georgia,serif;
+    font-size:11px;
+    width:90%;
+    border:0.5px solid black;
+    margin-left:auto;
+    margin-right:auto;
+    border-collapse: collapse;
+}
+td {
+    
+    border:0.5px solid black;
+    border-collapse: collapse;
+}
+span {
+    font-weight:bold;
+}
+h5{
+
+    font-weight:normal;    
+}
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
+</style>
+
+    </head>
+    <Body onload="return myfunction();">
+        <apex:form id="costsheetForm">
+            <apex:outputText id="abc"></apex:outputText>
+            <div id="printable1">
+                <apex:outputPanel >
+                    <table cellspacing="0px" id="MainTable">
+                        <tr>
+                            <td  align="center" colspan="6" style="background:#9CA1A1;text-transform: uppercase;">
+                                <h2 >{!Quotation__c.Project__r.Name}</h2>
+                                <br> PAYMENT SCHEDULE - {!Quotation__c.PaymentPlan__r.Name}</br>
+                            </td>
+                        </tr>
+                        <!-- </table><table id="MainTable" cellspacing="0px"> -->
+                        <tr>
+                            <td>Flat No.</td>
+                            <td colspan="3">{!Quotation__c.Project_Unit__r.RW_Param4__c}</td>
+                            <td>Unit Status</td>
+                            <td>{!Quotation__c.Project_Unit__r.RW_Unit_Status__c}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">Configuration</td>
+                            <td colspan="2">
+                                <apex:outputField value="{!Quotation__c.Project_Unit__r.New_Type__c}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">RERA Carpet area in Sq ft</td>
+                            <td colspan="2">
+                                <apex:outputField value="{!Quotation__c.Project_Unit__r.Carpet_Area__c}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">RERA Utility area in Sq ft</td>
+                            <td colspan="2">
+                                <apex:outputField value="{!Quotation__c.Project_Unit__r.Utility_Area__c}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">RERA Deck area in Sq ft</td>
+                            <td colspan="2">
+                                <apex:outputField value="{!Quotation__c.Project_Unit__r.Deck_Area__c}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">View</td>
+                            <td colspan="2">
+                                 <apex:outputField value="{!Quotation__c.Project_Unit__r.New_View__c}" /> 
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td colspan="4">Saleable Area</td>
+                            <td colspan="2">
+                                <apex:outputField value="{!Quotation__c.Project_Unit__r.Saleable_Area__c}" />
+                            </td>
+                        </tr> -->
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td colspan="1"></td>
+                            <td colspan="1"></td>
+                            <td colspan="1"></td>
+                            <td colspan="1">CGST+SGST</td>
+                            <td colspan="1"></td>
+                            <td colspan="1"> </td>
+                        </tr>
+                        <!-- <tr>
+                            <td colspan="1">Agreement Value (Without GST Discount)</td>
+                            <td colspan="1"></td>
+                            <td colspan="1">{!Quotation__c.Agreement_Value__c}</td>
+                            <td colspan="1">{!agreementValuewithoutDiscountTax}</td>
+                            <td colspan="1"></td>
+                            <td colspan="1"></td>
+                        </tr> -->
+                        <tr>
+                            <td colspan="1"> Original Agreement Value</td> <!-- <apex:outputLabel rendered="{!Quotation__c.Discount_1_Type__c != null && Quotation__c.Discount_1_Type__c == 'GST Discount'}">(After Passing GST Credit of&nbsp; <apex:outputText value="{!IF(Quotation__c.Project_Unit__r.Tax_Rate_Basic__c=='GST 8%','2.5','6.5')}"/>% of Agreement Value)**</apex:outputLabel> -->
+                            <td colspan="1">
+                            <apex:outputText value="{!Quotation__c.Agreement_Value_D__c }" style="display:none;"></apex:outputText></td>
+                            <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!Quotation__c.Agreement_Value__c}"/></apex:outputText></td>
+                            <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!scGST}"/></apex:outputText></td>
+                            <td colspan="1"></td>
+                            <td colspan="1"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Final Agreement Value </td> <!-- (Post Anti-Profiteering Discount @2.5%) -->
+                            <td colspan="1">
+                            <apex:outputText value="{0,number,###,###,###,###}"><apex:param value="{!agreementValuewithDiscount }"/></apex:outputText></td>
+                            <!-- <td colspan="3">Anti Profiteering Discount</td> 
+                            <td colspan="1"><apex:outputtext value="{0,number,###,###,###,###}"> <apex:param value="{!gstamount}"/></apex:outputtext></td> -->
+                            <td colspan="4">&nbsp;</td>
+                            
+                            
+                        </tr>
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td align="center" colspan="6">Payment Schedule</td>
+                        </tr>
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td colspan="1" align="center">Due/Event</td>
+                            <td colspan="1">Percentage</td>
+                            <td colspan="1">Amount</td>
+                            <td colspan="1">CGST+SGST</td>
+                            <td colspan="1">TDS</td>
+                            <td colspan="1">Final Cheque</td>
+                        </tr>
+                        <apex:repeat value="{!wrapperList}" var="x" >
+                            <tr>
+                                <td colspan="1">{!x.isToBePaid1}</td>
+                                <td colspan="1">{!x.percentageval}%</td>
+                                <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.installment1}"/></apex:outputText></td>
+                                <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.gst}"/></apex:outputText></td>
+                                <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.tds}"/></apex:outputText></td>
+                                <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.finalcheque}"/></apex:outputText></td>
+                            </tr>
+                        </apex:repeat>
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td colspan="1">Total</td>
+                            <td colspan="1">100%</td>
+                            <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!agreementValuewithDiscount}"/></apex:outputText></td>
+                            <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!scGST}"/></apex:outputText></td>
+                            <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!totalTDS}"/></apex:outputText></td>
+                            <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!totalFinalCheque}"/></apex:outputText></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">STAMP DUTY (APPROX)</td>
+                            <apex:outputText value="{!Quotation__c.Stamp_Duty_D__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Stamp_Duty__c}" style="display:none;"/>
+                            <td colspan="2">
+                               <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!stampDuty}"/></apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">REG. &amp; SCANNING(APPROX)</td>
+                            <td colspan="2">
+                                <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!Quotation__c.Registration_Charges__c}"/></apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">Other Charges</td>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_1__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_2__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_3__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_4__c  }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_6__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_7__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_8__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_9__c }" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_11__c }" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.Other_Charges_Amount_14__c}" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.Other_Charges_Amount_13__c}" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.Development_Charges_L__c}" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.CreatedDate}" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Apply_3_Additional_Discount__c}" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Apply_5_Additional_Discount__c}" style="display:none;"/>
+                             <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Exclude_GST_Passback__c}" style="display:none;"/>
+
+                              <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Name }" style="display:none;"/>
+
+                            <td colspan="2"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!othercharges}"/></apex:outputText></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">Maintenance</td>
+                            <td colspan="2">
+                                <apex:outputpanel rendered="{!Quotation__c.Project_Maintenance_Charges_Amount_1__c > 0}">  
+                                    <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!Quotation__c.Project_Maintenance_Charges_Amount_1__c}"/></apex:outputText>
+                                </apex:outputpanel>
+                                            				                              
+                             <apex:outputPanel rendered="{!Quotation__c.Project_Maintenance_Charges_Amount_1__c == 0  && Quotation__c.project__r.Name == 'Runwal Bliss' && Quotation__c.Project_Unit__r.TowerName__r.Name == 'A'}">
+                                          <apex:outputText value="On actuals"  /> 
+
+                                   </apex:outputpanel> 
+                                          
+                             <apex:outputPanel rendered="{!Quotation__c.Project_Maintenance_Charges_Amount_1__c == 0  && (Quotation__c.project__r.Name != 'Runwal Bliss' || Quotation__c.Project_Unit__r.TowerName__r.Name != 'A')}">
+									  <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!Quotation__c.Project_Maintenance_Charges_Amount_1__c}"/></apex:outputText>
+                                   </apex:outputpanel> 
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <apex:outputText value="{!Quotation__c.Project_Unit__r.Tax_Rate_Basic__c}" style="display:none;"></apex:outputText>
+                            <td colspan="4">CGST + SGST @ {!gst1Percenatge}%*  ON AGREEMENT VALUE</td>
+                            <apex:outputText value="{!Quotation__c.Agreement_Value_ST_D__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Agreement_Value_ST__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.OC_Approved__c}" style="display:none;"/>
+                            <td colspan="2">
+                                <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!scGST}"/></apex:outputText>
+                              </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">CGST + SGST @ 18 %  ON OTHER CHARGES <apex:outputText rendered="{!dupflag2}">( Including Maintenance  )</apex:outputText> </td>
+                            <td colspan="2"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!otherchargestax}"/></apex:outputText></td>
+                        </tr>
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td colspan="4">GRAND TOTAL</td>
+                            <apex:outputText value="{!Quotation__c.Grand_Total_D__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Grand_Total__c}" style="display:none;"/>
+
+                            <td colspan="2">
+                                <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!grandTotal}"/></apex:outputText>
+                            </td>
+                        </tr>
+                        <tr> 
+                             <td colspan="4"> <apex:outputText rendered="{!dupflag1}"> **Aditional GST Discount </apex:outputText> </td>
+                             <td colspan="2" rendered="{!dupflag1}"><apex:outputText value="{0,number,###,###,###,###}" rendered="{!dupflag1}"> <apex:param value="{!additionalgstdis}"/></apex:outputText></td>
+                        </tr>     
+                        <tr>
+                              <td colspan="4">**Expected All in Price</td>
+                              <td colspan="2"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!Expectedallprice}"/></apex:outputText></td>
+                        </tr>
+                          
+                        <tr>
+                            <td colspan="1">Cheque Favouring</td>
+                            <td colspan="5">{!le.Account_Name_Flat_Cost__c}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">A/C no.</td>
+                            <td colspan="5">{!le.Account_Number_Flat_Cost__c}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">GST Favouring</td>
+                            <td colspan="5">{!le.Account_Name_Service_Tax__c}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">GST A/C no.</td>
+                            <td colspan="5">{!le.Account_Number_Service_tax__c}</td>
+                        </tr>
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td colspan="6" align="center">{!le.Bank_Name_Flat_Cost__c}</td>
+                        </tr>
+                        <tr >  
+                             
+                              <td colspan="4"> </td>
+                              <td > Car Park 1 </td>
+                              <td > Car Park 2 </td> 
+                        </tr>
+                        <tr > 
+                        
+                              <td> </td>
+                              <td colspan="3"> Type of Car Park </td>
+                              <td >{!if(strq.size > 0,strq[0],'')} </td> 
+                              <td >{!if(strq.size > 1,strq[1],'')}</td>
+                        </tr> 
+                        <tr>
+                            <td colspan="6">** Includes {!Quotation__c.Total_No_of_Parking__c} Car Park</td>
+                        </tr>
+                          <tr>
+                           
+                           <td colspan="6" style="height:100px; font-size:10px;">
+                               <apex:outputpanel rendered="{!Quotation__c.Project__r.Quotation_Terms_Conditions__c != Null}">
+                             <apex:outputfield value="{!Quotation__c.Project__r.Quotation_Terms_Conditions__c}"/>
+                                 </apex:outputpanel>  
+                           </td>
+                                   
+                     </tr>       
+                            
+                        <!-- <apex:outputpanel rendered="{!Quotation__c.Project__r.Quotation_Terms_Conditions__c == Null}">    
+                        <tr style="font-weight:Bold;background:#9CA1A1;">
+                            <td colspan="6" align="center">NOTES</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="height:100px; font-size:10px;">
+                               
+                                NOTE: *ABATEMENT OF 1/3RD AVAILABLE TOWARDS LAND AGAINST DEMAND VALUE – EFFECTIVE RATE THUS WILL BE {!gst1Percenatge}%.<br/>
+                                A) AREAS, CHARGES, FIGURES, VALUES ARE SUBJECT TO CHANGE, AS PER APPLICABLE LAW.<br/>
+                                B) THE DEVELOPER RESERVES THE RIGHT TO ALTER/CHANGE/ENHANCE THE ABOVE MENTIONED ADDITIONAL EXPENSES AND PAYMENT SCHEDULE.THE FINAL PRICE IS SUBJECT TO CHANGE,
+                                AS PER APPLICABLE LAW.<br/>
+                                C) SHARE MONEY + TAXES ON SHARE MONEY WILL BE CHARGED EXTRA AS PER THE NUMBER AND TYPE OF APPLICANTS.<br/>
+                                D) PAYMENT SHALL BE SUBJECT TO TDS @1% AS PER SECTION 194 IA OF INCOME TAX ACT, 1961. KINDLY SUBMIT COPY OF PAYMENT/BANK CHALLAN, 
+                                FORM 26QB AND DULY SIGNED FORM 16B HARD COPY WITHIN 10 DAYS FROM THE END OF MONTH  IN WHICH TAX IS DEDUCTIBLE, FAILING WHICH IT WILL BE TREATED AS DELAY/DEFAULT IN PAYMENT, 
+                                INTEREST (AS APPLICABLE) SHALL BE LEVIED UNTIL SUBMISSION OF RESPECTIVE DOCUMENTS. <apex:outputText rendered="{!dupflag3}"> WE HAVE APPOINTED AN AGENCY TO MANAGE ALL YOUR TDS PAYMENT RELATED MATTERS WITH RESPECT TO YOUR APARTMENT.
+                                (IF YOU CHOOSE TO AVAIL THE SAID FACILITY) WE ARE SURE THIS WILL SIGNIFICANTLY EASE THE PROCESS OF CALCULATION AND PAYMENT OF TDS, THEREBY REDUCING YOUR TIME AND EFFORT ON THE SAME. 
+                                THIS WILL ALSO ELIMINATE THE PROBABILITY OF LEVY OF INTEREST/ PENALTY ON ACCOUNT OF DELAY IN TDS PAYMENT WHICH IS TIME BOUND AS PER STATUTE.
+                                TO AVAIL OF THE TDS SERVICES, KINDLY GET IN TOUCH WITH OUR RECOMMENDED AGENCY – GYAATA CONSULTANCY SERVICES PVT. LTD. YOU MAY CONTACT MR.GOURAV MARDIA ON TEL: +91 22 4004 2131 / +91 99203 50878 EMAIL: INFO@GYAATA.IN / GOURAV@GYAATA.IN
+                                THE ABOVE MENTIONED AGENCY WILL HANDLE ALL MATTERS PERTAINING TO PAYMENT OF TDS ON YOUR BEHALF FOR A NOMINAL SERVICE CHARGE, THROUGH THE TENURE OF THE PROJECT. YOU MAY APPOINT ANY OTHER CONSULTANT IF YOU REQUIRE.<br/></apex:outputText>
+                                E) THE AGREEMENT VALUE IS ARRIVED AT MUTUALLY AS PER PREVAILING MARKET RATES AND CONDITIONS, AFTER CONSIDERING THE BENEFIT OF ANY ADDITIONAL INPUT TAX CREDIT ACCRUING TO THE DEVELOPER UNDER THE GST LAW.
+                                POST ABSORPTION OF THE INCREMENTAL TAX IMPACT UNDER GST BY THE DEVELOPER, TO THE EXTENT ABSORBED BY IT, THE CUSTOMER UNCONDITIONALLY AND IRREVOCABLY AGREES AND ACCEPTS THAT THE DEVELOPER HAS NO FURTHER OBLIGATION
+                                TO PASS ANY ADDITIONAL BENEFIT UNDER THE ANTI-PROFITEERING PROVISIONS UNDER SEC 171 OF CGST ACT,2017.<br/>
+                                <apex:outputLabel rendered="{!Quotation__c.Project__r.Name == 'Runwal Bliss'}">
+                                F) THE MENTIONED STAMP DUTY AMOUNT IS INDICATIVE. ACTUAL STAMP DUTY WILL DEPEND ON GOVERNMENT MARKET VALUE OR AGREEMENT VALUE OF THE APARTMENT, WHICHEVER IS HIGHER.<br/>
+                                </apex:outputLabel>
+                              <apex:outputText rendered="{!dupflag2}"> **ADDITIONAL DISCOUNT OF 0.5% IS INCLUDED ON AREAS BELOW 60 SQ.MTRS AND 2.5% ON AREAS ABOVE 60 SQ.MTRS. </apex:outputText> 
+
+                            </td>
+                        </tr>
+                          </apex:outputpanel>  -->          
+
+                    </table>
+                </apex:outputPanel>
+            </div>
+        </apex:form>
+        <script>
+        function myfunction() {
+        window.print(); 
+        
+        }     
+</script>
+    </Body>
+</apex:page>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Visit_Type__c</fullName>
+    <label>Visit Type</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>OLA_Ride_For__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Site Visit</fullName>
+                <default>false</default>
+                <label>Site Visit</label>
+            </value>
+            <value>
+                <fullName>Re-Visit</fullName>
+                <default>false</default>
+                <label>Re-Visit</label>
+            </value>
+            <value>
+                <fullName>CP Visit</fullName>
+                <default>false</default>
+                <label>CP Visit</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Customer</controllingFieldValue>
+            <valueName>Site Visit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer</controllingFieldValue>
+            <valueName>Re-Visit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CP Meeting</controllingFieldValue>
+            <valueName>CP Visit</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

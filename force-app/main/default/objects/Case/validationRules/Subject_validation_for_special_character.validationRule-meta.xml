@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Subject_validation_for_special_character</fullName>
+    <active>false</active>
+    <description>10th Oct 2024: Deactivated as cases were not getting generated.</description>
+    <errorConditionFormula>AND(
+RecordTypeId == &apos;0125j0000006btT&apos;,
+NOT(ISBLANK( Subject )),
+NOT(REGEX(Subject,&quot;[a-zA-z0-9 -]+&quot;))
+)</errorConditionFormula>
+    <errorMessage>Please do not use special characters in Subject line</errorMessage>
+</ValidationRule>

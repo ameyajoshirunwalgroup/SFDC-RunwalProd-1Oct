@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AgeingOfBookingWeekly__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( MOD( AgeingOfBooking__c ,7) = 0 , 
+MOD( FLOOR( AgeingOfBooking__c / 7) ,52)+0 , 
+MOD( FLOOR( AgeingOfBooking__c / 7) ,52)+1)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>AgeingOfBookingWeekly</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

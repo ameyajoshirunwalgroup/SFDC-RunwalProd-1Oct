@@ -1,0 +1,74 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "093d9cc1-8391-46a3-a899-ab4cbac8c249",
+  "label" : "Digital Payment",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "ada6f9b1-f649-4916-9851-a267e8feb208",
+          "columns" : [ {
+            "UUID" : "701a4868-a1c8-4b8d-9391-5b66de8a3960",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "ada6f9b1-f649-4916-9851-a267e8feb208",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "data" : "{!data}",
+            "encResp" : "{!encResp}",
+            "eoiId" : "{!eoiId}",
+            "opportunityId" : "{!opportunityId}",
+            "orderNo" : "{!orderNo}"
+          },
+          "componentName" : "c:PaymentLink",
+          "id" : "5f44fb57-7a8c-49f9-868e-573f5c96a952",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "701a4868-a1c8-4b8d-9391-5b66de8a3960",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "c7db2dfb-480a-4df4-be0f-bf9cdba62ff1",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Digital Payment"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "eb0e9841-a22d-4c9f-9174-158dd4f2945f",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "6ca32982-2633-412f-bb7d-6d8845661b5e",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "977yTkxD7rwg4yVvaWbMkJZQMSIqdu",
+  "type" : "view",
+  "viewType" : "custom-digital-payment"
+}

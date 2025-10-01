@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Facing__c</fullName>
+    <label>Facing</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Garden Facing</fullName>
+                <default>false</default>
+                <label>Garden Facing</label>
+            </value>
+            <value>
+                <fullName>Bay/Sea Facing</fullName>
+                <default>false</default>
+                <label>Bay/Sea Facing</label>
+            </value>
+            <value>
+                <fullName>City Facing</fullName>
+                <default>false</default>
+                <label>City Facing</label>
+            </value>
+            <value>
+                <fullName>Not Important</fullName>
+                <default>false</default>
+                <label>Not Important</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Data_Error_Fixed_validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(Data_Error_Fixed__c,  ISCHANGED(Data_Error_Fixed__c),  NOT(ISPICKVAL( Booking__r.Status__c,&apos;Booking Confirmed&apos;)),
+ $Profile.Name != &apos;System Administrator&apos;,$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>You can not perform Data Error fixed without the Booking Confirmed</errorMessage>
+</ValidationRule>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Car_Parking_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(
+	and(Single_car_park_Additional__c&gt;0, isnull(Single_Covered_Additional_Amount__c)),
+	and(Tandem_car_park_Additional__c&gt;0, isnull(Tandem_Covered_Additional_Amount__c)),
+	and(Single_Open_Additional__c&gt;0, isnull(Single_Open_Additional_Amount__c)),
+	and(Tandem_Open_Additional__c&gt;0, isnull(Tandem_Open_Additional_Amount__c)),
+	and(Stack_Additional__c&gt;0, isnull(Stilt_Additional_Amount__c)),
+	and(MLCP_Additional__c&gt;0, isnull(MLCP_Additional_Amount__c)),
+	and(Basement_Additional__c&gt;0, isnull(Basement_Additional_Amount__c)),
+	and(Podium__c&gt;0, isnull(Podium_Amount__c))
+)
+
+
+/*AND(No_of_parking__c &gt;0 ,Total_Car_Park_Amount__c = 0)*/</errorConditionFormula>
+    <errorDisplayField>X2_Yr_Advance_Maintenance__c</errorDisplayField>
+    <errorMessage>Please enter the car park amount.</errorMessage>
+</ValidationRule>

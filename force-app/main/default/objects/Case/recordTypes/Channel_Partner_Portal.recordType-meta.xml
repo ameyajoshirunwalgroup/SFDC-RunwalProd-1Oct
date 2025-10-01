@@ -1,0 +1,2701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Channel_Partner_Portal</fullName>
+    <active>true</active>
+    <businessProcess>Channel Partner Portal</businessProcess>
+    <label>Channel Partner Portal</label>
+    <picklistValues>
+        <picklist>CSAT_Feedback_Rating__c</picklist>
+        <values>
+            <fullName>Fair</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Happy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Satisfied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unhappy</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CSAT_Feedback_Status__c</picklist>
+        <values>
+            <fullName>Feedback Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent To Customer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Category__c</picklist>
+        <values>
+            <fullName>Invoice Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Profile Update</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Sub_Category__c</picklist>
+        <values>
+            <fullName>Account Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Address Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amount Discrepancy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BANK Ac%2E Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Base Brokerage Query</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Date Mismatch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Document Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GST Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invoice Date Mismatch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invoice Preview Query</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kicker Incentive Query</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ladder Brokerage Query</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mobile Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partial Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Advice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RERA Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vendor Code</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Current_Stage__c</picklist>
+        <values>
+            <fullName>CP-L1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP-L2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP-L3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP-L4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP-L6</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Customer_Lifecycle_Touchpoint__c</picklist>
+        <values>
+            <fullName>Cancellation Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Home Loan Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post-Possession</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-Booking Experience</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Routine Operations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Service Options</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Welcome Call</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Department__c</picklist>
+        <values>
+            <fullName>CRM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility Management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Projects</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Escalation_Level__c</picklist>
+        <values>
+            <fullName>Level 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Level 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Level 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Origin</picklist>
+        <values>
+            <fullName>Channel Partner Portal</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Email - Channel Partner</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Priority</picklist>
+        <values>
+            <fullName>High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medium</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submit for Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Case_Escalation__c</picklist>
+        <values>
+            <fullName>First Escalation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fourth Escalation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reopen Escalation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Second Escalation - 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third Escalation - 1</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Case_Type__c</picklist>
+        <values>
+            <fullName>Complaint</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Communication_Type__c</picklist>
+        <values>
+            <fullName>Inbound</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inbound Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outbound</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Complaint_SubType__c</picklist>
+        <values>
+            <fullName>AC drain line core cut issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AC issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agent Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BCAM %2F FCAM %2F society charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Back to back demands</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Balance transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Source Conflict</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cannot understand demand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cannot understand ledger</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change of Mind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clarification on Demand Letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collection Followup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construction Photos</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construction images</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit %28referral %2Fscheme%29 not reflecting in demand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Portal - Miscellaneous</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer connect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay at Registrar%27s office</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in Flat Handover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in Payment %2F Can%27t Pay</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in response</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demand Letter Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demand due date and outstanding amount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demise of Applicant%28s%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Details Regarding Unit Booked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Did not Receive Receipt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disbursement Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute in O%2FS Amount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diverter valve issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Document Request for Home Loan Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents required on registration day</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Doesn%27t Intend to continue with the Booking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Door frame %26 Door issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E-Mail ID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EV Charging Provision</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enquiry on Allotment of Permanent Parking Slots</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enquiry on Amenities Commencement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enquiry on CAM Commencement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enquiry on OC Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Error in Demand letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Error in Payment Tagging</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Error in Receipt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Excess amount paid %2F refund request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expected possession date</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facilities at Registrars Office</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Feedback Not Getting Activated via QR Code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Constraints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flooring Veins %2F Cracks %2F Shade Variation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flush valve issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GST %2F TDS Related Queries</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Geyser issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Home Loan Related Constraints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I can%27t be present for possession %28POA%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inappropriate RM Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete information shared</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect %2F Incomplete Information of RM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect Amounts in Customer Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect Amounts in R-Connect App</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect KYC in R-Connect App</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inquiry on scheduling registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Interest Charges Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal Fund Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal door sunmica issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Knowing demand letter%2Fsociety charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Documents Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan status update%2F 1st dispursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MGL line provision</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mailing Address</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Main door lock issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical Exigency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Miscellaneous</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mobile Number</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not received Receipt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>POA Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Parking Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Details Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Updation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Exigency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poor Possession Arrangement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession Pending complaints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post possession support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Query on Possession Timelines</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R-Connect App - Miscellaneous</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Awaited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Regarding Offers %2F Schemes Given At Booking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registered agreement copy collection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration%2FStamp Duty payment process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Repurchase Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request for Time Extention for Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention by CRM Head</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention by RM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention by Retention Head</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention by SM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention by Site Head</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention by TL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SD Not released %2F delayed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SDR related Runwal paid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SDR related customer paid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SM Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction Letter Declined</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scheduling Registration Date</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scheduling key handover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seeking Home Loan Related Assistance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seeking Interest Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seeking Possession Delay Compensation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seeking Refund</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seeking Time Extension for Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seeking to make Advance Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Visit %2F Alterations in Flat Requests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site visit related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TDS Rectification Underway</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TDS challan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tile undulation issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Upgrade %2F Downgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to Log In to Customer Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit layout</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VDP issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vendor Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waste Disposal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Weak Customer Profile %2F Eligibility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>What do I need to pay at possession%3F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>What is expected on day of key handover%3F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Window closing issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wooden flooring issues%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong receipt received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>payment not posted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>payment tagged in wrong account</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Complaint_Sub_Subtype__c</picklist>
+        <values>
+            <fullName>%22Incorrect Demand Letter %2F Revised Demand Letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%22Payment Details shared by Customer %2F Bank %2F Cheque Pick up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%28KHO snags highlighted %2F KHO failure%29Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approval Plan Request %2F Clarification %2F Disputing Approval Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Balance Transfer Information related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank Details Available</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank Details Not Available</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank Not responding %2F Technical Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Banker Site Visit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Beyond Grace Period %28Credit%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CIBIL Issues %2F OCR Issues %2F Low Income</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Callback</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Request %28Voluntary Cancellation%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation progress status %2F DOC Date</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Challan Pick up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cheque Pick up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clarification of Agreement Clauses %2F Disputing Agreement Clauses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clarification on GST and TDS information</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clarity of information as per email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clarity on Agreement Clauses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Company Significant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Compensation Related %2F RERA Date Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complaint regarding ADF %2F Excess Refund</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complex</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construction Too Slow%2F Not Happening</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construction Update Not Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer complaint in RERA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer to shared details %2F Details already shared</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in ROC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in Referral Benefit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in Registration %2F Stamp Duty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demand Letter not received Soft or Hard Copy%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demand related Communication Not received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Discount%2FVoucher Not Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute %2F query</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute direct and not CP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute of Referral Benefit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute of pricing given at sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dispute on SDR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disputing BCAM %2F FCAM %2F TCAM charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disputing Interest Charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disputing Parking Charges %2F Parking Allocation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disputing Property Tax charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disputing Society Charges %2F Handover Complaint</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Document Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Doesn%E2%80%99t want any deductions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Error in registered agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Escalation in media %2F social platforms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Unit is Unregistered  - Self %2F  Existing Unit is Unregistered  - Bank Funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Unit is registered</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Explained Registration %2F Stamp Duty Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FM Not Helpful%2FNot Available%2F Not Co-Operative%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>False promise about Scheme%2FOffer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Constraints %2F Seeking Deviation %2F Job Loss %2F Business Loss%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Floor Planning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow Up to get PTP %2F Demand Recieved %2F Payment Details</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow up to get status on High Ageing Default Cases</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardcopy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardcopy %28Not on letter head%29 available</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardcopy %28Not on letter head%29 unavailable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardcopy available</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardcopy unavailable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Health %2F Bereavement related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect Entry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect Interest Charged</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect ROC%2FAmendment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect information %2F area dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect information given at the time of booking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect receipt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Information about Amenities %2F Unhappy with progress of Amenities status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Information not available %2F not updated %2F incorrect reflecting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Latest Construction Photos not received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Leakage %2F Seapage %2F Cracks %2F Paint %2F Tiles %2F Finishing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ledger Statement not received %2F Ledger Statement Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Document Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Documents not received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan dispursed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Login Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Misinformed about rate%2Fpayment plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New RM Change Information shared %2F Current O%2FS %26 Project Status Shared</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Communication for Area Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Disbursement as Plans not approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Registered</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not received as promised %2F received wrong item %2F voucher</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not received welcome call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not responding to emails%2Fcalls</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Opportunity Request created</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out of Turn PDL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PDL Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PDL without Interest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>POA information %2F process explained</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paid but still charged for Interest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Parking Space inadequate%2FDamaged%2FNo Parking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Password Reset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Option</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pitch ADF - Advance Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pitch Loyalty to generate Repurchase or Referrals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Plan changed without taking any Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Police Complaint filed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poor Construction Quality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poor Cosntruction Quality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession Date Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession not received on Time</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Proactive Calls %28Construction Update %2F Birthday %2F Anniversary %2F Vouchers %2F Gifts%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Process Complicated%2FDoesn%E2%80%99t have Client to sell%2F Cant Pay wants to Resell</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Query - Simple</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Query Yes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM TL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM did not send %2F system</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM not responding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM to update details of appreciation email or call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM was rude%2FNot Helpful</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Status Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raise a Task to Home loan team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Receipts%2FAllotment Letter%2FNOC%2FROC%2FDemand%2FAgreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refund Cheque</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refund Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refund Not Received %2F Delayed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registered  %28Self%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registered %28Bank%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminders %2F Legal Notice Sent - Disputes or Clarifications needed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove Certain Clause</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove Clause</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention  Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reversal of payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rudeness of RM %2F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal App is not working</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SM not reachable %2F rude behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction declined</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seepage%2FLeakage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Simple</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Visit Request %2F Site visit not allowed %2F Alterations request rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snags not worked properly%2FSnags reoccured%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Society Formation Information %2F Process%2F Amenities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Softcopy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Softcopy available</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Softcopy unavailable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Status of DOR %2F DOC%2C Process Explained</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Status of Sanction letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submission of  documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subvention Extension</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TDS enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Timely update of Construction update %2F Project Progress Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Too lengthy%2FComplicated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Too many Snags in New Apartment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to reach%2FWhom to contact</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unhappy with Parking Allocation %2F Wants Parking Allocation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit facing %2F Configuration %2F Tower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Variation in Tiles%2FPaint%2FWant Replacement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vendor dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Want compensation%2Finterest for delayed possession</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Want waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wants Interest Charges waived %2F Not Clearing O%2FS due to interest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>White Goods</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wont Pay Demurrage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wont Sign Affidavit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wont pay interest if disbursementb delayed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wont%27Pay for Additional Area</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong Info provided</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>date of possession</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>delay in dispursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>delaying payment  enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>delaying payment %2F deviation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>delaying payment enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>demand letter enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>deviation case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>incorrect information at sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>on hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>payment PTP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>payment status %2F PTP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>payout %2F CN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>post possession</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>query</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>statement Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>timely revert</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Complaint_Type__c</picklist>
+        <values>
+            <fullName>Applicant Details</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Appreciation from Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking %2F Pricing %2F Payment Schedule</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking%2C pricing %26 payment schedule</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CAM Charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation %26 Refund Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Carpentry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change or update demographics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Civil</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clubhouse %26 Amenities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collection Followup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collections %2F Outbound Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Connectivity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construction Update</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Portal %2F R-Connect App</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Service Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DND</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay at Registrar%27s office</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay in Scheduling registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demand Letters %2F Receipts %2F Ledger</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documentation Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Electrical</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employee %2F POA %2F Agent Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Excess paid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fitout Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HVAC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Home Loan Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Interest Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Interest Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Interest Waiver Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal complaints %2F queries</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan %26 Sanction related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Misc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OC Related %2F Possession</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Operations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other query%2Frequest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Parking Allotment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payments and Receipts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Plumbing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Portal Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Positive Feedback</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Possession of my unit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post Possession Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post-Possession Complaints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>QR Code %2F IVR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Receipt related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral %2F Loyalty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration %2F Agreement for Sale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Repurchase%2Frefer a friend%2Fredeem points</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request to Cancel the Booking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Service Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service Related Concern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Software</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stamp Duty Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TDS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tax Related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Taxes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Upgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer%2FUpgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Updating KYC Details</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Welcome call</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Legal_Complaint1__c</picklist>
+        <values>
+            <fullName>City Civil Court</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National Commision</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Police Complain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State  Commision</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Legal_Complaint__c</picklist>
+        <values>
+            <fullName>Legal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Potential Legal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Query_Type__c</picklist>
+        <values>
+            <fullName>Appreciation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complaint</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Feedback</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Query</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_RM_Name__c</picklist>
+        <values>
+            <fullName>A Harendra Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AKHIL RAJ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aakash Motwani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aarti Kocharekar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhishek Varma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Adrian Dsouza</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amrita Dhall</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anand Shah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aniket Naik</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aniket Salve</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ankita Bhosle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arfiyan Shaikh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ashish Ghogale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Atharva Dangat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Atul Tambe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Avadut Tandel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhagyashree Mengane</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhavesh Bhatt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhavita Lodaya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Charu Shahi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chetan Pathare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dakshata Sawant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deepa Vengurlekar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deepti Jadhav</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Devika Shah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dimpal Phalak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dinesh Dsouza</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dipali Pawar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dipti Kumari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Garima Singh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Geeta baratwal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Harsh Gupta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Harsh Parekh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Heena Qureshi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Heneel Shah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ISHA SHARMA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ingita Sinha</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janhavi Tawde</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jaswinder Ari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jyoti Shinde</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kajal Shinde</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalpita Dewadiga</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kirti Chawla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Krishna Gupta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Krupa Panchal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kumar Anand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kunal Ahuja</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kunal Kate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lucy Roychoudhury</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhusudan reddy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manasi Ratnakar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mayura Chaudhari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mayura Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Melwin Nadar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mitesh Jain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Naincy Salve</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Navin Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neha Shekar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nidhish Shinde</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nilufer Dsouza</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pallavi Priya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pawan Rane</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pooja Gupta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prajakta Rane</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pramod Tate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pranay Gaikwad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prashant Thorat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prathamesh Gawane</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pravin More</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Preeti Parab</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Priyanka Dudani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Priyanka Nimkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Priyanka Padsalgikar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rageshree Ghugare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rahi Palghadmal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajashri Kulkarni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajni Dubey</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rakesh Shah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reeya Chakranarayan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Revati Dhanawade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ria Bhatia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Sargar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sagar Pawar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sahil Chavan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sakshi Anand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sandeep Nikalje</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Santosh pillai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sarika Mhatre</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sayali Joshi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shailendra Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shailesh pandey</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shifa Mithagre</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shweta Mulekar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sofiya Victor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sonali Pawar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Soniya Juneja</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sumita Bendre</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sunita Sujit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surjeet Gill</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Swapnil Jadhav</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Swati Pandarkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tanaya Tambe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tara Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tejas Behera</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Umesh Barve</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Usha Ghadge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ushmi Gala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vaibhav Wagh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vaishnavi Sakharkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Varnika Makwana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijay Arora</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vinod Thakare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vismay Shinde</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Repeat_Complaint__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Waiting_Response_From__c</picklist>
+        <values>
+            <fullName>External</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason</picklist>
+        <values>
+            <fullName>Complex functionality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instructions not clear</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User didn%27t attend training</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Remarks_by_RM__c</picklist>
+        <values>
+            <fullName>Closed Satisfactory</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed Un-satisfactory</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Transfer_to_RM__c</picklist>
+        <values>
+            <fullName>Adarsh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alok</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chayan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pankaj</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ratnesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rishi</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Feature Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Question</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>locobuzz__Message_Type__c</picklist>
+        <values>
+            <fullName>Comment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Private</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reply</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retweet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tweet</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>locobuzz__Post_Identifier__c</picklist>
+        <values>
+            <fullName>Keyword</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tag</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>locobuzz__Source__c</picklist>
+        <values>
+            <fullName>AppStoreReviews</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AutomotiveIndia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Blogs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ComplaintWebsites</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CustomerCare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DiscussionForums</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ECommerceWebsites</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ElectronicMedia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expedia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Glassdoor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GoogleBusinessMessages</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GoogleMyReview</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GooglePlayStore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GooglePlus</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HolidayIQ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instagram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MakeMyTrip</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MyGov</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>News</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quora</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ReviewWebsites</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sitejabber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Survey</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TeamBHP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TikTok</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TripAdvisor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Twitter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Videos</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Voice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WebsiteChatBot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WhatsApp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yotpo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>YouTube</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zomato</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

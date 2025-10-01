@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "872ee5a7-4c61-4796-b848-94f56caca529",
+  "label" : "KYCDetails",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "eeaf46df-a784-47ea-8ff5-392ad421e076",
+          "columns" : [ {
+            "UUID" : "fd8d3d76-7314-438d-b6e2-ec8a5e4d745b",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "eeaf46df-a784-47ea-8ff5-392ad421e076",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalIndividualKYCDetails",
+          "id" : "4b2422da-f096-406c-97ec-c19869bcd8bd",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "fd8d3d76-7314-438d-b6e2-ec8a5e4d745b",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "548597d9-d23b-4284-aefa-89b50d442480",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "KYCDetails"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "5b20ca15-032d-4ffe-be90-0f182538b82f",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "84a949da-7869-4ec1-8753-b0eb0a482a60",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-kycdetails"
+}

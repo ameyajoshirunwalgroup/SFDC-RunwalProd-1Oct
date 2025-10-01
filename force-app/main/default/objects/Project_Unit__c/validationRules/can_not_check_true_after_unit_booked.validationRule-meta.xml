@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>can_not_check_true_after_unit_booked</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( RW_Unit_Status__c ,&apos;Booked&apos;) ,  RW_Seventh_Day__c ,$Profile.Name &lt;&gt; &quot;System Administrator&quot;,$Profile.Name &lt;&gt; &quot;Sys Admin Integration&quot;)</errorConditionFormula>
+    <errorDisplayField>RW_Seventh_Day__c</errorDisplayField>
+    <errorMessage>when the project unit status is unit booked, you can not check the checkbox true.</errorMessage>
+</ValidationRule>

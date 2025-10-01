@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Booking_Mandatory_Fields</fullName>
+    <active>false</active>
+    <description>Please fill the Base Rate, Floor Rise and PLC for booking.</description>
+    <errorConditionFormula>AND(
+	ISPICKVAL( RW_Unit_Status__c , &apos;Booked&apos;), 
+	!ISPICKVAL(PRIORVALUE(RW_Unit_Status__c) , &apos;Booked&apos;),
+	OR(
+		ISBLANK(RW_Base_Rate__c),ISNULL(RW_Base_Rate__c),
+		ISBLANK(RW_Floor_Rise__c),ISNULL(RW_Floor_Rise__c),
+		ISBLANK(RW_PLC__c),ISNULL(RW_PLC__c)
+	) 
+)</errorConditionFormula>
+    <errorMessage>Please fill the Base Rate, Floor Rise and PLC for booking.</errorMessage>
+</ValidationRule>

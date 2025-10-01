@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Cancellation__c</fullName>
+    <label>Reason for Cancellation</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Loan Eligibility</fullName>
+                <default>false</default>
+                <label>Loan Eligibility</label>
+            </value>
+            <value>
+                <fullName>Medical Exigency</fullName>
+                <default>false</default>
+                <label>Medical Exigency</label>
+            </value>
+            <value>
+                <fullName>Change of mind</fullName>
+                <default>false</default>
+                <label>Change of mind</label>
+            </value>
+            <value>
+                <fullName>Higher Rate</fullName>
+                <default>false</default>
+                <label>Higher Rate</label>
+            </value>
+            <value>
+                <fullName>Your experience with Team members</fullName>
+                <default>false</default>
+                <label>Your experience with Team members</label>
+            </value>
+            <value>
+                <fullName>Deliverable Timelines</fullName>
+                <default>false</default>
+                <label>Deliverable Timelines</label>
+            </value>
+            <value>
+                <fullName>Product specification</fullName>
+                <default>false</default>
+                <label>Product specification</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

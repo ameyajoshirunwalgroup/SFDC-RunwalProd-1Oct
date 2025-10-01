@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "0173dd4e-59ca-46d0-811c-f8bd8b0323e4",
+  "label" : "Videos",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "60929639-4764-4d90-b94e-669acf93be54",
+          "columns" : [ {
+            "UUID" : "7ad025bb-b1da-48ed-a1b1-20f62e54a4ad",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "60929639-4764-4d90-b94e-669acf93be54",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalVideos",
+          "id" : "e8592ce8-781d-4b50-8ce0-5dc9cdc38968",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "7ad025bb-b1da-48ed-a1b1-20f62e54a4ad",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "7f006d73-ddb3-4af9-8ca5-c3dc427a6dd4",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Videos"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "1c7c64ff-8144-4905-9a88-922c1a9dd9c9",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "6cdd05d3-c7f3-4bcb-b179-18336b352d09",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-videos"
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Without_Selecting_Entering_in_ACNO</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Posting_to_FA_system__c , &apos;&apos;) , NOT( ISBLANK(  ACNO__c  ) ) )</errorConditionFormula>
+    <errorDisplayField>ACNO__c</errorDisplayField>
+    <errorMessage>You cannn&apos;t enter in ACNO without selecting Posting to FA System Pick Value.</errorMessage>
+</ValidationRule>

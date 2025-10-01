@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Visit_Status__c</fullName>
+    <label>Visit Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Lost</fullName>
+                <default>false</default>
+                <label>Lost</label>
+            </value>
+            <value>
+                <fullName>Cold - Follow Up</fullName>
+                <default>false</default>
+                <label>Cold - Follow Up</label>
+            </value>
+            <value>
+                <fullName>Warm - Follow up</fullName>
+                <default>false</default>
+                <label>Warm - Follow up</label>
+            </value>
+            <value>
+                <fullName>Revisit Proposed</fullName>
+                <default>false</default>
+                <label>Revisit Proposed</label>
+            </value>
+            <value>
+                <fullName>Revisit Confirmed</fullName>
+                <default>false</default>
+                <label>Revisit Confirmed</label>
+            </value>
+            <value>
+                <fullName>Revisit Done</fullName>
+                <default>false</default>
+                <label>Revisit Done</label>
+            </value>
+            <value>
+                <fullName>Blocked</fullName>
+                <default>false</default>
+                <label>Blocked</label>
+            </value>
+            <value>
+                <fullName>Booked</fullName>
+                <default>false</default>
+                <label>Booked</label>
+            </value>
+            <value>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+                <label>Cancelled</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

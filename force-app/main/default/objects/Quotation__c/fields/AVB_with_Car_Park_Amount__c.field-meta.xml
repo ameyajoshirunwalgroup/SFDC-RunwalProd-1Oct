@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AVB_with_Car_Park_Amount__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Project__r.Is_Car_Parking_Applicable_for_Brokerage__c == true,Agreement_Value_for_brokers__c + Total_Car_Park_Amount__c  , 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>AV for Brokers + Total Car Park Amount</inlineHelpText>
+    <label>AVB with Car Park Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

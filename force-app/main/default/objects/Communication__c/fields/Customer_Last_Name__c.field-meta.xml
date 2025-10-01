@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Last_Name__c</fullName>
+    <externalId>false</externalId>
+    <formula>if( NOT(ISBLANK( OptyName__c )), &apos;test&apos; , if(NOT(ISBLANK(LeadName__c)), LeadName__r.LastName,if(NOT(ISBLANK(AccountName__c)),&apos;test&apos;, &apos;No Name&apos;)))</formula>
+    <label>Customer Last Name</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

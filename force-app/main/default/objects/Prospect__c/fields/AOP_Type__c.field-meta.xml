@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AOP_Type__c</fullName>
+    <description>For AOP Categorization</description>
+    <inlineHelpText>For AOP Categorization</inlineHelpText>
+    <label>AOP Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>AOP</fullName>
+                <default>false</default>
+                <label>AOP</label>
+            </value>
+            <value>
+                <fullName>Non AOP</fullName>
+                <default>false</default>
+                <label>Non AOP</label>
+            </value>
+            <value>
+                <fullName>ICP</fullName>
+                <default>false</default>
+                <label>ICP</label>
+            </value>
+            <value>
+                <fullName>RCP</fullName>
+                <default>false</default>
+                <label>RCP</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

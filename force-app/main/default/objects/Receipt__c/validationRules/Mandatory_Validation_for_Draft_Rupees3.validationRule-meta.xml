@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Validation_for_Draft_Rupees3</fullName>
+    <active>true</active>
+    <description>When User SelectDraft/Pay Order of Mode PickList and Rupees of Mode Selection then not entering data in Drawee Bank</description>
+    <errorConditionFormula>AND( ISPICKVAL( Mode__c , &apos;Draft/Pay Order&apos;) , ISPICKVAL( Mode_Selection__c , &apos;Rupees&apos;) , ISBLANK( Bank__c ) )</errorConditionFormula>
+    <errorDisplayField>Bank__c</errorDisplayField>
+    <errorMessage>After Selecting Draft/Pay Order of Mode PickList and Rupees of Mode Selection Pick List,Drawee Bank cann&apos;t be blank.</errorMessage>
+</ValidationRule>

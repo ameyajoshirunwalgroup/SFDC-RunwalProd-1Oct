@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Receipt_Number__c</fullName>
+    <externalId>false</externalId>
+    <formula>(Project__r.RDS_Short_Name__c) &amp; &apos;/&apos; &amp; Left( Project_Unit__r.TowerName__r.Name ,2) &amp; &apos;-&apos; &amp; Project_Unit__r.Name &amp; &apos;/&apos; &amp; TEXT(Receipt_Date__c) &amp; &apos;/&apos; &amp; Name</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Receipt Number</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Deployed &amp; Resolved</fullName>
+                <default>false</default>
+                <label>Deployed &amp; Resolved</label>
+            </value>
+            <value>
+                <fullName>Developed</fullName>
+                <default>false</default>
+                <label>Developed</label>
+            </value>
+            <value>
+                <fullName>In process</fullName>
+                <default>false</default>
+                <label>In process</label>
+            </value>
+            <value>
+                <fullName>Not initiated</fullName>
+                <default>true</default>
+                <label>Not initiated</label>
+            </value>
+            <value>
+                <fullName>Query</fullName>
+                <default>false</default>
+                <label>Query</label>
+            </value>
+            <value>
+                <fullName>UAT failed</fullName>
+                <default>false</default>
+                <label>UAT failed</label>
+            </value>
+            <value>
+                <fullName>Under UAT</fullName>
+                <default>false</default>
+                <label>Under UAT</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

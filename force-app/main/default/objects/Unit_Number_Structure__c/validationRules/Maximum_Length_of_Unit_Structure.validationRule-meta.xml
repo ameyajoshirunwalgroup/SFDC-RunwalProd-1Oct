@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maximum_Length_of_Unit_Structure</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(Maximum_Length__c  &gt; 5,Maximum_Length__c  &lt; 1)</errorConditionFormula>
+    <errorDisplayField>Maximum_Length__c</errorDisplayField>
+    <errorMessage>Maximum length cannot be greater than 5 OR Less than 1</errorMessage>
+</ValidationRule>

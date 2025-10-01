@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Percent_Value_must_be_between_100</fullName>
+    <active>false</active>
+    <errorConditionFormula>Percent__c &lt;1 ||  Percent__c&gt;100</errorConditionFormula>
+    <errorDisplayField>Percent__c</errorDisplayField>
+    <errorMessage>Percent value should between 100</errorMessage>
+</ValidationRule>

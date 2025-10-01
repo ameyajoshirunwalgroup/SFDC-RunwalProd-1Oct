@@ -1,0 +1,17 @@
+<apex:page controller="BatchRunFromButton" docType="html-5.0" >
+    <apex:form >  
+      
+        <apex:pageBlock title="Please Select the Start and End Date to Run the Batch" >  
+         <apex:pageMessages />   
+            Start Date: <apex:input type="date" value="{!Startdatename}"/> 
+            End Date:  <apex:input type="date" value="{!Enddatename}"/>
+            <apex:pageBlockButtons location="bottom">  
+              
+                <apex:commandButton value="Run Batch" action="{!BatchRunInactiveScheme}"/><br/>
+                  
+            </apex:pageBlockButtons>  
+              
+        </apex:pageBlock>  
+          
+    </apex:form>
+</apex:page>

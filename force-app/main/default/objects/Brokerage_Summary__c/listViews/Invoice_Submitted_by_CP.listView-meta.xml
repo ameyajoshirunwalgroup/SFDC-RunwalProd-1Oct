@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Invoice_Submitted_by_CP</fullName>
+    <columns>NAME</columns>
+    <columns>Booking_Name__c</columns>
+    <columns>Channel_Partner__c</columns>
+    <columns>Invoice_Submitted_by_CP__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Invoice_Submitted_by_CP__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Invoice Submitted by CP</label>
+</ListView>

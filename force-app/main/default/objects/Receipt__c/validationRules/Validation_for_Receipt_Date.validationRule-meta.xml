@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_for_Receipt_Date</fullName>
+    <active>true</active>
+    <description>When User Enter data in Receipt Date</description>
+    <errorConditionFormula>OR( Receipt_Date__c &gt;TODAY() , Receipt_Date__c&lt; Project__r.Start_Date__c   )</errorConditionFormula>
+    <errorDisplayField>Receipt_Date__c</errorDisplayField>
+    <errorMessage>Receipt Date can&apos;t be greater than Today&apos;s Date and not less than project Start date</errorMessage>
+</ValidationRule>

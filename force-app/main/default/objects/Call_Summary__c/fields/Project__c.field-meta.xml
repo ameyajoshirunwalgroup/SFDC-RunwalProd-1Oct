@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( Booking__c != null,  Booking__r.Project__r.Name ,  IF( Account__c != null,  Account__r.Project_Name__r.Name ,  IF( Lead__c != null,  Lead__r.RW_Project__r.Name ,  IF( Opportunity__c != null,  Opportunity__r.RW_Project__r.Name , null) ) ) )</formula>
+    <label>Project</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TPA_Upload_required_if_TPA_Case</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( RW_TPA_Case__c, &quot;TPA Case&quot;),
+ISBLANK( RW_TPA_Letter_Id__c))</errorConditionFormula>
+    <errorMessage>Please upload the TPA Letter as required!</errorMessage>
+</ValidationRule>

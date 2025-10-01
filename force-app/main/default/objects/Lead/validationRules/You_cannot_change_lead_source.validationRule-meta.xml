@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>You_cannot_change_lead_source</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( 
+!ISBLANK( TEXT (PRIORVALUE(LeadSource))), 
+ISCHANGED( LeadSource),$Profile.Name &lt;&gt; &quot;System Administrator&quot;, 
+$Profile.Name &lt;&gt; &quot;Sales Strategy&quot; ,$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>LeadSource</errorDisplayField>
+    <errorMessage>Lead source cannot be changed</errorMessage>
+</ValidationRule>

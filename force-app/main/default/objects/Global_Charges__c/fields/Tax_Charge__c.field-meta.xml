@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tax_Charge__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Tax Charges</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Global_Charges__c.Charge_Type__c</field>
+            <operation>equals</operation>
+            <value>Tax</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Global_Charges__c</referenceTo>
+    <relationshipLabel>Global Charges</relationshipLabel>
+    <relationshipName>Global_Charges1</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

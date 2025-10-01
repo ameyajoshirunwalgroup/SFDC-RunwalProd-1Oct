@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>S_Payable_At__c</fullName>
+    <label>Payable At</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>As per the payment milestone</fullName>
+                <default>false</default>
+                <label>As per the payment milestone</label>
+            </value>
+            <value>
+                <fullName>At Registration</fullName>
+                <default>false</default>
+                <label>At Registration</label>
+            </value>
+            <value>
+                <fullName>At Possession</fullName>
+                <default>false</default>
+                <label>At Possession</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

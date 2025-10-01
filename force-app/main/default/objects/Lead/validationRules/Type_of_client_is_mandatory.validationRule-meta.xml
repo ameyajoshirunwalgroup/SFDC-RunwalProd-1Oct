@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_client_is_mandatory</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISPICKVAL(RW_Type_of_Client__c,&quot;&quot;)</errorConditionFormula>
+    <errorDisplayField>RW_Type_of_Client__c</errorDisplayField>
+    <errorMessage>Please select the type of client.</errorMessage>
+</ValidationRule>

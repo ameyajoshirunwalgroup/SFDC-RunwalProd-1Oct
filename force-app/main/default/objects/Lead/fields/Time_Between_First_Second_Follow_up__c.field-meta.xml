@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Time_Between_First_Second_Follow_up__c</fullName>
+    <externalId>false</externalId>
+    <formula>( Second_Follow_up_date_time__c - First_Follow_up_date_time__c ) * 24 * 60</formula>
+    <label>Time Between First &amp; Second Follow-up</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

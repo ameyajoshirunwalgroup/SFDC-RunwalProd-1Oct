@@ -1,0 +1,821 @@
+<apex:page showHeader="false" sidebar="false" controller="S_InventoryMatrix"> 
+<head>
+    <title>Inventory Module</title>
+    <!--fonts-->
+        <link href='http://fonts.googleapis.com/css?family=Francois+One' rel='stylesheet' type='text/css'/>
+        <link href='http://fonts.googleapis.com/css?family=Cabin:400,500,600,700' rel='stylesheet' type='text/css'/> 
+       <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'/>
+       
+       <!--select checkbox-->  
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+       <!--<script src="{!$Resource.jquerysumoselect}"></script>-->
+       <!--<script src="{!$Resource.jquerysumoselectmin}"></script>-->
+    <!--select checkbox-->  
+    <!--//fonts-->      
+        <link href="{!$Resource.bootstrap}" rel="stylesheet" type="text/css" media="all" /> 
+        <link href="{!$Resource.style}" rel="stylesheet" type="text/css" media="all" /> 
+        <!--<link href="{!$Resource.sumoselect}" rel="stylesheet" type="text/css" media="all" />-->            
+
+    <!-- for-mobile-apps -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="soccer Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+        Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //for-mobile-apps  -->
+    <!-- js -->
+   <script src="{!$Resource.JQuery1}"></script>       
+    <!-- js -->
+        
+<script type="text/javascript">
+$(document).ready(function(){
+     $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+    $("#table_id td:contains('Sold')").css('background-color','#000070');
+    $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    $("#table_id td:contains('| Available |')").css('background-color','#008000');
+    $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+    $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+    //$("#table_id td:contains('Reserved')").css('background-color','#FFFF00');
+   
+    $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058'); // OLD Color Code:  #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500');// OLD Color Code:  #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898');// OLD Color Code:  #DC143C
+        
+    
+});
+</script>
+
+<script>
+var optyid =  "{!$CurrentPage.parameters.oppid}";
+var projectId=  "{!$CurrentPage.parameters.optyProject}";   
+
+</script> 
+<script>
+function process()
+{
+var multiselec  = new Array(<?php echo implode(',', $day); ?>);
+var url="{!$Label.VF_Page_Url}/apex/TestPAgeClone?tid=" + document.getElementById("tid").value + "&pid=" + multiselect;
+location.href=url;
+return false;
+}
+    
+
+</script>
+<script>
+    
+    //sforce.connection.sessionId = "{!$Api.Session_ID}";
+    function eoiBlock(unitid)
+    {
+       
+        blocckeoi(unitid);
+        //alert('EOI Blocked'+unitid); 
+        /* try {
+  var result = sforce.apex.execute("EOIBlockController","updateEOIBlockStatus",{projectUnitRecordId:unitid});
+            alert(result);
+               $("#block"+unitid).hide();
+               $("#unblock"+unitid).show();
+               
+               
+} catch(e) {
+  alert(e)
+}*/
+        
+    }
+    
+    function onCompleteEoiBlock()
+    {
+        
+        $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+    $("#table_id td:contains('Sold')").css('background-color','#000070');
+    $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    $("#table_id td:contains('| Available |')").css('background-color','#008000');
+    $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+    $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+    //$("#table_id td:contains('Reserved')").css('background-color','#FFFF00');
+   
+    $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058'); // OLD Color Code:  #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500');// OLD Color Code:  #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898');// OLD Color Code:  #DC143C
+        // alert('EOI is blocked successfully');
+        if(hasMessages)
+        {
+            if($.trim($('[id$=msgId]').html())!='') 
+            {
+                 $("html, body").animate({ scrollTop: 0 }, "slow");
+            }
+        }
+    }
+    
+    function eoiUnBlock(unitid)
+    {  
+        //alert('inside'+unitid);
+        unblocckeoi(unitid);
+        /* try {
+            var result = sforce.apex.execute("EOIBlockController","updateEOIAvailableStatus",{projectUnitRecordId:unitid});
+            alert(result);
+    } 
+        catch(e) {
+      alert(e)
+}*/
+
+    }
+    
+    
+    function onCompleteUnEoiBlock()
+    {
+        $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+    $("#table_id td:contains('Sold')").css('background-color','#000070');
+    
+    $("#table_id td:contains('| Available |')").css('background-color','#008000');
+    $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+    $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+    $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    //$("#table_id td:contains('Reserved')").css('background-color','#FFFF00');
+   
+    $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058'); // OLD Color Code:  #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500');// OLD Color Code:  #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898');// OLD Color Code:  #DC143C
+    if(hasMessages)
+        {
+            if($.trim($('[id$=msgId]').html())!='') 
+            {
+                 $("html, body").animate({ scrollTop: 0 }, "slow");
+            }
+            }
+}
+    
+    function checkEOIBlocked(unitId)
+    {
+        //alert('inside func');
+        checkBeforeBook(unitId);
+    }
+    
+    function checkOppStatus(unitId)
+    {
+        //alert('inside func'+opportunityId);
+        //alert('inside func');
+         $('#filter').show();
+        checkBeforeQuotationGen(unitId);
+    }
+    
+    function onCompleteCheckOppStatus(unitId)
+    {
+        //alert('inside func**');
+         $('#filter').hide();
+         $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+    $("#table_id td:contains('Sold')").css('background-color','#000070');
+    
+    $("#table_id td:contains('| Available |')").css('background-color','#008000');
+    $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+        $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+    //$("#table_id td:contains('Reserved')").css('background-color','#FFFF00');
+   
+    $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058'); // OLD Color Code:  #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500');// OLD Color Code:  #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898');// OLD Color Code:  #DC143C
+        if(hasMessages == 'false') 
+         {
+             //alert('inside if');
+             //window.open('/apex/BookingPageForm2?projectId='+projectId+'&optyid='+optyid+ '&unitId='+unitId)
+             window.open('/apex/QuotationStartPage?oppId='+optyid+'&id='+unitId)
+            
+         }
+        else
+            {
+                if($.trim($('[id$=msgId]').html())!='') 
+                {
+                 $("html, body").animate({ scrollTop: 0 }, "slow");
+                }
+            }
+    }                          
+    function onCompleteCheck(unitId)
+    {
+        //alert('inside');
+         $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+    $("#table_id td:contains('Sold')").css('background-color','#000070');
+    
+    $("#table_id td:contains('| Available |')").css('background-color','#008000');
+    $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+        $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+    //$("#table_id td:contains('Reserved')").css('background-color','#FFFF00');
+   
+    $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058'); // OLD Color Code:  #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500');// OLD Color Code:  #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898');// OLD Color Code:  #DC143C
+    
+         if(hasMessages == 'false') 
+         {
+             //alert('inside if');
+             window.open('/apex/BookingPageForm2?projectId='+projectId+'&optyid='+optyid+ '&unitId='+unitId)
+         }
+        else
+            {
+                if($.trim($('[id$=msgId]').html())!='') 
+                {
+                 $("html, body").animate({ scrollTop: 0 }, "slow");
+                }
+            }
+        
+    }
+</script>
+<style type="text/css">
+        
+        .SlectBox{font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;color:#444;font-size:13px;}
+        .SlectBox p,div,ul,li{padding:0px; margin:0px;}
+</style>
+<style>
+.resultstable,table { 
+    //width: 100%;
+    cellpadding:0px;
+    background : white;
+    border:3px solid white;
+    border-spacing: 0px;
+    border-collapse: separate;
+    font-size: 1em;
+    margin-left:auto;
+    margin-right:auto;
+    
+}
+.resultstable td{
+    padding: 6px;
+    border:2px solid white;
+    cursor: pointer;
+}
+.abc input
+{ 
+    background : white;
+}
+.xyz
+{ 
+    display: none;
+}
+.abc , span{
+
+    margin-right:1%;
+}
+
+.divbutton{
+    height: 100px;  
+    
+}
+.internal-div
+    {
+        margin-top:20px;
+        margin-bottom: 20px;
+        margin-left: 25px;
+    }
+.message 
+    {
+        background: none;
+        border: none;
+    }
+.message table tbody tr:FIRST-CHILD + tr
+    {
+       display : none;
+    }
+</style>
+<style>
+.towerdisplay table,td,tr,th {
+align:center;
+//background-color:white; 
+color: black; 
+padding : 20px;
+border: 1px solid black;
+}
+.towerdisplay table{
+width:50%;
+margin: auto auto;
+}
+#filter{ 
+
+       display:none;
+       position: fixed;
+                background-image: url({!URLFOR($Resource.CIFLoading)});
+                background-size: 80px 80px;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                z-index: 1004;
+                left: 0%;
+                top: 0%;
+}   
+</style>
+<!--show buttons on hover -->
+<script>
+var optyid =  "{!$CurrentPage.parameters.oppid}";   
+  
+$(document).ready(function () {
+ $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    $(document).on('mouseenter', '.divbutton', function ()                 
+    {
+             
+    var checksold =  document.getElementById('sold').checked;
+    var checkVacant =  document.getElementById('Vacant').checked;
+    var checkblocked = document.getElementById('blocked').checked;
+    //var checkreserved = document.getElementById('Reserved').checked;
+    var checkHold = document.getElementById('Hold').checked; 
+    var checkbooked = document.getElementById('booked').checked;
+    var checkBIPselect = document.getElementById('BIPselect').checked;
+    var checkCIP = document.getElementById('CIP').checked;
+    var checkRefuge = document.getElementById('Refuge').checked;
+    var checkEOIBlocked = document.getElementById('EOIBlocked').checked;
+    
+    var check1bhk =  document.getElementById('1bhk').checked;
+    var check2bhk =  document.getElementById('2bhk').checked;
+    var check3bhk = document.getElementById('3bhk').checked;
+    var check4bhk =document.getElementById('4bhk').checked; 
+   // var config = document.getElementById('{!$Component.formid.config}').value;
+    
+    /* document.write(config); */
+              if($(this).text().indexOf('Available') > 0 && checkVacant == true)
+              {
+                   //alert("Helllow");
+                   $(this).find("#btncost").show(); 
+                   $(this).find("#btnbook").show(); 
+                   $(this).find("#btneoiblock").show();
+                   $(this).find("#parking").show();
+                   $(this).find("#btnblock").show();  
+               }  
+               if($(this).text().indexOf('Blocked') > 0 && checkblocked == true)
+               {
+                   //alert("Helllow");
+                   $(this).find("#btncost").show(); 
+                   $(this).find("#btnbook").show();  
+                   $(this).find("#btneoiblock").show();
+                   $(this).find("#parking").show();
+                   $(this).find("#btnblock").show();  
+               } 
+        
+            if($(this).text().indexOf('Hold') > 0 && checkHold == true)
+               {
+                    
+                   if($(this).text().indexOf('EOI Blocked') > 0)
+                       {
+                            $(this).find("#btncost").hide(); 
+                            $(this).find("#btnbook").hide();
+                            $(this).find("#btneoiblock").hide();
+                            $(this).find("#btneoiunblock").show();
+                       }
+                   else
+                       {
+                           $(this).find("#btncost").hide(); 
+                            $(this).find("#btnbook").hide();
+                           $(this).find("#btneoiblock").show();
+                            $(this).find("#btneoiunblock").hide();
+                       }
+                   
+               }
+        
+            
+        
+             if($(this).text().indexOf('EOI Blocked') > 0 && (checkEOIBlocked == true || checkVacant == true))
+              {
+                  if($(this).text().indexOf('Booked') <0 && $(this).text().indexOf('Refuge Units') <0)
+                      {
+                          $(this).find("#btneoiblock").hide();
+                          $(this).find("#btneoiunblock").show();
+                      }
+              }
+            else
+                {
+                    if($(this).text().indexOf('Booked') <0 && $(this).text().indexOf('Refuge Units') <0 )
+                      {
+                          //$(this).find("#btneoiblock").show();
+                          //$(this).find("#btneoiunblock").hide();  
+                      }
+                }
+        
+            if(($(this).text().indexOf('EOI Blocked') > 0) && ($(this).text().indexOf('Booked') > 0) && (checkbooked == true ))
+              {
+                  
+                          $(this).find("#btneoiblock").hide();
+                          $(this).find("#btneoiunblock").hide();
+                          $(this).find("#btnbook").hide(); 
+                          $(this).find("#btncost").hide(); 
+                          
+              }
+        
+        
+        
+        
+                      
+                }).on('mouseleave', '.divbutton', function () {                  
+                        $(this).find(":button").hide(); 
+                        
+                                    
+                });
+            });
+</script>
+<script>
+function calcall()
+{   
+       var all =  document.getElementById('All').checked;
+       // alert(all);
+       if(all == true)
+       {
+                document.getElementById('sold').checked = true;
+                document.getElementById('Vacant').checked = true;
+                document.getElementById('blocked').checked = true;
+                document.getElementById('Hold').checked = true;
+                document.getElementById('EOIBlocked').checked = true;
+                //document.getElementById('Reserved').checked = true; 
+                document.getElementById('booked').checked = true;
+                document.getElementById('BIPselect').checked = true;
+                document.getElementById('CIP').checked = true;
+                document.getElementById('Refuge').checked = true;
+                document.getElementById('Welcome').checked = true; 
+                document.getElementById('1bhk').checked = true;
+                document.getElementById('2bhk').checked = true;
+                document.getElementById('3bhk').checked = true;
+                document.getElementById('4bhk').checked = true;
+                
+       }
+       else
+       {
+                document.getElementById('sold').checked = false;
+                document.getElementById('Vacant').checked = false;
+                document.getElementById('blocked').checked = false;
+                document.getElementById('Hold').checked = false; 
+                document.getElementById('booked').checked = false;
+                document.getElementById('EOIBlocked').checked = false;
+                //document.getElementById('Reserved').checked = false;
+                document.getElementById('BIPselect').checked = false;
+                document.getElementById('CIP').checked = false;
+                document.getElementById('Refuge').checked = false;
+                document.getElementById('Welcome').checked = false; 
+                document.getElementById('1bhk').checked = false;
+                document.getElementById('2bhk').checked = false;
+                document.getElementById('3bhk').checked = false;
+                document.getElementById('4bhk').checked = false;
+                
+       }
+       calc();
+}
+</script>
+<script>
+function calc()
+{   
+   
+    $("#table_id td:contains('Sold')").css('background-color','#000070');    
+    $("#table_id td:contains('| Available |')").css('background-color','#008000');
+    $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+    $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+    $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+    $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+    
+    //$("#table_id td:contains('Reserved')").css('background-color','#FFFF00');
+    $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058');  // OLD Color Code: #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500'); // OLD Color Code: #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898'); // OLD Color Code: #DC143C
+    
+    var Allcheck = document.getElementById('All').checked;
+    var checksold =  document.getElementById('sold').checked;
+    var checkVacant =  document.getElementById('Vacant').checked;
+    var checkblocked = document.getElementById('blocked').checked;
+    var checkHold  =document.getElementById('Hold').checked; 
+    var checkbooked = document.getElementById('booked').checked;
+    
+    var checkEoiBlocked = document.getElementById('EOIBlocked').checked;
+    //var checkreserved = document.getElementById('Reserved').checked;
+    var checkBIPselect = document.getElementById('BIPselect').checked;
+    var checkCIP = document.getElementById('CIP').checked;
+    var checkRefuge = document.getElementById('Refuge').checked;
+    var checkWelcome = document.getElementById('Welcome').checked;
+    var check1bhk =  document.getElementById('1bhk').checked;
+    var check2bhk =  document.getElementById('2bhk').checked;
+    var check3bhk = document.getElementById('3bhk').checked;
+    var check4bhk =document.getElementById('4bhk').checked; 
+    
+     if(checkEoiBlocked != true)
+       {
+        
+        $("#table_id td:contains('Sold')").css('background-color','#000070');
+        
+        $("#table_id td:contains('| Available |')").css('background-color','#008000');
+        $("#table_id td:contains('Hold')").css('background-color','#FFFF33'); 
+        $("#table_id td:contains('| Blocked |')").css('background-color','#7851a9');
+        $("#table_id td:contains('| EOI Blocked |')").css('background-color','#000000');
+        $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+         $("#table_id td:contains('BIP - Sales')").css('background-color','#7373C8');
+    $("#table_id td:contains('CIP')").css('background-color','#E60000');
+    $("#table_id td:contains('Refuge Units')").css('background-color','#000000');
+    $("#table_id td:contains('Floor')").css('background-color','#F4A460');
+    $("#table_id td:contains('Welcome Call Pending')").css('background-color','#FF0058');  // OLD Color Code: #FFFF00
+    $("#table_id td:contains('BIP - RM Verification')").css('background-color','#FF4500'); // OLD Color Code: #4682B4
+    $("#table_id td:contains('CRM Returned To Sales')").css('background-color','#989898'); // OLD Color Code: #DC143C
+   
+       }
+    
+  if(checksold != true){
+      //alert('inside sold equals true'); 
+      //alert('2');
+     $("#table_id td:contains('Sold')").css('background-color','#000000');                                   
+   }
+    
+   if(checkVacant != true){
+       // alert('3');
+      $("#table_id td:contains('| Available |')").css('background-color','#000000');  
+       // $("#table_id td:contains('| EOI Blocked |')").css('background-color','Black');
+     
+   }
+   
+     if(checkVacant){ 
+         // alert('4');
+         $("#table_id td:contains('| Available |')").css('background-color','#008000');  
+         $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+     
+   }
+   if(checkblocked != true){
+       //alert('5');
+     $("#table_id td:contains('| Blocked |')").css('background-color','#000000');
+    
+   }
+    if(checkEoiBlocked == true){
+         $("#table_id td:contains('| EOI Blocked |')").css('background-color','#DB7093');
+        }
+   if(checkHold != true){
+       //  alert('6');
+     $("#table_id td:contains('Hold')").css('background-color','#000000');
+   }
+  /* if(checkreserved != true){
+     $("#table_id td:contains('Reserved')").css('background-color','Black');
+   }*/
+  
+   if(checkBIPselect != true){
+       // alert('7');
+     $("#table_id td:contains('BIP')").css('background-color','#000000');
+   }
+   if(checkCIP != true){
+     $("#table_id td:contains('CIP')").css('background-color','#000000');
+   }
+   if(checkRefuge != true){
+     $("#table_id td:contains('Refuge')").css('background-color','#000000');
+   }
+   if(checkbooked != true){
+       //alert('8');
+     $("#table_id td:contains('Booked')").css('background-color','#000000');
+   } 
+    if(checkbooked == true){
+        //alert('9');
+        //alert('booked 9');
+     $("#table_id td:contains('Booked')").css('background-color','#ba0707');
+     $("#table_id td:contains('| Booked |')").css('background-color','#ba0707');
+   } 
+   if(checkWelcome != true){
+     $("#table_id td:contains('Welcome Call Pending')").css('background-color','#000000');
+   }
+   
+   if(check1bhk != true){
+       //alert('10');
+       // $("#table_id td:contains('1 BHK')").css('background-color','#000000');
+   }
+   if(check2bhk != true){
+       //alert('11');
+       // $("#table_id td:contains('2 BHK')").css('background-color','#000000');
+   }
+  
+   if(check3bhk != true){
+       //alert('12');
+       // $("#table_id td:contains('3 BHK')").css('background-color','Black');
+   }
+  
+   if(check4bhk != true){
+       //alert('13');
+       //$("#table_id td:contains('4 BHK')").css('background-color','Black');
+   }
+   
+    //var config = document.getElementById('{!$Component.formid.config}').value;    
+    //$("h5").not('.'+config).parent().css( 'background-color','Black');  
+   
+  /* if(check5bhk != true){   
+   var str1 = ' ';
+   var str2 = '5 BHK';
+   var str3 = ' ';
+   var res =  str1.concat(str2, str3);
+   
+     $("#table_id td:contains('res')").css('background-color','Black');
+   }*/ 
+}
+
+</script>
+
+</head>
+<body>
+    <center>
+    <div id="filter"></div>
+</center>           
+<a href="/home/home.jsp"><img src="{!$Resource.Home}" style="float:left; width:8%; height:8%;"></img></a>
+<!-- <img src="{!$Resource.InventoryLegends}" style="float:right; width:30%; height:8%;"></img>-->
+<apex:form rendered="{!If(SelectedClusterId !=null && selectedTower !=null,true,false)}">
+<a href="/apex/S_InventoryMatrixview"><img src="{!$Resource.newback}"   style="float:right; width:8%; height:8%;"></img></a>
+</apex:form>
+ <img src="{!$Resource.InventoryLegends}" style="float:right; width:40%; height:8%;"></img> 
+
+<div style="float:right">
+</div>
+         <script>
+                $("span.menu").click(function(){
+                    $(".top-menu ul").slideToggle("slow" , function(){
+                    });
+                });
+         </script>
+
+
+        <script src="{!$Resource.jquery2}"></script> 
+  <script>
+    $(function () {
+      $("#slider").responsiveSlides({
+        auto: true,
+        speed: 300,
+        timeout: 10000,
+        manualControls: '#slider3-pager',
+      });
+    });
+  </script>
+
+<!-- //banner -->
+<!-- //content-bottom -->
+<div class="error">
+    <div class="container">
+       <div align="center" style="font-size:1em;"><!--class="error-main"-->
+           <apex:form id="formid">
+               
+              
+               
+           <apex:actionFunction action="{!updateEOIBlockStatus}" name="blocckeoi" rerender="script-block,msgId" oncomplete="onCompleteEoiBlock()" >
+               <apex:param name="param1" assignTo="{!projectUnitRecordId}" value="" />
+               
+               </apex:actionFunction>
+               
+               <apex:actionFunction action="{!updateEOIAvailableStatus}" name="unblocckeoi" rerender="script-block,msgId" oncomplete="onCompleteUnEoiBlock()" >
+               <apex:param name="param1" assignTo="{!projectUnitRecordId}" value="" />
+               
+               </apex:actionFunction>
+               
+               <apex:actionFunction action="{!checkEOIBeforeBooking}" name="checkBeforeBook" reRender="script-block,msgId" oncomplete="onCompleteCheck('{!projectUnitRecordId}')" >
+               <apex:param name="param1" assignTo="{!projectUnitRecordId}" value="" />
+               
+               </apex:actionFunction>
+                 <apex:actionFunction action="{!checkOpportunityStatus}" name="checkBeforeQuotationGen" reRender="script-block,msgId" oncomplete="onCompleteCheckOppStatus('{!projectUnitRecordId}')" >
+               <apex:param name="param1" assignTo="{!projectUnitRecordId}" value="" />
+               
+               </apex:actionFunction>                                                                                                                                                                                                                                                                                               
+             <!--  <div align="center" style="font-size:1em;">
+            <apex:selectList id="abc2" value="{!SelectedProjectId}" size="1"> 
+                <apex:selectOptions value="{!getClients}" /> 
+                <apex:actionSupport event="onchange">
+                   <apex:param name="SelectedProjectId" value="{!getClients}" assignTo="{!SelectedProjectId}"/>
+               </apex:actionSupport>
+            </apex:selectList>              
+            </div>  <br></br>-->
+            <apex:selectList id="abc" value="{!selectedVal}" size="1"> 
+                <apex:selectOptions value="{!getProjects}" /> 
+                <apex:actionSupport event="onchange">
+                   <apex:param name="selectedVal" value="{!getProjects}" assignTo="{!selectedVal}"/> 
+               </apex:actionSupport> 
+               </apex:selectList>
+               
+                       <apex:selectList id="clustersectn" value="{!SelectedClusterId }" size="1"> 
+                <apex:selectOptions value="{!getClusterNames}" /> 
+                <apex:actionSupport event="onchange">
+                <apex:param name="SelectedClusterId" value="{!getClusterNames}" assignTo="{!SelectedClusterId}"/> 
+                </apex:actionSupport> 
+            </apex:selectList>  
+            
+            <apex:selectList id="def" value="{!selectedTower}" size="1"> 
+                <apex:selectOptions value="{!getTowers}" /> 
+                <apex:actionSupport event="onchange">
+                   <apex:param name="selectedTower" value="{!getTowers}" assignTo="{!selectedTower}"/>
+               </apex:actionSupport>    
+            </apex:selectList>
+            
+            <!-- <apex:selectList id="config" value="{!selectedConf}"  size="1"> 
+                <apex:selectOptions value="{!getProjectunittype}" /> 
+                <apex:actionSupport event="onchange"  onsubmit="return calc();" >
+                   <apex:param name="selectedConf" value="{!getProjectunittype}" assignTo="{!selectedConf}"  />
+               </apex:actionSupport>    
+            </apex:selectList> -->
+            
+            <div class="abc">
+                <br/><b>UNIT STATUS :</b>
+                
+                <span> All :   <input type="checkbox" id ="All" checked="true" onchange="calcall();" /></span>
+                <span> Sold :   <input type="checkbox" id ="sold" value="{!sold}" checked="true" onchange="calc();" /></span>
+                <span> Available:   <input type="checkbox" id ="Vacant" value="{!open}" checked="true" onchange="calc();" /></span>
+                <span> Booked : <input type="checkbox" id ="booked" value="{!booked}" checked="true" onchange="calc();" /></span>
+                <span> Blocked : <input type="checkbox" id ="blocked" value="{!blocked}" checked="true" onchange="calc();" /></span>
+                <span> Hold :<input type="checkbox" id ="Hold"  checked="true" onchange="calc();" />  </span> 
+                <span> EOI Blocked :<input type="checkbox" id ="EOIBlocked"  checked="true" onchange="calc();" />  </span> 
+                <!-- <span> Reserved :<input type="checkbox" id ="Reserved"  checked="true" onchange="calc();" />  </span>   -->                               
+                <span class="xyz"> BIP:<input type="checkbox" id ="BIPselect"   checked="true" onchange="calc();" />  </span>                                  
+                <span class="xyz"> CIP:<input type="checkbox" id ="CIP"  checked="true" onchange="calc();" />  </span>  
+                <span class="xyz"> Refuge Units:<input type="checkbox" id ="Refuge"  checked="true" onchange="calc();" />  </span>  
+                <span class="xyz"> Welcome Call Pending:<input type="checkbox" id ="Welcome"  checked="true" onchange="calc();" />  </span> 
+               
+               <!-- <br/><b>CONFIGURATION :</b>
+                <span> 1BHK : <input type="checkbox" id="1bhk" value="{!onebhk}" checked="true" onchange="calc();"/></span>
+                <span> 2BHK : <input type="checkbox" id="2bhk" value="{!twobhk}" checked="true" onchange="calc();"/></span>
+                <span> 3BHK : <input type="checkbox" id="3bhk" value="{!threebhk}" checked="true" onchange="calc();"/></span>
+                <span> 4BHK : <input type="checkbox" id="4bhk" value="{!fourbhk}" checked="true" onchange="calc();"/></span>-->
+                
+                  
+                <span>  <input class= "xyz" type="checkbox" id="1bhk" value="{!onebhk}" checked="true" onchange="calc();"/></span>
+                <span>  <input class="xyz" type="checkbox" id="2bhk" value="{!twobhk}" checked="true" onchange="calc();"/></span>
+                <span>  <input class="xyz" type="checkbox" id="3bhk" value="{!threebhk}" checked="true" onchange="calc();"/></span>
+                <span>  <input class="xyz" type="checkbox" id="4bhk" value="{!fourbhk}" checked="true" onchange="calc();"/></span>
+               
+              
+            </div>               
+            <br></br>    
+            <!--  <a href="/00OO0000000LLqS?pv0={!URLENCODE(LEFT(selectedVal,15))}" target="_blank"><u>View Unit Summary Report</u></a>
+                      {!selectedVal} -->                           
+            </apex:form>  
+           </div>     
+    </div>   
+    <br></br>  <apex:pageblock >
+   
+   <apex:outPutPanel layout="block" id="script-block">
+       <div style="margin: auto;width: 50%;padding: 10px;">
+       <apex:pageMessages id="msgId"></apex:pageMessages>
+       </div>
+        <script>
+            var hasMessages = '{!hasError}';
+        </script>
+   <!-- </apex:outPutPanel>-->
+ <!--  <apex:outputPanel id="TablePanel">
+       <div style="margin: auto;width: 50%;padding: 10px;">
+           <apex:pageMessages id="messages"></apex:pageMessages>
+           
+       </div>-->
+ 
+   <table id="table_id" style="width:100%;font-size:1em;" border="1" class="resultstable" >
+       
+        <apex:repeat value="{!floorDescSeqList}" var="floorNo" >               
+        <tr>
+            <td><b>Floor : {!floorNo}</b></td> 
+            <apex:repeat value="{!JMap[floorNo]}" var="J">    
+           <!-- | {!J.Project_Unit_Type__r.Name}     -->    
+           <td id="ppp" class="divbutton">Unit No : <a href="/{!J.Id}" target="_blank" id="{!J.Id}" onblur="LookupHoverDetail.getHover('{!J.Id}').hide();" onfocus="LookupHoverDetail.getHover('{!J.Id}', '/{!J.Id}/m?retURL=%2F{!J.Id}&isAjaxRequest=1').show();" onmouseout="LookupHoverDetail.getHover('{!J.Id}').hide();" onmouseover="LookupHoverDetail.getHover('{!J.Id}', '/{!J.Id}/m?retURL=%2F{!J.Id}&isAjaxRequest=1').show();">{!J.Name}</a>
+               | {!J.RW_Unit_Status__c} | <h5 class="{!J.New_Type__c}">{!J.New_Type__c}</h5> | <apex:outputText rendered="{!IF(J.RW_EOI_Block_Status__c == 'EOI Blocked',true,false)}"> {!J.RW_EOI_Block_Status__c} |</apex:outputText>
+               <h5 id="Applicant"><apex:outputText rendered="{!IF(J.RW_Unit_Status__c= 'Sold',true,false)}">|Customer :</apex:outputText><!-- style="display:none;"-->
+               <apex:outputlink value="/{!J.RW_Customer__c}" target="_blank" rendered="{!IF(J.RW_Unit_Status__c = 'Sold',true,false)}">{!J.RW_Customer__r.Name}</apex:outputlink> </h5> 
+               <br/><!--<button type="button" id="btncost" style="display:none;" onclick="window.open('/apex/QuotationStartPage?oppId=' +optyid+ '&id={!J}')">Quotation</button> -->
+                <button type="button" id="btncost" style="display:none;" onclick="checkOppStatus('{!J.Id}')">Quotation</button>                                                                                                                                                                                      
+                <!-- <button type="button" id="btnbook" style="display:none;" onclick="window.open('/apex/BookingPageForm2?projectId='+projectId+'&optyid='+optyid+ '&unitId={!J}')">Book</button>  -->
+               <button type="button" id="btnbook" style="display:none;" onclick="checkEOIBlocked('{!J.Id}')">Book</button>
+               <button type="button" id="btneoiblock" style="display:none;" onclick="eoiBlock('{!J.Id}')">EOI Block</button> 
+               <button type="button" id="btneoiunblock" style="display:none;" onclick="eoiUnBlock('{!J.Id}')">EOI UnBlock</button> 
+                
+               
+               
+                </td>
+              </apex:repeat>
+        </tr>
+        </apex:repeat>
+    </table>
+</apex:outputPanel>
+         </apex:pageblock>      
+</div>
+
+<!--footer-->
+<div class="footer">
+     <div class="container">
+         <div class="copywrite">
+             <p>© 2015 All Rights Reserved Design by www.Stetig.in </p>
+         </div>
+         
+         <div class="clearfix"></div>
+     </div>
+</div>
+<!-- //footer -->
+</body>
+    <!-- On click event of Command Button call test Function -->
+    
+</apex:page>

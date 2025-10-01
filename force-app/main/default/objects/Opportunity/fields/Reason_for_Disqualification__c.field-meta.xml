@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Disqualification__c</fullName>
+    <label>Reason for Disqualification</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>StageName</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Budget Concern</fullName>
+                <default>false</default>
+                <label>Budget Concern</label>
+            </value>
+            <value>
+                <fullName>Configuration Concern</fullName>
+                <default>false</default>
+                <label>Configuration Concern</label>
+            </value>
+            <value>
+                <fullName>Possession Timeline Concern</fullName>
+                <default>false</default>
+                <label>Possession Timeline Concern</label>
+            </value>
+            <value>
+                <fullName>Willing to purchase within Cooling Period</fullName>
+                <default>false</default>
+                <label>Willing to purchase within Cooling Period</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

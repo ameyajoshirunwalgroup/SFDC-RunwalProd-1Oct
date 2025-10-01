@@ -1,0 +1,39 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "725c5389-1c8e-4241-bc24-ffdcceb0d064",
+  "label" : "Brokerage Invoice Related List",
+  "regions" : [ {
+    "id" : "2a81757e-a156-4b26-8086-762de55591f1",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customTitle" : "",
+        "parentRecordId" : "{!recordId}",
+        "relatedListName" : "{!relationshipApiName}",
+        "showBreadCrumbs" : true,
+        "showCustomTitle" : false,
+        "showManualRefreshButton" : true,
+        "showRowNumbers" : true
+      },
+      "componentName" : "forceCommunity:relatedList",
+      "id" : "03b54645-dc10-4384-9ad0-4a1524f00e19",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "511f8a13-f000-48d8-af35-c895013bec41",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "b7fff9cb-6aab-4a32-9ce9-43a3a58ac2fb",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "relatedlist-a2f"
+}

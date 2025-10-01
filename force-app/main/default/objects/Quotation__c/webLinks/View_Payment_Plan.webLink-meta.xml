@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>View_Payment_Plan</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>View Payment Plan</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>var prjId = &apos;{!Quotation__c.ProjectId__c}&apos;;
+var qId = &apos;{!Quotation__c.Id}&apos;;
+
+if(prjId == &apos;a1428000001vuIq&apos;){  
+   window.open(&apos;/apex/View_Payment_Plan_For_SBHprj?scontrolCaching=1&amp;id=&apos;+qId);
+}
+else{
+   window.open(&apos;/apex/View_Payment_Plan?scontrolCaching=1&amp;id=&apos;+qId);
+}</url>
+</WebLink>

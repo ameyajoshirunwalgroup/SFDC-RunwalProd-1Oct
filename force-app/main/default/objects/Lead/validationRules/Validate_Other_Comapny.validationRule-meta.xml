@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Other_Comapny</fullName>
+    <active>true</active>
+    <description>Please enter the Other Company Name.</description>
+    <errorConditionFormula>AND(ISPICKVAL(RW_Company_Name__c, &quot;Other&quot;), ISBLANK(RW_Other_Company_Name__c),$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>Please enter the Other Company Name.</errorMessage>
+</ValidationRule>

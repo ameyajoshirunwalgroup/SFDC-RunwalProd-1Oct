@@ -1,0 +1,11 @@
+<apex:page controller="BrokerageInvoiceSAP" action="{!BrokerageInvoice}">
+    <apex:form >  
+            <apex:pageMessages > </apex:pageMessages>
+
+      <center id="Sendbtn">
+            <apex:commandButton action="{!BackToBrokerageInvoice}" value="Back to Invoice"/>&nbsp;               
+        </center>
+
+        
+    </apex:form>
+</apex:page>

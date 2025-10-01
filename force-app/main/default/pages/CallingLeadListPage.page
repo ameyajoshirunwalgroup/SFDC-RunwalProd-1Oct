@@ -1,0 +1,18 @@
+<apex:page sidebar="false" showHeader="false">
+    <apex:includeLightning />
+    <!--Lightning Container-->
+    <div style="width:100%;height:100px;" id="LightningContainer"/>
+     
+    <script type="text/javascript">
+    //get account Id from URL
+     
+    //Create Lightning Component
+    $Lightning.use("c:CallingLeadListApp", function() {
+        $Lightning.createComponent("c:CallingLeadList", 
+                                   { }, //Pass Parameter
+                                   "LightningContainer", function(component) {
+                                       console.log('Component created');
+                                   });
+    });
+    </script>
+</apex:page>

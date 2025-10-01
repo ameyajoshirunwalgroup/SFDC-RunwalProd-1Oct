@@ -1,0 +1,321 @@
+<apex:page controller="CSATFeedbackController" action="{!successPage}" sidebar="false" showHeader="false" applyHtmlTag="true" standardStylesheets="false" docType="html-5.0">
+	<apex:form >
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <style>                                      
+                    body{
+                    margin: 0;
+                    padding: 0;                    
+                    }
+                    .navbar img{
+                    width:70px;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    label{
+                    font-weight:600;
+                    font-size:20px;
+                    }
+                    .mainDiv{
+                    padding:20px;
+                    border-radius:5px;
+                    -webkit-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    -moz-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    }
+                    .form-control:focus {
+                    background-color: #fff;
+                    border-color: #bc8b2d;
+                    outline: 0;
+                    box-shadow: 0 0 0 1px rgb(188, 139, 45);
+                    }
+                    .btn{
+                    padding:8px 10px;
+                    color: #fff;
+                    cursor: pointer !important;
+                    border: solid 1px #A8822B;
+                    width: 100%;
+                    display: inline-block;
+                    background-color: #A8822B;
+                    width: 85px;
+                    font-size: 16px;
+                    font-weight:400;
+                    transition:0.2s;
+                    }
+                    .btn:hover{
+                    padding:8px 10px;
+                    color:A8822B;
+                    background-color: #fff;
+                    border:1px solid #A8822B;
+                    }
+                    .custom-control label img{
+                      width: 45px;
+                    }
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.9rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.9rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                   
+                    /*------------ Ipad -----------------*/
+                    @media screen and (max-width: 768px) {
+                    .navbar img{
+                    width:65px;
+                    text-align:center;
+                    }
+                    .custom-control label img{
+                      width: 40px;
+                    }
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.5rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.5rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                    }
+                     /*------------ Mobile -----------------*/
+                    @media screen and (max-width: 480px) {
+                    .navbar img{
+                    width:50px;
+                    text-align:center;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    .custom-control {
+                    padding-bottom: 35px;
+                    }
+                    label{
+                    font-weight:500;
+                    font-size:18px;
+                    }
+                    .custom-control label img{
+                      width: 40px;
+                    }
+                    
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 3.50rem;
+                        left: 0.7rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 3.50rem;
+                        left: 0.7rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                    
+                    }
+                    .spinnerBg {
+                        position: fixed;
+                        width: 100%;
+                        height: 100%;
+                        background-color: #000;
+                        opacity: 0.2;
+                        z-index: 999999;
+                        left: 0;
+                        top: 0;
+                    }
+        
+                    .Assigned {
+                        position: fixed;
+                        background: url('{!URLFOR($Resource.CIFLoading)}');
+                        background-size: 50px 50px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 1004;
+                        left: 0%;
+                        top: 0%;
+                    }
+                </style>
+            </head>
+            <body>
+                <a class="navbar">
+                    <img src ="https://www.runwal.com/images/runwal-logo.png"  alt="logo"/>
+                </a>
+                <div class="container pt-5" id="mainDiv">
+                    <div class="row" id="secondDiv">
+                        <apex:actionstatus id="status">
+                            <apex:facet name="start">
+                                <div class="spinnerBg" />
+                                <div class="Assigned" />
+                            </apex:facet>
+                        </apex:actionstatus>
+                         
+                        <div class="col-sm-12 col-md-10 col-lg-25">
+                            <div class="border mainDiv">
+                                <center>
+                                    <h3>
+                                        <u>Feedback Form</u>
+                                    </h3>
+                                </center>
+                                <br/>
+                                <apex:pageMessages id="showmsg"></apex:pageMessages>
+                                <div class="form-row mt-2">
+                                    <div class="form-group col-md-25" >
+                                        <apex:outputpanel rendered="{!($CurrentPage.parameters.rating != 'UnHappy')}">
+                                        <label for="MobNo">Dear Customer basis your last interaction with the service relationship manager, how satisfied are you with the response?</label>
+                                        <center>
+                                            <div id="experienceDiv" required = "true">
+                                        	<div class="custom-control custom-radio custom-control-inline">
+                                                <input value="{!rating}" type="radio" id="UnHappy" name="Feedback" class="custom-control-input" onclick="updatecustomerEx(this.id)" />
+                                                <label class="custom-control-label" for="UnHappy">
+                                                    <img src="{!$Resource.Unhappy}" title="UnHappy"/>
+                                                </label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input value="{!rating}" type="radio" id="Happy" name="Feedback" class="custom-control-input" onclick="updatecustomerEx(this.id)" />
+                                                <label class="custom-control-label" for="Happy">
+                                                    <img src="{!$Resource.Happy}" title="Happy"/>
+                                                </label>
+                                            </div>
+                                            
+                                            
+                                            <!--<div>
+     											<input  type="radio" id="Happy" name="Feedback1" onclick="updatecustomerEx(this.id)" />
+                                                <label for="Happy">
+                                                    <img src="{!$Resource.Happy}" title="Happy"/>
+                                                </label>
+    										</div>
+                                            <div>
+     											<input  type="radio" id="UnHappy" name="Feedback2" onclick="updatecustomerEx(this.id)" />
+                                                <label for="UnHappy">
+                                                    <img src="{!$Resource.UnHappy}" title="UnHappy"/>
+                                                </label>
+    										</div>-->
+
+    
+                                            
+                                            <apex:inputText value="{!rating}" style="display:none;" Id="custEx1"/>
+                                            <script>
+                                                function updatecustomerEx(custX)
+                                                {
+                                                    //alert('hi:'+custX);
+                                                    $("[Id$='custEx1']").val(custX);
+                                                        
+                                                }
+                                            </script>
+                                        </div><br/><br/>
+                                            </center>
+                                        </apex:outputpanel>
+                                        <apex:outputpanel rendered="{!($CurrentPage.parameters.rating = 'UnHappy')}">
+                                        <label for="MobNo">Dear Customer basis your last interaction with the service relationship manager, how satisfied are you with the response?</label>
+                                        <center>
+                                            <div id="experienceDiv" required = "true">
+                                        	<div class="custom-control custom-radio custom-control-inline">
+                                                <input checked="true" value="{!rating}" type="radio" id="UnHappy" name="Feedback" class="custom-control-input" onclick="updatecustomerEx(this.id)" />
+                                                <label class="custom-control-label" for="UnHappy">
+                                                    <img src="{!$Resource.Unhappy}" title="UnHappy"/>
+                                                </label>
+                                            </div>
+                                            <apex:inputText value="{!rating}" style="display:none;" Id="custEx"/>
+                                            <script>
+                                                function updatecustomerEx(custX)
+                                                {
+                                                    //alert('hi:'+custX);
+                                                    $("[Id$='custEx']").val(custX);
+                                                        
+                                                }
+                                            </script>
+                                        </div><br/><br/>
+                                            </center>
+                                        
+                                        <!--<apex:outputpanel rendered="{!($CurrentPage.parameters.rating = 'UnHappy')}">-->
+                                        	<label for="MobNo">Dear customer you have selected  option as UNHAPPY. Can you please share the reason in order for us to improve our services?</label>
+                                            <br/>
+                                            <apex:inputText value="{!remarks}" styleclass="form-control" id="MobNo" required="true"/>
+                                        </apex:outputpanel>
+                                      
+                                        
+                                    </div>
+                                </div><br/>
+                                
+                                <apex:outputpanel style="font-size: 17px;color: red;font-weight: bold; margin-bottom:5px;width:100%" id="errorDiv">
+                                    <center>
+                                        <apex:outputtext value="{!errorMsg}" id="errorId" escape="false" />
+                                    </center>
+                                </apex:outputpanel>
+                                <br/>
+                                <center>
+                                    
+                                    <apex:commandButton styleclass="btn" action="{!submitFeedback}" value="Submit" status="status" reRender="errorDiv"/>
+                                    <!-- <button type="button" class="btn" action="{!submitFeedback}">Submit</button> -->
+                                </center>
+                            </div><br/>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+                <apex:outputpanel rendered="{!isSubmitted}">                  
+                    <h3>
+                        Feedback has been submited successfully !!!
+                    </h3>
+                
+                </apex:outputpanel>
+                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                <script>
+                    function checkforblank() {
+                    }
+                </script>
+            </body>
+        </html>
+    </apex:form>
+
+</apex:page>

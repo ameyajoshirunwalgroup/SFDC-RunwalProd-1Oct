@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Service_Tax_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>LEN(RDS_Service_Tax_No__c) &gt;15||LEN(RDS_Service_Tax_No__c) &lt;15</errorConditionFormula>
+    <errorDisplayField>RDS_Service_Tax_No__c</errorDisplayField>
+    <errorMessage>Service Tax must be 15 digit</errorMessage>
+</ValidationRule>

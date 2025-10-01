@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mobile_Number_10_Digits</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(LEN( Mobile_No__c ) &gt; 10 , LEN( Mobile_No__c ) &lt; 10)</errorConditionFormula>
+    <errorDisplayField>Mobile_No__c</errorDisplayField>
+    <errorMessage>Mobile number can not be more or less than 10 digits.</errorMessage>
+</ValidationRule>

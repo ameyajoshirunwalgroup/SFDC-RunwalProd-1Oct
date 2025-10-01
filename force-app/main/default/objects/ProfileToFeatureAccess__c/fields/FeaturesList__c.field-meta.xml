@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FeaturesList__c</fullName>
+    <description>List of all the features like buttons,  links,  pages which we want to control through code [where Sharing rules, field level security or profile access can&apos;t be used]</description>
+    <label>FeaturesList</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Sales Call</fullName>
+                <default>false</default>
+                <label>Sales Call</label>
+            </value>
+            <value>
+                <fullName>Presales Call</fullName>
+                <default>false</default>
+                <label>Presales Call</label>
+            </value>
+            <value>
+                <fullName>Site Visit</fullName>
+                <default>false</default>
+                <label>Site Visit</label>
+            </value>
+            <value>
+                <fullName>Enquiry Received</fullName>
+                <default>false</default>
+                <label>Enquiry Received</label>
+            </value>
+            <value>
+                <fullName>VDNB Call</fullName>
+                <default>false</default>
+                <label>VDNB Call</label>
+            </value>
+            <value>
+                <fullName>HWC</fullName>
+                <default>false</default>
+                <label>HWC</label>
+            </value>
+            <value>
+                <fullName>CRM Call</fullName>
+                <default>false</default>
+                <label>CRM Call</label>
+            </value>
+            <value>
+                <fullName>Home Loan Call</fullName>
+                <default>false</default>
+                <label>Home Loan Call</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

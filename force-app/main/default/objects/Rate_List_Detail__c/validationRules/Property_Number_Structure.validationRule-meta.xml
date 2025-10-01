@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Property_Number_Structure</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( Based_on_Property_Number_Structure__c=true ,  ISNULL( Unit_Number_Structure__c ) , NOT( ISNULL( Unit_Number_Structure__c ) ))</errorConditionFormula>
+    <errorDisplayField>Based_on_Property_Number_Structure__c</errorDisplayField>
+    <errorMessage>Check this field</errorMessage>
+</ValidationRule>

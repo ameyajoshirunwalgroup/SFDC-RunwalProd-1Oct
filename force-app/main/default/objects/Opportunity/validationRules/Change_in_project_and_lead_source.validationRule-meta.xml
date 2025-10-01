@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Change_in_project_and_lead_source</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR( ISCHANGED( RW_Project__c ) , ISCHANGED( LeadSource ) )</errorConditionFormula>
+    <errorMessage>You cannot change Project or Lead Source value.</errorMessage>
+</ValidationRule>

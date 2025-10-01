@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Family_Income__c</fullName>
+    <label>Family Income</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Upto 50 Lacs</fullName>
+                <default>false</default>
+                <label>Upto 50 Lacs</label>
+            </value>
+            <value>
+                <fullName>&gt; 50 Lacs To 1 Cr.</fullName>
+                <default>false</default>
+                <label>&gt; 50 Lacs To 1 Cr.</label>
+            </value>
+            <value>
+                <fullName>&gt; 1 Cr. To 5 Cr.</fullName>
+                <default>false</default>
+                <label>&gt; 1 Cr. To 5 Cr.</label>
+            </value>
+            <value>
+                <fullName>&gt; 5 Cr. To 10 Cr.</fullName>
+                <default>false</default>
+                <label>&gt; 5 Cr. To 10 Cr.</label>
+            </value>
+            <value>
+                <fullName>&gt; 10 Cr.</fullName>
+                <default>false</default>
+                <label>&gt; 10 Cr.</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Expected_Timeline__c</fullName>
+    <label>Expected Timeline</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Immediate</fullName>
+                <default>false</default>
+                <label>Immediate</label>
+            </value>
+            <value>
+                <fullName>Within 15 Days</fullName>
+                <default>false</default>
+                <label>Within 15 Days</label>
+            </value>
+            <value>
+                <fullName>Within 30 Days</fullName>
+                <default>false</default>
+                <label>Within 30 Days</label>
+            </value>
+            <value>
+                <fullName>Within 60 Days</fullName>
+                <default>false</default>
+                <label>Within 60 Days</label>
+            </value>
+            <value>
+                <fullName>60+ Days</fullName>
+                <default>false</default>
+                <label>60+ Days</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

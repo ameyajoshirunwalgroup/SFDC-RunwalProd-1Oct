@@ -1,0 +1,245 @@
+<apex:page controller="SendBulkLeadClass" showHeader="false" sidebar="false" cache="false" standardStylesheets="true" docType="html-5.0">
+    <html lang="en">
+        <apex:form > 
+            <head>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+                <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"/>
+                <title>Mass Email</title>
+                <style>
+                    html, body {
+                    padding: 0px;
+                    margin: 0px;
+                    font-family: 'Roboto', sans-serif;
+                    }
+                    header {
+                    position: sticky;
+                    top: 0px;
+                    display: flex;
+                    padding: 5px 40px;
+                    align-items: center;
+                    background: #F5F5DC;
+                    border-bottom: 1px solid rgb(239, 239, 239);
+                    box-shadow: 9px 0 8px -4px rgb(0, 0, 0);
+                    z-index: 1;
+                    }
+                    .mainHeading{          
+                    background: #D1AE5C;
+                    padding: 4px;
+                    color:#fff;
+                    }
+                    h2{
+                    font-weight: bold;
+                    font-size: 22px;
+                    }
+                    .col-form-label{
+                    font-weight:bold;
+                    }
+                    .table1{
+                    width:100%;
+                    border-collapse:collapse;
+                    border-saperate:2px;
+                    }
+                    .table1 tr th{
+                    padding:4px 6px;
+                    background:#9f1635;
+                    color:#fff;
+                    font-size:12px;
+                    font-weight:400;
+                    border:1px solid #9f1635;
+                    }
+                    .table1 tr td{
+                    padding:4px 6px;
+                    font-size:12px;
+                    color:#000;
+                    border:1px solid #000;
+                    }
+                    .table1 tr:nth-child(even){background:#f1f1f1}
+                    .table1 tr:nth-child(odd) {background:#ffffff}
+                    .btn{
+                    background-image:none !important;
+                    background:none !important;
+                    border-radius:0 !important;
+                    background:#9f1635 !important;
+                    color:#fff !important;
+                    padding:6px 10px !important;
+                    width:112px;
+                    }
+                    .form-control:focus {
+                    color: #495057;
+                    background-color: #fff;
+                    border-color: #9f1635;
+                    outline: 0;
+                    box-shadow: 0 0 0 1px rgb(159 22 53);
+                    }
+                    .col-md-2, .col-md-4{
+                    padding-right: 8px;
+                    padding-left: 8px;
+                    }
+                    .button{
+                    background: #5cb85c;
+                    }
+                    .container1{
+                    width:60%;
+                    margin:auto;
+                    border:1px solid #ddd;
+                    padding:20px 10px;
+                    box-shadow: 9px 0 8px -4px rgb(0, 0, 0);
+                    }
+                    
+                </style>
+            </head>
+            <body>
+                <apex:pageMessages ></apex:pageMessages>
+                <!----------------------------------------- Navigation Bar ----------------------------------------->
+                <header>
+                    <!--<a href="#"><i class="fas fa-home fa-3x"></i></a> -->
+                    <div class="flex-auto"></div>
+                   <!-- <a href="/home/home.jsp"><img class="logo" src="https://www.centuryrealestate.in/assets/images/global/logo-white.png" width="120px"/></a> -->
+                  <!--  {!$Resource.Logo} -->
+                  <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}" style="text-align:left; display: block; margin: auto; width: 60px;" alt="Runwal" />-->
+                  <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}" style="text-align:left; display: block; margin: auto; width: 60px;" alt="Runwal" />
+                </header>
+                <!------------------------------------- Personal Details ---------------------------------------->            
+                <Center>
+                  <apex:outputLabel value="{!strError}" style="color:red;" id="errorId2"></apex:outputLabel>
+                </Center>
+                <div id="motifCurve">
+                    <div class="container">
+                        <div class="container mt-5">
+                          <!--  <div align="center">
+                              <h2 style="color:#9f1635;font-size:24px;text-align:center"><u>Campaign</u></h2> 
+                            </div> -->
+                 
+                            <!--Facet Loading cycle Starts Here--->
+                            <apex:actionStatus id="status">
+                                <apex:facet name="start">
+                                    <div class="fadeMe">
+                                        &nbsp;
+                                    </div>
+                                    <div style="position: fixed ; left: 0; top: 0; bottom: 0; right: 0; z-index: 1;background-color: rgba(178, 180, 184, 0.4);;">
+                                        <div style="margin: 17% 44%;">                                    
+                                            <img src="{!$Resource.CIFLoading}" style="width:150px;" /> 
+                                            <span style="padding:5px 10px;z-index: -1001;font-size:16px;color:#333;position: relative;bottom: 45px;left: 23px;">Please Wait...</span>
+                                        </div>
+                                    </div>
+                                </apex:facet>
+                            </apex:actionStatus>
+                            
+                            <div class="container1 mt-4 mb-4"> 
+                            <!-- <div class="form-group"> -->
+                                <div class="mt-4 row">
+                                    <label for="selectCamp" class="col-md-5 col-form-label">Select Campaign <sup style="color:red">*</sup></label>                        
+                                    <div class="col-md-7">                                        
+                                        <apex:selectList value="{!campName}" size="1" id="selectCamp" styleClass="form-control" >
+                                            <apex:selectOptions value="{!CampList}"   />
+                                            <apex:actionSupport event="onchange" action="{!getMembers}" >
+                                            </apex:actionSupport> 
+                                        </apex:selectList>
+                                    </div>
+                                </div>
+                         <!--   </div> -->
+                                <div class="mt-5 p-0">
+                                     <p>Count of Leads in Campaign : {!LeadCount}</p> 
+                                    <p class="p-0">Count of Accounts in Campaign : {!AccCount}</p> 
+                                <!--    <p class="p-0">Count of Opportunities in Campaign : {!OppCount}</p> -->
+                                </div>
+                            For More details of campaign :<apex:outputLink value="/{!campName }" target="_blank"> Click Here</apex:outputLink>
+                            
+                            <div style="display:none" >
+                                <a class="btn btn-primary" id="feedbackClickPopup" data-toggle="modal"  href="#activity">Send</a>
+                                <a class="btn btn-primary" id="feedbackClickSavePopup" data-toggle="modal"  href="#saveactivity">Save Send</a>
+                            </div>
+                            <br/><br/>
+                            <center>
+                            <apex:commandButton value="Send" id="feedbackClick" onclick="disableButton(this);document.getElementById('feedbackClickPopup').click();return false;"  styleClass="button" ></apex:commandButton> &nbsp;
+                            </center>
+                            </div>
+                            <script type="text/javascript">
+                                function disableButton(feedbackClick){
+                                     var sc = document.getElementById('j_id0:j_id2:selectCamp').value;
+                                    if(sc == ''){
+                                        alert('Please Select Campaign');
+                                        return false;
+                                    }
+                                    /*  var em = document.getElementById('j_id0:j_id2:emailTemp').value;
+                                    if(em == ''){
+                                        alert('Select Email Template ');
+                                        return false;
+                                    } 
+                                    */
+                                    document.getElementById(feedbackClick.id).disabled = true;
+                                    //alert("Button has been disabled.");
+                                    send();
+                                }
+                            
+                            </script>
+                            <apex:actionFunction name="send" action="{!sendMassEmailLead}" status="status" reRender="batchStatus"  /> 
+                          
+                            <!---------------------------------Saved Popoup----------------------------------->
+                            <div class="container mt-3">
+                                <div class="row">                                    
+                                    <div class="modal fade" id="activity" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content mt-5">
+                                                <div class="modal-body">
+                                                    <div class="thank-you-pop">
+                                                        <apex:outputPanel id="batchStatus">
+                                                            <apex:outputPanel rendered="{!batchStatusBool}">
+                                                                <div style="text-align:center;">
+                                                                    <img src="{!$Resource.CIFLoading}" style="width:150px;" />
+                                                                    <hr/>
+                                                                    <h4>Processing please wait...</h4>
+                                                                    <p>Status of Process is: {!batchStatus}</p>
+                                                                    <apex:actionPoller interval="5"  action="{!checkBatchStatus}" enabled="{!pollerBool}" reRender="batchStatus"  ><!--oncomplete="document.getElementById('feedbackClickSavePopup').click();"-->
+                                                                   
+                                                                    </apex:actionPoller>
+                                                                </div>
+                                                            </apex:outputPanel>
+                                                            <apex:outputPanel rendered="{!showsavepopup}" >
+                                                            <img src="http://goactionstations.co.uk/wp-content/uploads/2017/03/Green-Round-Tick.png" alt="" />
+                                                            <h3>Sent Successfully!</h3>
+                                                          <!--  <p>Leads has been pushed sucessfully.</p> -->
+                                                            </apex:outputPanel>
+                                                        </apex:outputPanel>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <!---------------------------------Saved Popoup----------------------------------->
+                            <div class="container mt-3">
+                                <div class="row">                                    
+                                    <div class="modal fade" id="saveactivity" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content mt-5">
+                                                <div class="modal-body">
+                                                    <apex:outputPanel id="h" >
+                                                        <div class="thank-you-pop">
+                                                            <img src="http://goactionstations.co.uk/wp-content/uploads/2017/03/Green-Round-Tick.png" alt="" />
+                                                            <h3>Sent Successfully!</h3>
+                                                            <p>Mail has been sucessfully Sent to the contacts.</p>
+                                                        </div>
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            </body>
+        </apex:form>
+    </html>
+</apex:page>

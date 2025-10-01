@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Project_Unit__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Project Unit</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Doesn&apos;t match filter criteria.</errorMessage>
+        <filterItems>
+            <field>Project_Unit__c.RW_Project__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.RW_Project__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>Project_Unit__c.RW_Seventh_Day__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Project_Unit__c</referenceTo>
+    <relationshipLabel>Opportunities</relationshipLabel>
+    <relationshipName>Opportunities</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Lookup</type>
+</CustomField>

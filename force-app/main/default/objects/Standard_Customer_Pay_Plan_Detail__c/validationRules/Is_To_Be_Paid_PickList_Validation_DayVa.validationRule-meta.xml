@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_To_Be_Paid_PickList_Validation_DayVa</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Is_to_be_Paid__c , &apos;From Dt. of Booking&apos;) , ISBLANK( Days_Months_Value__c ) )</errorConditionFormula>
+    <errorDisplayField>Days_Months_Value__c</errorDisplayField>
+    <errorMessage>After Selecting  Dt. of Booking Picklist Value of Is to be Paid Day/Months Value cannot be left blank.</errorMessage>
+</ValidationRule>

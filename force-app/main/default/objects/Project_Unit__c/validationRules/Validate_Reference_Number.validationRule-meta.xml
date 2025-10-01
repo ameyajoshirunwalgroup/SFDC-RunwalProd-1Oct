@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Reference_Number</fullName>
+    <active>false</active>
+    <description>Please fill up the Reference Number on the opportunity to proceed.</description>
+    <errorConditionFormula>AND(
+ISPICKVAL( RW_Unit_Status__c , &apos;Booked&apos;), 
+OR(ISPICKVAL(RW_Customer__r.LeadSource, &apos;Loyalty&apos;), 
+ISPICKVAL(RW_Customer__r.RW_Reference_Source__c, &apos;Existing Customer Reference&apos;))
+)</errorConditionFormula>
+    <errorMessage>Please fill up the Reference Number on the opportunity to proceed.</errorMessage>
+</ValidationRule>

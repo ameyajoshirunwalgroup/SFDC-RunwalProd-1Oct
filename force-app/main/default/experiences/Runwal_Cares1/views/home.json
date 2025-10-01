@@ -1,0 +1,108 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:sldsTwoCol84Layout",
+  "dataProviders" : [ ],
+  "id" : "a731b6e3-c520-40e0-9708-1abd4b541f7d",
+  "label" : "Home",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "autoPlay" : true,
+        "autoPlayInterval" : 4000,
+        "controlsAlignment" : "center",
+        "controlsPosition" : "bottom",
+        "datasource" : "carousel-object",
+        "datasourceInput" : "CommunityHeaders",
+        "showControls" : true,
+        "slidesPerPage" : 1,
+        "title" : "",
+        "titleAlign" : "left",
+        "titleSize" : "large"
+      },
+      "componentName" : "cloudx_cms:SS_cmsCarousel",
+      "id" : "30ce0267-c970-492c-90b5-363241e89d8b",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : { },
+      "componentName" : "c:floatingData",
+      "id" : "c9a6eb2c-cb61-407f-853f-6f6cbf13267c",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "bannerText" : "",
+        "bannerTextWithKnowledge" : "Explore other <a href=\"javascript:void(0)\" class=\"headlineArticles\">articles</a> and <a href=\"javascript:void(0)\" class=\"headlineDiscussions\">discussions</a> on this topic.",
+        "bannerTextWithoutKnowledge" : "Explore other <a href=\"javascript:void(0)\" class=\"headlineDiscussions\">discussions</a> on this topic.",
+        "pageType" : "",
+        "showSubTopics" : false,
+        "title" : "Welcome {!CurrentUser.firstName}!",
+        "uniqueNameOrId" : ""
+      },
+      "componentName" : "forceCommunity:headline",
+      "id" : "9a5c62f0-eaae-4ef0-abfe-42fc137876d8",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "0a4b9897-ce0b-44bc-a0ca-8d2b5e9a3fd1",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:HomeRunwal",
+      "id" : "a7a43aa9-b6a5-46ca-8b0d-2d13ad2b3d9e",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "4b66a365-54f0-4205-bd67-d3af8b293e81",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:HomePageButtons",
+      "id" : "761f77aa-fb4b-41f6-b17d-b1221a140e82",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "c4b177bf-0691-45a4-bcbb-ceb2f18f056f",
+    "regionName" : "sidebar",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:RunwalFooter",
+      "id" : "2d2f4b45-0661-4b5d-b507-95bbcbf5990c",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "2aed8916-dfaf-4127-b76c-93ee0034d1a8",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Home"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "679862ff-4fe1-46c3-9b50-00ad6625adb8",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "1c5e06bb-4bc4-4087-b59d-d7f33e04e83c",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Home",
+  "type" : "view",
+  "viewType" : "home"
+}

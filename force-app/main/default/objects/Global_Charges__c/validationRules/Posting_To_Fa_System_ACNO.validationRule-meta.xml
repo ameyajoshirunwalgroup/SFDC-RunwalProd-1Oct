@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Posting_To_Fa_System_ACNO</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Posting_to_FA_system__c , &apos;CLC&apos;) , NOT(  ISBLANK(  ACNO__c  )    ) )</errorConditionFormula>
+    <errorDisplayField>ACNO__c</errorDisplayField>
+    <errorMessage>After Selecting CLC  Pick Value,You cannn&apos;t enter in ACNO</errorMessage>
+</ValidationRule>

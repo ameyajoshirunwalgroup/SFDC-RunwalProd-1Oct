@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NPS__c</fullName>
+    <externalId>false</externalId>
+    <formula>if(Answer_1__c != null, Answer_1__c,
+	if(Camp_NPS__c != null, Camp_NPS__c,
+		if(Sales_Experience_Answer_6__c != null, Sales_Experience_Answer_6__c,
+			if(and (ispickval(Question_Set__c,&quot;1&quot;),Answer_12__c != null, ispickval (Feedback_Type__c, &apos;Day of Registration&apos;)),Answer_12__c,
+				if(and (ispickval(Question_Set__c,&quot;1&quot;),Answer_20__c != null, ispickval (Feedback_Type__c, &apos;Day of Possession Handover&apos;)),Answer_20__c,
+					if(and (ispickval(Question_Set__c,&quot;2&quot;),Answer_12__c != null, ispickval (Feedback_Type__c, &apos;Day of Registration&apos;)),Answer_12__c,
+						if(and (ispickval(Question_Set__c,&quot;2&quot;),Answer_18__c != null, ispickval (Feedback_Type__c, &apos;Day of Possession Handover&apos;)),Answer_18__c,
+							if(and (ispickval(Question_Set__c,&quot;2&quot;),Answer_29__c != null, ispickval (Feedback_Type__c, &apos;Post Possession Handover&apos;)),Answer_29__c,
+								if(and (ispickval(Question_Set__c,&quot;&quot;),Answer_6__c != null, ispickval (Feedback_Type__c, &apos;Day of Registration&apos;)),Answer_6__c,
+									if(and (ispickval(Question_Set__c,&quot;&quot;),Answer_18__c != null, ispickval (Feedback_Type__c, &apos;Day of Possession Handover&apos;)),Answer_18__c,
+										if(and (ispickval(Question_Set__c,&quot;&quot;),Answer_29__c != null, ispickval (Feedback_Type__c, &apos;Post Possession Handover&apos;)),Answer_29__c,
+										&apos;--&apos;
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+)
+/*IF(Answer_1__c != null, Answer_1__c ,
+	IF(Answer_12__c != null, Answer_12__c ,
+		IF( Answer_18__c != null, Answer_18__c ,
+			IF( Answer_29__c != null, Answer_29__c ,
+				IF(Camp_NPS__c != null, Camp_NPS__c,
+						IF(Sales_Experience_Answer_6__c != null, Sales_Experience_Answer_6__c,
+						null
+						)
+					)
+				
+			)
+		)
+	)
+)
+*/</formula>
+    <label>NPS</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

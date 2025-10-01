@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HL_RM_Names__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(TEXT(RW_First_Disbursement_Status__c) != &apos;Received&apos;, HL_RM__r.User__r.FirstName + &apos; &apos; + HL_RM__r.User__r.LastName,
+ HL_RM__r.Disbursement_RM_User__r.FirstName + &apos; &apos; + 	HL_RM__r.Disbursement_RM_User__r.LastName		)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>HL RM Name</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

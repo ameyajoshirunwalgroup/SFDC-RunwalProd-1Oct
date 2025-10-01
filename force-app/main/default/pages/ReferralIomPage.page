@@ -1,0 +1,237 @@
+<apex:page controller="ReferralIOMController" Doctype="html-5.0" standardStylesheets="true" showHeader="true" sidebar="false" >
+    <html>
+        <head>
+            <style>
+                @page {
+                size: A4;
+                margin:35px;
+                <!--border:1px solid #fff;-->
+                padding:30px 34px;
+                @bottom-center {          
+                content: "Page " counter(page) " of " counter(pages);                
+                }
+                }
+                @page {
+                size: 8.87in 10.0in;
+                }
+                body{
+                margin:0;
+                padding:0;            
+                font-family:"Google Sans", Roboto, arial, sans-serif !important;
+                font-family: 'cambria';
+                font-size:45px;
+                }
+                .table1{
+                width:100%;
+                <!--border-collapse:collapse;-->
+                } 
+                .table1 tr td{
+                padding:5px 6px;
+                }
+                .table3{
+                width:100%;
+                border-collapse:collapse;
+                } 
+                .table3 tr td{
+                padding:6px 10px;
+                }
+                .table2{
+                width:80%;
+                margin-left: auto;
+                margin-right: auto;
+                border-width:1;
+                border-collapse:collapse;
+                }
+                .table2 tr th{
+                border:1px solid #808080;
+                font-size:15px;
+                padding:3px 5px;
+                background:#ddd;
+                }
+                .table2 tr td{
+                font-size:14px;
+                border:1px solid #808080;
+                padding:3px 5px;
+                }
+                .letterList{
+                list-style-type: upper-alpha;
+                }
+                
+                @page {
+                margin-bottom: 30px;
+                margin-top: 30px;
+                
+                @top-center {
+                content: element(header,first-except);
+                }
+                @bottom-center {
+                content: element(footer,first-except);
+                }
+                }            
+                .header{
+                position: running(header);
+                display:block;
+                margin-top:30px;
+                }
+                .footer {
+                display:block;
+                position: running(footer);
+                z-index:-999;
+                text-align:center;
+                }     
+                .btn{
+                background: none !important;
+                background-image:none !important;
+                background-color: #5cb85c	 !important;
+                color: #FFF !important;                    
+                padding: px 10px !important;      
+                border: 1px solid #88724d !important;
+                border-radius: 0px !important;
+                width:120px;
+                letter-spacing:2px;
+                font-size:16px !important;
+                transition:0.5s all;
+                }
+                .btn:hover{
+                background-color: #FFFFFF !important;
+                color: #937554 !important; 
+                border: 1px solid #937554 !important;
+                }        
+                
+            </style>
+            
+            
+        </head>
+        <apex:form >
+          <apex:pageMessages />  
+            <body>
+                <div style="text-align: center;margin-top:20px;">
+                    <H1 style="font-size: 23px;">IOM Referral Form </H1>
+                    
+                </div>
+                <div Style="font-size:12px;text-align:center;">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<tr> <td>Date :</td>
+                        <td>{!strEventDate}</td>
+                    </tr>
+                </div>
+                <div style="margin-top:30px;">
+                    
+                    
+                    <table class="table2" >
+                        <tr> <th  style = "text-align :center;">{!BookingList[0].RW_Project_Name__c} </th></tr>
+                        <tr> <td style = "text-align :center;">Referral Scheme</td></tr>  
+                        <tr> <td style = "text-align :center;">Please advise the Accounts Department to adjust the Payment against Referral Scheme for the 
+                            flat as per the details mentioned :- </td></tr>
+                    </table>  
+                    <table class="table2" >
+                        <tr> <td style = "text-align :left;" width = "50%" >Name of Existing Customer</td>
+                            <td style = "text-align :left;" width = "50%"><apex:outputText rendered="{!if(BookingList[0].Customer_Reference_Primary_Applicant_Nam__c != Null,True,False)}">{!BookingList[0].Customer_Reference_Primary_Applicant_Nam__c}</apex:outputText></td></tr>  
+                        <tr> <td style = "text-align :left;" width = "50%" >CRN</td>
+                            <td style = "text-align :left;" width = "50%">{!BookingList[0].Customer_Reference_Opportunity__r.SAP_Customer_Number__c}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Registration Status</td>
+                            <td style = "text-align :left;" width = "50%"><apex:outputtext value="Registered" rendered="{!if(BookingList[0].Reference_Booking_Registration_Date__c != NULL ,true,false)}" />  
+                                <apex:outputtext value="Un-Registered" rendered="{!if(BookingList[0].Reference_Booking_Registration_Date__c == NULL ,true,false)}" />    </td></tr> 
+                        
+                        
+                        
+                        <tr> <td style = "text-align :left;" width = "50%">Registration Date</td>
+                            <td style = "text-align :left;" width = "50%"><apex:outputText value="{0,date,dd-MM-yyyy}"><apex:param value="{!BookingList[0].Reference_Booking_Registration_Date__c}" /></apex:outputText> </td></tr> 
+                        <tr> <td style = "text-align :left;" width = "50%" >Flat no.</td>
+                            <td style = "text-align :left;" width = "50%">{!BookingList[0].Customer_Reference_Flat_No__c}</td></tr> 
+                        <tr> <td style = "text-align :left;" width = "50%" >Amount Received</td>
+                            <td style = "text-align :left;" width = "50%">{!ReferenceTotalAmtReceived}</td></tr> 
+                        <tr><td style = "text-align :left;background-color:#B2BEB5;" width = "50%"><br/></td>
+                            <td style = "text-align :left;background-color:#B2BEB5;" width = "50%"><br/></td></tr>
+                        <tr> <td style = "text-align :left;" width = "50%" >Name of New Customer</td>
+                            <td style = "text-align :left;" width = "50%">{!BookingList[0].Primary_Applicant_Name__c}</td></tr> 
+                        <tr> <td style = "text-align :left;" width = "50%" >CRN</td>
+                            <td style = "text-align :left;" width = "50%">{!BookingList[0].Customer__r.SAP_Customer_Number__c}</td></tr>
+                        <tr> <td style = "text-align :left;" width = "50%" >Flat no.</td>
+                            <td style = "text-align :left;" width = "50%">{!BookingList[0].Unit_Number__c}</td></tr>
+                        <tr> <td style = "text-align :left;" width = "50%" >Registration Status</td>
+                            <td style = "text-align :left;" width = "50%"><apex:outputtext value="Registered" rendered="{!if(BookingList[0].RW_Registration_Date__c != NULL ,true,false)}" />  
+                                <apex:outputtext value="Un-Registered" rendered="{!if(BookingList[0].RW_Registration_Date__c == NULL ,true,false)}" />    </td></tr> 
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Registration Date</td>
+                            <td style = "text-align :left;" width = "50%"><apex:outputText value="{0,date,dd-MM-yyyy}"><apex:param value="{!BookingList[0].RW_Registration_Date__c}" /></apex:outputText> </td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Amount Received</td>
+                            <td style = "text-align :left;" width = "50%">{!TotalAmountReceived}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Unit Configuration</td>
+                            <td style = "text-align :left;" width = "50%">{!unitTypeLabel}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Saleable Area</td>
+                            <td style = "text-align :left;" width = "50%">{!BookingList[0].Saleable_Area_Sq_Ft__c}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Agreement Value</td>
+                            <td style = "text-align :left;" width = "50%">{!AVAllotmentPremium}</td></tr>
+                        
+                        <!-- <tr> <td style = "text-align :left;" width = "50%" >1% of Agreement Value</td> 
+<td style = "text-align :left;" width = "50%">{!BookingList[0].Actual_Referral_Amount__c}</td></tr>-->
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >1% of Agreement Value</td>
+                            <!--<td style = "text-align :left;" width = "50%"><apex:outputtext value="{!CurrencyReferralAmt}" rendered="{!if(BookingList[0].Actual_Referral_Amount__c != NULL ,true,false)}" />  -->
+                            <td style = "text-align :left;" width = "50%">
+                                <!--<apex:outputtext value="{!CurrencyReferralAmt}" rendered="{!if(BookingList[0].X1_of_Agreement_Value__c != NULL ,true,false)}" />-->
+                                <apex:outputtext value="{!BookingList[0].X1_of_Agreement_Value__c}" rendered="{!if(BookingList[0].X1_of_Agreement_Value__c != NULL ,true,false)}" />
+                                <apex:outputtext value="{!BookingList[0].X1_of_Agreement_Value__c}" rendered="{!if(BookingList[0].X1_of_Agreement_Value__c == NULL ,true,false)}" />    </td></tr> 
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >TDS @5 to be deducted</td>
+                            <td style = "text-align :left;" width = "50%">{!CurrencyTDS}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Referral Amount to be Adjusted</td>
+                            <td style = "text-align :left;" width = "50%">{!AdjustedAmt}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;"  width = "50%" >CRM Manager</td>
+                            <td style = "text-align :left;height:40px;" width = "100%">{!BookingList[0].Project__r.CRM_MIS_Head__r.Name}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >CRM HOD</td>
+                            <td style = "text-align :left;height:40px;" width = "50%">{!BookingList[0].Project__r.CRMHead__r.Name}</td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Accounts</td>
+                            <td style = "text-align :left;height:40px;" width = "50%"></td></tr>
+                        
+                        <tr> <td style = "text-align :left;" width = "50%" >Director</td>
+                            <td style = "text-align :left;height:40px;" width = "50%"></td></tr> 
+                        <tr>
+                            <td style="text-align:left;" width="50%">Comments</td>                            
+                            <!-- Show input field if Referral_IOM_Comments__c is null or empty -->
+                            <apex:outputPanel rendered="{!ISBLANK(BookingList[0].Referral_IOM_Comments__c)}">
+                                <td style="text-align:left;" width="50%">
+                                    <apex:inputField value="{!BookingList[0].Referral_IOM_Comments__c}" styleClass="form-control" style="width:100%" />
+                                </td>
+                            </apex:outputPanel>                            
+                            <!-- Show plain text if Referral_IOM_Comments__c has value -->
+                            <apex:outputPanel rendered="{!NOT(ISBLANK(BookingList[0].Referral_IOM_Comments__c))}">
+                                <td style="text-align:left;" width="50%">
+                                    {!BookingList[0].Referral_IOM_Comments__c}
+                                </td>
+                            </apex:outputPanel>
+                        </tr>
+
+                    </table>
+                    <br/>
+                    <center class="mt-5 mb-5">
+                         <!-- <apex:outputpanel rendered="{!isDue}"> 
+                            <apex:commandButton action="{!save}" value="Save" style="Width:150px" styleClass="btn" rendered="{!isDue}" />&nbsp;&nbsp;
+                        </apex:outputpanel>-->
+                        <apex:outputPanel rendered="{!isShowBtn}" >
+                            <apex:outputPanel id="submitButton2" >
+                                <apex:commandButton action="{!goBack}" value="Back" style="Width:150px" styleClass="btn btn-danger"/>&nbsp;&nbsp;
+                            </apex:outputPanel>
+                            <apex:outputPanel id="submitButton1" rendered="{!isReferral}" >
+                                <apex:commandButton action="{!save}" value="Save PDF" style="Width:150px" styleClass="btn"/>&nbsp;&nbsp;
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+
+                    </center>
+                    
+                    
+                    
+                </div>
+            </body>
+        </apex:form>
+    </html>
+</apex:page>

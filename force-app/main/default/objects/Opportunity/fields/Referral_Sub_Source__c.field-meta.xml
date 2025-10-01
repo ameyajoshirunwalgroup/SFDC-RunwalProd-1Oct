@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Referral_Sub_Source__c</fullName>
+    <label>Walkin Referral Sub Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Walkin_Source__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Employee reference</fullName>
+                <default>false</default>
+                <label>Employee reference</label>
+            </value>
+            <value>
+                <fullName>Existing client reference</fullName>
+                <default>false</default>
+                <label>Existing client reference</label>
+            </value>
+            <value>
+                <fullName>Management reference</fullName>
+                <default>false</default>
+                <label>Management reference</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Referral</controllingFieldValue>
+            <valueName>Employee reference</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Referral</controllingFieldValue>
+            <valueName>Existing client reference</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Referral</controllingFieldValue>
+            <valueName>Management reference</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

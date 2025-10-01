@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Edit_Scheme_Configuration</fullName>
+    <active>true</active>
+    <description>Cannot Edit Scheme Configuration if Scheme is Approved by L2.</description>
+    <errorConditionFormula>AND(
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+NOT(ISNEW()),
+text(Brokerage_Scheme__r.Approval_Status__c)= &apos;Approved by Level 2&apos;
+)</errorConditionFormula>
+    <errorMessage>You cannot edit Scheme Configuration details.</errorMessage>
+</ValidationRule>

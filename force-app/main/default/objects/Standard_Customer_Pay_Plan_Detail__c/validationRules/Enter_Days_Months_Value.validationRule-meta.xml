@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enter_Days_Months_Value</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Days_Months__c , &apos;&apos;) , NOT( ISBLANK( Days_Months_Value__c ) ) )</errorConditionFormula>
+    <errorDisplayField>Days_Months__c</errorDisplayField>
+    <errorMessage>Please Select atleast Days or Months Picklist Value</errorMessage>
+</ValidationRule>

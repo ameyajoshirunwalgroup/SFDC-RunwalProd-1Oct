@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Customer_References</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF(!ISBLANK(Customer_Reference__c ),AND(!ISPICKVAL(RW_Lead_Sub_Source__c,&quot;Existing client reference&quot;),!ISPICKVAL( LeadSource ,&quot;Loyalty&quot;)),false)</errorConditionFormula>
+    <errorDisplayField>RW_Agent_ID__c</errorDisplayField>
+    <errorMessage>Customer Reference should filled only on Reference Source is Existing Customer and Lead source is loyalty</errorMessage>
+</ValidationRule>

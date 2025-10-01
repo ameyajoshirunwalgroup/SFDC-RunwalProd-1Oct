@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Validation_for_RTGS_Rupee4</fullName>
+    <active>true</active>
+    <description>When User Select RTGS of Mode PickList and Rupees of Mode Selection then not entering data in Forex Amount</description>
+    <errorConditionFormula>AND( ISPICKVAL( Mode__c , &apos;RTGS&apos;) , ISPICKVAL( Mode_Selection__c,&apos;Rupees&apos;) , ISBLANK(  FOREX__c  ) )</errorConditionFormula>
+    <errorDisplayField>FOREX__c</errorDisplayField>
+    <errorMessage>After Selecting RTGS of Mode PickList and Rupees of Mode Selection Pick List,Forex Amount cann&apos;t be blank.</errorMessage>
+</ValidationRule>

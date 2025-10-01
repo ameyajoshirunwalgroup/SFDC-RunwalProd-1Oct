@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NOC_Generated_Date_mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  ISPICKVAL(RW_Loan_Record_Status__c, &apos;NOC Generated&apos;),
+  ISBLANK(RW_NOC_Generated_Date__c)
+	)</errorConditionFormula>
+    <errorMessage>Please enter NOC generated date</errorMessage>
+</ValidationRule>

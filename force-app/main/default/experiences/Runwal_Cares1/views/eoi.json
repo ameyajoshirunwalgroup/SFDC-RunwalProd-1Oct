@@ -1,0 +1,75 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "7262907d-ec2f-45eb-8a05-3d6c60c1cbe8",
+  "label" : "eoi",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "fb454acc-47bd-4485-af60-3d3864d99974",
+          "columns" : [ {
+            "UUID" : "169a9579-ced6-422b-83f3-82b97ff148a2",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "fb454acc-47bd-4485-af60-3d3864d99974",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "data" : "{!data}",
+            "encResp" : "{!encResp}",
+            "eoiId" : "{!eoiId}",
+            "msg" : "{!msg}",
+            "opportunityId" : "{!opportunityId}",
+            "orderNo" : "{!orderNo}"
+          },
+          "componentName" : "c:EOIForm",
+          "id" : "3a41d141-cf28-4994-9490-d2682459aa6f",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "169a9579-ced6-422b-83f3-82b97ff148a2",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "d288cc21-457b-481d-a9a2-043555984e81",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "eoi"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "b61097c8-54df-42d3-a68f-9003309ee73d",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "316ae3f7-f851-427a-87d4-b1472affa0f2",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "977yTkxD7rwg4yVvaWbMkJZQMSIqdu",
+  "type" : "view",
+  "viewType" : "custom-eoi"
+}

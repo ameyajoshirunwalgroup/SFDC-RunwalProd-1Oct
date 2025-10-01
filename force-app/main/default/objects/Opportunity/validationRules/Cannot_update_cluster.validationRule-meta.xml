@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_update_cluster</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISCHANGED( ClusterLookup__c ) &amp;&amp;  PRIORVALUE(ClusterLookup__c )&lt;&gt; &quot;&quot; &amp;&amp; $Profile.Name &lt;&gt; &apos;System Administrator&apos; &amp;&amp; $Profile.Name &lt;&gt; &apos;Site Head&apos;,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>ClusterLookup__c</errorDisplayField>
+    <errorMessage>You cannot change Cluster.</errorMessage>
+</ValidationRule>

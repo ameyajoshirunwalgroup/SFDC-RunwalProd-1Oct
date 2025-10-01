@@ -1,0 +1,192 @@
+<apex:page standardController="Task" extensions="CustomTaskControllerClass" showHeader="false" standardStylesheets="true" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">    
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+  <title>Task View</title>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+  <script src="/soap/ajax/9.0/connection.js"></script>
+</head>
+<body>    
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds">    
+  <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp">   
+        <!-- CREATE/EDIT TASK -->
+      <div aria-labelledby="newtaskform">
+        <!-- BOXED AREA -->
+        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+           <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">Call Attempt</legend> 
+    
+          <!-- CREATE NEW TASK FORM -->
+            <apex:form id="newtaskform" styleClass="slds-form--inline">
+            <apex:PageMessages id="pageMsgs" /> 
+                <apex:pageBlock id="pgBlock" mode="edit"> 
+                    <apex:pageBlockButtons location="both" styleClass="slds-button-group">
+                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate"/>
+                    </apex:pageBlockButtons>
+                 
+                <apex:pageBlockSection id="pgBlockSectionCallInfo" title="System Details" collapsible="false" columns="2" >
+                        <apex:pageBlockSectionItem >
+                           <apex:outputLabel >Customer Name</apex:outputLabel>
+                           <apex:outputField id="Opportunity" value="{!Task.whoId}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel rendered="{!Task.whatId != null}"> 
+                                <apex:outputLabel >Opportunity Name</apex:outputLabel>
+                                <apex:outputField id="Opportunity" value="{!Task.whatId}" />
+                              </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:outputField id="Subject" value="{!Task.Subject}" />
+                        <!-- <apex:outputField id="mobile" value="{!Task.Mobile_Number_Webform__c }" /> -->
+                        <apex:outputField id="DueDate" value="{!Task.ActivityDate}" />
+                         <apex:outputField id="CallTime" value="{!Task.Call_Time__c}" /> 
+               </apex:pageBlockSection>
+               <apex:pageBlockSection id="pgBlockSectionCallAttempt" title="Call Attempt Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Presales Call',true,false)}">
+                        <apex:outputField id="commType" value="{!Task.Communication_Type__c}" />
+                        <apex:outputField id="SalescallAttemptedBy" value="{!Task.RW_Sales_Associate__c}" />    
+                        <!-- <apex:outputField id="callSource" value="{!Task.Call_Source__c}"/> -->
+                      <!--    <apex:outputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/> -->
+                       <!--   <apex:outputField id="callStatus" value="{!Task.Call_Status__c}" /> -->
+                          <apex:outputField id="callStatus1" value="{!Task.Call_Status__c}" />
+                           <apex:outputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" /> 
+                            <apex:outputField id="lostJunkReason" value="{!Task.Reason_for_Lost_Junk__c}"/> 
+                     <!--      <apex:outputField id="commTypeOut" value="{!Task.Reason_for_Outbound_Communication__c}"/> -->
+                           
+                          <!-- <apex:outputField id="otherReason" value="{!Task.Specify_Others__c}"/> -->
+                           
+                     <!--     <apex:outputField id="teamAttemptedBy" value="{!Task.Team_Attended_By__c}"/>  -->
+                          
+                           <!-- <apex:outputField id="campaignLookup" value="{!Task.Campaign_Lookup__c}"/> -->
+                       <apex:outputField id="callAttemptedBy" value="{!Task.Attempted_By__c}" />
+                       
+                    <!--    <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Next Action</apex:outputLabel>
+                             <apex:outputField id="callAttemptStatus" value="{!Task.Call_Attempt_Status__c}"/> 
+                         </apex:pageBlockSectionItem> -->
+                         
+                         <apex:outputField id="visitingat" value="{!Task.Financial_Institute__c}"/> 
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Proposed Date of Visit</apex:outputLabel>
+                             <apex:outputField id="callproposeddate" value="{!Task.Call_Proposed_date_of_visit__c}"/> 
+                         </apex:pageBlockSectionItem>
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Prospect</apex:outputLabel>
+                             <apex:outputField id="Prospect" value="{!Task.Prospect__c}"/> 
+                         </apex:pageBlockSectionItem>
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Project</apex:outputLabel>
+                             <apex:outputField id="Project" value="{!Task.Project__c}"/> 
+                         </apex:pageBlockSectionItem>
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Call Recording Link</apex:outputLabel>
+                             <apex:outputField id="callR" value="{!Task.Voice_Log_URL__c}"/> 
+                         </apex:pageBlockSectionItem>
+                            
+               </apex:pageBlockSection>
+               <apex:pageBlockSection id="pgBlockSectionPreviousCall" title="Previous Call Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Presales Call',true,false)}">
+                        <apex:outputField id="prevCallStatus" value="{!Task.Previous_Call_Attempt_Status__c}" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection id="pgBlockSectionNextCall" title="Next Action Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Presales Call',true,false)}">
+                        <apex:outputField id="nextCall" value="{!Task.Next_Action_Date__c}" />
+                        <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Call Comments</apex:outputLabel>
+                            <apex:outputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" />
+                        </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                
+                 <apex:pageBlockSection id="pgBlockSectionCallAttempt2" title="Call Attempt Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call' || task.Task_Type__c='CRM Call',true,false)}">
+                        <apex:outputField id="commType" value="{!Task.Communication_Type__c}" />
+                            <apex:outputField id="commType1" value="{!Task.Attempted_By__c}" />
+                          <apex:outputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/>
+                           <apex:outputField id="commTypeOut" value="{!Task.Reason_for_Outbound_Communication__c}"/>
+                           <apex:outputField id="callStatus1" value="{!Task.Call_Status__c}" />
+                           <apex:outputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" /> 
+                           <apex:outputField id="callStatus3" value="{!Task.Sub_Disposition_Type__c}" /> 
+                           
+                        <!-- <apex:outputField id="callAttemptedBy" value="{!Task.RW_Sales_Associate__c}" />  -->
+                              <apex:outputField id="salesmanager" value="{!Task.Sales_Manager__c}" rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}"/> <!-- Added the rendered condition by Vinay 04-07-2025 -->
+                              <apex:outputField id="crmManager" label="CRM Manager" value="{!Task.RW_Sales_Associate__c}" rendered="{!IF(task.Task_Type__c='CRM Call',true,false)}"/> <!-- Added by Vinay 04-07-2025 -->
+                          <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Next Action</apex:outputLabel>
+                             <apex:outputField id="callAttemptStatus" value="{!Task.Call_Attempt_Status__c}"/> 
+                         </apex:pageBlockSectionItem> 
+                         <apex:outputField id="visitingat" value="{!Task.Financial_Institute__c}"/> 
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Proposed Date of Visit</apex:outputLabel>
+                             <apex:outputField id="callproposeddate" value="{!Task.Call_Proposed_date_of_visit__c}"/> 
+                         </apex:pageBlockSectionItem> 
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Prospect</apex:outputLabel>
+                             <apex:outputField id="ProspectId" value="{!Task.Prospect__c}"/> 
+                         </apex:pageBlockSectionItem> 
+                   
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Project</apex:outputLabel>
+                             <apex:outputField id="Project" value="{!Task.Project__c}"/> 
+                         </apex:pageBlockSectionItem>
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Call Recording Link</apex:outputLabel>
+                             <apex:outputField id="callR" value="{!Task.Voice_Log_URL__c}"/> 
+                         </apex:pageBlockSectionItem>
+               </apex:pageBlockSection>
+          <!--     <apex:pageBlockSection id="pgBlockSectionPreviousCall2" title="Previous Call Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}">
+                        <apex:outputField id="prevCallStatus" value="{!Task.Previous_Call_Attempt_Status__c}" />
+                </apex:pageBlockSection>  -->
+                <apex:pageBlockSection id="pgBlockSectionNextCall2" title="Next Action Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call' || task.Task_Type__c='CRM Call',true,false)}">
+                        <apex:outputField id="nextCall" value="{!Task.Next_Action_Date__c}" />
+                        <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Call Comments</apex:outputLabel>
+                            <apex:outputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" />
+                        </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+
+                
+                <!--  Post Sales Call -->
+                <apex:pageBlockSection id="pgBlockSectionPostSalesCallAttempt" title="Post Sales Interaction Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Post Sales Call',true,false)}" >
+                      <!--  <apex:outputField id="scommType" value="{!Task.Call_Rating__c}"/>     -->                     
+                        <apex:outputField id="scommTypeIn" value="{!Task.Reason_For_Call__c}"/>
+                      
+                        <apex:outputField id="nextactdate" value="{!Task.Next_Action_Date__c}"/> 
+                 <!-- <apex:outputField id="address" value="{!Task.VDNB_Rating__c}"/> -->
+                         
+                        
+                </apex:pageBlockSection>
+                <apex:pageBlockSection id="xxx" rendered="{!IF(task.Task_Type__c='Post Sales Call',true,false)}" >
+                            <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Call Comments</apex:outputLabel>
+                            <apex:outputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" /><!-- required="true" -->
+                        </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection> <br></br>
+    
+              </apex:pageBlock>
+              </apex:form>
+          <!-- CREATE NEW TASK FORM -->
+    
+        </fieldset>
+        <!-- / BOXED AREA -->
+      </div>
+  <!-- / CREATE NEW TASK -->
+    </div>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->    
+    <!-- JAVASCRIPT -->
+    <script>
+      var j$ = jQuery.noConflict();
+ 
+        j$(document).ready(function() {
+        });
+     </script>
+    <!-- / JAVASCRIPT -->
+</body>
+</html>
+</apex:page>

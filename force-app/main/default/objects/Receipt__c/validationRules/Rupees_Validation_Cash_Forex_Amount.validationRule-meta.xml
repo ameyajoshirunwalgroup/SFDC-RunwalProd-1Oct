@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rupees_Validation_Cash_Forex_Amount</fullName>
+    <active>true</active>
+    <description>When User Select Cash of Mode PickList and Rupees of Mode Selection then Enter data in Forex Amount</description>
+    <errorConditionFormula>AND( ISPICKVAL( Mode__c , &apos;Cash&apos;) , ISPICKVAL( Mode_Selection__c , &apos;Rupees&apos;) , NOT( ISBLANK(  FOREX__c  ) ) )</errorConditionFormula>
+    <errorDisplayField>FOREX__c</errorDisplayField>
+    <errorMessage>After Selecting Cash of Mode PickList and Rupees of Mode Selection Pick List,You cann&apos;t enter in Forex Amount</errorMessage>
+</ValidationRule>

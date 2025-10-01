@@ -1,0 +1,127 @@
+<apex:page controller="CPInvoiceDueEmailController" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" >
+    <head>        
+        <style>
+            @page {
+            size: A4;
+            margin: 8mm;
+            @bottom-center {
+            content: "Page " counter(page) " of " counter(pages);
+            }
+            }
+            
+            body{
+            margin:0;
+            padding:0;            
+            font-family:"Google Sans", Roboto, arial, sans-serif !important;
+            font-family: 'cambria';
+            }                
+            .table1{
+            width:100%;
+            border-collapse:collapse;
+            }
+            .table1 tr th{
+            border:1px solid #000;
+            text-align:center;
+            font-size:12px;
+            padding:3px 5px;
+            }
+            .table1 tr td{
+            text-align:center;
+            font-size:12px;
+            border:1px solid #000;
+            padding:3px 5px;
+            }
+            
+            @page {
+            margin-bottom: 64px;
+            margin-top: 64px;
+            
+            @top-center {
+            content: element(header,first-except);
+            }
+            @bottom-center {
+            content: element(footer,first-except);
+            }
+            }            
+            .header{
+            position: running(header);
+            }
+            .footer {
+            display:block;
+            position: running(footer);
+            z-index:-999;
+            }         
+            
+        </style>
+        
+    </head>
+    <body >
+        <table id="main" border="0" width="50%" border-collapse="collapse">
+            <tr><td> &nbsp; </td></tr>
+            <tr><td> Dear {!ChannelPartner[0].Name}, </td></tr>
+            <tr><td> &nbsp; </td></tr>
+            <tr><td>Greeting From Runwal Group !!!.</td></tr>
+            <tr><td> &nbsp; </td></tr>
+            <tr><td>Below Booking is eligible for Invoice generation.  Please Login to your Channel Partner Portal and Generate the Invoice For the Same.</td></tr>
+            <tr><td> &nbsp; </td></tr>
+            <tr><td>Please Find below Booking  Detail.</td></tr>
+            <tr><td>&nbsp;</td></tr>
+        </table>
+        
+        <table style="width:50%;border-collapse: collapse;border:1px solid black;margin-left:10px;">
+            <tr>
+                <td Style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">Ladder Scheme</td>
+                <td Style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">{!brokerageScheme[0].Name}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Start Date</td>
+                <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!brokerageScheme[0].Start_Date__c}" /> </apex:outputText></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">End Date</td>
+                <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!brokerageScheme[0].End_Date__c}" /> </apex:outputText></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Eligible Slab</td>
+                <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">{!CPInv[0].Eligible_Slab__c}</td>
+                <td></td>
+            </tr>
+        </table><br/><br/>
+        <table style="width:75%;border-collapse: collapse;margin-left:10px;">
+            <tr>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:15%;height:15px;font-size:11px">Customer Name </th>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:10.6px;font-size:11px">Booking Date</th>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:10.6px;font-size:11px">Unit No.-Tower No</th>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:10.6px;font-size:11px">AV Value</th>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:10.6px;font-size:11px">Brokerage %</th>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:10.6px;font-size:11px">Brokerage Amount</th>
+                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:10.6px;font-size:11px">Total Brokerage</th>
+            </tr>
+            <tr>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:15%;height:25px;font-size:13px;">{!bklist[0].Primary_Applicant_Name__c}</td>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:10%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bklist[0].Booking_Date__c}" /> </apex:outputText></td>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:10%;height:25px;font-size:13px">{!bklist[0].Unit_Number__c} - {!bklist[0].Wing__c}</td>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:10%;height:25px;font-size:13px;">{!AVValueStr}</td>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:10%;height:25px;font-size:13px">{!CPInv[0].Brokerage__c}</td>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:10%;height:25px;font-size:13px">{!TotalStr}</td>
+                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:10%;height:25px;font-size:13px">{!TotalStr}</td>
+            </tr>
+            <tr>
+                <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="10">Amount in Words : {!NoToWord}&nbsp;Only</td>
+            </tr>
+        </table> <br/><br/>
+        <table id="main" border="0" width="50%" border-collapse="collapse">
+            <tr><td>Regards,</td></tr>
+            <tr><td>Runwal Group</td></tr>
+        </table>
+        
+        
+        
+        
+        
+        
+    </body>
+</apex:page>

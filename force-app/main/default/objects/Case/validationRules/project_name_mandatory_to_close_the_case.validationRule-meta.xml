@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>project_name_mandatory_to_close_the_case</fullName>
+    <active>false</active>
+    <errorConditionFormula>And(
+	RecordType.Name == &apos;Channel Partner Portal&apos;,
+	ischanged(Status),
+	ischanged(RW_Project__c)
+)</errorConditionFormula>
+    <errorDisplayField>Case_Category__c</errorDisplayField>
+    <errorMessage>Pl update project first and then close the case.</errorMessage>
+</ValidationRule>

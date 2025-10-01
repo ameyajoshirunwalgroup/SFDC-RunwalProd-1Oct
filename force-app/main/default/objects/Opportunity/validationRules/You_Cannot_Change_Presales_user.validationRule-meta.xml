@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>You_Cannot_Change_Presales_user</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISCHANGED(RW_Pre_Sales_User__c),$Profile.Name &lt;&gt; &apos;System Administrator&apos;, $Profile.Name &lt;&gt; &apos;Sales Strategy&apos;,$Profile.Name &lt;&gt; &apos;Pre Sales Manager&apos;,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>RW_Pre_Sales_User__c</errorDisplayField>
+    <errorMessage>You cannot pre sales user</errorMessage>
+</ValidationRule>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sanction_Letter_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( RW_Sanction_Status__c , &quot;Loan Sanctioned&quot;),  RW_Sanction_Letter_ID__c == null)</errorConditionFormula>
+    <errorMessage>Please Upload the Sanction Letter First before making a Loan Sanctioned!</errorMessage>
+</ValidationRule>

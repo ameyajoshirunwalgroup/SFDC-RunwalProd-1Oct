@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_To_Be_Paid_PickList_ValidationDayM</fullName>
+    <active>true</active>
+    <description>When User Select On Date of PickList and Enter data in Day/Months Value</description>
+    <errorConditionFormula>AND(
+ISPICKVAL( Is_to_be_Paid__c , &apos;On Date&apos;) , 
+NOT( ISBLANK( Days_Months_Value__c ) ))</errorConditionFormula>
+    <errorDisplayField>Days_Months_Value__c</errorDisplayField>
+    <errorMessage>After Selecting On Date Pick Value,You cannn&apos;t enter in Day/Months Value</errorMessage>
+</ValidationRule>

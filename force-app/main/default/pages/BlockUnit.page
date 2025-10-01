@@ -1,0 +1,488 @@
+<apex:page Controller="BlockUnitController" Doctype="html-5.0" standardStylesheets="true" showHeader="true" sidebar="false">
+    <apex:form >
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <style>                                      
+                    body{
+                    margin: 0;
+                    padding: 0;  
+                    <!--background: #C6D4D7;-->
+                    background-image: url("{!$Resource.CustomerVisitDetailsBackground}");
+                    }
+                    .navbar img{
+                    width:70px;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    label{
+                    font-weight:600;
+                    font-size:20px;
+                    }
+                    .mainDiv{
+                    padding:20px;
+                    border-radius:5px;
+                    -webkit-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    -moz-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    
+                    }
+                    .form-control:focus {
+                    background-color: #fff;
+                    border-color: #bc8b2d;
+                    outline: 0;
+                    box-shadow: 0 0 0 1px rgb(188, 139, 45);
+                    }
+                    .btn{
+                    padding:8px 10px;
+                    color: #fff;
+                    cursor: pointer !important;
+                    border: solid 1px #A8822B;
+                    width: 100%;
+                    display: inline-block;
+                    background-color: #A8822B;
+                    width: 85px;
+                    font-size: 16px;
+                    font-weight:400;
+                    transition:0.2s;
+                    }
+                    .btn:hover{
+                    padding:8px 10px;
+                    color:A8822B;
+                    background-color: #fff;
+                    border:1px solid #A8822B;
+                    }
+                    .custom-control label img{
+                    width: 45px;
+                    }
+                    .custom-control-label::before {
+                    position: absolute;
+                    top: 4.25rem;
+                    left: 0.9rem;
+                    display: block;
+                    width: 1rem;
+                    height: 1rem;
+                    pointer-events: none;
+                    content: "";
+                    background-color: #fff;
+                    border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                    position: absolute;
+                    top: 4.25rem;
+                    left: 0.9rem;
+                    display: block;
+                    width: 1rem;
+                    height: 1rem;
+                    content: "";
+                    background: no-repeat 50%/50% 50%;
+                    }
+                    
+                    /*------------ Ipad -----------------*/
+                    @media screen and (max-width: 768px) {
+                    .navbar img{
+                    width:65px;
+                    text-align:center;
+                    }
+                    .custom-control label img{
+                    width: 40px;
+                    }
+                    .custom-control-label::before {
+                    position: absolute;
+                    top: 4.25rem;
+                    left: 0.5rem;
+                    display: block;
+                    width: 1rem;
+                    height: 1rem;
+                    pointer-events: none;
+                    content: "";
+                    background-color: #fff;
+                    border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                    position: absolute;
+                    top: 4.25rem;
+                    left: 0.5rem;
+                    display: block;
+                    width: 1rem;
+                    height: 1rem;
+                    content: "";
+                    background: no-repeat 50%/50% 50%;
+                    }
+                    }
+                    /*------------ Mobile -----------------*/
+                    @media screen and (max-width: 480px) {
+                    .navbar img{
+                    width:50px;
+                    text-align:center;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    .custom-control {
+                    padding-bottom: 35px;
+                    }
+                    label{
+                    font-weight:500;
+                    font-size:18px;
+                    }
+                    .custom-control label img{
+                    width: 40px;
+                    }
+                    
+                    .custom-control-label::before {
+                    position: absolute;
+                    top: 3.50rem;
+                    left: 0.7rem;
+                    display: block;
+                    width: 1rem;
+                    height: 1rem;
+                    pointer-events: none;
+                    content: "";
+                    background-color: #fff;
+                    border: #adb5bd solid 1px;
+                    }
+                    .custom-control-label::after {
+                    position: absolute;
+                    top: 3.50rem;
+                    left: 0.7rem;
+                    display: block;
+                    width: 1rem;
+                    height: 1rem;
+                    content: "";
+                    background: no-repeat 50%/50% 50%;
+                    }
+                    
+                    }
+                    .spinnerBg {
+                    position: fixed;
+                    width: 100%;
+                    height: 100%;
+                    background-color: #000;
+                    opacity: 0.2;
+                    z-index: 999999;
+                    left: 0;
+                    top: 0;
+                    }
+                    
+                    .Assigned {
+                    position: fixed;
+                    background: url('{!URLFOR($Resource.CIFLoading)}');
+                    background-size: 50px 50px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1004;
+                    left: 0%;
+                    top: 0%;
+                    }
+                    
+                    
+                </style>
+            </head>
+            
+            <body>
+                
+                <apex:actionstatus id="spinnerStatus">
+                    <apex:facet name="start">
+                        <div class="spinnerBg" />
+                        <div class="Assigned" />
+                    </apex:facet>
+                </apex:actionstatus>
+                <div class="col-sm-12 col-md-10 col-lg-25">
+                    <div class="">
+                        <center>
+                            <h3>
+                                <u>Blocking Unit Information</u>
+                            </h3>
+                        </center>
+                        <br/>
+                        <apex:pageMessages id="pageMsg"></apex:pageMessages><br/>
+                        
+                        
+                        <apex:outputPanel rendered="{!hideAll == false}">
+                            
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="width: 250px;  font-weight: normal;">Customer:</label>
+                                            <span style="width: 200px;">{!opp.Name}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="width: 250px;  font-weight: normal;">Project:</label>
+                                            <span style="width: 200px;">{!unit.RW_Project__r.Name}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="width: 250px; font-weight: normal;">Project Unit:</label>
+                                            <span style="width: 200px;">{!unit.Name}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="width: 250px; font-weight: normal;">Salable Area:</label>
+                                            <span style="width: 200px;">{!unit.Saleable_Area__c}</span>
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="width: 250px; font-weight: normal;">Agreed Agreement Value:</label>
+                                            <apex:input value="{!agrementVal}" styleClass="form-control"
+                                                        style="width: 200px;" />
+                                        </div>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="width: 250px; font-weight: normal;">Pending Reason:</label>
+                                            <apex:selectList value="{!pendingReason}" size="5" multiselect="true" styleClass="form-control" style="width: 350px;">
+                                                <apex:selectOptions value="{!pendingReasonList}" />
+                                            </apex:selectList>
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                <td style="width: 50%;">
+                                    <div style="display: flex; align-items: flex-start;">
+                                        <label style="width: 250px; font-weight: normal;">Remarks (if “Others”):</label>
+                                        <apex:inputTextarea value="{!remarks}" styleClass="form-control"
+                                                            style="width: 200px; height: 70px;" />
+                                    </div>
+                                </td>
+                                    <td style="width: 50%;">
+                                    <div style="display: flex; align-items: flex-start;">
+                                        <label style="width: 250px; font-weight: normal;">Aadhar Number:</label>
+                                        <apex:inputText value="{!aadharNumber}" styleClass="form-control"
+                                                        style="width: 200px;" maxlength="12"/>
+                                    </div>
+                                </td>
+                               </tr>
+                                <tr > 
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: flex-start; padding-top: 10px;">
+                                            <label style="width: 250px; font-weight: normal;">PAN Number:</label>
+                                            <apex:inputText value="{!panNumber}" styleClass="form-control"
+                                                            style="width: 200px;" maxlength="10"/>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <div style="display: flex; align-items: flex-start;">
+                                            <label style="width: 250px; font-weight: normal;">Blocked date:</label>  
+                                            <apex:input type="date" value="{!blockedDate}" styleClass="form-control"
+                                                            style="width: 200px;"/>
+                                        </div>
+                                    </td>
+                                </tr>  
+                               <!-- Mode of Funding placed after Blocked Date Added by Dolly-->
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
+                                            <label for="modeOfFunding" style="width: 250px; font-weight: normal;">
+                                                Mode Of Funding:
+                                            </label>
+                                            <div class="frmElem" style="width: 200px;">
+                                                <apex:inputField value="{!CIFObj.Mode_of_funding__c}" styleClass="form-control" />
+                                                <apex:actionSupport event="onchange" action="{!modeOfFundingChanged}" reRender="bankPanel"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <apex:outputPanel id="bankPanel">
+                                            <apex:outputPanel rendered="{!CIFObj.Mode_of_funding__c == 'Bank Loan'}">
+                                                <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
+                                                    <label for="bank1" style="width: 250px; font-weight: normal;">Bank 1:</label>
+                                                    <div class="frmElem" style="width: 200px;">
+                                                    <apex:inputField value="{!CIFObj.Bank_Preference_1__c}" styleClass="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
+                                                    <label for="bank2" style="width: 250px; font-weight: normal;">Bank 2:</label>
+                                                    <div class="frmElem" style="width: 200px;">
+                                                    <apex:inputField value="{!CIFObj.Bank_Preference_2__c}" styleClass="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
+                                                    <label for="bank3" style="width: 250px; font-weight: normal;">Bank 3:</label>
+                                                    <div class="frmElem" style="width: 200px;">
+                                                    <apex:inputField value="{!CIFObj.Bank_Preference_3__c}" styleClass="form-control" />
+                                                    </div> 
+                                                </div>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>                
+                                <!--Added By Dolly-->                             
+                                                               
+                                
+							</table>
+                                                            
+                            <br/><br/>
+                            
+                            
+                            <script>
+                            var visibleRows = 1;
+                            
+                            function showRow() {
+                                if (visibleRows < 5) {
+                                    visibleRows++;
+                                    document.getElementById('row' + visibleRows).style.display = '';
+                                    if (visibleRows === 5) {
+                                        document.getElementById('addBtn').disabled = true;
+                                    }
+                                    document.getElementById('removeBtn').disabled = false;
+                                }
+                                calculateTotal();
+                            }
+                            
+                            function hideRow() {
+                                if (visibleRows > 1) {
+                                    document.getElementById('row' + visibleRows).style.display = 'none';
+                                    visibleRows--;
+                                    if (visibleRows === 1) {
+                                        document.getElementById('removeBtn').disabled = true;
+                                    }
+                                    document.getElementById('addBtn').disabled = false;
+                                }
+                                calculateTotal();
+                            }
+                            
+                            function calculateTotal() {
+                                var total = 0;
+                                var inputs = document.querySelectorAll('.amountInput');
+                                for (var i = 0; i < visibleRows; i++) {
+                                    var input = inputs[i];
+                                    if (input && input.value) {
+                                        var val = parseFloat(input.value);
+                                        if (!isNaN(val)) {
+                                            total += val;
+                                        }
+                                    }
+                                }
+                                document.getElementById('totalAmount').innerText = total.toFixed(2);
+                            }
+                            
+                            
+                            </script>
+                            
+                            <div style="position: relative;">
+                                
+                                <div style="position: absolute; top: -40px; right: 0;">
+                                    <input type="button" value="Add Row" onclick="showRow()" id="addBtn" />
+                                    <input type="button" value="Remove Row" onclick="hideRow()" id="removeBtn" disabled="disabled" />
+                                </div>
+                                <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="4px">
+                                    
+                                    
+                                    <tr>
+                                        <th>S No</th>
+                                        <th>Mode of Payment</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Cheque / UTR Details</th>
+                                        <th>Bank Name</th>
+                                    </tr>
+                                    
+                                    
+                                    <tr id="row1">
+                                        <td>1</td>
+                                        <td><apex:selectList value="{!payMode1}" size="1"><apex:selectOptions value="{!payModeList}" /></apex:selectList></td>
+                                        <td><apex:input value="{!amount1}" styleClass="amountInput" onkeyup="calculateTotal()"  /></td>
+                                        <td><apex:input type="date" value="{!payDate1}"  /></td>
+                                        <td><apex:input value="{!payDetails1}"    /></td>
+                                        <td><apex:selectList value="{!bank1}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                    </tr>
+                                    
+                                    
+                                    <tr id="row2" style="display:none;">
+                                        <td>2</td>
+                                        <td><apex:selectList value="{!payMode2}" size="1"><apex:selectOptions value="{!payModeList}"  /></apex:selectList></td>
+                                        <td><apex:input value="{!amount2}" styleClass="amountInput" onkeyup="calculateTotal()"   /></td>
+                                        <td><apex:input type="date" value="{!payDate2}"  /></td>
+                                        <td><apex:input value="{!payDetails2}"    /></td>
+                                        <td><apex:selectList value="{!bank2}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                    </tr>
+                                    
+                                    
+                                    <tr id="row3" style="display:none;">
+                                        <td>3</td>
+                                        <td><apex:selectList value="{!payMode3}" size="1"><apex:selectOptions value="{!payModeList}" /></apex:selectList></td>
+                                        <td><apex:input value="{!amount3}" styleClass="amountInput" onkeyup="calculateTotal()" /></td>
+                                        <td><apex:input type="date" value="{!payDate3}" /></td>
+                                        <td><apex:input value="{!payDetails3}" /></td>
+                                        <td><apex:selectList value="{!bank3}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                    </tr>
+                                    
+                                    
+                                    <tr id="row4" style="display:none;">
+                                        <td>4</td>
+                                        <td><apex:selectList value="{!payMode4}" size="1"><apex:selectOptions value="{!payModeList}" /></apex:selectList></td>
+                                        <td><apex:input value="{!amount4}" styleClass="amountInput" onkeyup="calculateTotal()" /></td>
+                                        <td><apex:input type="date" value="{!payDate4}" /></td>
+                                        <td><apex:input value="{!payDetails4}" /></td>
+                                        <td><apex:selectList value="{!bank4}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                    </tr>
+                                    
+                                    
+                                    <tr id="row5" style="display:none;">
+                                        <td>5</td>
+                                        <td><apex:selectList value="{!payMode5}" size="1"><apex:selectOptions value="{!payModeList}" /></apex:selectList></td>
+                                        <td><apex:input value="{!amount5}" styleClass="amountInput" onkeyup="calculateTotal()" /></td>
+                                        <td><apex:input type="date" value="{!payDate5}" /></td>
+                                        <td><apex:input value="{!payDetails5}" /></td>
+                                        <td><apex:selectList value="{!bank5}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding-top: 10px;">
+                                            <b>Total: ₹ <span id="totalAmount">0.00</span></b>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            
+                            <div style="text-align: center; margin-top: 20px;">
+                            <!--<apex:commandButton value="Save" action="{!saveDetails}" status="idActionStatus" rendered="{!showContinueButton == false}" disabled="false" rerender="idActionStatus,pageMsg"/>-->
+                            <apex:commandButton value="Save" 
+                                                action="{!saveDetails}" 
+                                                status="spinnerStatus" 
+                                                rerender="idActionStatus,pageMsg,flagPanel"
+                                                />
+                                 <apex:commandButton value="Save and Generate Quotation"
+                                                action="{!saveAndRedirectToQuotePage}"
+                                                style="width: 240px; white-space: normal;" 
+                                                />
+                                 <apex:commandButton value="cancel" 
+                                                action="{!cancleButton}" 
+                                                status="spinnerStatus" 
+                                                rerender="idActionStatus,pageMsg,flagPanel"
+                                                />
+                            
+                            
+                            
+                            <!--<apex:commandButton value="Continue" action="{!continueToApproval}" rendered="{!showContinueButton == true}"/>-->
+                            </div>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+            </body>
+        </html>
+    </apex:form>
+</apex:page>

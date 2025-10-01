@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Brokerage_Summary_Status_Due2</fullName>
+    <columns>NAME</columns>
+    <columns>Brokerage__c</columns>
+    <columns>Applied_Slab_Name__c</columns>
+    <columns>Total_Brokerage__c</columns>
+    <columns>Booking__c</columns>
+    <columns>Tower_Unit__c</columns>
+    <columns>Brokerage_Scheme__c</columns>
+    <columns>Invoice_Submitted_by_CP__c</columns>
+    <columns>Project__c</columns>
+    <columns>Status__c</columns>
+    <columns>Channel_Partner__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Due</value>
+    </filters>
+    <label>Brokerage Summary -  Due</label>
+</ListView>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loan_Pre_Approval__c</fullName>
+    <label>Funding</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pre-approved loan/Sanction Letter</fullName>
+                <default>false</default>
+                <label>Pre-approved loan/Sanction Letter</label>
+            </value>
+            <value>
+                <fullName>Eligibility For Loan</fullName>
+                <default>false</default>
+                <label>Eligibility For Loan</label>
+            </value>
+            <value>
+                <fullName>No Intention/Self-funding</fullName>
+                <default>false</default>
+                <label>No Intention/Self-funding</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

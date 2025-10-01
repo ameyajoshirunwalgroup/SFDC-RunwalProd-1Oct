@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Sanction_Status__c</fullName>
+    <label>Sanction Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Loan Sanctioned</fullName>
+                <default>false</default>
+                <label>Loan Sanctioned</label>
+            </value>
+            <value>
+                <fullName>Cibil / Eligibility</fullName>
+                <default>false</default>
+                <label>Cibil / Eligibility</label>
+            </value>
+            <value>
+                <fullName>Customer Stalling/Not Submitting Docs</fullName>
+                <default>false</default>
+                <label>Customer Stalling/Not Submitting Docs</label>
+            </value>
+            <value>
+                <fullName>Logged In- Sanction in Process</fullName>
+                <default>false</default>
+                <label>Logged In- Sanction in Process</label>
+            </value>
+            <value>
+                <fullName>Follow Up / Document Collating</fullName>
+                <default>false</default>
+                <label>Follow Up / Document Collating</label>
+            </value>
+            <value>
+                <fullName>Customer issue- Sales / CRM</fullName>
+                <default>false</default>
+                <label>Customer issue- Sales / CRM</label>
+            </value>
+            <value>
+                <fullName>Self Funding</fullName>
+                <default>false</default>
+                <label>Self Funding</label>
+            </value>
+            <value>
+                <fullName>Subvention / Deviation</fullName>
+                <default>false</default>
+                <label>Subvention / Deviation</label>
+            </value>
+            <value>
+                <fullName>Under Cancellation</fullName>
+                <default>false</default>
+                <label>Under Cancellation</label>
+            </value>
+            <value>
+                <fullName>Will Apply For Loan After OC</fullName>
+                <default>false</default>
+                <label>Will Apply For Loan After OC</label>
+            </value>
+            <value>
+                <fullName>Conditional Sanction</fullName>
+                <default>false</default>
+                <label>Conditional Sanction</label>
+            </value>
+            <value>
+                <fullName>Received</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Received</label>
+            </value>
+            <value>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rejected</label>
+            </value>
+            <value>
+                <fullName>Sanction Pending</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Sanction Pending</label>
+            </value>
+            <value>
+                <fullName>Sanctioned letter received</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Sanctioned letter received</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,58 @@
+<apex:page controller="MobileAppPayPageController" action="{!pay}" showHeader="false" sidebar="false">
+    <apex:includeLightning />
+    <div id="lightning" />
+    <apex:slds />
+    <div role="status" class="slds-spinner slds-spinner_large slds-spinner_brand">
+        <span class="slds-assistive-text">Loading...</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+    </div>
+    <script src="https://runwalhomes.secure.force.com/pay/lightning/lightning.out.js"></script>
+    
+    <script>
+    /*const queryString = window.location.search; 
+        const urlParams = new URLSearchParams(QueryString); 
+        const booking = urlParams.get('bkgId'); 
+        const opportunity = urlParams.get('oppId');
+        const tower = urlParams.get('twrId');
+        const amount = urlParams.get('amount');
+        const unit = urlParams.get('unit');*/
+    	let url = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href;
+        console.log({url});
+        const queryString = url.split('?')[1];
+        console.log({queryString});
+        const urlParams = new URLSearchParams(queryString);
+        console.log({urlParams});
+        const booking = urlParams.get('bkgId'); 
+        const opportunity = urlParams.get('oppId');
+        const tower = urlParams.get('twrId');
+        const amount = urlParams.get('amount');
+        const unit = urlParams.get('unit');
+        const amountType = urlParams.get('type');
+        const responseMsg = urlParams.get('msg');
+        console.log({booking});
+        var respMsg = '{!msg}';
+                     
+    	console.log('booking', booking);
+        console.log('msg', respMsg);
+    	$Lightning.use("c:PayFromMobileApp", function() {
+         $Lightning.createComponent("c:BillDeskTest",
+             {bookingId:booking,
+              OpportunityId: opportunity,
+              towerId: tower,
+              Amount: amount,
+              ProjectUnit: unit,
+              TypeOfAmount: amountType,
+              msg: respMsg},
+             "lightning",
+             function(cmp) {
+          console.log("c:PayFromMobileApp loaded successfully in VF page");
+             }
+         );
+    	},
+        'https://runwalhomes.secure.force.com/pay'
+     );
+    </script>
+</apex:page>

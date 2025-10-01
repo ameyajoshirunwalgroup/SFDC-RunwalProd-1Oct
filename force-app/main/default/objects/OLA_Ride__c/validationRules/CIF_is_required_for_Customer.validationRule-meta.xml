@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CIF_is_required_for_Customer</fullName>
+    <active>true</active>
+    <description>CIF is required if OLA Ride for - Customer is selected</description>
+    <errorConditionFormula>AND(
+TEXT(OLA_Ride_For__c) = &quot;Customer&quot;,
+OR(ISBLANK(CIF__c)))</errorConditionFormula>
+    <errorDisplayField>CIF__c</errorDisplayField>
+    <errorMessage>Please Select CIF.</errorMessage>
+</ValidationRule>

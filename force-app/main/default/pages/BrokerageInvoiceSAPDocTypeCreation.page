@@ -1,0 +1,17 @@
+<apex:page controller="BrokerageInvoiceSAP">
+    <apex:form >
+        
+        <apex:pageMessages />
+
+         <center id="Sendbtn">
+             
+        <apex:selectList value="{!selectedPicklistValue}" size="1">
+            <apex:selectOptions value="{!picklistOptions}"  />
+        </apex:selectList>
+        
+        <apex:commandButton value="Submit" action="{!BrokerageInvoice}" />
+
+        <apex:commandButton value="Back to Invoice" action="{!BackToBrokerageInvoice}" />
+        </center>
+    </apex:form>
+</apex:page>

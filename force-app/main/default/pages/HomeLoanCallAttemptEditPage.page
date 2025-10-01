@@ -1,0 +1,304 @@
+<apex:page standardController="Task" extensions="CustomTaskControllerClass" showHeader="false" standardStylesheets="true" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">    
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+  <title>Task Edit</title>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+  <script src="/soap/ajax/54.0/connection.js"></script>
+  
+</head>
+<body>    
+ <apex:actionStatus id="status">
+    <apex:facet name="start">
+    <div class="fadeMe">
+        &nbsp;
+    </div>
+    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+            <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+        </div>
+    </div>
+    </apex:facet>
+ </apex:actionStatus>
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds">    
+  <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp">   
+        <!-- CREATE/EDIT TASK -->
+      <div aria-labelledby="newtaskform">
+        <!-- BOXED AREA -->
+        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+          <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">Call Attempt</legend>
+          
+          
+    
+          <!-- CREATE NEW TASK FORM -->
+            <apex:form id="newtaskform" styleClass="slds-form--inline">
+            <apex:PageMessages id="pageMsgs" /> 
+                <apex:pageBlock id="pgBlock" mode="edit">
+                    <apex:pageBlockButtons location="bottom" styleClass="slds-button-group">
+                      <apex:actionStatus id="go">
+                        <apex:facet name="stop">
+                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Save" action="{!save}" status="go" disabled="false" rerender="go,pageMsgs"/>
+                        </apex:facet>
+                        <apex:facet name="start">
+                          <apex:commandButton status="go" styleClass="slds-button slds-button--brand slds-button--small" value="Save" disabled="true" />
+                        </apex:facet>
+                      </apex:actionStatus>
+                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate"/>
+                    </apex:pageBlockButtons>
+              
+                <apex:pageBlockSection id="pgBlockSectionCallInfo" title="System Details" collapsible="false" columns="2">
+                        <apex:pageBlockSectionItem >
+                           <apex:outputLabel >Customer Name</apex:outputLabel>
+                           <apex:outputField id="Opportunity" value="{!Task.whoId}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Loan Name</apex:outputLabel>
+                            <apex:outputField id="Opportunity" value="{!Task.whatId}" />
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Subject</apex:outputLabel>
+                            <apex:outputField id="Subject" value="{!Task.Subject}" />
+                            <!--<apex:outputLabel >Subject</apex:outputLabel>
+                            <apex:outputText value=" Home Loan Call" />-->
+                        </apex:pageBlockSectionItem>
+                        
+                       <!-- <apex:outputField id="mobile" value="{!Task.Mobile_Number_Webform__c }" /> -->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Call Date</apex:outputLabel>
+                            <apex:outputField id="DueDate" value="{!Task.ActivityDate}" />
+                        </apex:pageBlockSectionItem>
+                         <apex:outputField id="CallTime" value="{!Task.Call_Time__c}" />
+                         <apex:outputPanel style="display:none;">
+                             <apex:inputField id="tasktype" value="{!Task.Task_Type__c}" />
+                         </apex:outputPanel>
+               </apex:pageBlockSection>
+                
+                <apex:pageBlockSection id="pgBlockSectionCallAttempt2" title="Call Attempt Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Home Loan Call',true,false)}">
+                        <!--<apex:inputField id="commType" value="{!Task.Communication_Type__c}" required="true"/> -->
+                       <apex:selectList size="1" value="{!Task.Communication_Type__c}" required="true" >
+                           <apex:selectOption itemLabel="--None--" itemValue="--None--"/>
+                           <apex:selectOption itemLabel="Inbound Call" itemValue="Inbound Call"/>
+                           <apex:selectOption itemLabel="Outbound Call" itemValue="Outbound Call"/>         
+                        </apex:selectList>
+                       <!-- <apex:inputField id="callSource" value="{!Task.Call_Source__c}" required="true"/>  -->                                              
+                       <!-- <apex:inputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/>-->
+                        <!--<apex:inputField id="callStatus" value="{!Task.Call_Status__c}" required="true"/>-->
+                        
+                            <!--<apex:selectList required="true" size="1" value="{!Task.Call_Status__c}" id="cbxlevel1">
+                               <apex:selectOption itemLabel="--None--" itemValue="--None--"/>
+                               <apex:selectOption itemLabel="First Disbursement follow up" itemValue="First Disbursement follow up"/>
+                               <apex:selectOption itemLabel="Home Loan logged in" itemValue="Home Loan logged in"/>
+                               <apex:selectOption itemLabel="Documents Collating/ Follow-up" itemValue="Documents Collating/ Follow-up"/>
+                               <apex:selectOption itemLabel="Customer Disconnected(DNC)" itemValue="Customer Disconnected (DNC)"/>
+                               <apex:selectOption itemLabel="Not Contactable/Cust Not Responding" itemValue="Not Contactable/Cust Not Responding"/>
+                               <apex:selectOption itemLabel="Number Busy" itemValue="Number Busy"/>
+                            </apex:selectList>-->
+                               
+                               
+                           <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Call Status</apex:outputLabel>
+                             <apex:OutputPanel >
+                                 <apex:selectList value="{!Task.Call_Status__c}" size="1" multiselect="false"  >
+                                          <apex:selectOptions value="{!homeLoanCallStatus}" rendered="true"></apex:selectOptions>
+                                 </apex:selectList>
+                            </apex:OutputPanel>
+                            </apex:pageBlockSectionItem>
+                                          
+                            
+                        <!--<apex:inputField id="commTypeOut" value="{!Task.Reason_for_Outbound_Communication__c}"/>-->
+                        
+                        <!-- <apex:inputField id="otherReason" value="{!Task.Specify_Others__c}"/> -->  
+                        <!-- <apex:inputField id="campaignLookup" value="{!Task.Campaign_Lookup__c}" required="false"/> --> 
+                        <!--<apex:pageBlockSectionItem >
+                            <apex:outputLabel >Home Loan Manager</apex:outputLabel>
+                            <apex:actionRegion >
+                                <apex:selectList size="1" value="{!Task.RW_Sales_Associate__c}" required="true" >
+                                   <apex:selectOption itemLabel="--None--" itemValue="--None--"/>
+                                   <apex:selectOption itemLabel="Apeksha Sathe" itemValue="Apeksha Sathe"/>
+                                   <apex:selectOption itemLabel="Milind Kawle" itemValue="Milind Kawle"/>
+                                   <apex:selectOption itemLabel="Kunal Kate" itemValue="Kunal Kate"/>
+                                   <apex:selectOption itemLabel="Shweta Yadav" itemValue="Shweta Yadav"/>
+                                   <apex:selectOption itemLabel="Sonali Mane" itemValue="Sonali Mane"/>
+                                   <apex:selectOption itemLabel="Atul Malusare" itemValue="Atul Malusare"/>
+                                   <apex:selectOption itemLabel="Chandan Patil" itemValue="Chandan Patil"/>
+                                   <apex:selectOption itemLabel="Anuja Parandkar" itemValue="Anuja Parandkar"/>
+                                </apex:selectList>
+                            </apex:actionRegion> 
+                        </apex:pageBlockSectionItem>-->
+                         
+                        
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Home Loan Manager</apex:outputLabel>
+                             <apex:OutputPanel >
+                                 <apex:selectList value="{!Task.RW_Sales_Associate__c}" size="1" multiselect="false"  >
+                                          <apex:selectOptions value="{!hlrmNames}" rendered="true"></apex:selectOptions>
+                                 </apex:selectList>
+                        </apex:OutputPanel>
+                         </apex:pageBlockSectionItem>
+                        
+
+                        <!-- <apex:inputField id="nameofTL" value="{!Task.Name_of_TL__c}" required="true"/> -->
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Next Action</apex:outputLabel>
+                             <apex:actionRegion >
+                                 <apex:inputField id="callAttemptStatus" value="{!Task.Call_Attempt_Status__c}" required="true">
+                                     <apex:actionSupport action="{!dummyMethod}" reRender="test22" event="onchange" status="status"/>
+                                 </apex:inputField>  
+                             </apex:actionRegion>      
+                         </apex:pageBlockSectionItem>  
+                         
+                         
+                         <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Project</apex:outputLabel>
+                             <apex:outputPanel id="test44"> 
+                             <apex:inputField id="projct" value="{!Task.Project__c}" /> 
+                            </apex:outputPanel>
+                         </apex:pageBlockSectionItem>  
+                         <!--<apex:inputField id="follupbuck" value="{!Task.Follow_Up_Status__c}" required="false"/>-->
+                         <!--<apex:selectList size="1" value="{!Task.Follow_Up_Status__c}" required="true" >
+                           <apex:selectOption itemLabel="--None--" itemValue="--None--"/>
+                           <apex:selectOption itemLabel="Deciding- Interested- list of documents Shared" itemValue="Deciding- Interested- list of documents Shared"/>
+                           <apex:selectOption itemLabel="Not interested" itemValue="Not interested"/> 
+                           <apex:selectOption itemLabel="Document Collating" itemValue="Document Collating"/> 
+                           <apex:selectOption itemLabel="Follow-up" itemValue="Follow-up"/> 
+                           <apex:selectOption itemLabel="Non-Contactable" itemValue="Non-Contactable"/> 
+                           <apex:selectOption itemLabel="Customer not Responding" itemValue="Customer not Responding"/>     
+                           <apex:selectOption itemLabel="Self-Funding" itemValue="Self-Funding"/> 
+                           <apex:selectOption itemLabel="Moved to other bank" itemValue="Moved to other bank"/>
+                           <apex:selectOption itemLabel="Logged in sanction in process" itemValue="Logged in sanction in process"/>
+                           <apex:selectOption itemLabel="Sanctioned" itemValue="Sanctioned"/> 
+                           <apex:selectOption itemLabel="Declined" itemValue="Declined"/> 
+                           <apex:selectOption itemLabel="cibil-eligibility issue" itemValue="cibil-eligibility issue"/> 
+                           <apex:selectOption itemLabel="Sales Dispute" itemValue="Sales Dispute"/> 
+                           <apex:selectOption itemLabel="Booking not confirmed" itemValue="Booking not confirmed"/>     
+                           <apex:selectOption itemLabel="Under cancellation" itemValue="Under cancellation"/> 
+                           <apex:selectOption itemLabel="First disbursement in process" itemValue="First disbursement in process"/>
+                           <apex:selectOption itemLabel="Pendency from Customer" itemValue="Pendency from Customer"/>
+                           <apex:selectOption itemLabel="pendency from Runwal" itemValue="pendency from Runwal"/>
+                        </apex:selectList>-->
+                         <!--<apex:inputField id="rsnnotint" value="{!Task.Sales_Reason_Not_Interested__c}" required="false"/> -->                                                                                      
+                        
+                        <apex:pageBlockSectionItem >
+                             <apex:outputLabel >Follow Up Status</apex:outputLabel>
+                             <apex:OutputPanel >
+                                 <apex:selectList value="{!Task.Follow_Up_Status__c}" size="1" multiselect="false"  >
+                                          <apex:selectOptions value="{!homeLoanFollowupStatus}" rendered="true"></apex:selectOptions>
+                                 </apex:selectList>
+                        </apex:OutputPanel>
+                         </apex:pageBlockSectionItem>
+                                           
+               </apex:pageBlockSection>
+               
+         <!--      <apex:pageBlockSection id="pgBlockSectionPreviousCall2" title="Previous Call Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}">                      
+                        <apex:outputField id="prevCallStatus" value="{!Task.Previous_Call_Attempt_Status__c}" />
+                </apex:pageBlockSection>  -->
+                
+                <apex:pageBlockSection id="pgBlockSectionNextCall2" title="Next Action Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call' || task.Task_Type__c='CRM Call' || task.Task_Type__c='Home Loan Call',true,false)}">
+                        <!--<apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}" />-->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Follow up Date</apex:outputLabel>
+                            <apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Remarks</apex:outputLabel>
+                            <apex:inputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" required="true"/>
+                        </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+               <!-- <apex:pageBlockSection id="nextactionsectionitem">                       
+                         <apex:inputField id="nextActionDate" value="{!Task.Next_Action_Date__c}" required="true" rendered="{!IF(task.Call_Status__c ='Call back later',true,false)}" /> 
+                </apex:pageBlockSection> -->
+                        
+                <apex:pageBlockSection title="Post Sales Interaction Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Post Sales Call',true,false)}" >
+                   <!-- <apex:OutputField label="Milestone Name"  value="{!Task.Standard_Customer_Pay_Plan_Detail__c}" Rendered= "{!If(LEN(Task.Standard_Customer_Pay_Plan_Detail__c)>0,True,False)}"/> -->
+                    <apex:outputText ></apex:outputText>
+                    <apex:inputField id="scommType" value="{!Task.Communication_Type__c}" required="true"/>   
+                    <apex:inputField id="scommTypeIn" value="{!Task.Reason_For_Call__c}" required="true" />
+                           
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Reason Category</apex:outputLabel>
+                        <apex:actionRegion >
+                           <!-- <apex:inputField id="reasonCat" value="{!Task.L2__c}" required="true"> -->
+                                <apex:actionSupport event="onchange" rerender="xxx" status="status"/>
+                           <!-- </apex:inputField> -->
+                        </apex:actionRegion>
+                    </apex:pageBlockSectionItem>
+                    <!-- <apex:inputField value="{!Task.L3__c}" required="true"/> -->
+                    <!-- <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Call Disposition</apex:outputLabel>
+                        <apex:actionRegion >
+                        <apex:inputField id="scallStatus" value="{!Task.Call_Disposition__c}" required="true">
+                            <apex:actionSupport event="onchange" rerender="xxx,pageMsgs" />
+                        </apex:inputField> 
+                        </apex:actionRegion>
+                      </apex:pageBlockSectionItem> -->
+                      <apex:inputField id="nextactdate" value="{!Task.Next_Action_Date__c}" required="true" /> 
+                     
+                     <!-- <apex:inputField id="scppdinput" label="Milestone Name" value="{!Task.Standard_Customer_Pay_Plan_Detail__c}" Rendered="{!If(LEN(Task.Standard_Customer_Pay_Plan_Detail__c)== 0,True,False)}"/> -->
+                   </apex:pageBlockSection>
+                    <apex:pageBlockSection id="xxx" rendered="{!IF(task.Task_Type__c='Post Sales Call',true,false)}">
+                      <!--  <apex:inputField id="ptpamount" value="{!Task.PTP_Amount__c}" required="{!If(Task.L2__c == 'Promised to pay',True,False)}"/><br></br> -->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >PTP Instrument</apex:outputLabel>
+                            <apex:actionRegion >
+                           <!-- <apex:inputField id="inst" value="{!Task.Payment_Instrument__c}" required="{!If(Task.L2__c == 'Promised to pay',True,False)}"> -->
+                                <apex:actionSupport event="onchange" rerender="address,address1,pageMsgs"  status="status"/>
+                           <!-- </apex:inputField> -->
+                            </apex:actionRegion>
+                        </apex:pageBlockSectionItem> 
+                     </apex:pageBlockSection> <br></br>    
+                     <apex:pageBlockSection id="address" rendered="{!IF(task.Task_Type__c='Post Sales Call',true,false)}">
+                       <!--  <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Pick up address category</apex:outputLabel>
+                            <apex:actionRegion >
+                              <apex:inputField value="{!Task.VDNB_Rating__c}"> 
+
+                                 <apex:actionSupport event="onchange"  rerender="addresspanel"  status="status"/>
+                              </apex:inputField>
+                            </apex:actionRegion> 
+                         </apex:pageBlockSectionItem> -->
+                     </apex:pageBlockSection>  
+                     <apex:outputPanel id="addresspanel">
+                     <apex:pageBlockSection id="address1" rendered="{!IF(task.Task_Type__c='Post Sales Call' ,true,false)}">
+                        <!--  <apex:InputField value="{!Task.Address__c}" rendered="{!If(OR(Task.VDNB_Rating__c == 'Others'),True,False)}" required="{!If(OR(Task.Payment_Instrument__c == 'Cheque',Task.Payment_Instrument__c == 'Demand Draft / Pay Order'),True,False)}"/> -->
+                          <!-- <apex:InputField value="{!Task.Address__c}" rendered="{!If(OR(Task.VDNB_Rating__c == 'Others'),True,False)}"/>
+
+                          <apex:OutputField value="{!Task.Address__c}" rendered="{!If(OR(Task.VDNB_Rating__c == 'Permanent',Task.VDNB_Rating__c == 'Correspondence',Task.Address__c!= null),True,False)}"/> -->
+                             <apex:pageBlockSectionItem >
+                                <apex:outputLabel >Call Comments</apex:outputLabel>
+                                <apex:inputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" required="true"/>
+                             </apex:pageBlockSectionItem>
+                     </apex:pageBlockSection>
+                     </apex:outputPanel>
+                   
+              </apex:pageBlock>
+              
+              </apex:form>
+          <!-- CREATE NEW TASK FORM -->
+    
+        </fieldset>
+        <!-- / BOXED AREA -->
+      </div>
+  <!-- / CREATE NEW TASK -->
+    </div>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->    
+    <!-- JAVASCRIPT -->
+    <script>
+      var j$ = jQuery.noConflict();
+ 
+        j$(document).ready(function() {
+        });
+     </script>
+    <!-- / JAVASCRIPT -->
+</body>
+</html>
+</apex:page>

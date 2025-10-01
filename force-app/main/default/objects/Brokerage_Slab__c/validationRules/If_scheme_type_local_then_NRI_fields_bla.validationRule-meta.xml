@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>If_scheme_type_local_then_NRI_fields_bla</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND( ISPICKVAL(  Brokerage_Scheme__r.Type__c ,&quot;Local&quot; ) , NOT(ISNULL(   Base_Brokerage_for_OS_NRI__c )) , NOT(ISNULL(   Additional_Brokerage_for_OS_NRI__c )) , NOT(ISNULL( Total_Brokerage_for_OS_NRI__c )) )</errorConditionFormula>
+    <errorDisplayField>Additional_Brokerage_for_OS_NRI__c</errorDisplayField>
+    <errorMessage>Additional Brokerage for OS/NRI Should be blank</errorMessage>
+</ValidationRule>

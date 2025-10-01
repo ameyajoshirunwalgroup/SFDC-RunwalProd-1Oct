@@ -1,0 +1,100 @@
+<apex:page controller="CPMandateInvoiceAttachmentController" renderAs="PDF" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" >
+	<html>
+        <head>
+            <style type="text/css" media="print">
+                @page {
+                size: A4; 
+                size: 10.27in 13.69in;
+                @bottom-center {          
+                content: "Page " counter(page) " of " counter(pages);
+                
+                }
+                }
+                body{
+                margin:0;
+                padding:0;            
+                font-family:"Google Sans", Roboto, arial, sans-serif !important;
+                font-family: 'cambria';
+                }                
+                .table1{
+                width:100%;
+                border-collapse:collapse;
+                }
+                .table1 tr th{
+                border:1px solid #000;
+                text-align:center;
+                font-size:12px;
+                padding:3px 5px;
+                }
+                .table1 tr td{
+                text-align:center;
+                font-size:12px;
+                border:1px solid #000;
+                padding:3px 5px;
+                }
+                
+                @page {
+                margin-bottom: 64px;
+                margin-top: 64px;
+                
+                @top-center {
+                content: element(header,first-except);
+                }
+                @bottom-center {
+                content: element(footer,first-except);
+                }
+                }            
+                .header{
+                position: running(header);
+                }
+                .footer {
+                display:block;
+                position: running(footer);
+                z-index:-999;
+                }            
+                
+            </style>  
+        </head>
+        <apex:form >
+            <body>
+                <apex:outputPanel >
+                    <div>
+                        <h3 style="text-align:center;">
+                            Customer Details
+                        </h3>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Customer Name</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Status</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">SGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CP Name</th>
+                            </tr>
+                            <apex:repeat value="{!annexure}" var="anxa">
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.customerName}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!anxa.bookingDate}"/> </apex:outputText></td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.bookingStatus}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.unit}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.finalAv}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.brokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.brokerageAmount}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.cgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.sgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.totalBrokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.cpName}</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </body>
+        </apex:form>
+    </html>
+</apex:page>

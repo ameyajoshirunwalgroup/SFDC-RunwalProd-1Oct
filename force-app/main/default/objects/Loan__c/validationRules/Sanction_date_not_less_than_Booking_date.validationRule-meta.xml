@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sanction_date_not_less_than_Booking_date</fullName>
+    <active>false</active>
+    <errorConditionFormula>RW_Sanction_Date__c  &lt;  DATEVALUE(RW_Booking__r.Booking_Date__c )</errorConditionFormula>
+    <errorMessage>Sanction Date should not be less than the Booking Date</errorMessage>
+</ValidationRule>

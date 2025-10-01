@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Change_Reported_Agreement_Value</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( 
+!ISNULL( TEXT (PRIORVALUE(Reported_Agreement_Value__c))), 
+ISCHANGED(Reported_Agreement_Value__c),$Profile.Name &lt;&gt; &quot;System Administrator&quot;, 
+$Profile.Name &lt;&gt; &quot;Sales Strategy&quot;,
+$Profile.Name &lt;&gt; &quot;MIS2&quot;,
+$Profile.Name &lt;&gt; &quot;Site Head&quot;,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>Reported_Agreement_Value__c</errorDisplayField>
+    <errorMessage>You cannot edit the Value . Please Get in Touch with Sales Strategy - Praveen Sharma</errorMessage>
+</ValidationRule>

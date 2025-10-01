@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>If_Both_then_NRI_fields_should_not_be_bl</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Brokerage_Scheme__r.Type__c ,&quot;Both&quot; ) , ISNULL( Additional_Brokerage_for_Local_Bookings__c ) )</errorConditionFormula>
+    <errorMessage>Additional Brokerage for Local Bookings Should not be blank</errorMessage>
+</ValidationRule>

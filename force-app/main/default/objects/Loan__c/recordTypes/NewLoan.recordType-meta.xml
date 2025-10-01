@@ -1,0 +1,5467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NewLoan</fullName>
+    <active>true</active>
+    <label>NewLoan</label>
+    <picklistValues>
+        <picklist>First_Disbursement_sub_status__c</picklist>
+        <values>
+            <fullName>Agreement Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agreement with Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agreement with vendor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Sanction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disbursed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Docket Submitted to Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Docket with Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fund Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GST%2FTDS Pending%2FOther Charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal %26 Technical</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Login For Disbursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management Deviation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical %2F Hospitalization %2F Covid 19%2FDeath</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NOC Done</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NOC Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Dues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OCR Shortfall</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out of Station</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Part Disbursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partially Disbursed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partially Disbursed - Technical Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partially Self Funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pendency from Runwal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ready Docket in Office</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ready for Disbursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rectification Deed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salary%2FJob%2FBusiness Loss%2FJob Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sap Entry Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Cancellation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>HL_RM_Name__c</picklist>
+        <values>
+            <fullName>Akshay Korgaonkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ankit Verma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apeksha Sathe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ashish Ghogale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandan Jaiswal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Krishna Gupta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Krishna Patil</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kunal Kate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raj Mandhana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shailesh Pandey</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shweta Yadav</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Supriya Khawle Khawle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vinod Thakare</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>HL_Status__c</picklist>
+        <values>
+            <fullName>Customer non-contactable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer yet to connect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Decline of Sanction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documentation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documentation for disbursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents with customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Funding type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Eligibility issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Log in for disbursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Login done with HFC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ready for Disbursement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self- funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subvention scheme</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under cancellation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>HL_Sub_Status__c</picklist>
+        <values>
+            <fullName>Bank Subvention</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank name</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Builder NOC pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Builders subvention</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CIBIL Issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CIBIL issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Client visit to bank pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer nor responding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer opted self-funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer out of station</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer will submit the docs to bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deviations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Discounts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents  with Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents to be received from customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eligibility issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial%2FIncome loss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Income loss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non closure of other Loans</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not answering</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not reachable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OCR Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment awaited from Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Receipt of Sanction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registered Agreement awaited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction declined</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction in process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction on Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Source type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TDS Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yet to decide</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>HL_TL_Name__c</picklist>
+        <values>
+            <fullName>Adrian Dsouza</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ajit Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apeksha Sathe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chetan Pathare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Panjwani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shyam Bhagat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Usha Ghadge</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Home_Loan_Taken_From__c</picklist>
+        <values>
+            <fullName>Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Home_Loan_taken_from_sub_mode__c</picklist>
+        <values>
+            <fullName>Ankush Runwal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chanda Runwal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chartered Accountant %28CA%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct Branch Visit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Relationship Manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Friend is Banker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online DSA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other Non Pannel Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out Station Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre Booking Sanction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Relative is Banker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal-RREPL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal-Residency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Banker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Financial Adviser</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staff Loan</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Loan_Record_Sub_Status__c</picklist>
+        <values>
+            <fullName>CIBIL Issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Not Providing Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eligibility issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HL Disbursement Initiated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partially Self-Funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Provisional NOC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salary%2FJob%2FFinancial Loss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Funding</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payment_Type__c</picklist>
+        <values>
+            <fullName>Collectible</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-Collectible</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Bank_Name__c</picklist>
+        <values>
+            <fullName>AU SMALL FINANCE BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aadhar Housing Finance ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aavas Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhinav Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhyudaya Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aditya Birla Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmedabad Mercantile Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Janata Commercial Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andaman and Nicobar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh Mahesh Co-Op Urban Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apna Sahakari Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Axis Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bajaj Finserv Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bajaj Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Baroda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bassein Catholic Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Petroleum Corporation Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharati Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bombay Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CITI bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canara Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Capri Global Housing Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Catholic Syrian Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Central Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chiva Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citizen Credit Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cosmos Co-operative Urban Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DCB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DHFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNS bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darussalam Co Operative Urban Bank Ltd%3B hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dena Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deutsche Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dombivli Nagari Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edelweiss Financial Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eenadu Urban Co operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Equitas Small Finance Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fullerton India Credit Company Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GIC Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Godrej Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gopinath Patil Parsik Janata Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greater Bombay Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gruh Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Agriculture %26 Rural Development Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HDFC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HPCL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HPCL%2F HDFC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HSBC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana State Co-opertive Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hinduja Housing Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hindustan Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Home Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDBI Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDFC First Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ING Vysya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>India Infoline Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indiabulls Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Overseas Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IndusInd Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jagdamba Co-operative Society</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jalgaon Janata Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jalgaon people Co-op bank ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janakalyan Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janalaxmi Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalupur Commercial Coop%2E Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karad Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karur Vysya Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kotak Mahindra Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kulswami Co%2EOp Credit Society</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kunabi Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LIC Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MACO BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MUMBAI UNIVERSITY</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahanagar Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mapusa Urban Co-operative Bank of Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mehsana Urban Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mogaveera Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Dist Cntrl Bnk Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Municipal Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NKGSB Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagar Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National bank for agr dev</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Navi Mumbai Co Op Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New India Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutan Nagarik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ONGC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oriental Bank of Commerce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PIRAMAL CAPITAL %26 HOUSING FINANCE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PNB Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PowerGrid Corporation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pravara Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab %26 Maharashtra Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab National Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RELIANCE HOME FINANCE LIMITED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajdhani Nagar Sahkari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajkot Nagrik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramella Ramesh Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reserve Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Kataria Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rupee Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SBI-CAPS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SEBI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SECURITIES %26EXCHANGE BOARD OF INDIA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SHIV KRUPA SAHKARI PATPEDI LTD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sai Prerna Co-Op Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli District Primary Teachers Bank Ltd%3B Sangli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saraswat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sardar Bhiladwala Pardi Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamrao Vithal Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shikshak Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shiv Sahyadri Sahakari Patpedhi Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shriram Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solapur Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>South Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Bikaner and Jaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Mysore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Patiala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Travancore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sundaram Home Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Syndicate Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TJSB Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tamilnad Mercantile Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tata Cap Housing Finc Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telangana State Co-Operative Apex Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Bharat Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Dhanalakshmi Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kalyan Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kapole Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Lakshmi Vilas Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Maharashtra State co-operative bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Nainital Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Naval Dockyard Co Operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Shamrao Vithal Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Tamil Nadu State Apex Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Thane Dist Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Grain Merchant%27s Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCO Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ujjain Small Finance Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Union Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank Of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttarakhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijaya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zoroastrian Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>narayana madhubabu bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Bank_Preference_1__c</picklist>
+        <values>
+            <fullName>AU SMALL FINANCE BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aadhar Housing Finance ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aavas Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhinav Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhyudaya Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmedabad Mercantile Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Janata Commercial Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andaman and Nicobar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh Mahesh Co-Op Urban Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apna Sahakari Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Axis Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bajaj Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Baroda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bassein Catholic Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Petroleum Corporation Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharati Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bombay Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CITI bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canara Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Catholic Syrian Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Central Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citizen Credit Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cosmos Co-operative Urban Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DCB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DHFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNS bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darussalam Co Operative Urban Bank Ltd%3B hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dena Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dombivli Nagari Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edelweiss Financial Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eenadu Urban Co operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Godrej Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gopinath Patil Parsik Janata Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greater Bombay Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Agriculture %26 Rural Development Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HDFC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HSBC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana State Co-opertive Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hinduja Housing Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Home Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDBI Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDFC First Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ING Vysya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>India Infoline Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Overseas Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IndusInd Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janakalyan Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janalaxmi Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio finance limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalupur Commercial Coop%2E Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karad Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karur Vysya Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kotak Mahindra Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LIC Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MACO BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahanagar Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mapusa Urban Co-operative Bank of Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mehsana Urban Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mogaveera Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Dist Cntrl Bnk Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Municipal Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NKGSB Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagar Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National bank for agr dev</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New India Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutan Nagarik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oriental Bank of Commerce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PIRAMAL CAPITAL %26 HOUSING FINANCE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PNB Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pravara Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab %26 Maharashtra Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab National Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBL Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajdhani Nagar Sahkari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajkot Nagrik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramella Ramesh Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Kataria Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rupee Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SBI Caps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli District Primary Teachers Bank Ltd%3B Sangli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saraswat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sardar Bhiladwala Pardi Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamrao Vithal Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shikshak Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shriram Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solapur Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Bikaner and Jaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Mysore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Patiala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Travancore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Syndicate Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TJSB Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tata Capital Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telangana State Co-Operative Apex Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Bharat Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Dhanalakshmi Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kalyan Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kapole Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Lakshmi Vilas Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Nainital Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Naval Dockyard Co Operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Tamil Nadu State Apex Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Grain Merchant%27s Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCO Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Union Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank Of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttarakhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijaya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zoroastrian Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>narayana madhubabu bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Bank_Preference_2__c</picklist>
+        <values>
+            <fullName>AU SMALL FINANCE BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aadhar Housing Finance ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aavas Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhinav Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhyudaya Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmedabad Mercantile Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Janata Commercial Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andaman and Nicobar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh Mahesh Co-Op Urban Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apna Sahakari Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Axis Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bajaj Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Baroda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bassein Catholic Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Petroleum Corporation Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharati Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bombay Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CITI bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canara Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Catholic Syrian Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Central Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citizen Credit Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cosmos Co-operative Urban Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DCB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DHFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNS bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darussalam Co Operative Urban Bank Ltd%3B hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dena Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dombivli Nagari Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edelweiss Financial Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eenadu Urban Co operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Godrej Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gopinath Patil Parsik Janata Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greater Bombay Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Agriculture %26 Rural Development Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HSBC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana State Co-opertive Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hinduja Housing Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Home Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDBI Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDFC First Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ING Vysya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>India Infoline Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Overseas Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IndusInd Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janakalyan Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janalaxmi Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio finance limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalupur Commercial Coop%2E Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karad Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karur Vysya Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kotak Mahindra Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LIC Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MACO BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahanagar Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mapusa Urban Co-operative Bank of Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mehsana Urban Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mogaveera Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Dist Cntrl Bnk Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Municipal Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NKGSB Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagar Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National bank for agr dev</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New India Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutan Nagarik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oriental Bank of Commerce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PIRAMAL CAPITAL %26 HOUSING FINANCE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PNB Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pravara Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab %26 Maharashtra Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab National Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBL Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajdhani Nagar Sahkari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajkot Nagrik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramella Ramesh Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Kataria Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rupee Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SBI Caps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli District Primary Teachers Bank Ltd%3B Sangli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saraswat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sardar Bhiladwala Pardi Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamrao Vithal Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shikshak Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shriram Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solapur Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Bikaner and Jaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Mysore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Patiala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Travancore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Syndicate Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TJSB Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tata Capital Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telangana State Co-Operative Apex Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Bharat Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Dhanalakshmi Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kalyan Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kapole Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Lakshmi Vilas Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Nainital Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Naval Dockyard Co Operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Tamil Nadu State Apex Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Grain Merchant%27s Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCO Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Union Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank Of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttarakhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijaya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zoroastrian Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>narayana madhubabu bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Bank_Preference_3__c</picklist>
+        <values>
+            <fullName>AU SMALL FINANCE BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aadhar Housing Finance ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aavas Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhinav Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhyudaya Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmedabad Mercantile Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Janata Commercial Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andaman and Nicobar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh Mahesh Co-Op Urban Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apna Sahakari Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Axis Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bajaj Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Baroda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bassein Catholic Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Petroleum Corporation Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharati Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bombay Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CITI bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canara Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Catholic Syrian Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Central Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citizen Credit Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cosmos Co-operative Urban Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DCB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DHFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNS bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darussalam Co Operative Urban Bank Ltd%3B hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dena Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dombivli Nagari Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edelweiss Financial Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eenadu Urban Co operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Godrej Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gopinath Patil Parsik Janata Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greater Bombay Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Agriculture %26 Rural Development Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HSBC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana State Co-opertive Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hinduja Housing Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Home Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDBI Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDFC First Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ING Vysya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>India Infoline Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Overseas Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IndusInd Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janakalyan Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janalaxmi Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio finance limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalupur Commercial Coop%2E Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karad Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karur Vysya Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kotak Mahindra Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LIC Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MACO BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahanagar Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mapusa Urban Co-operative Bank of Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mehsana Urban Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mogaveera Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Dist Cntrl Bnk Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Municipal Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NKGSB Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagar Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National bank for agr dev</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New India Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutan Nagarik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oriental Bank of Commerce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PIRAMAL CAPITAL %26 HOUSING FINANCE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PNB Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pravara Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab %26 Maharashtra Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab National Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBL Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajdhani Nagar Sahkari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajkot Nagrik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramella Ramesh Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Kataria Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rupee Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SBI Caps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli District Primary Teachers Bank Ltd%3B Sangli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saraswat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sardar Bhiladwala Pardi Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamrao Vithal Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shikshak Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shriram Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solapur Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Bikaner and Jaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Mysore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Patiala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Travancore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Syndicate Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TJSB Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tata Capital Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telangana State Co-Operative Apex Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Bharat Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Dhanalakshmi Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kalyan Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kapole Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Lakshmi Vilas Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Nainital Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Naval Dockyard Co Operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Tamil Nadu State Apex Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Grain Merchant%27s Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCO Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Union Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank Of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttarakhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijaya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zoroastrian Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>narayana madhubabu bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_City__c</picklist>
+        <values>
+            <fullName>Adilabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Adoni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agartala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmedabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmednagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aizawl</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ajmer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akbarpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aligarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alipurduar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alwar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ambala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ambikapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amravati</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amritsar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amroha</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anantapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anantnag</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Angul</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arrah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Asansol</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aurangabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azamgarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Badgam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bagaha</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bahadurgarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Baharampur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bahraich</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Balasore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ballia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Balurghat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Banda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bandipora</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bangalore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bangaon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bankura</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Banswara</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barabanki</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Baramulla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Baran</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Baraut</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barbil</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bardhaman</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bareilly</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Baripada</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barmer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barnala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Basar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Basirhat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Basti</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Batala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bathinda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Begusarai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Belgaum</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bellary</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bettiah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhadrak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhagalpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharatpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharuch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhavnagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhawanipatna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhilwara</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhimavaram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhiwandi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhiwani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhopal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhubaneshwar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar Sharif</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bijapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bijnor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bikaner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bilaspur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bokaro Steel City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bomdila</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bongaigaon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Botad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brahmapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Budaun</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bulandshahr</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bundi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Burhanpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buxar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chakdaha</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chamba</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandausi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandrapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chennai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhapra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhatarpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chirkunda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chittoor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chittorgarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Churu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Coimbatore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cooch Behar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cuttack</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Daman</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dankuni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darbhanga</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darjeeling</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dausa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Davanagere</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dehradun</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dehri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deoghar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deoria</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dewas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dhanbad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dhenkanal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dholpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dhule</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dhulian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dibrugarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dimapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Doda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dungarpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Durg-Bhilainagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Durgapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eluru</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Erode</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Etah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Etawah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Faizabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Faridabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Farrukhabad-cum-Fategarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fatehpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firozabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firozpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ganderbal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gandhidham</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gandhinagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gangtok</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gaya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Geyzing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ghaziabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ghazipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Giridih</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Godhra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gonda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gorakhpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greater Noida</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gulbarga</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Guntur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gurgaon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Guwahati</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gwalior</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Habra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hajipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haldia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haldwani-cum-Kathgodam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hamirpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hanumangarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardoi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haridwar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hathras</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hazaribagh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hindupur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hisar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hoshiarpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hubballi-Dharwad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Imphal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Itanagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jabalpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jagdalpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jaisalmer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jajpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jalandhar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jalgaon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jalor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jalpaiguri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jamalpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jamnagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jamshedpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jangipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jaunpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jehanabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jhalawar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jhansi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharsuguda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jhunjhunu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jodhpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jorhat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Junagadh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kadapa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kaithal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kakinada</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalyan-Dombivali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kangra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kannur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kanpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kapurthala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karauli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kargil</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karimnagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kasganj</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kashipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kathua</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Katihar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kavaratti</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Khammam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Khandwa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Khanna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kharagpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Khurja</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kishanganj</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kishtwar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kochi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kolhapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kolkata</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kollam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Korba</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kota</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kottayam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kozhikode</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Krishnanagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kulgam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kullu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kupwara</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kurnool</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lakhimpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lalitpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Latur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Leh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lucknow</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ludhiana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madanapalle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madurai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahasamund</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahbubnagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mainpuri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Malappuram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Malda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Malerkotla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mandi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mangalore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mangan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Margao</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mathura</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maunath Bhanjan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mayabunder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medininagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medinipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meerut</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Miryalaguda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mirzapur-cum-Vindhyachal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Modinagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moga</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moradabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Morbi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Motihari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mubarakpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mughalsarai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Muktasar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Munger</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Murwara %28Katni%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Muzaffarnagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Muzaffarpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mysore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nabadwip</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nadiad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nalgonda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Namchi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nanded</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nandyal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Narasaraopet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nashik</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Navi Mumbai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Navsari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nawada</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nellore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nizamabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Noida</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ongole</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Palwal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Panaji</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Panchkula</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Panipat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pasighat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Patiala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Patna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phagwara</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phusro</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pilibhit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pimpri-Chinchwad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondicherry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poonch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Porbandar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Port Blair</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pratapgarh%5B1%5D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prodattur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pulwama</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pune</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Puri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purnia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purulia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raebareli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raichur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raiganj</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raigarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajahmundry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajkot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajouri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajsamand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramagundam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramban</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramgarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rampur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ranaghat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ranchi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ratlam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reasi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rewa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rewari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rishikesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohtak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Roorkee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rourkela</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rudrapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saharanpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saharsa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Samba</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sambalpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sambhal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sasaram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Satna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sawai Madhopur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shahjahanpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shantipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shikohabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shillong</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shimla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shivamogga %28Shimoga%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shivpuri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shopian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sidhpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Silchar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Siliguri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Silvassa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Singrauli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sirmaur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sirohi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sirsa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sitamarhi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sitapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Siwan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solapur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sonipat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sri Ganganagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Srikakulam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Srinagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sultanpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surendranagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Suryapet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tadepalligudem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tezpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thiruvananthapuram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thoothukkudi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thrissur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tinsukia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tiruchirappalli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tirunelveli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tirupati</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tiruppur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tonk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Udaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Udhampur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ujjain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Una</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unnao</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vadodara</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Varanasi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vasai-Virar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vellore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veraval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vidisha</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijayawada</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vishakhapatnam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vizianagaram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Warangal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yamunanagar</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_First_Disbursement_Received__c</picklist>
+        <values>
+            <fullName>Not yet Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Received</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_First_Disbursement_Status__c</picklist>
+        <values>
+            <fullName>Agreement Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Default Notice Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Defaulter%2FPre-Term Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disbursed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Docket Submitted to Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Docket with Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Index II %26 NOC Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PTN Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partially Disbursed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pendency from Runwal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RERA Complaint Filed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ready Docket in Office</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ready Docket with CRM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminder Letter 1 Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminder Letter 2 Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminder Letter 3 Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminder Letter 4 Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminder Letter 5 Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reminder Letter 6 Sent</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Loan_Record_Status__c</picklist>
+        <values>
+            <fullName>Balance Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>File Logged In</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>First Disbursement Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HL Documentation Initiated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HL Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Process Initiated</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Loan Sanctioned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NOC Generated</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Reason__c</picklist>
+        <values>
+            <fullName>Booking cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan eligibility issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Switch to another bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Sanction_Status__c</picklist>
+        <values>
+            <fullName>Cibil %2F Eligibility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Conditional Sanction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Stalling%2FNot Submitting Docs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer issue- Sales %2F CRM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow Up %2F Document Collating</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Sanctioned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Logged In- Sanction in Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subvention %2F Deviation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Will Apply For Loan After OC</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_State__c</picklist>
+        <values>
+            <fullName>Andaman %26 Nicobar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dadar %26 Nagar Haveli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Daman %26 Diu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lakshadweep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tamil Nadu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttaranchal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_TPA_Case__c</picklist>
+        <values>
+            <fullName>Non TPA Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TPA Case</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sanction_Sub_Status__c</picklist>
+        <values>
+            <fullName>Bank not Confirmed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Not Providing Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Declined %2F Cibil Issue%2F Eligibility Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Defaulter%2FPTN%2FFTN Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email Sent %2F Call connected with SM%2FCRM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Final Stage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Credit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In RCU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Job loss%2FFinancial Issue%2FMedical Issue%2FPersonal Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead to Assign</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Logged In</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out Station</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre Login- Document Collating</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Query Documents Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected from 2 banks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected from 3 banks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SENP Case- ITR Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SOP %2F Loan Closure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanctioned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanctioned -Letter Awaited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanctioned -Letter Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgarde-Downgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verification %2F PD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>location%2Fcosting%2Fposession Date</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Target_Months__c</picklist>
+        <values>
+            <fullName>April</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>August</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>December</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>February</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>January</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>July</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>June</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>March</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>May</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>November</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>October</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>September</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

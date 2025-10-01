@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TL_Name__c</fullName>
+    <externalId>false</externalId>
+    <formula>User__r.Manager.FirstName + &apos; &apos; +  User__r.Manager.LastName</formula>
+    <label>TL Name</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

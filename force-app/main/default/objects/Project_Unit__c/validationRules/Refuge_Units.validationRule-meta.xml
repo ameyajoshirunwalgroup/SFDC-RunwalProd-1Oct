@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Refuge_Units</fullName>
+    <active>true</active>
+    <description>Project Unit status can not be updated to Refuge Units, if any customer is tagged.</description>
+    <errorConditionFormula>AND( ISPICKVAL( RW_Unit_Status__c , &apos;Refuge Units&apos;) , NOT(ISBLANK( RW_Customer__c )))</errorConditionFormula>
+    <errorMessage>Project Unit status can not be updated to Refuge Units, if any customer is tagged.</errorMessage>
+</ValidationRule>

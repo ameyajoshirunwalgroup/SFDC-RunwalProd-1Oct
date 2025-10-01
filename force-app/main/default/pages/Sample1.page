@@ -1,0 +1,71 @@
+<apex:page >
+  <html>
+<head>
+      <!-- Imports Open CTI JavaScript library. Point to a valid Salesforce domain. -->
+      <script src="https://runwal.my.salesforce.com/support/api/41.0/interaction.js"></script>
+      <script type="text/javascript">
+             // Callback of API method: isInConsole
+             var isInConsoleCallback = function (response) {
+                  // Returns true if method is executed in Salesforce console, false otherwise.
+                  if (response.result) {
+                      alert('Softphone is in Salesforce console.');
+                  } 
+                  else {
+                      alert('Softphone is not in Salesforce console.');
+                  }
+              };
+              // Invokes API method: isInConsole
+              function isInConsole() {
+                       sforce.interaction.isInConsole(isInConsoleCallback);
+              }
+              // Callback of API method: getCallCenterSettings
+              var getCallCenterSettingsCallback = function (response) {
+                     // Result returns call center settings as a JSON string.
+                     if (response.result) {
+                            alert(response.result);
+                     } 
+                     else {
+                            alert('Error retrieving call center settings ' + response.error);
+                     }
+              };
+              // Invokes API method: getCallCenterSettings
+              function getCallCenterSettings() {
+                       sforce.interaction.cti.getCallCenterSettings(getCallCenterSettingsCallback);
+              }
+              // Callback of API method: setSoftphoneHeight
+              var setSoftphoneHeightCallback = function (response) {
+                       // Returns true if SoftPhone height was set successfully, false otherwise.
+                      if (response.result) {
+                          alert('Setting softphone height to 300px was successful.');
+                      } 
+                      else {
+                         alert('Setting softphone height failed.');
+                     }
+               };
+               // Invokes setSoftphoneHeight API method.
+               function setSoftphoneHeight() {
+                       sforce.interaction.cti.setSoftphoneHeight(300, setSoftphoneHeightCallback);
+               }
+               // Callback of API method: getPageInfo
+               var getPageInfoCallback = function (response) {
+                      if (response.result) {
+                             alert(response.result);
+                      } 
+                      else {
+                             alert('Error occured while trying to get page info: ' + response.error);
+                      }
+               }
+               // Invokes API method getPageInfo
+               function getPageInfo() {
+                       sforce.interaction.getPageInfo(getPageInfoCallback);
+               }
+      </script>
+</head>
+<body>
+      <button onclick="isInConsole();">isInConsole</button><br/>
+      <button onclick="getCallCenterSettings();">getCallCenterSettings</button><br/>
+      <button onclick="setSoftphoneHeight();">setSoftphoneHeight(300)</button><br/>
+      <button onclick="getPageInfo();">getPageInfo</button>
+</body>
+</html>
+</apex:page>

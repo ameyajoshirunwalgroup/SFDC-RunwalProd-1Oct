@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_no_of_chang_in_walkinSubSourc</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(!ISBLANK( Walkin_sub_source_change__c ), 
+ISCHANGED( Walkin_SubSource__c ),
+$Profile.Name &lt;&gt; &quot;System Administrator&quot; )</errorConditionFormula>
+    <errorDisplayField>Walkin_SubSource__c</errorDisplayField>
+    <errorMessage>You cannot change the walkin sub source.</errorMessage>
+</ValidationRule>

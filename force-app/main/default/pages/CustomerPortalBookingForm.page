@@ -1,0 +1,735 @@
+<apex:page controller="CustomerPortalBookingFormData" applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="pdf">
+    <head>
+        <style>
+            @page {
+            size: A4;
+            margin: 0.25in;
+            
+            @bottom-center {
+            font-family:arial;
+            font-size:80%;            
+            }
+            }
+            .sfdc_richtext img {
+            border: 0;
+            width: 100px;
+            height:100px;
+            }
+            .htmlDetailElementTable .sfdc_richtext img {
+            width:100px;
+            }
+            
+            .imgdynamic .htmlDetailElementTable .sfdc_richtext img {
+            width:1024px;
+            height:1024px;
+            }
+            table.htmlDetailElementTable {
+                width: 100% !important;
+            }
+            table.htmlDetailElementTable .sfdc_richtext img{
+                width: 100% !important;
+                height:100% !important;
+                padding:0.1 px;
+            }
+            .table1{
+            width:100%;
+            border-collapse:collapse;
+            }
+            .table1 tr td{
+            border:1px solid;
+            padding:3px 2px;
+            font-size:12px !important;
+            }
+             .table2{
+            width:100%;
+            border-collapse:collapse;
+            }
+            .table2 tr td{
+            border:1px solid;
+            padding:3px 2px;
+            font-size:12px !important;
+            }
+        </style>
+    </head>
+    <body>
+        <!--<div style="page-break-after:always;" styleClass="imgdynamic">-->
+            <div style="" styleClass="imgdynamic">
+          <apex:outputField value="{!b[0].Project__r.Front_Page_Image__c}"  />
+            
+        </div>
+        <table>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sample">
+                <tr>
+                    <th align="left" width="20%" style="padding:4px;">
+                        <apex:outputField value="{!b[0].Project__r.RW_Project_Image__c}" />
+                    </th>
+                    <td align="center" width="90%" style="font-family:arial;font-size: 12px;">                    
+                        PROPEL DEVELOPERS PVT LTD.
+                        <br/>
+                        Regd. Office: Runwal And Omkar Esquare, 5th floor, off:Eastern Exp Highway
+                        <br/>
+                        Opp sion Chunabhatti signal, Sion-(E) Mumbai MH 400022 IN
+                        <br/>
+                        CIN: U45200MH2007PTC167631  
+                    
+                    </td>
+                    <th align="right" width="20%" style="padding:4px 8px 0 0;">
+                        <div style="padding-left:00px;float:right">
+                            <!--<apex:image value="{!$Resource.RunwalLogo}" height="100" width="100"/> -->
+                            <apex:image value="{!$Resource.RunwalLogo_New}" height="100" width="100"/>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <div style="font-family:arial; background-color:#fff; color:#222; text-align:center;">
+                            <p class="dark-grey">MahaRERA Registration no. 
+                                <apex:outputField value="{!b[0].Project__r.RERA_Certificate_No__c}"/> &nbsp; MahaRERA website:http://maharera.mahaonline.gov.in
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td >
+                        <div style="padding-left:275px; float:left; display:inline; font-family:arial; background-color:#fff; color:#222; font-size:16px; font-weight:bold;">
+                            APPLICATION FOR BOOKING
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-family:arial; background-color:#fff; color:#222; font-size:12px;text-align:left;">
+                            
+                            <p class="dark-grey">&nbsp; Date: &nbsp;
+                                <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}">
+                                    <apex:param value="{!b[0].Booking_Date__c}" /> 
+                            </apex:outputText>
+                                
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+           <!--<apex:pageBlock rendered="{!ShowpageBlockFlag1}>-->
+            <tr>
+                <td width="20"></td>
+                <td width="400" style="font-family:arial; color:#333333; padding:4px; font-size:12px;"> I/We,the Applicant/s remit herewith a sum of &nbsp; 
+                   <apex:outputText value="{!dvarformat}"/> {!receiptammountwords} &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td width="40"></td>
+                <td width="40000" style="font-family:arial; color:#333333; padding:4px; font-size:12px;">
+                    <b>  </b>&nbsp; only Vide Cheque/Draft/PO/NEFT no.&nbsp;
+                    <!--<apex:outputfield value="{!re[0].Mode__c}"/>&nbsp;-->
+                    <apex:outputText value="{!checkvar}"/>&nbsp;dated on&nbsp; 
+                   <apex:outputText value="{!datevar}"/>
+                    <!--<apex:repeat value="{!datevar}" var="datevar">
+                        <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}"> &nbsp; - &nbsp;
+                        <apex:param value="{!datevar}" /> 
+                    </apex:outputText>
+                    </apex:repeat>-->
+                   
+                </td>
+            </tr>
+            <tr>
+                <td width="30"></td>
+                <td width="40000" style="font-family:arial; color:#333333; padding:4px; font-size:12px;"> drawn on &nbsp; 
+                    <apex:outputText value="{!bankname}"/> (Not exceeding 10% of total consideration) favouring &nbsp;
+                        <apex:outputText value="{!developername}"/>
+             
+                </td>
+            </tr>
+          <!--</apex:pageBlock>-->
+        
+       <apex:pageBlock rendered="{!ShowpageBlockFlag1}">
+            <tr>
+                <td width="30"></td>
+                <td width="40000" style="font-family:arial; color:#333333; padding:4px; font-size:12px;">
+                <!--<apex:outputfield value="{!b[0].Company__c}"/>-->As Earnest Money/Token amount against booking of Flat and also a sum of &nbsp;
+        &nbsp;<apex:outputText value="{!receiptammount1format}"/> {!receiptammount1words} &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td width="30"></td>
+                <td width="40000" style="font-family:arial; color:#333333; padding:4px; font-size:12px;"> 
+                    <apex:outputText value="{!modevar}"/> &nbsp; 
+                    <apex:outputText value="{!chequetaxdd}"/>&nbsp;dated on&nbsp;
+                     <apex:outputText value="{!chequetaxdate}"/>
+                    <!--<apex:repeat value="{!chequetaxdateList}" var="chequetaxdate">
+                    <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}">
+                        <apex:param value="{!chequetaxdate}" /> 
+                    </apex:outputText>
+                    </apex:repeat>-->
+                  
+                    drawn on &nbsp;  <apex:outputText value="{!chequetaxbank}"/>
+                    towards the applicable Taxes as detailed hereunder.
+                </td>
+            </tr>
+            <tr>
+                <td width="30"></td>
+                <!--<td width="40000" style="font-family:arial; color:#333333; padding:4px; font-size:14px;"> Sum of Rs. 
+                    <apex:outputfield value="{!re[0].Amount_Rs__c}"/> &nbsp; paid under EOI dated &nbsp; 
+                    <apex:outputfield value="{!re[0].Cheque_DD_Date__c}"/>
+                </td>-->
+                <!--need to cheack-->
+            </tr>
+            </apex:pageBlock> 
+            
+            <tr>
+                <td width="30"></td>
+                <td width="40000" style="font-family:arial; color:#333333; padding:4px; font-size:12px;"> Name of Company/Developer: &nbsp; 
+                    <apex:outputText value="{!developername}"/>
+                </td>
+            </tr>
+            <br/>
+            <br/>
+            <table width="100%" border="0" cellpadding="0" cellspacing="5">
+                <tr>
+                    <td style="font-weight:bold;font-size:16px;">A. FLAT DETAILS</td>
+                </tr>
+            </table>
+            <table class ="table2" width="100%" border="1" cellspacing="0" cellpadding="10">
+                <tr>
+                    <td colspan="3" > Flat/Shop </td>
+                    <td colspan="2"><apex:outputText value="{!if(b[0].Project__r.Project_Property_Type__c =='Commercial','Shop','Flat')}"/></td>
+                    <td colspan="2" >Sales Manager's Name</td>
+                    <td colspan="2" style="width:350px;">
+                        <apex:outputfield value="{!b[0].Sales_Managers__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" > Configuration </td>
+                    <td colspan="2" style="width:350px;">
+                        <apex:outputfield value="{!b[0].opportunity__r.RW_Configuration__c}"/>
+                    </td>
+                    <td colspan="2"> Flat Carpet Area(sq.ft)</td>
+                    <td colspan="2" style="width:350px;">
+                        <apex:outputfield value="{!pu[0].Carpet_Area__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"  > Tower Name/Unit No </td>
+                    <td colspan="2" style="width:350px;">
+                        <!-- <apex:outputfield value="{!b[0].Wing__c}"/>&nbsp; / &nbsp;
+                        <apex:outputfield value="{!pu[0].RW_Param4__c}"/>-->
+                        <apex:outputfield value="{!pu[0].RW_Param2__c}"/>&nbsp; - &nbsp;
+                        <apex:outputfield value="{!pu[0].RW_Param4__c}"/>
+                    </td>
+                    <td colspan="2">No of Parking/s </td>
+                    <td colspan="2" style="width:350px;">
+                        <!--<apex:outputfield value="{!b[0].No_of_Parking__c}"/>-->
+                         <apex:outputfield value="{!b[0].Quotation__r.Total_No_of_Parking__c}" />
+                    </td>
+                </tr>
+                <tr>
+                    <!--<td colspan="3" style="font-size:14px;" > View Premium </td>-->
+                    <td colspan="3"  > Garden Facing(GF) /<br/> Non-Garden Facing(NGF) </td>
+                    <td colspan="2" style="width:350px;">
+                      <apex:outputfield value="{!pu[0].S_View1__c}"/>
+                    </td>
+                    <td colspan="2">Agreement Value(Rs)</td>
+                    <td colspan="2" style="width:350px;">
+                        <apex:outputfield value="{!b[0].Allotment_Premium__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"  > Agreement Value[Words] </td>
+                    <td colspan="6" style="width:350px;">{!AgreementValueInWords} only</td>
+                </tr>
+                <tr>
+                    <td colspan="3"> Present Amount Due In Percentage</td>
+                    <td colspan="2" style="width:350px;"></td>
+                    <td colspan="2" style="font-size:16px;"> Present Amount Due(Rs) </td>
+                    <td colspan="2" style="width:350px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="font-size:16px;"> Time Period For Balance </td>
+                    <td colspan="6" style="width:350px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="font-size:16px;"> Payment Due on/Before </td>
+                    <td colspan="6" style="width:350px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="font-size:16px;"> Other remark </td>
+                    <td colspan="6" style="width:350px;">{!b[0].Quotation__r.Remarks__c}</td>
+                </tr>
+            </table>
+            <br/>
+           <!--<div style="page-break-after:always;"> </div>-->
+            <div style=""> </div>
+            <tr>
+                <td style="font-weight:bold;font-size:16px;">B. APPLICANT/S DETAILS</td>
+            </tr>
+            <br/>
+            <table class="table1" border="1" cellspacing="0" cellpadding="0"  table-layout="fixed" width='100%' style='width:100%'>
+                <tr>
+                    <td colspan="2"></td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Applicant_Number__c}" />
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;" >Full Name </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:14px;text-transform: uppercase">
+                            <apex:outputfield value="{!a.Name}" />
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;" > Date of Birth </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:14px;">
+                            <apex:outputfield value="{!a.DOB__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;"> PAN No. </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.PancardNo__c}" />
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;"> Permanent Address </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Permanent_Address__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2"  style="font-size:16px;"> Address for Communication </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Mailing_Address__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2"  style="font-size:14px;"> Mobile No.</td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Mobile_Number__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2"  style="font-size:16px;"> Telephone No. </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Landline_Number__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;"> E-Mail ID </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:14px;">
+                            <apex:outputfield value="{!a.Email_Address__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;"> Company Name</td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Organization_Name__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                
+                <tr>
+                    <td colspan="2" style="font-size:16px;"> Designation </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Designation__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-size:16px;"> Office Address </td>
+                    <apex:repeat value="{!ad}" var="a">
+                        <td colspan="3" style="font-size:16px;">
+                            <apex:outputfield value="{!a.Organization_Address__c}"/>
+                        </td>
+                    </apex:repeat>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+            <apex:pageBlock >
+                <apex:repeat value="{!b}" var="a">
+                    <td colspan="1" style="font-weight:bold;font-size:16px;">C. SOURCE OF BOOKING </td>
+                    <br/>
+                    <td style="font-size:14px;">
+                    <u><apex:outputfield value="{!b[0].Source_of_Booking__c}"/></u>
+                    </td>
+                    <br/>
+                    <td style="font-size:16px;">
+                        <b>Details of Source :</b>
+                    </td>
+                    <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                        <tr>
+                            <td colspan="1" style="font-size:12px;">Name of Corporate/Channel Partner/Referrer</td>
+                            <td colspan="2" style="font-size:12px;width:310px;">
+                                <apex:outputfield value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.Representative_Name__c}"/>
+                            </td>
+                            <td colspan="3" style="font-size:12px;">Name of Company</td>
+                            <td colspan="4" style="font-size:12px;width:310px;">
+                                <apex:outputfield value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__c}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="font-size:12px;">Mobile No.</td>
+                            <td colspan="2" style="font-size:12px;width:310px;">
+                                <apex:outputfield value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.RW_Mobile_No__c}"/>
+                            </td>
+                            <td colspan="3" style="font-size:12px;">E-Mail ID</td>
+                            <td colspan="4" style="font-size:12px;width:310px;">
+                                <apex:outputfield value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.RW_Email__c}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="font-size:12px;">RERA Certificate No.(in Case of Channel Partner)</td>
+                            <td colspan="2" style="font-size:12px;width:310px;">
+                                <apex:outputfield value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.RW_RERA_Registration_Number__c}"/>
+                            </td>
+                            <td colspan="3" style="font-size:12px;">Unit No.(in Case of Referrer) </td>
+                            <td colspan="4" style="font-size:12px;width:310px;">
+                                 <!-- <apex:outputfield value="{!a.Unit_No__c}"/>-->
+                            </td> 
+                        </tr>
+                    </table>
+                </apex:repeat>
+            </apex:pageBlock>
+            <!--<div style="page-break-after:always;"> </div>-->
+            <div style=""> </div>
+            <!--  ____________________________________terms&conditions______________________ -->
+            <!--<tr style="page-break-before: always;">
+                <td>
+                    <table width="100%" border="0" cellpadding="0" cellspacing="20">
+                        <tr>
+                            <td style="font-size:16px;">
+                                <b>TERMS AND CONDITIONS AGREED AND ACCEPTED BY AND BETWEEN THE PARTIES</b>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">1)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s agrees and undertakes to pay the total cost of the Flat as per the schedule provided along with this application. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">2)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s agrees and undertakes to pay the applicable Stamp Duty, Registration Charges, scanning fees and other incidental expenses of the Flat, as and 
+                                when demanded by the Promoter in addition to the flat cost.  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">3)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s further agrees to pay over and above the Flat cost, Legal charges, Share Money, Society Formation charges, Electrical Connection, Mainte 
+                                nance, Property/ Municipal Tax, and Other Charges etc. as applicable.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">4)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s understand that Piramal Capital and Housing Finance Limited is the lender for the Project. The Applicant/s further understand that the 
+                                properties/assets of the Project have been charged/ mortgaged in favour of IDBI Trusteeship Limited, who is the security trustee thereof. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">5)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                It is mutually, unconditionally and irrevocably agreed, accepted and confirmed between the parties as under: 
+                                <br/>
+                                a.  The Applicant/s hereby agrees and declares that the Applicant/s shall pay the sum of Rs. 
+                                <br/>
+                                (Rupees on the booking as per the specification given above. The balance consideration of Rs. 
+                                <br/>
+                                _(Rupees 
+                                <br/>
+                                _only) shall be paid by the applicant/s as per the schedule agreed between the parties herein. The Booking amount shall
+                                <br/>
+                                not be more than 10% of the total consideration towards the Flat. The Applicant will execute proforma Agreement for 
+                                <br/>
+                                Sale with the Promoter after realisation of the 10% amount of the total 
+                                <br/>
+                                consideration by the Promoter. 
+                                <br/>
+                                b.  The Applicant hereby agrees to pay the applicable Taxes by way of a separate Cheque/PO, as and when the same becomes due.
+                                <br/>
+                                C.  In case of default by the Applicants towards the payment or part payment of the 10% amount of the total consideration or
+                                <br/>
+                                non-execution and non-registration of the proforma Agreement for Sale by the Applicant within 30 days from the date of the 
+                                <br/>
+                                Promoter calling upon the Applicant/s to execute and register the proforma Agreement for Sale, the Promoter shall be entitled 
+                                <br/>
+                                to cancel/revoke or withdraw this booking, after giving 15 days written notice to the Applicant/s calling upon the Applicant
+                                <br/>
+                                to make payment/execute and register the proforma Agreement for Sale. On expiry of the 15 day period, in case the Applicant 
+                                <br/>
+                                has failed to make payment/execute and register the proforma Agreement for Sale, then and without prejudice to the rights 
+                                <br/>
+                                and remedies available to the Promoter including the right to charge interest at the prevailing rate of State Bank of India 
+                                <br/>
+                                Highest Marginal Cost of Lending Rate plus 2% thereon for every month of delay in making payment, the Promoter would be 
+                                <br/>
+                                entitled at its sole option and discretion to terminate this Application for Booking and to forfeit upto 10% of the total 
+                                <br/>
+                                consideration for the Flat, as agreed. Within a period of 30 (thirty) days of such cancellation or upon resale of the Flat 
+                                <br/>
+                                whichever is later, i.e. within 30 (thirty) days of such cancellation or upon the Promoter subsequently selling and transferring
+                                <br/>
+                                the Flat to another allottee; whichever is later, the Promoter shall after adjusting 10% of the total consideration as mentioned 
+                                <br/>
+                                above and after deducting interest on any overdue payments, brokerage/referral fees, administrative charges as determined by the
+                                <br/>
+                                Promoter and exclusive of any indirect taxes, refund to the Applicant, the balance amount, if any. This clause on forfeiture and
+                                <br/> 
+                                refund shall also apply in the event where the Applicant cancels the booking voluntarily for any 
+                                <br/>
+                                reason whatsoever. Further, before voluntary termination, the Applicant will give atleast 30 (Thirty) days notice of his/her
+                                <br/>
+                                intention to do so.
+                            
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">6)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s hereby agrees, declares and undertakes that in the event of any delay in payment of any amount/instalment as per the schedule, the same 
+                                shall be paid to the Promoter together with interest thereon at the prevailing rate of State Bank of India highest marginal cost of lending rate plus 2% to 
+                                be calculated from the due date until realization of the cheque/payment. The Promoter will give an opportunity to the Applicant/s to rectify the default 
+                                in payment, failing which, it will be the Promoter's prerogative to either, accept or reject the payment together with interest or take any action against
+                                Applicant/s as the Promoter may deem fit and proper at its own discretion. The Applicant authorizes the Promoter to adjust/appropriate all payments made by 
+                                him/her under any head(s) of dues against lawful outstanding, if any, in his/her/its name as the Promoter may in its sole discretion deem fit and the 
+                                Applicant undertakes not to object/demand/direct the Promoter to adjust his/her payments in any manner.  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">7)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The payment of sale consideration and other charges, taxes, deposits etc, on its due date as per the schedule or otherwise shall be the essence of the 
+                                transaction.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">8)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                This booking is of a tentative nature and final confirmation will be given to the Applicant/s on issuance of Allotment letter of the Flat, subject to the payment 
+                                of required consideration/amount by the Applicant/s and this Application for Booking does not constitute/confer any right, title claim or interest in favour 
+                                of the Applicant/s in respect of the Flat or part thereof. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">9)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                Documents generally available with the Promoters to enable the Applicant/s to avail of a housing loan shall be made available after execution of Agreement 
+                                for Sale. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">10)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s agrees to abide by the Promoter's terms of Allotment and also agrees to sign the Allotment Letter and Agreement for Sale as and when 
+                                called upon by the Promoter. In addition to the applicable Stamp Duty and Registration Charges, the Applicant/s undertakes to pay the incidental charges, 
+                                administrative charges, etc. and to keep the Promoter indemnified in that regard. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">11)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s assumes the responsibility of lodging the stamped documents/Agreement for Sale for registration in compliance with relevant laws and to 
+                                forthwith inform the Promoter to enable the Promoter to admit execution thereof. The Applicant/s assures that, the Applicant/s shall comply with the 
+                                aforesaid and in the meanwhile shall pay to the Promoter all the relevant instalments as specified.  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">12)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                In case of cancellation or termination of the Allotment/Agreement for Sale, GST, and other taxes, etc. would be dealt with as per the Applicable Laws.   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">13)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s agrees to pay other charges and deposits for Legal and Society Formation, and Electrical Connection and Maintenance etc. as applicable in addition 
+                                to the consideration of the Flat/Unit or as may be applicable on or before the Promoter hands over the said unit to the Applicant for possession.  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">14)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                Promoter has informed the Applicant/s that this project will consist of several buildings and same will be constructed and developed in a phased manner 
+                                and the Applicant/s hereby consents that the Promoter shall be fully entitled to amend/ modify/ vary/ alter/ increase/ decrease/ add/ delete/ withdraw (as 
+                                the case may be), the Flat/ floor/ building/ wing/ layout/ plan/ area/ design/ specifications/ brandname/ services/ facilities/ amenities/ facade/ elevation/ 
+                                layout/ RG/ common areas/ infrastructure/ features/ construction method of the Project and or merge/amalgamate the Flat with adjoining flat, as may be
+                                required by the Company/Promoter towards product improvement including for optimizing the use of the full building potential of the said property 
+                                including additional Floor Space Index (FSI)/Fungible FSI/Transferable Development Rights (TDR) as available presently and /or in the future and/or as may 
+                                be required by MCGM or any other Statutory/Governing body.                           
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">15)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                No changes affecting structure or otherwise, layout of the Flat, elevations of the building shall be accepted. No two or more Flat or adjoining flat can be 
+                                joined either by removing walls/opening doors amalgamation, construction or staircase, etc and no sub division of the Flat are allowed without prior 
+                                consent or approval of the Promoter and also of the BMC.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">16)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s hereby understands that his/their eligibility to avail subvention plan, if offered, for payments, shall be decided by the bank/financial 
+                                institution in their sole discretion and in accordance with their policies. The Applicant/s further agree and understand that if the subvention plan is 
+                                availed by the Applicant/s, then the Applicant/s shall liable to pay any amounts not covered by the bank funding.                             
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">17)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s hereby confirms that he has fully understood the entire scope of development to be undertaken by the Promoter in the Project, including 
+                                the details of carpet area, common areas and facilities being provided in the Project and the Applicant/s is submitting this Application for Booking for
+                                allotment of Flat in the Project without relying on any of the publicity materials / advertisements published in any form or any channel by the Promoter or 
+                                any third party in the past. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">18)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The transfer, sale or assignment of the Flat including benefit of this booking to a third party is not permitted/allowed and will be subject to the 
+                                Promoter's     
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">18)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                prior consent/approval in writing and execution of necessary deeds/or documents by the Promoter. 
+                                The transfer, sale or assignment of the Flat including benefit of this booking to a third party is not permitted/allowed
+                                and will be subject to the Promoter's  prior consent/approval in writing and execution of necessary deeds/or documents by the Promoter.      
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">19)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicants further unconditionally and irrevocably agrees and accepts to pay GST*, etc. or any other statutory and / or new charges, levies/Taxes, 
+                                Property Tax/Municipal Tax, Cess, Surcharge dues, Duties, Fine, Charges, Premium Deposit, Penalty, Interest etc., which may be under any name or 
+                                terminology, payable and/or may become payable due to change/amendment in the existing laws, rules or due to implementation/enactment of any new 
+                                laws/rules by the local bodies, State Government, Central Government or by any competent authorities on the booking or sale of the Flat and/or any 
+                                other payment incidental to this transaction, before or after possession of the Flat cost and other charges and deposits in additions to the Flat cost.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">20)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant(s) acknowledges and confirms that the Promoter has provided all information, clarifications and documents in relation to the Project 
+                                and the  Applicant(s) is fully satisfied with the same. The Applicant(s) further acknowledges that he has seen all documents / papers in relation to the Project, 
+                                including but not limited to the title documents, license, sanctions, approvals etc. obtained from the competent authorities and the present Application 
+                                has been made after being fully satisfied about the rights, title and interest possessed by Prompter over the Project Land.   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">21)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                Notwithstanding anything in this booking form, it is subject to the proposed Development Plan 2034 by MCGM and acceptance by the Promoter.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">22)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                It is agreed between the Promoter and the Applicant/s that in case of any disputes Mumbai Courts shall have exclusive jurisdictions. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">23)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s hereby confirm and declare that, I/We have read and understood the terms and conditions of the booking form for the reservation of the Flat 
+                                as mentioned herein above and agrees and accepts to pay further instalments of the purchase price/consideration and other incidental and associated charges 
+                                thereto, as stipulated/demanded  by the Promoter from time to time. The information and details provided by me herein are true and correct to the best of 
+                                my/our knowledge. 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">24)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                This Application for Booking is subject to the Agreement for Sale to be executed between the parties hereto and shall not survive after execution of the 
+                                Agreement for Sale.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">25)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                The Applicant/s hereby confirm and declare that I/we have gone through the project details as available on the MahaRERA website 
+                                maharera.mahaonline.gov.in under registered projects
+                                
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="30" valign="top" style="font-family:arial; color:#333333; font-size:12px;">26)</td>
+                            <td style="line-height:14px; font-family:arial; color:#333333; font-size:12px;">
+                                In case the Applicant/s has accepted to book the apartment under _ 
+                                payment scheme, the Applicant/s hereby accepts the payment schedule and the applicant/s hereby accepts that no further discount
+                                will be provided by the Promoter of any form. 
+                                *GST Note: The agreement value is arrived at mutually as per prevailing
+                                market rates and conditions, after considering the benefit of any additional input tax credit accruing to the developer under the GST law.
+                                Post absorption of the incremental tax impact under GST by the developer, to the extent absorbed by it, the customer unconditionally and irrevocably 
+                                agrees and accepts that the developer has no further obligation to pass any additional benefit under the anti-profiteering provisions under Sec 171 of CGST Act, 2017.    
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <br/>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sample">
+                <tr>
+                    <th align="right" style="padding:4px 8px 0 0;">
+                        <div style="padding-right:0px;float:center">
+                            <apex:image value="{!$Resource.picNsign}" height="400" width="700" />
+                        </div>
+                    </th>
+                </tr>
+            </table>
+            <!--<tr>
+                <th align="center">
+                    <div style="padding-left:00px;float:right">
+                        <apex:image value="{!$Resource.LastPageBookingForm}" />
+                    </div>
+                </th>
+            </tr> -->
+            <br/>
+            <b style="font-size:12px;">TERMS AND CONDITIONS AGREED AND ACCEPTED BY AND BETWEEN THE PARTIES</b>
+
+            <td style="font-size:9px;"> <apex:outputfield value="{!b[0].project__r.TermsAndConditions__c}"/></td>
+            <br/>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sample">
+                <tr>
+                    <th align="right" style="padding:4px 8px 0 0;">
+                        <div style="padding-right:0px;float:center">
+                            <apex:image value="{!$Resource.picNsign}" height="400" width="700" />
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </table>
+    </body>
+</apex:page>

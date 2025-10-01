@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Name_of_unregistered_Corporate</fullName>
+    <active>false</active>
+    <description>Please fill the unregistered corporate</description>
+    <errorConditionFormula>AND( ISPICKVAL( Walkin_Source__c , &apos;Corporate(Unregistered)&apos;) , ISBLANK( Name_of_Unregistered_Corporate__c ) )</errorConditionFormula>
+    <errorDisplayField>Name_of_Unregistered_Corporate__c</errorDisplayField>
+    <errorMessage>Please fill the name of the unregistered corporate.</errorMessage>
+</ValidationRule>

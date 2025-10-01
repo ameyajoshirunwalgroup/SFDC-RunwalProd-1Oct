@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mobile_No_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( ISPICKVAL( RDS_Country_Code__c,&apos;+91&apos;), OR(LEN(RW_Mobile_No__c)&gt;10,LEN(RW_Mobile_No__c)&lt;10),false)</errorConditionFormula>
+    <errorDisplayField>RW_Mobile_No__c</errorDisplayField>
+    <errorMessage>Please Enter 10 digit Mobile Number.</errorMessage>
+</ValidationRule>

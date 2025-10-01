@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reported_Cancellation_Date_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(if(isNUll(Reported_Cancellation_Date__c),false,
+Reported_Cancellation_Date__c &lt; Reported_Booking_date__c ),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Reported_Cancellation_Date__c</errorDisplayField>
+    <errorMessage>Reported cancellation date should be greater than Reported Booking date.</errorMessage>
+</ValidationRule>

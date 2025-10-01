@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>cloudx_cms__Button_Variant__c</fullName>
+    <inlineHelpText>Choose a button design: Branding Editor, Neutral, or Bare.</inlineHelpText>
+    <label>Button Variant</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>brand</fullName>
+                <default>true</default>
+                <label>brand</label>
+            </value>
+            <value>
+                <fullName>neutral</fullName>
+                <default>false</default>
+                <label>neutral</label>
+            </value>
+            <value>
+                <fullName>base</fullName>
+                <default>false</default>
+                <label>base</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

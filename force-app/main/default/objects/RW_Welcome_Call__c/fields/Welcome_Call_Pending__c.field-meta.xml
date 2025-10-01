@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Welcome_Call_Pending__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(TEXT(RW_Welcome_Call_Status__c) == &apos;Reinitiate&apos;, TODAY() - RW_Welcome_Call_Reinitiate_date__c,  IF(TEXT(RW_Welcome_Call_Status__c) == &apos;Reject&apos;, TODAY() - RW_Welcome_Call_Rejected_date__c,  IF(TEXT(RW_Welcome_Call_Status__c) == &apos;Hold&apos;, TODAY() - RW_Welcome_Call_Hold_date__c,  IF(TEXT(RW_Welcome_Call_Status__c) == &apos;Due&apos;, Now() -  CreatedDate , 0) ) ) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Welcome Call Pending</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

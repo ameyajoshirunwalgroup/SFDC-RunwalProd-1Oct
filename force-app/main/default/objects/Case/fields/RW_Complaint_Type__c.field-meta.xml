@@ -1,0 +1,1170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Complaint_Type__c</fullName>
+    <label>Complaint Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Customer_Lifecycle_Touchpoint__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Applicant Details</fullName>
+                <default>false</default>
+                <label>Applicant Details</label>
+            </value>
+            <value>
+                <fullName>Appreciation from Customer</fullName>
+                <default>false</default>
+                <label>Appreciation from Customer</label>
+            </value>
+            <value>
+                <fullName>Booking, pricing &amp; payment schedule</fullName>
+                <default>false</default>
+                <label>Booking, pricing &amp; payment schedule</label>
+            </value>
+            <value>
+                <fullName>Booking, pricing &amp; payment schedule(Enquiry)</fullName>
+                <default>false</default>
+                <label>Booking, pricing &amp; payment schedule(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>Booking Experience</fullName>
+                <default>false</default>
+                <label>Booking Experience</label>
+            </value>
+            <value>
+                <fullName>Call status</fullName>
+                <default>false</default>
+                <label>Call status</label>
+            </value>
+            <value>
+                <fullName>Cancellation &amp; Refund Related</fullName>
+                <default>false</default>
+                <label>Cancellation &amp; Refund Related</label>
+            </value>
+            <value>
+                <fullName>Cancellation Related</fullName>
+                <default>false</default>
+                <label>Cancellation Related</label>
+            </value>
+            <value>
+                <fullName>Change in Applicant Details</fullName>
+                <default>false</default>
+                <label>Change in Applicant Details</label>
+            </value>
+            <value>
+                <fullName>Change of Contact Details</fullName>
+                <default>false</default>
+                <label>Change of Contact Details</label>
+            </value>
+            <value>
+                <fullName>Change or update demographics</fullName>
+                <default>false</default>
+                <label>Change or update demographics</label>
+            </value>
+            <value>
+                <fullName>Collections / Outbound Call</fullName>
+                <default>false</default>
+                <label>Collections / Outbound Call</label>
+            </value>
+            <value>
+                <fullName>Complaints</fullName>
+                <default>false</default>
+                <label>Complaints</label>
+            </value>
+            <value>
+                <fullName>Construction Update</fullName>
+                <default>false</default>
+                <label>Construction Update</label>
+            </value>
+            <value>
+                <fullName>Customer Service Related</fullName>
+                <default>false</default>
+                <label>Customer Service Related</label>
+            </value>
+            <value>
+                <fullName>Demand</fullName>
+                <default>false</default>
+                <label>Demand</label>
+            </value>
+            <value>
+                <fullName>Demand letter Related</fullName>
+                <default>false</default>
+                <label>Demand letter Related</label>
+            </value>
+            <value>
+                <fullName>Demand letter Related(Enquiry)</fullName>
+                <default>false</default>
+                <label>Demand letter Related(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>DND</fullName>
+                <default>false</default>
+                <label>DND</label>
+            </value>
+            <value>
+                <fullName>Documentation Enquiry</fullName>
+                <default>false</default>
+                <label>Documentation Enquiry</label>
+            </value>
+            <value>
+                <fullName>Documentation Related</fullName>
+                <default>false</default>
+                <label>Documentation Related</label>
+            </value>
+            <value>
+                <fullName>Documents</fullName>
+                <default>false</default>
+                <label>Documents</label>
+            </value>
+            <value>
+                <fullName>Gifts / Voucher Related</fullName>
+                <default>false</default>
+                <label>Gifts / Voucher Related</label>
+            </value>
+            <value>
+                <fullName>Home Loan Related</fullName>
+                <default>false</default>
+                <label>Home Loan Related</label>
+            </value>
+            <value>
+                <fullName>Home Loan Related(Enquiry)</fullName>
+                <default>false</default>
+                <label>Home Loan Related(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>Interaction Feedback</fullName>
+                <default>false</default>
+                <label>Interaction Feedback</label>
+            </value>
+            <value>
+                <fullName>Interest Dispute</fullName>
+                <default>false</default>
+                <label>Interest Dispute</label>
+            </value>
+            <value>
+                <fullName>Interest Related</fullName>
+                <default>false</default>
+                <label>Interest Related</label>
+            </value>
+            <value>
+                <fullName>Interest Waiver</fullName>
+                <default>false</default>
+                <label>Interest Waiver</label>
+            </value>
+            <value>
+                <fullName>Interest Waiver Enquiry</fullName>
+                <default>false</default>
+                <label>Interest Waiver Enquiry</label>
+            </value>
+            <value>
+                <fullName>Legal complaints / queries</fullName>
+                <default>false</default>
+                <label>Legal complaints / queries</label>
+            </value>
+            <value>
+                <fullName>Legal Relate(Enquiry)</fullName>
+                <default>false</default>
+                <label>Legal Relate(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>Legal Related</fullName>
+                <default>false</default>
+                <label>Legal Related</label>
+            </value>
+            <value>
+                <fullName>Loan &amp; Sanction related</fullName>
+                <default>false</default>
+                <label>Loan &amp; Sanction related</label>
+            </value>
+            <value>
+                <fullName>NPS Feedback Related</fullName>
+                <default>false</default>
+                <label>NPS Feedback Related</label>
+            </value>
+            <value>
+                <fullName>Operations</fullName>
+                <default>false</default>
+                <label>Operations</label>
+            </value>
+            <value>
+                <fullName>Other queries</fullName>
+                <default>false</default>
+                <label>Other queries</label>
+            </value>
+            <value>
+                <fullName>Other query/request</fullName>
+                <default>false</default>
+                <label>Other query/request</label>
+            </value>
+            <value>
+                <fullName>Payment Related</fullName>
+                <default>false</default>
+                <label>Payment Related</label>
+            </value>
+            <value>
+                <fullName>Payments and Receipts</fullName>
+                <default>false</default>
+                <label>Payments and Receipts</label>
+            </value>
+            <value>
+                <fullName>Portal Related</fullName>
+                <default>false</default>
+                <label>Portal Related</label>
+            </value>
+            <value>
+                <fullName>Positive Feedback for Employee / Company</fullName>
+                <default>false</default>
+                <label>Positive Feedback for Employee / Company</label>
+            </value>
+            <value>
+                <fullName>Possession of my unit</fullName>
+                <default>false</default>
+                <label>Possession of my unit</label>
+            </value>
+            <value>
+                <fullName>Possession Related</fullName>
+                <default>false</default>
+                <label>Possession Related</label>
+            </value>
+            <value>
+                <fullName>Possession Related(Enquiry)</fullName>
+                <default>false</default>
+                <label>Possession Related(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>Post Possession Related</fullName>
+                <default>false</default>
+                <label>Post Possession Related</label>
+            </value>
+            <value>
+                <fullName>Receipt related</fullName>
+                <default>false</default>
+                <label>Receipt related</label>
+            </value>
+            <value>
+                <fullName>Referral Dispute</fullName>
+                <default>false</default>
+                <label>Referral Dispute</label>
+            </value>
+            <value>
+                <fullName>Referral Related</fullName>
+                <default>false</default>
+                <label>Referral Related</label>
+            </value>
+            <value>
+                <fullName>Registration Related</fullName>
+                <default>false</default>
+                <label>Registration Related</label>
+            </value>
+            <value>
+                <fullName>Registration Related(Enquiry)</fullName>
+                <default>false</default>
+                <label>Registration Related(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>Repurchase/refer a friend/redeem points</fullName>
+                <default>false</default>
+                <label>Repurchase/refer a friend/redeem points</label>
+            </value>
+            <value>
+                <fullName>RM Change</fullName>
+                <default>false</default>
+                <label>RM Change</label>
+            </value>
+            <value>
+                <fullName>Routine Operations</fullName>
+                <default>false</default>
+                <label>Routine Operations</label>
+            </value>
+            <value>
+                <fullName>Routine Operations(Enquiry)</fullName>
+                <default>false</default>
+                <label>Routine Operations(Enquiry)</label>
+            </value>
+            <value>
+                <fullName>Runwal App &amp; Portal Related</fullName>
+                <default>false</default>
+                <label>Runwal App &amp; Portal Related</label>
+            </value>
+            <value>
+                <fullName>Self Service Portal</fullName>
+                <default>false</default>
+                <label>Self Service Portal</label>
+            </value>
+            <value>
+                <fullName>Service Related Concern</fullName>
+                <default>false</default>
+                <label>Service Related Concern</label>
+            </value>
+            <value>
+                <fullName>Software</fullName>
+                <default>false</default>
+                <label>Software</label>
+            </value>
+            <value>
+                <fullName>Stamp Duty Related</fullName>
+                <default>false</default>
+                <label>Stamp Duty Related</label>
+            </value>
+            <value>
+                <fullName>Taxes</fullName>
+                <default>false</default>
+                <label>Taxes</label>
+            </value>
+            <value>
+                <fullName>Tax Related</fullName>
+                <default>false</default>
+                <label>Tax Related</label>
+            </value>
+            <value>
+                <fullName>TDS / GST Related</fullName>
+                <default>false</default>
+                <label>TDS / GST Related</label>
+            </value>
+            <value>
+                <fullName>TDS Enquiry</fullName>
+                <default>false</default>
+                <label>TDS Enquiry</label>
+            </value>
+            <value>
+                <fullName>Transfer/Upgrade</fullName>
+                <default>false</default>
+                <label>Transfer/Upgrade</label>
+            </value>
+            <value>
+                <fullName>Transfer Upgrade</fullName>
+                <default>false</default>
+                <label>Transfer Upgrade</label>
+            </value>
+            <value>
+                <fullName>Unable to Connect to CRM</fullName>
+                <default>false</default>
+                <label>Unable to Connect to CRM</label>
+            </value>
+            <value>
+                <fullName>Upgrade / Downgrade/ Transfer</fullName>
+                <default>false</default>
+                <label>Upgrade / Downgrade/ Transfer</label>
+            </value>
+            <value>
+                <fullName>Welcome call</fullName>
+                <default>false</default>
+                <label>Welcome call</label>
+            </value>
+            <value>
+                <fullName>Request to Cancel the Booking</fullName>
+                <default>false</default>
+                <label>Request to Cancel the Booking</label>
+            </value>
+            <value>
+                <fullName>Retention Call</fullName>
+                <default>false</default>
+                <label>Retention Call</label>
+            </value>
+            <value>
+                <fullName>Demand Letters / Receipts / Ledger</fullName>
+                <default>false</default>
+                <label>Demand Letters / Receipts / Ledger</label>
+            </value>
+            <value>
+                <fullName>Collection Followup</fullName>
+                <default>false</default>
+                <label>Collection Followup</label>
+            </value>
+            <value>
+                <fullName>TDS</fullName>
+                <default>false</default>
+                <label>TDS</label>
+            </value>
+            <value>
+                <fullName>Excess paid</fullName>
+                <default>false</default>
+                <label>Excess paid</label>
+            </value>
+            <value>
+                <fullName>Bank related</fullName>
+                <default>false</default>
+                <label>Bank related</label>
+            </value>
+            <value>
+                <fullName>CAM Charges</fullName>
+                <default>false</default>
+                <label>CAM Charges</label>
+            </value>
+            <value>
+                <fullName>Carpentry</fullName>
+                <default>false</default>
+                <label>Carpentry</label>
+            </value>
+            <value>
+                <fullName>Civil</fullName>
+                <default>false</default>
+                <label>Civil</label>
+            </value>
+            <value>
+                <fullName>Clubhouse &amp; Amenities</fullName>
+                <default>false</default>
+                <label>Clubhouse &amp; Amenities</label>
+            </value>
+            <value>
+                <fullName>Electrical</fullName>
+                <default>false</default>
+                <label>Electrical</label>
+            </value>
+            <value>
+                <fullName>Fitout Process</fullName>
+                <default>false</default>
+                <label>Fitout Process</label>
+            </value>
+            <value>
+                <fullName>HVAC</fullName>
+                <default>false</default>
+                <label>HVAC</label>
+            </value>
+            <value>
+                <fullName>Misc</fullName>
+                <default>false</default>
+                <label>Misc</label>
+            </value>
+            <value>
+                <fullName>Parking Allotment</fullName>
+                <default>false</default>
+                <label>Parking Allotment</label>
+            </value>
+            <value>
+                <fullName>Plumbing</fullName>
+                <default>false</default>
+                <label>Plumbing</label>
+            </value>
+            <value>
+                <fullName>Post-Possession Complaints</fullName>
+                <default>false</default>
+                <label>Post-Possession Complaints</label>
+            </value>
+            <value>
+                <fullName>Employee / POA / Agent Behaviour</fullName>
+                <default>false</default>
+                <label>Employee / POA / Agent Behaviour</label>
+            </value>
+            <value>
+                <fullName>Delay at Registrar&apos;s office</fullName>
+                <default>false</default>
+                <label>Delay at Registrar&apos;s office</label>
+            </value>
+            <value>
+                <fullName>Registration / Agreement for Sale</fullName>
+                <default>false</default>
+                <label>Registration / Agreement for Sale</label>
+            </value>
+            <value>
+                <fullName>Delay in Scheduling registration</fullName>
+                <default>false</default>
+                <label>Delay in Scheduling registration</label>
+            </value>
+            <value>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+                <label>Scheduled</label>
+            </value>
+            <value>
+                <fullName>Updating KYC Details</fullName>
+                <default>false</default>
+                <label>Updating KYC Details</label>
+            </value>
+            <value>
+                <fullName>Events</fullName>
+                <default>false</default>
+                <label>Events</label>
+            </value>
+            <value>
+                <fullName>Referral / Loyalty</fullName>
+                <default>false</default>
+                <label>Referral / Loyalty</label>
+            </value>
+            <value>
+                <fullName>Connectivity</fullName>
+                <default>false</default>
+                <label>Connectivity</label>
+            </value>
+            <value>
+                <fullName>Positive Feedback</fullName>
+                <default>false</default>
+                <label>Positive Feedback</label>
+            </value>
+            <value>
+                <fullName>Customer Portal / R-Connect App</fullName>
+                <default>false</default>
+                <label>Customer Portal / R-Connect App</label>
+            </value>
+            <value>
+                <fullName>QR Code / IVR</fullName>
+                <default>false</default>
+                <label>QR Code / IVR</label>
+            </value>
+            <value>
+                <fullName>Unit related</fullName>
+                <default>false</default>
+                <label>Unit related</label>
+            </value>
+            <value>
+                <fullName>OC Related / Possession</fullName>
+                <default>false</default>
+                <label>OC Related / Possession</label>
+            </value>
+            <value>
+                <fullName>Booking / Pricing / Payment Schedule</fullName>
+                <default>false</default>
+                <label>Booking / Pricing / Payment Schedule</label>
+            </value>
+            <value>
+                <fullName>Agreement Clauses Clarification</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Agreement Clauses Clarification</label>
+            </value>
+            <value>
+                <fullName>Agreement Clauses Clarification / Modification</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Agreement Clauses Clarification / Modification</label>
+            </value>
+            <value>
+                <fullName>Appreciation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Appreciation</label>
+            </value>
+            <value>
+                <fullName>Booking Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Booking Related</label>
+            </value>
+            <value>
+                <fullName>Booking Terms Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Booking Terms Related</label>
+            </value>
+            <value>
+                <fullName>Cancellation &amp; Refund</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Cancellation &amp; Refund</label>
+            </value>
+            <value>
+                <fullName>Cancellation &amp; Refund  Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Cancellation &amp; Refund  Related</label>
+            </value>
+            <value>
+                <fullName>Cancellation / Forfeiture Refund</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Cancellation / Forfeiture Refund</label>
+            </value>
+            <value>
+                <fullName>Cancellation of Unit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Cancellation of Unit</label>
+            </value>
+            <value>
+                <fullName>Change In KYC Details</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Change In KYC Details</label>
+            </value>
+            <value>
+                <fullName>Communication Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Communication Related</label>
+            </value>
+            <value>
+                <fullName>Compensation for Delay</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Compensation for Delay</label>
+            </value>
+            <value>
+                <fullName>Construction Progress  Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Construction Progress  Related</label>
+            </value>
+            <value>
+                <fullName>Construction Progress Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Construction Progress Related</label>
+            </value>
+            <value>
+                <fullName>Credit Note (ITC / Referra / SDR Discount)</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Credit Note (ITC / Referra / SDR Discount)</label>
+            </value>
+            <value>
+                <fullName>Credit Note (ITC / Referral / SDR Discount)</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Credit Note (ITC / Referral / SDR Discount)</label>
+            </value>
+            <value>
+                <fullName>Customer Care</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Customer Care</label>
+            </value>
+            <value>
+                <fullName>Customisation of Unit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Customisation of Unit</label>
+            </value>
+            <value>
+                <fullName>Delay in Registration of Unit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Delay in Registration of Unit</label>
+            </value>
+            <value>
+                <fullName>Delay in Response</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Delay in Response</label>
+            </value>
+            <value>
+                <fullName>Delay in Unit Handover</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Delay in Unit Handover</label>
+            </value>
+            <value>
+                <fullName>Delay in sending Demand Letter</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Delay in sending Demand Letter</label>
+            </value>
+            <value>
+                <fullName>Delay in sending Receipts</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Delay in sending Receipts</label>
+            </value>
+            <value>
+                <fullName>Demand Letter Clarifications</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Demand Letter Clarifications</label>
+            </value>
+            <value>
+                <fullName>Demand Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Demand Related</label>
+            </value>
+            <value>
+                <fullName>Demand for Delay Compensation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Demand for Delay Compensation</label>
+            </value>
+            <value>
+                <fullName>Documentation Dispute</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Documentation Dispute</label>
+            </value>
+            <value>
+                <fullName>Error In Demand Letter</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Error In Demand Letter</label>
+            </value>
+            <value>
+                <fullName>Error In Ledger</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Error In Ledger</label>
+            </value>
+            <value>
+                <fullName>Error In Receipt</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Error In Receipt</label>
+            </value>
+            <value>
+                <fullName>Finance Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Finance Related</label>
+            </value>
+            <value>
+                <fullName>Flat Resold</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Flat Resold</label>
+            </value>
+            <value>
+                <fullName>Fungible Dispute</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Fungible Dispute</label>
+            </value>
+            <value>
+                <fullName>General</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>General</label>
+            </value>
+            <value>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Hardware</label>
+            </value>
+            <value>
+                <fullName>Home Loan Status Update</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Home Loan Status Update</label>
+            </value>
+            <value>
+                <fullName>ITC  / Referral Credit Not Applied</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>ITC  / Referral Credit Not Applied</label>
+            </value>
+            <value>
+                <fullName>ITC / Referral Credit Not Applied</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>ITC / Referral Credit Not Applied</label>
+            </value>
+            <value>
+                <fullName>Incorrect Levy of Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Incorrect Levy of Charges</label>
+            </value>
+            <value>
+                <fullName>Inter-Project Transfer</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Inter-Project Transfer</label>
+            </value>
+            <value>
+                <fullName>Intra-Project Transfer</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Intra-Project Transfer</label>
+            </value>
+            <value>
+                <fullName>Ledger Clarifications</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Ledger Clarifications</label>
+            </value>
+            <value>
+                <fullName>Legal Threat / RERA Complaint</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Legal Threat / RERA Complaint</label>
+            </value>
+            <value>
+                <fullName>Legal case</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Legal case</label>
+            </value>
+            <value>
+                <fullName>Levy of Interest</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Levy of Interest</label>
+            </value>
+            <value>
+                <fullName>Name Confirmation Form</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Name Confirmation Form</label>
+            </value>
+            <value>
+                <fullName>Network</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Network</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Others</label>
+            </value>
+            <value>
+                <fullName>Poor Service</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Poor Service</label>
+            </value>
+            <value>
+                <fullName>Possession Delay</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Possession Delay</label>
+            </value>
+            <value>
+                <fullName>Post Possession</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Post Possession</label>
+            </value>
+            <value>
+                <fullName>Pre Possession  Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pre Possession  Related</label>
+            </value>
+            <value>
+                <fullName>Pre Post Possession Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pre Post Possession Related</label>
+            </value>
+            <value>
+                <fullName>Quality of Unit Finish</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Quality of Unit Finish</label>
+            </value>
+            <value>
+                <fullName>RM Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>RM Related</label>
+            </value>
+            <value>
+                <fullName>RM Rude / Unprofessional</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>RM Rude / Unprofessional</label>
+            </value>
+            <value>
+                <fullName>RM Unresponsive / Not Reachable</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>RM Unresponsive / Not Reachable</label>
+            </value>
+            <value>
+                <fullName>Receipt Clarifications</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Receipt Clarifications</label>
+            </value>
+            <value>
+                <fullName>Referral Lead / Query</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Referral Lead / Query</label>
+            </value>
+            <value>
+                <fullName>Refund Other Than Cancellation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Refund Other Than Cancellation</label>
+            </value>
+            <value>
+                <fullName>Refusal for Ammending Agreement</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Refusal for Ammending Agreement</label>
+            </value>
+            <value>
+                <fullName>Refusal for Site Visit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Refusal for Site Visit</label>
+            </value>
+            <value>
+                <fullName>Refusal for Unit Customisation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Refusal for Unit Customisation</label>
+            </value>
+            <value>
+                <fullName>Registration Details</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Registration Details</label>
+            </value>
+            <value>
+                <fullName>Registration Procedure Details</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Registration Procedure Details</label>
+            </value>
+            <value>
+                <fullName>Request for Additional Discount</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Additional Discount</label>
+            </value>
+            <value>
+                <fullName>Request for Demand Letter</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Demand Letter</label>
+            </value>
+            <value>
+                <fullName>Request for Future milestone completion dates</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Future milestone completion dates</label>
+            </value>
+            <value>
+                <fullName>Request for Interest Waiver</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Interest Waiver</label>
+            </value>
+            <value>
+                <fullName>Request for Ledger</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Ledger</label>
+            </value>
+            <value>
+                <fullName>Request for Payment Deviation/ Extension</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Payment Deviation/ Extension</label>
+            </value>
+            <value>
+                <fullName>Request for Receipts</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Receipts</label>
+            </value>
+            <value>
+                <fullName>Request for Site Visit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Request for Site Visit</label>
+            </value>
+            <value>
+                <fullName>Resale</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Resale</label>
+            </value>
+            <value>
+                <fullName>SDR Details</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>SDR Details</label>
+            </value>
+            <value>
+                <fullName>SDR Payment Related</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>SDR Payment Related</label>
+            </value>
+            <value>
+                <fullName>Security Deposit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Security Deposit</label>
+            </value>
+            <value>
+                <fullName>Security Deposit Refund</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Security Deposit Refund</label>
+            </value>
+            <value>
+                <fullName>Sharing of Referral Lead</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Sharing of Referral Lead</label>
+            </value>
+            <value>
+                <fullName>Tagging of Payment Made</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Tagging of Payment Made</label>
+            </value>
+            <value>
+                <fullName>Tagging of TDS</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Tagging of TDS</label>
+            </value>
+            <value>
+                <fullName>Time Extension for Payment</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Time Extension for Payment</label>
+            </value>
+            <value>
+                <fullName>Welcome Mail Confirmation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Welcome Mail Confirmation</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Cancellation Related</controllingFieldValue>
+            <valueName>Cancellation Related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Cancellation Related</controllingFieldValue>
+            <valueName>Request to Cancel the Booking</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Cancellation Related</controllingFieldValue>
+            <valueName>Retention Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Home Loan Related</controllingFieldValue>
+            <valueName>Home Loan Related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment Related</controllingFieldValue>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Demand Letters / Receipts / Ledger</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment Related</controllingFieldValue>
+            <valueName>Collection Followup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment Related</controllingFieldValue>
+            <valueName>TDS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment Related</controllingFieldValue>
+            <valueName>Excess paid</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment Related</controllingFieldValue>
+            <valueName>Bank related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>CAM Charges</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Carpentry</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Civil</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Clubhouse &amp; Amenities</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Electrical</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Fitout Process</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>HVAC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Misc</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Parking Allotment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Plumbing</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Post-Possession</controllingFieldValue>
+            <valueName>Post-Possession Complaints</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pre-Booking Experience</controllingFieldValue>
+            <valueName>Booking Experience</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Registration</controllingFieldValue>
+            <valueName>Employee / POA / Agent Behaviour</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Registration</controllingFieldValue>
+            <valueName>Delay at Registrar&apos;s office</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Registration</controllingFieldValue>
+            <valueName>Registration / Agreement for Sale</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Registration</controllingFieldValue>
+            <valueName>Delay in Scheduling registration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Registration</controllingFieldValue>
+            <valueName>Scheduled</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Updating KYC Details</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Events</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Referral / Loyalty</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Connectivity</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Positive Feedback</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Routine Operations</controllingFieldValue>
+            <valueName>Unit related</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Self-Service Options</controllingFieldValue>
+            <valueName>Customer Portal / R-Connect App</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Self-Service Options</controllingFieldValue>
+            <valueName>QR Code / IVR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Welcome Call</controllingFieldValue>
+            <valueName>Booking / Pricing / Payment Schedule</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Possession</controllingFieldValue>
+            <valueName>OC Related / Possession</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

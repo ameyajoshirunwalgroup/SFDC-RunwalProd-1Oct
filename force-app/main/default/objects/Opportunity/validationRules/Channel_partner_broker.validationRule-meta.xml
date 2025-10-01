@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Channel_partner_broker</fullName>
+    <active>true</active>
+    <errorConditionFormula>And(
+   ISNEW(), /* Added by Vinay */
+  CreateDate__c &gt;= DATE(2021,01,01),
+IF(OR( ISPICKVAL(LeadSource , &quot;Channel Partner&quot;), ISPICKVAL( Walkin_Source__c , &quot;Channel Partner&quot;) ),AND(ISBLANK(RW_Broker__c), ISBLANK( RW_Walkin_Channel_Partner__c ) , RW_Apply_Unregistered_Broker__c == false,Walkin_Apply_Unregistered_ChannelPartner__c == false),false),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>RW_19_99_Received__c</errorDisplayField>
+    <errorMessage>Please enter the broker name or enter Unregistered broker details.</errorMessage>
+</ValidationRule>

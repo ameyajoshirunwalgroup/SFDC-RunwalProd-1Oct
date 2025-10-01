@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_Type__c</fullName>
+    <label>CP Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Individual Firm</fullName>
+                <default>false</default>
+                <label>Individual Firm</label>
+            </value>
+            <value>
+                <fullName>Limited Company</fullName>
+                <default>false</default>
+                <label>Limited Company</label>
+            </value>
+            <value>
+                <fullName>Partnership Firm</fullName>
+                <default>false</default>
+                <label>Partnership Firm</label>
+            </value>
+            <value>
+                <fullName>Proprietorship Firm</fullName>
+                <default>false</default>
+                <label>Proprietorship Firm</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Remark</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED( Remark__c )&amp;&amp; $Profile.Name  &lt;&gt;  &apos;System Administrator&apos; &amp;&amp;  PRIORVALUE(Remark__c ) &lt;&gt; &quot;&quot; &amp;&amp; $Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/</errorConditionFormula>
+    <errorMessage>Remark cannot be changed</errorMessage>
+</ValidationRule>

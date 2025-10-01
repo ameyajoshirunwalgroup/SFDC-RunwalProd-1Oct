@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Website_Enquiries</fullName>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>FULL_NAME</columns>
+    <columns>LEAD.EMAIL</columns>
+    <columns>RW_Project__c</columns>
+    <columns>RW_Lead_Sub_Source__c</columns>
+    <columns>LEAD.STATUS</columns>
+    <columns>LEAD.UNREAD</columns>
+    <columns>Pre_Sales_User__c</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>LEAD.LEAD_SOURCE</field>
+        <operation>equals</operation>
+        <value>Digital</value>
+    </filters>
+    <label>Website Enquiries</label>
+    <sharedTo>
+        <roleAndSubordinates>Marketing_Head</roleAndSubordinates>
+    </sharedTo>
+</ListView>

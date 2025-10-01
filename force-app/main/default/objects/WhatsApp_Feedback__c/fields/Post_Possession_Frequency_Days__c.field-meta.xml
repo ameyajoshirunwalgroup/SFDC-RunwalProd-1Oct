@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Post_Possession_Frequency_Days__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 60, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 90), 60, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 90, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 120), 90, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 120, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 150), 120, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 150, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 180), 150, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 180, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 210), 180, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 210, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 240), 210, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 240, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 270), 240, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 270, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 300), 270, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 300, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 330), 300, IF(AND((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 330, (DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &lt; 360), 330, IF((DATEVALUE(CreatedDate) - Opportunity__r.Booking__r.RW_Key_handover_date__c) &gt;= 360, 360, 0) ) ) ) ) ) ) ) ) ) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Post Possession Frequency Days</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

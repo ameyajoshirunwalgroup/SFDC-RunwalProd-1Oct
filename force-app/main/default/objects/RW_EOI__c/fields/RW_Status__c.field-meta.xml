@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Status__c</fullName>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>EOI Confirmed</fullName>
+                <default>false</default>
+                <label>EOI Confirmed</label>
+            </value>
+            <value>
+                <fullName>EOI Blocked</fullName>
+                <default>false</default>
+                <label>EOI Blocked</label>
+            </value>
+            <value>
+                <fullName>EOI Booked</fullName>
+                <default>false</default>
+                <label>EOI Booked</label>
+            </value>
+            <value>
+                <fullName>Cancellation Initiated</fullName>
+                <default>false</default>
+                <label>Cancellation Initiated</label>
+            </value>
+            <value>
+                <fullName>EOI Cancelled - Refund pending</fullName>
+                <default>false</default>
+                <label>EOI Cancelled - Refund pending</label>
+            </value>
+            <value>
+                <fullName>EOI Cancelled -Refunded</fullName>
+                <default>false</default>
+                <label>EOI Cancelled -Refunded</label>
+            </value>
+            <value>
+                <fullName>EOI Sent to Customer</fullName>
+                <default>false</default>
+                <label>EOI Sent to Customer</label>
+            </value>
+            <value>
+                <fullName>EOI Submitted - Payment pending</fullName>
+                <default>false</default>
+                <label>EOI Submitted - Payment pending</label>
+            </value>
+            <value>
+                <fullName>Cancellation Rejected</fullName>
+                <default>false</default>
+                <label>Cancellation Rejected</label>
+            </value>
+            <value>
+                <fullName>EOI Cancelled</fullName>
+                <default>false</default>
+                <label>EOI Cancelled</label>
+            </value>
+            <value>
+                <fullName>EOI Cancelled - Refund Initiated</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>EOI Cancelled - Refund Initiated</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

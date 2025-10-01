@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Configuration_or_Project__c</fullName>
+    <label>Configuration or Project</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Lower Configuration</fullName>
+                <default>false</default>
+                <label>Lower Configuration</label>
+            </value>
+            <value>
+                <fullName>Smaller ticket size</fullName>
+                <default>false</default>
+                <label>Smaller ticket size</label>
+            </value>
+            <value>
+                <fullName>Different stage of construction</fullName>
+                <default>false</default>
+                <label>Different stage of construction</label>
+            </value>
+            <value>
+                <fullName>Alternate project with different ticket size</fullName>
+                <default>false</default>
+                <label>Alternate project with different ticket size</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

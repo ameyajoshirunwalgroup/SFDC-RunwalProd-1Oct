@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Action_Date_is_Mandatory</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(ISPICKVAL(Task_Type__c, &apos;Presales Call&apos;),
+TODAY() &gt;= DATE(2018,10,24),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Not Interested&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Customer Disconnected(DNC)&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Wrong Number&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Junk Enquiry&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;DND&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Not contactable&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Number Busy&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Out of Coverage Area&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Ringing&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Spoke to the 3rd party&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Switched off&apos;)),
+NOT(ISPICKVAL( Call_Status__c ,&apos;Wrong Number&apos;)),
+ISBLANK(Customer_CRT_Id__c),
+ISBLANK(00N0I00000KM7QL),
+ISBLANK(Next_Action_Date__c))</errorConditionFormula>
+    <errorDisplayField>ActivityDate__c</errorDisplayField>
+    <errorMessage>Next Action Date is Mandatory</errorMessage>
+</ValidationRule>

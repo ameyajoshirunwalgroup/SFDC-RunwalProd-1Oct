@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>City_is_required_for_Outstation_client</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(RW_Type_of_Client__c,&apos;Outstation&apos;), ISPICKVAL(City__c,&quot;&quot;),
+			TODAY() &gt;= Date(2024,01,03),ISNEW(),$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>City</errorDisplayField>
+    <errorMessage>Please select a city for the Outstation client.</errorMessage>
+</ValidationRule>

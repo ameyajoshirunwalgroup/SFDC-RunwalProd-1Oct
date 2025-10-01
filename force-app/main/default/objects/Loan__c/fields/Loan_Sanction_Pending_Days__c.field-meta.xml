@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loan_Sanction_Pending_Days__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL(RW_Loan_Record_Status__c, &apos;Loan Sanctioned&apos;) ,  RW_Sanction_Date__c -  DATEVALUE( CreatedDate ) , IF(ISPICKVAL(RW_Loan_Record_Status__c, &apos;Loan Process Initiated&apos;), Now() - CreatedDate, 0 ))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Loan Sanction Pending Days</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(IF(Phone!= null, NOT(REGEX(Phone, &quot;[0-9]{7,13}&quot;)), false)))</errorConditionFormula>
+    <errorMessage>Please enter valid Phone number.</errorMessage>
+</ValidationRule>

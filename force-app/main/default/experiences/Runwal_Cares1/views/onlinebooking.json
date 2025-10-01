@@ -1,0 +1,73 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "f487aace-79a3-4278-a6f1-3e60e9da1e92",
+  "label" : "onlinebooking",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "6d8163db-7b4f-42a7-aec5-bf6f14f2a969",
+          "columns" : [ {
+            "UUID" : "e2cc3d5a-8633-490d-9eff-724ebb88d9de",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "6d8163db-7b4f-42a7-aec5-bf6f14f2a969",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "data" : "{!data}",
+            "encResp" : "{!encResp}",
+            "msg" : "{!msg}",
+            "orderNo" : "{!encResp}"
+          },
+          "componentName" : "c:DigitalBooking",
+          "id" : "3789469e-e451-4583-babe-a53681471d02",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "e2cc3d5a-8633-490d-9eff-724ebb88d9de",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "64242528-1ee2-4de3-bd01-3b49bea4eae2",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "onlinebooking"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "87e9fb3f-9a6a-45e3-9305-d078d87fa598",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "9bff655b-126e-4291-9620-c3a27d57dbf5",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "977yTkxD7rwg4yVvaWbMkJZQMSIqdu",
+  "type" : "view",
+  "viewType" : "custom-onlinebooking"
+}

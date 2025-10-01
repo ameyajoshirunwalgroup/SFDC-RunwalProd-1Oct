@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_action_date_is_mandatory_sales_call</fullName>
+    <active>false</active>
+    <description>Next action date is mandatory if task type is sales call</description>
+    <errorConditionFormula>AND(ISPICKVAL(Task_Type__c ,&apos;Sales Call&apos;), 
+ TODAY()  &gt;=  DATE(2019,09,09)  ,
+ ISBLANK(Next_Action_Date__c),
+ NOT( ISPICKVAL( Call_Status__c , &apos;Booked&apos;)),
+ NOT( ISPICKVAL(Call_Status__c, &apos;Follow Up- NC&apos;)),
+ NOT( ISPICKVAL(Call_Status__c, &apos;DND&apos;)),
+ NOT( ISPICKVAL(Call_Status__c,&apos;Not Interested&apos;)))</errorConditionFormula>
+    <errorMessage>Please enter next action date</errorMessage>
+</ValidationRule>

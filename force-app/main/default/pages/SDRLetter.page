@@ -1,0 +1,157 @@
+<apex:page controller="RW_BookingStamp_Registration_Charges" applyHtmlTag="false"  applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false">
+
+<style>
+                
+                @page {
+                      size: A4;
+                      margin: 0;
+                    }
+                    @media print {
+                      html, body {
+                        width: 210mm;
+                        height: 297mm;
+                      }
+                     
+                    }
+                .outermostdiv
+                {
+                  border: 1px solid black;
+                  width: 777px;
+  				  height: 5580px;
+                  
+                }
+    <!--body {
+    font-family:sans-serif;
+				font-size:9px;
+                }-->
+                
+            </style>
+    
+    <body>
+        <div style="font-size:15px;" class= "pagePadding">
+         
+            
+         
+         <p>
+            Dear <b>{!info.Customer__r.Name}</b>,
+         </p>
+            
+            <p>
+                
+                Greetings from Runwal Group!
+                
+            </p>
+            <p>
+                You have chosen exclusively by applying for a flat <b>{!info.Unit_No__r.RW_Param4__c}</b> in building <b>{!info.Unit_No__r.TowerName__r.Name}</b> at <b>{!info.Project__r.Name}</b>. We appreciate your choice and welcome you
+            </p>
+            <p>
+                
+                Kindly note below details of stamp duty and registration charges. 
+            </p>
+         <p>
+             1.	Stamp Duty Amount : Rs. &nbsp;<apex:outputText value="{0, number, ###,##0}">
+    				<apex:param value="{!info.Quotation__r.Stamp_Duty__c}"/>
+				</apex:outputText>/- ({!stampDuty})<br/>
+             2.	Registration fees : Rs.&nbsp;<apex:outputText value="{0, number, ###,##0}">
+    				<apex:param value="{!info.Quotation__r.Registration_Charges__c}"/>
+				</apex:outputText>/- ({!registrationCharges}) <br/>
+             Total to be Transferred Rs.&nbsp;<apex:outputText value="{0, number, ###,##0}">
+    				<apex:param value="{!info.Quotation__r.Stamp_Duty_and_Registration_Total__c}"/>
+             </apex:outputText>/- ( {!totalStampDuty}) 
+         </p>
+         <p>
+            3.	Consultation charges &amp; scanning charges  : Approx Rs.&nbsp;<apex:outputText value="{0, number, ###,##0}">
+    				<apex:param value="{!info.Consultation_Scanning_charges__c}"/>
+             </apex:outputText>/- ({!scanningCharges})
+         </p>
+         <p>
+            Please find given below the process for payment of stamp duty and registration of ‘Agreement for Sale’
+         </p>
+         
+            <ul>
+                <li>
+                Sr. no. 1, &amp; <b>to be paid together via one single NEFT transfer</b> to the bank A/c details 
+                </li>
+                <li style="padding-top:3px;">
+                Account No : <b style="font-size:12px;"> {!consultant.Account_No__c}</b>
+                </li>
+                <li style="padding-top:3px;">
+                A/c Name : <b style="font-size:12px;"> {!consultant.Account_Name__c}</b>
+                </li>
+                <li style="padding-top:3px;">
+                    IFSC Code : <b style="font-size:12px;"> {!consultant.IFSC_Code__c}</b>
+                </li>
+                <li style="padding-top:3px;">
+                Bank Name : <b style="font-size:12px;"> {!consultant.Bank_Name__c}</b>
+                </li>
+                <li style="padding-top:3px;">
+                Branch : <b style="font-size:12px;">{!consultant.Branch__c}</b>
+                </li>
+                <li style="padding-top:3px;">
+                Sr. no.3 to be paid directly to the agent on the day of registration to facilitate the process through him.
+                </li>
+                <li style="padding-top:3px;">
+                NEFT to be done from First Applicants Account only (First Applicant should be the first A/c holder in bank from whose A/c is NEFT done). After making the payment, receipt to be provided with details of A/c no., Name of A/c holder, UTR / transaction no. &amp; bank stamping as token of confirmation of outward remittance
+                </li>
+                <li style="padding-top:3px;">
+                Once you have paid the stamp duty and registration charges challan will be generated from the bank.
+                </li>
+                <li style="padding-top:3px;">
+                Post your signatures, the agreement will be signed by our authorized signatories.
+                </li>
+                <li style="padding-top:3px;">
+                Your relationship manager (the undersigned) will schedule and intimate you the date and time for registration of the ‘Agreement for Sale’. Registration date will be scheduled as per the dates available at the Registrar’s office.
+                </li>
+                <li style="padding-top:3px;">
+                You need to be present on the registration date along with required documents and the agent service charges including administrative/scanning charges.  The list of the said documents are given herein below:  
+                </li>
+            </ul>
+            
+            <p>
+                A)  Copy of PAN card for identity proof
+            </p>
+            <p>
+                B)  Copy of Aadhar card for residential proof                
+            </p>
+            <p>
+                
+                C)  If Power of Attorney (POA) holder, in addition to the documents stipulated in (A &amp; B) above, the POA holder needs to carry the original  POA along with 1 photocopy of the POA and 2 photographs of POA holder.  If POA holder is also executing the Agreement, POA holder to carry photos of both the purchaser as well as the POA holder. (The POA must be duly registered at the office of sub registrar).
+            </p>
+            <p>
+                
+                D)  4 passport size photographs of all applicants.
+            </p>
+            <p>
+                E) Incase the flat owner is a company, please carry a copy of Board Resolution, Company Seal and PAN card of both the Company and the Authorized Signatory.
+            </p>
+            <p>
+                In order to provide quick and seamless service, we request you to please fill the enclosed <b>‘Name Confirmation Form’</b> (to incorporate in the Agreement for Sale) and send across a signed copy of the same at the earliest.
+            </p>
+            <p>
+                In case you intend to take a bank loan, we would request you to please submit the loan sanction letter. To avail of bank loan, you are required to first make the payment of your own contribution.
+                
+            </p>
+            
+            <!--<p>
+                <b>Address : REGISTRATION OFFICE- VIKHROLI OR NAHUR.</b>
+            </p>-->
+            
+            <p>
+                Thank you once again for your decision to book an apartment in <b>{!info.Project__r.Name}</b>. We are privileged to have you amongst our clientele and sincerely value the trust shown in us. 
+            </p>
+            
+            <p>
+                We request you to kindly contact the undersigned for further details.
+            </p>
+            
+            <p>
+               <b> Regards, <br/>
+			    {!info.RM_Name__c} <br/>
+				{!info.Unit_No__r.Relationship_Manager__r.Contact_Number__c} </b>
+
+            </p>
+         
+        
+      </div>
+    </body>
+</apex:page>

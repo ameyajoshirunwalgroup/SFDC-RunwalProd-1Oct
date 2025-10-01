@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Receipt_can_either_be_for_token_or_ST</fullName>
+    <active>false</active>
+    <errorConditionFormula>(Token_Amount_Receipt__c = TRUE)  &amp;&amp;  (Token_Amount_ST__c = TRUE)</errorConditionFormula>
+    <errorMessage>Receipt can be made for Token or for Service Tax Only</errorMessage>
+</ValidationRule>

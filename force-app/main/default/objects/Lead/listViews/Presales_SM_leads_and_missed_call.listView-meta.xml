@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Presales_SM_leads_and_missed_call</fullName>
+    <booleanFilter>(1 AND 2) OR (3 AND 4) AND 5</booleanFilter>
+    <columns>RW_Project__c</columns>
+    <columns>RDS_Country__c</columns>
+    <columns>RDS_Country_Code__c</columns>
+    <columns>FULL_NAME</columns>
+    <columns>LEAD.STATUS</columns>
+    <columns>Last_call_attempt_status__c</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>Is_Serviced__c</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>LEAD.LAST_UPDATE</columns>
+    <columns>Sales_Call_Attempt_Date__c</columns>
+    <columns>LEAD.UNREAD</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Last_call_attempt_status__c</field>
+        <operation>contains</operation>
+        <value>mISSED</value>
+    </filters>
+    <filters>
+        <field>Last_Call_Attempt_Date__c</field>
+        <operation>equals</operation>
+        <value>LAST_N_DAYS:3</value>
+    </filters>
+    <filters>
+        <field>LEAD.CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>LAST_N_DAYS:3</value>
+    </filters>
+    <filters>
+        <field>LEAD.STATUS</field>
+        <operation>equals</operation>
+        <value>Not Sure</value>
+    </filters>
+    <filters>
+        <field>First_Call_Attempt_Status__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Presales SM leads and missed call</label>
+</ListView>

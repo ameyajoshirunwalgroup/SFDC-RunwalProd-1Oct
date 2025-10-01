@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Area_Type__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Project Area Type</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Project__c</field>
+            <operation>equals</operation>
+            <valueField>Project_Area_Type__c.Project__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Project_Area_Type__c</referenceTo>
+    <relationshipLabel>Rate List Details (Project Area Type)</relationshipLabel>
+    <relationshipName>Rate_List_Details1</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

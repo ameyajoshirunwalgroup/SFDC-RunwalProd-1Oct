@@ -1,0 +1,11 @@
+<apex:page controller="SMAssignToProspect" action="{!assignSM}">
+    <apex:form id="fm1">
+        <apex:pageMessages >
+        </apex:pageMessages>
+           <!-- <apex:actionPoller action="{!incrementCounter}"  interval="5" rendered="{!IF(status == true, true, false)}"/> -->
+           <br/>
+            <center>
+               <apex:commandButton value="Back to Prospect" action="{!BackToPage}" />
+           </center> 
+    </apex:form>
+</apex:page>

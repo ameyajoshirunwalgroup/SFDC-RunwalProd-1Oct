@@ -1,0 +1,262 @@
+<apex:page applyHtmlTag="false" controller="RW_UnitTransferAndCancellation"  applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="PDF">
+	<html>
+   <head>
+      <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+      <style>
+         @page {
+         size: A4;
+         margin: 0;
+         }
+         @media print {
+         html, body {
+         width: 210mm;
+         height: 297mm;
+         }
+         }
+         body{
+         <!--font-family: samplefont;        -->
+         font-family:sans-serif;
+         font-size:13px;
+         }
+          p {
+  			min-width: 100px;
+		  }
+         .pagePadding{
+         padding-top:80px;
+         padding-left:60px;
+         padding-right:60px;
+         }
+         .tableBorder{
+         border-collapse: collapse;
+         }
+         .tableBorder td, .tableBorder th {
+         border: 1px solid #757575;
+         padding:2px;
+         width:145px;
+         }
+          .tableBorder td:first-child{width:200px;}
+          
+         
+      </style>
+   </head>
+        <body>
+            <div class= "pagePadding">
+                <table class="tableBorder" width="650">
+                	<th style="text-align:center;">
+                       <b>{!info.Project__r.Name}</b>
+                    </th>
+                    <th>
+                       <b><apex:outputText value="{0, date, dd-MM-yyyy}">
+                                <apex:param value="{!TODAY()}" />
+                            </apex:outputText></b>
+                    </th>	
+                    <tr><td colspan="2" style="text-align:center;"><b>CANCEL / UPGRADE AND TRANSFER</b></td></tr>
+                    <tr>
+                    	<td Style="width:50%;">DATE OF BOOKING</td>
+                        <td><apex:outputText value="{0, date, dd-MM-yyyy}">
+                                <apex:param value="{!info.Booking_Date__c}" />
+                            </apex:outputText></td>
+                    </tr>
+                    <tr>
+                    	<td>DATE OF CANCELLATION</td>
+                        <td><apex:outputText value="{0, date, dd-MM-yyyy}">
+                                <apex:param value="{!TODAY()}" />
+                            </apex:outputText></td>
+                    </tr>
+                    <tr>
+                    	<td>DATE OF REGISTRATION</td>
+                        <td><apex:outputText value="{0, date, dd-MM-yyyy}">
+                                <apex:param value="{!info.RW_Registration_Date__c}" />
+                            </apex:outputText></td>
+                    </tr>
+                    <tr>
+                        <td>REGISTRATION STATUS</td>
+                        <td>{!info.RW_Registration_Status__c}</td>
+                    </tr>
+                    <tr>
+                        <td>TOWER/FLAT NO./PROJECT</td>
+                        <td>{!info.Unit_No__r.RW_Param1__c}/ {!info.Unit_No__r.RW_Param2__c}/ {!info.Unit_No__r.RW_Param4__c}</td>
+                    </tr>
+                    <tr>
+                        <td>CRN (old unit)</td>
+                        <td>{!info.Opportunity__r.SAP_Customer_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Reason for cancellation/Transfer/</td>
+                        <td>{!info.Reason_For_Cancellation__c}</td>
+                    </tr>
+                    <tr>
+                        <td>1st APPLICANT/2nd APPLICANT</td>
+                        <td>{!oldAppNames}</td>
+                    </tr>
+                    <tr>
+                        <td>SALEABLE AREA (Sq ft)</td>
+                        <td>{!info.Unit_No__r.Saleable_Area__c}</td>
+                    </tr>
+                    <tr>
+                        <td>OLD AGREEMENT VALUE</td>
+                        <td>{!info.Allotment_Premium__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Net Rate (NRR) of old Unit</td>
+                        <td>{!info.Net_Rate__c}</td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL AMOUNT RECEIVED</td>
+                        <td>{!info.RW_Total_Receipt_Amount_Received__c}</td>
+                    </tr>
+                    <tr>
+                        <td>PRINCIPAL</td>
+                        <td>{!info.RW_Total_Amount_Received_Without_GST__c}</td>
+                    </tr>
+                    <tr>
+                        <td>TAX</td>
+                        <td>{!info.TAX__c}</td>
+                        <!--<td>{!info.Taxes_if_any__c}</td>-->
+                    </tr>
+                    <tr>
+                        <td>Less Deductions:</td>
+                        <td>{!lessDeductions}</td>
+                    </tr>
+                    <tr>
+                        <td>GST/ST - NON RECOVERABLE</td>
+                        <td>{!info.GST__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Swipe Charges with GST</td>
+                        <td>{!info.Swipe_Charges__c}</td>
+                    </tr>
+                    <tr>
+                        <td>INTEREST with GST</td>
+                        <td>{!info.Interest_with_GST__c}</td>
+                    </tr>
+                    <tr>
+                        <td>8% GST ON INTEREST</td>
+                        <td>{!gst8Perc}</td>
+                    </tr>
+                    <tr>
+                        <td>BROKERAGE PAID</td>
+                        <!--<td>{!brokerageAmount}</td>-->
+                        <td>{!info.Brokerage_Paid__c}</td>
+                    </tr>
+                    <tr>
+                        <td>TDS if paid</td>
+                        <td>{!info.Total_TDS_Amount_Paid_In_Rs__c}</td>
+                    </tr>
+                    <tr>
+                        <td>MVAT</td>
+                        <td>{!info.MVAT__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Stamp Duty Cheque Exchange Amt to be paid</td>
+                        <td>{!info.Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c}</td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL AMOUNT TO BE TRANSFERRED</td>
+                        <td>{!info.Total_Amount_to_be_Transferred__c}</td>
+                    </tr>
+                    <tr>
+                        <td>TRANSFERRED TO TOWER/FLAT NO./PROJECT</td>
+                        <td>{!newInfo.Unit_No__r.RW_Param1__c}/ {!newInfo.Unit_No__r.RW_Param2__c}/ {!newInfo.Unit_No__r.RW_Param4__c}</td>
+                    </tr>
+                    <!--<tr>
+                        <td>BOOKING DATE</td>
+                        <td><apex:outputText value="{0, date, dd-MM-yyyy}">
+                                <apex:param value="{!newInfo.Booking_Date__c}" />
+                            </apex:outputText></td>
+                    </tr>-->
+                    <tr>
+                        <td>CRN (New Unit)</td>
+                        <td>{!newInfo.Opportunity__r.SAP_Customer_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td>1st APPLICANT/2nd APPLICANT</td>
+                        <td>{!newAppNames}</td>
+                    </tr>
+                    <tr>
+                        <td>NEW AGREEMENT VALUE</td>
+                        <td>{!newInfo.Allotment_Premium__c}</td>
+                    </tr>
+                    <tr>
+                        <td>SALEABLE AREA</td>
+                        <td>{!newInfo.Unit_No__r.Saleable_Area__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Net Rate (NRR) of New Unit</td>
+                        <td>{!newInfo.Net_Rate__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Comments</td>
+                        <td>{!info.NOTE__c}</td>
+                    </tr>
+                </table>
+                
+                <br/>
+                <table class="tableBorder">
+                	<th >
+                       <b>CRM - RM (NAME AND SIGN)</b>
+                    </th>
+                    <th >
+                       <b>TL (NAME AND SIGN)</b>
+                    </th>
+                    <th >
+                        <b>AVP/VP (NAME AND SIGN)</b>
+                    </th>
+                    <th >
+                        <b>ACCOUNTS (NAME AND SIGN)</b>
+                    </th>
+                    <th >
+                       <b>HOD (NAME AND SIGN)</b>
+                    </th>
+                    <apex:outputText rendered="{!IF(OR(info.Project__r.Name ='Runwal Gardens', info.Project__r.Name ='Runwal MyCity', info.Project__r.Name ='Runwal Edge Dombivli'),true,false)}">
+                    <th >
+                       <b>MANOJ PALIWAL</b>
+                    </th>
+                    </apex:outputText>
+                    <th >
+                       <b>SNEHAL MADAM</b>
+                    </th>
+                    <tr style="height:100px;">
+                        <td>
+                        
+                        </td>
+                        <td>
+                        
+                        </td>
+                        <td>
+                        
+                        </td>
+                        <td>
+                        
+                        </td>
+                        <td>
+                        
+                        </td>
+                        <apex:outputText rendered="{!IF(OR(info.Project__r.Name ='Runwal Gardens', info.Project__r.Name ='Runwal MyCity', info.Project__r.Name ='Runwal Edge Dombivli'),true,false)}">
+                        <td>
+                        
+                        </td>
+                        </apex:outputText>
+                        <td>
+                        
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td>{!info.RM_Name__c}</td>
+                        <td>{!info.Unit_No__r.Relationship_Manager__r.TL_Name__c}</td>
+                        <td>{!info.Project__r.CRMHead__r.Name}</td>
+                        <td>{!info.Project__r.Accounts_Head__c}</td>
+                        <td>{!info.Project__r.Overall_CRM_Head__r.Name}</td>
+                        <apex:outputText rendered="{!IF(OR(info.Project__r.Name ='Runwal Gardens', info.Project__r.Name ='Runwal MyCity', info.Project__r.Name ='Runwal Edge Dombivli'),true,false)}">
+                        <td>MANOJ PALIWAL</td>
+                        </apex:outputText>
+                        <td>SNEHAL MADAM</td>
+                    </tr>
+                </table>
+            </div>
+        </body>
+    </html>
+</apex:page>

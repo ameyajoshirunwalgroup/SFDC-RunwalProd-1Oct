@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_on_closed_lost</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(IF(
+ISPICKVAL( StageName , &quot;Lost&quot;),
+!ISBLANK(RW_Project_Unit__c),false ),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>You cannot select the stage name as Lost as the unit is tagged.</errorMessage>
+</ValidationRule>

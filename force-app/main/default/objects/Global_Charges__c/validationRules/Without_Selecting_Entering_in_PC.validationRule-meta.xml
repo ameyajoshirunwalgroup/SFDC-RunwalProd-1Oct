@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Without_Selecting_Entering_in_PC</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Posting_to_FA_system__c , &apos;&apos;) , NOT( ISBLANK( PC__c ) ) )</errorConditionFormula>
+    <errorDisplayField>PC__c</errorDisplayField>
+    <errorMessage>You cannn&apos;t enter in PC without selecting Posting to FA System Pick Value.</errorMessage>
+</ValidationRule>

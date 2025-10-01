@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_Reference</fullName>
+    <active>true</active>
+    <errorConditionFormula>And(
+  CreateDate__c &gt;= DATE(2021,01,01),
+IF((ISPICKVAL( RW_Reference_Source__c , &apos;Existing Customer Reference&apos;)),ISBLANK(  Customer_Reference__c ),false ),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>RW_19_99_Received__c</errorDisplayField>
+    <errorMessage>If Reference source is &apos;Existing Customer Reference&apos; need to fill Customer Reference</errorMessage>
+</ValidationRule>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_To_Be_Paid_PickList_ValidationAfterOn</fullName>
+    <active>true</active>
+    <description>When User Select From Dt. of Booking of PickList and Enter data in On date</description>
+    <errorConditionFormula>AND( ISPICKVAL( Is_to_be_Paid__c ,&apos;From Dt. of Booking&apos;) ,NOT( ISBLANK( On_date__c ) ))</errorConditionFormula>
+    <errorDisplayField>On_date__c</errorDisplayField>
+    <errorMessage>After Selecting From Dt. of Booking Picklist Value,You Cannot enter in &quot;On date&quot; field</errorMessage>
+</ValidationRule>

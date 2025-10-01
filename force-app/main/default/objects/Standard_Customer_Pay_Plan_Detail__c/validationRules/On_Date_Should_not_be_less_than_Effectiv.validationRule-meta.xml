@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>On_Date_Should_not_be_less_than_Effectiv</fullName>
+    <active>true</active>
+    <errorConditionFormula>On_date__c  &lt;   Standard_Pay_Plan_Header__r.Effective_from__c</errorConditionFormula>
+    <errorDisplayField>On_date__c</errorDisplayField>
+    <errorMessage>On date should be less than the Effective from date of the Payment Plan.</errorMessage>
+</ValidationRule>

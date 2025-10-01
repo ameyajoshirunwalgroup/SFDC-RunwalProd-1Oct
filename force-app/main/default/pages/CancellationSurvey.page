@@ -1,0 +1,100 @@
+<apex:page Controller="CancellationSurveyController" action="{!recCS}" sidebar="false" showHeader="false" applyHtmlTag="true" standardStylesheets="false" docType="html-5.0">
+    <apex:form >
+        
+        <a class="navbar">
+            <img style="width:100px;" src ="https://www.runwal.com/images/runwal-logo.png"  alt="logo"/>
+        </a> 
+        
+        <div style="padding:30px">
+            <center>
+                <h3>
+                    <u>CANCELLATION SURVEY</u>
+                </h3>
+            </center>
+            <br/>
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+            <b>Dear {!custName},</b><br/><br/>
+            <b>We regret to know your decision to withdraw your booking from our project. We request your valuable inputs to serve you better.</b><br/><br/>
+            <b>1. We would like to know your reason for Cancellation.</b>
+            <apex:selectCheckboxes id="ress" value="{!res}" layout="pageDirection">
+                <apex:selectOptions value="{!Reasons}"/>
+                <!-- <apex:actionSupport event="onchange" action="{!reasons}"/> -->
+            </apex:selectCheckboxes>
+            <div id="cancRes" style="padding-left:30px">
+                Please Enter your Comments:<br/>
+                <apex:inputTextarea rows="2" value="{!otherRes}" cols="100"/>
+            </div><br/>
+        	<b>2. Will change of configuration or Project match your requirements?</b>
+            <apex:selectCheckboxes value="{!config}" layout="pageDirection">
+            	<apex:selectOptions value="{!ConfigList}"/>
+               <!-- <apex:actionSupport event="onchange" action="{!configRes}"/>-->
+        	</apex:selectCheckboxes>
+            <div id="confRes" style="padding-left:30px">
+                Please Enter your Comments:<br/>
+                <apex:inputTextarea rows="2" value="{!otherConfig}" cols="100" />
+            </div><br/>
+            <b>3. Will any payment structure match your requirements?</b>
+            <apex:selectCheckboxes value="{!payStr}" layout="pageDirection">
+            	<apex:selectOptions value="{!PaymentList}"/>
+               <!-- <apex:actionSupport event="onchange" action="{!payStrRes}"/>-->
+        	</apex:selectCheckboxes>
+            <div id="payRes" style="padding-left:30px">
+                Please Enter your Comments:<br/>
+                <apex:inputTextarea rows="2" value="{!otherPayStr}" cols="100" />
+            </div><br/>
+            <b>4. How satisfied were you with our Teams.</b>
+            <p style="padding-left:40px"> <b>- Sales Team and Booking process</b></p>
+            <apex:selectRadio style="padding-left:50px" value="{!salesTeam}">
+            	<apex:selectOptions value="{!SalesTeamList}"/>
+        	</apex:selectRadio>
+            <p style="padding-left:40px"> <b>- CRM Representative and Post Sales Process</b></p>
+            <apex:selectRadio style="padding-left:50px" value="{!crmRep}">
+            	<apex:selectOptions value="{!CrmRepList}"/>
+        	</apex:selectRadio><br/>
+            <b>5. Will you consider recommending Runwal Projects to anyone?</b>
+            <apex:selectRadio value="{!recm}" layout="pageDirection">
+            	<apex:selectOptions value="{!recmList}"/>
+        	</apex:selectRadio><br/>
+            <b>6. Any Other Feedback</b><br/><br/>
+            <div style="padding-left:30px">
+                <apex:inputTextarea rows="2" value="{!otherFB}" cols="100" />
+            </div><br/>
+         
+        <apex:commandButton value="Submit" action="{!addReasons}" rerender="out" status="status"/>
+        </div>
+        
+        <script>
+        /*console.log('out: ', document.getElementById("out"));
+        	const cancResEle = document.getElementById("cancRes");
+        	console.log('showOtherRes: ', {!showOtherRes});
+        	if(!{!showOtherRes}){
+                cancResEle.style.display = "none";
+            }else{
+            	
+            }
+        	const confRes = document.getElementById("confRes");
+        	console.log('showconfigOtherRes: ', {!showconfigOtherRes});
+        	if(!{!showconfigOtherRes}){
+                confRes.style.display = "none";
+            }
+        	const payRes = document.getElementById("payRes");
+        	console.log('showpayStrOtherRes: ', {!showpayStrOtherRes});
+        	if(!{!showpayStrOtherRes}){
+                payRes.style.display = "none";
+            }
+        	
+        	function reasons(){
+                console.log('showpayStrOtherRes: ', {!res});
+            	
+            }*/
+            
+        	function reasons(){
+                var selectedvalue = document.getElementById("{!$Component.ress}").value; 
+                console.log('selectedvalue: ', selectedvalue);
+            }
+        </script>
+        
+        
+        
+    </apex:form>
+</apex:page>

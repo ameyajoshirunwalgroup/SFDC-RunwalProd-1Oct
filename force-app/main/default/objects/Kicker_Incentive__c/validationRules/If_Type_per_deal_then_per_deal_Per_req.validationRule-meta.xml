@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>If_Type_per_deal_then_per_deal_Per_req</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(ISPICKVAL(Type__c,&apos;Per Deal %&apos;), ISBLANK( Per_Deal__c ), False)</errorConditionFormula>
+    <errorDisplayField>Per_Deal__c</errorDisplayField>
+    <errorMessage>Per Deal %  Should not be blank.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,130 @@
+<apex:page controller="InventoryMatrix" sidebar="false">
+    <style>
+    .main
+    {
+        width : 1300px;
+    }
+    .inner-div
+    {
+        width:150px;
+        height: 50px;
+        display: -webkit-inline-box;
+        border: rgb(155, 155, 155) solid;
+    }
+    .internal-div
+    {
+        margin-top:20px;
+        margin-bottom: 20px;
+        margin-left: 25px;
+    }
+    .Processing
+        {
+            position: fixed;
+            background: url('/img/loading32.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+            
+            width: 100%;
+            height: 100%;
+            z-index: 1004;
+            left: 0%;
+            top: 0%;
+        }
+    </style>
+   <apex:form >
+   <apex:actionStatus id="act_Type" startStyleClass="Processing"/>
+     <apex:pageBlock title="Inventory Matrix">
+         <apex:pageMessages id="pageMessages"></apex:pageMessages>
+     <apex:outputPanel >
+           <table>
+               <tr>
+                   <td></td>
+                   <td><div style="background-color: rgb(255,255,51); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Hold</div></td>
+               
+                   <td></td>
+                   <td><div style="background-color: green; height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Available</div></td>
+               
+                   <!--<td></td>
+                   <td><div style="background-color: rgb(255,63,4); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Cancelled</div></td> -->
+               
+                   <td></td>
+                   <td><div style="background-color: rgb(120,81,169); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Blocked</div></td>
+               
+                   <td></td>
+                   <td><div style="background-color: rgb(186,7,7); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Booked</div></td>
+                   
+                   <td></td>
+                   <td><div style="background-color: rgb(0,0,0); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Refuge Units</div></td>
+               
+                 <!--  <td></td>
+                   <td><div style="background-color: rgb(115,115,200); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">BIP - Sales</div></td>
+                   
+                   <td></td>
+                   <td><div style="background-color: rgb(255,0,88); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Welcome Call Pending</div></td>
+               
+                   <td></td>
+                   <td><div style="background-color: rgb(152,152,152); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">CRM returned to Sales</div></td>
+               
+                   <td></td>
+                   <td><div style="background-color: rgb(0,0,112); height: 15px; width: 15px; float: left;"></div><div style="margin-left: 18px;">Sold</div></td>-->
+                   
+                   
+               </tr>
+           </table>
+       </apex:outputPanel>
+         
+       <apex:pageBlockSection title="Inventory Section" columns="3" id="PBS">
+       
+       
+           <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Select Project"/> 
+                 <apex:selectList value="{!SelectedProjId}" size="1" id="prjid"> 
+                      <apex:selectOptions value="{!ProjectNames}" />
+                     <!-- <apex:actionSupport action="{!TowersName}" event="onchange" reRender="towerid,prjid" status="act_Type"/>-->
+                      <apex:actionSupport event="onchange" reRender="towerid,prjid,projlist" status="act_Type"/>
+                 </apex:selectList>    
+            </apex:pageBlockSectionItem>
+            
+        
+        <apex:pageBlockSectionItem >
+           <apex:outputLabel value="Select Tower" />
+           <apex:selectList value="{!SelectedTowerId}" size="1" id="towerid"> 
+                  <apex:selectOptions value="{!TowerNames}" />
+                    <apex:actionSupport action="{!SearchProjectUnit}" event="onchange" reRender="projlist, pageMessages" status="act_Type"/>
+            </apex:selectList>     
+        </apex:pageBlockSectionItem>
+            
+        </apex:pageBlockSection> 
+          
+        <br/><br/><br/>
+        <div  class="main">
+        <apex:outputPanel id="projlist">
+            <div style="overflow-x: scroll; max-height: 500px;">
+                <table>
+                <apex:repeat value="{!TowerName}" var="proj1">
+                    <tr>
+                        <td>
+                            <div class="inner-div" >
+                            <div class="internal-div" >
+                            <apex:outputLabel value="Floor - {!proj1}" style="font-weight:bold" ></apex:outputLabel>
+                            </div>
+                            </div>
+                        </td>
+                        <apex:repeat value="{!MapTowerToProjUnit[proj1]}" var="proj" rendered="{!if(MapTowerToProjUnit != null && MapTowerToProjUnit[proj1] != null, true, false)}" >
+                        <td>
+                            <div class="inner-div" Style="{!IF(proj.RW_Unit_Status__c  == "Hold","background-color: rgb(255,255,51);",IF(proj.RW_Unit_Status__c =="Available","background-color: rgb(0, 176, 80);",IF(proj.RW_Unit_Status__c =="Blocked","background-color: rgb(120,81,169);",IF(proj.RW_Unit_Status__c =="Booked","background-color: rgb(186,7,7);",IF(proj.RW_Unit_Status__c =="Refuge Units","background-color: rgb(0,0,0);","background-color: rgb(255,63,4);")))))}">
+                            <div class="internal-div" >
+                            <a href="/{!proj.Id}" target="_blank" id="{!proj.Id}" onblur="LookupHoverDetail.getHover('{!proj.Id}').hide();" onfocus="LookupHoverDetail.getHover('{!proj.Id}', '/{!proj.Id}/m?retURL=%2F{!proj.Id}&isAjaxRequest=1').show();" onmouseout="LookupHoverDetail.getHover('{!proj.Id}').hide();" onmouseover="LookupHoverDetail.getHover('{!proj.Id}', '/{!proj.Id}/m?retURL=%2F{!proj.Id}&isAjaxRequest=1').show();">{!proj.Name}</a>
+                            </div>
+                            </div>
+                        </td>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+                </table>
+            </div>
+        </apex:outputPanel>
+        </div>
+     </apex:pageBlock>
+   </apex:form>
+</apex:page>

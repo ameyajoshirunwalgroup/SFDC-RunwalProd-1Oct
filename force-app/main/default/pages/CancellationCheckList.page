@@ -1,0 +1,534 @@
+<apex:page applyHtmlTag="false" controller="RW_UnitTransferAndCancellation"  applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="PDF" >
+  <html>
+   <head>
+      <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+      <style>
+         @page {
+         size: A4;
+         margin: 0;
+         }
+         @media print {
+         html, body {
+         width: 210mm;
+         height: 297mm;
+         }
+         }
+         body{
+         <!--font-family: samplefont;        -->
+         font-family:sans-serif;
+         font-size:13px;
+         }
+          p {
+            min-width: 100px;
+          }
+         .pagePadding{
+         padding-top:80px;
+         padding-left:60px;
+         padding-right:60px;
+         }
+         .tableBorder{
+         border-collapse: collapse;
+         }
+         .tableBorder td, .tableBorder th {
+         border: 1px solid #757575;
+         padding:2px;
+         width:145px;
+         }
+          .tableBorder td:first-child{width:200px;}
+          
+         
+      </style>
+   </head>
+   <body>
+      <div class= "pagePadding">
+         <p>
+          <u>
+             <b>Date:</b> <b><apex:outputText value="{0, date, MMMM d','  yyyy}">
+    <apex:param value="{!NOW()}" />
+</apex:outputText></b> <br/>
+         </u> 
+          </p>
+         <p style="text-align:center;">
+            <b><u>Refund/Forfeiture/ Internal Fund Transfer Application</u></b>
+         </p>
+         <p>
+            Nature of Request: Post Cancellation Refund/ Forfeiture/ Internal Fund Transfer
+         </p>
+         <p>
+            Comments : {!info.Reason_For_Cancellation__c}
+         </p>
+         <p>
+            Resale Status : 
+         </p>
+         <p>
+            Customer Name : <b> {!info.Primary_Applicant_Name__c}</b>
+         </p>
+         <p>
+            <b><u>Booking Details</u></b>
+         </p>
+         <div style="width:100%;">
+            <div style="float:left;width:15%;">
+               Project: 
+            </div>
+            <div style="float:left;width:20%;">
+               <b>{!info.Project__r.Name}</b>
+            </div>
+            <div style="float:left;width:5%">
+               Unit: 
+            </div>
+            <div style="float:left;width:15%">
+               <b>{!info.Unit_No__r.RW_Param4__c}</b>
+            </div>
+            <div style="float:left;width:15%">
+               Booking Source 
+            </div>
+             <div style="float:left;width:20%">
+               <b>{!info.Source_of_Booking__c}</b>
+            </div>
+             
+         </div>
+          
+         <div style="width:100%;">
+            <div style="float:left;width:35%;padding-top:7px;">
+               Date of Booking: &nbsp; <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}">
+                     <apex:param value="{!info.Booking_Date__c}" /> 
+                </apex:outputText>
+            </div>
+            <div style="float:left;width:30%;padding-top:7px;">
+               Saleable Area : {!info.Unit_No__r.Saleable_Area__c}
+            </div>
+            <div style="float:left;width:35%;padding-top:7px;">
+               Carpet Area : {!info.Carpet_Area__c}
+            </div>
+             
+         </div>
+         <div style="width:100%;padding-top:10px;">
+            <div style="float:left;width:35%;padding-top:7px;">
+               <!--Rate of booking : <b>{!info.Quotation__r.Total_Rate_Card_PSF__c}</b>-->
+               Rate of booking : &nbsp;<apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Quotation__r.Total_Rate_Card_PSF__c}"/>
+                </apex:outputText>
+            </div>
+            <div style="float:left;width:40%;padding-top:7px;">
+               Any Additional Discount/Waivers Offered: 
+            </div>
+             <div style="float:left;width:10%;padding-top:7px;">
+                 <!--<b>{!info.RW_Total_Interest_Amount_Waived__c}</b>-->
+                 <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.RW_Total_Interest_Amount_Waived__c}"/>
+                </apex:outputText>                   
+            </div>
+         </div>
+          <div style="width:100%;padding-top:10px;">
+           <div style="float:left;width:20%;padding-top:7px;">
+               Agreement Value:
+            </div>
+              <div style="float:left;width:15%;padding-top:7px;">
+              <!--<b> {!info.Quotation__r.Agreement_Value__c}</b>-->
+               <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Allotment_Premium__c}"/>
+                </apex:outputText>
+            </div>
+            <div style="float:left;width:20%;padding-top:7px;">
+               Demanded Amount:
+            </div>
+              <div style="float:left;width:15%;padding-top:7px;">
+                  <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.RW_Total_Demand_Raised__c}"/>
+                </apex:outputText>
+             <!--<b> {!info.RW_Total_Demand_Raised__c} </b>-->
+            </div>
+            <div style="float:left;width:15%;padding-top:7px;">
+               Paid Amount: 
+            </div>
+              <div style="float:left;width:15%;padding-top:7px;">
+              <!--<b>{!info.RW_Total_Receipt_Amount_Received__c} </b>-->
+                  <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.RW_Total_Receipt_Amount_Received__c}"/>
+                </apex:outputText>
+            </div>
+         </div>
+         <div style="width:100%;padding-top:10px;">
+            <div style="float:left;width:17%;padding-top:7px;">
+               Registration status:
+            </div>
+             <div style="float:left;width:25%;padding-top:7px;">
+             <b>  {!info.RW_Registration_Status__c}</b>
+            </div>
+            <div style="float:left;width:20%;padding-top:7px;">
+               Forfeiture Clause:
+            </div>
+             <div style="float:left;width:30%;padding-top:7px;">
+              <b> {!info.Forfeit_Percentage__c}% of {!info.Forfeiture_Amount_Type__c} </b>
+            </div>
+            <div style="float:left;width:30%;padding-top:7px;">
+               <apex:outputPanel rendered="{!info.Referral_Amount_Cancellation_Checklist__c != null && info.Referral_Amount_Cancellation_Checklist__c > 0}">
+                        Referral Amount: {!info.Referral_Amount_Cancellation_Checklist__c}
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!info.Referral_Amount_Cancellation_Checklist__c != null && info.Referral_Amount_Cancellation_Checklist__c == 0}">
+                        Referral Amount: {!info.Referral_Amount__c}
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!info.Referral_Amount_Cancellation_Checklist__c == null}">
+                        Referral Amount: 
+                    </apex:outputPanel>
+            </div>
+            <div style="float:left;width:30%;padding-top:7px;">
+                Voucher Deductions:
+                <apex:outputPanel rendered="{!info.Scheme_of_Customer__c != null}">
+                          {!info.Scheme_of_Customer__r.Name} 
+                    </apex:outputPanel>
+            </div>
+          
+         </div>
+          <br/><br/><br/><br/><br/><br/>
+          <p>
+            <b><u>Resale Status Details</u></b>
+         </p>
+          <div style="width:100%;">
+            <div style="float:left;width:28%">
+               Resale Status: 
+                <apex:outputPanel rendered="{!info.Resale_Status__c != null}">
+                          {!info.Resale_Status__c} 
+                    </apex:outputPanel>
+            </div>
+            <div style="float:left;width:28%">
+               New Rate: <apex:outputPanel rendered="{!info.New_Rate__c != null}">
+                          {!info.New_Rate__c} 
+                    </apex:outputPanel>
+            </div>
+            <div style="float:left;width:40%">
+               New Flat Agreement Value: <apex:outputPanel rendered="{!info.New_Flat_Agreement_Value__c != null}">
+                          {!info.New_Flat_Agreement_Value__c} 
+                    </apex:outputPanel>
+            </div>
+            <div style="float:left;width:30%">
+               Received Amount: <apex:outputPanel rendered="{!info.Received_Amtount__c != null}">
+                          {!info.Received_Amtount__c} 
+                    </apex:outputPanel>
+            </div>
+            
+         </div>
+          <br/>
+          <br/>
+          <br/>
+         <p>
+            <b><u>Working</u></b>
+         </p>
+         <table class="tableBorder">
+            <th >
+               <b>Particulars</b>
+            </th>
+            <th>
+               <b>Received</b>
+            </th>
+            <th>
+               <b>Deductions</b>
+            </th>
+            <th>
+               <b>Comments</b>
+            </th>
+            <tr>
+               <td>
+                  Total Amount Received (R)  
+               </td>
+               <td>
+                   <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.RW_Total_Receipt_Amount_Received__c}"/>
+                </apex:outputText>
+                  <!--{!info.RW_Total_Receipt_Amount_Received__c}  -->
+               </td>
+               <td>
+                    
+               </td>
+               <td>
+                  
+               </td>
+            </tr>
+            <tr>
+               <td>                   
+                  GST Tax (G)  
+               </td>
+               <td>
+                   
+                 <!-- {!info.RW_GST_On_Interest__c}-->
+               </td>
+               <td>
+                  <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.GST_Tax_G__c}"/>
+                </apex:outputText>
+               </td>
+               <td>
+                   
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Service Tax (S)
+               </td>
+               <td>
+                   
+                 <!--{!info.ST_Token_Amount__c}  -->
+               </td>
+               <td>
+                   <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Taxes_if_any__c}"/>
+                </apex:outputText>
+               </td>
+               <td>
+                    
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  TDS (T)  
+               </td>
+               <td>
+                   
+                  <!--{!info.RW_Total_TDS_Outstanding__c}-->
+               </td>
+               <td>
+                    <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Total_TDS_Amount_Paid_In_Rs__c}"/>
+                    </apex:outputText>
+               </td>
+               <td>
+                   
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  MVAT (M)
+               </td>
+               <td>
+                  
+                   <!--{!info.MVAT__c}-->
+               </td>
+               <td>
+                     <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.MVAT__c}"/>
+                </apex:outputText>
+               </td>
+               <td>
+                     
+               </td>
+            </tr>
+            <tr>
+               <td>
+                 Cancellation Charges (C) = {!info.Forfeit_Percentage__c}% of {!info.Forfeiture_Amount_Type__c}
+               </td>
+               <td>
+                   
+                   <!--{!info.MVAT__c}-->
+               </td>
+               <td>
+                   <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Forfeiture_Amount__c}"/>
+                </apex:outputText>
+                    
+               </td>
+               <td>
+                     {!info.Forfeit_Percentage__c}% of {!info.Forfeiture_Amount_Type__c}
+               </td>
+            </tr> 
+            <tr>
+               <td>
+                  Add CGST (C1)  
+               </td>
+               <td>
+                  <!--{!info.CGST__c}-->
+                   
+               </td>
+               <td>
+                        <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.CGST__c}"/>
+                </apex:outputText>                  
+               </td>
+               <td>
+                        {!$Label.RW_GSTPercentage}% of (C)
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Add SGST (C2)  
+               </td>
+               <td>
+                   
+                  <!--{!info.SGST__c}-->
+               </td>
+               <td>
+                 <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.SGST__c}"/>
+                </apex:outputText>
+               </td>
+               <td>
+                  {!$Label.RW_GSTPercentage}% of (C)
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Any Accured Interest Amt (I)  
+               </td>
+               <td>
+                   
+               </td>
+               <td>
+                   <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Interest_Value__c}"/>
+                </apex:outputText>
+                  
+               </td>
+               <td>
+                     
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Brokerage Paid (B)  
+               </td>
+               <td>
+                   
+                  <!--{!info.Brokerage_Amount__c}  -->
+               </td>
+               <td>
+                  <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Brokerage_Amount__c}"/>
+                </apex:outputText>
+               </td>
+               <td>
+                    
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Total  
+               </td>
+               <td>
+                    <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.RW_Total_Receipt_Amount_Received__c}"/>
+                    </apex:outputText>                 
+               </td>
+               <td>
+                   <apex:outputText value="{0, number, ###,##0}">
+                    <apex:param value="{!info.Total_Forfeiture_Amount__c}"/>
+                    </apex:outputText> 
+                  
+               </td>
+               <td>
+                   
+               </td>
+            </tr>
+            
+             <tr>
+             <td colspan="2">
+                 <b>Amount</b>
+                 </td>
+                 <td>
+                  <apex:outputPanel rendered="{!info.Payment_Refund_Amount__c == 'Forfeiture'}">
+                     <b><apex:outputText value="{0, number, ###,##0}">
+                         <apex:param value="{!info.Total_Forfeiture_Amount__c}"/>
+                     </apex:outputText></b>
+                  </apex:outputPanel>
+                  <apex:outputPanel rendered="{!info.Payment_Refund_Amount__c != 'Forfeiture'}">
+                     <b><apex:outputText value="{0, number, ###,##0}">
+                         <apex:param value="{!info.Final_Refund_Amount__c}"/>
+                     </apex:outputText></b>
+                  </apex:outputPanel>
+               <!-- <b>  <apex:outputText value="{0, number, ###,##0}">
+                 <apex:param value="{!info.Final_Refund_Amount__c}"/>
+             </apex:outputText></b>-->
+                     <!-- {!info.Final_Refund_Amount__c} -->
+                 </td>
+                 <td>
+                 <b>
+                  <!--REFUND TO {!info.Primary_Applicant_Name__c}   -->
+                     <apex:outputPanel rendered="{!info.Payment_Refund_Amount__c != null}">
+                          {!info.Payment_Refund_Amount__c} To {!info.Primary_Applicant_Name__c}
+                    </apex:outputPanel>
+                     <apex:outputPanel rendered="{!info.Payment_Refund_Amount__c == null}">
+                          REFUND To {!info.Primary_Applicant_Name__c}
+                    </apex:outputPanel>
+                  </b>
+                 </td>
+             </tr>
+         </table>
+          <br/>
+          <table class="tableBorder">
+            <th >
+               <b>Prepared By (RM)</b>
+            </th>
+            <th>
+               <b>Reviewed By (CRM Head)</b>
+            </th>
+            <th>
+               <b>Reviewed By (Accounts Head)</b>
+            </th>
+            <th>
+               <b>Reviewed By (Senior VP)</b>
+            </th>
+            <th>
+               <b>CRM-HOD</b>
+            </th>
+            <th>
+               <b>Sales – Site Head</b>
+            </th>
+            <th>
+               <b>Director</b>
+            </th>
+            <tr style="height:100px;">
+               <td>
+                  
+               </td>
+               <td>
+                  
+               </td>
+               <td>
+                  
+               </td>
+               <td>
+                 
+               </td>
+               <td>
+                 
+               </td>
+               <td>
+                 
+               </td>
+               <td>
+                 
+               </td>
+            </tr>
+           
+            <tr>
+               <td>
+                  {!info.RM_Name__c}  
+               </td>
+               <td>
+                  {!info.Project__r.CRMHead__r.Name} 
+               </td>
+               <td>
+                 <!-- {!$Label.Accounts_Head} -->
+                 {!info.Project__r.Accounts_Head__c}
+               </td>
+               <td>
+                 {!$Label.Senior_VP}
+               </td>
+               <td>
+                 {!info.Project__r.Overall_CRM_Head__r.Name}
+               </td>
+               <td>
+                  {!$Label.Sales_HOD}
+               </td>
+               <td>
+                  {!$Label.RW_Director} 
+               </td>
+            </tr>
+            
+            
+         </table>
+      </div>
+   </body>
+</html>
+</apex:page>

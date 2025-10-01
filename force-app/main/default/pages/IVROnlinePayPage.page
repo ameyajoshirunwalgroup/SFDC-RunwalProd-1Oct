@@ -1,0 +1,221 @@
+<apex:page controller="IVROnlinePay" action="{!successPage}"  sidebar="false" showHeader="false" applyHtmlTag="true" standardStylesheets="false" docType="html-5.0">
+	<apex:form >
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <style>                                      
+                    body{
+                    margin: 0;
+                    padding: 0;                    
+                    }
+                    .navbar img{
+                    width:70px;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    label{
+                    font-weight:600;
+                    font-size:20px;
+                    }
+                    .mainDiv{
+                    padding:20px;
+                    border-radius:5px;
+                    -webkit-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    -moz-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    }
+                    .form-control:focus {
+                    background-color: #fff;
+                    border-color: #bc8b2d;
+                    outline: 0;
+                    box-shadow: 0 0 0 1px rgb(188, 139, 45);
+                    }
+                    .btn{
+                    padding:8px 10px;
+                    color: #fff;
+                    cursor: pointer !important;
+                    border: solid 1px #A8822B;
+                    width: 100%;
+                    display: inline-block;
+                    background-color: #A8822B;
+                    width: 85px;
+                    font-size: 16px;
+                    font-weight:400;
+                    transition:0.2s;
+                    }
+                    .btn:hover{
+                    padding:8px 10px;
+                    color:A8822B;
+                    background-color: #fff;
+                    border:1px solid #A8822B;
+                    }
+                    .custom-control label img{
+                      width: 45px;
+                    }
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.9rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.9rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                   
+                    /*------------ Ipad -----------------*/
+                    @media screen and (max-width: 768px) {
+                    .navbar img{
+                    width:65px;
+                    text-align:center;
+                    }
+                    .custom-control label img{
+                      width: 40px;
+                    }
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.5rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.5rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                    }
+                     /*------------ Mobile -----------------*/
+                    @media screen and (max-width: 480px) {
+                    .navbar img{
+                    width:50px;
+                    text-align:center;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    .custom-control {
+                    padding-bottom: 35px;
+                    }
+                    label{
+                    font-weight:500;
+                    font-size:18px;
+                    }
+                    .custom-control label img{
+                      width: 40px;
+                    }
+                    
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 3.50rem;
+                        left: 0.7rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 3.50rem;
+                        left: 0.7rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                    
+                    }
+                    .spinnerBg {
+                        position: fixed;
+                        width: 100%;
+                        height: 100%;
+                        background-color: #000;
+                        opacity: 0.2;
+                        z-index: 999999;
+                        left: 0;
+                        top: 0;
+                    }
+        
+                    .Assigned {
+                        position: fixed;
+                        background: url('{!URLFOR($Resource.CIFLoading)}');
+                        background-size: 50px 50px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 1004;
+                        left: 0%;
+                        top: 0%;
+                    }
+                </style>
+            </head>
+            <body>
+                <a class="navbar">
+                    <img src ="https://www.runwal.com/images/runwal-logo.png"  alt="logo"/>
+                </a>
+                <div class="container pt-5" id="mainDiv">
+                    <div class="row" id="secondDiv">
+                        <apex:actionstatus id="status">
+                            <apex:facet name="start">
+                                <div class="spinnerBg" />
+                                <div class="Assigned" />
+                            </apex:facet>
+                        </apex:actionstatus>
+                        <apex:pageBlock title="Payment">
+                            <br/>
+                        	<apex:pageBlockSection columns="1" rendered="{!separatePay == true}" >
+                            	 <apex:outputLabel value="Total Demand Amount: " />
+                                <apex:input label="Amount" value="{!totalOutStanding}"/><br/>
+                                <apex:commandButton styleclass="btn" value="Pay" title="Pay" action="{!pay}"/>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!separatePay == false}">
+                                <apex:input label="Total Demand Amount: " value="{!principalAmount}"/>
+                                <apex:commandButton styleclass="btn" value="Pay" title="Pay" action="{!demandPay}"/><br/><br/>
+                                <apex:input label="Total GST Amount: " value="{!gstAmount}"/>
+                                <apex:commandButton styleclass="btn" value="Pay" title="Pay" action="{!gstPay}"/>
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                        
+                    </div>
+                </div>
+            </body>
+        </html>
+    </apex:form>
+
+</apex:page>

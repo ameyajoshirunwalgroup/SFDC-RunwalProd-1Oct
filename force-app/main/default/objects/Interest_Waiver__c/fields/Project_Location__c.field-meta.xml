@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Location__c</fullName>
+    <externalId>false</externalId>
+    <formula>TEXT(Demand__r.Booking__r.Project__r.Project_Location__r.Location__c)</formula>
+    <label>Project Location</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

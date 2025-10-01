@@ -1,0 +1,140 @@
+<apex:page controller="CreateNewChannelPartnerController" sidebar="false" showheader="false" standardstylesheets="false" id="thePage" deferlastcommanduntilready="true" cache="false">
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Create Channel Partner</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <!-- <link rel="stylesheet" href="css/runwal.css" /> -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.RunwalCSS,'/css/runwal.css')}" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+        .spinnerBg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: 0.2;
+            z-index: 999999;
+            left: 0;
+            top: 0;
+        }
+        
+        .Assigned {
+            position: fixed;
+            background: url('{!URLFOR($Resource.CIFLoading)}');
+            background-size: 50px 50px;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+            z-index: 1004;
+            left: 0%;
+            top: 0%;
+        }
+        
+        .errorMsg {
+            color: red;
+        }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <apex:form styleclass="form">
+                <apex:actionstatus id="spinnerStatus">
+                    <apex:facet name="start">
+                        <div class="spinnerBg" />
+                        <div class="Assigned" /> </apex:facet>
+                </apex:actionstatus>
+                <div class="row mrgn_t15">
+                    <div class="col-sm-3">
+                        <!--<img src="images/runwal_greens.png" alt="Runwal Greens" width="200" />-->
+                        <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}" style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> </div>-->
+                        <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}" style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> </div>
+                    <div class="col-sm-6 text-center">
+                        <h1 class="heading1"><span>Create Channel Partner</span></h1> </div>
+                    <div class="col-sm-3 text-right">
+                        <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->&nbsp; </div>
+                </div>
+                <div style="font-size: 17px;color: red;font-weight: bold;margin-top:5px;" id="errorDiv" align="center">
+                    <apex:outputtext value="{!strError}" id="errorId" />
+                </div>
+                <div class="frmContainer"> </div>
+                <apex:outputpanel layout="block">
+                    <!--rendered="{!AND(!isNew,!isCpExist)}"-->
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">* CP PAN no: </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!NewCP.Broker_Pan_No__c}" styleclass="form-control" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">* CP Name: </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!NewCP.Name}" styleclass="form-control" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">* Country: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputfield value="{!NewCP.Dialing_Country1__c}" styleclass="form-control" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">* Country Code: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputfield value="{!NewCP.Dialing_Country_Code1__c}" styleclass="form-control" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">* Mobile No.: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputfield value="{!NewCP.RW_Mobile_No__c}" styleclass="form-control" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel"> *Email: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputfield value="{!NewCP.RW_Email__c}" styleclass="form-control" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <apex:commandbutton action="{!goBack}" value="Cancel" styleclass="btn btn-danger" style="margin-bottom :5px" /> &nbsp;
+                            <apex:commandbutton action="{!saveMethod}" value="Save" styleclass="btn btn-success" style="margin-bottom :5px" />
+                            <!-- rendered="{!and(!isNew, !isCpExist)}" />-->
+                        </div>
+                    </div>
+                </apex:outputpanel>
+            </apex:form>
+        </div>
+    </body>
+
+    </html>
+</apex:page>

@@ -1,0 +1,987 @@
+<apex:page docType="html-5.0"   showHeader="false" Controller="QuotationExtn" sidebar="false" standardStylesheets="false">
+    <html
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+            <script src="/soap/ajax/54.0/connection.js"></script>
+        </head>
+        <style>
+        .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th, .slds td {
+        font-family: 'Lato';
+        }
+        .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th {
+        text-align: center;
+        }
+        .slds .slds-theme--shade {
+        background-color: aliceblue;
+        }
+        .slds .slds-button {
+            background-color:orange;
+            line-height: 10px;
+            min-height: 22px;
+            color:black;
+            font-weight:normal;
+            border:1px solid black;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        table {
+            font-family: Lato,verdana, arial, sans-serif;
+            font-size: 12px;
+            border-width: 3px;
+            border-collapse: collapse;
+            empty-cells:show;
+        }
+     
+        table th {
+            border-width: 1px;
+            padding: 3px;
+            border: 1px solid #517994;
+            background-color:#B9D7D9;
+            }
+     
+        table td {
+            border-width: 1px;
+            padding: 1px;
+            border: 1px solid #CAD1C3;
+        }
+    
+        .bold, .aval, .avalDisc {
+            font-weight:700;
+        }
+        
+        .projectStyle {
+        border-width: 1px;
+        font-weight:700;
+        text-align:center;
+        border-style: solid;
+    }
+    
+    .header {
+        border-width: 1px;
+        padding: 5px;
+        border: 1px solid #CAD1C3;
+        background-color:#E2DDD9;
+    }
+    
+    .readOnly {
+        background-color: #CCFFFF;
+        border-color: #003F87;
+        padding: 2.5px;
+        color: #333366;
+    }
+    .Edit {
+        border-color:#ff69b4;
+        border-width: 1px;
+        border-style: dotted dotted dotted dotted;
+        background-color:#FADADD;
+    }
+    .zoomin {
+        border-color: #727B84 !important;
+        background-color: #DF9496 !important;
+    }
+    .error {
+        border-color: red !important;
+        background-color: light blue;
+        border-width: 2px;
+    }
+    .odd {
+        background-color:#FADADD;
+    }
+    .even {
+        background-color:#CFFFDD;
+    }
+    /** copying salesforce lookup input styles
+    since we are turning off the std styles **/
+    .lookupInput
+    {
+        display: inline;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .lookupInput img
+    {
+        background-repeat: no-repeat;
+        margin-right: .25em;
+        vertical-align: middle;
+    }
+    .lookupInput .disabled
+    {
+        background-color: #ccc;
+    }
+    .lookupInput .emptyDependentLookup
+    {
+        font-style: italic;
+    }
+    .lookupInput input[readonly]
+    {
+        background-color: #e6e6e6;
+        border: 2px solid #e6e6e6;
+        color: #333;
+        cursor: default;
+    }
+    .lookupInput a.readOnly
+    {
+        float: right;
+    }
+    .lookupInput span.readOnly
+    {
+        display: block;
+        white-space: normal;
+    }
+    .lookupInput span.totalSummary
+    {
+        font-weight: bold;
+    }
+    .inlineEditRequiredDiv .lookupInput img,.inlineEditDiv .lookupInput img
+    {
+        vertical-align: middle;
+    }
+    .quickCreateModule .lookupInput input {
+        max-width: 155px
+    }
+    .lookupIcon {
+        background-image: url(/img/func_icons/util/lookup20.gif);
+        background-position: 0 0;
+        width: 20px;
+        height: 20px;
+        background-position: top left
+    }
+    .lookupIconOn {
+        background-image: url(/img/func_icons/util/lookup20.gif);
+        background-position: 0 0;
+        width: 20px;
+        height: 20px;
+        background-position: top right
+    }
+    .messageTable {
+        font-family: Lato,verdana, arial, sans-serif;
+        font-weight:700;
+        color: #BE2625;
+        width:100%;
+        background-color:#EEB4B4; !important
+    }
+    .messageTable td{
+        height:15px;
+    }
+    .messageCell td{
+        height:0px;
+    }
+    div.fadeMe {
+      opacity:    0.5; 
+      background: #D9E9FF; 
+      width:      100%;
+      height:     100%; 
+      z-index:    1000;
+      top:        0; 
+      left:       0; 
+      position:   fixed; 
+    }
+    .button {
+        background-color:orange;
+        background-image:none;
+    }
+    .contributionOC {
+       background-color:#90EE90;
+    }
+    .contributionBank {
+       background-color:#FADADD;
+    }
+    
+    </style>
+        <body>
+          <!-- REQUIRED SLDS WRAPPER -->
+          <div class="slds">    
+          <!-- PRIMARY CONTENT WRAPPER -->
+            <div class="myapp">   
+                <!-- SEARCH DEMANDS-->
+              <div aria-labelledby="DSform">
+                <!-- BOXED AREA -->
+                <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+                  <legend id="dsForm" class="slds-text-heading--medium slds-p-vertical--medium">Generate Quote</legend>
+            
+            <apex:form id="newquoteform">
+                
+                <apex:actionFunction name="RefreshPlanDiv" action="{!QueryPlanDetails}" oncomplete="populatePlan1()" reRender="payplandiv">
+                    <apex:param id="plan" name="subPlanId" value="" />
+                    <apex:param id="av" name="aVal" value="" />
+                </apex:actionFunction>
+                <apex:actionFunction name="RefreshPlanEditDiv" action="{!QueryPlanDetails}" oncomplete="fixHeaderforStaticArea(),populatePlan2()" reRender="payplaneditable,discounts" status="status">
+                    <apex:param id="plan2" name="subPlanId" value="" />
+                    <apex:param id="av2" name="aVal" value="" />
+                    <apex:param id="flag" name="flag" value="true" assignTo="{!editSchedule}" />
+                </apex:actionFunction>
+                <apex:actionFunction name="saveScheduleAction" action="{!savePaymentSchedule}" oncomplete="PreselectPlanAfterSave()" rerender="printArea" status="status"/>  
+                <apex:actionFunction name="applyScheduleAction" action="{!updatePaymentSchedule}" oncomplete="populatePlan21()" rerender="messages,payplaneditdiv,NPVPanel1,NPVPanel2,NPVPanel3,NPVPanel5,NPVPanel5,NPVPanel6,discounts" status="status" /> 
+                <apex:actionFunction name="rowModifyFunction" action="{!rowModify}" oncomplete="populatePlan2()" reRender="payplaneditable" status="status" >
+                    <apex:param id="rowNumber" name="rowNumber" value="index" assignTo="{!rowNumber}"/>
+                    <apex:param id="type" name="addType" value="type" assignTo="{!addType}"/>
+                    <apex:param id="flag1" name="flag" value="true" assignTo="{!editSchedule}" />
+                </apex:actionFunction>
+                <apex:actionStatus id="status">
+                <apex:facet name="start">
+                <div class="fadeMe">
+                    &nbsp;
+                </div>
+                <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                    <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                        <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                        <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                    </div>
+                </div>
+                </apex:facet>
+                </apex:actionStatus>
+                <apex:outputPanel id="messages" >
+                    <apex:PageMessages id="pageMsgs" />
+                </apex:outputPanel>
+                <!-- <apex:pageBlock rendered="{!(oppId == null || unitId == null ||subPlanId == null)}">
+                    <apex:pageBlockSection id="opptyUnitPgBlock" title="Unit and Opportunity Details" collapsible="false" columns="1">
+                            <apex:inputField value="{!q.Opportunity__c}" required="true" rendered="{!oppId = null}" />
+                            <apex:outputField value="{!q.Opportunity__c}" rendered="{!oppId != null}" />
+                            <apex:inputField value="{!q.Project_Unit__c}" required="true" rendered="{!unitId = null}" />
+                            <apex:outputField value="{!q.Project_Unit__c}" rendered="{!unitId != null}" />
+                            <apex:inputField value="{!q.Plan_Type__c}" required="true" rendered="{!subPlanId = null}" />
+                            <apex:outputField value="{!q.Plan_Type__c}" rendered="{!subPlanId != null}" />
+                            <apex:inputField id="projLookup" styleclass="disableField" value="{!q.Project__c}" rendered="{!unitId != null}" />
+                    </apex:pageBlockSection>
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Generate Quote" action="{!startQuote}"/>
+                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate" />
+                    </apex:pageBlockButtons>
+                </apex:pageBlock> -->
+                
+<!---------------------------------------  Added by Vikas    ------------------------------------------------->   
+             
+                <apex:outputPanel id="baseaRate" rendered="{!(oppId != null && unitId !=null && NOT(editSchedule))}">
+                <apex:actionFunction name="changeBaseRate" action="{!changeBaseRate}" reRender="printArea,planOptions,payplandiv,discounts" oncomplete="loadPaymentPlan();" status="status"/>
+                <apex:actionFunction name="getOldBaseRate" action="{!getOldBaseRate}" reRender="printArea,planOptions,payplandiv" status="status"/>
+                <apex:actionFunction name="reloadURL" action="{!reloadURL}" reRender="printArea" status="status"/>  
+                      <apex:outputLabel value="Please select car parking before making any changes in Rates or Discount." style="font-weight:bold;padding-left:200px;color:red;" rendered="{!if(proj.Edit_Base_Rate__c == true || proj.Edit_Discount_Lumsum__c == true,true,false)}"/> <br/><br/>
+                      <apex:outputLabel value="Base Rate:" style="font-weight:bold;padding-left:0px;">
+                                  &nbsp;&nbsp;<apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!baseRate}" rendered="{!if(proj.Edit_Base_Rate__c == true,true,false)}"/>
+                                  &nbsp;&nbsp;<apex:outputText style="background-color:#FADADD;font-weight:normal;" value="{!baseRate}" rendered="{!if(proj.Edit_Base_Rate__c == false,true,false)}"/>
+                      </apex:outputLabel>
+                      <apex:outputLabel value="Premium:" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_Premium_Rate__c == true,true,false)}"/>&nbsp;&nbsp;&nbsp;
+                        <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!premiumRate}" rendered="{!if(proj.Edit_Premium_Rate__c == true,true,false)}"/>
+                      <apex:outputLabel value="Allotment Charge(Lumsum):" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_AllotmentCharge__c == true,true,false)}"></apex:outputLabel>&nbsp;&nbsp;&nbsp;
+                        <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!allotmentChargeLumsum}" rendered="{!if(proj.Edit_AllotmentCharge__c == true,true,false)}"/>
+                      <apex:outputLabel value="Discount(Lumpsum):" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_Discount_Lumsum__c == true,true,false)}"></apex:outputLabel>&nbsp;&nbsp;&nbsp;
+                        <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!discountVal}" rendered="{!if(proj.Edit_Discount_Lumsum__c == true,true,false)}"/>
+                        
+                     <br/><br/>
+                     <center>
+                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Generate Quote" onclick="changeBaseRate();return false;" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" status="status"/>&nbsp;
+                          <apex:commandButton id="btncan" styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Cancel Changes" onclick="getOldBaseRate();" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" oncomplete="reloadURL();" status="status"/>
+                     </center>     
+                </apex:outputPanel><br></br><br></br>
+                
+<!---------------------------------------  Vikas Added end here  ------------------------------------------------->
+                
+                <apex:outputPanel id="printArea" rendered="{!(oppId != null && unitId !=null)}">
+                    <table id="quoteDetails" width='100%'>
+                       <tr>
+                           <td class="projectStyle">
+                                Prepared For : <a href="/{!oppId}">{!quoteFor}</a>
+                            </td>
+                           <td class="projectStyle">
+                                Quotation Prepared Date:{!quoteDate} 
+                                <br></br>
+                                Quotation Effective Till: {!quoteValidity}
+                           </td>
+                           <td class="projectStyle">
+                              <center><apex:outputText value="Remarks:"/> </center>
+                              <center><apex:inputfield value="{!q.Remarks__c}" style="background-color:#FADADD;width:300px;height:60px;"/></center>
+                           </td>
+                           
+                           <td class="projectStyle">
+                                <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Save" action="{!savePrint}"/>
+                          </td>
+                        </tr>
+                        <tr>
+                            <th colspan="4" class="blinkMe">
+                                Approval Status : {!quoteApprovalMsg}
+                            </th>
+                        </tr>
+                    </table>
+                    <table width="100%" border-style="solid" >
+                        <tr width="100%">
+                            <th align="right" colspan="3">
+                            <apex:outputPanel id="discounts">
+                                 <apex:commandLink value="Calculate Discounts" id="calcdisc" style="float:right; color:#001449;" target="_parent" action="{!openDiscountPage}" rendered="{!AND(NOT(disableDiscount),NOT(editSchedule),(proj.Discount_Link_Option__c))}">
+                                    <apex:param name="mode" value="edit" assignTo="{!discountPageMode}"/>
+                                </apex:commandLink> 
+                                &nbsp; &nbsp; &nbsp;
+                                  <apex:commandLink value="View Discounts" id="viewdisc" style="float:right;color:#D61C59;" target="_blank" action="{!openDiscountPage}" rendered="{!disableDiscount || editSchedule}">
+                                    <apex:param name="mode" value="view" assignTo="{!discountPageMode}"/>
+                                </apex:commandLink> 
+                            </apex:outputPanel>
+                            </th>
+                        </tr>
+                        <tr width="100%">
+                            <td width="20%">
+                                <apex:dataTable value="{!quoteUIMap['LEFTTOP']}" var="rows"  id="left1" width="100%">
+                                    <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
+                                    <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
+                                </apex:dataTable>
+                               <table  id="carparkTable" width="100%">
+                                    <th colspan="2">Additional Car Parks</th>
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Single Covered" />
+                                        </th>
+                                        <td width="50%">
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Single_car_park_Additional__c}" rendered="{!canAddCarPark1}"/>
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark1)}"/>
+                                        </td>
+                                    </tr>
+                                   <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Tandem Covered" />
+                                        </th>
+                                        <td width="50%">
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Tandem_car_park_Additional__c}" rendered="{!canAddCarPark2}"  />
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark2)}" />
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <th width="50%">
+                                            <apex:outputText value="Single Open" />
+                                        </th>
+                                        <td width="50%">
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Single_Open_Additional__c}" rendered="{!canAddCarPark3}"  />
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark3)}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Covered Stack" />
+                                        </th>
+                                        <td width="50%">
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Tandem_Open_Additional__c}" rendered="{!canAddCarPark4}"  />
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark4)}" />
+                                        </td>
+                                    </tr> 
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Stilt" />
+                                        </th>
+                                        <td width="50%">
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Stack_Additional__c}" rendered="{!canAddCarPark5}"  />
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark5)}" />
+                                        </td>
+                                    </tr>
+                                                                                
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="MLCP" />
+                                        </th>
+                                        <td width="50%">
+                                           
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.MLCP_Additional__c}" rendered="{!canAddCarPark6}"/>
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark6)}"/>
+                                        </td>
+                                    </tr>        
+                                     
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Basement" />
+                                        </th>
+                                        <td width="50%">
+                                           
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Basement_Additional__c}" rendered="{!canAddCarPark7}"/>
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark7)}"/>
+                                        </td>
+                                    </tr>
+                                      <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Podium" />
+                                        </th>
+                                        <td width="50%">
+                                           
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Podium__c}" rendered="{!canAddCarPark8}"/>
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark8)}"/>
+                                        </td>
+                                    </tr>  
+
+                                    <!-- Added by Vinay 28-03-2025 Start-->        
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Puzzle Car Park" />
+                                        </th>
+                                        <td width="50%">
+                                           
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Puzzle_Car_Park__c}" rendered="{!canAddCarPark9}"/>
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark9)}"/>
+                                        </td>
+                                    </tr>  
+                                    <!-- Added by Vinay 28-03-2025 End--> 
+                                            
+                                    <tr> 
+                                        <th colspan="2">
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small"  value="Apply Selection" action="{!addCarPark}" disabled="{!NOT(showAddCarPark)}"/>
+                                        </th>
+                                    </tr>
+                                </table> 
+                            </td>
+                            <td width="50%">
+                                <apex:dataTable value="{!quoteUIMap['RIGHTTOP']}" var="rows"  id="right1" width="100%">
+                                    <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
+                                    <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
+                                </apex:dataTable>
+                            </td>
+                            <td width="30%">
+                                <apex:dataTable value="{!quoteUIMapDisc['RIGHTTOP']}" var="rows"  id="right1Disc" width="100%" rendered="{!quoteUIMapDisc != null}">
+                                    <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
+                                </apex:dataTable>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td width="30%">
+                                <apex:dataTable value="{!quoteUIMap['LEFTBOTTOM']}" var="rows"  id="left2" width="100%">
+                                    <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
+                                    <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
+                                </apex:dataTable>
+                            </td>
+                            <td width="55%">
+                                <table id="right2" width="100%" styleClass="tBorder">
+                                    <tr>
+                                        <th>Select Payment Plan</th>
+                                        <th>
+                        
+                                                <select id="planOptions">
+                                                   <apex:outputPanel rendered="{!if(subPlanId == null,true,false)}">
+                                    <option value="">--Select--</option> 
+                               </apex:outputPanel>  
+                                                    <apex:repeat value="{!payPlanList}" var="plan">
+                                                        <option value="{!plan.Id}" colspan="2">{!plan.Name}</option>
+                                                    </apex:repeat>
+                                                </select>
+                        
+                                        </th>
+                                        <th>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="editScheduleBtn" value="Edit Schedule" title="Edit Schedule" onclick="editSchedule();return false;" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}" status="status"/>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="applyScheduleBtn" value="View Updated Schedule" title="View Updated Schedule" onclick="applyScheduleAction();return false;" status="status" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}"/>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="saveScheduleBtn" value="Confirm Changes" title="Save Schedule" onclick="saveScheduleAction();return false;" status="status" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}"/>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="cancelBtn"  value="Cancel Changes" title="Cancel Changes" action="{!cancelEdit}"  oncomplete="PreselectPlanOnCancel();"  rerender="printArea" status="status" rendered="{!if(subPlanId == null,true,false)}"/> <!-- rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}" -->
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <apex:outputPanel id="payplandiv" >
+                                                <apex:dataTable id="ppTable" value="{!qPlanWrapper}" var="pd" width="100%">
+                                                    <apex:column rendered="{!pd.PayPlanRecord != null}"><apex:outputField value="{!pd.PayPlanRecord.Is_to_be__c}"/></apex:column>
+                                                    <apex:column rendered="{!pd.PayPlanRecord  == null}">Grand Total</apex:column>
+                                                    <apex:column rendered="{!pd.PayPlanRecord != null}"><apex:outputField value="{!pd.PayPlanRecord.Due_Date__c}"/></apex:column>
+                                                    <apex:column rendered="{!pd.PayPlanRecord == null}"></apex:column>
+                                                    <apex:column rendered="{!pd.PayPlanRecord != null}" ><apex:outputField value="{!pd.PayPlanRecord.Value__c}"/></apex:column>
+                                                    <apex:column rendered="{!pd.PayPlanRecord == null}"></apex:column>
+                                                    <apex:column >{!pd.strAmount}</apex:column>
+                                                        <apex:repeat value="{!pd.taxNames}" var="taxes">
+                                                        <apex:column >{!pd.taxMapStr[taxes]}</apex:column>
+                                                    </apex:repeat>
+                                                    <apex:column >{!pd.strServiceTax}</apex:column>
+                                                     <apex:column styleClass="contributionOC" rendered="{!if(pd.PayPlanRecord != null &&  pd.PayPlanRecord.OC_Milestone__c == true && subPlanId != null,true,false)}"><apex:outputField value="{!pd.PayPlanRecord.Contribution_From__c}"/>
+                                                    </apex:column>
+                                                    <apex:column styleClass="contributionBank" rendered="{!if(pd.PayPlanRecord != null && pd.PayPlanRecord.OC_Milestone__c == false && subPlanId != null,true,false)}"><apex:outputField value="{!pd.PayPlanRecord.Contribution_From__c}"/>  
+                                                    </apex:column> 
+                                                    <apex:column rendered="{!pd.PayPlanRecord == null}"></apex:column>
+                                                </apex:dataTable>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel id="payplaneditable">
+                                            <table id="ppt">
+                                                <tr>
+                                                    <td width="40%">
+                                                     <apex:outputPanel id="payplaneditdivstatic" >
+                                                        <apex:dataTable id="ppTable2static" value="{!qPlanWrapper}" var="mm" width="100%" rendered="{!qPlanWrapper !=NULL && editSchedule}">
+                                                            <!--  cloned column variable Read Only Mode -->
+                                                             <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord != null}"><apex:outputField value="{!mm.PayPlanRecord.Is_to_be__c}" /></apex:column>
+                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord  == null}">Grand Total</apex:column>
+                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord != null}"><apex:outputField value="{!mm.PayPlanRecord.Due_Date__c}" /></apex:column>
+                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord == null}"></apex:column>
+                                                            <apex:column styleClass="readOnly"><apex:outputField value="{!mm.PayPlanRecord.Value__c}" /></apex:column>
+                                                            <apex:column styleClass="readOnly">{!mm.strAmount}</apex:column>
+                                                            <apex:column styleClass="readOnly" rendered="{!if(mm.PayPlanRecord != null && mm.PayPlanRecord.OC_Milestone__c == true && subPlanId != null,true,false)}"><apex:outputText value="✔"/> 
+                                                            </apex:column>
+                                                            <apex:column styleClass="readOnly" rendered="{!if(mm.PayPlanRecord != null && mm.PayPlanRecord.OC_Milestone__c == False && subPlanId != null,true,false)}"><apex:outputText value="✘"/> 
+                                                            </apex:column>
+                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord == null}"></apex:column>
+                                                         </apex:dataTable>
+                                                      </apex:outputPanel>
+                                                     </td>
+                                                     <td width="60%" colspan="2">
+                                                      <apex:outputPanel id="payplaneditdiv" >
+                                                        <apex:variable var="index" value="{!0}"/>
+                                                         <apex:dataTable id="ppTable2" value="{!qPlanWrapperC}" var="pd" width="100%" rendered="{!qPlanWrapperC !=NULL && editSchedule}">
+                                                            <apex:column width="15%" styleClass="Edit" >
+                                                                 <apex:inputField id="istobepaid" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Is_to_be_Paid__c}" rendered="{!pd.PayPlanRecord != null}" />                    
+                                                            </apex:column>
+                                                            <apex:column width="10%" styleClass="Edit">
+                                                                 <apex:inputField id="daysmonths" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Days_Months__c}" rendered="{!pd.PayPlanRecord != null}" />                    
+                                                            </apex:column>
+                                                            <apex:column width="1%" styleClass="Edit">
+                                                                 <apex:inputField id="daysmonthsvalue" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Days_Months_Value__c}" rendered="{!pd.PayPlanRecord != null}" />                    
+                                                            </apex:column>  
+                                                            <apex:column width="20%" styleClass="Edit">
+                                                                 <apex:inputField id="constructionstage" styleClass="{!pd.style}" style="width:85%" value="{!pd.payPlanRecord.Project_Construction_Stages__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
+                                                            </apex:column>
+                                                            <apex:column width="13%" styleClass="Edit">
+                                                                 <apex:inputField id="amountpercent" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Amount__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
+                                                            </apex:column>
+                                                            <apex:column width="13%" styleClass="Edit">
+                                                                 <apex:inputField id="amtvalue" styleClass="{!pd.style}" style="width:95%"  value="{!pd.PayPlanRecord.Amount_Value__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
+                                                            </apex:column>
+                                                            <!-- <apex:column styleClass="Edit">
+                                                                <apex:inputField value="{!pd.PayPlanRecord.Deduct_Token__c}" rendered="{!pd.PayPlanRecord != null && pd.PayPlanRecord.Amount__c == 'Percentage'}"  onclick="deductTokenCheck(this);"/>
+                                                            </apex:column> -->
+                                                            <apex:column styleClass="Edit" width="8%"><apex:outputField value="{!pd.PayPlanRecord.Due_Date__c}" rendered="{!pd.PayPlanRecord != null}"/></apex:column>
+                                                            <apex:column styleClass="Edit" width="15%">{!pd.strAmount}</apex:column>
+                                                             <apex:column >
+                                                                 <apex:commandLink value="+" onclick="rowModify({!index},'new');return false;" rendered="{!pd.PayPlanRecord != null}"/>
+                                                                 &nbsp; &nbsp;
+                                                                 
+                                                                 <apex:commandLink value="_" onclick="rowModify({!index},'remove');return false;" rendered="{!pd.PayPlanRecord != null}"/ > 
+                                                                 <apex:variable var="index" value="{!index + 1}" />
+                                                            </apex:column> 
+                                                        </apex:dataTable>
+                                                        </apex:outputPanel>
+                                                       </td>
+                                                   </tr>
+                                                    <tr>
+                                                        <th width="33%">
+                                                              <apex:outputPanel id="NPVPanel1" rendered="{!editSchedule}">
+                                                                <apex:outputLabel for="onpv" value="Original NPV :      " /> 
+                                                                 <apex:outputText id="onpv" value="{!SOriginalPlanNPV}" />
+                                                              </apex:outputPanel>
+                                                             </th>
+                                                             <th width="33%">
+                                                                <apex:outputPanel id="NPVPanel2" rendered="{!editSchedule}">
+                                                                <apex:outputLabel for="mnpv" value="Modified NPV :      " />
+                                                                <apex:outputText id="mnpv" value="{!SUpdatedPlanNPV}" />
+                                                                </apex:outputPanel>
+                                                            </th>
+                                                             <th width="34%">
+                                                                <apex:outputPanel id="NPVPanel3" rendered="{!editSchedule}">
+                                                                <apex:outputLabel for="diff" value="Discount :      " />
+                                                                <apex:outputText id="diff" value="{!SNPVDiffLumpsum}" />
+                                                                </apex:outputPanel>
+                                                            </th>
+                                                    </tr>
+                                                    <tr>
+                                                            <th width="33%">
+                                                              <apex:outputPanel id="NPVPanel4" rendered="{!editSchedule}">
+                                                                <apex:outputLabel for="onpvpsf" value="Original NPV PSF :   " /> 
+                                                                 <apex:outputText id="onpvpsf" value="{!SOriginalNPVPSF}" />
+                                                              </apex:outputPanel>
+                                                             </th>
+                                                             <th width="33%">
+                                                                <apex:outputPanel id="NPVPanel5" rendered="{!editSchedule}">
+                                                                <apex:outputLabel for="mnpvpsf" value="Modified NPV PSF : " />
+                                                                <apex:outputText id="mnpvpsf" value="{!SUpdatedNPVPSF}" />
+                                                                </apex:outputPanel>
+                                                            </th>
+                                                             <th width="34%">
+                                                                <apex:outputPanel id="NPVPanel6" rendered="{!editSchedule}">
+                                                                <apex:outputLabel for="diffpsf" value="Discount PSF : " />
+                                                                <apex:outputText id="diffpsf" value="{!SNPVDiffPSF}" />
+                                                                </apex:outputPanel>
+                                                            </th>
+                                                    </tr>
+                                                   </table>
+                                                </apex:outputPanel>
+                                            </td>
+                                        </tr>
+                                        
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+            </apex:form>
+            
+              <!-- DEMAND SEARCH FORM -->
+    
+        </fieldset>
+        <!-- / BOXED AREA -->
+      </div>
+  <!-- / SEARCH DEMANDS -->
+    </div>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->  
+            <!-- JAVASCRIPT -->
+            <script>
+          var j$ = jQuery.noConflict();
+     
+            j$(document).ready(function() {
+            if('{!subPlanId}' != null && '{!subPlanId}' != ''){
+                    bindEvents();
+            }
+            else{
+                bindEvents2();
+            }    
+            });
+            
+            // events are not bound if partial refresh happens. we need to bind it again
+            // hence keeping bindevents separately and call them when needed
+            
+            function bindEvents() {
+                j$('.disableField').prop('disabled', true);
+                j$("[id$='projLookup_lkwgt']").remove();
+                adjustTableRowsTop();
+                adjustTableRowsBottom();
+                var selectedPlan =  "{!$CurrentPage.parameters.subPlanId}";
+                if(selectedPlan != "") {
+                    j$('#planOptions').val(selectedPlan);
+                }
+                j$("[id$='saveScheduleBtn']").hide();
+                j$("[id$='applyScheduleBtn']").hide();
+                    if(j$('#planOptions :selected').val().length != 0) {
+                        console.log("Context Obj:" + j$('#planOptions :selected').val());
+                        j$("[id$='right2']").find("tr:gt(1)").remove();
+                        j$("[id$='left2']" + ' tr').each(function () {
+                            if(j$(this).find('td:empty').length==j$(this).find('td').length) 
+                            j$(this).remove();
+                        });                     
+                        var planId = j$('#planOptions :selected').val();
+                        sessionStorage.setItem('planName', j$('#planOptions :selected').text());
+                        sessionStorage.setItem('subplanID', j$('#planOptions :selected').val());
+                        var aVal = j$('.aval').text();
+                        aVal = removeFormat(aVal);
+                        var aValDisc = j$('.avalDisc').text();
+                        aValDisc = removeFormat(aValDisc);
+                        console.log('Aval:' + aVal);
+                        console.log('Aval Discounted:' + aValDisc)
+                        
+                        if(aValDisc === null || aValDisc =='')
+                            RefreshPlanDiv(planId,aVal);
+                        else
+                            RefreshPlanDiv(planId,aValDisc);
+                    }
+                j$("[id$='ppTable'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                });
+            setInterval(blinker, 1000);
+        }
+    
+    function bindEvents2() {
+                j$('.disableField').prop('disabled', true);
+                j$("[id$='projLookup_lkwgt']").remove();
+                adjustTableRowsTop();
+                adjustTableRowsBottom();
+                var selectedPlan =  "{!$CurrentPage.parameters.subPlanId}";
+                if(selectedPlan != "") {
+                    j$('#planOptions').val(selectedPlan);
+                }
+                j$("[id$='saveScheduleBtn']").hide();
+                j$("[id$='applyScheduleBtn']").hide();
+                j$('#planOptions').on("change",function(event, ui){
+                    if(j$('#planOptions :selected').val().length != 0) {
+                        console.log("Context Obj:" + j$('#planOptions :selected').val());
+                        j$("[id$='right2']").find("tr:gt(1)").remove();
+                        j$("[id$='left2']" + ' tr').each(function () {
+                            if(j$(this).find('td:empty').length==j$(this).find('td').length) 
+                            j$(this).remove();
+                        });                     
+                        var planId = j$('#planOptions :selected').val();
+                        sessionStorage.setItem('planName', j$('#planOptions :selected').text());
+                        sessionStorage.setItem('subPlanId', j$('#planOptions :selected').val());
+                        var aVal = j$('.aval').text();
+                        aVal = removeFormat(aVal);
+                        var aValDisc = j$('.avalDisc').text();
+                        aValDisc = removeFormat(aValDisc);
+                        console.log('Aval:' + aVal);
+                        console.log('Aval Discounted:' + aValDisc)
+                        if(aValDisc === null || aValDisc =='')
+                            RefreshPlanDiv(planId,aVal);
+                        else
+                            RefreshPlanDiv(planId,aValDisc);
+                    }
+                });
+                j$("[id$='ppTable'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                });
+            setInterval(blinker, 1000);
+            
+            populatePlan1();
+        }
+    
+        function blinker() {
+            if(j$('.blinkMe').text().indexOf('N/A') == -1) {
+                j$('.blinkMe').fadeOut(500);
+                j$('.blinkMe').fadeIn(4000);
+                j$('.blinkMe').css('color','#DB2929');
+            } else {
+                j$('.blinkMe').css('color','#FF7D10');
+            }
+            
+        }
+        function populatePlan1(){
+        var rowHtml;
+        if('{!subPlanId}' != null && '{!subPlanId}' != ''){
+              rowHtml = "<tr><th>Schedule</th><th>Date</th><th>%</th><th>Installment</th><th>CGST</th><th>SGST</th><th>Total Tax</th><th>Contribution From</th></tr>";
+        }
+        else{
+              rowHtml = "<tr><th>Schedule</th><th>Date</th><th>%</th><th>Installment</th><th>CGST</th><th>SGST</th><th>Total Tax</th></tr>";
+        }
+        j$("[id$='ppTable']" + '> tbody > tr:first').before(rowHtml);
+                j$("[id$='ppTable'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                });      
+                 adjustTableRowsBottom();
+        }
+        function fixHeaderforStaticArea() {
+                var rowHtml = "<tr> <th>Schedule</th> <th>Date</th> <th>%</th> <th>Installment</th></tr>";
+                j$("[id$='ppTable2static']" + '> tbody > tr:first').before(rowHtml);
+                j$("[id$='ppTable2static'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                });
+        }
+       
+       function populatePlan21(){
+                var errorId = '';
+                var rowHtml1 = "<tr><th>Milestone Type</th> <th>Add Delay</th><th>Days/Months</th> <th>Construction Link</th><th>Pay Type</th><th>Amount</th><th>Date</th><th>Installment</th> <th>Action</th></tr>";
+                j$("[id$='ppTable2']" + '> tbody > tr:first').before(rowHtml1);
+                j$("[id$='ppTable2'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                }); 
+                j$('.messageCell').hide();
+                // disable edits of payment plan on the edit schedule screen
+                j$('#planOptions :selected').prop('disabled',true);
+                j$("[id$='editScheduleBtn']").hide();
+                j$("[id$='applyScheduleBtn']").show();
+                j$("[id$='saveScheduleBtn']").show();
+           	    
+                //j$("[id$='baseaRate']").hide();
+                
+                j$("[id$='ppTable2']").find("tr").each(function() { //get all rows in table
+                   errorId = j$(this).find('td input.error').attr('id');
+                    
+                    console.log(errorId);
+                   if(errorId) {
+                        return false;
+                   }
+                 });
+                if(errorId) {
+                    j$("[id$='saveScheduleBtn']").prop('disabled',true);
+                    
+                } else {
+                    j$("[id$='saveScheduleBtn']").prop('disabled',false);                    
+                }
+           		
+        }      
+       function populatePlan2(){
+                var errorId = '';
+                var rowHtml1 = "<tr><th>Milestone Type</th> <th>Add Delay</th><th>Days/Months</th> <th>Construction Link</th><th>Pay Type</th><th>Amount</th><th>Date</th><th>Installment</th> <th>Action</th></tr>";
+                j$("[id$='ppTable2']" + '> tbody > tr:first').before(rowHtml1);
+                j$("[id$='ppTable2'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                }); 
+                j$('.messageCell').hide();
+                // disable edits of payment plan on the edit schedule screen
+                j$('#planOptions :selected').prop('disabled',true);
+                j$("[id$='editScheduleBtn']").hide();
+                j$("[id$='applyScheduleBtn']").show();
+                j$("[id$='saveScheduleBtn']").show();
+                //j$("[id$='baseaRate']").hide();
+                
+                j$("[id$='ppTable2']").find("tr").each(function() { //get all rows in table
+                   errorId = j$(this).find('td input.error').attr('id');
+                   if(errorId) {
+                        return false;
+                   }
+                 });
+                if(errorId) {
+                    j$("[id$='saveScheduleBtn']").prop('disabled',true);
+                } else {
+                    j$("[id$='saveScheduleBtn']").prop('disabled',false);
+                      j$("[id$='saveScheduleBtn']").prop('disabled',true);
+                }
+        }
+        function PreselectPlan(){
+            // calling bind events to re-register handlers on partial page updates
+            if('{!subPlanId}' != null && '{!subPlanId}' != ''){
+                 bindEvents();
+            }
+            else{
+                 bindEvents2();
+            }
+            console.log("In Preselect");
+            var planName = sessionStorage.getItem('planName');
+            var planIden = sessionStorage.getItem('subPlanId');
+             if(planName === null) {
+             } else {
+                console.log('setting planName:' + planName + '::' + planIden);
+                j$('#planOptions').val(planIden);
+                j$('#planOptions').change();
+            }
+        }
+        
+        function PreselectPlanAfterSave() {
+        // making this separate from the above, because here
+        // we dont want to trigger change event after setting the plan
+            if('{!subPlanId}' != null && '{!subPlanId}' != ''){
+                 bindEvents();
+            }
+            else{
+                 bindEvents2();
+            }
+            var planName = sessionStorage.getItem('planName');
+            var planIden = sessionStorage.getItem('subPlanId');
+             if(planName === null) {
+             } else {
+                console.log('setting planName:' + planName + '::' + planIden);
+                j$('#planOptions').val(planIden);
+            }
+            // once edited and saved, the plan cant be changed, till cancel is clicked
+            j$('#planOptions').prop('disabled',true);
+            
+            j$("[id$='ppTable'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+            });
+            j$('.messageTable').hide();
+            j$("#projectAddress").show();
+            j$("#quoteDetails").show();
+            j$("[id$='baseaRate']").show();
+            j$("[id$='cancelBtn']").show();
+        }
+        
+        function PreselectPlanOnCancel() {
+            if('{!subPlanId}' != null && '{!subPlanId}' != ''){
+                 bindEvents();
+            }
+            else{
+                 bindEvents2();
+            }
+            
+            // remove restriction plan change on cancel
+            j$('#planOptions').prop('disabled',false);
+            var planName = sessionStorage.getItem('planName');
+            var planIden = sessionStorage.getItem('subPlanId');
+             if(planName === null) {
+             } else {
+                console.log('setting planName:' + planName + '::' + planIden);
+                // set the existing plan and render the original plan details
+                j$('#planOptions').val(planIden).change();              
+            }
+
+            j$("[id$='ppTable'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+            });
+            j$("#projectAddress").show();
+            j$("#quoteDetails").show();
+            j$("[id$='baseaRate']").show();
+            
+        }
+        
+        function editSchedule(){
+            console.log('edit schedule');
+            j$("[id$='right1']").closest("td").prev().toggle("explode");
+            j$("[id$='right1']").closest("td").next().toggle("explode");
+            j$("[id$='right1']").closest("td").toggle("explode");
+            j$("[id$='right2']").closest("td").prev().toggle("explode");
+            j$("[id$='right2']").closest("td").next().toggle("explode");
+            j$("#projectAddress").hide();
+            j$("#quoteDetails").hide();
+            j$("[id$='baseaRate']").hide();
+            var planId = j$('#planOptions :selected').val();
+            
+            var aVal = j$('.aval').text();
+            aVal = removeFormat(aVal);
+            var aValDisc = j$('.avalDisc').text();
+            aValDisc = removeFormat(aValDisc);
+            console.log('Aval:' + aVal);
+            console.log('Aval Discounted:' + aValDisc)
+            if(aValDisc === null || aValDisc =='')
+                RefreshPlanEditDiv(planId,aVal);
+            else
+                RefreshPlanEditDiv(planId,aValDisc);
+            // disable edits of payment plan on the edit schedule screen
+            j$('#planOptions :selected').prop('disabled',true);
+            j$("[id$='ppTable']").toggle();
+         }
+    
+        function rowModify(index,type) {
+            rowModifyFunction(index,type);
+        }
+        function deductTokenCheck(selected) {
+            console.log('this was checked:' + selected.id);
+            j$("[id$='ppTable2'] tr").find('td').each (function() {
+                console.log('Uncheck function:');
+                j$(this).find('input[type="checkbox"]').prop('checked', false);
+            });
+            selected.checked=true;
+        }
+        function adjustTableRowsTop(){
+            var left1Count = j$("[id$='carparkTable']" + ' tr').size();
+            left1Count += j$("[id$='left1']" + ' tr').size();
+            var right1Count = j$("[id$='right1']" + ' tr').size();
+            var adjustByCount =0;
+            if(left1Count != right1Count && left1Count < right1Count) {
+                adjustByCount = right1Count -  left1Count;
+                console.log('calling adjust rows:' + adjustByCount);
+                adjustRowsTop('carparkTable', adjustByCount);
+            } else if(left1Count != right1Count && left1Count > right1Count) {
+                adjustByCount = left1Count - right1Count;
+            }
+            console.log('carparkTable:' + left1Count);
+            console.log('Right1:' + right1Count);       
+        }
+        
+       function adjustTableRowsBottom(){
+            var left2Count = j$("[id$='left2']" + ' tr').size();
+            var right2Count = j$("[id$='right2']" + ' tr').size();
+            var adjustByCount =0;     
+            if(left2Count != right2Count && left2Count < right2Count) {
+                adjustByCount = right2Count -  left2Count;
+                adjustRowsBottom('left2', adjustByCount);
+            } else if(left2Count != right2Count && left2Count > right2Count) {
+                adjustByCount = left2Count - right2Count;
+                adjustRowsBottom('right2', adjustByCount);
+            }
+            console.log('Left2:' + left2Count);
+            console.log('Right2:' + right2Count);
+       }
+         
+       function adjustRowsTop(divid, rowcount) {
+            console.log('adjust for ' + divid + ' ' + rowcount);
+            var rowHtml = null;
+            for(count=0; count
+                <rowcount; count++){
+                rowHtml = rowHtml + '<tr> <td colspan="2" width="100%" height="15px"></td> </tr>';
+            }
+            console.log('divid:' + j$("[id$='"+divid+"']").attr('id'));
+            j$("[id$='"+divid+"']").append(rowHtml);
+        }   
+        
+       function adjustRowsBottom(divid, rowcount) {
+            console.log('adjust for ' + divid + ' ' + rowcount);
+            var rowHtml = null;
+            for(count=0; count < rowcount; count++){
+                rowHtml = rowHtml + '<tr> <td colspan="5" width="100%" height="15px"></td> </tr>';
+            }
+            console.log('divid:' + j$("[id$='"+divid+"']").attr('id'));
+            j$("[id$='"+divid+"']").append(rowHtml);
+        }       
+        
+        function removeFormat(money) {
+            money = money.replace(/,/g,'');
+            money = money.replace(/₹ /,'');
+            return money;
+        }    
+        function loadPaymentPlan(){
+          if('{!subPlanId}' != null && '{!subPlanId}' != ''){
+                bindEvents();
+          }
+          else{
+                bindEvents2();
+          }
+        }
+      </script>
+     <!-- / JAVASCRIPT -->
+    </body>
+   </html>
+ </apex:page>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Market_Spend__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+AND(AmountWonOpportunities &lt;&gt; 0, NOT(ISNULL(AmountWonOpportunities))),
+(ActualCost / AmountWonOpportunities) * 100, 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Market Spend %</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

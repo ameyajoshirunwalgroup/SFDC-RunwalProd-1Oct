@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "987bb770-6649-4703-83bd-1248d342ad4d",
+  "label" : "Booking",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "df19e249-70cf-4a7e-a5fe-0021545a8b21",
+          "columns" : [ {
+            "UUID" : "fe95de63-2ca4-4123-bc22-08505798475d",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "df19e249-70cf-4a7e-a5fe-0021545a8b21",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalBookingDetails",
+          "id" : "03d00443-69a8-4b0a-925d-251813f1335b",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "fe95de63-2ca4-4123-bc22-08505798475d",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "50de4c12-1b6e-4847-a8a6-523fa26c660d",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Booking"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "10e08040-f7e9-4465-bb7c-19ccdeeffae6",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "d34c4f9f-3b56-4136-9b69-2fd0cc2b4b0c",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-booking"
+}

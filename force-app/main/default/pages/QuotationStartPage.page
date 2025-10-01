@@ -1,0 +1,269 @@
+<apex:page docType="html-5.0"   showHeader="false" Controller="QuotationStartController" sidebar="false" standardStylesheets="false">
+    <html
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+            <script src="/soap/ajax/54.0/connection.js"></script>
+        </head>
+        <style>
+        .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th, .slds td {
+        font-family: 'Lato';
+        }
+        .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th {
+        text-align: center;
+        }
+        .slds .slds-theme--shade {
+        background-color: aliceblue;
+        }
+        .slds .slds-button {
+            background-color:orange;
+            line-height: 10px;
+            min-height: 22px;
+            color:black;
+            font-weight:normal;
+            border:1px solid black;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        table {
+            font-family: Lato,verdana, arial, sans-serif;
+            font-size: 12px;
+            border-width: 3px;
+            border-collapse: collapse;
+            empty-cells:show;
+        }
+     
+        table th {
+            border-width: 1px;
+            padding: 3px;
+            border: 1px solid #517994;
+            background-color:#B9D7D9;
+            }
+     
+        table td {
+            border-width: 1px;
+            padding: 1px;
+            border: 1px solid #CAD1C3;
+        }
+    
+        .bold, .aval, .avalDisc {
+            font-weight:700;
+        }
+        
+        .projectStyle {
+        border-width: 1px;
+        font-weight:700;
+        text-align:center;
+        border-style: solid;
+    }
+    
+    .header {
+        border-width: 1px;
+        padding: 5px;
+        border: 1px solid #CAD1C3;
+        background-color:#E2DDD9;
+    }
+    
+    .readOnly {
+        background-color: #CCFFFF;
+        border-color: #003F87;
+        padding: 2.5px;
+        color: #333366;
+    }
+    .Edit {
+        border-color:#ff69b4;
+        border-width: 1px;
+        border-style: dotted dotted dotted dotted;
+        background-color:#FADADD;
+    }
+    .zoomin {
+        border-color: #727B84 !important;
+        background-color: #DF9496 !important;
+    }
+    .error {
+        border-color: red !important;
+        background-color: light blue;
+        border-width: 2px;
+    }
+    .odd {
+        background-color:#FADADD;
+    }
+    .even {
+        background-color:#CFFFDD;
+    }
+    /** copying salesforce lookup input styles
+    since we are turning off the std styles **/
+    .lookupInput
+    {
+        display: inline;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .lookupInput img
+    {
+        background-repeat: no-repeat;
+        margin-right: .25em;
+        vertical-align: middle;
+    }
+    .lookupInput .disabled
+    {
+        background-color: #ccc;
+    }
+    .lookupInput .emptyDependentLookup
+    {
+        font-style: italic;
+    }
+    .lookupInput input[readonly]
+    {
+        background-color: #e6e6e6;
+        border: 2px solid #e6e6e6;
+        color: #333;
+        cursor: default;
+    }
+    .lookupInput a.readOnly
+    {
+        float: right;
+    }
+    .lookupInput span.readOnly
+    {
+        display: block;
+        white-space: normal;
+    }
+    .lookupInput span.totalSummary
+    {
+        font-weight: bold;
+    }
+    .inlineEditRequiredDiv .lookupInput img,.inlineEditDiv .lookupInput img
+    {
+        vertical-align: middle;
+    }
+    .quickCreateModule .lookupInput input {
+        max-width: 155px
+    }
+    .lookupIcon {
+        background-image: url(/img/func_icons/util/lookup20.gif);
+        background-position: 0 0;
+        width: 20px;
+        height: 20px;
+        background-position: top left
+    }
+    .lookupIconOn {
+        background-image: url(/img/func_icons/util/lookup20.gif);
+        background-position: 0 0;
+        width: 20px;
+        height: 20px;
+        background-position: top right
+    }
+    .messageTable {
+        font-family: Lato,verdana, arial, sans-serif;
+        font-weight:700;
+        color: #BE2625;
+        width:100%;
+        background-color:#EEB4B4; !important
+    }
+    .messageTable td{
+        height:15px;
+    }
+    .messageCell td{
+        height:0px;
+    }
+    div.fadeMe {
+      opacity:    0.5; 
+      background: #D9E9FF; 
+      width:      100%;
+      height:     100%; 
+      z-index:    1000;
+      top:        0; 
+      left:       0; 
+      position:   fixed; 
+    }
+    .button {
+        background-color:orange;
+        background-image:none;
+    }
+    
+    </style>
+        <body>
+          <!-- REQUIRED SLDS WRAPPER -->
+          <div class="slds">    
+          <!-- PRIMARY CONTENT WRAPPER -->
+            <div class="myapp">   
+                <!-- SEARCH DEMANDS-->
+              <div aria-labelledby="DSform">
+                <!-- BOXED AREA -->
+                <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+                  <legend id="dsForm" class="slds-text-heading--medium slds-p-vertical--medium">Generate Quote</legend>
+            
+            <apex:form id="newquoteform">
+                
+                <apex:actionStatus id="status">
+                <apex:facet name="start">
+                <div class="fadeMe">
+                    &nbsp;
+                </div>
+                <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                    <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                        <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                        <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                    </div>
+                </div>
+                </apex:facet>
+                </apex:actionStatus>
+                <apex:outputPanel id="messages" >
+                    <apex:PageMessages id="pageMsgs" />
+                </apex:outputPanel>
+                <apex:pageBlock rendered="{!if(oppId != null || unitId != null, true, false)}">
+
+    <apex:pageBlockSection id="opptyUnitPgBlock" 
+                           title="Unit and Opportunity Details" 
+                           collapsible="false" 
+                           columns="1">
+        <apex:inputField value="{!qObj.Opportunity__c}" required="true" rendered="{!oppId = null}" />
+        <apex:outputField value="{!qObj.Opportunity__c}" rendered="{!oppId != null}" />
+        
+        <apex:inputField value="{!qObj.Project_Unit__c}" required="true" rendered="{!unitId = null}" />
+        <apex:outputField value="{!qObj.Project_Unit__c}" rendered="{!unitId != null}" />
+
+        <apex:outputField value="{!qObj.Project__c}" rendered="{!unitId != null}" />
+
+        <apex:inputField id="planType" styleclass="disableField" value="{!qObj.Plan_Type__c}">
+            <apex:actionSupport event="onchange" action="{!populatePaymentPlan}" status="status"/>
+            &nbsp;&nbsp;
+            <apex:selectList value="{!selectedPlanId}" size="1" 
+                             rendered="{!if(qObj.Plan_Type__c != null && qObj.Plan_Type__c == 'Subvention Plan', true, false)}"> 
+                <apex:selectOptions value="{!getPlans}" /> 
+                <apex:actionSupport event="onchange">
+                    <apex:param name="selectedPlanId" value="{!getPlans}" assignTo="{!selectedPlanId}"/>
+                </apex:actionSupport>    
+            </apex:selectList>
+        </apex:inputField>
+    </apex:pageBlockSection>
+
+    <!-- Removed quotationExists message completely -->
+
+    <apex:pageBlockButtons location="bottom" style="text-align: center;">
+        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" 
+                            value="Generate Quote" 
+                            action="{!startQuote}" /> 
+        &nbsp;&nbsp;
+        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" 
+                            value="Cancel" 
+                            action="{!cancel}" 
+                            immediate="true"  
+                            html-formnovalidate="formnovalidate" />
+    </apex:pageBlockButtons>
+
+</apex:pageBlock>
+
+            </apex:form>
+           </fieldset> 
+        </div>
+      </div>
+    </div>
+   </body>
+  </html>
+</apex:page>

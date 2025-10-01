@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Brokerage__c</fullName>
+    <label>Total Brokerage</label>
+    <summarizedField>Brokerage__c.Total_Brokerage_Amount_without_Kicker__c</summarizedField>
+    <summaryFilterItems>
+        <field>Brokerage__c.Brokerage_Type__c</field>
+        <operation>equals</operation>
+        <value>Base Brokerage, Additional Brokerage, Retrofit Brokerage, Cancellation Brokerage, Manual Override Brokerage, Source Change Brokerage Cancellation, Kicker Incentive</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Brokerage__c.Brokerage_Summary__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

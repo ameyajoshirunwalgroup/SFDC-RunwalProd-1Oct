@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CRN_and_SO_delete_validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(
+AND(ISCHANGED(SAP_Customer_Number__c),SAP_Customer_Number__c == null, PRIORVALUE(SAP_Customer_Number__c ) != null ),
+AND(ISCHANGED(SalesOrder_Number__c),SalesOrder_Number__c == null, PRIORVALUE(SalesOrder_Number__c ) != null)
+)</errorConditionFormula>
+    <errorMessage>You can not delete the CRN or SO</errorMessage>
+</ValidationRule>

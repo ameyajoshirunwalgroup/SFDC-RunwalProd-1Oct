@@ -1,0 +1,39 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "43527937-1051-4405-a70f-8217d976ce96",
+  "label" : "Brokerage Receipt Related List",
+  "regions" : [ {
+    "id" : "68ca16b8-e854-4b17-a832-6fa9c2ffb286",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customTitle" : "",
+        "parentRecordId" : "{!recordId}",
+        "relatedListName" : "{!relationshipApiName}",
+        "showBreadCrumbs" : true,
+        "showCustomTitle" : false,
+        "showManualRefreshButton" : true,
+        "showRowNumbers" : true
+      },
+      "componentName" : "forceCommunity:relatedList",
+      "id" : "eb980178-345f-4f70-af56-114453944cf1",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "4edcb69c-572c-41cc-b99e-d6cbe4035301",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "2ec769cd-b3ab-4d44-8a75-1f8ba368084d",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "relatedlist-a2g"
+}

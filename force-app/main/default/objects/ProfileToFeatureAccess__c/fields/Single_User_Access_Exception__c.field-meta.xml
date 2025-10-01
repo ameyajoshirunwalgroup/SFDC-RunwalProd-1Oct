@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Single_User_Access_Exception__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>If within a profile we want to have all users to have access but not a single user then enter only that user name and set feature access as no.
+Similarly if the entire profile doesnt have access but one user should have access, then enter the user and make the access as &quot;Yes&quot;</description>
+    <label>Single User Access Exception</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>ProfileToFeatureAccess</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

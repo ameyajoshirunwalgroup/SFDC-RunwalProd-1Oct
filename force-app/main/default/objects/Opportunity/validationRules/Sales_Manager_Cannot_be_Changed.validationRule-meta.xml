@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_Manager_Cannot_be_Changed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+!ISBLANK( TEXT (PRIORVALUE(RW_Sales_Associate__c))), 
+ISCHANGED( RW_Sales_Associate__c ),$Profile.Name &lt;&gt; &quot;System Administrator&quot;,$Profile.Name &lt;&gt; &quot;Site Head&quot;,
+$Profile.Name &lt;&gt; &quot;Sales Strategy&quot;, $Profile.Name &lt;&gt; &apos;SAdmin&apos; ,
+$Profile.Name &lt;&gt; &apos;System Administrator Clone&apos;,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>RW_Sales_Associate__c</errorDisplayField>
+    <errorMessage>Sales Manager Cannot be Changed</errorMessage>
+</ValidationRule>

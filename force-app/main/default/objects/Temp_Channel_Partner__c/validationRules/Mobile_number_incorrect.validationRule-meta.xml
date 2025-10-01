@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mobile_number_incorrect</fullName>
+    <active>true</active>
+    <errorConditionFormula>and(
+	OR(
+		CONTAINS(&apos; &apos;, Mobile_No__c),
+		CONTAINS(&apos;+&apos;, Mobile_No__c),
+		CONTAINS(&apos;-&apos;, Mobile_No__c),
+		LEN(Mobile_No__c) &lt;&gt; 10
+	),
+	DATEVALUE(CreatedDate) &gt;=  DATE(2024,04,05) 
+)</errorConditionFormula>
+    <errorDisplayField>Mobile_No__c</errorDisplayField>
+    <errorMessage>Mobile number incorrect</errorMessage>
+</ValidationRule>

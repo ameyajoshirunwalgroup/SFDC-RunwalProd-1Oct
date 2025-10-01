@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Channel_Partner_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( NOT(AND( ISBLANK(RW_Broker__c),$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/) ),  OR(  NOT(ISPICKVAL( Lead_Sub_Sub_Source__c , &apos;Local&apos;)), NOT(ISPICKVAL( Lead_Sub_Sub_Source__c , &apos;OutStation&apos;)),NOT(ISPICKVAL( Lead_Sub_Sub_Source__c , &apos;NRI&apos;)))   , false)</errorConditionFormula>
+    <errorDisplayField>Lead_Sub_Sub_Source__c</errorDisplayField>
+    <errorMessage>IF you select channel partner then please select Lead - sub sub- source  as Local, OutStation, NRI.</errorMessage>
+</ValidationRule>

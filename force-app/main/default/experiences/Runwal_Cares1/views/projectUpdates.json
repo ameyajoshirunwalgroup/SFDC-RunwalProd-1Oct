@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "77bd8fcb-d1b6-42c5-ab37-e63a5a158776",
+  "label" : "ProjectUpdates",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "77ad2a0a-f8ac-4e69-afb9-71b87ff91e5c",
+          "columns" : [ {
+            "UUID" : "da6babb3-6870-41a3-a913-8c3d23c71033",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "77ad2a0a-f8ac-4e69-afb9-71b87ff91e5c",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalProjectUpdates",
+          "id" : "7fa9c1dc-3fb1-46ca-a14b-f59fada8b70e",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "da6babb3-6870-41a3-a913-8c3d23c71033",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "480a2f8b-8d66-4ece-9480-ea8f65e07ba2",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "ProjectUpdates"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "20b6d2ea-2251-4093-b1c5-b0b97e865928",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "d2addb69-5aeb-41d5-a614-ae4d84a75787",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-projectupdates"
+}

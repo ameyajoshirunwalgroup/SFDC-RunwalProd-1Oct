@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ClusterLookup__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Cluster</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.RW_Project__c</field>
+            <operation>equals</operation>
+            <valueField>Cluster__c.Project__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Cluster__c</referenceTo>
+    <relationshipLabel>Opportunities</relationshipLabel>
+    <relationshipName>Opportunities</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

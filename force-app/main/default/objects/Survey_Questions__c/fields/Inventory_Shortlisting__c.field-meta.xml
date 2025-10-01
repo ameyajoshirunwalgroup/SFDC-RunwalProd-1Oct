@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inventory_Shortlisting__c</fullName>
+    <label>Inventory Shortlisting</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Inventory Finalised</fullName>
+                <default>false</default>
+                <label>Inventory Finalised</label>
+            </value>
+            <value>
+                <fullName>Shortlisted Multiple Inventory</fullName>
+                <default>false</default>
+                <label>Shortlisted Multiple Inventory</label>
+            </value>
+            <value>
+                <fullName>Considering Series/Wing</fullName>
+                <default>false</default>
+                <label>Considering Series/Wing</label>
+            </value>
+            <value>
+                <fullName>Neutral</fullName>
+                <default>false</default>
+                <label>Neutral</label>
+            </value>
+            <value>
+                <fullName>Pending</fullName>
+                <default>false</default>
+                <label>Pending</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

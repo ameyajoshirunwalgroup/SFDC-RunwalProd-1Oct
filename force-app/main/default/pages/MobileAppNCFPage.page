@@ -1,0 +1,29 @@
+<apex:page controller="MobileAppNCFPageController" action="{!ncf}" showHeader="false" sidebar="false">
+    <apex:includeLightning />
+    <div id="lightning" />
+    <script src="https://runwal--uat.sandbox.my.salesforce-sites.com/mobilencf/lightning/lightning.out.js"></script>
+    <script>
+        
+        let url = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href;
+        console.log({url});
+        const queryString = url.split('?')[1];
+        console.log({queryString});
+        const urlParams = new URLSearchParams(queryString);
+        console.log({urlParams});
+        const account = urlParams.get('accId'); 
+                
+    	$Lightning.use("c:MobileAppNCFApp", function() {
+         $Lightning.createComponent("c:MobileAppNCFForm",
+             {accountId: account},
+             "lightning",
+             function(cmp) {
+          console.log("c:MobileAppNCFApp loaded successfully in VF page");
+             }
+         );
+    	},
+        'https://runwalhomes.secure.force.com//mobilencf'
+     );
+    </script>
+</apex:page>

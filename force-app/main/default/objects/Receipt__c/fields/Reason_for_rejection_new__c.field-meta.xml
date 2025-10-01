@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_rejection_new__c</fullName>
+    <label>Physical Verification Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+                <label>Accepted</label>
+            </value>
+            <value>
+                <fullName>Rejected-Over writing</fullName>
+                <default>false</default>
+                <label>Rejected-Over writing</label>
+            </value>
+            <value>
+                <fullName>Rejected-Third Party</fullName>
+                <default>false</default>
+                <label>Rejected-Third Party</label>
+            </value>
+            <value>
+                <fullName>Rejected-Date lapsed</fullName>
+                <default>false</default>
+                <label>Rejected-Date lapsed</label>
+            </value>
+            <value>
+                <fullName>Rejected-Wrong Favoring</fullName>
+                <default>false</default>
+                <label>Rejected-Wrong Favoring</label>
+            </value>
+            <value>
+                <fullName>Rejected-Amount mismatch</fullName>
+                <default>false</default>
+                <label>Rejected-Amount mismatch</label>
+            </value>
+            <value>
+                <fullName>Rejected-Signature missing</fullName>
+                <default>false</default>
+                <label>Rejected-Signature missing</label>
+            </value>
+            <value>
+                <fullName>Rejected-Old Cheque Format CTS2010</fullName>
+                <default>false</default>
+                <label>Rejected-Old Cheque Format CTS2010</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

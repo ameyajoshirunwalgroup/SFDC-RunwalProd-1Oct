@@ -1,0 +1,427 @@
+<apex:page controller="CpMandateInvoicePreview" renderAs="PDF" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" action="{!updateInv}">
+    <html>
+        <head>
+            <style type="text/css" media="print">
+                @page {
+                size: A4; 
+                size: 10.27in 13.69in;
+                @bottom-center {          
+                content: "Page " counter(page) " of " counter(pages);
+                
+                }
+                }
+                body{
+                margin:0;
+                padding:0;            
+                font-family:"Google Sans", Roboto, arial, sans-serif !important;
+                font-family: 'cambria';
+                }                
+                .table1{
+                width:100%;
+                border-collapse:collapse;
+                }
+                .table1 tr th{
+                border:1px solid #000;
+                text-align:center;
+                font-size:12px;
+                padding:3px 5px;
+                }
+                .table1 tr td{
+                text-align:center;
+                font-size:12px;
+                border:1px solid #000;
+                padding:3px 5px;
+                }
+                
+                @page {
+                margin-bottom: 64px;
+                margin-top: 64px;
+                
+                @top-center {
+                content: element(header,first-except);
+                }
+                @bottom-center {
+                content: element(footer,first-except);
+                }
+                }            
+                .header{
+                position: running(header);
+                }
+                .footer {
+                display:block;
+                position: running(footer);
+                z-index:-999;
+                }            
+                
+            </style>  
+        </head>
+        
+        <apex:form >
+            <body>
+                <apex:outputPanel >
+                    <div>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:16px" colspan="4">{!CPInv.Channel_Partner__r.Name}({!CPInv.Channel_Partner__r.Company_Name_As_per_RERA__c})</th>
+                            </tr>
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:14px" colspan="4">{!CPInv.Channel_Partner__r.Address__c}</th>
+                            </tr>
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:14px" colspan="4">Mobile No:&nbsp;{!CPInv.Channel_Partner__r.RW_Mobile_No__c}&nbsp;&nbsp;Email:&nbsp;{!CPInv.Channel_Partner__r.RW_Email__c}</th>
+                            </tr>
+                            <tr>
+                                <th Style="text-align:center;background-color:#c2d1f0;border:1px solid black;height:30px;" colspan="4">TAX INVOICE</th>
+                            </tr>
+
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!CPInv.Invoice_Number__c} </td>
+                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!CPInv.Invoice_Date__c}" /> </apex:outputText>&nbsp;</td>
+                            </tr>
+                            <tr >
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Place of Supply: {!pos[0].Name}</td>
+                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;State Code : {!pos[0].State_Code__c}&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:30px;" colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;To,&nbsp;&nbsp;</td>
+                                <td Style="text-align:left;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Company Name:- {!CPInv.Legal_Entity__r.RDS_Company_Name__c}</td>
+                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2"></td>
+                            </tr>
+                        </table>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;width:90%;height:25px;font-size:13px" colspan="2">&nbsp;Registration Address:- {!CPInv.Legal_Entity__r.RDS_Address1__c}</td>
+                                <td Style="text-align:right;border-right:1px solid black;width:10%;height:25px;font-size:13px" colspan="2"></td>
+                            </tr>
+                        </table>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="4">&nbsp;PAN:- {!CPInv.Legal_Entity__r.RDS_PAN_No__c}</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="4">&nbsp;GSTIN No.:- {!CPInv.Legal_Entity__r.GSTIN__c}</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="4">&nbsp;RERA No.:- {!CPInv.Legal_Entity__r.RERA_Number__c}</td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        <table style="width:100%;border-collapse: collapse;border:1px solid black;">
+                            <tr>
+                                <td Style="border:1px solid black;width:40%;height:25px;font-size:13px">Scheme: {!CPInv.AOP__r.CP_Mandate_Scheme__c}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td Style="border:1px solid black;width:30%;height:25px;font-size:13px">Start Date:&nbsp; <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!CPInv.AOP__r.Start_Date__c}"/> </apex:outputText></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td Style="border:1px solid black;width:30%;height:25px;font-size:13px">End Date:&nbsp; <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!CPInv.AOP__r.End_Date__c}"/> </apex:outputText></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        <apex:outputPanel rendered="{!withRecovery == false}">
+                            <table style="width:100%;border-collapse: collapse;">
+                                <tr>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:20%;height:25px;font-size:11px">Particular</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Brokerage %</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Final AV Value</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Brokerage Amount</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">CGST @ 9%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">SGST @ 9%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Total Brokerage</th>
+                                </tr>
+                                
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure) - Local</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.avLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageAmountLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.cgstLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.sgstLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.totalBrokerageLocal}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure) - Outstation</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.avOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageAmountOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.cgstOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.sgstOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.totalBrokerageOS}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure) - NRI</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.avNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageAmountNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.cgstNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.sgstNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.totalBrokerageNRI}</td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Net Brokerage for Month</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">-</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netAv}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netBrokerageAmount}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netCgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netSgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netTotalBrokerage}</td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!withRecovery}">
+                            <table style="width:100%;border-collapse: collapse;">
+                                <tr>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:20%;height:25px;font-size:11px">Particular</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Brokerage %</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Final AV Value</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Brokerage Amount</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">CGST @ 9%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">SGST @ 9%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:10%;height:25px;font-size:11px">Total Brokerage</th>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure) - Local</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.avLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageAmountLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.cgstLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.sgstLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.totalBrokerageLocal}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure) - Outstation</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.avOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageAmountOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.cgstOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.sgstOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.totalBrokerageOS}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure) - NRI</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.avNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageAmountNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.cgstNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.sgstNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.totalBrokerageNRI}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure - B) - Local</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryAvLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryAmountLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryCgstLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoverySgstLocal}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryTotalBrokerageLocal}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure - B) - Outstation</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryAvOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryAmountOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryCgstOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoverySgstOS}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryTotalBrokerageOS}</td>
+                                </tr>
+                                <tr style="border-collapse: collapse;">
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Brokerage for Month (as per Annexure - B) - NRI</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.brokerageNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryAvNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryAmountNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryCgstNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoverySgstNRI}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.recoveryTotalBrokerageNRI}</td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Net Brokerage for Month</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">-</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netAv}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netBrokerageAmount}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netCgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netSgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">{!invDetails.netTotalBrokerage}</td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                        
+                        <br/><br/>
+                        <table style="width:100%;">
+                            <tr>
+                                <td Style="text-align:left;border:1px solid black;height:25px;font-size:13px" colspan="4">Amount in Words : {!NoToWord}</td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <td Style="text-align:left;border-top:1px solid black;border-left:1px solid black;height:30px;font-size:13px" colspan="10">&nbsp;Channel Partner Code : {!CPInv.Channel_Partner__r.SAP_CP_Code__c}</td>
+                                <td Style="text-align:right;border-top:1px solid black;border-right:1px solid black;height:30px;font-size:13px" colspan="10">Channel Partner PAN No. : {!CPInv.Channel_Partner__r.Broker_Pan_No__c} &nbsp;</td>
+                            </tr>
+                            <tr style="display: {!IF(CPInv.Channel_Partner__r.RW_GST_Number__c != null,'table-row' , 'none')};">
+                                <td Style="text-align:left;border-left:1px solid black;height:30px;font-size:13px" colspan="10">&nbsp;Channel Partner RERA NO. : {!CPInv.Channel_Partner__r.RW_RERA_Registration_Number__c} </td>
+                                <td Style="text-align:right;border-right:1px solid black;height:30px;font-size:13px;" colspan="10">Channel Partner GST No. : {!CPInv.Channel_Partner__r.RW_GST_Number__c}&nbsp;</td>
+                            </tr>
+                            <tr style="display: {!IF(CPInv.Channel_Partner__r.RW_GST_Number__c == null,'table-row' , 'none')};">
+                                <td Style="text-align:left;border-left:1px solid black;height:30px;font-size:13px" colspan="10">&nbsp;Channel Partner RERA NO. : {!CPInv.Channel_Partner__r.RW_RERA_Registration_Number__c} </td>
+                                <td Style="text-align:right;border-right:1px solid black;height:30px;font-size:13px;" colspan="10">Channel Partner GST No. : NA&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border-left:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="10">&nbsp;Cheque/Demand Drafts favouring Name: {!CPInv.Channel_Partner__r.Cheque_DD_Favouring_Name__c}</td>
+                                <td Style="text-align:right;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="10">SAC Code: 997222</td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <td Style="text-align:left;border:1px solid black;height:25px;font-size:13px">Channel Partner Bank Name:   {!CPInv.Channel_Partner__r.Bank_Name__c}</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border:1px solid black;height:25px;font-size:13px">Channel Partner Bank Account Number:   {!CPInv.Channel_Partner__r.Account_Number__c}</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border:1px solid black;height:25px;font-size:13px">Channel Partner Bank Account IFSC Code:   {!CPInv.Channel_Partner__r.IFSC_Code__c}&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td Style="text-align:left;border:1px solid black;height:25px;font-size:13px">Channel Partner BANK Branch Name:   {!CPInv.Channel_Partner__r.Bank_Branch__c}</td>
+                            </tr>
+                        </table>
+                        <br/><br/><br/><br/><br/><br/>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <td Style="text-align:right;height:25px;font-size:13px" colspan="4">Sign &amp; Stamp</td>
+                            </tr>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+                <br/><br/>
+                <apex:outputPanel rendered="{!withRecovery == false}">
+                    <br/><br/>
+                    <div>
+                        <h3 Style="text-align:center;">Annexure</h3>
+                        <h3 Style="text-align:center;">Brokerage for the Month</h3>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Customer Name</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Type of Client</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">SGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CP Name</th>
+                            </tr>
+                            <apex:repeat value="{!annexure}" var="anx">
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.customerName}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.clientType}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!anx.bookingDate}"/> </apex:outputText></td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.unit}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.finalAv}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.brokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.brokerageAmount}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.cgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.sgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.totalBrokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anx.cpName}</td>
+                                </tr>
+                            </apex:repeat>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!withRecovery}">
+                    <div>
+                        <h3 Style="text-align:center;">Annexure - A</h3>
+                        <h3 Style="text-align:center;">Brokerage for the Month</h3>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Customer Name</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Type of Client</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">SGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CP Name</th>
+                            </tr>
+                            <apex:repeat value="{!annexure}" var="anxa">
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.customerName}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.clientType}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!anxa.bookingDate}"/> </apex:outputText></td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.unit}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.finalAv}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.brokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.brokerageAmount}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.cgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.sgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.totalBrokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxa.cpName}</td>
+                                </tr>
+                            </apex:repeat>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h3 Style="text-align:center;">Annexure - B</h3>
+                        <h3 Style="text-align:center;">Brokerage Recovery for the Month</h3>
+                        <table style="width:100%;border-collapse: collapse;">
+                            <tr>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Customer Name</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Type of Client</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Cancellation Date</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Unit</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">SGST @ 9%</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CP Name</th>
+                            </tr>
+                            <apex:repeat value="{!annexureB}" var="anxb">
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.customerName}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.clientType}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!anxb.bookingDate}"/> </apex:outputText></td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.unit}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.finalAv}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.brokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.brokerageAmount}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.cgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.sgst}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.totalBrokerage}</td>
+                                    <td Style="text-align:center;border:1px solid black;height:25px;font-size:11px">{!anxb.cpName}</td>
+                                </tr>
+                            </apex:repeat>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </body>
+        </apex:form>
+    </html>
+</apex:page>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Action_Date_Mandatory_for_SiteVisit</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(ISPICKVAL(Call_Rating__c,&apos;Hot (4)&apos;),
+ISPICKVAL(Call_Rating__c,&apos;Warm (3)&apos;),
+ISPICKVAL(Call_Rating__c,&apos;Cold (2)&apos;)),
+ISPICKVAL(Task_Type__c, &apos;Site Visit&apos;),
+ISBLANK(Next_Action_Date__c),
+				/*Added by Prashant to avoid the validation for Revisit-- START*/
+				NOT(Revisit__c) ,
+				/*Added by Prashant to avoid the validation for Revisit-- END*/
+$Profile.Name !=&apos;System Administrator&apos;,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorMessage>Please enter next action date</errorMessage>
+</ValidationRule>

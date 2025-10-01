@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Auto_Rating__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(!ISPICKVAL(RW_Location_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Location_Rating__c))*0.2), 0)+
+IF(!ISPICKVAL(RW_Price_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Price_Rating__c))*0.2), 0)+
+IF(!ISPICKVAL(RW_Product_Flat_Size_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Product_Flat_Size_Rating__c))*0.1), 0)+
+IF(!ISPICKVAL(RW_Product_Flat_Configuration_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Product_Flat_Configuration_Rating__c))*0.1), 0)+
+IF(!ISPICKVAL(RW_Project_Amenities_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Project_Amenities_Rating__c))*0.1), 0)+
+IF(!ISPICKVAL(RW_Project_Theme_Layout_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Project_Theme_Layout_Rating__c))*0.1), 0)+
+IF(!ISPICKVAL(RW_Possession_Timelines_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Possession_Timelines_Rating__c))*0.1), 0)+
+IF(!ISPICKVAL(RW_Runwal_Brand_Rating__c, &quot;&quot;),(VALUE(TEXT(RW_Runwal_Brand_Rating__c))*0.1), 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Auto Rating</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

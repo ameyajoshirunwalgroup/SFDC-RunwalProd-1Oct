@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Survey_For_Activity__c</fullName>
+    <label>Survey For Activity</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Site Visit</fullName>
+                <default>false</default>
+                <label>Site Visit</label>
+            </value>
+            <value>
+                <fullName>Booking</fullName>
+                <default>false</default>
+                <label>Booking</label>
+            </value>
+            <value>
+                <fullName>Cases</fullName>
+                <default>false</default>
+                <label>Cases</label>
+            </value>
+            <value>
+                <fullName>Random Booking</fullName>
+                <default>false</default>
+                <label>Random Booking</label>
+            </value>
+            <value>
+                <fullName>Revisit</fullName>
+                <default>false</default>
+                <label>Revisit</label>
+            </value>
+            <value>
+                <fullName>Possession</fullName>
+                <default>false</default>
+                <label>Possession</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

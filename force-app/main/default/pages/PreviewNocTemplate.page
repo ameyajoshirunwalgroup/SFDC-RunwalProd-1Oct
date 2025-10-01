@@ -1,0 +1,134 @@
+<apex:page applyHtmlTag="false" controller="PreviewNocController" applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="advanced_pdf">
+    <html>
+        <head>
+            <style type="text/css" media="print">
+                
+                @page {
+                
+                @top-center {
+                
+                content: element(header);
+                
+                }
+                
+                @bottom-left {
+                
+                content: element(footer);
+                
+                }
+                
+                margin:8em 1em 6em;
+                
+                }
+                
+                
+                
+                div.header {
+                
+                padding: 10px;
+                height : 400px !important;
+                
+                position: running(header);
+                
+                }
+                
+                div.footer {
+                
+                display: block;
+                
+                padding: 5px;
+                
+                position: running(footer);
+                
+                }
+                
+                
+                
+                .pagenumber:before {
+                
+                content: counter(page);
+                
+                }
+                
+                .pagecount:before {
+                
+                content: counter(pages);
+                
+                }
+                
+                .underlineText
+                {
+                border:0px;
+                border-bottom:1px solid  black;
+                display: block;
+                unicode-bidi: isolate;
+                margin-block-start: 0em;
+                margin-block-end: 0em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                overflow: hidden;
+                border-width: 2px;
+                }
+                
+            </style>
+            
+        </head>
+        
+        <body>
+            
+            
+            <div class="header" >
+                
+                <div style="width:90%;float:left;padding-top:60px;font-size:14px;font-weight:600">
+                    
+                    <h1 style="font-size:25px !important;">
+                        RUNWAL RESIDENCY PRIVATE LTD
+                    </h1>
+                </div>
+                <div  style="display: flex;flex-wrap: wrap;white-space: nowrap;width:10%;float:right;text-align: left;">
+                    <apex:outputField style="display: flex;flex-wrap: wrap;white-space: nowrap;float:right;text-align: left;" value="{!noc.RW_Runwal_Logo__c }">
+                    </apex:outputField>
+                </div>
+                <div style="float: left;width: 100%;padding-top:0px !important;margin-top:0px !important">
+                    
+                    <span class="underlineText"></span>
+                </div>
+            </div>
+            
+            
+            
+            <div class="footer">
+                <div style="float: left;width: 100%;padding-top:0px !important;margin-top:0px !important">                        
+                    <span class="underlineText"></span>
+                    
+                </div>
+                
+                <div style="width:10%">
+                    &nbsp;
+                </div>
+                
+                <div style="width:100%;text-align: center;"> <b>Regd.Office </b>: Runwal and Omkar Esquare, 5th flr.,Opp. Sion Chunabhatti Signal, Sion (E), Mumbai-400 022.<br/>
+                    <b>Tel</b> : +91 22 6113 3000 <b>. FAX</b>: +91 22 2409 3749 <b>. E</b>: corporate@runwal.com <b>.</b> www.runwal.com <br/>
+                    CIN - U45400MH2011PTC212140</div>
+                
+                <div style="width:10%">
+                    &nbsp;
+                </div>
+                
+            </div>
+            
+            
+            
+            <div class="content">
+                
+                <p>
+                    <apex:outputText style="font-size:14px;font-family:sans-serif;" escape="false" value="{!noc.RW_Template__c}"  ></apex:outputText>
+                </p>
+                
+            </div>
+            
+            
+        </body>
+        
+    </html>
+</apex:page>

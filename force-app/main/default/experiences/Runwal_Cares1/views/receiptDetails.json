@@ -1,0 +1,68 @@
+{
+  "appPageId" : "55e0b7c3-0717-42c4-9566-d5f906bed081",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "684d12c6-d84a-460b-88a1-d8a882cd9945",
+  "label" : "ReceiptDetails",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "39412760-2d92-4547-9e31-a48c46b57c18",
+          "columns" : [ {
+            "UUID" : "6064adbf-17d4-4222-b070-da797d03f979",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "39412760-2d92-4547-9e31-a48c46b57c18",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:CustomerPortalViewReceipts",
+          "id" : "51aec967-ec78-459b-97d9-289caedd333d",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "6064adbf-17d4-4222-b070-da797d03f979",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "8ff113e4-c175-4d3f-b4b0-1ed2eb8712a6",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "ReceiptDetails"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "7e245ce1-0d1b-40d0-9891-124a707259b4",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "fbcded3f-3d39-481c-9916-afb28255d546",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-receiptdetails"
+}

@@ -1,0 +1,345 @@
+<apex:page sidebar="false" showheader="false" standardstylesheets="false" id="thePage" deferlastcommanduntilready="true" cache="false" 
+           controller="CIFSearchPageController">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>CIF Form</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet"
+              href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <!-- <link rel="stylesheet" href="css/runwal.css" /> -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.RunwalCSS,'/css/runwal.css')}" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            .spinnerBg {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0.2;
+                z-index: 999999;
+                left: 0;
+                top: 0;
+            }
+
+            .Assigned {
+                position: fixed;
+                background: url('{!URLFOR($Resource.CIFLoading)}');
+                background-size: 50px 50px;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                z-index: 1004;
+                left: 0%;
+                top: 0%;
+            }
+            .errorMsg {
+                color: red;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <div class="container">
+            <script type="text/javascript">
+                function showPopup(){
+                //let popUpVal = confirm("Do you want to create a lead with Direct Source!");
+                alert("Do you want to create a lead with Direct Source!");
+                }
+            </script>
+        
+            <apex:form styleclass="form">
+                <apex:actionstatus id="spinnerStatus">
+                    <apex:facet name="start">
+                        <div class="spinnerBg" />
+                        <div class="Assigned" />
+                    </apex:facet>
+                </apex:actionstatus>
+                <apex:pageMessages />
+                <div class="row mrgn_t15">
+                    <div class="col-sm-3">
+                        <!--<img src="images/runwal_greens.png" alt="Runwal Greens" width="200" />-->
+                        <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}"
+                                    style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" />-->
+                        <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}"
+                                    style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" />
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <h1 class="heading1"><span>CUSTOMER INFORMATION FORM</span></h1>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->
+                        &nbsp;
+                    </div>
+                </div>
+                <div style="font-size: 17px;color: red;font-weight: bold;margin-top:5px;" id="errorDiv" align="center">
+                    <apex:outputtext value="{!strError}" id="errorId" />
+                </div>
+                <div class="frmContainer">
+                    <apex:outputpanel layout="block" rendered="{!showOtpDetails == false}">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">*Project : </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:selectlist value="{!strProjectId}" multiselect="false" styleclass="form-control" size="1">
+                                        <apex:selectoptions value="{!lstProjectList}" />
+                                    </apex:selectlist>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">*Contact No: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputtext value="{!NewLead.RW_Mobile_No__c}" styleclass="form-control" id="phoneID" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                         <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="form-group text-center">
+                                    <label class="frmlabel">*Enter OTP: </label>
+                                    <div class="frmElem">
+                                        <apex:inputText value="{!enteredOtp}" styleClass="form-control" html-placeholder="Enter OTP here"  />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="text-center">
+                                    <apex:inputcheckbox value="{!isNRI}" /> &nbsp;
+                                    <label>Is NRI Customer </label>  &nbsp; &nbsp;
+                                    <apex:inputcheckbox value="{!isDirect}" id="isDirectChk" onchange="toggleDirectSectionVF()" /> &nbsp;
+                                    <label>Is Direct/Revisit </label>
+                                </div>
+                                
+                            </div>
+                        </div>
+                     
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">First Name: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputtext value="{!NewLead.FirstName}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">Last Name: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputtext value="{!NewLead.LastName}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <label class="frmlabel">Email: </label>
+                                <div class="frmElem">
+                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
+                                    <apex:inputtext value="{!NewLead.Email}" styleclass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                                   
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <!--<apex:actionFunction action="{!directLead}" name="directLeadCreation" rerender="none" />-->
+                            <apex:actionFunction action="{!dummy}" name="searchLeads" rerender="none" />
+                            <apex:commandbutton action="{!goBack}" value="Cancel" styleclass="btn btn-danger" /> &nbsp;
+                            <apex:commandbutton action="{!searchAllLead}" value="Search" styleclass="btn btn-success" rendered="{!showOtpDetails == false}"/> &nbsp;
+                            <apex:commandbutton action="{!saveMethod}" value="Continue" styleclass="btn btn-success"
+                                                rendered="{!and(!isNew, !isDuplicateLeadExist, !isMultipleDuplicateOptyExist, !showDirectLeadButton)}" />
+                            <apex:commandbutton onClick="showPopup();" action="{!directLead}" value="Continue" styleclass="btn btn-success"
+                                                rendered="{!and(!isNew, !isDuplicateLeadExist, !isMultipleDuplicateOptyExist, showDirectLeadButton)}" />
+                            <!--<apex:commandbutton onClick="showPopup();" action="{!directLead}" value="Continue" styleclass="btn btn-success"
+                                                rendered="{!and(!isNew, !isDuplicateLeadExist, !isMultipleDuplicateOptyExist, showDirectLeadButton)}" />
+                            <span class="btn" onclick="showPopup();return true;"> Continue </span>
+                            <span class="btn" id="btnTest"> Button </span>-->
+                        </div>
+                    </div>
+					
+                    <apex:outputpanel layout="block" rendered="{!AND(!isNew, !isDuplicateLeadExist,!isDuplicateOptyExist,!isDuplicateAccountExist, !isMultipleDuplicateOptyExist, !showOtpDetails, !showDirectLead)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;">
+                            No duplicate lead found, Please create a new lead.
+                        </center>
+                    </apex:outputpanel>
+                    <apex:outputpanel layout="block" rendered="{!AND(isDuplicateLeadExist, !showOtpDetails, !showDirectLead)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;">
+                            Duplicate Lead Exist in the sytstem. Please click on below link to fill CIF. 
+                        </center>
+                    </apex:outputpanel>
+                    <apex:outputpanel layout="block" rendered="{!AND(isDuplicateOptyExist, !showOtpDetails, !showDirectLead)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;">
+                            Opportunity found with Same project. Please click on below link or Continue to fill CIF. 
+                        </center>
+                    </apex:outputpanel>
+                    <apex:outputpanel layout="block" rendered="{!AND(isMultipleDuplicateOptyExist, !showOtpDetails, !showDirectLead)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: red;">
+                            Multiple active opportunities found. Please connect with Sales Strategy. 
+                        </center>
+                    </apex:outputpanel>
+                    <apex:outputpanel layout="block" rendered="{!AND(isDuplicateAccountExist, !showOtpDetails, !showDirectLead)}">
+                        <center style="margin-top: 7px; font-weight: bold; font-size: 19px; color: seagreen;">
+                            Account found in the System. Please click on below link or Continue to fill CIF. 
+                        </center>
+                    </apex:outputpanel>
+                    </apex:outputpanel>
+                </div>
+                <apex:outputpanel layout="block" rendered="{!showOtpDetails}">
+                    <div style="text-align:center;" class="table-responsive col-sm-12">
+                        <h2 style="text-align:center;">Create Direct Lead</h2>
+                        Enter OTP: &nbsp;&nbsp; <apex:inputText value="{!enteredOtp}" /> &nbsp;&nbsp;  <apex:commandbutton action="{!submitOtp}" value="Submit" styleclass="btn btn-success" />
+                        
+                        <br/><br/><br/>
+                    </div>
+                   <br/><br/><br/>
+                </apex:outputpanel>
+                <apex:outputpanel layout="block" rendered="{!AND(!showOtpDetails,!showDirectLead)}">
+                <apex:outputpanel layout="block" rendered="{!isDuplicateLeadExist}">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Lead Name</th>
+                                    <th>Project Name</th>
+                                    <apex:repeat value="{!$ObjectType.Lead.FieldSets.RWLeadSearch}" var="f">
+                                        <th>
+                                            <apex:outputtext value="{!f.Label}" /><br />
+                                        </th>
+                                    </apex:repeat>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!lstDuplicateLeads}" var="lead">
+                                    <tr>
+                                        <td>
+                                            <apex:outputlink value="{!'/apex/CIFFormPage?id=' + lead.id+'&projectId='+strProjectId + '&leadOTP='+enteredOtp}">
+                                                {!lead.Name}
+                                            </apex:outputlink>
+                                        </td>
+                                        <td>
+                                            {!lead.RW_project__r.Name}
+                                        </td>
+                                        <apex:repeat value="{!$ObjectType.Lead.FieldSets.RWLeadSearch}" var="f">
+                                            <td>
+                                                <apex:outputfield value="{!lead[f]}" /><br />
+                                            </td>
+                                        </apex:repeat>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </apex:outputpanel>
+                <apex:outputpanel layout="block" rendered="{!isDuplicateAccountExist}">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Account Name</th>
+                                    <th>Mobile No</th>
+                                    <th>Email</th>
+                                    <th>Alternate Mobile no.</th>
+                                    <th>Alternate Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!lstDuplicateAccount}" var="acc">
+                                    <tr>
+                                        <td>
+                                             <apex:outputlink value="{!'/apex/CIFFormPage?Accid=' + acc.id+'&projectId='+strProjectId}">
+                                                {!acc.Name}
+                                            </apex:outputlink> 
+                                            
+                                             <!--  <apex:outputLink value="/lightning/r/Account/{!acc.Id}/view">
+                                                    {!acc.Name}
+                                                </apex:outputLink>  -->
+                                        </td>
+                                        <td>
+                                            {!acc.Mobile_No__c}
+                                        </td> 
+                                        <td>
+                                            {!acc.PersonEmail}
+                                        </td>
+                                        <td>
+                                            {!acc.Alternate_Mobile_No__c}
+                                        </td>
+                                        <td>
+                                            {!acc.Alternate_Email__c}
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </apex:outputpanel>
+                <apex:outputpanel layout="block" rendered="{!isDuplicateOptyExist}">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Opportunity Name</th>
+                                    <th>Project Name</th>
+                                    <th>Account Name</th>
+                                    <th>Lead Source</th>
+                                    <th>Contact No.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!lstDuplicateOpty}" var="opp">
+                                    <tr>
+                                        <td>
+                                            <apex:commandlink action="{!createEventOnDuplicateOpty}" value="{!opp.Name}"> <!-- value="{!'/apex/CIFFormPage?optyid=' + opp.id+'&projectId='+strProjectId}" -->
+                                               <apex:param name="OpportunityId" value="{!Opp.Id}" assignTo="{!OpportunityId}"/>
+                                            </apex:commandlink>
+                                        </td>
+                                        <td>
+                                            {!opp.RW_Project__r.Name}
+                                        </td>
+                                        <td>
+                                            {!opp.Account.Name}
+                                        </td>
+                                        <td>
+                                            {!opp.LeadSource}
+                                        </td>
+                                        <td>
+                                            {!opp.Account.Mobile_No__c }
+                                        </td> 
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </apex:outputpanel>
+                </apex:outputpanel>
+                <div class="col-md-12 text-center">
+                	<apex:commandbutton style="text-align:center;" action="{!directLead}" onClick="showPopup();" value="Create Direct Lead" styleclass="btn btn-success" rendered="{!and(showDirectLeadButton, or(isNew, isDuplicateLeadExist, isMultipleDuplicateOptyExist, isDuplicateOptyExist))}" />
+                     
+                </div>
+                    
+        			
+            </apex:form>
+        </div>
+    </body>
+</html>
+</apex:page>

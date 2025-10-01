@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LeadSource_Change</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(!ISPICKVAL(PRIORVALUE(LeadSource), &quot;&quot;),
+ISCHANGED(LeadSource),OR(DATEVALUE(CreatedDate) + 180 &gt; TODAY(),Lead_Source_Modified_Date__c + 180 &gt; TODAY()))</errorConditionFormula>
+    <errorDisplayField>LeadSource</errorDisplayField>
+    <errorMessage>You cannot change Lead Source till 180 days.</errorMessage>
+</ValidationRule>

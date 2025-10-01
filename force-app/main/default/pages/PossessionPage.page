@@ -1,0 +1,136 @@
+<apex:page docType="html-5.0" controller="Possessioncontroller"  showHeader="false" sidebar="false" standardStylesheets="true" cache="false" lightningStylesheets="false">
+    <html
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+            <script src="/soap/ajax/54.0/connection.js"></script>
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="description" content=""/>
+            <meta name="author" content=""/>
+            <apex:stylesheet value="{!URLFOR($Resource.bootstrap, '/bootstrap/css/bootstrap.min.css')}" />
+            <apex:includeScript value="{!URLFOR($Resource.bootstrap, '/bootstrap/js/bootstrap.min.js')}" />
+<style>
+.form-control.raised-box {
+                font-weight:bold;
+                padding: 10px;
+                border: 1px solid #708090;
+                box-shadow:  -1px 1px #708090,
+                     +2px 2px #708090,
+                     +3px 3px #708090,
+                     +4px 4px #708090,
+                     +5px 5px #708090;
+}
+.button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+    
+
+</style>
+        </head>
+<body>  
+ <apex:actionStatus id="status">
+    <apex:facet name="start">
+    <div class="fadeMe">
+        &nbsp;
+    </div>
+    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+            <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+        </div>
+    </div>
+    </apex:facet>
+ </apex:actionStatus>
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds">    
+  <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp">   
+        <!-- CREATE/EDIT TASK -->
+      <div aria-labelledby="newtaskform">
+        <!-- BOXED AREA -->
+        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+          <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">{!survey.Project__c}</legend> 
+            
+          <!-- CREATE NEW TASK FORM -->
+            <apex:form id="newtaskform" styleClass="slds-form--inline">
+             <apex:PageMessages id="pageMsgs"/>
+             
+            <apex:outputpanel id="renderedBlock">
+            <apex:outputText style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;" styleClass="form-control" value="Your Feedback Will Help Us Improve Our Services" rendered="{!isDisplay}"/>
+            <br/><br/>
+            <table id="table_id" style="width:100%;font-size:1em;">
+                    <apex:repeat rendered="{!IF(AND(isExpired == false,isDone == false),true,false)}" value="{!pquestions}" var="f">
+                    <tr>
+                    <td style="border:0px;">
+                    <!-- <tr> -->
+                    <b>
+                    <div class="form-group col-md-4">
+                    <label> 
+                    <apex:outputText style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;" styleClass="form-control" value="{!f.Question_Number__c}"/>
+                    <apex:outputText >. </apex:outputText>
+                    &nbsp;
+                    <apex:outputText style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;" styleClass="form-control" value="{!f.Question_Text__c}"/>
+                    </label> 
+                    </div>
+                    </b> 
+                    <br/>
+                    <!-- </tr>
+                    <tr> -->
+                    <div class="form-group col-md-4">
+                    <!-- <apex:inputField style="width: 100%;padding: 12px 20px;margin: 8px 0;display: inline-block;border: 2px solid #555;border-radius: 4px;box-sizing: border-box;" styleClass="form-control" rendered="{!IF(f.RecordType.Name == 'Yes or No Questions',true,false)}" value="{!f.Answer_Yes_No__c}"/> -->
+                    <apex:inputField style="width: 100%;padding: 12px 20px;margin: 8px 0;display: inline-block;border: 2px solid #555;border-radius: 4px;box-sizing: border-box;" styleClass="form-control" rendered="{!IF(f.RecordType.Name == 'Free Text Questions',true,false)}" value="{!f.AnswerText__c}" ignoreEditPermissionForRendering="true"/>
+                    <apex:outputPanel rendered="{!IF(f.RecordType.Name == 'Yes or No Questions',true,false)}">
+                            <apex:selectRadio id="theRadio" value="{!f.Answer_Yes_No__c}" layout="pageDirection" styleClass="radioinput">
+                            <apex:selectOption itemLabel="Yes" itemValue="Yes" id="Yes"></apex:selectOption>
+                            <apex:selectOption ItemLabel="No" itemValue="No" id="No"></apex:selectOption>
+                        </apex:selectRadio>
+                    </apex:outputPanel>
+                    <apex:outputPanel id="reasonpanel" rendered="{!IF(AND(f.RecordType.Name == 'Yes or No Questions',f.Survey__r.Survey_For_Activity__c == 'Booking'),true,false)}">
+                    <apex:outputLabel style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;">Comments if any</apex:outputLabel>
+                    &nbsp;
+                    <apex:inputField id="reason" style="width: 50%;height: 12px;padding: 12px 20px;margin: 8px 0;display: inline-block;border: 2px solid #555;border-radius: 4px;box-sizing: border-box;" styleClass="form-control" value="{!f.Reason_For_Low_Rating__c}" ignoreEditPermissionForRendering="true"/>  <!-- html-disabled="true"  rendered="{!IF(AND(f.RecordType.Name == 'Yes or No Questions',f.Survey__r.Survey_For_Activity__c == 'Booking'),true,false)}" -->
+                    </apex:outputPanel>
+                    </div>
+                    <br/>
+                   <!-- </tr> -->
+                    </td> 
+                    </tr>
+                    <tr><td style="border:0px;" colspan="2">&nbsp;</td></tr>
+                    </apex:repeat>
+                    </table>
+                    <br/>       
+            </apex:outputpanel>        
+<div align="center" draggable="false" >                     
+<apex:commandButton style="padding: 10px 24px;width: 220px;font-size: 18px;" rendered="{!IF(AND(isTrue == false,isExpired == false,isDone == false,show == true),true,false)}" styleClass="slds-button slds-button--brand slds-button--small button2" value="Submit" action="{!save}" status="status"/> 
+</div>
+</apex:form>
+</fieldset >
+</div>
+</div>
+</div>
+<script>
+function dummy()
+{
+    //var rate_value;
+    //if (document.getElementById('one').checked) {
+         //var rate_value = document.getElementById('one').value;
+    //}
+    //alert('IN FUNCTION DUMMY');
+    
+    //document.getElementById("newtaskform:renderedBlock:reasonpanel:reason").style.html-disabled = 'false';
+    
+    //if (getElementByID("one").value == 1 || getElementByID("two").value == 2)
+    //{
+        //getElementByID("reason").style.html-disabled = "false";
+    //}
+}
+</script>
+</body>
+</html>    
+</apex:page>

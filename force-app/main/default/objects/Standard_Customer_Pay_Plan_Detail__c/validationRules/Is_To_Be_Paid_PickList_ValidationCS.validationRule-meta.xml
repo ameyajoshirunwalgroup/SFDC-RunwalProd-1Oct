@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_To_Be_Paid_PickList_ValidationCS</fullName>
+    <active>true</active>
+    <description>When User Select On Date of PickList and Enter data in Project Construction Stages</description>
+    <errorConditionFormula>AND(
+ISPICKVAL( Is_to_be_Paid__c , &apos;On Date&apos;) ,NOT( ISBLANK( Project_Construction_Stages__c ) )  )</errorConditionFormula>
+    <errorMessage>After Selecting On Date  Pick Value,You cannn&apos;t enter in Project Construction Stages</errorMessage>
+</ValidationRule>

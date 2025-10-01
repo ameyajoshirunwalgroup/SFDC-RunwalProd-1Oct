@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sequence_Number_Value</fullName>
+    <active>true</active>
+    <errorConditionFormula>Sequence_No__c &lt;1 ||  Sequence_No__c &gt;=6</errorConditionFormula>
+    <errorDisplayField>Sequence_No__c</errorDisplayField>
+    <errorMessage>Sequence Number value Can only be between 1-5</errorMessage>
+</ValidationRule>

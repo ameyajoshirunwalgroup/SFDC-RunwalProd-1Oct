@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_Of_Possession_cannot_be_changed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+!ISBLANK( TEXT (PRIORVALUE(Date_of_Possesion__c))), 
+ISCHANGED( Date_of_Possesion__c),$Profile.Name &lt;&gt; &quot;System Administrator&quot;, $Profile.Name &lt;&gt; &quot;Sales Strategy&quot;  ,
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Date_of_Possesion__c</errorDisplayField>
+    <errorMessage>Date of Possession Cannot be Changed</errorMessage>
+</ValidationRule>

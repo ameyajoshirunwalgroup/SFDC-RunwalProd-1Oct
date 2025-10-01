@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Document_Proof__c</fullName>
+    <label>Document Proof</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>RW_Residential_Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Driving License</fullName>
+                <default>false</default>
+                <label>Driving License</label>
+            </value>
+            <value>
+                <fullName>Passport</fullName>
+                <default>false</default>
+                <label>Passport</label>
+            </value>
+            <value>
+                <fullName>Electricity Bill</fullName>
+                <default>false</default>
+                <label>Electricity Bill</label>
+            </value>
+            <value>
+                <fullName>Aadhar Card</fullName>
+                <default>false</default>
+                <label>Aadhar Card</label>
+            </value>
+            <value>
+                <fullName>Voter’s ID Card</fullName>
+                <default>false</default>
+                <label>Voter’s ID Card</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Indian National</controllingFieldValue>
+            <valueName>Driving License</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Indian National</controllingFieldValue>
+            <controllingFieldValue>Foreign Nationals Of Indian Origin</controllingFieldValue>
+            <controllingFieldValue>For NRI</controllingFieldValue>
+            <controllingFieldValue>For Company</controllingFieldValue>
+            <controllingFieldValue>Partnership Firm</controllingFieldValue>
+            <valueName>Passport</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Indian National</controllingFieldValue>
+            <valueName>Electricity Bill</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Indian National</controllingFieldValue>
+            <valueName>Aadhar Card</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Indian National</controllingFieldValue>
+            <valueName>Voter’s ID Card</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

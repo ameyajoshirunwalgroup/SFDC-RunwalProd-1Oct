@@ -1,0 +1,63 @@
+<apex:page docType="html-5.0"
+           showHeader="false" 
+           sidebar="false"
+           standardController="Lead" 
+           extensions="CallActionControllerForLead">
+   <head>
+    <apex:stylesheet value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery-1.9.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'backbone/underscore-1.4.4.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'force.entity.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'SObjectData.js')}"/>         
+   </head>
+   <body>
+
+       <div data-role="content" id="contactList">            
+           <ul id="cList" data-filter="true" data-inset="true" data-role="listview" data-theme="c" data-dividertheme="b">
+           </ul>
+       </div>
+   </body>
+   <script type="text/javascript">
+       var $j = jQuery.noConflict(); 
+       $j(document).ready(function() {
+           CallActionControllerForLead.getPhoneFields('{!Id}',showPhoneFields,{escape:false});
+       });
+            
+       function showPhoneFields(recordMap, event) {
+           if(event.status) {
+               $j('#cList').empty();
+               for (var m in recordMap){
+                   var newLi = $j('<li></li>'); 
+                   var newLink = '<a data-theme="b" data-role="button" href="#" onclick=makeCall("{!Id}",' + recordMap[m] + ')> ' + m + '</a>';         
+                   newLi.append(newLink);
+                   newLi.appendTo('#cList');
+               } 
+               $j.mobile.hidePageLoadingMsg();
+               $j('#cList').listview('refresh');
+           }else if(event.type === 'exception') {
+               alert('event exception:' + event.message);
+           } else{
+               alert('event failed:' + event.message);
+           }    
+       }
+       
+       function makeCall(Id, Phone) {
+           var strPhone = Phone.toString();
+           var strPhoneNo = strPhone.replace(strPhone.substring(0,5),'XXXXX');
+           alert('Making a call to ' + Id + ' on #' + strPhoneNo );
+           CallActionControllerForLead.click2Call(Id,Phone, showResponse,{escape:false});
+       }
+       
+       function showResponse(message, event) {
+           if(event.status) {
+               alert('Response:' + message);
+           }else if(event.type === 'exception') {
+               alert('event exception:' + event.message);
+           } else{
+               alert('event failed:' + event.message);
+           }    
+       }
+       
+    </script>     
+</apex:page>

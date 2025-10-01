@@ -1,0 +1,199 @@
+<apex:page id="pageId" standardController="Payment_Plan__c" extensions="NewPaymentPlanController" sidebar="false" action="{!Constructor}">
+    
+    <style>
+        .Processing
+        {
+            position: fixed;
+            background: url('/img/loading32.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+            
+            width: 100%;
+            height: 100%;
+            z-index: 1004;
+            left: 0%;
+            top: 0%;
+        }
+        .closeIcon{ display: none; }
+    </style>
+     <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+   
+     <script type="text/javascript">
+            function abc()
+            {
+             $("[for$=project]").css('display','none');
+             $("[for$=tower]").css('display','none');
+            
+            }
+            
+            $( document ).ready(function() {
+               
+               abc();
+        });
+    </script>
+    
+   
+  
+    
+    <script type="text/javascript">
+        
+        function checkValidations()
+        {
+            var x = document.getElementById('pageId:formId:pb_main:pbs_milestone:paid').value;
+            
+            if(x == null || x == '')
+            {
+                alert('Please provide a value for Is to be Paid Field....');
+                document.getElementById('pageId:formId:pb_main:pbs_milestone:paid').focus();
+                return false;
+            }
+            
+            var x = document.getElementById('pageId:formId:pb_main:pbs_milestone:stage');
+            
+            if(x)
+            {
+                var y = x.value;
+                if(y == null || y == '')
+                {
+                    alert('Please provide a value for Construction Stages Field....');
+                    document.getElementById('pageId:formId:pb_main:pbs_milestone:stage').focus();
+                    return false;
+                }
+            }
+            
+            var x = document.getElementById('pageId:formId:pb_main:pbs_milestone:day').value;
+            
+            if(x == null || x == '')
+            {
+                alert('Please provide a value for Days/Months Field....');
+                document.getElementById('pageId:formId:pb_main:pbs_milestone:day').focus();
+                return false;
+            }
+            
+            var x = document.getElementById('pageId:formId:pb_main:pbs_milestone:dayvalue').value;
+            
+            if(x == null || x == '')
+            {
+                alert('Please provide a value for Days/Months Value Field....');
+                document.getElementById('pageId:formId:pb_main:pbs_milestone:dayvalue').focus();
+                return false;
+            }
+            return true;
+        }
+        
+        function EditCharge(element)
+        {
+            var spVal = element.id.split(':');
+            document.getElementById('pageId:formId:pb_main:EditValue').value = spVal[spVal.length - 2];
+            RowEditCall();
+        }
+        
+        function DeleteCharge(element)
+        {
+            var response = window.confirm('Do you want to delete this project stage ?');
+            
+            if(response == true)
+            {
+                var spVal = element.id.split(':');
+                document.getElementById('pageId:formId:pb_main:EditValue').value = spVal[spVal.length - 2];
+                RowDelCall();
+            }
+        }
+    </script>
+   
+    <apex:outputLabel style="font-weight:bold; margin-left:10px; color: blue;text-shadow: 1px 1px skyblue;word-spacing: 4px;letter-spacing: 1px;">Payment Plan Edit</apex:outputLabel><br/>
+    <apex:outputLabel style="font-size:28px;font-weight:bold; margin-left:10px; color: skyblue;text-shadow: 2px 1px blue;word-spacing: 4px;letter-spacing: 1px;">New Payment Plan</apex:outputLabel>
+    
+    <apex:form id="formId" style="margin-top:20px;"> 
+             <apex:pageMessages ></apex:pageMessages> 
+        <apex:pageBlock id="pb_main" title="Payment Plan Edit">
+            
+            <apex:actionStatus id="act_Type" startStyleClass="Processing"/>
+            <apex:inputHidden id="EditValue" value="{!EditValue}"/>
+            <apex:actionFunction action="{!EditCharge}" name="RowEditCall" reRender="pb_main" status="act_Type"/>
+            <apex:actionFunction action="{!DeleteCharge}" name="RowDelCall"/>
+            
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Add" action="{!AddMilestone}" rendered="{!NOT(EditMode)}" onclick="return checkValidations();" style="width:60px; margin-left:80px;"/>  
+                <apex:commandButton value="Save" action="{!Save}" rendered="{!EditMode}" onclick="return checkValidations();" style="width:60px; margin-left:80px;"/>  
+                <apex:commandButton value="Close" action="{!Close}" style="width:80px; margin-left:20px;" />
+                <apex:commandButton value="Cancel" action="{!Cancel}" style="width:60px; margin-left:20px;"/>  
+            </apex:pageBlockButtons>
+            
+          
+                  
+            <apex:pageBlockSection id="pbs_plan" columns="3" title="Plan Details" collapsible="false">
+                <apex:outputField value="{!objPaymentPlan.Project__c}"/>
+                <apex:outputLink value="/{!objPaymentPlan.Id}">{!objPaymentPlan.Name}</apex:outputLink>
+                <apex:outputLink value="/{!objPaymentPlan.Id}">{!objPaymentPlan.Tower__r.Name}</apex:outputLink>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection id="pbs_milestone" columns="2" title="Milestone Details" collapsible="false">
+                <apex:inputField id="paid" value="{!objPayPlanDetail.Is_to_be_Paid__c}"><apex:actionSupport event="onchange" action="{!ChangeIsToBePaid}" oncomplete="abc();" reRender="pbs_milestone" status="act_Type"/></apex:inputField>
+                <apex:inputField id="stage" value="{!objPayPlanDetail.Project_Construction_Stages__c}" rendered="{!showStage}" />
+                <apex:inputField id="day" value="{!objPayPlanDetail.Days_Months__c}"/>
+                <apex:inputField id="dayvalue" value="{!objPayPlanDetail.Days_Months_Value__c}"/>
+                 <apex:inputField id="project" value="{!objPayPlanDetail.Project__c}"   rendered="true" style="Display:none;" />
+                 <apex:inputField id="tower" value="{!objPayPlanDetail.Tower__c}"   rendered="true" style="Display:none;" />
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockTable id="pb_table" value="{!lstWrapperClassForCreation}" var="PayPlan" style="margin-top:25px;margin-bottom:10px;text-align:center;border:2px solid black;" rendered="{!IF(lstWrapperClassForCreation.size > 0, true, false)}">
+
+                <apex:column style="border-left: 1px solid #e3deb8; width:10%" headerValue="Select"><apex:inputCheckbox value="{!PayPlan.SelectCharge}"/></apex:column>
+                
+                <apex:column style="border-left: 1px solid #e3deb8; width:18%;font-weight:bold" headerValue="Project Charges" value="{!PayPlan.ChargeName}"/>
+                
+                <apex:column style="border-left: 1px solid #e3deb8; width:18%;" headerValue="%/Amount"><apex:inputField value="{!PayPlan.objPayPlanDetail.Amount__c}" style="width:100px;"/></apex:column>
+                
+                <apex:column style="border-left: 1px solid #e3deb8; width:18%;" headerValue="%/Amount Value"><apex:inputField value="{!PayPlan.objPayPlanDetail.Amount_Value__c}" style="width:100px;"/></apex:column>
+                
+                <apex:column style="border-left: 1px solid #e3deb8; width:18%;" headerValue="Calculate Inst. Amount as %"><apex:inputField value="{!PayPlan.objPayPlanDetail.Calculate_Installment_Amount_as__c}" style="width:100px;"/></apex:column>
+                
+                <apex:column style="border-left: 1px solid #e3deb8; width:18%;" headerValue="Total Charge Value Minus"><apex:inputField value="{!PayPlan.objPayPlanDetail.Total_Charge_Value_Minus__c}" style="width:100px;"/></apex:column>
+                
+                <apex:column headerValue="OC Milestone?" rendered="{!bankFunded}"><apex:inputField value="{!PayPlan.objPayPlanDetail.OC_Milestone__c}" style="width:100px;"/></apex:column>
+                 
+                <apex:column style="border-left: 1px solid #e3deb8; width:18%;" headerValue="Is Registration Linked"><apex:inputField value="{!PayPlan.objPayPlanDetail.Registration_Linked__c}" style="width:100px;"/></apex:column>
+                
+            </apex:pageBlockTable>
+            
+            <apex:outputText id="error_msg" value="{!ErrorMsg}" style="font-weight: bold;font-size: 14px;color: red;"/>
+            
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="pb_detail" title="Payment Plan Details">
+            <table style="width: 100%;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;text-align: left; font-family:Georgia, serif" cellspacing="0" cellpadding="8">
+                <tr>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;font-weight:bold;font-size:10px;background-color:#CC527A;">Project Stages</td>
+                    <apex:repeat value="{!lstPayPlanHeader}" var="PayPlan">
+                        <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;background-color: #D0E7C8;"><apex:outputLabel style="font-weight:bold; font-size:10px;" value="{!PayPlan.Charge_Code__r.Name}" /></td>
+                    </apex:repeat>
+                </tr>
+                <apex:repeat value="{!lstPayPlanDetails}" var="HeaderList">
+                    <tr>
+                        <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;background-color: #FAFBD5;">
+                            <apex:variable value="{!1}" var="counter" />
+                            <apex:repeat value="{!HeaderList}" var="DetailedList">
+                                <apex:outputLabel style="font-size:10px" rendered="{!IF(counter == 1, true, false)}"><b>{!DetailedList.Is_to_be__c}</b></apex:outputLabel>
+                                <apex:variable value="{!counter + 1}" var="counter" />
+                            </apex:repeat>
+                        </td>
+                        <apex:repeat value="{!lstPayPlanHeader}" var="PayPlan">
+                            <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;background-color: white;">
+                                <apex:repeat value="{!HeaderList}" var="DetailList">
+                                    <apex:outputLink rendered="{!IF(PayPlan.Id == DetailList.Standard_Pay_Plan_Header__c,true,false)}" target="_blank" value="/{!DetailList.Id}" style="text-decoration:none;cursor:pointer;font-size:10px;color:blue">{!DetailList.Value__c}</apex:outputLink>
+                                    <apex:outputLabel rendered="{!IF(PayPlan.Id == DetailList.Standard_Pay_Plan_Header__c,true,false) && DetailList.Registration_Linked__c}" style="font-size:8px;color:#CC527A">(Registration Linked)</apex:outputLabel>
+                                    <br/>
+                                        <apex:outputLabel style="color:red;" rendered="{!IF(PayPlan.Id == DetailList.Standard_Pay_Plan_Header__c,true,false) && DetailList.OC_Milestone__c}">
+                                            OC Milestone - ✓
+                                        </apex:outputLabel>
+                                </apex:repeat>
+                            </td>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

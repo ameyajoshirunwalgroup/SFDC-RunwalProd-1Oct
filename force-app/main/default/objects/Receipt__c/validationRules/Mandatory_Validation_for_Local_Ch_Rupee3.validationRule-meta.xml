@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Validation_for_Local_Ch_Rupee3</fullName>
+    <active>true</active>
+    <description>When User Select  Local Cheque of Mode PickList and Rupees of Mode Selection then not entering data in Cheque/DD Amount (Rs.)</description>
+    <errorConditionFormula>AND( ISPICKVAL( Mode__c , &apos;Local Cheque&apos;) , ISPICKVAL( Mode_Selection__c , &apos;Rupees&apos;) , ISBLANK(  Cheque_DD_Amount_Rs__c ) )</errorConditionFormula>
+    <errorDisplayField>Cheque_DD_Amount_Rs__c</errorDisplayField>
+    <errorMessage>After Selecting Local Cheque of Mode PickList and Rupees of Mode Selection Pick List,Cheque/DD Amount (Rs.) cann&apos;t be blank.</errorMessage>
+</ValidationRule>

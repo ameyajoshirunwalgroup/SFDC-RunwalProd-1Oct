@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Feedback_Type1__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( ISPICKVAL(Feedback_Type__c, &apos;End of Bot conversation&apos;) , &apos;End of Bot conversation&apos;,  
+IF(ISPICKVAL(Feedback_Type__c, &apos;Case Closure&apos;), &apos;Case Closure&apos;,  IF(ISPICKVAL(Feedback_Type__c, &apos;Call Disposition&apos;), &apos;Call Disposition&apos;,  IF(ISPICKVAL(Feedback_Type__c, &apos;Day of Registration&apos;), &apos;Day of Registration&apos;,  IF(ISPICKVAL(Feedback_Type__c, &apos;Day of Possession Handover&apos;), &apos;Day of Possession Handover&apos;,  IF(ISPICKVAL(Feedback_Type__c, &apos;Post Possession Handover&apos;), &apos;Post Possession Handover&apos;, IF(ISPICKVAL(Feedback_Type__c, &apos;Sales Experience&apos;), &apos;Sales Experience&apos;, null)) ) ) ) ) )</formula>
+    <label>Feedback Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Validation_for_RTGS_Forex1</fullName>
+    <active>true</active>
+    <description>When User Select RTGS of Mode PickList and Forex of Mode Selection then not entering data in Cheque/DD Date</description>
+    <errorConditionFormula>AND( ISPICKVAL( Mode__c , &apos;RTGS&apos;) , ISPICKVAL( Mode_Selection__c,&apos;Forex&apos;) , ISBLANK(  Cheque_DD_Date__c  ) )</errorConditionFormula>
+    <errorDisplayField>Cheque_DD_Date__c</errorDisplayField>
+    <errorMessage>After Selecting RTGS of Mode PickList and forex of Mode Selection Pick List,	Cheque/DD Date cann&apos;t be blank.</errorMessage>
+</ValidationRule>

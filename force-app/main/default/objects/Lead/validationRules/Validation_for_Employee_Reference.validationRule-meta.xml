@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_for_Employee_Reference</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF(ISPICKVAL(LeadSource
+,&apos;Emp / Mgmt Reference&apos;),ISBLANK(Employee_Reference__c),false)</errorConditionFormula>
+    <errorDisplayField>Employee_Reference__c</errorDisplayField>
+    <errorMessage>Please Select Employee/Manager.</errorMessage>
+</ValidationRule>

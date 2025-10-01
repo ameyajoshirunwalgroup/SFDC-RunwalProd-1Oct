@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mahalaxmi_users</fullName>
+    <columns>NAME</columns>
+    <columns>Project__c</columns>
+    <columns>Tower__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Project__c</field>
+        <operation>contains</operation>
+        <value>Mahalaxmi</value>
+    </filters>
+    <label>Mahalaxmi users</label>
+</ListView>

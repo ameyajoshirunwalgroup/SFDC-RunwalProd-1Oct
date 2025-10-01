@@ -1,0 +1,634 @@
+<apex:page standardController="Booking__c" renderAs="pdf" applyHtmlTag="false" applyBodyTag="false" contentType="application/pdf" showHeader="false"
+           extensions="generate_BookingApplication_Controller" standardStylesheets="false">
+   
+    <html>
+        <head>
+            <style>
+                .signature-box {
+                width: 100px;
+                height: 120px;
+                border: 1px solid #000;
+                display: inline-block;
+                margin: 0 64px;
+                align: left;
+                }
+                .signature-label {
+                text-align: center;
+                font-weight: bold;
+                margin-top: 5px;
+                margin: 0 64px;
+                }
+                .signature-title {
+                text-align: center;
+                margin-top: 5px;
+                margin: 0 64px;
+                }
+                
+                table.signature-table {
+                border-collapse: collapse;
+                margin-top: 30px;
+                width: 700px;
+                }
+                
+                table.signature-table td {
+                border: 1px solid black;
+                text-align: center;
+                padding: 20px;
+                }
+                
+                .custom-checkbox {
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                border: 1px solid #000;
+                margin-right: 5px;
+                vertical-align: center;
+                }
+                
+                @page{
+                size: A4 potrait;
+                margin: 0;
+                padding: 0;
+                }
+                
+                .custom {
+                margin: 50px;
+                } 
+                
+                 .customPage {
+                margin-Top: 30px;
+                margin-Bottom: 30px;
+                margin-left: 20px;
+                } 
+            </style>
+        </head>
+        
+        
+        <body>
+            <!-- Page 1 start -->
+           <div>
+                <img src="{!FrontPageofProject}" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 216mm; height: 279.5mm;
+                overflow: hidden;"/>
+               
+            </div>
+            <!-- Page 1 end -->
+            
+            <div style="page-break-before:always;"></div>
+            <div>
+            <apex:outputPanel rendered="{!showPriceSheet}">
+                <apex:include pageName="Generate_Price_Sheet_PDF" rendered="{!NOT(ISNULL(quotationId))}">
+                    <apex:param name="id" value="{!quotationId}"/>
+                </apex:include>
+            </apex:outputPanel>
+            </div>
+            
+            <div style="page-break-before:always;"></div>
+            <!-- Page 2 start -->
+            <div class="custom">
+                
+                       
+            <div style="position: relative; text-align: center;">
+                <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; table-layout: fixed; border: 1px solid #000;">
+                    <tr>
+                        <!-- Left: Project Logo (reduced width) -->
+                        <td style="width: 20%; text-align: left; vertical-align: top; padding: 3px;">
+                            <img src="{!ImageofProjectLogo}" width="140px" height="80px" />
+                        </td>
+                        
+                        <!-- Center: Project Details -->
+                        <td style="width: 70%; text-align: center; padding: 5px;">
+                            <h2 style="font-size: 16px; margin: 0;">
+                                {!bookingWrap.projectName}
+                            </h2>
+                            <p style="margin: 5px 0; font-size: 14px;">
+                                {!bookingWrap.projectAddress1}<br/>
+                                {!bookingWrap.projectCIN}
+                            </p>
+                        </td>
+                        
+                        <!-- Right: Header Logo (reduced width) -->
+                        <td style="width: 15%; text-align: right; vertical-align: top; padding: 5px;">
+                            <apex:image url="{!$Resource.Runwal_Booking_Application_HeaderLogo}" width="80px" height="80px"/>
+                        </td>
+                    </tr>
+                    <!--tr>
+                        <td style="width: 100px; vertical-align: top; text-align: left;">
+                            
+                            <img src="{!ImageofQRcode}" width="90.70px" height="85.97px" />
+                        </td>
+                        
+                        <td colspan="2" style="text-align: center; padding: 10px; vertical-align: middle;">
+                            <hr style="margin-top: 4px;" />
+                            <p style="margin: 5px 0; font-size: 14px; font-family: Arial, sans-serif;">
+                                MahaRERA registration no : {!bookingWrap.mhahReraUnit} - {!bookingWrap.mhahRera}<br/>
+                                MahaRERA website:
+                                <a href="http://maharera.mahaonline.gov.in" target="_blank">
+                                    http://maharera.mahaonline.gov.in
+                                </a>
+                            </p>
+                            <hr style="margin-top: 5px;" />
+                        </td>
+                    </tr-->
+                </table>
+                <table style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <tr>
+                        <td style="width: 90px; padding: 0; margin: 0; vertical-align: top; text-align: center;">
+                            <img src="{!ImageofQRcode}" width="90.70px" height="85.97px" />
+                        </td>
+                        
+                        <td colspan="2" style="padding: 0; margin: 0; text-align: center; vertical-align: middle;">
+                            <hr style="margin: 2px 0;" />
+                            <p style="margin: 2px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.4;">
+                                MahaRERA registration no : {!bookingWrap.mhahReraUnit} - {!bookingWrap.mhahRera}<br/>
+                                MahaRERA website:
+                                <a href="http://maharera.mahaonline.gov.in" target="_blank">
+                                    http://maharera.mahaonline.gov.in
+                                </a>
+                            </p>
+                            <hr style="margin: 2px 0;" />
+                        </td>
+                    </tr>
+                </table>
+                
+                <!--hr style="margin-top: 15px;"/>
+                <p style="margin: 5px 0; padding:15px; font-size: 14px; font-family: Arial MT, sans-serif; text-align : center">
+                    MahaRERA registration no : {!bookingWrap.mhahReraUnit} - {!bookingWrap.mhahRera}
+                    <br/>MahaRERA website: 
+                    <a href="http://maharera.mahaonline.gov.in" target="_blank">
+                        http://maharera.mahaonline.gov.in
+                    </a>
+                </p>
+                <hr/>
+                <div style="position: absolute; top: 110px; left: 0px;">
+                    <img src="{!ImageofQRcode}" width="90.70px" height="85.97px" />
+                </div-->
+                   
+                </div><br/><br/>
+            
+            
+             
+            <div style="text-align: center;">
+                <h2 style="margin: 0; font-size: 18px; font-family: Arial, sans-serif;">APPLICATION FOR BOOKING</h2>
+            </div><br/>
+            
+                <table style="width: 100%;">
+                    <tr>
+                        <th style="font-size:14px; text-align: left; width: 50%;">
+                            A. APPLICANT/S DETAILS
+                        </th>
+                        <th style="font-size:14px; text-align: right; width: 50%;">
+                            Date:
+                            <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                <apex:param value="{!dDate}" />
+                            </apex:outputText>
+                        </th>
+                    </tr>
+                </table><br/>
+                
+                <apex:form >
+                    <apex:variable var="showSecond" value="{!NOT(ISBLANK(second_Applicant_Wrapper.isfullName))}" />
+                    <apex:variable var="showThird" value="{!NOT(ISBLANK(third_Applicant_Wrapper.isfullName))}" />
+                    
+                    <table border="1" cellspacing="0" cellpadding="4"
+                           style="font-family:Arial MT; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
+                        <thead>
+                            <tr style="background-color: #fff;">
+                                <th style="font-size:13px; border: 1px solid #000;"></th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;">1<sup>st</sup> Applicant</th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;" rendered="{!showSecond}">2<sup>nd</sup> Applicant</th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;" rendered="{!showThird}">3<sup>rd</sup> Applicant</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Full Name (In Capital)</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isfullName}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isfullName}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isfullName}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Date of Birth</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">
+                                    <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                        <apex:param value="{!first_Applicant_Wrapper.isDob}" />
+                                    </apex:outputText>
+                                </td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">
+                                    <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                        <apex:param value="{!second_Applicant_Wrapper.isDob}" />
+                                    </apex:outputText>
+                                </td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">
+                                    <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                        <apex:param value="{!third_Applicant_Wrapper.isDob}" />
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Nationality</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isNationality}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isNationality}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isNationality}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Residential Status<br/>(Resident / NRI / Foreign National / Indian Origin)</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isResedentialStatus}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isResedentialStatus}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isResedentialStatus}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">PAN No.</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isPanNo}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isPanNo}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isPanNo}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Aadhar Card No.</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isAadharNo}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isAadharNo}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isAadharNo}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">GSTN No.</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isGstNo}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isGstNo}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isGstNo}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Permanent Address</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isPerAddress}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isPerAddress}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isPerAddress}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Address for Communication</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isCommunAddress}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isCommunAddress}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isCommunAddress}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Mobile No.</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isMoNo}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isMoNo}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isMoNo}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Telephone No.</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isTelNo}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isTelNo}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isTelNo}</td>
+                            </tr>
+                            <!--tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Email Id</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center; white-space: pre-wrap;">{!first_Applicant_Wrapper.isemail}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center; white-space: pre-wrap;">{!second_Applicant_Wrapper.isemail}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center; white-space: pre-wrap;">{!third_Applicant_Wrapper.isemail}</td>
+                            </tr-->
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Email Id</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center; word-break: break-all;">
+                                    {!formattedFirstEmail}
+                                </td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center; word-break: break-all;">
+                                    {!formattedSecondEmail}
+                                </td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center; word-break: break-all;">
+                                    {!formattedThirdEmail}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Company Name</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isCompanyName}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isCompanyName}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isCompanyName}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Designation</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isDesignation}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isDesignation}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isDesignation}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; font-size: 13px;">Office Address</td>
+                                <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!first_Applicant_Wrapper.isOfficeAddress}</td>
+                                <td rendered="{!showSecond}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!second_Applicant_Wrapper.isOfficeAddress}</td>
+                                <td rendered="{!showThird}" style="border: 1px solid #000; font-size: 13px; text-align: center;">{!third_Applicant_Wrapper.isOfficeAddress}</td>
+                            </tr>
+                            
+                            
+                        </tbody>
+                    </table>
+                </apex:form>
+                </div>
+            <!-- Page 2 end -->
+            
+            <div Style ='page-break-before:always;'></div>
+            <!-- Page 3 start -->
+            <div class="custom">
+                
+                
+                <div style="margin-top:20px; line-height:1.8; font-size: 14px; font-family:Arial MT;">
+                    <p style="font-size:14px; font-family:Arial MT;">
+                        I/We, the Applicant/s remit herewith a sum of 
+                        <span style="border-bottom: 1px solid #000; padding-bottom: 3px; font-weight: bold; display: inline-block;">
+                            <apex:outputText value="₹ {0,number,###,##,##0.00}">
+                                <apex:param value="{!grandTotalReceiptAmount}" />
+                            </apex:outputText>
+                        </span> /- In Words 
+                        <span style="font-weight: bold;">
+                            <apex:outputText value="{!totalAmountinWords}" />
+                        </span> vide the following favoring as token amount (not exceeding 10% of the total consideration).
+                    </p>              
+                    <br/>
+                    
+                    <table border="1" cellspacing="0" cellpadding="4"
+                           style="font-family:Arial MT; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
+                        <thead>
+                            <tr style="background-color: #fff;">
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;">Instrument</th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;">Transaction Date</th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;">
+                                    Transaction / Cheque no / Draft no / NEFT No / UPI ID
+                                </th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;">Total Amount</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <apex:repeat value="{!receiptWrapList}" var="wrap">
+                                <tr>
+                                    <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!wrap.modeofInstrument}</td>
+                                    <td style="border: 1px solid #000; font-size: 13px; text-align: center;">
+                                        <apex:outputText value="{0,date,dd-MM-yyyy}">
+                                            <apex:param value="{!wrap.chequeOrDdDate}" />
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!wrap.chequeNo}</td>
+                                    <td style="border: 1px solid #000; font-size: 13px; text-align: center;">
+                                        <apex:outputText value="₹ {0,number,###,##,##0.00}">
+                                            <apex:param value="{!wrap.totalAmount}" />
+                                        </apex:outputText> /-
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table><br/>
+                    <p style="font-family: Arial MT; font-size: 14px; ">
+                        <b>Name of the Company / Developer:</b>&nbsp; 
+                        <span style="border-bottom: 1px solid #000; padding-bottom: 2px; display: inline-block;">
+                            {!bookingWrap.companyOrDeveloper}
+                        </span>
+                    </p>
+                </div><br/>
+                <table border="0" cellspacing="0" cellpadding="4" 
+                       style="font-family:Arial MT; border-collapse:collapse; border: 1px solid #000;">
+                    <tr style="background-color: #fff;">
+                        <th style="font-size:14px;  border: 0px solid #000;">B. FLAT DETAILS</th><th></th><th></th>
+                    </tr></table><br/>
+                
+                <apex:form >
+                    <table border="1" cellspacing="0" cellpadding="4" 
+                           style="width: 700px; font-family:Arial MT; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Unit No.</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.unitNo}" />
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">Sales Manager’s Name</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.salesManagerName}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Configuration</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.Configuration}" />
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">Flat Carpet Area (sq. ft.)</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.carpetArea}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Tower Name / Unit No.</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.towerName}"/>
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">No. Of Parking/s</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!parkingCount}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                         <td style="font-size:14px;border: 1px solid #000;">Type of Parking</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!parkingCountDisplay}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Agreement Value (Rs.)</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="₹ {0,number,###,##,##0.00}">
+                                    <apex:param value="{!bookingWrap.agreementValue}" /></apex:outputText>
+                                /-
+                            </td>
+                           
+                             <td style="font-size:14px;border: 1px solid #000;">Unit Type</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.UniteType}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Agreement Value (in words)</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;">{!bookingWrap.agreementValueinWords}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; font-size: 13px;">Bare-shell ( Yes / No )</td>
+                            <td colspan="3" style="border: 1px solid #000; font-size: 13px; text-align: left;">{!bareShellDisplay}</td>
+                            
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Other Remarks</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.otherRemark}"/>
+                            </td>
+                        </tr>
+                    </table><br/><br/>
+                </apex:form>
+                <table border="0" cellspacing="0" cellpadding="4" 
+                       style="width: 700px; font-family:Arial MT; border-collapse:collapse; border: 1px solid #000;">
+                    <tr style="background-color: #fff;">
+                        <th style="font-size:14px;  border: 0px solid #000;">C. SOURCE OF BOOKING</th><th></th><th></th>
+                    </tr>
+                    <br/>
+                </table>
+                <table border="0" cellspacing="0" cellpadding="4" 
+                       style="width: 100%; font-family:Arial MT; border-collapse:collapse; border: 1px solid #000;">
+                    <tr>
+                        <td colspan="3" style="font-size:14px; border: none; text-align: left; width: 50%;">
+                            <b>Details of Source:</b>&nbsp; {!bookingWrap.sourceOfBooking}
+                        </td>
+                        <td style="font-size:14px; border: none; text-align: left; margin-left: 20px; width: 50%;">
+                            <b>Type Of Client:</b>&nbsp; {!bookingWrap.TypeofClient}
+                        </td>
+                    </tr>
+                </table><br/>
+                <table border="1" cellspacing="0" cellpadding="4" 
+                       style="font-family:Arial; width: 700px; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
+                    
+                    <!-- Common Content (if any) could go here -->
+                    
+                    <!-- Condition 1: Corporate or Channel Partner -->
+                    <apex:outputPanel rendered="{!OR(bookingWrap.sourceOfBooking == 'Corporate', bookingWrap.sourceOfBooking == 'Channel Partner')}">
+                        <table border="1" cellspacing="0" cellpadding="4" 
+                               style="width: 700px; font-family:Arial; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
+                            <tr>
+                                <td style="font-size:14px; border:1px solid #000;">Name of {!bookingWrap.sourceOfBooking}</td>
+                                <td style="font-size:14px; border:1px solid #000; text-align:center;">
+                                    <apex:outputText value="{!bookingWrap.nameOfCorporate}"/>
+                                </td>
+                                <td style="font-size:14px; border:1px solid #000;">Name of Company</td>
+                                <td style="font-size:14px; border:1px solid #000; text-align:center;">
+                                    <apex:outputText value="{!bookingWrap.nameofCompany}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:14px; border:1px solid #000;">
+                                    RERA certificate number<br/><!--(In case of channel partner)-->
+                                </td>
+                                <td colspan="3" style="font-size:14px; border:1px solid #000;">
+                                    <apex:outputText value="{!bookingWrap.reraCertNo}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                    
+                    <!-- Condition 2: Referral -->
+                    <apex:outputPanel rendered="{!bookingWrap.sourceOfBooking == 'Referral'}">
+                        <table border="1" cellspacing="0" cellpadding="4" 
+                               style="width: 700px; font-family:Arial; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
+                            <tr>
+                                <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                    Existing Customer ( Yes / No )
+                                </td>
+                                <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                    If Yes ( Project / Building No. / Unit No. )
+                                </td>
+                                <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                   
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                    CRN No.<br/>(In case of Referrer)
+                                </td>
+                                
+                                <td colspan="2" style="font-size:14px; border:1px solid #000;"></td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                </table>
+            </div>
+            
+            
+            <!-- Page 3 end -->
+            <div Style ='page-break-before:always;'></div>
+            
+            <!-- Page 4 start -->
+            <div style= 'margin:25px;'>
+                <h2 style="font-family:Arial; font-size:12px;" >TERMS AND CONDITION AGREED AND ACCEPTED BY AND BETWEEN THE PARTIES</h2>
+                <apex:outputPanel rendered="{!NOT(ISBLANK(Terms1))}">
+                    <div style="min-height:1000px; position: relative; font-family: Arial; font-size: 10px; line-height: 1;">
+                        
+                        <!-- Terms Content -->
+                        <div style="padding-bottom: 160px;"> <!-- Push content up to leave space for signature -->
+                            <apex:outputText escape="false" value="{!Terms1}" />
+                        </div>
+                        
+                        <!-- Signature Table at Bottom -->
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0;">
+                            <table style="width: 700px; text-align: center; border-collapse: separate; border-spacing: 20px 10px; margin: 0 auto;">
+                                <tr>
+                                    <td style="border-bottom: 1px solid; width: 120px; height: 50px;"></td>
+                                    <td style="border-bottom: 1px solid; width: 120px; height: 50px;"></td>
+                                    <td style="border-bottom: 1px solid; width: 120px; height: 50px;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 14px;">
+                                        <b>First Applicant</b><br/>
+                                        <b><span>Signature</span></b>
+                                    </td>
+                                    <td style="font-size: 14px;">
+                                        <b>Second Applicant</b><br/>
+                                        <b><span>Signature</span></b>
+                                    </td>
+                                    <td style="font-size: 14px;">
+                                        <b>Third Applicant</b><br/>
+                                        <b><span>Signature</span></b>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <!-- Page 4 end -->
+            
+            <div Style ='page-break-after:always;'></div>
+            <!-- Page 5 start -->
+            <div style= 'margin:25px;'>
+                <apex:outputPanel rendered="{!NOT(ISBLANK(Terms2))}">
+                    <div style="min-height:1000px; position: relative; font-family: Arial; font-size: 10px; line-height: 1;">
+                        
+                        <!-- Terms Content -->
+                        <div style="padding-bottom: 160px;"> <!-- Push content up to leave space for signature -->
+                            <apex:outputText escape="false" value="{!Terms2}" />
+                        </div>
+                        
+                        <!-- Signature Table at Bottom -->
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0;">
+                            <table style="width: 700px; text-align: center; border-collapse: separate; border-spacing: 20px 10px; margin: 0 auto;">
+                                <tr>
+                                    <td style="border-bottom: 1px solid; width: 120px; height: 50px;"></td>
+                                    <td style="border-bottom: 1px solid; width: 120px; height: 50px;"></td>
+                                    <td style="border-bottom: 1px solid; width: 120px; height: 50px;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 14px;">
+                                        <b>First Applicant</b><br/>
+                                        <b><span>Signature</span></b>
+                                    </td>
+                                    <td style="font-size: 14px;">
+                                        <b>Second Applicant</b><br/>
+                                        <b><span>Signature</span></b>
+                                    </td>
+                                    <td style="font-size: 14px;">
+                                        <b>Third Applicant</b><br/>
+                                        <b><span>Signature</span></b>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div><br/>
+            <div Style ='page-break-after:always;'></div>
+            <!-- Last page Image-->
+            <div>
+                <img src="{!LastPageofProject}"
+                     style="margin-left: -10px; margin-bottom: -15px; padding: 0px; width: 218mm; height: 279mm;
+                overflow: hidden;"/>
+            </div>
+            
+             <!-- Last Page Image end-->    
+        </body>
+    </html>
+   
+    
+</apex:page>

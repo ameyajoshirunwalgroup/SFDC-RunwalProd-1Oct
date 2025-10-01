@@ -1,0 +1,82 @@
+<apex:page controller="Channel_Partner_Booking_Acknowlegement" applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="pdf">
+    <div style="margin-top:2%;text-align:center">CHANNEL PARTNER BOOKING ACKNOWLEDGMENT</div>
+    <br/><br/>
+    <table  border="1px solid black;" style="border-collapse: collapse;" cellspacing="5" cellpadding="5px">
+        <tr>
+            <td>Name of Channel Partner </td>
+            <td><apex:outputField value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.Representative_Name__c}"/></td>
+            <td>Name of the Company</td>
+            <td><apex:outputText value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.name}"/></td>
+        </tr>
+        <tr>
+            <td>Mobile No</td>
+            <td><apex:outputField value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.RW_Mobile_No__c}"/></td>
+            <td>Date of Booking </td>
+            <td>
+                <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}">
+                    <apex:param value="{!b[0].Booking_Date__c}" /> 
+                </apex:outputText>
+            </td>
+        </tr>
+        <tr>
+            <td>Flat No.</td>
+            <td><apex:outputField value="{!b[0].Flat_No__c}"/></td>
+            <td> Name of the Applicant/s</td>
+            <td><apex:outputField value="{!ad[0].Name}"/></td>
+        </tr>
+        <tr>
+            <td>Sales Manager's Name And Signature </td>
+            <td><apex:outputField value="{!b[0].Sales_Managers__c}"/></td>
+            <td> Site Sales Head Name and Signature </td>
+            <td>___________</td>
+        </tr>
+        <tr>
+            <td>Channel Partner Signature </td>
+            <td> ______________  </td>
+            <td> Channel partner RERA certificate number </td>
+            <td><apex:outputField value="{!b[0].opportunity__r.RW_Walkin_Channel_Partner__r.RW_RERA_Registration_Number__c}"/></td> 
+
+        </tr>
+        <br/>
+    </table>
+    <div style="margin-top:2%;text-align:center">
+        PROVISIONAL RECEIPT
+    </div>
+    <br/>
+    <table style="word-spacing: 50px;">
+        <tr>
+            <td align="left" width="100%" style="font-family:arial;font-size: 17px; word-spacing:5px;">
+                <p>
+                    Received  with thanks from the Applicant/s the sum of Rs. <apex:outputField value="{!re[0].Total_Amount__c}"/> /<br/>
+                    {!re[0].AmountToWords__c }  
+                    vide Cheque/Draft/PO/NEFT no.<apex:outputField value="{!re[0].Cheque_DD__c}"/> dated  &nbsp;
+                    <apex:outputField value="{!re[0].Cheque_DD_Date__c}"/> drawn on &nbsp;&nbsp;<apex:outputField value="{!re[0].DraweeBank__c}"/> (Not exceeding 10% of the total  
+                    consideration) favouring&nbsp;&nbsp; <apex:outputField value="{!re[0].Drawn_in_favour_of__c}"/>&nbsp;&nbsp;as Earnest Money/Token amount against booking
+                    of Flat/Shop and also a sum of Rs._______________________ / Rupees _________________
+                    vide Cheque/Draft/PO no.___________________ dated_________________ drawn on
+                    _________________________________towards the applicable Taxes. 
+                </p>
+            </td>
+        </tr>
+    </table>
+    <br/><br/><br/>
+    <table width="100%">
+        <tr>
+            <td align="left">Dated:______________</td>
+            
+            <td align="right">  For______________</td>
+        </tr>
+
+        <tr>
+            <td>Place:______________ </td>
+            <td align="right">Authorized Signatory</td>
+        </tr>
+    </table>
+    <p>
+        Note: <br/>
+        1. This receipt is valid subject to realization of cheque/DD/PO/NEFT. <br/>
+        2. Acceptance of this payment won't guarantee transfer or creation of any right or interest of the Flat /shop &nbsp;until full 
+           and final payment is received from the Applicant/s, as per payment schedule. 
+    </p>
+    
+</apex:page>

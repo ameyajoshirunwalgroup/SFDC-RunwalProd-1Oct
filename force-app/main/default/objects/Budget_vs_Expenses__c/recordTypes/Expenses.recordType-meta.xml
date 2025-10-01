@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Expenses</fullName>
+    <active>true</active>
+    <description>This is Record type for Expenses which will be Project wise</description>
+    <label>Expenses</label>
+    <picklistValues>
+        <picklist>Category__c</picklist>
+        <values>
+            <fullName>Offline</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Support</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Month__c</picklist>
+        <values>
+            <fullName>April</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>August</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>December</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>February</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>January</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>July</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>June</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>March</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>May</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>November</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>October</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>September</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sub_Category__c</picklist>
+        <values>
+            <fullName>Brand ambassador</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP Promotions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chatbot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collaterals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Influencers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Market Research</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Miscellaneous</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OOH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outstation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paid Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Presales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Print</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Property portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R%26L</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retainers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS %26 Whatsapp credits</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site branding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Social media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TV</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sub_sub_category__c</picklist>
+        <values>
+            <fullName>99 acres</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agency - Image purchases</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alchemist%2FLowe%2FEtc%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Analytics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP Meet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP Tellecallers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP brokerage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP giveaways</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CP incentive%2FVouchers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CSAT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Call Centre - Presales - Telecallers - CBSL%2FVelox%2FMIST%2FStar Connect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Celebrity association</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chatbot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chocolates%2F Booking Hampers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collaterals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Drone shoot %2F Location video %2F Virtual tour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E-modules</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Emailers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events %26 Expo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Experience Centre</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gantry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hoardings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Housing%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Images package</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inserts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instagram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Journal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>K2V2 Technologies</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LOKMAT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LOKSATTA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linkedin</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Magazine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Magicbricks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manpower%2FHostess</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mystery Audit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NBT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NPS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Native - Taboola</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ola%2Fcab</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outdoor activation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outstation expenses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PR Agency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pole kiosks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Propequity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Publishers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased Data</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Realtte</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renders %26 Walkthrough</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS %26 Whatsapp credits</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS %26 Whatsapp for CPs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Support %28Broker network%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scale Model - Sparrow%2C etc%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seminars and webinars</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Activations%2F Customer giveaways</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Branding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Decor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TOI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thought Rains</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transport branding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Video</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Youtube</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indirect</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>WBS_name_as_per_SAP__c</picklist>
+        <values>
+            <fullName>BTL Activities %2B Call centre</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brand ambassador%2F influencer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brochures%2FBooking Forms%2FCollateral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Digital advertising</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Films%2FWalkthrough%2FScale Model</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Misc %28Consumer promotion%2C Sponsorship %26 Sundries%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outdoor advertising</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Print advertising</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio Advertising</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retainer%2FConsultant%2FResearch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site branding%2Fsignages%2FSite decor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TV</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Year__c</picklist>
+        <values>
+            <fullName>2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2027</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2028</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2029</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2030</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2031</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2032</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2033</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

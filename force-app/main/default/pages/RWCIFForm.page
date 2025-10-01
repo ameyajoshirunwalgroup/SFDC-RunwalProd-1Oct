@@ -1,0 +1,1510 @@
+<apex:page sidebar="false" showheader="false" standardstylesheets="false" id="thePage" deferlastcommanduntilready="true" cache="false"
+           standardcontroller="Lead" extensions="RWCIFController">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>CIF Form</title>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+        <apex:includescript value="{!$Resource.AutoCompleteJs}" />
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <!-- <link rel="stylesheet" href="css/runwal.css" /> -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.RunwalCSS,'/css/runwal.css')}" />
+
+        <script>
+        
+        (function()
+            {try
+        {
+            
+        var a=navigator.userAgent; 
+        
+        if((a.indexOf('Salesforce')!=-1)&&(a.indexOf('iPhone')!=-1||a.indexOf('iPad')!=-1)&&(a.indexOf('Safari')==-1)){ 
+        var s=document.createElement('style'); 
+        
+        s.innerHTML="html,html body{overflow: auto;-webkit-overflow-scrolling:touch;}body{position:absolute;left:0;right:0;top:0;bottom:0;}"; 
+        document.getElementsByTagName('head')[0].appendChild(s);
+            
+        }}catch(e){}})(); 
+
+            $( document ).ready(function() {
+               applyDatePicker();
+                refreshValues();
+            });
+
+            function applyDatePicker()
+            {
+                $( ".clsDatePicker" ).datepicker({
+                  dateFormat: "dd/mm/yy",
+                  changeYear: true,
+                  yearRange: "-50:+0"
+                });
+            }
+
+            function refreshValues()
+            {
+                if($("[Id$='occuptn']").val() == 'Salaried')
+                {
+                    $("[Id$='service']").attr('checked', true);
+                }
+                else if($("[Id$='occuptn']").val() == 'Business')
+                {
+                    $("[Id$='bussn']").attr('checked', true);
+                }
+                else if($("[Id$='occuptn']").val() == 'Self Employed')
+                {
+                    $("[Id$='self']").attr('checked', true);
+                }
+                else if($("[Id$='occuptn']").val() == 'Others')
+                {
+                    $("[Id$='others']").attr('checked', true);
+                }
+
+                if($("[Id$='finalConfig']").val() == '1.5 BHK')
+                {
+                    $("[Id$='onefive']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == '2 BHK')
+                {
+                    $("[Id$='twobhk']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == '2.fivebhk')
+                {
+                    $("[Id$='secfbhk']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == '3 BHK')
+                {
+                    $("[Id$='thrbhk']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == '3.fivebhk')
+                {
+                    $("[Id$='threefbhk']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == '4 BHK')
+                {
+                    $("[Id$='frbhk']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == 'fivebhk')
+                {
+                    $("[Id$='fivebhk']").attr('checked', true);
+                }
+                else if($("[Id$='finalConfig']").val() == 'Retail')
+                {
+                    $("[Id$='retail']").attr('checked', true);
+                }
+
+                if($("[Id$='custType']").val() == 'NRI')
+                {
+                    $("[Id$='ResNRI']").attr('checked', true);
+                    $("[Id$='ResNRI']").prop( "disabled", true );
+                    $("[Id$='ResLoc']").prop( "disabled", true );
+                    $("[Id$='ResOut']").prop( "disabled", true );
+                }
+                else if($("[Id$='custType']").val() == 'Local')
+                {
+                    $("[Id$='ResLoc']").attr('checked', true);
+                }
+                else if($("[Id$='custType']").val() == 'Outstation')
+                {
+                    $("[Id$='ResOut']").attr('checked', true);
+                }
+                if($("[Id$='timelineVal']").val() == 'Ready Possession')
+                {
+                    $("[Id$='readyPoss']").attr('checked', true);
+                }
+                else if($("[Id$='timelineVal']").val() == 'Near to Possession')
+                {
+                    $("[Id$='NearPos']").attr('checked', true);
+                }
+                else if($("[Id$='timelineVal']").val() == '1 to 2 year')
+                {
+                    $("[Id$='oneTotwoYr']").attr('checked', true);
+                }
+                else if($("[Id$='timelineVal']").val() == '2 to 3 years')
+                {
+                    $("[Id$='twoTothreeYr']").attr('checked', true);
+                }
+                else if($("[Id$='timelineVal']").val() == 'More than 3 years')
+                {
+                    $("[Id$='moreThanthre']").attr('checked', true);
+                }
+                else if($("[Id$='timelineVal']").val() == 'Not Important')
+                {
+                    $("[Id$='tlni']").attr('checked', true);
+                }
+
+                if($("[Id$='neighval']").val().indexOf('Schools') >= 0)
+                {
+                    $("[Id$='plschool']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Creches') >= 0)
+                {
+                    $("[Id$='plscreches']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Colleges') >= 0)
+                {
+                    $("[Id$='plsclg']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Gardens') >= 0)
+                {
+                    $("[Id$='plsgard']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Departmental Stores') >= 0)
+                {
+                    $("[Id$='plsdeprt']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Malls') >= 0)
+                {
+                    $("[Id$='plsmall']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Multiplexes') >= 0)
+                {
+                    $("[Id$='plsmulti']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Hospitals') >= 0)
+                {
+                    $("[Id$='plshostp']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Place of worship') >= 0)
+                {
+                    $("[Id$='plsworsh']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Restaurants') >= 0)
+                {
+                    $("[Id$='plsrestr']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Gyms') >= 0)
+                {
+                    $("[Id$='plsgyms']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('Night Clubs') >= 0)
+                {
+                    $("[Id$='plsnight']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('IT Parks') >= 0)
+                {
+                    $("[Id$='plsitp']").attr('checked', true);
+                }
+                if($("[Id$='neighval']").val().indexOf('High Street Shopping') >= 0)
+                {
+                    $("[Id$='plshigh']").attr('checked', true);
+                }
+            }
+        </script>
+        <style>
+            /* @media(max-width: 1024px){
+                html, html body { overflow: auto; -webkit-overflow-scrolling: touch; }
+                body { position: absolute;left: 0;right: 0;top: 0;bottom: 0; }
+            } */
+            .addressBlk select {
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+                -moz-border-radius: 0;
+                -webkit-border-radius: 0;
+                border-radius: 0;
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                width: 100%;
+                outline: none;
+            }
+
+            input[type="checkbox"].customechkBox {
+                width: 20px;
+                height: 15px;
+                position: relative;
+                top: 5px;
+                margin-right: 5px;
+            }
+
+            .spinnerBg {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0.2;
+                z-index: 999999;
+                left: 0;
+                top: 0;
+            }
+
+            .Assigned {
+                position: fixed;
+                background: url('{!URLFOR($Resource.CIFLoading)}');
+                background-size: 50px 50px;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                z-index: 1004;
+                left: 0%;
+                top: 0%;
+            }
+
+            .errorMsg {
+                color: red;
+            }
+
+            .btn-success-custm {
+                color: #fff !important;
+                background-color: #5cb85c;
+                border-color: #4cae4c !important;
+            }
+
+            .btn-danger-custm {
+                color: #fff !important;
+                background-color: #c9302c;
+                border-color: #c9302c !important;
+            }
+
+            .btn-custm {
+                display: inline-block;
+                margin-bottom: 0;
+                font-weight: normal;
+                text-align: center;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                background-image: none;
+                border: 1px solid transparent;
+                white-space: nowrap;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <apex:form styleclass="form">
+                <apex:actionstatus id="spinnerStatus">
+                    <apex:facet name="start">
+                        <div class="spinnerBg" />
+                        <div class="Assigned" />
+                    </apex:facet>
+                </apex:actionstatus>
+
+                <div class="row mrgn_t15">
+                    <div class="col-sm-3">
+                        <!--<img src="images/runwal_greens.png" alt="Runwal Greens" width="200" />-->
+                        <c:RWProjectLogo projid="{!objLead.RW_Project__c}" wdth="140px" />
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <h1 class="heading1"><span>CUSTOMER INFORMATION FORM</span></h1>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->
+                        <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}"
+                                    style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> -->
+                        <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}"
+                                    style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" />
+                    </div>
+                </div>
+                <div class="row mrgn_t15">
+                    <div class="col-sm-offset-9 col-sm-3">
+                        <label for="nriPin" class="frmlabel">Date:</label>
+                        <div class="frmElem">
+                            <!--<input type="text" id="nriPin" class="form-control" />-->
+                            &nbsp;{!strEventDate}
+                            <!--<apex:inputtext value="{!strEventDate}" styleclass="form-control clsDatePicker" />-->
+                        </div>
+                    </div>
+                </div>
+                <div class="row mrgn_t15">
+                    <div class="col-xs-12 text-center">
+                        <label for="">
+                            To help us understand your requirments better, request you to fill in your details below:
+                        </label>
+                    </div>
+                </div>
+                <apex:outputpanel style="font-size: 17px;color: red;font-weight: bold;margin-top:5px;width:100%" id="errorDiv">
+                    <center><apex:outputtext value="{!strError}" id="errorId" /></center>
+                </apex:outputpanel>
+                <div class="frmContainer">
+                    <!-- Name & DOB -->
+                    <div class="row">
+                        <div class="col-xs-12 col-md-8">
+                            <div class="form-group">
+                                <label class="frmlabel">*Name: </label>
+                                <div class="frmElem">
+                                    <div class="col-xs-2">
+                                        <apex:inputfield value="{!objLead.Salutation}" styleclass="form-control" />
+                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Salutation</div>
+                                    </div>
+                                    <div class="col-xs-5 col-lg-5">
+                                        <apex:inputfield value="{!objLead.FirstName}" styleclass="form-control" />
+                                        <div class="text-center " style="font-size: 12px; color: #608506; font-weight: bold; ">First Name</div>
+                                    </div>
+                                    <div class="col-xs-5 col-lg-5">
+                                        <apex:inputfield value="{!objLead.LastName}" styleclass="form-control" required="true" />
+                                        <div class="text-center " style="font-size: 12px; color: #608506; font-weight: bold; ">Last Name</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group">
+                                <label for="dob" class="frmlabel">
+                                    Date of Birth:
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="dob" />-->
+                                    <apex:inputtext value="{!strDOB}" styleclass="form-control clsDatePicker" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mobile Numbers -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="mob1" class="frmlabel" >
+                                    *Mobile No.(1):
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="mob1" />-->
+                                    <apex:inputfield value="{!objLead.RW_Mobile_No__c}" styleclass="form-control" required="true" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="mob2" class="frmlabel">
+                                    Mobile No.(2):
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="mob2" />-->
+                                    <apex:inputfield value="{!objLead.RW_Secondary_Mobile_No__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Landline & Personal Email -->
+                    <div class="row">
+                        <!--<div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="landline" class="frmlabel">
+                                    Landline:
+                                </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!objLead.Phone}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="email" class="frmlabel">
+                                    *Personal Email:
+                                </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!objLead.Email}" styleclass="form-control" required="true" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="landline" class="frmlabel">
+                                    Secondary Email:
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="landline" />-->
+                                    <apex:inputfield value="{!objLead.RW_Secondary_Email__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 12px;">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="country" class="frmlabel">
+                                    *Customer Type:
+                                </label>
+                                <div class="frmElem">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="ResNRI" onchange="updateCustType(this.id)" /> NRI
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-2">
+                                            <label class="topPos_5 frmlabel">
+                                                <input type="checkbox" class="customechkBox" id="ResLoc" onchange="updateCustType(this.id)" /> Local
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-2">
+                                            <label class="topPos_5 frmlabel">
+                                                <input type="checkbox" class="customechkBox" id="ResOut" onchange="updateCustType(this.id)" /> Outstation
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <apex:inputtext value="{!objLead.RW_Customer_Type__c}" style="display:none" id="custType" />
+                                </div>
+                                <script>
+                            function updateCustType(cntry)
+                            {
+                                if(cntry.indexOf('ResNRI') >= 0)
+                                {
+                                    if($("[Id$='ResNRI']").is(':checked'))
+                                    {
+                                        $("[Id$='ResLoc']").attr('checked', false);
+                                        $("[Id$='ResOut']").attr('checked', false);
+                                        $("[Id$='custType']").val('NRI');
+                                    }
+                                    else
+                                    {
+                                        $("[Id$='custType']").val('');
+                                        //$("[Id$='resStatus']").hide();
+                                    }
+                                }
+                                if(cntry.indexOf('ResLoc') >= 0)
+                                {
+                                    if($("[Id$='ResLoc']").is(':checked'))
+                                    {
+                                        $("[Id$='ResNRI']").attr('checked', false);
+                                        $("[Id$='ResOut']").attr('checked', false);
+                                        $("[Id$='custType']").val('Local');
+                                    }
+                                    else
+                                    {
+                                        $("[Id$='custType']").val('');
+                                        //$("[Id$='resStatus']").hide();
+                                    }
+                                }
+
+                                if(cntry.indexOf('ResOut') >= 0)
+                                {
+                                    if($("[Id$='ResOut']").is(':checked'))
+                                    {
+                                        $("[Id$='ResLoc']").attr('checked', false);
+                                        $("[Id$='ResNRI']").attr('checked', false);
+                                        $("[Id$='custType']").val('Outstation');
+                                    }
+                                    else
+                                    {
+                                        $("[Id$='custType']").val('');
+                                    }
+                                }
+                            }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Country -->
+                    <!--<div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="country" class="frmlabel">
+                                    Country of Residence:
+                                </label>
+                                <div class="frmElem">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-lg-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="ResIndia" onchange="updateResStat(this.id)" /> Indian
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-lg-2">
+                                            <label class="topPos_5 frmlabel">
+                                                <input type="checkbox" class="customechkBox" id="ResNRI" onchange="updateResStat(this.id)" /> Others
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    function updateResStat(cntry)
+                                    {
+                                        if(cntry.indexOf('ResIndia') >= 0)
+                                        {
+                                            if($("[Id$='ResIndia']").is(':checked'))
+                                            {
+                                                $("[Id$='ResNRI']").attr('checked', false);
+                                                $("[Id$='resStatus']").val('India');
+                                                //$("[Id$='resStatus']").show();
+                                            }
+                                            else
+                                            {
+                                                $("[Id$='resStatus']").val('');
+                                                //$("[Id$='resStatus']").hide();
+                                            }
+                                        }
+                                        if(cntry.indexOf('ResNRI') >= 0)
+                                        {
+                                            if($("[Id$='ResNRI']").is(':checked'))
+                                            {
+                                                $("[Id$='ResIndia']").attr('checked', false);
+                                                $("[Id$='resStatus']").val('');
+                                                //$("[Id$='resStatus']").show();
+                                            }
+                                            else
+                                            {
+                                                $("[Id$='resStatus']").val('');
+                                                //$("[Id$='resStatus']").hide();
+                                            }
+                                        }
+
+                                        if(cntry.indexOf('resStatus') >= 0)
+                                        {
+                                            if($("[Id$='resStatus']").val() == 'India')
+                                            {
+                                                if($("[Id$='ResNRI']").is(':checked'))
+                                                {
+                                                    alert('Please Select a NRI Country other than India!');
+                                                    $("[Id$='resStatus']").val('');
+                                                }
+                                            }
+
+                                            if($("[Id$='resStatus']").val() != 'India')
+                                            {
+                                                if($("[Id$='ResIndia']").is(':checked'))
+                                                {
+                                                    alert('Cannot change the Country as the Residential Status is Indian!');
+                                                    $("[Id$='resStatus']").val('India');
+                                                }
+                                            }
+                                        }
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!-- Address -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group addressBlk">
+                                <label class="frmlabel">*Address:</label>
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.Country__c}" styleclass="form-control" id="resStatus" />
+                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Country</div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.State__c}" styleclass="form-control" />
+                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">State</div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.City__c}" styleclass="form-control" />
+                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">City</div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.Zip_Code__c}" styleclass="form-control" />
+                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Zip Code</div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.Street__c}" styleclass="form-control" />
+                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Locality</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Occupation -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="country" class="frmlabel">
+                                    *Occupation:
+                                </label>
+                                <div class="frmElem">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-lg-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="service" onchange="updateoccupation(this.id)" /> Salaried
+                                            </label>
+                                        </div>
+                                        <!--<div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="bussn" onchange="updateoccupation(this.id)" /> Business
+                                            </label>
+                                        </div>-->
+                                        <div class="col-xs-6 col-lg-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="self" onchange="updateoccupation(this.id)" /> Self Employed
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-lg-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="others" onchange="updateoccupation(this.id)" /> Others
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <apex:inputtext value="{!objLead.RW_Occupation__c}" style="display:none" id="occuptn" />
+                                    <script>
+                                        function updateoccupation(occpatn)
+                                        {
+                                            if(occpatn.indexOf('service') >= 0)
+                                            {
+                                                 if($("[Id$='service']").is(':checked'))
+                                                {
+                                                    $("[Id$='bussn']").attr('checked', false);
+                                                    $("[Id$='self']").attr('checked', false);
+                                                    $("[Id$='others']").attr('checked', false);
+                                                    $("[Id$='occuptn']").val('Salaried');
+                                                }
+                                                else
+                                                {
+                                                    $("[Id$='occuptn']").val('');
+                                                }
+                                            }
+
+                                            if(occpatn.indexOf('bussn') >= 0)
+                                            {
+                                                 if($("[Id$='bussn']").is(':checked'))
+                                                {
+                                                    $("[Id$='service']").attr('checked', false);
+                                                    $("[Id$='self']").attr('checked', false);
+                                                    $("[Id$='others']").attr('checked', false);
+                                                    $("[Id$='occuptn']").val('Business');
+                                                }
+                                                else
+                                                {
+                                                    $("[Id$='occuptn']").val('');
+                                                }
+                                            }
+
+                                            if(occpatn.indexOf('self') >= 0)
+                                            {
+                                                 if($("[Id$='self']").is(':checked'))
+                                                {
+                                                    $("[Id$='service']").attr('checked', false);
+                                                    $("[Id$='bussn']").attr('checked', false);
+                                                    $("[Id$='others']").attr('checked', false);
+                                                    $("[Id$='occuptn']").val('Self Employed');
+                                                }
+                                                else
+                                                {
+                                                    $("[Id$='occuptn']").val('');
+                                                }
+                                            }
+
+                                            if(occpatn.indexOf('others') >= 0)
+                                            {
+                                                 if($("[Id$='others']").is(':checked'))
+                                                {
+                                                    $("[Id$='service']").attr('checked', false);
+                                                    $("[Id$='bussn']").attr('checked', false);
+                                                    $("[Id$='self']").attr('checked', false);
+                                                    $("[Id$='occuptn']").val('Others');
+                                                }
+                                                else
+                                                {
+                                                    $("[Id$='occuptn']").val('');
+                                                }
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Name & Location -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="companyName" class="frmlabel">
+                                    Company Name:
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="companyName" />-->
+                                    <apex:inputfield value="{!objLead.RW_Company_Name__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="companyLocation" class="frmlabel">
+                                    Other Company Name:
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="companyLocation" />-->
+                                    <apex:inputfield value="{!objLead.RW_Other_Company_Name__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Designation -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="companyLocation" class="frmlabel">
+                                    Company Location:
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="companyLocation" />-->
+                                    <apex:inputfield value="{!objLead.RW_Company_Location__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="designation" class="frmlabel">
+                                    Designation:
+                                </label>
+                                <div class="frmElem">
+                                    <!--<input type="text" class="form-control" id="designation" />-->
+                                    <apex:inputfield value="{!objLead.RW_Designation__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="frmlabel">
+                                    *Ethnicity:
+                                </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!objLead.RW_Ethnicity__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="frmContainer">
+                    <!-- Requirement -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h2>Requirement:</h2>
+                        </div>
+                    </div>
+                    <!-- Apartment Type -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="apartmentType" class="frmlabel" >
+                                    *Apartment Type:
+                                </label>
+                                <div class="frmElem">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="onefive" onchange="updateConfig(this.id)" /> 1.5 BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="twobhk" onchange="updateConfig(this.id)" /> 2 BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="secfbhk" onchange="updateConfig(this.id)" /> 2.5BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="thrbhk" onchange="updateConfig(this.id)" /> 3 BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="threefbhk" onchange="updateConfig(this.id)" /> 3.5BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="frbhk" onchange="updateConfig(this.id)" /> 4 BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="fivebhk" onchange="updateConfig(this.id)" /> 5 BHK
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="retail" onchange="updateConfig(this.id)" /> Retail
+                                            </label>
+                                        </div>
+                                        <apex:inputtext value="{!objLead.RW_Configuration__c}" style="display:none" id="finalConfig" />
+                                        <script>
+                                            function updateConfig(confg)
+                                            {
+                                                if(confg.indexOf('onefive') >= 0)
+                                                {
+                                                    if($("[Id$='onefive']").is(':checked'))
+                                                    {
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('1.5 BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('twobhk') >= 0)
+                                                {
+                                                    if($("[Id$='twobhk']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('2 BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('secfbhk') >= 0)
+                                                {
+                                                    if($("[Id$='secfbhk']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('2.5BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('thrbhk') >= 0)
+                                                {
+                                                    if($("[Id$='thrbhk']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('3 BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('threefbhk') >= 0)
+                                                {
+                                                    if($("[Id$='threefbhk']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('3.5BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('frbhk') >= 0)
+                                                {
+                                                    if($("[Id$='frbhk']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('4 BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('fivebhk') >= 0)
+                                                {
+                                                    if($("[Id$='fivebhk']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='retail']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('5BHK');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                                if(confg.indexOf('retail') >= 0)
+                                                {
+                                                    if($("[Id$='retail']").is(':checked'))
+                                                    {
+                                                        $("[Id$='onefive']").attr('checked', false);
+                                                        $("[Id$='twobhk']").attr('checked', false);
+                                                        $("[Id$='secfbhk']").attr('checked', false);
+                                                        $("[Id$='thrbhk']").attr('checked', false);
+                                                        $("[Id$='threefbhk']").attr('checked', false);
+                                                        $("[Id$='frbhk']").attr('checked', false);
+                                                        $("[Id$='fivebhk']").attr('checked', false);
+                                                        $("[Id$='finalConfig']").val('Retail');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='finalConfig']").val('');
+                                                    }
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Budget -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="apartmentType" class="frmlabel">
+                                    *Budget (Rs. in Cr.):
+                                </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!objLead.RW_Budget_Rs_in_Cr__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Posession Timeline -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="apartmentType" class="frmlabel">
+                                    *Posession Time-Line:
+                                </label>
+                                <div class="frmElem">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="readyPoss" onchange="updateTimeline(this.id)" /> Ready Possession
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="NearPos" onchange="updateTimeline(this.id)" /> Near to Possession
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="oneTotwoYr" onchange="updateTimeline(this.id)" /> 1 to 2 year
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="twoTothreeYr" onchange="updateTimeline(this.id)" /> 2 to 3 years
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="moreThanthre" onchange="updateTimeline(this.id)" /> More than 3 years
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3">
+                                            <label class="topPos_5">
+                                                <input type="checkbox" class="customechkBox" id="tlni" onchange="updateTimeline(this.id)" /> Not Important
+                                            </label>
+                                        </div>
+                                        <apex:inputtext value="{!objLead.RW_Time_line__c}" style="display:none" id="timelineVal" />
+                                        <script>
+                                            function updateTimeline(timval)
+                                            {
+                                                if(timval.indexOf('readyPoss') >= 0)
+                                                {
+                                                    if($("[Id$='readyPoss']").is(':checked'))
+                                                    {
+                                                        $("[Id$='NearPos']").attr('checked', false);
+                                                        $("[Id$='oneTotwoYr']").attr('checked', false);
+                                                        $("[Id$='twoTothreeYr']").attr('checked', false);
+                                                        $("[Id$='moreThanthre']").attr('checked', false);
+                                                        $("[Id$='tlni']").attr('checked', false);
+                                                        $("[Id$='timelineVal']").val('Ready Possession');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='timelineVal']").val('');
+                                                    }
+                                                }
+
+                                                if(timval.indexOf('NearPos') >= 0)
+                                                {
+                                                    if($("[Id$='NearPos']").is(':checked'))
+                                                    {
+                                                        $("[Id$='readyPoss']").attr('checked', false);
+                                                        $("[Id$='oneTotwoYr']").attr('checked', false);
+                                                        $("[Id$='twoTothreeYr']").attr('checked', false);
+                                                        $("[Id$='moreThanthre']").attr('checked', false);
+                                                        $("[Id$='tlni']").attr('checked', false);
+                                                        $("[Id$='timelineVal']").val('Near to Possession');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='timelineVal']").val('');
+                                                    }
+                                                }
+
+                                                if(timval.indexOf('oneTotwoYr') >= 0)
+                                                {
+                                                    if($("[Id$='oneTotwoYr']").is(':checked'))
+                                                    {
+                                                        $("[Id$='readyPoss']").attr('checked', false);
+                                                        $("[Id$='NearPos']").attr('checked', false);
+                                                        $("[Id$='twoTothreeYr']").attr('checked', false);
+                                                        $("[Id$='moreThanthre']").attr('checked', false);
+                                                        $("[Id$='tlni']").attr('checked', false);
+                                                        $("[Id$='timelineVal']").val('1 to 2 year');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='timelineVal']").val('');
+                                                    }
+                                                }
+
+                                                if(timval.indexOf('twoTothreeYr') >= 0)
+                                                {
+                                                    if($("[Id$='twoTothreeYr']").is(':checked'))
+                                                    {
+                                                        $("[Id$='readyPoss']").attr('checked', false);
+                                                        $("[Id$='NearPos']").attr('checked', false);
+                                                        $("[Id$='oneTotwoYr']").attr('checked', false);
+                                                        $("[Id$='moreThanthre']").attr('checked', false);
+                                                        $("[Id$='tlni']").attr('checked', false);
+                                                        $("[Id$='timelineVal']").val('2 to 3 years');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='timelineVal']").val('');
+                                                    }
+                                                }
+
+                                                if(timval.indexOf('moreThanthre') >= 0)
+                                                {
+                                                    if($("[Id$='moreThanthre']").is(':checked'))
+                                                    {
+                                                        $("[Id$='readyPoss']").attr('checked', false);
+                                                        $("[Id$='NearPos']").attr('checked', false);
+                                                        $("[Id$='oneTotwoYr']").attr('checked', false);
+                                                        $("[Id$='twoTothreeYr']").attr('checked', false);
+                                                        $("[Id$='tlni']").attr('checked', false);
+                                                        $("[Id$='timelineVal']").val('More than 3 years');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='timelineVal']").val('');
+                                                    }
+                                                }
+
+                                                if(timval.indexOf('tlni') >= 0)
+                                                {
+                                                    if($("[Id$='tlni']").is(':checked'))
+                                                    {
+                                                        $("[Id$='readyPoss']").attr('checked', false);
+                                                        $("[Id$='NearPos']").attr('checked', false);
+                                                        $("[Id$='oneTotwoYr']").attr('checked', false);
+                                                        $("[Id$='twoTothreeYr']").attr('checked', false);
+                                                        $("[Id$='moreThanthre']").attr('checked', false);
+                                                        $("[Id$='timelineVal']").val('Not Important');
+                                                    }
+                                                    else
+                                                    {
+                                                        $("[Id$='timelineVal']").val('');
+                                                    }
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Location -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="apartmentType" class="frmlabel">
+                                    *Preferred Location:
+                                </label>
+                                <div class="frmElem">
+                                    <apex:inputfield value="{!objLead.RW_Location__c}" styleclass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Neighbourhood Places Interested in: (Tick All Applicable)</h2>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plschool" onchange="updatePlaces(this.id)" /> Schools
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plscreches" onchange="updatePlaces(this.id)" /> Creches
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsclg" onchange="updatePlaces(this.id)" /> Colleges
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsgard" onchange="updatePlaces(this.id)" /> Gardens
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsdeprt" onchange="updatePlaces(this.id)" /> Departmental Stores
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsmall" onchange="updatePlaces(this.id)" /> Malls
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsmulti" onchange="updatePlaces(this.id)" /> Multiplexes
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plshostp" onchange="updatePlaces(this.id)" /> Hospitals
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsworsh" onchange="updatePlaces(this.id)" /> Place of worship
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsrestr" onchange="updatePlaces(this.id)" /> Restaurants
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsgyms" onchange="updatePlaces(this.id)" /> Gyms
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsnight" onchange="updatePlaces(this.id)" /> Night Clubs
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plsitp" onchange="updatePlaces(this.id)" /> IT Parks
+                            </label>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <label class="topPos_5">
+                                <input type="checkbox" class="customechkBox" id="plshigh" onchange="updatePlaces(this.id)" /> High Street Shopping
+                            </label>
+                        </div>
+                        <apex:inputtext value="{!objLead.RW_Neighbourhood_Places__c}" style="display:none" id="neighval" />
+                        <script>
+                            function updatePlaces(ngVal)
+                            {
+                                $("[Id$='neighval']").val('');
+
+                                if($("[Id$='plschool']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val('Schools;');
+                                }
+                                if($("[Id$='plscreches']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Creches;');
+                                }
+                                if($("[Id$='plsclg']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Colleges;');
+                                }
+                                if($("[Id$='plsgard']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Gardens;');
+                                }
+                                if($("[Id$='plsdeprt']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Departmental Stores;');
+                                }
+                                if($("[Id$='plsmall']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Malls;');
+                                }
+                                if($("[Id$='plsmulti']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Multiplexes;');
+                                }
+                                if($("[Id$='plshostp']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Hospitals;');
+                                }
+                                if($("[Id$='plsworsh']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Place of worship;');
+                                }
+                                if($("[Id$='plsrestr']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Restaurants;');
+                                }
+                                if($("[Id$='plsgyms']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Gyms;');
+                                }
+                                if($("[Id$='plsnight']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'Night Clubs;');
+                                }
+                                if($("[Id$='plsitp']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'IT Parks;');
+                                }
+                                if($("[Id$='plshigh']").is(':checked'))
+                                {
+                                    $("[Id$='neighval']").val($("[Id$='neighval']").val()+'High Street Shopping;');
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <apex:outputpanel id="LeadSourcePanel" layout="block">
+                    <div class="frmContainer">
+                        <h2>How did you come to know about {!objLead.RW_Project__r.Name}? (Tick only one)</h2>
+                        <!-- Lead Source -->
+                        <div class="row">
+                            <apex:repeat value="{!lstLeadSource}" var="EachSource">
+                                <div class="col-xs-6 col-sm-4">
+                                    <label class="topPos_5 form-group">
+                                        <apex:inputcheckbox value="{!EachSource.isSelected}" styleclass="customechkBox">
+                                            <apex:actionsupport action="{!validateLeadSource}" event="onchange" rerender="LeadSourcePanel,CPSignDiv" status="spinnerStatus">
+                                                <apex:param name="CurrentSource" value="{!EachSource.strLeadSource}" assignto="{!strCurrentSource}" />
+                                            </apex:actionsupport>
+                                        </apex:inputcheckbox>
+                                        {!EachSource.strLabel}
+                                    </label>
+                                </div>
+                            </apex:repeat>
+                        </div>
+                    </div>
+                    <div class="frmContainer">
+                        <h2>Additional Informations</h2>
+                        <!-- Lead Sub Source -->
+                        <apex:outputpanel layout="block" styleclass="form-group" rendered="{!IF(objLead.LeadSource == 'Channel Partner', true, false)}">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="topPos_5 form-group">
+                                        <apex:inputcheckbox value="{!objLead.RW_Apply_Unregistered_Broker__c}" styleclass="customechkBox">
+                                            <apex:actionsupport event="onchange" rerender="LeadSourcePanel" status="spinnerStatus">
+                                            </apex:actionsupport>
+                                        </apex:inputcheckbox>
+                                        Apply Unregistered Broker
+                                    </label>
+                                </div>
+                                <apex:outputpanel layout="block" styleclass="col-xs-6" rendered="{!!objLead.RW_Apply_Unregistered_Broker__c}">
+                                    <label class="frmlabel">Channel Partner Name :</label>
+                                    <div class="frmElem">
+                                        <c:AutoCompleteV2 allowclear="true" importjquery="false" labelfield="Name" sobject="Broker__c" valuefield="Id"
+                                                          targetfield="{!objLead.RW_Broker__c}" style="width:200px" syncmanualentry="false" />
+                                    </div>
+                                </apex:outputpanel>
+                            </div>
+                            <div class="row form-group">
+                                <apex:outputpanel layout="block" styleclass="col-xs-6" rendered="{!objLead.RW_Apply_Unregistered_Broker__c}">
+                                    <label class="frmlabel">
+                                        Unregistered Broker Name :
+                                    </label>
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.RW_Unregistered_Broker_Name__c}" styleclass="form-control" />
+                                    </div>
+                                </apex:outputpanel>
+                                <apex:outputpanel layout="block" styleclass="col-xs-6" rendered="{!objLead.RW_Apply_Unregistered_Broker__c}">
+                                    <label class="frmlabel">
+                                        Unregistered Broker Email :
+                                    </label>
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.RW_Unregistered_Broker_Email__c}" styleclass="form-control" />
+                                    </div>
+                                </apex:outputpanel>
+                            </div>
+                            <div class="row form-group">
+                                <apex:outputpanel layout="block" styleclass="col-xs-6" rendered="{!objLead.RW_Apply_Unregistered_Broker__c}">
+                                    <label class="frmlabel">
+                                        Unregistered Broker Mobile :
+                                    </label>
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.RW_Unregistered_Broker_Mobile__c}" styleclass="form-control" />
+                                    </div>
+                                </apex:outputpanel>
+                            </div>
+                        </apex:outputpanel>
+                        <apex:outputpanel layout="block" styleclass="form-group" rendered="{!IF(objLead.LeadSource == 'Reference', true, false)}">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="frmlabel">Reference Source :</label>
+                                    <div class="frmElem addressBlk">
+                                        <apex:inputfield value="{!objLead.LeadSource}" style="display:none" />
+                                        <apex:inputfield value="{!objLead.RW_Reference_Source__c}" styleclass="form-control">
+                                            <apex:actionsupport event="onchange" rerender="LeadSourcePanel" status="spinnerStatus">
+                                            </apex:actionsupport>
+                                        </apex:inputfield>
+                                    </div>
+                                </div>
+                                <apex:outputpanel layout="block" styleclass="col-xs-6"
+                                                  rendered="{!IF(objLead.RW_Reference_Source__c == 'Existing Customer Reference', true, false)}">
+                                    <label class="frmlabel">Existing Customer Reference :</label>
+                                    <div class="frmElem">
+                                        <c:AutoCompleteV2 allowclear="true" importjquery="false" labelfield="Name" sobject="Account" valuefield="Id"
+                                                          targetfield="{!objLead.Customer_Reference__c}" style="width:200px" syncmanualentry="false" />
+                                    </div>
+                                </apex:outputpanel>
+                                <apex:outputpanel layout="block" styleclass="col-xs-6"
+                                                  rendered="{!IF(OR(objLead.RW_Reference_Source__c == 'Management Reference', objLead.RW_Reference_Source__c == 'Employee Reference'), true, false)}">
+                                    <label class="frmlabel">Referral Details :</label>
+                                    <div class="frmElem">
+                                        <apex:inputfield value="{!objLead.RW_Referral_Details__c}" styleclass="form-control" />
+                                    </div>
+                                </apex:outputpanel>
+                            </div>
+                        </apex:outputpanel>
+                        <apex:outputpanel layout="block" styleclass="form-group"
+                                          rendered="{!IF(AND(objLead.LeadSource != null, OR(objLead.LeadSource == 'Channel Partner',
+                                          objLead.LeadSource == 'Reference', objLead.LeadSource == 'Corporate', objLead.LeadSource == 'Loyalty',
+                                          objLead.LeadSource == 'Corporate(Unregistered)')), false, true)}">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="frmlabel">Source :</label>
+                                    <div class="frmElem addressBlk">
+                                        <apex:inputfield value="{!objLead.LeadSource}" style="display:none" />
+                                        <apex:inputfield value="{!objLead.RW_Lead_Sub_Source__c}" styleclass="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputpanel>
+                        <apex:outputpanel layout="block" styleclass="form-group"
+                                          rendered="{!IF(OR(objLead.LeadSource == 'Corporate', objLead.LeadSource == 'Corporate(Unregistered)'), true, false)}">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="frmlabel">Corporate Company :</label>
+                                    <div class="frmElem addressBlk">
+                                        <apex:inputfield value="{!objLead.LeadSource}" style="display:none" />
+                                        <apex:inputfield value="{!objLead.Corporate_Company__c}" styleclass="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label class="frmlabel">Other Corporate Company :</label>
+                                    <div class="frmElem addressBlk">
+                                        <apex:inputfield value="{!objLead.NameofUnregisteredCorporate_LeadSource__c}" styleclass="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputpanel>
+                        <!--<apex:outputpanel layout="block" styleclass="form-group"
+                                          rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="frmlabel">Other Corporate Company :</label>
+                                    <div class="frmElem addressBlk">
+                                        <apex:inputfield value="{!objLead.NameofUnregisteredCorporate_LeadSource__c}" styleclass="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputpanel>-->
+                        <apex:outputpanel layout="block" styleclass="form-group"
+                                          rendered="{!IF(objLead.LeadSource == 'Loyalty', true, false)}">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="frmlabel">Loyalty :</label>
+                                    <div class="frmElem addressBlk">
+                                        <c:AutoCompleteV2 allowclear="true" importjquery="false" labelfield="Name" sobject="Account" valuefield="Id"
+                                                          targetfield="{!objLead.Customer_Reference__c}" style="width:200px" syncmanualentry="false" />
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputpanel>
+                    </div>
+                </apex:outputpanel>
+                <div class="row mrgn_t45 hidden-md hidden-lg" id="CPSignDiv">
+                    <div class="col-xs-7 col-sm-6">
+                        <c:RWSignatureComponent parentid="{!objLead.id}" attname="CustomerSign" />
+                        <h2>Customer's Signature</h2>
+                    </div>
+                    <div class="col-xs-7 col-sm-6">
+                        <c:RWSignatureComponent parentid="{!objLead.id}" attname="CPSign" />
+                        <h2>Channel Partner's Signature</h2>
+                    </div>
+                </div>
+                <div class="col-xs-12" style="margin-bottom: 15px;">
+                    <!--<apex:commandbutton value="Save & Exit" styleclass="pull-right btn btn-success pull-right" action="{!redirectNext}" rerender="errorDiv"
+                                        status="spinnerStatus" />
+                    <apex:commandbutton styleclass="btn btn-danger pull-left" value="Back" action="{!GoBackToLead}" status="spinnerStatus" />-->
+
+                    <apex:commandbutton value="Save Form & Exit" styleclass="pull-right btn-custm btn-success-custm pull-right" action="{!redirectNext}" 
+                                        rendered="{!AND($User.UIThemeDisplayed !='Theme4d',$User.UIThemeDisplayed !='Theme4t')}" />
+                    <apex:commandbutton action="{!redirectNext}" value="Save & Close" oncomplete="redirectTo({!isSubmitted});"
+                                        styleclass="pull-right btn-custm btn-success-custm"
+                                        rendered="{!OR($User.UIThemeDisplayed == 'Theme4d',$User.UIThemeDisplayed == 'Theme4t')}" />
+                    <script>
+                    function redirectTo(isSubmitted)
+                    {
+                        if((typeof sforce.one != 'undefined') && (sforce.one != null))
+                        {
+                            if(isSubmitted)
+                            {
+                                sforce.one.navigateToSObject('{!objLead.id}');
+                            }
+                            else 
+                            {
+                                refreshError();
+                            }
+                        }
+                    }
+                    </script>
+                    
+                    <apex:commandbutton styleclass="pull-left btn-custm btn-danger-custm" value="< Back" action="{!GoBackToLead}" 
+                                        rendered="{!AND($User.UIThemeDisplayed !='Theme4d',$User.UIThemeDisplayed !='Theme4t')}" />
+                    <apex:commandbutton onclick="cancel_JS()" value="< Back" styleclass="pull-left btn-custm btn-danger-custm" 
+                                        rendered="{!OR($User.UIThemeDisplayed == 'Theme4d',$User.UIThemeDisplayed == 'Theme4t')}" />
+                    <script>
+                    function cancel_JS()
+                    {
+                        if((typeof sforce.one != 'undefined') && (sforce.one != null))
+                            sforce.one.navigateToSObject('{!objLead.id}');
+                    }
+                    </script>
+                    <apex:actionfunction name="refreshError" status="spinnerStatus" rerender="errorDiv" />
+                </div>
+            </apex:form>
+        </div>
+    </body>
+</html>
+</apex:page>

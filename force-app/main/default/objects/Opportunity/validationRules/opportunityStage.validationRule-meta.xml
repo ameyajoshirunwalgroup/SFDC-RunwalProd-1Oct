@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>opportunityStage</fullName>
+    <active>true</active>
+    <errorConditionFormula>And(
+  CreateDate__c &gt;= DATE(2021,01,01),
+OR(AND( ISPICKVAL( StageName , &apos;Unit Booked&apos;) ,
+		!ISNULL( RW_Project_Unit__c ),
+		OR(ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Blocked&apos;),
+			ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Hold&apos;),
+			ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Documentation Complete&apos;))
+	   ),
+	AND( ISPICKVAL( StageName , &apos;Unit Blocked&apos;) ,
+		!ISNULL( RW_Project_Unit__c ), 
+		OR(ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Booked&apos;),
+			ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Documentation Complete&apos;))
+	    ),
+	AND( ISPICKVAL( StageName , &apos;Documentation Complete&apos;) ,
+		!ISNULL( RW_Project_Unit__c ), 
+		OR(ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Blocked&apos;),
+		   ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Hold&apos;),
+		   ISPICKVAL( RW_Project_Unit__r.RW_Unit_Status__c , &apos;Booked&apos;))
+		)
+),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>StageName</errorDisplayField>
+    <errorMessage>Please update this under Project Unit</errorMessage>
+</ValidationRule>

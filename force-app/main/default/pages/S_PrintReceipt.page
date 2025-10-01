@@ -1,0 +1,412 @@
+<apex:page controller="PrintReceipt" applyHtmlTag="false" sidebar="false" showHeader="false" standardStylesheets="false" docType="html-5.0"><!-- renderAs="PDF" -->
+<html>
+    <head>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+            <script src="/soap/ajax/54.0/connection.js"></script>
+    <style>
+            @page {
+                size: A4;
+                margin:  2mm         //5mm;
+                @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                }
+            }
+            .page-break {
+                display:block;
+                page-break-after:always;
+            }
+            body {
+                font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+                font-weight:normal; 
+                font-size:12px; 
+                mso-line-height-rule: exactly;
+            }
+            .infobox {
+                  font-size: 90%;
+            }
+            .sfdc_richtext img {
+              border: 0;
+              width: 100px;
+              height:90px;
+            }
+            .RMStyle {
+                border-collapse: collapse;
+                border-width: 1px;
+                border-style: solid;
+                border-color: #104E8B;
+            }
+            .RMStyle th {
+                border-width: 1px;
+                border-style: solid;
+                border-color: #104E8B;
+                background-color:#E2DDD9;
+            }
+            /* Padding and font style */
+            .RMStyle td {
+                border-style: solid;
+                border-width: .5px;
+                border-color: #CAD1C3;
+            }
+            .paymenttoStyle th {
+                border-style: solid;
+                border-color: #CAD1C3;
+                background-color:#FFD8D8;
+            }
+            .paymenttoStyle {
+                border-width: 1px;
+                border-style: solid;
+                border-color: #CAD1C3B;
+            }
+            .demandStyle th {
+                border-width: 1px;
+                border-style: solid;
+                border-color: #CAD1C3;
+                background-color:#B9D7D9;
+                padding: 3px;
+            }
+            /* Padding and font style */
+            .demandStyle td {
+                border-style: solid;
+                border-width: .5px;
+                border-color: #CAD1C3;
+                padding: 2px;
+            }
+            .demandStyle {
+                border-collapse: collapse;
+                border-width: 1px;
+                border-style: solid;
+                border-color: #CAD1C3;
+            }
+            
+        </style>
+    </head>
+    <body width="100%" onload="window.print();" ><!-- onload="window.print(); myFunction()" -->
+        <br/>
+       <!--
+        <span style="padding:5px;"> 
+                <button name="print" value="print" style="float:right; padding:5px;" onclick="window.print();" class="no-print"> Print Receipt </button> 
+       </span>
+    -->
+    <table id="main" border="0" cellspacing="0" cellpadding="0" align="center" width="80%">
+    <tr>
+    <td>
+        <table width="100%" >
+            <tr width="100%">
+                <td colspan="3" align="center" >
+                    <h2>Application money Receipt</h2>
+                </td>
+                <td colpsan="1" width="5%" align="right" valign="top">
+                    <apex:outputField value="{!lstReceipt[0].Project__r.Project_Image__c}" rendered="{!If(letterhead == '1',True,False)}" ></apex:outputField>
+                </td>
+            </tr>
+       </table>
+    </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" >
+               <tr width="100%">
+                     <td colspan="1" align="left" width="55%" valign="top">
+                        <apex:panelGrid columns="1" styleClass="infobox">
+                            <b> To,</b> <apex:outputText value="{!CustomerPrimaryName},"/>
+                                        <!--<apex:outputText value="{!lstReceipt[0].Opportunity__r.Other_Applicants_Name__c}"/>-->
+                                        <apex:outputText value="{!CustomerOtherApplicantName}"/>
+                                       
+                                        
+                            <apex:outputPanel >
+                                <apex:outputText value="Address: {!CustomerMailingAddress}"/>
+                            </apex:outputPanel>
+                            <apex:outputText value="Contact No: {!CustomerMobilePhone}"/>
+                          </apex:panelGrid>
+                    </td>
+                    <td colspan="2" valign="top">&nbsp;&nbsp;</td><!--width="50%" -->
+                    <td colspan="1" align="left" width="45%" valign="top"><!--width="50%" -->
+                           <apex:panelGrid columns="2" styleClass="infobox">
+                                 <apex:outputText value="Unit No:"/>
+                                 <apex:outputText value="{!UnitName}"/>
+                                 <apex:outputText value="Project Name :"/>
+                                 <apex:outputText value="{!lstReceipt[0].Project__r.Name}"/>
+                                 <apex:outputText value="Receipt No:"/>
+                                 <apex:outputText value="{!lstReceipt[0].Receipt_Number__c}"/>
+                                 <apex:outputText value="Receipt Date:"/>
+                                 <apex:outputText value="{0, date, dd MMM,yyyy}"><apex:param value="{!lstReceipt[0].Receipt_Date__c}"/></apex:outputtext>
+                                <!-- <apex:outputText value="Receipt Status : "/>
+                                 <apex:outputText value="{!lstReceipt[0].Receipt_Status__c}"/> -->
+                            </apex:panelGrid>
+                      </td>
+                </tr>
+          </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="paymenttoStyle infobox" width="100%"><!-- old Class demandStyle -->
+                    <tr width="100%">
+                    </tr>
+                    <tr width="100%">
+                        <th>Instrument Type</th>
+                        <th>Instrument Number</th>
+                        <th>Instrument Date</th>
+                        <th>Drawn On Bank</th>
+                        <th>Amount</th>
+                    </tr>
+                  
+                    <tr width="100%">
+                        <td>{!lstReceipt[0].Mode__c}</td>
+                        <td>{!lstReceipt[0].Cheque_DD__c}{!lstReceipt[0].Challan_No__c}{!lstReceipt[0].NEFT__c}</td>
+                        <td><apex:outputText value="{0, date, dd MMM,yyyy}"><apex:param value="{!lstReceipt[0].Cheque_DD_Date__c}"/></apex:outputtext></td>
+                        <td><apex:outputText value="{!lstReceipt[0].DraweeBank__c}" rendered="{!If(lstReceipt[0].DraweeBank__c!='Other',true,false)}"/>
+                           <apex:outputText value="{!lstReceipt[0].Drawee_Bank_If_Others__c}" rendered="{!If(lstReceipt[0].DraweeBank__c=='Other' && lstReceipt[0].Drawee_Bank_If_Others__c!=null ,true,false)}"/>
+                        </td>
+                        <td>{!amountRs}</td>
+                    </tr>
+            </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td class="infobox" width="100%">
+           <h4><br/>Payment Adjustment Against<br/></h4>
+        </td>    
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td>
+            <table id="invoiceDetails" class="demandStyle infobox" width="100%">
+                    <tr width="100%">
+                    </tr>
+                    <tr width="100%">
+                        <th>Cluster</th>
+                        <th>Wing</th>
+                        <th>Unit No.</th>
+                        <th>Adjusted Amount</th>
+                        
+                    </tr>
+                    <apex:repeat value="{!wrapperList}" var="x">
+                    <tr width="100%">
+                            <td>{!x.lstReceiptDetails.Demand_Invoice__r.Name}</td>
+                            <td><apex:outputText value="{0, date, dd MMM,yyyy}"><apex:param value="{!x.lstReceiptDetails.Demand_Invoice__r.Invoice_Date__c}"/></apex:outputtext></td>
+                            <td>{!x.basicChargeswrap}</td>
+                            <td>{!x.amt}</td> 
+                    </tr>
+                    
+                    </apex:repeat>
+                    <tr width="100%">
+                            <td>{!clusterName}</td>
+                            <td>{!towerName}</td>
+                            <td>{!UnitName}</td>
+                           <td class="accMoney">{!accMoney}</td>
+                    </tr>
+                    <tr>
+                            <td Colspan="3" align="center"><h3>Total</h3></td>
+                            <td><h3>{!tamt}</h3></td>
+                    </tr>
+            </table>
+        </td>
+    </tr>
+    
+    
+    
+    <tr>
+        <td>
+            <table width="100%">
+                <tr width="100%">
+                    <td width="50%" class="infobox">
+                        <h4>Disclaimer :</h4>
+                                    - Receipt is subject to realization of Cheque.<br/>
+                                    - This is system generate Receipt.
+                        
+                    </td>
+                </tr><br/>
+                <!-- <tr width="100%">
+                    
+                    <td  width="50%">
+                        <table class="RMStyle infobox" width="100%">
+                            <tr>
+                            <th colspan="3" align="center">Any Queries: <br/> Contact your Relationship Manger</th>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">{!ownerSalutation}{!ownerName}</td>
+                                <td>Mobile:</td>
+                                <td>{!ownerPhone}</td>
+                            </tr>
+                            <tr>
+                                <td>Email:</td>
+                                <td>{!ownerEmail}</td>
+                            </tr>
+                            <tr>
+                            <td colspan="3">Available (Excluding National Holidays): Mon-Fri; 10 AM to 5</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td  width="50%">
+                        <table class="RMStyle infobox" width="100%">
+                            <tr>
+                                <th align="center">You may also contact our centralised <br/> contact centre</th>
+                            </tr>
+                           
+                            <tr>
+                                <td>Email: customercare@xanadudevelopers.com</td>
+                            </tr>
+                            <tr>
+                                <td>Toll Free No: 022 6223 6223</td>
+                            </tr>
+                            <tr>
+                                <td>Available (Excluding National Holidays): 365 days; 10 AM to 7 PM</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+   
+   <tr>
+        <td width="100%">
+                <table class="infobox" width="100%">
+                    
+                    <tr width="100%">
+                          <td width="40%"> <b>
+                          <apex:outputpanel >
+                              <apex:outputText rendered="{!If(letterhead == '0',false,True)}">{!legalEntityName}</apex:outputText>
+                              <apex:outputText rendered="{!If(letterhead == '1',false,True)}">System generated receipt</apex:outputText>
+                            
+                          </apex:outputpanel>                                                          
+                          </b>
+                          </td> 
+                          
+                          <td width="60%">
+                                <table width="100%">
+                                  <tr>
+                                    <td width="50%">PAN : </td>
+                                    <td>{!PanNo}</td>
+                                  </tr>
+                                  <tr >
+                                    <td width="50%">Service Tax Regn. No.: </td>
+                                    <td>{!ServiceTaxNo}</td>
+                                  </tr>
+                                  <tr>
+                                      <td width="50%">Registered Address : </td>
+                                      <td>{!Address},{!City},{!PinCode}</td>
+                                  </tr>
+                               </table>
+                            </td>
+                 </tr>-->
+            </table>
+        </td>
+    </tr> 
+    <tr>
+        <td>
+            <table width="100%">
+                <tr width="100%">
+                    <td width="100%" colspan="4"><apex:outputField value="{!lstReceipt[0].Project__r.Footer_Image__c}"  rendered="{!If(letterhead == '1',false,True)}" ></apex:outputField>
+                    </td>
+              </tr>
+             
+            </table>
+        </td>
+     </tr> 
+    </table>
+   
+</body>
+                    <!--------------------- JAVASCRIPT -------------------->    
+                    <!--------------------- JAVASCRIPT -------------------->
+   
+    <script> 
+        //var tbl = document.getElementById('table');   
+        //alert(tbl);      
+        var accmoney = ('{!accMoney}');
+        //alert (accmoney);
+        // Hide Last Row if On Account Money value 
+        //$('#invoiceDetails tr .accMoney').filter(function () {
+       /* $('#invoiceDetails td').filter(function () 
+        {
+            return $(this).text() === "Rs 0/-";               
+        }).parent().hide();*/
+        
+        /*function func()
+        {
+             $('#invoiceDetails tr td').filter(function () {
+                   return $(this).text() === "Rs 0/-";        
+              }).parent().hide();
+        }
+       */
+       //$("#invoiceDetails tr td:contains('Rs 0/-')").parent().remove();
+       
+       //parent.window.opener.close();    
+       //window.parent.close();
+       //window.opener.close();
+       //child.opener.close();
+       //window.opener.justClose();
+      
+       
+       //-----------------------------------------------------------------------------------------------
+        
+        function myFunction() 
+        {
+             
+             function getQueryVariable(variable) 
+             {
+                 var query = window.location.search.substring(1);
+                 var vars = query.split("&");
+                     //alert("Page is loaded" + query +" xxx " + vars );
+                     for (var i=0;i<vars.length;i++) 
+                     {
+                        var pair = vars[i].split("=");
+                        if (pair[0] == variable) 
+                        {
+                          return pair[1];
+                        }
+                      } 
+                     // alert('Query Variable ' + variable + ' not found');       
+             }
+             
+             var param1var = getQueryVariable("letterhead");
+             //alert ("Letter Head : " + param1var );
+             if(param1var == 0)
+             {
+                 document.getElementById("rowB").style.display="none";
+             }
+             if(param1var == 1)
+             {
+                 document.getElementById("rowA").style.display="none";
+             }
+        }
+        
+        
+        function getUrlParameter(sParam) 
+        {
+                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+                
+                for (i = 0; i < sURLVariables.length; i++)
+                {
+                        sParameterName = sURLVariables[i].split('=');
+                
+                        if (sParameterName[0] === sParam) 
+                        {
+                            return sParameterName[1] === undefined ? true : sParameterName[1];
+                        }
+                }
+       }
+                    
+</script>
+<script>
+$ = jQuery.noConflict();
+$("td.accMoney").each(function() {
+    var amount = $(this).text();
+    //alert('this :'+amount);
+    if (amount === 'Rs 0/-')
+    {
+        $(this).parent().hide();
+    }
+    
+});
+</script>
+    
+    </html>
+</apex:page>

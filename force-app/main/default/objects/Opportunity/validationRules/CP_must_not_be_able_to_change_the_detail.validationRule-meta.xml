@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_must_not_be_able_to_change_the_detail</fullName>
+    <active>true</active>
+    <errorConditionFormula>and(
+	$User.ProfileId = &quot;00e5j000000NUHd&quot;,
+	OR(
+		ISCHANGED( StageName ),
+		ISCHANGED( Name)
+	),
+$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorMessage>You dont have the access to change this field.</errorMessage>
+</ValidationRule>

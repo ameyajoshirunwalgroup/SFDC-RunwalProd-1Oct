@@ -1,0 +1,307 @@
+<apex:page controller="CustomerDetailsFormController" applyHtmlTag="false" standardStylesheets="false" showHeader="false" sidebar="false">
+    <apex:form >
+        
+        <apex:pageMessages />
+        <apex:actionFunction name="callSaveDetails" action="{!saveDetails}" />
+        <div style="text-align:right; margin-top:20px;">
+            <i class="fa-solid fa-upload" 
+               style="font-size: 32px; color: #c88618; cursor: pointer;" 
+               title="Uplaoad Details"
+               onclick="callSaveDetails()">
+            </i>
+            <i class="fa-solid fa-download" 
+               style="font-size: 32px; color: #c88618; cursor: pointer;" 
+               title="Download PDF"
+               onclick="downloadPDF()">
+            </i>
+        </div>
+        <div id="pdfContent" style="width: 770px; margin: auto; border: 1px solid #333; padding: 20px; box-sizing: border-box; background-color: white;">
+            <div class="col-sm-3 text-center">
+                <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->
+                <apex:image id="theImage" value="{!$Resource.Runwal_Enterprises_Logo}"
+                            style="text-align: center; display: block; margin: auto; width: 90px;" alt="Runwal" />
+            </div>
+            <br/>
+            <div style='font-family: Arial;text-align:center;font-size:32px;color:white;font-weight: bold;background-color:#c88618;height:38px;margin:auto;'>
+                CUSTOMER DETAILS FORM
+            </div>
+            <div style='margin: auto;width:90%;'>
+            	<p style='color:#c88618;font-weight: bold;font-size:20px;'>CUSTOMER NAME</p>
+                <table>
+                    <tr>
+                        <td class="label">Title</td>
+                        <td class="checkbox-option">
+                            <apex:selectRadio value="{!selectedSalutation}">
+                                <apex:selectOptions value="{!salutationOptions}" />
+                            </apex:selectRadio>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>FIRST</td>
+                        <td>MIDDLE</td>
+                        <td>LAST</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="char-box-wrapper">
+                                <apex:repeat value="{!charIndexes}" var="i">
+                                    <input type="text" name="firstNameChar{!i}" maxlength="1" class="char-box"
+                                           value="{!IF(LEN(cif.FirstName__c) > i, MID(cif.FirstName__c, i+1, 1), '')}" />
+                                </apex:repeat>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="char-box-wrapper">
+                                <apex:repeat value="{!charIndexes}" var="i">
+                                    <input type="text" name="midNameChar{!i}" maxlength="1" class="char-box"
+                                           value="{!IF(LEN(cif.MiddleName__c) > i, MID(cif.MiddleName__c, i+1, 1), '')}" />
+                                </apex:repeat>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="char-box-wrapper">
+                                <apex:repeat value="{!charIndexes}" var="i">
+                                    <input type="text" name="lastNameChar{!i}" maxlength="1" class="char-box"
+                                           value="{!IF(LEN(cif.LastName__c) > i, MID(cif.LastName__c, i+1, 1), '')}" />
+                                </apex:repeat>
+                            </div>
+                        </td>
+                    </tr>
+                </table><br/>
+                <div class="char-box-wrapper">
+                    <b><span class="label">Booked Unit No.</span></b>
+                    <apex:repeat value="{!charIndexes}" var="i">
+                        <input type="text" name="bookedUnitChar{!i}" maxlength="1" class="char-box"
+                               value="{!IF(LEN(opp.RW_Project_Unit__r.RW_Param4__c) > i, MID(opp.RW_Project_Unit__r.RW_Param4__c, i+1, 1), '')}" />
+                    </apex:repeat>
+                </div>
+                <div class="char-box-wrapper">
+                    <b><span class="label">No. Of Family Members</span></b>
+                    <apex:repeat value="{!familyCharIndexes}" var="i">
+                        <input type="text" name="familyChar{!i}" maxlength="1" pattern="[0-9]*" inputmode="numeric" class="char-box"
+                               value="{!IF(LEN(TEXT(cif.No_of_Family_Members__c)) > i, MID(TEXT(cif.No_of_Family_Members__c), i+1, 1), '')}" />
+                    </apex:repeat>
+                </div>
+                <div class="char-box-wrapper">
+                    <b><span class="label">Residence Pincode</span></b>
+                    <apex:repeat value="{!charIndexes}" var="i">
+                        <input type="text" name="pinChar{!i}" maxlength="1" class="char-box"
+                               value="{!IF(LEN(cif.ZipCode__c) > i, MID(cif.ZipCode__c, i+1, 1), '')}" />
+                    </apex:repeat>
+                </div>
+                <table>
+                    <tr>
+                        <td class="label"><b>Current Residential Address</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <apex:repeat value="{!addrCharIndexes}" var="i">
+                                <input type="text" name="addrChar{!i}" maxlength="1" class="char-box"
+                                       value="{!IF(LEN(cif.Current_Residential_Address__c) > i, MID(cif.Current_Residential_Address__c, i+1, 1), '')}" />
+                            </apex:repeat>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td class="label">Profession</td>
+                        <td class="checkbox-option">
+                            <apex:selectRadio value="{!selectedOccupation}">
+                                <apex:selectOptions value="{!occupationOptions}" />
+                            </apex:selectRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Distance To Office</td>
+                        <td class="checkbox-option">
+                            <apex:selectRadio value="{!selectedDistanceToOfc}">
+                                <apex:selectOptions value="{!distanceToOfficeOptions}" />
+                            </apex:selectRadio>
+                        </td>
+                    </tr>
+                </table>
+                <div style="page-break-before: always;padding-top:10px;">
+                    <p style='color:#c88618;font-weight: bold;font-size:20px;'>COMPANY NAME</p>
+                    <div class="char-box-wrapper">
+                        <apex:outputPanel rendered="{!cif.CompanyName__c != 'Other'}">
+                            <apex:repeat value="{!companyCharIndexes}" var="i">
+                                <input type="text" name="companyChar{!i}" maxlength="1" class="char-box"
+                                       value="{!IF(LEN(cif.CompanyName__c) > i, MID(cif.CompanyName__c, i+1, 1), '')}" />
+                            </apex:repeat>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!cif.CompanyName__c == 'Other'}">
+                            <apex:repeat value="{!companyCharIndexes}" var="i">
+                                <input type="text" name="companyChar{!i}" maxlength="1" class="char-box"
+                                       value="{!IF(LEN(cif.CompanyNameOther__c) > i, MID(cif.CompanyNameOther__c, i+1, 1), '')}" />
+                            </apex:repeat>
+                        </apex:outputPanel>
+                    </div>
+                    <div class="char-box-wrapper">
+                        <b><span class="label">Industry</span></b>
+                        <apex:repeat value="{!industryCharIndexes}" var="i">
+                            <input type="text" name="industryChar{!i}" maxlength="1" class="char-box"
+                                   value="{!IF(LEN(cif.Industry__c) > i, MID(cif.Industry__c, i+1, 1), '')}" />
+                        </apex:repeat>
+                    </div>
+                    <div class="char-box-wrapper">
+                        <b><span class="label">Designation</span></b>
+                        <apex:repeat value="{!designationCharIndexes}" var="i">
+                            <input type="text" name="desgChar{!i}" maxlength="1" class="char-box"
+                                   value="{!IF(LEN(cif.Designation__c) > i, MID(cif.Designation__c, i+1, 1), '')}" />
+                        </apex:repeat>
+                    </div>
+                    <table>
+                        <tr>
+                            <td class="label">Yearly Family Income</td>
+                            <td class="checkbox-option">
+                                <apex:selectRadio value="{!selectedFamilyIncome}">
+                                    <apex:selectOptions value="{!familyIncomeOptions}" />
+                                </apex:selectRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Reason To Purchase</td>
+                            <td class="checkbox-option">
+                                <apex:selectRadio value="{!selectedPurchaseReason}">
+                                    <apex:selectOptions value="{!purchaseReasonOptions}" />
+                                </apex:selectRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">No. Of Vehicles</td>
+                            <td class="checkbox-option">
+                                <apex:selectRadio value="{!selectedNoOfvehicles}">
+                                    <apex:selectOptions value="{!noOfVehiclesOptions}" />
+                                </apex:selectRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Four Wheeler</td>
+                            <td class="checkbox-option">
+                                <apex:selectRadio value="{!selectedFourWheeler}">
+                                    <apex:selectOptions value="{!fourWheelerOptions}" />
+                                </apex:selectRadio>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <br/>
+        
+
+        <style>
+            .char-box-wrapper {
+                display: flex;
+                gap: 4px;
+            	margin-bottom: 10px;
+            }
+
+            .char-box {
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid #444;
+                border-radius: 1px;
+            	
+            	vertical-align: middle;
+            }
+
+            .char-box:focus {
+                outline: 1px solid #0070d2;
+            }
+            .upload-btn::before {
+                content: '\f093'; /* FontAwesome upload icon */
+                font-family: 'Font Awesome 6 Free';
+                font-weight: 900;
+                margin-right: 8px;
+            }
+            
+             /* Hide the native radio */
+                input[type="radio"] {
+                appearance: none;
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #ccc;
+                border-radius: 3px;
+                background-color: #fff;
+                cursor: pointer;
+                position: relative;
+                }
+                
+                /* Checked state shows a tick mark */
+                input[type="radio"]:checked::before {
+                content: "✔";
+                //content: "x";
+                position: absolute;
+                top: -4px;
+                left: 0px;
+                font-size: 20px;
+                color: #0070d2;
+                }
+                
+                /* Add some space for label */
+                .checkbox-label {
+                margin-left: 6px;
+                }
+                
+                /* Stack vertically */
+                .checkbox-option {
+                margin-bottom: 8px;
+                font-size: 16px;
+                }
+        </style>
+
+        <script>
+            // Auto move to next box
+            document.addEventListener('DOMContentLoaded', () => {
+                const inputs = document.querySelectorAll('.char-box');
+                inputs.forEach((input, idx) => {
+                    input.addEventListener('input', () => {
+                        if (input.value && idx < inputs.length - 1) {
+                            inputs[idx + 1].focus();
+                        }
+                    });
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Backspace' && !input.value && idx > 0) {
+                            inputs[idx - 1].focus();
+                        }
+                    });
+                });
+            });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+            <script>
+                function downloadPDF() {
+                const element = document.getElementById("pdfContent");
+                
+                const opt = {
+                    margin: 0,
+                    filename: 'CustomerDetails.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        logging: true,
+                        scrollY: 0
+                    },
+                    jsPDF: {
+                        unit: 'px',
+                        format: [794, 1123],
+                        orientation: 'portrait'
+                    }
+                };
+                
+                html2pdf().set(opt).from(element).save();
+            }
+            </script>
+    </apex:form>
+  
+</apex:page>

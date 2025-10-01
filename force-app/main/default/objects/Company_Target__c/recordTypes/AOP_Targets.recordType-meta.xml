@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AOP_Targets</fullName>
+    <active>true</active>
+    <label>AOP Targets</label>
+    <picklistValues>
+        <picklist>Cluster__c</picklist>
+        <values>
+            <fullName>5th Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5th Avenue Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>All Inventory</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>All Inventory Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLUSTER 04</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLUSTER 05</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLUSTER 06</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commercial Edge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EWS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Garden Heights Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MLCP 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PHASE 01</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PHASE 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phase 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phase 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phase 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phase 5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phase 6</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phase 8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R Galleria</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R Galleria 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R Galleria 2 and Edge 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Commerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 1 Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 2 Cluster</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Financial_Year__c</picklist>
+        <values>
+            <fullName>FY 2017-2018</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2018-2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2019-2020</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2020-2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2021-2022</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2022-2023</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2023-2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2024-2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2025-2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FY 2026-2027</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Month__c</picklist>
+        <values>
+            <fullName>1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>6</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>9</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Segment__c</picklist>
+        <values>
+            <fullName>7 Mahalaxmi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bandra - Grace</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bandra - Nootan Nagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chembur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal City Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Garden City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Pinnacle</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sub_Project__c</picklist>
+        <values>
+            <fullName>5th Avenue - Runwal Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5th Avenue - Runwal Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>7 Mahalaxmi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bandra - Grace</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bandra - Nootan Nagar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chembur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R Galleria 2 and Edge 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal City Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Commerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Edge Dombivli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Garden City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal MyCity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Pinnacle</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tower__c</picklist>
+        <values>
+            <fullName>5th Avenue - Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5th Avenue - Retail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BETAVADE RETAIL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CITRUS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-01</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-02</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-03</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-04</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-05</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-06</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-07</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-08</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-09</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL04-12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05 RETAIL PART I</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05 RETAIL PART II</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05 RETAIL PART III</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-01</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-02</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-03</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-04</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-05</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-06</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-07</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-08</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-09</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL05-12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL06-06</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL06-07</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL06-08</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CL06-09</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CYPRESS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EBONY</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>G</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Galleria 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Garden Heights</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>H</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HAZEL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>J</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>K</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MAGNOLIA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MLCP 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OAK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ORCHID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PALM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PINE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PINEWOOD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Primrose MHADA 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Primrose MHADA 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>REDWOOD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Commerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runwal Shopping Arcade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SILVER OAK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 10 - Tulip</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 11 - Orchid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 13</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 14</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 15</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 16</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 17</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 18</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 19</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 20</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 21</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 23</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 24</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 25</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 26</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 28</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 30</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 31</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 32</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 33</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 34</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 35</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 36</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 37</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 38</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 39</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 40</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 41</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 42</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 43</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 44</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 45</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 53</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 54</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 6</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 9</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 9 - Lily</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WALNUT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WILLOW</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wing 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wing 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wing 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wing 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wing 5</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Verticals__c</picklist>
+        <values>
+            <fullName>CP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OverAll</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Presales%2FDirect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R%26L</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Year__c</picklist>
+        <values>
+            <fullName>2017</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2018</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2020</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2022</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2023</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2027</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2028</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2029</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2030</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>
