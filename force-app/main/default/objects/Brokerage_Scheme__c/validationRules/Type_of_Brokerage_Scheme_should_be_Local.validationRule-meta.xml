@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_Brokerage_Scheme_should_be_Local</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Type__c ,&quot;NRI&quot; ),
+Start_Date__c &gt;= DATE(2024,04,01))</errorConditionFormula>
+    <errorDisplayField>Type__c</errorDisplayField>
+    <errorMessage>The type of brokerage scheme should be Local.</errorMessage>
+</ValidationRule>

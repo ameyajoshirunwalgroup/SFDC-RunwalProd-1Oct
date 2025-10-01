@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Channel_Partner_Inactive_Scheme_Bookings</fullName>
+    <columns>NAME</columns>
+    <columns>Project__c</columns>
+    <columns>Type_of_Client__c</columns>
+    <columns>RW_X9_99_Received__c</columns>
+    <columns>RW_Registration_Date__c</columns>
+    <columns>Booking_Date__c</columns>
+    <columns>RW_Registration_Done__c</columns>
+    <columns>Brokerage__c</columns>
+    <columns>Brokerage_Scheme__c</columns>
+    <columns>Brokerage_Summary__c</columns>
+    <columns>Passback__c</columns>
+    <columns>Passback_Amount__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>BrokerIId__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Source_of_Booking__c</field>
+        <operation>equals</operation>
+        <value>Channel Partner</value>
+    </filters>
+    <filters>
+        <field>Booking_Date__c</field>
+        <operation>greaterOrEqual</operation>
+        <value>10/1/2022 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Booking Confirmed</value>
+    </filters>
+    <filters>
+        <field>Exclude_From_Brokerage_Batch__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <filters>
+        <field>RW_Registration_Done__c</field>
+        <operation>notEqual</operation>
+        <value>Yes</value>
+    </filters>
+    <filters>
+        <field>Brokerage_Summary__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>RW_Registration_Date__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>RW_X9_99_Received__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Brokerage_Scheme__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <label>Channel Partner Inactive Scheme Bookings</label>
+    <sharedTo>
+        <role>Director</role>
+    </sharedTo>
+</ListView>

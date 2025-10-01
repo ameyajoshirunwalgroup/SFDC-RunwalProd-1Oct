@@ -1,0 +1,35 @@
+<apex:component controller="ReferralCreditDocController" allowDML="true" access="Global">
+    <apex:attribute assignTo="{!RDHId}" type="string" name="idoff" description="Related Document Id" /> 
+    <html style="font-family: geneva;font-size: 10.0pt;">
+        <body>{!CreateDocList}
+            
+            Dear Sir/Ma'am,<br/><br/>
+            
+            Referral IOM for Customer  {!rdhList[0].Name_of_Existing_Customer__c}, Unit no. {!rdhList[0].Existing_Customer_Flat_no__c} has been processed
+            in system as per attached approved IOM.<br/><br/><br/>
+            Request your approval to process it further for credit note / payouts.<br/><br/><br/>
+                       
+            <apex:outputText rendered="{!if(ISNULL(cd.size),False,True)}">
+            <table border="1" style="font-family: Lato,verdana, arial, sans-serif;font-size: 12px; border-width: 3px;border-collapse: collapse;empty-cells:show;">
+                    <tr>
+                        <th style="text-align:left;"> Sr. No. </th>
+                        <th style="text-align:center;"> Document Link </th>
+                    </tr>
+                    <apex:variable var="i" value="{!1}"/>
+                    <apex:repeat value="{!cd}" var="c">
+                    <tr>
+                        <td style="text-align:center;"> {!i} </td>
+                        <td style="text-align:left;"> <a href="{!c.DistributionPublicUrl}">{!c.ContentVersion.title}</a></td>
+                        <apex:variable var="i" value="{!i+1}"/>
+                    </tr>
+                    
+                    </apex:repeat>
+                    
+             </table>
+             <br/><br/>
+             </apex:outputText>            
+            Thanks and Regards,<br/>
+            Runwal Team
+        </body>
+    </html>
+</apex:component>

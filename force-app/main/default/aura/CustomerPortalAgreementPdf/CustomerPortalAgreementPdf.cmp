@@ -1,0 +1,44 @@
+<aura:component access="GLOBAL" extensible="false" controller="AgreementController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+	<aura:attribute access="GLOBAL" name="pdfdata" type="String" description="PDF data in base64 encoded format"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="bookingId" type="String"/>
+    <aura:attribute name="rejectionreason" type="String"/>
+    <aura:attribute name="enableButtons" type="Boolean" default="true"/>
+    <aura:attribute name="enablereasonSection" type="Boolean" default="false"/>
+    <aura:attribute name="agreementStatus" type="String"/>
+     <aura:if isTrue="{!v.enableButtons}">
+     <div class="slds-align_absolute-center" >
+         				<aura:if isTrue="{!not(v.enablereasonSection)}">
+                        <lightning:button variant="brand" class="sizeButton textInput" label="Approve" title="Approve" onclick="{! c.onapproveAgreement }" /> 
+                        <lightning:button variant="brand" class="sizeButton textInput" label="Reject" title="Reject" onclick="{! c.onrejectAgreement }"  /> 
+                        </aura:if>
+    </div>
+       </aura:if> 
+    
+    <aura:if isTrue="{!v.enablereasonSection}">
+         <div class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                 <div class="slds-p-top_x-large">
+                    <span>Reason for Rejection</span>                        
+                 </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+        	 <lightning:textarea name="reason" value="{!v.rejectionreason}"/>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            
+        </div>
+              <div class="slds-align_absolute-center" >
+             <lightning:button variant="brand" label="Submit" title="Submit" onclick="{! c.onrejectSubmit }"  /> 
+             <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.oncancel }"  /> 
+             </div>
+             </div>
+    </aura:if>
+   
+	<iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" onload="{!c.loadpdf}"></iframe>
+</aura:component>

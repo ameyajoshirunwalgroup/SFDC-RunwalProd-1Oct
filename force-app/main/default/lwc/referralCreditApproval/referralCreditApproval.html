@@ -1,0 +1,42 @@
+<template>
+    <lightning-card>
+        <template if:true={isShowUploadSection}>
+            <lightning-spinner alternative-text="Loading" size="small" if:true={isSpinner}></lightning-spinner>
+            <div>
+                <div class="slds-p-around_large">
+                    <lightning-combobox value={typeofdoc} label="Type of Document" placeholder="Select Type"
+                        options={docoptions} onchange={handleChangepicklistdoc} required></lightning-combobox>
+                </div>
+                <div class="slds-p-around_large">
+                    <lightning-file-upload label="Upload Document" name="Upload Document" accept={acceptedFormats}
+                        onuploadfinished={handleupload}>
+                    </lightning-file-upload>
+                </div>
+            </div>
+            <div if:true={showapprovalbutton}>
+                <div class="slds-p-around_large">
+                    <lightning-input type="text" variant="standard" value={cmnt} name="name" required="true"
+                        label="Approval Comments" onchange={handlecomment}></lightning-input>
+                </div>
+                <div slot="footer">
+                    <lightning-button style="margin-right: 10px;margin-left: 22px;" variant="brand" label="Submit For Approval"
+                        onclick={submitapproval}></lightning-button>
+                    <lightning-button variant="brand" label="Back" onclick={back}></lightning-button>
+                </div>
+            </div><br/>
+            <template if:true={data}>
+                <lightning-card title="Uploaded Files" icon-name="standard:account">
+                    <div >
+                        <lightning-datatable data={data} columns={columns} key-field="id">
+                        </lightning-datatable>
+                    </div>
+                </lightning-card>
+            </template>
+        </template>
+        <template if:false={isShowUploadSection}>
+            <div slot="footer">
+                <lightning-button variant="brand" label="Back" onclick={back}></lightning-button>
+            </div>
+        </template>
+    </lightning-card>
+</template>

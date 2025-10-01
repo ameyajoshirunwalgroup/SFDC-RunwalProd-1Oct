@@ -1,0 +1,49 @@
+<aura:component controller="GetSAPReceiptsForCustomer" implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionwithoutheader" access="global" >
+	 <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: Show !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 60% !important;
+        max-width: 60% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .toastMessage.forceActionsText{
+        white-space : pre-line !important;
+        }
+     
+    </aura:html>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="timestamp" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div class="slds-spinner_container">
+            <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!--<lightning:input type="text" label="TimeStamp" value="{!v.timestamp}" required="true"/>
+    <lightning:button variant="brand" class="slds-m-top_small" label="Trigger" onclick="{!c.trigger}"  />-->
+</aura:component>

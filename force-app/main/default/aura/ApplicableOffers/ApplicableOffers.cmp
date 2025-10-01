@@ -1,0 +1,18 @@
+<aura:component implements="flexipage:availableforRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" >
+    <!--<aura:attribute name="OfferRecord" type="ApplicableOfferWrapper[]"/> -->
+    <aura:attribute name="OfferType" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+         <div class="slds-p-around_small">
+        <div style="height: 100px">
+        <lightning:datatable
+                keyField="id"
+                data="{! v.data }"
+                columns="{! v.columns }"
+                hideCheckboxColumn="true"
+                class="table-test"/>
+    </div>
+    </div>
+                                                                                                                      
+</aura:component>

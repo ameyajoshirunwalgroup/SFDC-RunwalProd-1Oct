@@ -1,0 +1,145 @@
+<aura:component controller="EOIController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="isSuccess" type="Boolean" />
+    <aura:attribute name="projectName" type="String" />
+    <aura:attribute name="towerId" type="String" />
+    <aura:attribute name="towerNames" type="String[]" />
+    <aura:attribute name="offers" type="list"  />
+    <aura:attribute name="suboffer" type="List"  />
+    <aura:attribute name="subofferName" type="String" />
+    <aura:attribute name="Amount" type="Decimal" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="offerName" type="String" />
+    <aura:attribute name="PaymentGateway" type="String"/>
+
+     <div class="slds-align_absolute-center" >
+         <p>Please Select the Tower and enter the amount below for customer to pay</p>
+    </div>
+    
+     <div class="slds-grid slds-gutters slds-wrap" >
+         
+         
+          <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Tower<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+         
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                               <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-small slds-p-right_none">
+                                    <lightning:select  value="{!v.towerId}" name="tower" label="Tower Name" variant="label-hidden" required="true" onchange="{!c.getOffers}">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.towerNames}" var="val">
+                                                    <option value="{!val.key}"> {!val.value}</option>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                   </div>
+             </div>
+                            </div>
+         
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Amount</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                     <div class="slds-p-top_large slds-p-left_none">
+                                   <lightning:input type="number" name="amount" label="Amount" value="{!v.Amount}" formatter="currency"  variant="label-hidden"/>
+                                    </div>
+                                    </div>
+                            </div>
+        					<!-- PaymentGateway bkk -->    
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Payment Gateway<span class="asterisk">*</span></span>                       
+                                    </div>
+                                </div>
+                            </div>
+                  			<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                     <div class="slds-p-top_large slds-p-left_none">
+                                         <lightning:select name="PaymentGateway" aura:id ="PaymentGateway" value="{!v.PaymentGateway}" label="Payment Gateway" variant="label-hidden" required="true" messageWhenValueMissing="Choose one!">
+                                        	 <option value="">--None--</option>
+                                            <!-- <option value="CCAvenue">CCAvenue</option>
+                                             <option value="BillDesk">BillDesk</option>-->
+                                             <option value="BillDesk">EaseBuzz</option>
+                                         </lightning:select>
+                                     </div>
+                                 </div>
+                            </div>
+        					<!-- PaymentGateway bkk -->
+        <aura:if isTrue="{!not(empty(v.offers))}">
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Offer</span>                        
+                                    </div>
+                                </div>
+                            </div>
+         
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                               <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-small slds-p-right_none">
+                                    <lightning:select  value="{!v.offerName}" name="offerName" label="Offer Name" variant="label-hidden" onchange="{!c.getSuboffers}">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.offers}" var="offer" indexVar="key">
+                                                    <option value="{!offer.key}"> {!offer.key}</option>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                   </div>
+             </div>
+                            </div>
+         
+          <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Sub Offer</span>                        
+                                    </div>
+                                </div>
+                            </div>
+         
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                               <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-small slds-p-right_none">
+                                    <lightning:select  value="{!v.subofferName}" name="subofferName" label="Sub Offer" variant="label-hidden" >
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.suboffer}" var="subofferVal" >
+                                                    <option value="{!subofferVal}"> {!subofferVal}</option>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                   </div>
+             </div>
+                            </div>
+         </aura:if>
+
+    </div>
+    
+     <div class="slds-align_absolute-center" >
+         <div class="slds-p-around_large">
+         <lightning:button variant="brand" label="Send EOI Link" title="Send EOI Link" onclick="{! c.sendEOIFormLink }" />
+         </div>
+         </div>
+    
+   <!-- <aura:if isTrue="{!v.isSuccess}">
+        <div class="slds-p-around_medium slds-text-align_center slds-text-color_success slds-text-heading_small">
+        An Email has been sent successfully to the customer.
+        </div>
+        <aura:set attribute="else">
+        <div class="slds-p-around_medium slds-text-align_center slds-text-color_error slds-text-heading_small">
+        {!v.errorMessage}
+        </div>
+    </aura:set>
+    </aura:if> -->
+                                           
+</aura:component>

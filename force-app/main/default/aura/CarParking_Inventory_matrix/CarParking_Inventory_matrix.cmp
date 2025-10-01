@@ -1,0 +1,270 @@
+<aura:component controller="CarPakingInventory" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"  access="global" >
+	
+    
+    
+    
+     <!-- init handler to fetch the project -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    
+    <!--Attributes  to hold the values-->
+    <aura:attribute name="projectName" type="String"></aura:attribute>
+    <aura:attribute name="projectList" type="list"></aura:attribute>
+    <aura:attribute name="towerList" type="list"></aura:attribute>
+    <aura:attribute name="levelList" type="list"></aura:attribute>
+    <aura:attribute name="FacingtypeList" type="list"></aura:attribute>
+    <aura:attribute name="carparkingList" type="list"></aura:attribute>
+    <aura:attribute name="bookinginfo" type="list"></aura:attribute>
+    <aura:attribute name="selectedCheckBoxes" type="List"  default="[]"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="countAllot" type="list"></aura:attribute>
+    <aura:attribute name="parkingtypelist" type="List" />
+    <aura:attribute name="selectParkingtype" type="List" />
+    <aura:attribute name="parkingname" type="String"></aura:attribute>
+    <aura:attribute type="list" name="list1"/>
+    <aura:attribute type="map" name="map1"/>
+    
+    <!-- This is to increase width of quick action modal pop-up -->
+    <aura:html tag="style">
+    .slds-modal__container {
+     min-width: 95vw;
+    }
+</aura:html>   
+    
+    <div class="slds-box slds-theme_default">
+        <div class="slds-grid">
+            <div class="slds-text-heading_medium slds-align_absolute-center">            
+            <b>Car Parking Inventory Matrix</b>
+            </div>
+        </div>    
+        
+         
+       
+            
+        <div class="slds-grid">
+            <div class="slds-size_10-of-12" style="padding-top:20px;">
+                
+                <div class="slds-grid">
+            <div class="slds-col">
+            </div>
+ 				 <div class="slds-col"> 
+           			 <lightning:select name="select" label="Select Project" aura:id="projectId" >
+       					 <aura:iteration items="{!v.projectList}" var="pl">
+        				   <option value="{!pl.value}" text="{!pl.label}" ></option> 
+       					 </aura:iteration>
+   					 </lightning:select>
+           		 </div>
+  				 <div class="slds-col"> 
+                	 <lightning:select name="select" label="Select Tower" aura:id="towerName">
+           				 <aura:iteration items="{!v.towerList}" var="towerName">
+            			   <option value="{!towerName.value}" text="{!towerName.label}" ></option>
+            		     </aura:iteration>
+       				 </lightning:select>     
+            	</div>
+            	<div class="slds-col">
+                    <lightning:select name="select" label="Select Level" aura:id="level">
+                        <aura:iteration items="{!v.levelList}" var="lvl">
+            			   <option value="{!lvl.value}" text="{!lvl.label}" ></option>
+            		     </aura:iteration>
+                     </lightning:select>    
+                </div>  
+            
+            	<div class="slds-col">
+                    <aura:if isTrue="{!empty(v.recordId)}">
+                    <lightning:select name="select" label="Select Type" aura:id="parkingtype">
+                        <option value="--None--" text="--None--"></option>
+                        <option value="Tandem Open" text="Tandem Open"></option>
+                        <option value="Tandem Covered" text="Tandem Covered"></option>
+                        <option value="Stilt" text="Stilt"></option>
+                        <option value="Single Open" text="Single Open"></option>
+                        <option value="Single Covered" text="Single Covered"></option>
+                        <option value="MLCP" text="MLCP"></option>
+                        <option value="Podium" text="Podium"></option>
+                        <option value="Puzzle Car Park" text="Puzzle Car Park"></option> <!-- Added by Vinay 28-03-2025 -->
+                     </lightning:select>   
+                   </aura:if>
+                    <aura:if isTrue="{!not(empty(v.recordId))}">
+                    		<lightning:select name="select" label="Select Parking Type" aura:id="parkingtype">
+           				 <aura:iteration items="{!v.selectParkingtype}" var="info">
+            			   <option value="{!info.value}" text="{!info.label}" ></option>
+            		     </aura:iteration>
+       				 </lightning:select>
+                    </aura:if>
+                    
+                </div>
+                    
+               <div class="slds-col" >
+                    <lightning:select name="select" label="Select Status" aura:id="status">
+                        <option value="--None--" text="--None--"></option>
+                        <option value="Booked" text="Booked"></option>
+                        <option value="Available" text="Available"></option>
+                        <option value="Blocked" text="Blocked"></option>                        
+                     </lightning:select>    
+                </div> 
+			
+                    
+                  
+                    
+                 <div class="slds-col">
+                    <lightning:select name="select" label="Select Facing Type" aura:id="facingtype">
+                        <aura:iteration items="{!v.FacingtypeList}" var="ft">
+            			   <option value="{!ft.value}" text="{!ft.label}" ></option>
+            		     </aura:iteration>
+                     </lightning:select>    
+                </div> 
+                    
+               
+            
+            <div class="slds-col" style="padding-top:20px;">
+                <lightning:button variant="brand-outline" label="Search" title="Brand action"  onclick="{!c.carParkingList}"  />                
+            </div>
+                  
+            </div> 
+                   
+                </div>
+            <div class="slds-size_2-of-12" >            
+                Alloted <div class="slds-box slds-box_xx-small" style="background-color:red;"></div>
+                 <br/>
+                Available<div class="slds-box slds-box_xx-small" style="background-color:green;"></div>
+                <!--<br/> 
+                Blocked <div class="slds-box slds-box_xx-small" style="background-color:blue;"></div>            
+        		-->    
+		</div>    
+        </div>
+    
+      <aura:if isTrue="{! not(empty(v.recordId))}">
+      <div class="slds-grid" style="padding-top:13px;">
+          
+          <div class="slds-size_8-of-12">
+              Parking Type : 
+              <aura:iteration items="{!v.parkingtypelist}" var="ptype">                    
+           		  <aura:if isTrue="{!not(empty(ptype.Car_Parking_Allotment__c))}">
+                         <img src="/img/checkbox_checked.gif"/> 
+                         {!ptype.Parking__c}
+                      </aura:if>
+                      <aura:if isTrue="{!empty(ptype.Car_Parking_Allotment__c)}">
+                         <img src="/img/checkbox_unchecked.gif"/>
+                         {!ptype.Parking__c}
+                      </aura:if>
+              </aura:iteration>    
+          </div>
+          <div class="slds-size_4-of-12">
+            <div class="slds-text-heading_small">
+                
+                <!--  <aura:iteration items="{!v.list1}" var="cnt" indexVar="key">
+				<span style="color:#grey;font-size:13px;padding-left:2px;">
+                    {!cnt.key} = {!cnt.value}, 
+                </span>
+				</aura:iteration> -->
+                <p style="display:none;">
+                	{!v.countAllot[0]}
+                    {!v.countAllot[1]}
+                    {!v.countAllot[2]}
+                    {!v.countAllot[3]}
+                    {!v.countAllot[4]}
+                    {!v.countAllot[5]}
+                </p>
+                
+                
+            </div>
+           </div>  
+        </div> 
+      </aura:if>  
+     <div class="slds-grid slds-wrap showhide" style="padding-top:13px;">                      
+         <aura:iteration items="{!v.carparkingList}" var="info">        				   
+       	  <div class="slds-size_1-of-12" >  
+            <aura:if isTrue="{!info.Status__c == 'Booked'}">
+            <div class="slds-box slds-align_absolute-center" style="background-color:red;border-radius:8px 8px 5px 5px;color:white;padding:6px;min-height:113px;">
+               <div>
+                {!info.Name} <br/>
+                {!info.Parking_Type__c} <br/> 
+                {!info.Facing_Type__c} <br/>
+                {!info.Tower_Name__c} <br/>
+                {!info.Booking__r.Customer__r.Name} <br/>
+                {!info.Booking__r.Unit_No__r.RW_Param4__c} <br/>   
+                <aura:if isTrue="{!and(and(not(empty(info.Booking__r.Id)), not(empty(v.recordId))), info.Booking__r.Id == v.recordId)}">
+                
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="UnAllot" value="{!info.Id}"  onclick="{!c.unallotBooking}"   />
+                </div>
+                </aura:if>
+              </div>  
+			</div>
+           </aura:if>
+           <aura:if isTrue="{!info.Status__c == 'Available'}">
+            <div class="slds-box slds-align_absolute-center" style="background-color:green;border-radius:8px 8px 5px 5px;color:white;padding:6px;min-height:113px;">
+                <div>
+                    {!info.Name} <br/>
+                    {!info.Parking_Type__c} <br/>  
+                    {!info.Facing_Type__c}   <br/>
+                
+                <aura:if isTrue="{!not(empty(v.recordId))}">
+                <aura:if isTrue="{!and(info.Parking_Type__c == 'Tandem Open' , v.countAllot[0] != 0)}">
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="Allot" value="{!info.Id}" onclick="{!c.allotCarParking}"  />
+                </div>
+                 </aura:if>
+                    
+                <aura:if isTrue="{!and(info.Parking_Type__c == 'Tandem Covered' , v.countAllot[1] != 0)}">
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="Allot" value="{!info.Id}" onclick="{!c.allotCarParking}"  />
+                </div>
+                 </aura:if>
+                    
+               <aura:if isTrue="{!and(info.Parking_Type__c == 'Stilt' , v.countAllot[2] != 0)}">
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="Allot" value="{!info.Id}" onclick="{!c.allotCarParking}"  />
+                </div>
+                 </aura:if>
+                    
+                <aura:if isTrue="{!and(info.Parking_Type__c == 'Single Open' , v.countAllot[3] != 0)}">
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="Allot" value="{!info.Id}" onclick="{!c.allotCarParking}"  />
+                </div>
+                 </aura:if>
+                    
+                 <aura:if isTrue="{!and(info.Parking_Type__c == 'Single Covered' , v.countAllot[4] != 0)}">
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="Allot" value="{!info.Id}" onclick="{!c.allotCarParking}"  />
+                </div>
+                 </aura:if>
+                    
+                 <aura:if isTrue="{!and(info.Parking_Type__c == 'MLCP' , v.countAllot[5] != 0)}">
+                <div style="padding-top:3px;">
+                <lightning:button class="padding-top" variant="brand-outline" label="Allot" value="{!info.Id}" onclick="{!c.allotCarParking}"  />
+                </div>
+                 </aura:if>   
+                    
+                  </aura:if>      
+                </div> 
+                
+			</div>
+               
+           </aura:if>
+           <aura:if isTrue="{!info.Status__c == 'Blocked'}">
+            <div class="slds-box slds-align_absolute-center" style="background-color:blue;border-radius:8px 8px 5px 5px;color:white;padding:6px;min-height:113px;">
+                {!info.Name} <br/>
+                {!info.Parking_Type__c} <br/>
+                {!info.Facing_Type__c}
+			</div>
+           </aura:if>   
+              
+             </div>
+          
+         </aura:iteration>        
+     </div>
+      
+            
+        
+    <div class="slds-col nomessage" style="display:none;background-color : orange;color:white;margin-top:100px;">
+      <div class="slds-box slds-align_absolute-center nomessage">            
+  			<div class="slds-text-heading_medium">            
+            <b>No Car parking available</b>
+            </div>
+	</div>          
+	</div>
+        
+    </div>   
+    
+     <lightning:spinner aura:id="mySpinner" class="slds-hide" />
+</aura:component>

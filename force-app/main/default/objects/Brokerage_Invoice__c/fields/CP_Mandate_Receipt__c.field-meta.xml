@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_Mandate_Receipt__c</fullName>
+    <formula>AND(
+  AOP__c != null,
+  AOP__r.RecordType.Name == &apos;CP Mandate&apos;
+)</formula>
+    <label>CP Mandate Receipt</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

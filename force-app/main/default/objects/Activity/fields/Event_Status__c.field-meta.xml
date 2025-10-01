@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Event_Status__c</fullName>
+    <label>Del Visit Status</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Booked (5)</fullName>
+                <default>false</default>
+                <label>Booked (5)</label>
+            </value>
+            <value>
+                <fullName>Blocked (5)</fullName>
+                <default>false</default>
+                <label>Blocked (5)</label>
+            </value>
+            <value>
+                <fullName>Hot (4)</fullName>
+                <default>false</default>
+                <label>Hot (4)</label>
+            </value>
+            <value>
+                <fullName>Warm (3)</fullName>
+                <default>false</default>
+                <label>Warm (3)</label>
+            </value>
+            <value>
+                <fullName>Cold (2)</fullName>
+                <default>false</default>
+                <label>Cold (2)</label>
+            </value>
+            <value>
+                <fullName>Lost (1)</fullName>
+                <default>false</default>
+                <label>Lost (1)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

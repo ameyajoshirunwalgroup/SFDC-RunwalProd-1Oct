@@ -1,0 +1,212 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <aura:attribute name= "projectId" type ="string"/>
+    <aura:attribute name="Bookingrec" type ="List"/>
+    <aura:attribute name= "BankName" type ="List"/>
+    <aura:attribute name= "RunwalWrapList" type ="List"/>
+    <aura:attribute name="DependentBranchMap" type="Map" default="{}" />
+    <aura:attribute name= "BranchName" type ="Map"/>
+    <aura:attribute name="BankWrap" type="Map" default="{}" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="pancardno" type="string"/>
+    <aura:attribute name="aadharno" type="string"/>
+    <aura:attribute name="drivingLicenseno" type="string"/>
+    <aura:attribute name="passportPhoto" type="string"/>
+    <aura:attribute name="uploadedPANDocumentID" type="string"/>
+    <aura:attribute name="uploadedAadharCardDocumentID" type="string"/>
+    <aura:attribute name="uploadedSalarySlip" type="string"/>
+    <aura:attribute name="uploadedITR" type="string"/>
+    <aura:attribute name="uploadedBankStatement" type="string"/>
+    <aura:attribute name="uploadedSalarySlipId" type="string"/>
+    <aura:attribute name="uploadedITRId" type="string"/>
+    <aura:attribute name="uploadedBankStatementId" type="string"/>
+    <aura:attribute name="disablePANUpload" type="boolean" default="true"/> 
+    <aura:attribute name="disableAADHARUpload" type="boolean" default="true"/>
+    
+    <aura:attribute name="BankNameId" type="string"/>
+    <aura:attribute name="BranchNameID" type="string"/>
+    <aura:attribute name="loanrecordstatus" type="string"/>
+    <aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    
+      <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+        
+        <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+            <div class="slds-section slds-is-open">
+                <div class="slds-p-top_small"></div>
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                        <b class="headerstyle">Home Loan For Booking </b>
+                        <div class="slds-p-top_small"></div>
+                        <div class="slds-form" role="list">
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-3">
+                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                     <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Bank Name<span class="asterisk"> *</span></label>
+                                    <lightning:select aura:id="bankname" value="{!v.BankWrap.bankname}" onchange="{!c.handleOnBankChange}" name="bankList" label="Bank Name" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.BankName}" var="i" indexVar="key">
+                                            <option value="{!i}">{!i}</option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-3">
+                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                     <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Branch Name<span class="asterisk"> *</span></label>
+                                    <lightning:select aura:id="bankname" value="{!v.BankWrap.branchname}"  name="bankList" label="Branch Name" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.BranchName}" var="i" indexVar="key">
+                                            <option value="{!i}">{!i}</option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </lightning:layoutItem>
+                    
+                    
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                        
+                        <div class="slds-p-top_small"></div>
+                        <div class="slds-form" role="list">
+                            
+                                            
+                              <div class="slds-form__row">
+                                
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                        <label class="slds-form-element__label" for="horizontal-form-element-id-12">Pan Card<span class="asterisk"> *</span></label>
+                                        <div class="slds-form-element__control">
+                                            <lightning:input aura:id = "Pancard" type="text" label="" value="{!v.pancardno}" onblur = "{!c.ValidatePanCard}" required="true"/>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="{!$Browser.isPhone ?'slds-form-element slds-form-element_horizontal slds-is-editing slds-p-top_large' : 'slds-form-element slds-form-element_horizontal slds-is-editing'}">
+                                        <lightning:fileUpload name="pancard"  label="" onuploadfinished="{!c.uploadDocument}" disabled="{!v.disablePANUpload}"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            <div class="slds-p-top_small"></div>
+                            
+                            <div class="slds-form__row">
+                                
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                        <label class="slds-form-element__label" for="horizontal-form-element-id-12">Aadhar Card<span class="asterisk"> *</span></label>
+                                        <div class="slds-form-element__control">
+                                            <lightning:input aura:id = "adharCard" type="text" label="" value ="{!v.aadharno}" required="true" onblur = "{!c.validateAadhar}"/>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="{!$Browser.isPhone ?'slds-form-element slds-form-element_horizontal slds-is-editing slds-p-top_large' : 'slds-form-element slds-form-element_horizontal slds-is-editing'}">
+                                        <lightning:fileUpload name="AadharCard"  label="" onuploadfinished="{!c.uploadDocument}" disabled="{!v.disableAADHARUpload}"/>
+                                    </div>
+                                </div>
+                                
+                            </div> 
+                            
+                            <div class="slds-p-top_small"></div>
+                            
+                            <div class="slds-form__row">
+                                
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                        <label class="slds-form-element__label" for="horizontal-form-element-id-12">Salary Slip</label>
+                                      <!--  <div class="slds-form-element__control">
+                                            <lightning:input aura:id = "Salary Slip" type="text" label="" value ="{!v.drivingLicenseno}" required="true"/>
+                                        </div> -->
+                
+                                        
+                                    </div>
+                                    
+                                    
+                                    <div class="{!$Browser.isPhone ?'slds-form-element slds-form-element_horizontal slds-is-editing slds-p-top_large' : 'slds-form-element slds-form-element_horizontal slds-is-editing'}">
+                                        <lightning:fileUpload name="DrivingLicense"  label="" onuploadfinished="{!c.uploadDocument}"/>
+                                    </div> 
+                                </div>
+                                
+                            </div> 
+                            
+                            <div class="slds-p-top_small"></div>
+                            
+                             <div class="slds-form__row">
+                                
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                        <label class="slds-form-element__label" for="horizontal-form-element-id-12">ITR</label>
+                                       <!-- <div class="slds-form-element__control">
+                                            <lightning:input aura:id = "ITR" type="text" label="" value ="{!v.passportPhoto}" required="true"/>
+                                        </div> -->
+                                    </div>
+                                    
+                                    
+                                    <div class="{!$Browser.isPhone ?'slds-form-element slds-form-element_horizontal slds-is-editing slds-p-top_large' : 'slds-form-element slds-form-element_horizontal slds-is-editing'}">
+                                        <lightning:fileUpload name="PassportPhoto"  label="" onuploadfinished="{!c.uploadDocument}"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            <div class="slds-p-top_small"></div>
+                            
+                                      <div class="slds-form__row">
+                                
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                        <label class="slds-form-element__label" for="horizontal-form-element-id-12">Bank Statement</label>
+                                        <!-- <div class="slds-form-element__control">
+                                            <lightning:input aura:id = "Bank Statement" type="text" label="" value ="{!v.passportPhoto}" required="true"/>
+                                        </div>-->
+                                    </div>
+                                    
+                                    
+                                    <div class="{!$Browser.isPhone ?'slds-form-element slds-form-element_horizontal slds-is-editing slds-p-top_large' : 'slds-form-element slds-form-element_horizontal slds-is-editing'}">
+                                        <lightning:fileUpload name="PassportPhoto"  label="" onuploadfinished="{!c.uploadDocument}"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                             <div class="slds-p-top_small"></div>
+                            
+                            
+                            <div class="{!$Browser.isPhone ? 'slds-align_absolute-center' :'slds-align_absolute-center slds-p-top_xx-large'}" >
+                                <lightning:button variant="brand" name="{}" label="Submit" title="Submit" onclick="{!c.onsubmit}" />
+                            </div> 
+                            
+                            
+                        </div>
+                        
+                    </lightning:layoutItem>
+                    
+                </lightning:layout>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    
+    
+</aura:component>

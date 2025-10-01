@@ -1,0 +1,42 @@
+<aura:component controller="EOICancellationController" implements="flexipage:availableforRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+    <aura:attribute name="recordId" type="String"></aura:attribute>
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="errormessage" type="String"/>  
+    <aura:if isTrue="{!empty(v.errormessage)}">
+    <lightning:recordEditForm aura:id="myRecordForm" recordId="{!v.recordId}" objectApiName="RW_EOI__c" onsubmit="{!c.handleSubmit}" >
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField fieldName="RW_Reason__c" />
+            </div>
+            <!--<div class="slds-col slds-size_1-of-2">
+                <lightning:inputField fieldName="RW_Sub_Reason__c" />
+            </div>-->
+             
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField fieldName="RW_Date_of_Cancellation__c" required="true" />
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField aura:id="cancellationApprover" fieldName="RW_Approver__c" />
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+               <lightning:fileUpload name="CancellationEmail"  label="Attach Cancellation Email" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.recordId}"
+                                              onuploadfinished="{!c.onUploadFinished}" /> 
+            </div>
+            <lightning:inputField aura:id="cancellationEmail" fieldName="RW_Cancellation_Email_Uploaded__c" class ="slds-hide"/>
+            <lightning:inputField aura:id="approvalStatus" fieldName="RW_Approval_Status__c" class ="slds-hide"/>
+            <lightning:inputField aura:id="cancellationEmailId" fieldName="RW_Cancellation_Email_Document__c" class ="slds-hide"/>
+            <div class="slds-align_absolute-center" >
+            <lightning:button variant="brand" class="slds-m-top_small" type="Submit" label="Send for Approval" />
+            </div>
+            </div>
+    </lightning:recordEditForm>
+         <aura:set attribute="else">
+             <div class="slds-text-color_error slds-align_absolute-center">
+          <b> {!v.errormessage} </b>
+         </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>AOP</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>AOP</value>
+    </caseValues>
+    <layouts>
+        <layout>AOP Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>CP Mandate</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Run CP Mandate Batch --></label>
+        <name>Run_CP_Mandate_Batch</name>
+    </quickActions>
+    <recordTypes>
+        <label><!-- AOP --></label>
+        <name>AOP</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- CP Mandate --></label>
+        <name>CP_Mandate</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- You can not edit this record. Please contact System Administrator. --></errorMessage>
+        <name>Disable_editing_of_CP_Mandate_record</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Rate List Detail</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Rate List Details</value>
+    </caseValues>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Check this Field --></errorMessage>
+        <name>Based_on_Property_Area</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Check this Field --></errorMessage>
+        <name>Based_on_Property_Type</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Pick Percent from Picklist --></errorMessage>
+        <name>Charge_Based_On</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Cannot Save Record because the Rate List is already processed. --></errorMessage>
+        <name>Dont_Save_If_Processed</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Percent value should between 100 --></errorMessage>
+        <name>Percent_Value_must_be_between_100</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Check this field --></errorMessage>
+        <name>Property_Number_Structure</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- New_Rate_List_Detail --></label>
+        <name>New_Rate_List_Detail</name>
+    </webLinks>
+</CustomObjectTranslation>

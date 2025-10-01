@@ -1,0 +1,394 @@
+<template>
+    <lightning-card>
+
+        <div >
+            
+            <lightning-button class="slds-float_right" name="overAllExp" variant="Brand" label="Export ALl Data" title="export" onclick={exportOverAllData} disabled={disableAllExpBtn}></lightning-button>
+            <h3 class="title slds-text-heading_medium"  style="text-align:center; font-weight: bold;">Post Possession Dashboard - {team}</h3>
+            <lightning-layout horizontal-align="left" vertical-align="end">
+                <!--<lightning-layout-item padding="around-small" >
+                    <lightning-combobox
+                        name="Report"
+                        label="Report"
+                        value=""
+                        placeholder="Post Possession Handover"
+                        options="" >
+                    </lightning-combobox>
+                </lightning-layout-item>-->
+
+                <lightning-layout-item padding="around-small" >
+                    <lightning-combobox
+                        name="Period"
+                        label="Period"
+                        value={selectedPeriod}
+                        placeholder="-Select-"
+                        options={periodOptions}
+                        onchange={handlePeriodChange} >
+                    </lightning-combobox>
+                </lightning-layout-item>
+                
+                    <lightning-layout-item padding="around-small">
+                        <lightning-combobox
+                            name="Year"
+                            label="Year"
+                            value={selectedYear}
+                            placeholder={selectedYear}
+                            options={yearOptions}
+                            onchange={handleYearChange} 
+                            disabled={hideYearMonth}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item padding="around-small">
+                        <lightning-combobox
+                            name="Month"
+                            label="Month"
+                            value={selectedMonth}
+                            placeholder="-Select-"
+                            options={monthOptions}
+                            onchange={handleMonthChange} 
+                            disabled={hideYearMonth}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <template if:true={allTeam}>
+                        <lightning-layout-item padding="around-small">
+                            <lightning-button class="slds-float_right" variant="Brand" label="Go to Overall NPS Dashboard" title="Go to Overall NPS Dashboard" onclick={goBackToAllFbsPage}></lightning-button>
+                        </lightning-layout-item>
+                    </template>    
+            </lightning-layout>
+        </div>
+        
+        <br/>
+
+        <template if:true={noDataFound}>
+            <p style="text-align:center;font-size:20px;"><b>No data found for selected period</b></p>
+        </template>
+
+        <template if:true={showMainTable}>
+        <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+            <thead>
+                                                
+                          
+            </thead>
+            <tbody>
+                <!--<template for:each={fbList} for:item="det" for:index="i">-->
+                <template iterator:it={fbList}>
+                    <tr key={it.value.project}>
+                        <td style="width:10%;"><b>{it.value.project}</b></td>
+                        <td >
+                            <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                                <template if:true={it.first}>
+                                <tr >
+                                    <td rowspan="2" style="text-align:center;"><b>Event</b></td>
+                                    <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                    <td colspan="2" style="text-align:center;background-color:#5acf67;"><b>Promoters</b></td>
+                                    <td colspan="2" style="text-align:center;background-color:#7fc8f1;"><b>Passives</b></td>
+                                    <td colspan="6" style="text-align:center;background-color:#f9898d;"><b>Detractors</b></td>
+                                    <td rowspan="2" style="text-align:center;background-color:#5acf67;"><b>% Promoters</b></td>
+                                    <td rowspan="2" style="text-align:center;background-color:#7fc8f1;width:150px;"><b>% Passives</b></td>
+                                    <td rowspan="2" style="text-align:center;background-color:#f9898d;width:150px;"><b>% Detractors</b></td>
+                                    <td rowspan="2" style="text-align:center;background-color:#77e7f7;width:150px;"><b>NPS SCORE</b></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;background-color:#5acf67;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                    <td style="text-align:center;background-color:#5acf67;"><b>9</b></td>
+                                    <td style="text-align:center;background-color:#7fc8f1;"><b>8</b></td>
+                                    <td style="text-align:center;background-color:#7fc8f1;"><b>7</b></td>
+                                    <td style="text-align:center;background-color:#f9898d;"><b>6</b></td>
+                                    <td style="text-align:center;background-color:#f9898d;"><b>5</b></td>
+                                    <td style="text-align:center;background-color:#f9898d;"><b>4</b></td>
+                                    <td style="text-align:center;background-color:#f9898d;"><b>3</b></td>
+                                    <td style="text-align:center;background-color:#f9898d;"><b>2</b></td>
+                                    <td style="text-align:center;background-color:#f9898d;width:10px;"><b>1</b></td>
+                                    
+                                </tr>
+                                </template>
+                                <template if:false={it.first}>
+                                <tr >
+                                       <td rowspan="2" style="text-align:center;"><b>Event</b></td>
+                                    <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                    <td colspan="2" style="text-align:center;"><b>Promoters</b></td>
+                                    <td colspan="2" style="text-align:center;"><b>Passives</b></td>
+                                    <td colspan="6" style="text-align:center;"><b>Detractors</b></td>
+                                    <td rowspan="2" style="text-align:center;"><b>% Promoters</b></td>
+                                    <td rowspan="2" style="text-align:center;width:150px;"><b>% Passives</b></td>
+                                    <td rowspan="2" style="text-align:center;width:150px;"><b>% Detractors</b></td>
+                                    <td rowspan="2" style="text-align:center;width:150px;"><b>NPS SCORE</b></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                    <td style="text-align:center;"><b>9</b></td>
+                                    <td style="text-align:center;"><b>8</b></td>
+                                    <td style="text-align:center;"><b>7</b></td>
+                                    <td style="text-align:center;"><b>6</b></td>
+                                    <td style="text-align:center;"><b>5</b></td>
+                                    <td style="text-align:center;"><b>4</b></td>
+                                    <td style="text-align:center;"><b>3</b></td>
+                                    <td style="text-align:center;"><b>2</b></td>
+                                    <td style="text-align:center;width:10px;"><b>1</b></td>
+                                    
+                                </tr>
+                                </template>
+                                
+                            <!--<aura:iteration items="{!npsData.fbNps}" var="fb">-->
+                                <template iterator:it2={it.value.fbNps}>
+                                <tr key={it2.value.fbType}>
+                                    
+                                    <td style="overflow-x: auto;text-align:center;">
+                                        <b><a href="javascript:void(0)" id={it2.value.fbType} name={it.value.project} onclick={detaildReport}>{it2.value.fbType}</a></b></td>
+                                    <td style="text-align:center;"><b>{it2.value.nps_T}</b></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="10" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_10}</a></td>
+                                    <td style="text-align:center;" >
+                                        <a href="javascript:void(0)" data-nps="09" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_9}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="08" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_8}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="07" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_7}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="06" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_6}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="05" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_5}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="04" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_4}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="03" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_3}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="02" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_2}</a></td>
+                                    <td style="text-align:center;">
+                                        <a href="javascript:void(0)" data-nps="01" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReport}>
+                                            {it2.value.nps_1}</a></td>
+                                    <!--<td style={it2.value.promoters_per_color} data-id="prom" data-n="prom" class="\{it2.value.promoters_per > 75 ? 'gt75p' : ''}\">
+                                            <a href="javascript:void(0)" data-nps="promoters" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReportPPD}>
+                                                {it2.value.promoters_per}</a></td>-->
+
+                                    <td style={it2.value.promoters_per_color} data-id="prom" data-n="prom" class="\{it2.value.promoters_per > 75 ? 'gt75p' : ''}\">
+                                        <a href="javascript:void(0)" data-nps="promoters" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReportPPD}>
+                                            <template if:true={it2.value.promoters_per}>
+                                                {it2.value.promoters_per}
+                                            </template>
+                                            <template if:false={it2.value.promoters_per}>
+                                                <p style="text-align:center;"><b>-</b></p>
+                                            </template>
+                                            </a></td>
+                                    
+                                    <td style="text-align:center;" >
+                                            <a href="javascript:void(0)"  data-nps="passives" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReportPPD}>
+                                                <template if:true={it2.value.passives_per}>
+                                                    {it2.value.passives_per}
+                                                </template>
+                                                <template if:false={it2.value.passives_per}>
+                                                    <p style="text-align:center;"><b>-</b></p>
+                                                </template></a></td>
+                                    <td style={it2.value.detractors_per_color} data-id="detr" class="\{it2.value.detractors_per > 75 ? 'gt75d' : ''}\">
+                                            <a href="javascript:void(0)"  data-nps="detractors" id={it2.value.fbType} name={it.value.project} onclick={npsWiseReportPPD}>
+                                                
+                                                <template if:true={it2.value.detractors_per}>
+                                                    {it2.value.detractors_per}
+                                                </template>
+                                                <template if:false={it2.value.detractors_per}>
+                                                    <p style="text-align:center;"><b>-</b></p>
+                                                </template></a></td>
+                                    <td style="text-align:center;">
+                                        <template if:true={it2.value.nps_score}>
+                                            {it2.value.nps_score}
+                                        </template>
+                                        <template if:false={it2.value.nps_score}>
+                                            <p style="text-align:center;"><b>-</b></p>
+                                        </template></td>
+                                    
+                                </tr>
+                            </template>
+                                <tr style="background-color: #f2f4f7">
+                                    <td style="overflow-x: auto;text-align:center;"><b>Total</b></td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_T_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_10_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_9_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_8_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_7_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_6_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_5_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_4_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_3_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_2_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_1_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.promoters_per_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.passives_per_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.detractors_per_T}</td>
+                                    <td style="overflow-x: auto;text-align:center;">{it.value.fbNpsTotals.nps_score_T}</td>
+                                </tr>
+                            </table>
+                            </td>
+                    </tr>
+                </template>
+                
+                
+            </tbody>
+        </table>
+        </template>
+        <br/><br/>
+        <div>
+        <template if:true={showSummary}>
+
+            <h3 class="title slds-text-heading_medium"  style="text-align:center; font-weight: bold;">NPS Score Summary for last 12 months</h3><br/><br/>
+            <table style="width:90%;margin: 0px auto;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                <template iterator:it={yearMonthValues}>
+                    <tr key={it.value.fbType}>
+                        <td style="word-break:word;border: 1px solid #666;width:90px;text-align:center;"><b>{it.value.fbType}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month1}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month2}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month3}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month4}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month5}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month6}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month7}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month8}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month9}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month10}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month11}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month12}</b></td>
+                    </tr>
+                </template>
+                <template iterator:it={npsSummary}>
+                    <tr key={it.value.fbType}>
+                        <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{it.value.fbType}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month1}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month2}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month3}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month4}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month5}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month6}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month7}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month8}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month9}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month10}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month11}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.month12}</td>
+                    </tr>
+                </template>
+            </table>
+
+        <!--<h3 class="title slds-text-heading_medium"  style="text-align:center; font-weight: bold;">NPS Score Summary for last 12 months</h3><br/><br/>
+        <table style="table-layout: fixed;width:100%;padding: 20px 0;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+            <template iterator:it={npsSummary}>
+                <template if:true={it.first}>
+                    <tr key={it.value.fbType}>
+                        <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{it.value.fbType}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month1}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month2}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month3}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month4}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month5}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month6}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month7}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month8}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month9}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month10}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month11}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month12}</b></td>
+                    </tr>
+                </template>
+                <template if:false={it.first}>
+                    <tr key={it.value.fbType}>
+                        <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{it.value.fbType}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month1}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month2}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month3}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month4}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month5}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month6}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month7}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month8}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month9}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month10}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month11}</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{it.value.month12}</b></td>
+                    </tr>
+                </template>
+            </template>
+        </table>-->
+        </template>
+        <br/><br/>
+        <template if:true={showEventWiseData}>
+            <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                Detailed Report on {eventWiseFbType}
+            </h3><br/>
+            <div>
+                <lightning-button variant="Brand" label="Back" title="Back" onclick={goBack}></lightning-button>
+                <lightning-button class="slds-float_right" name="eventWiseDetailsExp" variant="Brand" label="Export Data" title="export" onclick={exportData}></lightning-button>
+            </div>
+
+            <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                <tr>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                    <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                    <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                </tr>
+                
+                <template iterator:it={eventWiseDetails}>
+                    <tr key={it.value.Id}>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                            <a href="javascript:void(0)" id={it.value.Id} name={it.value.Id} onclick={openRec}>
+                                {it.value.Name}
+                            </a></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.Project__c}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.CRN__c}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                            <a href="javascript:void(0)" id={it.value.Opportunity__c} name={it.value.Opportunity__c} onclick={openRec}>
+                                {it.value.Opportunity_Name__c}
+                            </a>
+                        </td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{it.value.NPS__c}</td>
+                    </tr>
+                </template>
+            </table>
+        </template>
+
+        <template if:true={showNPSDataTable}>
+                <div>
+                	<lightning-button variant="Brand" label="Back" title="Back" onclick={goBack}></lightning-button>
+                    <lightning-button class="slds-float_right" name="npsWiseDetailsExp" variant="Brand" label="Export Data" title="export" onclick={exportData}></lightning-button>
+                </div>
+                <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                	<tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    <template iterator:it={npsWiseDetails}>
+                        <tr key={it.value.Id}>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id={it.value.Id} name={it.value.Id} onclick={openRec}>
+                                    {it.value.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{it.value.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id={it.value.Opportunity__c} name={it.value.Opportunity__c} onclick={openRec}>
+                                    {it.value.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{it.value.NPS__c}</td>
+                        </tr>
+                    </template>
+                </table>
+        </template>
+    </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,20 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+    
+   
+    <aura:attribute name="videos" type ="Customer_Portal_Videos__c[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    
+    
+    <div class="slds-box">
+         <div class="slds-page-header">
+             <h1 style="font-size:20px"><b>Video Guide</b></h1>
+        </div><BR/>
+        <aura:iteration items="{!v.videos}" var="vid" indexVar="index">
+            <!-- <lightning:button variant="base" class="slds-button_base" label="{!vid.Name}" title="{!vid.Name}" onclick="{! c.openvideoLink }" value="{!vid.File_Id__c}"/> -->
+            <lightning:button variant="base" class="slds-button_base" label="{!vid.Name}" title="{!vid.Name}" onclick="{! c.openvideoLink }" value="{!vid.Video_Link__c}"/>
+             <br/>
+        </aura:iteration>
+        
+    </div>
+</aura:component>

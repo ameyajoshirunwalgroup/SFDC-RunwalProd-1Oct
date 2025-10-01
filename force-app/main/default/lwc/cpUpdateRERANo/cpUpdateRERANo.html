@@ -1,0 +1,37 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <lightning-card if:false={isPresent} title="Update RERA No">
+        <lightning-layout class="x-small">
+            <lightning-layout-item flexibility="auto" padding="around-small">
+                <lightning-input type="text" label="Update RERA No" value={rerano} placeholder="Enter RERA No"
+                    onchange={handlereraChange} required></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small">
+                <lightning-file-upload label="Upload RERA Certificate" name="Upload RERA Certificate"
+                    accept={acceptedFormats} onuploadfinished={openfileUpload2} multiple>
+                </lightning-file-upload>
+            </lightning-layout-item>
+        </lightning-layout>
+        <!--div class="slds-col">
+            <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handlesave} label="Submit"></lightning-button>
+        </div-->
+        <template if:true={data}>
+            <lightning-card title="Uploaded Files" icon-name="standard:account">
+                <div style="width: auto;">
+                    <lightning-datatable data={data} columns={columns} key-field="id">
+                    </lightning-datatable>
+                </div>
+
+            </lightning-card>
+        </template>
+        <template if:true={data}>
+            <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handlesave} label="Submit">
+            </lightning-button>
+        </template>
+    </lightning-card>
+    <lightning-card if:true={isPresent}>
+        <p class="slds-align_absolute-center"><b>RERA No. Already Exists</b></p>
+    </lightning-card>
+</template>

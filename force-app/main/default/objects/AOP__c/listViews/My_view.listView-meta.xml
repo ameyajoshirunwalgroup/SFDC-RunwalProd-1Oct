@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_view</fullName>
+    <columns>OBJECT_ID</columns>
+    <columns>NAME</columns>
+    <columns>AOP_CP_Name__c</columns>
+    <columns>Channel_Partner__c</columns>
+    <columns>Category__c</columns>
+    <columns>Start_Date__c</columns>
+    <columns>End_Date__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Channel_Partner__c</field>
+        <operation>equals</operation>
+        <value>Homesfy Realty Limited</value>
+    </filters>
+    <label>My view</label>
+</ListView>

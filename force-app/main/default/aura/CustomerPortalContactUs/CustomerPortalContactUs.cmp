@@ -1,0 +1,128 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="lstRM" type="Relationship_Manager__c[]"/>
+    <aura:attribute name="complaintRecord" type="Case" default="{}"/>
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="DependentPicklistMap" type="Map" default="{}" />
+    <aura:attribute name="CaseTypePicklistOptions" type="String[]"/>
+    <aura:attribute name="DependentCaseTypePicklistOptions" type="Map" default="{}" />
+    <aura:attribute name="DependentCustLifeCyclePicklistOptions" type="Map" default="{}" /> <!-- Added by Vinay 28-03-2025 -->
+    <aura:attribute name="ComplaintTypePicklistOptions" type="String[]"/>
+    <aura:attribute name="ComplaintSubTypePicklistOptions" type="String[]"/>
+    <aura:attribute name="CustLifeCyclePicklistOptions" type="String[]"/> 
+    <aura:attribute name="unitNumber" type="String"/>
+    <aura:attribute name="bookingName" type="String"/>
+    <aura:attribute name="bookingId" type="String"/>
+    
+    <aura:attribute name="projectId" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+     <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+    <lightning:card > 
+        <h1 class="title slds-text-heading--medium" style="text-align:center; ">We're always happy to hear from you. Get in touch with us over phone,email or simply fill the contact form below.</h1><br/><br/>
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="6" largeDeviceSize="4" padding="horizontal-medium">
+                <div class="slds-box slds-box_small slds-text-align_center textInput">
+                    <p>Headquarter Contact</p>
+                </div><br/>
+                 <div class="slds-box slds-box_small">
+                <p>Runwal and Omkar Esquare 4th Floor, </p>
+                <p>Off Eastern Express Highway, opp.</p>
+                <p>Sion-Chunabhatti Signal, Sion(East),</p>
+                <p>Mumbai-400 022.</p><br/>
+                <p>+91 22 4880 7065</p><br/>
+                <p>contact@runwal.com</p><br/>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="6" largeDeviceSize="4" padding="horizontal-medium">
+                <div class="slds-box slds-box_small slds-text-align_center textInput">
+                    <p>Dedicated Relationship Manager</p>
+                </div><br/>
+                <div class="slds-box slds-box_xx-small">
+                    <!--div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}"-->
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                    <div class="custom-box slds-p-left_xxx-large"><br/>
+                    <aura:iteration items="{!v.RunwalHomeWrapList}" var="rm">
+                        <div class="custom-box slds-p-right_small">
+                        <h3 class="slds-text-heading_small sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">For Unit {!rm.unitNumber}</span>
+                        </h3>
+                    </div>
+                        <div class="custom-box slds-p-left_small slds-grid slds-grid_vertical">
+                        <lightning:input name="Name" type="text" value="{!rm.RMName}" readonly="true" class=""/>
+                        <lightning:input name="Email" type="Email" value="{!rm.RMEmail}" readonly="true" class=""/>
+                        <lightning:input name="Phone Number" type="text" value="{!rm.RMNumber}" readonly="true" class=""/>
+                        </div>
+                    </aura:iteration>
+                        </div>
+                    </div>
+                <!--/div-->
+                </div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="6" largeDeviceSize="4" padding="horizontal-medium">
+                <div class="slds-box slds-box_small slds-text-align_center textInput">
+                    <p class="field-title" title="Cotact Us Form" icon-name="standard:contact">Contact Us Form</p>
+                </div><br/>
+                <div class="slds-box slds-box_small">
+                    
+                <lightning:select name="select1" label="Service Request Type" onchange="{!c.onCaseTypeChange}" value="{!v.complaintRecord.RW_Case_Type__c}" required="true">
+                    <option value="">--None--</option>
+                     <aura:iteration items="{!v.CaseTypePicklistOptions}" var="caseType" indexVar="index">
+                    <option value="{!caseType}">{!caseType}</option>
+                    </aura:iteration>
+                    <!--<option value="">choose one...</option>
+                    <option value="1">one</option>
+                    <option value="2">two</option>
+                    <option value="3">three</option>-->
+                </lightning:select>
+                    
+                <lightning:select name="select1" label="Service Request" onchange="{!c.onCustLifeCycleChange}" disabled="{!empty(v.complaintRecord.RW_Case_Type__c)}" value="{!v.complaintRecord.Customer_Lifecycle_Touchpoint__c}" required="{!and (not(empty(v.complaintRecord.RW_Case_Type__c)),not(empty(v.CustLifeCyclePicklistOptions)))?'true':'false'}" class="{!and (not(empty(v.complaintRecord.RW_Case_Type__c)),not(empty(v.CustLifeCyclePicklistOptions)))? '':'slds-hide'}">
+                    <option value="">--None--</option>
+                     <aura:iteration items="{!v.CustLifeCyclePicklistOptions}" var="custLifeCycle" indexVar="index">
+                    <option value="{!custLifeCycle}">{!custLifeCycle}</option>
+                    </aura:iteration>
+                    <!--<option value="">choose one...</option>
+                    <option value="1">one</option>
+                    <option value="2">two</option>
+                    <option value="3">three</option>-->
+                </lightning:select>
+                <lightning:select name="select1" label="Service Request Detail" onchange="{!c.onComplaintTypeChange}" disabled="{!empty(v.complaintRecord.Customer_Lifecycle_Touchpoint__c)}" value="{!v.complaintRecord.RW_Complaint_Type__c}" required="{!and (not(empty(v.complaintRecord.Customer_Lifecycle_Touchpoint__c)),not(empty(v.ComplaintTypePicklistOptions)))?'true':'false'}" class="{!and (not(empty(v.complaintRecord.Customer_Lifecycle_Touchpoint__c)),not(empty(v.ComplaintTypePicklistOptions)))? '':'slds-hide'}">
+                    <option value="">--None--</option>
+                     <aura:iteration items="{!v.ComplaintTypePicklistOptions}" var="complaintType" indexVar="index">
+                    <option value="{!complaintType}">{!complaintType}</option>
+                    </aura:iteration>
+                    <!--<option value="">choose one...</option>
+                    <option value="1">one</option>
+                    <option value="2">two</option>
+                    <option value="3">three</option>-->
+                </lightning:select>
+                <lightning:select name="select1" label="Service Request Sub Detail" disabled="{!empty(v.complaintRecord.RW_Complaint_Type__c)}" value="{!v.complaintRecord.RW_Complaint_SubType__c}" required="{!not(empty(v.ComplaintSubTypePicklistOptions))?'true':'false'}" class="{!not(empty(v.ComplaintSubTypePicklistOptions))? '':'slds-hide'}">
+                    <option value="">--None--</option>
+                     <aura:iteration items="{!v.ComplaintSubTypePicklistOptions}" var="subtype" indexVar="index">
+                    <option value="{!subtype}">{!subtype}</option>
+                    </aura:iteration>
+                </lightning:select>
+                    
+               <lightning:select name="select1" label="Unit Number"  value="{!v.unitNumber}" required="true" onchange="{!c.setfields}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookingdata" indexVar="index">
+                    <option value="{!bookingdata.unitNumber}">{!bookingdata.unitNumber}</option>
+                    </aura:iteration>
+                </lightning:select>
+                
+                <lightning:textarea label="Description" placeholder= "Service Request Description" value="{!v.complaintRecord.Description}" required="true"/>
+                <div class="slds-align_absolute-center slds-m-left_xx-large">
+                    <lightning:button variant="brand" label="Submit"  onclick="{!c.onsubmit}"/>
+                </div>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+</aura:component>

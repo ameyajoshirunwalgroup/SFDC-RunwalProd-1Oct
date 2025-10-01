@@ -1,0 +1,152 @@
+<apex:component controller="RWSignatureComponentController" allowdml="true">
+    <apex:attribute name="parentId" type="id" description="The Id of the record for Signature" required="true" assignto="{!objParentId}" />
+    <apex:attribute name="Attname" type="string" description="The name Of the Attachment" required="true" assignto="{!strAttName}" />
+
+    <!--  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" ></link>
+     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+     <script>var $ = jQuery.noConflict();</script>-->
+
+
+
+    <div data-role="page" id="signatureCaptureHome">
+        <div data-role="content">
+            <!--<input id="accountNameId" type="text" name="accountName"/>
+            <input type="button" name="findAccountBtn" onclick="findAccounts();" value="Find Accounts"/>-->
+            <!-- <h1 id="recordSigId">Record Signature:</h1> -->
+            <canvas id="signatureCanvas{!strAttName}" style="border:1px solid #000000;" />
+            <canvas id='blank' style='display:none'></canvas>
+            <input id="{!strAttName}_SIGN" type="button" name="SigCap" onclick="saveSignature(this.id);" value="Capture Signature"></input>
+            <input id="{!strAttName}" type="button" name="SigCap1" onclick="clearSignature(this.id);" value="Clear Signature"></input>
+        </div>
+    </div>
+    <!-- <div data-role="page" id="signatureCaptureHome">
+    <div data-role="content">
+    <input id="accountNameId" type="text" name="accountName"/>
+    <input type="button" name="findAccountBtn" onclick="findAccounts();" value="Find Accounts"/>
+    </div>
+    </div>  -->
+    <script src="/soap/ajax/33.0/connection.js" type="text/javascript"></script>
+
+    <script>
+
+        var canvas;
+        var context;
+        var drawingUtil;
+        var isDrawing = false;
+        var accountId = '';
+
+        function DrawingUtil()
+        {
+            isDrawing = false;
+            canvas.addEventListener("touchstart",start,false);
+            canvas.addEventListener("touchmove",draw,false);
+            canvas.addEventListener("touchend",stop,false);
+            context.strokeStyle = "#00F";
+        }
+
+        //Start Event for Signature Captuare on HTML5 Canvas
+        function start(event)
+        {
+            isDrawing = true;
+            canvas = document.getElementById("signatureCanvas{!strAttName}");
+            console.log('X-'+event.touches[0].clientX )
+            console.log(canvas.getBoundingClientRect().left )
+            console.log('Y-'+event.touches[0].clientY )
+            console.log(canvas.getBoundingClientRect().top )
+
+            context = canvas.getContext("2d");
+            context.strokeStyle = "rgba(0,0,200,0.5)";
+            context.beginPath();
+
+             context.moveTo(event.touches[0].clientX - canvas.getBoundingClientRect().left,event.touches[0].clientY - canvas.getBoundingClientRect().top);
+        }
+
+        //Event while someone is drawing to caputre the path while they draw....
+        function draw(event) {
+
+            event.preventDefault();
+            if(isDrawing) {
+                console.log('X1-'+event.touches[0].clientX )
+                console.log(canvas.getBoundingClientRect().left )
+                console.log('Y1-'+event.touches[0].clientY )
+                console.log(canvas.getBoundingClientRect().top )
+                context.lineTo(event.touches[0].clientX - canvas.getBoundingClientRect().left,event.touches[0].clientY - canvas.getBoundingClientRect().top);
+                context.stroke();
+            }
+        }
+
+
+        //Event when someone stops drawing their signature line
+        function stop(event) {
+            if(isDrawing) {
+                context.stroke();
+                context.closePath();
+                isDrawing = false;
+            }
+        }
+
+        canvas = document.getElementById("signatureCanvas{!strAttName}");
+        context = canvas.getContext("2d");
+        drawingUtil = new DrawingUtil(canvas);
+
+        function saveSignature(thisid)
+        {
+            var attrName = thisid.substring(0, thisid.length - 5);
+            console.log(attrName);
+            canvas = document.getElementById("signatureCanvas" + attrName);
+
+            //context = canvas.getContext("2d");
+            //drawingUtil = new DrawingUtil(canvas);
+            if(canvas.toDataURL() == document.getElementById('blank').toDataURL())
+            {
+                alert('Blank');
+            }
+            else
+            {
+                var strDataURI = canvas.toDataURL();
+                var accountId = '{!parentId}';
+                strDataURI = strDataURI.replace(/^data:image\/(png|jpg);base64,/, "");
+                RWSignatureComponentController.saveSignature(strDataURI,accountId,thisid, processResult);
+            }
+        }
+
+
+        function processResult(result)
+        {
+            alert(JSON.stringify(result));
+            var loc = document.location.origin;
+            var recordid = '{!parentId}';
+
+            //sforce.one.navigateToSObject('{!parentId}');
+        }
+
+        function clearSignature(clearId)
+        {
+        	canvas = document.getElementById("signatureCanvas" + clearId);
+            context = canvas.getContext("2d");
+
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        }
+
+    /*  function findAccounts()
+        {
+            var nameValue = document.getElementById("accountNameId").value;
+            AnyObjectSignatureController.findAccounts(nameValue, processSearchResult, {!strAttName});
+        }
+
+        function processSearchResult(result)
+        {
+            $j = jQuery.noConflict();
+            //$j("#accountList").html("");
+            $j.each(result, function(i, record) {accountId = record.Id; $j("#recordSigId").html("Record Signature: " + record.Name);});
+            $j("#recordSigId").trigger("update");
+            //$j("#accountList").trigger("update");
+            //alert(JSON.stringify(result));
+        }
+    */
+
+
+    </script>
+</apex:component>

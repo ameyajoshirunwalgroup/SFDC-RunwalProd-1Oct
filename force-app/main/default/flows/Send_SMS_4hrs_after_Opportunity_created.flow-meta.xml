@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <formulas>
+        <name>LineBreak</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!$Label.Line_Break},&apos;-&apos;,&apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>ProjectURL</name>
+        <dataType>String</dataType>
+        <expression>IF({!$Record.RW_Project__r.Name} = &apos;Runwal Bliss&apos;, &quot;https://runwalbliss.com&quot;, IF({!$Record.RW_Project__r.Name} = &apos;Runwal Forests&apos;, &quot;https://runwalforests.com&quot;, IF({!$Record.RW_Project__r.Name} = &apos;Runwal Pinnacle&apos;, &quot;https://runwalpinnacle.com&quot;, IF({!$Record.RW_Project__r.Name} = &apos;Runwal Avenue&apos;, &quot;https://runwalavenue.com&quot;,IF({!$Record.RW_Project__r.Name} = &apos;Runwal Gardens&apos;, &quot;https://runwalgardens.in&quot;,IF({!$Record.RW_Project__r.Name} = &apos;Runwal City Centre&apos;, &quot;https://runwalcitycentre.com&quot;, null))))))</expression>
+    </formulas>
+    <interviewLabel>Send SMS 4hrs after Opportunity created {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Send SMS 4hrs after Opportunity created</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_SMS</name>
+        <label>Create SMS</label>
+        <locationX>308</locationX>
+        <locationY>408</locationY>
+        <inputAssignments>
+            <field>Immediate__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>SM Welcome SMS</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SMS_Long_text__c</field>
+            <value>
+                <stringValue>Dear Customer,{!LineBreak}Thank you for visiting {!$Record.RW_Project__r.Name}.{!LineBreak}You interacted with sales manager {!$Record.RW_Sales_Associate__c} who’s available on {!Get_Sales_Manager_mobile_number.DID__c} mobile number.{!LineBreak}We hope you become a part of {!$Record.RW_Project__r.Name} family.{!LineBreak}You may visit {!ProjectURL} for further information.{!LineBreak}RUNWAL GROUP</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sender_Mobile__c</field>
+            <value>
+                <elementReference>$Record.RW_Mobile_No__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SMS_Schedule_SMS_c__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Sales_Manager_mobile_number</name>
+        <label>Get Sales Manager mobile number</label>
+        <locationX>308</locationX>
+        <locationY>288</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_SMS</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RW_Sales_Associate__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>DID__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <object>Opportunity</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>After_4_Hrs</name>
+            <connector>
+                <targetReference>Get_Sales_Manager_mobile_number</targetReference>
+            </connector>
+            <label>After 4 Hrs</label>
+            <offsetNumber>4</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <timeSource>RecordTriggerEvent</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

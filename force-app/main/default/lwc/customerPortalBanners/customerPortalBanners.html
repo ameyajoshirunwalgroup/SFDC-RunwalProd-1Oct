@@ -1,0 +1,53 @@
+<template>
+  <lightning-card
+    title="Customer Portal Banners Upload"
+    icon-name="custom:custom19"
+  >
+    <div class="slds-grid" style="margin: 2%">
+      <lightning-file-upload
+        label="Banner Upload"
+        name="bannerUpload"
+        accept={acceptedFormats}
+        record-id={recordId}
+        onuploadfinished={customerPortalBanners}
+        multiple
+      ></lightning-file-upload>
+    </div>
+  </lightning-card>
+
+  <lightning-card
+    title="Channel Partner Portal Banners Upload"
+    icon-name="custom:custom19"
+  >
+    <div class="slds-grid" style="margin: 2%">
+      <lightning-input
+        label="Same as Customer Portal Banners"
+        type="checkbox"
+        onchange={syncCustToCp}
+      ></lightning-input>
+    </div>
+    <div class="slds-grid" style="margin: 2%">
+      <lightning-file-upload
+        label="Banner Upload"
+        name="bannerUpload"
+        accept={acceptedFormats}
+        record-id={recordId}
+        onuploadfinished={cpPortalBanners}
+        multiple
+      ></lightning-file-upload>
+    </div>
+  </lightning-card>
+
+  <lightning-card title="Mobile App Banners Upload" icon-name="custom:custom19">
+    <div class="slds-grid" style="margin: 2%">
+      <lightning-file-upload
+        label="Banner Upload"
+        name="bannerUpload"
+        accept={acceptedFormats}
+        record-id={recordId}
+        onuploadfinished={mobileAppBanners}
+        multiple
+      ></lightning-file-upload>
+    </div>
+  </lightning-card>
+</template>

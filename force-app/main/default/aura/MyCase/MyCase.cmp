@@ -1,0 +1,117 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="MyCaseController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="wrapCase" type="wrapCase[]" />
+    <aura:attribute name="Subj" type="String" default="" />
+    <aura:attribute name="Descr" type="String" default="" />
+    <aura:attribute name="lstOfUnit" type="string[]" />
+    <aura:attribute name="SelectedUnit" type="string" />
+    <aura:attribute name="lstOfCaseType" type="string[]" />
+    <aura:attribute name="SelectedCaseType" type="string" />
+
+    <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system.min.css" />
+    <div>
+        <c:RWSpinner />
+    </div>
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                Create New Case :
+            </div>
+        </div>
+    </div>
+    
+    <table>
+        <tbody>
+            <tr>
+                <td style="width: 7%;">
+                    <b>Subject :</b>
+                </td>
+                <td style="padding: 10px;">
+                    <ui:inputtext value="{!v.Subj}" aura:id="Subjc" class="slds-input"></ui:inputtext>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 7%;">
+                    <b>Description :</b>
+                </td>
+                <td style="padding: 10px;">
+                    <ui:inputtextarea value="{!v.Descr}" aura:id="Descrp" class="slds-input" rows="3"></ui:inputtextarea>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 7%;">
+                    <b>Unit :</b>
+                </td>
+                <td style="padding: 10px;">
+                    <div class="slds-picklist__label">
+                        <ui:inputselect class="slds-input" value="{!v.SelectedUnit}">
+                            <!--<ui:inputselectoption text="" label="-Select-" />-->
+                            <aura:iteration items="{!v.lstOfUnit}" var="UnitNo">
+                                <ui:inputselectoption text="{!UnitNo}" label="{!UnitNo}" />
+                            </aura:iteration>
+                        </ui:inputselect>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 7%;">
+                    <b>Case Type :</b>
+                </td>
+                <td style="padding: 10px;">
+                    <div class="slds-picklist__label">
+                        <ui:inputselect class="slds-input" value="{!v.SelectedCaseType}">
+                            <aura:iteration items="{!v.lstOfCaseType}" var="CaseType">
+                                <ui:inputselectoption text="{!CaseType}" label="{!CaseType}" />
+                            </aura:iteration>
+                        </ui:inputselect>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="slds-card__footer">
+        <div class="slds-no-flex">
+            <center>
+                <ui:button class="slds-button slds-button--neutral" press="{!c.insertCase}">
+                    <span aria-hidden="true" class="slds-button__icon--Right" title="Insert New Lead">
+                        Save
+                    </span>
+                </ui:button>
+            </center>
+        </div>
+    </div> 
+
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                My Cases :
+            </div>
+        </div>
+    </div>
+	
+    <div class="slds-scrollable">
+    <!--<aura:if istrue="{!if(v.wrapCase != null, true, false)}">-->
+    <table class="slds-table slds-table--bordered slds-table--col-bordered" role="grid" >
+        <tbody>
+            <tr>
+                <td width="20%"><b>Subject</b></td>
+                <td width="30%"><b>Description</b></td>
+                <td width="10%"><b>Case Type</b></td>
+                <td width="10%"><b>CurrentStatus</b></td>
+                <td width="30%"><b>Remark</b></td>
+            </tr>
+            <aura:iteration var="EachWrap" items="{!v.wrapCase}">
+                <tr>
+                    <td width="20%" class="slds-cell-wrap"><ui:outputtext value="{!EachWrap.strCaseSubject}" /></td>
+                    <td width="30%" class="slds-cell-wrap"><ui:outputtext value="{!EachWrap.strCaseDescription}" /></td>
+                    <td width="10%" class="slds-cell-wrap"><ui:outputtext value="{!EachWrap.strCaseType}" /></td>
+                    <td width="10%" class="slds-cell-wrap"><ui:outputtext value="{!EachWrap.strCaseStatus}" /></td>
+                    <td width="30%" class="slds-cell-wrap"><ui:outputtext value="{!EachWrap.strCaseRemark}" /></td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+    </div>
+    <!--</aura:if>-->
+</aura:component>

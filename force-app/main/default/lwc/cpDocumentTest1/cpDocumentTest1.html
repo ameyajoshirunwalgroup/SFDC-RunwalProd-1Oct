@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Upload Document" icon-name="custom:custom14">
+        <div class="slds-m-around_medium">
+            <lightning-input type="file" 
+            accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+            label="Attachment" onchange={openfileUpload}></lightning-input>
+        </div>
+        <div if:true={fileNames} class="slds-text-body_small slds-text-color_error">{fileNames}
+            <template if:true={showLoadingSpinner}>
+                <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+            </template>
+        </div><br />
+        <lightning-button variant="brand" label="Upload" title="Upload" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+        <template if:true={lastnextbutton} >
+            <lightning-button variant="brand" label="submit" title="Submit" onclick={Register} class="slds-m-left_x-small"></lightning-button>
+        </template>
+    </lightning-card>
+    <template if:true={data}>
+        <lightning-card title="Uploaded Files" icon-name="standard:account">
+            <div style="width: auto;">
+                <lightning-datatable data={data} 
+                                     columns={columns} 
+                                     key-field="id">
+                </lightning-datatable>
+            </div>
+        </lightning-card>
+    </template>
+</template>

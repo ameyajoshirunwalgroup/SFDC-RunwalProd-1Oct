@@ -1,0 +1,86 @@
+<apex:component controller="BrokerageSchemeTemplateController" allowDML="true" access="Global">
+    <apex:attribute assignTo="{!SchemeId}" type="string" name="idoff" description="Related Slab Id" /> 
+    <html style="font-family: geneva;font-size: 10.0pt;">
+        <body><!--{!getSchemeList}-->
+            
+            Need your approval for below Ladder Scheme <br/><br/>  
+            <table border="1" style="font-family: Lato,verdana, arial, sans-serif;font-size: px; border-width: 1px;border-collapse: collapse;empty-cells:show;">
+                <tr border="0" width="40%"> 
+                    <td border="0"  >
+                        <table border="1" style="font-family: Lato,verdana, arial, sans-serif;font-size: 12px; border-width: 1px;border-collapse: collapse;empty-cells:show;">
+                            <tr><th width="60%" style="text-align:center;font-size:22px;padding:5px;background-color:#ffff1a" colspan="2" >Scheme  Details</th></tr>        
+                            
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;">Brokerage Scheme Name :-</td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;">{!SchemeList[0].Name}</td>
+                            </tr>
+                            <apex:repeat value="{!SchemeProjectList}" var="ProjectList">
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;">Project :-</td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;">{!ProjectList.Project__r.name}</td>
+                            </tr>
+                            </apex:repeat>
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;">Project Location :-</td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;">{!SchemeList[0].Project_Location__r.name}</td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;">Slab Type :-</td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;">{!SchemeList[0].Slab_Type__c}</td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;background-color:#787878"><br/></td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;background-color:#787878"></td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;">Start Date</td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!SchemeList[0].Start_Date__c}" /> </apex:outputText></td>
+                                
+                            </tr>
+                            <tr>
+                                <td width="50%" style="text-align:Right;font-size:15px;padding:5px;">End Date</td>
+                                <td width="50%" style="text-align:center;font-size:15px;padding:5px;"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!SchemeList[0].End_Date__c}" /> </apex:outputText></td>
+                                
+                            </tr>
+                            
+                        </table>
+                        
+                    </td>
+                </tr>
+                <br/><br/>  
+                
+                <tr>                    
+                    <th style="text-align:center;font-size:22px;padding:5px;background-color:#f8cbad" >Slab Details</th>                    
+                </tr>
+                <tr>
+                    <td> 
+                        <table width = "100%" border="1" style="font-family: Lato,verdana, arial, sans-serif;font-size: 12px; border-width: 1px;border-collapse: collapse;empty-cells:show;">
+                            <tr>
+                                <th Width ="20%" style="text-align:left;"> Brokerage Slab Name</th>
+                                <th Width ="30%" style="text-align:center;"> From </th>
+                                <th Width ="10%" style="text-align:center;font-size:13px">To</th>
+                                <th Width ="20%" style="text-align:center;font-size:13px">Additional Brokerage for Local Bookings</th>
+                                <th Width ="20%" style="text-align:center;font-size:13px">Additional Brokerage  for OS / NRI</th>
+                                
+                            </tr>
+                            <apex:repeat value="{!SlabList}" var="slab">
+                                <tr>                                    
+                                    <td Width ="20%" style="text-align:center;font-size:13px">{!slab.Name}</td>
+                                    <td Width ="30%" style="text-align:center;font-size:13px">{!slab.From__c}</td>
+                                    <td Width ="10%"  style="text-align:center;font-size:13px">{!slab.To__c}</td>
+                                    <td Width ="20%"  style="text-align:center;font-size:13px">{!slab.Additional_Brokerage_for_Local_Bookings__c}</td>
+                                    <td Width ="20%" style="text-align:center;font-size:13px">{!slab.Additional_Brokerage_for_OS_NRI__c}</td>
+                                    
+                                </tr>
+                                
+                            </apex:repeat>
+                            
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            Scheme Link : <a href="{!ReletedSchemeLink}">{!SchemeList[0].Name}</a>
+        </body>
+    </html>
+</apex:component>

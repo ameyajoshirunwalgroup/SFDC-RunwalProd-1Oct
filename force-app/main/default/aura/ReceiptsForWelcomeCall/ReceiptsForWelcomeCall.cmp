@@ -1,0 +1,51 @@
+<aura:component controller="WelcomeCallReceipts"  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="receiptList"  type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.fetchReceiptList}"/>
+    <aura:attribute name="recordId" type="String" />   
+    <lightning:card title="Payment Details" >  
+        
+        <table class="slds-table slds-table_bordered slds-table--header-fixed_container" style="background-color: white;">  
+            <aura:iteration items="{!v.receiptList}" var="recpt">
+                <tbody>
+                    
+                    <tr>
+                        <td colspan="2" style="background:rgb(243, 242); font-weight: bold;" >Receipt Number : {!recpt.Name}</td>
+                        <td></td>
+                    </tr>
+                    <tr>	
+                        <td>PaymentMode :</td>	
+                        <td>{!recpt.Mode__c}</td>	
+                        
+                        
+                    </tr>	
+                    <tr>	
+                        <td>Amount :</td>	
+                        <td>{!recpt.Total_Amount__c}</td>	
+                        
+                        
+                    </tr>	
+                    <tr>	
+                        <td>Date :</td>	
+                        <td>{!recpt.Cheque_DD_Date__c}</td>	
+                        
+                        
+                    </tr>	
+                    <tr>	
+                        <td>Bank Name :</td>	
+                        <td>{!recpt.DraweeBank__c}</td>	
+                        
+                        
+                    </tr>	
+                    <tr>	
+                        <td>Instrument Name :</td>	
+                        <td>{!recpt.Cheque_DD__c}</td>	
+                        
+                        
+                    </tr>	
+                    
+                </tbody>
+            </aura:iteration>   
+        </table>
+    </lightning:card>
+    
+</aura:component>

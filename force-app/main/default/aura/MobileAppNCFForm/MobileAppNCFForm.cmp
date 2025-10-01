@@ -1,0 +1,258 @@
+<aura:component controller="MobileAppNCFController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="ncfWrap" type="Map" default="{}" />
+    <aura:attribute name="removedAppIds" type="List"  />
+    <aura:attribute name="ncfData" type="Name_Confirmation_Form__c" default="{'sobjectType':'Name_Confirmation_Form__c'}" />
+    
+    <aura:attribute name="ApplicantPicklistOptions" type="String[]"/>
+    <aura:attribute name="TypeOfOriginOptions" type="String[]"/>
+    <aura:attribute name="bookingId" type="String"/>
+    <aura:attribute name="ResidentialPicklistOptions" type="String[]"/>
+    <aura:attribute name="AddressProofDocument" type="string[]"/>
+    <aura:attribute name="applicantDetail" type="Applicant_Details__c" />
+	<aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="accountId" type="String"/>
+    
+    <aura:attribute name="errorMessage" type="boolean" default="false"/>
+    <!--<aura:handler event="c:CustomerPortalSessionEvent" action="{!c.handleApplicationEventFired}"/> -->
+    <lightning:navigation aura:id="navService"/>
+    
+    
+    
+     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+    
+    <div>
+        <lightning:card>
+            <lightning:tabset selectedTabId="Booking 1">
+                <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                    <lightning:tab label="{!'NCF Form for Booking '+ bookvar.unitNumber}" id="{!'Booking '+ add(index,1)}">
+                       
+                           <!-- <div class="slds-clearfix">
+                                        <div class="slds-float_right">
+                                        <lightning:button class="slds-m-left_x-small" name="{!bookvar.BookingId}" variant="brand" label="Add Applicant" title="Add Applicant" onclick="{! c.onAddApplicant }" />
+                                        </div>
+                                        </div>-->
+                        <div class="slds-text-align_center slds-text-heading_large">
+                            <label><b>NAME CONFIRMATION FORM</b></label>
+                        </div>
+                        
+                         <div class="slds-clearfix">
+                         <div class="slds-float_right slds-p-right_large">
+                        <lightning:button name="{!bookvar.BookingId+'|'+bookvar.opportunityId}" variant="brand" class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'sizeButton textInput':'slds-hide'}" label="Add Applicant" title="Add Applicant" onclick="{! c.onAddApplicant }" />
+                        </div>
+                        </div>
+                        
+                        <lightning:accordion aura:id="accordion" activeSectionName="Primary Applicant" allowMultipleSectionsOpen="true" class="slds-p-top_medium">
+                            <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                                <aura:if isTrue="{!appdetvar.appNumber == 'Primary Applicant'}">
+                                    <lightning:accordionSection aura:id='PrimaryApplicant' name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                                        <c:CustomerPortalIndividualApplicantNCFForm aura:id="Primary Applicant" applicantdetails="{!appdetvar}" RunwalHomeWrapList="{!v.RunwalHomeWrapList}" countryList="{!bookvar.countryNames}" stateList="{!bookvar.stateNames}" cityList="{!bookvar.cityNames}"
+                                         ApplicantPicklistOptions="{!bookvar.applicantTypePicklistValues}" ResidentialPicklistOptions="{!bookvar.residentailstatusPicklistValues}"
+                                                                                    OriginTypePicklistValues="{!bookvar.typeofOriginPicklistValues}"   applicantDetail="{!v.applicantDetail}"  TypeOfOriginOptions="{!bookvar.typeofOriginPicklistValues}" bookingId="{!bookvar.BookingId}" ncfData="{!bookvar.ncfdata}"  AddressProofDocument="{!bookvar.addressproofPicklistValues}" ResidentialPicklist="{!bookvar.dependentPicklistMap.Subtype_Of_Applicant__c}" allowupdate="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c)}"/>
+                                    </lightning:accordionSection>
+                                </aura:if>
+                            </aura:iteration> 
+                            <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                                <aura:if isTrue="{!appdetvar.appNumber == 'Second Applicant'}">
+                                    
+                                    <lightning:accordionSection aura:id='SecondApplicant' name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                                        <div class="slds-clearfix">
+                                        <div class="slds-float_right">
+                                        <lightning:button  class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'slds-m-left_x-small sizeButton textInput':'slds-hide'}"  name="{!appdetvar.bookingId +'|' + appdetvar.appNumber}" variant="brand"  label="Remove Applicant" title="Remove Applicant" onclick="{! c.onRemoveApplicant }" />
+                                        </div>
+                                        </div>
+                                             <c:CustomerPortalIndividualApplicantNCFForm aura:id="Second Applicant" applicantdetails="{!appdetvar}" RunwalHomeWrapList="{!v.RunwalHomeWrapList}" countryList="{!bookvar.countryNames}" stateList="{!bookvar.stateNames}" cityList="{!bookvar.cityNames}"
+                                         ApplicantPicklistOptions="{!bookvar.applicantTypePicklistValues}" ResidentialPicklistOptions="{!bookvar.residentailstatusPicklistValues}"
+          								OriginTypePicklistValues="{!bookvar.typeofOriginPicklistValues}"   applicantDetail="{!v.applicantDetail}"  TypeOfOriginOptions="{!bookvar.typeofOriginPicklistValues}" bookingId="{!bookvar.BookingId}"   AddressProofDocument="{!bookvar.addressproofPicklistValues}" ResidentialPicklist="{!bookvar.dependentPicklistMap.Subtype_Of_Applicant__c}"  allowupdate="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c)}"/>
+                                    </lightning:accordionSection>
+                                </aura:if>
+                            </aura:iteration>
+                            <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                                <aura:if isTrue="{!appdetvar.appNumber == 'Third Applicant'}">
+                                    <lightning:accordionSection aura:id='ThirdApplicant' name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                                        <div class="slds-clearfix">
+                                        <div class="slds-float_right">
+                                        <lightning:button class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'slds-m-left_x-small sizeButton textInput':'slds-hide'}"  name="{!appdetvar.bookingId +'|' + appdetvar.appNumber}" variant="brand" label="Remove Applicant" title="Remove Applicant" onclick="{! c.onRemoveApplicant }" />
+                                        </div>
+                                        </div>
+                                        <c:CustomerPortalIndividualApplicantNCFForm aura:id="Third Applicant" applicantdetails="{!appdetvar}" RunwalHomeWrapList="{!v.RunwalHomeWrapList}" countryList="{!bookvar.countryNames}" stateList="{!bookvar.stateNames}" cityList="{!bookvar.cityNames}"
+                                         ApplicantPicklistOptions="{!bookvar.applicantTypePicklistValues}" ResidentialPicklistOptions="{!bookvar.residentailstatusPicklistValues}"
+          								OriginTypePicklistValues="{!bookvar.typeofOriginPicklistValues}"   applicantDetail="{!v.applicantDetail}"  TypeOfOriginOptions="{!bookvar.typeofOriginPicklistValues}" bookingId="{!bookvar.BookingId}"   AddressProofDocument="{!bookvar.addressproofPicklistValues}" ResidentialPicklist="{!bookvar.dependentPicklistMap.Subtype_Of_Applicant__c}" allowupdate="{!bookvar.ncfdata.RW_Allow_Customer_to_Update__c}"/>
+                                    </lightning:accordionSection>
+                                </aura:if>
+                            </aura:iteration>
+                            <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                                <aura:if isTrue="{!appdetvar.appNumber == 'Fourth Applicant'}">
+                                    
+                                    <lightning:accordionSection aura:id='FourthApplicant' name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                                        <div class="slds-clearfix">
+                                        <div class="slds-float_right">
+                                        <lightning:button class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'slds-m-left_x-small sizeButton textInput':'slds-hide'}"  name="{!appdetvar.bookingId +'|' + appdetvar.appNumber}" variant="brand" label="Remove Applicant" title="Remove Applicant" onclick="{! c.onRemoveApplicant }" />
+                                        </div>
+                                        </div>
+                                        <c:CustomerPortalIndividualApplicantNCFForm aura:id="Fourth Applicant" applicantdetails="{!appdetvar}" RunwalHomeWrapList="{!v.RunwalHomeWrapList}" countryList="{!bookvar.countryNames}" stateList="{!bookvar.stateNames}" cityList="{!bookvar.cityNames}"
+                                         ApplicantPicklistOptions="{!bookvar.applicantTypePicklistValues}" ResidentialPicklistOptions="{!bookvar.residentailstatusPicklistValues}"
+          								OriginTypePicklistValues="{!bookvar.typeofOriginPicklistValues}"   applicantDetail="{!v.applicantDetail}"  TypeOfOriginOptions="{!bookvar.typeofOriginPicklistValues}" bookingId="{!bookvar.BookingId}"   AddressProofDocument="{!bookvar.addressproofPicklistValues}" ResidentialPicklist="{!bookvar.dependentPicklistMap.Subtype_Of_Applicant__c}" allowupdate="{!bookvar.ncfdata.RW_Allow_Customer_to_Update__c}"/>
+                                    </lightning:accordionSection>
+                                </aura:if>
+                            </aura:iteration>
+                            <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                                <aura:if isTrue="{!appdetvar.appNumber == 'Fifth Applicant'}">
+                                    
+                                    <lightning:accordionSection aura:id='FifthApplicant' name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                                        <div class="slds-clearfix">
+                                        <div class="slds-float_right">
+                                        <lightning:button class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'slds-m-left_x-small sizeButton textInput':'slds-hide'}"  name="{!appdetvar.bookingId +'|' + appdetvar.appNumber}" variant="brand" label="Remove Applicant" title="Remove Applicant" onclick="{! c.onRemoveApplicant }" />
+                                        </div>
+                                        </div>
+                                        <c:CustomerPortalIndividualApplicantNCFForm aura:id="Fifth Applicant" applicantdetails="{!appdetvar}" RunwalHomeWrapList="{!v.RunwalHomeWrapList}" countryList="{!bookvar.countryNames}" stateList="{!bookvar.stateNames}" cityList="{!bookvar.cityNames}"
+                                         ApplicantPicklistOptions="{!bookvar.applicantTypePicklistValues}" ResidentialPicklistOptions="{!bookvar.residentailstatusPicklistValues}"
+          								OriginTypePicklistValues="{!bookvar.typeofOriginPicklistValues}"   applicantDetail="{!v.applicantDetail}"  TypeOfOriginOptions="{!bookvar.typeofOriginPicklistValues}" bookingId="{!bookvar.BookingId}"   AddressProofDocument="{!bookvar.addressproofPicklistValues}" ResidentialPicklist="{!bookvar.dependentPicklistMap.Subtype_Of_Applicant__c}" allowupdate="{!bookvar.ncfdata.RW_Allow_Customer_to_Update__c}"/>
+                                    </lightning:accordionSection>
+                                </aura:if>
+                            </aura:iteration>
+                            
+                            <lightning:accordionSection name="Nominee Details" label="Nominee Details">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+                                        <div class="slds-section slds-is-open">
+                                            <div class="slds-p-top_small"></div>
+                                            <lightning:layout multipleRows="true">
+                                                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                                                    
+                                                    <div class="slds-p-top_small"></div>
+                                                    <div class="slds-form" role="list">
+                                                        
+                                                        <div class="slds-p-top_small"></div>
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">NAME</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning:input  type="text" id="single-form-element-id-02" value="{!bookvar.ncfdata.RW_Nominee_Name__c}" name="{!bookvar.bookingId}" readonly="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}" />
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PAN</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning:input  type="text" aura:id="nomineepannumber" id="single-form-element-id-02" value="{!bookvar.ncfdata.RW_Nominee_PAN_Number__c}" onblur="{!c.validatePAN}" name="{!bookvar.bookingId}" readonly="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                </lightning:layoutItem>
+                                            </lightning:layout>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                </div>
+                            </lightning:accordionSection>
+                            
+                            
+                            <lightning:accordionSection name="POA Details" label="POA Details">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+                                        <div class="slds-section slds-is-open">
+                                            <div class="slds-p-top_small"></div>
+                                            <lightning:layout multipleRows="true">
+                                                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                                                    
+                                                    <div class="slds-p-top_small"></div>
+                                                    <div class="slds-form" role="list">
+                                                        
+                                                        <div class="slds-p-top_small"></div>
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">NAME</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning:input  type="text" id="single-form-element-id-02" value="{!bookvar.ncfdata.RW_POA_Name__c}" name="{!bookvar.bookingId}" readonly="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PAN</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning:input aura:id="poapannumber" type="text" id="single-form-element-id-02" value="{!bookvar.ncfdata.RW_POA_PAN_Number__c}" name="{!bookvar.bookingId}" readonly="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    
+                                                                </div>
+                                                                
+                                                                
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                               
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">MOBILE</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning:input  aura:id="poamobile" type="text" id="single-form-element-id-02" value="{!bookvar.ncfdata.RW_POA_Phone_Number__c}" pattern="^[0-9]+$" messageWhenPatternMismatch="Only Numbers are allowed" name="{!bookvar.bookingId}" readonly="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">EMAIL</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning:input  aura:id="poaemail" type="email" id="single-form-element-id-02" value="{!bookvar.ncfdata.RW_POA_Email__c}" name="{!bookvar.bookingId}" readonly="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                </lightning:layoutItem>
+                                            </lightning:layout>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                </div>
+                            </lightning:accordionSection>
+                            
+                            
+                            
+                            <div class="{!$Browser.isPhone ? 'slds-align_absolute-center' :'slds-align_absolute-center slds-p-top_xx-large'}" >
+                                <lightning:button variant="brand" class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'sizeButton textInput':'slds-hide'}"  name="{!bookvar.BookingId}" disabled="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}" label="Submit" title="Submit" onclick="{! c.onsubmit }" />
+                                <lightning:button variant="brand" class="{!and(bookvar.registrationstatus !='Registration Completed',bookvar.ncfdata.RW_Allow_Customer_to_Update__c) ? 'sizeButton textInput':'slds-hide'}"  name="{!bookvar.BookingId}" disabled="{!or(bookvar.registrationstatus =='Registration Completed',not(bookvar.ncfdata.RW_Allow_Customer_to_Update__c))}" label="Cancel" title="Cancel" onclick="{! c.onCancel }" />
+                            </div>
+                        </lightning:accordion>
+                        
+                    </lightning:tab>
+                </aura:iteration>
+            </lightning:tabset>
+        </lightning:card>
+    </div>
+</aura:component>

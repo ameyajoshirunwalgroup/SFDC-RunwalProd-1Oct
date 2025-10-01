@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Brokerage Scheme</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Brokerage Schemes</value>
+    </caseValues>
+    <layouts>
+        <layout>Brokerage Scheme Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Brokerage Scheme Layout - CP Access</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Brokerage Scheme Layout - CP Billing Access</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Channel Partner Portal Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please Enter the AOP CP% on the Brokerage Scheme. --></errorMessage>
+        <name>AOP_CP_is_Required</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Base Brokerage for local bookings should not be blank --></errorMessage>
+        <name>Base_Brokerage_for_Local_Bookings_Req</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Base Brokerage for OS / NRI should be blank. --></errorMessage>
+        <name>Base_Brokerage_for_OS_NRI_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Base Brokerage For OS/NRI should not be blank --></errorMessage>
+        <name>Both_fields_should_not_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You cannot edit this scheme. --></errorMessage>
+        <name>Cannot_Edit_Approved_by_L2_Scheme</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Approved Scheme cannot re-send for Approval. --></errorMessage>
+        <name>Cannt_uncheck_checkbox_if_scheme_is_Appr</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- End Date does not comes before Start Date. --></errorMessage>
+        <name>End_Date_should_be_greater_Start_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Base Brokerage for local bookings should not be blank --></errorMessage>
+        <name>If_NRI_Base_brokerage_local_should_be_bl</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Base Brokerage For Local Bookings should not be blank --></errorMessage>
+        <name>If_both_both_fields_should_not_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Base Brokerage For OS / NRI Should be blank --></errorMessage>
+        <name>If_local_is_selected_NRI_base_rate_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field length cannot be more than 50 --></errorMessage>
+        <name>Record_name_Character_length_limitation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The type of brokerage scheme should be Local. --></errorMessage>
+        <name>Type_of_Brokerage_Scheme_should_be_Local</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Batch_Run_For_Brokerage_Calculation --></label>
+        <name>Batch_Run_For_Brokerage_Calculation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Batch_Run_For_Brokerage_Cancellation --></label>
+        <name>Batch_Run_For_Brokerage_Cancellation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Run_Batch_for_Brokerage_Ladder1 --></label>
+        <name>Run_Batch_for_Brokerage_Ladder1</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Run_Inactive_Scheme --></label>
+        <name>Run_Inactive_Scheme</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Submit_For_Approval --></label>
+        <name>Submit_For_Approval</name>
+    </webLinks>
+</CustomObjectTranslation>

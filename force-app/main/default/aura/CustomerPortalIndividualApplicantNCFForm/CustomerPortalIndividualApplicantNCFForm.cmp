@@ -1,0 +1,396 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	<aura:attribute name="applicantdetails" type="List" />
+    <aura:attribute name="countryList" type="List" />
+    <aura:attribute name="stateList" type="List" />
+    <aura:attribute name="cityList" type="List" />
+    <aura:attribute name="ncfData" type="Name_Confirmation_Form__c" />
+    <aura:attribute name="dateValidationError" type="Boolean"/>
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="allowupdate" type="Boolean" />
+    
+    <aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/> 
+    
+    
+     <aura:attribute name="ApplicantPicklistOptions" type="String[]"/>
+    <aura:attribute name="TypeOfOriginOptions" type="String[]"/>
+    <aura:attribute name="OriginTypePicklistValues" type="String[]"/>
+    <aura:attribute name="bookingId" type="String"/>
+    <aura:attribute name="ResidentialPicklistOptions" type="String[]"/>
+    <aura:attribute name="AddressProofDocument" type="string[]"/>
+    <aura:attribute name="applicantDetail" type="Applicant_Details__c" />
+    <aura:attribute name="ResidentialPicklist" type="Object"/>
+    
+    <aura:registerEvent name="sessionupdateevent" type="c:CustomerPortalSessionEvent"/>
+        <aura:attribute name="multiple" type="Boolean" default="false"/> 
+    
+    <aura:method name="doValidityCheck" action="{!c.doValidityCheck}" >
+    <aura:attribute name="isValid" type="boolean" default="false" access="PUBLIC"/>
+	</aura:method>
+    <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+                    
+                    <div class="slds-section slds-is-open">
+                         
+                    <div class="slds-p-top_small"></div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                            <!--<div class="slds-float_right">
+                                        <lightning:button class="slds-m-left_x-small" variant="brand" label="Remove" title="Remove" onclick="{! c.generateOTP }" />
+                                        </div>-->
+                            <div class="slds-p-top_small"></div>
+                            <div class="slds-form" role="list">
+                                
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">FIRST NAME<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                  
+                                                <lightning:input  type="text" aura:id="firstName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_First_Name__c}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}" />
+                                                <aura:set attribute="else">
+                                                    <lightning:input  type="text" aura:id="firstName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" id="single-form-element-id-02" value="{!v.applicantdetails.firstName}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"  />
+                                                    </aura:set> 
+                                                </aura:if>
+                                                </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">MIDDLE NAME</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input  type="text" aura:id="middleName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Middle_Name__c}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}" />
+                                                <aura:set attribute="else">
+                                                <lightning:input  type="text" aura:id="middleName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" id="single-form-element-id-02" value="{!v.applicantdetails.middleName}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">LAST NAME<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input  type="text" aura:id="lastName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Last_Name__c}" required="true"  readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                <aura:set attribute="else">
+                                                <lightning:input  type="text" aura:id="lastName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" id="single-form-element-id-02" value="{!v.applicantdetails.lastName}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">DATE OF BIRTH<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input  type="Date" aura:id="dateOfBirth" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_DOB__c}" required="true" onchange="{!c.checkDateValidation}" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                <aura:set attribute="else">
+                                                <lightning:input  type="Date" aura:id="dateOfBirth" id="single-form-element-id-02" value="{!v.applicantdetails.dateOfBirth}" required="true" onchange="{!c.checkDateValidation}" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                            	
+                                                   
+                                                    </aura:set>
+                                            
+                                			</aura:if> 
+                                            <aura:if isTrue="{!v.dateValidationError}">
+                                                <div class="slds-text-color_error slds-p-left_x-small">
+                                                Date cannot be today or in the future
+                                            </div>
+                                                 </aura:if>
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                        <!--<div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PAN NUMBER<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.panCard}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">AADHAR NUMBER</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.addressproofDocumentNumber}" />
+                                            </div>
+                                        </div>-->
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">EMAIL<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input aura:id="emailId" type="email" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Email__c}" required="true" messageWhenTypeMismatch="Please enter a valid email" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                <aura:set attribute="else">
+                                                <lightning:input aura:id="emailId" type="email" id="single-form-element-id-02" value="{!v.applicantdetails.email}" required="true" messageWhenTypeMismatch="Please enter a valid email" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">MOBILE<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input aura:id="mobile"  type="text" pattern="^[0-9]+$" messageWhenPatternMismatch="Only Numbers are allowed" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Mobile_Number__c}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                <aura:set attribute="else">
+                                                <lightning:input aura:id="mobile"  type="text" pattern="^[0-9]+$" messageWhenPatternMismatch="Only Numbers are allowed" id="single-form-element-id-02" value="{!v.applicantdetails.mobile}" required="true" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PERMANENT ADDRESS LINE 1<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input aura:id="permanentaddr1" type="text" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Permanent_Address_Line_1__c}" required="true" maxlength="60" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    <aura:set attribute="else">
+                                                <lightning:input aura:id="permanentaddr1" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.permanentaddr1}" required="true" maxlength="60" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PERMANENT ADDRESS LINE 2</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input aura:id="permanentaddr2" type="text" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Permanent_Address_Line_2__c}" maxlength="40" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    <aura:set attribute="else">
+                                                <lightning:input aura:id="permanentaddr2" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.permanentaddr2}" maxlength="40" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PERMANENT ADDRESS LINE 3</label>
+                                            <div class="slds-form-element__control">
+                                                 <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:input aura:id="permanentaddr3" type="text" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Permanent_Address_Line_3__c}" maxlength="40" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                    <aura:set attribute="else">
+                                                <lightning:input aura:id="permanentaddr3" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.permanentaddr3}" maxlength="40" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                     </aura:set>
+                                                </aura:if>
+                                                     </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">COUNTRY<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                 <lightning:select onchange="{!c.onCountryValueChange}" value="{!v.ncfData.RW_Primary_Country__c}" name="country" aura:id="country" label="Country" variant="label-hidden" required="true" disabled="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.countryList}" var="val">
+                                                    <aura:if isTrue="{!and( not(empty(v.ncfData.RW_Primary_Country__c)) , v.ncfData.RW_Primary_Country__c == val) }">
+                                                        <option value="{!val}" selected="true"> {!val}</option>
+                                                        <aura:set attribute="else">
+                                                            <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </lightning:select> 
+                                                    
+                                                 <aura:set attribute="else">   
+                                                    
+                                                
+                                                <!--<lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.country}" />-->
+                                                <lightning:select onchange="{!c.onCountryValueChange}" value="{!v.applicantdetails.country}" name="country" aura:id="country" label="Country" variant="label-hidden" required="true" disabled="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.countryList}" var="val">
+                                                    <aura:if isTrue="{!and( not(empty(v.applicantdetails.country)) , v.applicantdetails.country == val) }">
+                                                        <option value="{!val}" selected="true"> {!val}</option>
+                                                        <aura:set attribute="else">
+                                                            <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </lightning:select> 
+                                                    </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">STATE<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                 <lightning:select value="{!v.ncfData.RW_Primary_State__c}" name="state" aura:id="state" label="State" variant="label-hidden" disabled="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.stateList}" var="val">
+                                                    <aura:if isTrue="{!and( not(empty(v.ncfData.RW_Primary_State__c)) , v.ncfData.RW_Primary_State__c == val) }">
+                                                        <option value="{!val}" selected="true"> {!val}</option>
+                                                        <aura:set attribute="else">
+                                                            <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </lightning:select> 
+                                                     <aura:set attribute="else">   
+                                                
+                                                <!--<lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.state}" /> -->
+                                                <lightning:select value="{!v.applicantdetails.state}" name="state" aura:id="state" label="State" variant="label-hidden" disabled="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.stateList}" var="val">
+                                                    <aura:if isTrue="{!and( not(empty(v.applicantdetails.state)) , v.applicantdetails.state == val) }">
+                                                        <option value="{!val}" selected="true"> {!val}</option>
+                                                        <aura:set attribute="else">
+                                                            <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </lightning:select> 
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">CITY<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                <lightning:select value="{!v.ncfData.RW_Primary_City__c}" name="city" aura:id="city" label="city" variant="label-hidden" disabled="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.cityList}" var="val">
+                                                    <aura:if isTrue="{!and( not(empty(v.ncfData.RW_Primary_City__c)) , v.ncfData.RW_Primary_City__c == val) }">
+                                                        <option value="{!val}" selected="true"> {!val}</option>
+                                                        <aura:set attribute="else">
+                                                            <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                                    
+                                                    <aura:set attribute="else">
+                                                <!--<lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.city}" /> -->
+                                                <lightning:select value="{!v.applicantdetails.city}" name="city" aura:id="city" label="city" variant="label-hidden" disabled="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}" >
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.cityList}" var="val">
+                                                    <aura:if isTrue="{!and( not(empty(v.applicantdetails.city)) , v.applicantdetails.city == val) }">
+                                                        <option value="{!val}" selected="true"> {!val}</option>
+                                                        <aura:set attribute="else">
+                                                            <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </lightning:select> 
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PIN<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                                 <lightning:input  aura:id="pincode" type="text" id="single-form-element-id-02" value="{!v.ncfData.RW_Primary_Pincode__c}" required="true" pattern="^[0-9]+$" messageWhenPatternMismatch="Letters and Special Characters are not allowed" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}" />
+                                                 <aura:set attribute="else">
+                                                <lightning:input  aura:id="pincode" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.pin}" required="true" pattern="^[0-9]+$" messageWhenPatternMismatch="Letters and Special Characters are not allowed" readonly="{!or(v.applicantdetails.registrationStatus =='Registration Completed',not(v.ncfData.RW_Allow_Customer_to_Update__c))}"/>
+                                                 </aura:set>
+                                                </aura:if>
+                                                    </div>
+                                        </div>
+                                        
+                                         <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            
+                                        </div>
+                                        
+                                         <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            
+                                        </div>
+                                        
+                                       <!-- <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">EMAIL<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.email}" required="true"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-p-around_small">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">MOBILE<span class="asterisk"> *</span></label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input  type="text" id="single-form-element-id-02" value="{!v.applicantdetails.mobile}" required="true"/>
+                                            </div>
+                                        </div>
+												-->                                        
+                                        
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                                
+                                   <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-is-editing slds-p-around_small">
+										<aura:if isTrue="{!v.applicantdetails.appNumber == 'Primary Applicant'}">
+                                            
+                                            <c:CustomerPortalNCFPrimaryKYCComponent ApplicantPicklistOptions="{!v.ApplicantPicklistOptions}"
+                            ResidentialPicklist="{!v.ResidentialPicklist}" ResidentialPicklistOptions="{!v.ResidentialPicklistOptions}"
+          OriginTypePicklistValues="{!v.TypeOfOriginOptions}"   applicantDetail="{!v.ncfData}"  TypeOfOriginOptions="{!v.TypeOfOriginOptions}"   bookingId="{!v.bookingId}"    applicantId="{!v.applicantdetails.applicantId}"     AddressProofDocument="{!v.AddressProofDocument}" allowforupdate="{!v.allowupdate}"/>
+                                            <aura:set attribute="else">
+                                            
+                                        <c:CustomerPortalNCFKYCComponent ApplicantPicklistOptions="{!v.ApplicantPicklistOptions}"
+                            ResidentialPicklist="{!v.ResidentialPicklist}" ResidentialPicklistOptions="{!v.ResidentialPicklistOptions}"
+          OriginTypePicklistValues="{!v.TypeOfOriginOptions}"   applicantDetail="{!v.applicantdetails}"  TypeOfOriginOptions="{!v.TypeOfOriginOptions}"   bookingId="{!v.bookingId}"         AddressProofDocument="{!v.AddressProofDocument}" allowforupdate="{!v.allowupdate}"/>
+                                            </aura:set>
+                                            </aura:if>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                
+                               
+                                
+                            </div>
+                        </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+        </div>
+        
+       
+        
+                
+        <!--<div class="{!$Browser.isPhone ? 'slds-col slds-size_1-of-1 slds-large-size_2-of-12' :'slds-col slds-size_1-of-1 slds-large-size_2-of-12 slds-p-top_xx-large'}" >
+            <div class="{!$Browser.isPhone ? 'slds-align_absolute-center' :'slds-p-top_xx-large'}" >
+            <lightning:button variant="brand" class="sizeButton textInput" name="{!v.applicantdetails}" label="Request a Change" title="Request a Change" onclick="{! c.openApplicantDetails }" />
+        	</div>
+            </div>-->
+    </div>
+</aura:component>

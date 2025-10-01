@@ -1,0 +1,167 @@
+<aura:component Controller = "DigitalBookingController" >
+    <aura:attribute name="PaymentBankPicklistOptions" type="String[]"/>
+    <aura:attribute name="PaymentModePicklistOptions" type="String[]"/>
+    <aura:attribute name="isGatewayAvailable" type="boolean" default="false"/>
+    <aura:attribute name="ASpinner" type="boolean" default="true"/>
+    <aura:attribute name="showPaymentFields" type="boolean" default="false"/>
+    <aura:attribute name="digitalPaymentMode" type="boolean" default="false"/>
+    <aura:attribute name="addDisabled" type="boolean" default="true"/>
+       <aura:attribute name="chequedateValidationError" type="boolean" default="false"/>
+    <aura:attribute name="dateErrorMsg" type="String" />
+    <aura:attribute name="removeDisabled" type="boolean" default="true"/>
+    <aura:attribute name="tokenAmount" type="Decimal"  />
+
+    
+    <aura:attribute name="RecieptsList" type ="Receipt__c[]" />
+    <aura:attribute name="booking" type ="Booking__c" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if  isTrue="{! not( v.ASpinner)}">
+        <div class="slds-grid slds-gutters slds-wrap" >
+            <aura:iteration items="{!v.RecieptsList}" var="reciepts" indexVar="key">
+                <div class="slds-col slds-size_1-of-1">
+                    
+                    <div class="slds-text-title slds-theme_shade slds-p-around_large ">
+                        <span class=" slds-theme_shade  sectionBackground" title="Section Title">PAYMENT {!key+1}</span>
+                        
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                    <div class="slds-p-around_small">
+                        <div class="slds-p-top_large">
+                            <span>Payment Mode<span class="asterisk">*</span></span>                        
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                    <div class="slds-p-around_small">
+                        <lightning:select onchange="{!c.showPaymentFields}" aura:id ="RWModeOfPayment" value="{!reciepts.Mode__c}" name="ModeOfPayment" label="Select Mode of Payment" variant="label-hidden" required="true" messageWhenValueMissing="Choose one!">
+                            <option value="">--None--</option>
+                            <aura:if isTrue="{!and(v.isGatewayAvailable,key==0)}">
+                                <option value="Digital" >Digital</option>
+                            </aura:if>
+                            <option value="Cheque">Cheque</option>
+                            <option value="DD/Pay Order">DD/Pay Order</option>
+                            <option value="EFT">Card Swipe</option> 
+                            
+                        </lightning:select>   
+                    </div>
+                </div> 
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                    <div class="slds-p-around_small">
+                        <div class="slds-p-top_large">
+                            <span >Amount<span class="asterisk">*</span></span>                        
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                    <div class="slds-p-around_small">
+                        <lightning:input type="number" formatter="currency" aura:id="RWPaymentAmount" required="true" value="{!reciepts.Total_Amount__c}" disabled="{!or(reciepts.Mode__c == 'Digital',reciepts.Mode__c=='')}" />
+                    </div>
+                </div>
+                
+                
+                
+                <aura:if isTrue="{!v.showPaymentFields}">   
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_medium">
+                                <span>Payment Reference Number<span class="asterisk">*</span></span>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">
+                            <lightning:input type="text" aura:id="RWInstrumentNumber" value="{!reciepts.Cheque_DD__c}" maxlength="18" required="true"/>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_large">
+                                <span >Payment Reference Date<span class="asterisk">*</span></span>                        
+                            </div>
+                        </div>
+                    </div>
+                    <aura:if isTrue="{! (reciepts.Mode__c=='Cheque')}" >
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">           
+                     <!--   <ui:inputDate aura:id="RWPaymentDate"  required="true"  value="{!reciepts.Cheque_DD_Date__c}" displayDatePicker="true" format="dd/MM/yyyy" />
+            -->
+                       <lightning:input type="date" dateStyle = "short"  aura:id="RWPaymentDate" value="{!reciepts.Cheque_DD_Date__c}" required="true" onchange="{!c.checkInstrumentDate}" />
+                            </div>
+                        <aura:if isTrue="{!v.chequedateValidationError}">
+                            <div class="slds-text-color_error slds-p-left_x-small">
+                                {!v.dateErrorMsg}
+                            </div>
+                        </aura:if> 
+                    </div> 
+                        <aura:set attribute="else">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">           
+                     <!--   <ui:inputDate aura:id="RWPaymentDate"  required="true"  value="{!reciepts.Cheque_DD_Date__c}" displayDatePicker="true" format="dd/MM/yyyy" />
+            -->
+                       <lightning:input type="date" dateStyle = "short"  aura:id="RWPaymentDate" value="{!reciepts.Cheque_DD_Date__c}" onchange="{!c.checkInstrumentDate1}"   />
+                            </div>
+                        <aura:if isTrue="{!v.chequedateValidationError}">
+                            <div class="slds-text-color_error slds-p-left_x-small">
+                                {!v.dateErrorMsg}
+                            </div>
+                        </aura:if> 
+                    </div> 
+                    
+                        </aura:set>
+                        
+                    </aura:if>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_large">
+                                <span>Drawee Bank<span class="asterisk">*</span></span>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">
+                            
+                            <lightning:select value="{! reciepts.DraweeBank__c}" name="RWBankName" label="Drawee Bank" required="true" variant="label-hidden">
+                                <option value="">---None---</option>
+                                
+                                <aura:iteration items="{!v.PaymentBankPicklistOptions}" var="val">
+                                    <aura:if isTrue="{!and( not(empty(reciepts.DraweeBank__c)) ,reciepts.DraweeBank__c == val) }">
+                                        <option value="{!val}" selected="true"> {!val}</option>
+                                        <aura:set attribute="else">
+                                            <option value="{!val}"> {!val}</option>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"></div>
+                    
+                </aura:if>
+            </aura:iteration>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_large">
+                        <lightning:button label="Add Payment" iconName="utility:add" iconPosition="right"  variant="brand" onclick="{!c.addPayment }" disabled="{!v.addDisabled}"/>
+                        <lightning:button label="Remove Payment" iconName="utility:delete" iconPosition="right" variant="destructive" onclick="{!c.removePayment}" disabled="{!v.removeDisabled}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-spinner_container">
+                <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            
+        </aura:set>
+    </aura:if>
+</aura:component>

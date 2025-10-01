@@ -1,0 +1,356 @@
+<template>
+    <div class="Main">
+    <div class="tab-container">
+        <!-- Tab Buttons -->
+         <div class="tabs">
+                <button class={summaryTabClass} onclick={showSummary}>Additional Detail</button>
+                <button class={videosTabClass} onclick={showVideos}>Portal Videos</button>
+                <button class={emailTabClass} onclick={showEmail}>Email</button>
+            </div>
+    </div>
+
+    <!-- Tab Content -->
+    <template if:true={isSummaryActive}>
+        <div class="OPRowTable">
+            <!-- Main Booking -->
+            <template for:each={bookingData} for:item="bk">
+                <!-- Child -->
+                <template key={bk.ObjectId} for:each={bk.childset} for:item="bkchild">
+                    <div key={bkchild.ObjectId} class="HeadingRow dark-golden-border" >
+                        <div class="HeadingTH" data-id={bkchild.ObjectId}>
+                            <lightning-icon class="accordianlogo" icon-name='utility:chevrondown' alternative-text='chevrondown' size='x-small' title='chevrondown' if:false={bkchild.isShowChild} data-id={bkchild.ObjectId} onclick={handleShowRelatedItemRow}></lightning-icon>
+                            <lightning-icon class="accordianlogo accordianlogo_active" icon-name='utility:chevrondown' alternative-text='chevrondown' size='x-small' title='chevrondown' if:true={bkchild.isShowChild} data-id={bkchild.ObjectId} onclick={handleShowRelatedItemRow}></lightning-icon>
+                        </div>
+                        <div class="HeadingTH minwidth100">{bkchild.Objname}</div>
+                        <div class="HeadingSummary">
+                            <template key={bkchild.ObjectId} for:each={bkchild.fieldset} for:item="bkfieldItem">
+                                <div class="HeadingSummaryitem" key={bkfieldItem.label}>
+                                    <div class="RecordItem2_row_label">{bkfieldItem.label}</div>
+                                    <div class="RecordItem2_row_value">{bkfieldItem.value}</div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.ShowAllReciepts}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={handleNavigateToReceiptReport}>All Reciepts</button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.ShowAllReciepts}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={handleSendReciept}>Send Reciepts</button>
+                                    </div>
+                                </div>
+                            </template>
+                              <template if:true={bkchild.ShowAllDemands}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={handleNavigateToDemandReport}>All Demands</button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.ShowAllDemands}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={handleSendDemand}>Send Demands</button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.showButton}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem3_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={navigateToCaseReport}>All Cases</button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.showButton}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem3_row_label">
+                                        <button class="link-button" onclick={navigateToNewAccountPage}> New Case</button>
+                                    </div>
+                                </div>
+                            </template>
+                             <template if:true={bkchild.showButton}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                          <div class="RecordItem3_row_label">Aging</div>
+                                           <div class="RecordItem3_row_value">{bkchild.Aging}</div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.CreateNewReferral}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={navigateToReferralReport}>All Referrals</button>
+                                    </div>
+                                </div>
+                            </template>
+                             <template if:true={bkchild.ShowAllApplicant}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button" data-id={bkchild.bookingId} onclick={navigateToApplicantReport}>All Applicants</button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={bkchild.CreateNewReferral}>
+                                <div class="HeadingSummaryitem">
+                                    <div class="RecordItem2_row_label">
+                                        <button class="link-button"  onclick={navigateToNewReferralPage}>New Referral</button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <template key={bkchild.ObjectId} for:each={bkchild.childset} for:item="bkchildItem">
+                        <div key={bkchildItem.ObjectId} if:true={bkchild.isShowChild} style={bkchildItem.bgcolor} class="CpRecordRow" data-id={bkchildItem.ObjectId}>
+                            <div colspan="9">
+                                <div class="RecordItemSection">
+                                    <div class="RecordItem-Row" key={bkchildItem.ObjectId}>
+                                        <div class="RecordItemCol1">
+                                            <div class="dashedline"></div>
+                                            <div onclick={handleNavigateToRecord} data-id={bkchildItem.ObjectId} style={bkchildItem.bgcolor} class="RecordFieldlabel">
+                                                {bkchildItem.Objname}
+                                            </div>
+                                        </div>
+                                        <div class="RecordItem2">
+                                            <template key={bkchildItem.ObjectId} for:each={bkchildItem.fieldset} for:item="bkchildItemField">
+                                                <div class="RecordItem2_row" key={bkchildItemField.ObjectId}>
+                                                    <div class="RecordItem2_row_label">{bkchildItemField.label}</div>
+                                                    <div if:false={bkchildItemField.isURL} class="RecordItem2_row_value">{bkchildItemField.value}</div>
+                                                    <a href={bkchildItemField.value} target="_blank" if:true={bkchildItemField.isURL} class="RecordItem2_row_value">{bkchildItemField.isURLName}</a>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </template>
+    <template if:true={isReceiptModalOpen}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close"
+                            title="Close" onclick={closeReceiptModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Select Receipts to Send</h2>
+                </header>
+
+                <!-- Modal/Popup Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                  <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="table-layout: fixed; width: 100%;">
+    <thead>
+        <tr class="slds-text-title_caps  small-header-font" >
+            <th style="width: 20%;" scope="col">Select</th>
+            <th style="width: 70%;" scope="col">Milestone</th>
+            <th style="width: 25%;" scope="col">Name</th>
+            <th style="width: 25%;" scope="col">Amount </th>
+            <th style="width: 25%;" scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <template for:each={receipts} for:item="receipt">
+            <tr key={receipt.id} class="small-header-font">
+                <td>
+                    <lightning-input type="checkbox" data-id={receipt.Id} onchange={handleCheckboxChange}></lightning-input>
+                </td>
+                <td>{receipt.RW_Usage_Description__c}</td>
+                <td>{receipt.Name}</td>
+                <td>{receipt.Total_Amount_Paid__c}</td>
+                <td>{receipt.RW_Payment_Date__c}</td>
+            </tr>
+        </template>
+    </tbody>
+</table>
+
+                </div>
+
+                <!-- Modal/Popup Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeReceiptModal}></lightning-button>
+                    <lightning-button variant="brand" label="Submit" onclick={submitSelectedReceipts}></lightning-button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={isDemandModalOpen}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close"
+                            title="Close" onclick={closeReceiptModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Select Demands to Send</h2>
+                </header>
+
+                <!-- Modal/Popup Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="table-layout: fixed; width: 100%;">
+                        <thead>
+                            <tr class="slds-text-title_caps small-header-font">
+                                <th style="width: 25%;" scope="col">Select</th>
+                                <th style="width: 25%;" scope="col"> Name</th>
+                                <th  style="width: 25%;" scope="col">Amount</th>
+                                <th  style="width: 25%;" scope="col">Demand Date</th>
+                                <th  style="width: 25%;" scope="col">Due Date</th>
+                                <th  style="width: 70%;" scope="col">Milestone</th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={demands} for:item="demand">
+                                <tr key={demand.id} class="small-header-font">
+                                    <td>
+                                        <lightning-input type="checkbox" data-id={demand.Id} onchange={handleDemandboxChange}></lightning-input>
+                                    </td>
+                                    <td>{demand.Name}</td>
+                                    <td>{demand.RW_Demand_Amount__c }</td>
+                                    <td>{demand.formattedDemandDate}</td>
+                                    <td>{demand.formattedDueDate}</td>
+                                    <td>{demand.RW_Demand_Milestone__c}</td>
+                                    
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal/Popup Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeDemandModal}></lightning-button>
+                    <lightning-button variant="brand" label="Submit" onclick={submitSelectedDemands}></lightning-button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+<template if:true={isVideosActive}>
+    <template for:each={bookingData} for:item="bk">
+        <div key={bk.ObjectId} class="CardContainer">
+            <div class="vedioHeader" onclick={toggleTable}>
+            </div>
+            <div class="booking-record">
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={bk.VideoWrapper} for:item="video">
+                            <tr key={video.vId}>
+                                <td class="spaced-cell">
+                                    <a href={video.value} target="_blank">{video.label}</a>
+                                </td>
+                                <td class="spaced-cell">
+                                    <button class="slds-button slds-button_neutral" data-id={video.vId} onclick={handleShareClick}>Share</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+    
+    <!-- Modal for confirmation -->
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Confirm Share</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>Do you want to share this video with the customer?</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={confirmShare}>Yes, Share</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
+ <template if:true={isEmailActive}>
+           <template for:each={emailTemplates} for:item="template">
+    <div key={template.templateId} class="emailCardContainer">
+        <div class="emailHeader">
+            <span>{template.name}</span>
+              <!--<button class="slds-button slds-button_neutral email-share-button" data-content={template.htmlValue} onclick={previewHandler}>Preview</button>-->
+            <button class="slds-button slds-button_neutral email-share-button" data-id={template.templateId} onclick={handleEmailShareClick}>Share</button>
+        </div>
+    </div>
+</template>
+ <template if:true={viewHtmlContent}>
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeEmailModal}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                            </button>
+                            <h2 class="slds-text-heading_medium">Email Content</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium ">
+                            <p><lightning-formatted-rich-text
+                            placeholder="Type something interesting"
+                            value={selectedEmailContent}
+                           >
+                            </lightning-formatted-rich-text></p>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick={closehtml}>Close</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+  
+  <template if:true={isEmailModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Confirm Share</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>Do you want to share this Email with the customer?</p>
+                </div>
+               <footer class="slds-modal__footer" style="display: flex; justify-content: space-between;">
+    <button class="slds-button slds-button_brand" style="width: 150px; height: 50px; padding 10px;" onclick={closeEmailModal}>Cancel</button>
+    <button class="slds-button slds-button_brand" style="width: 150px; height: 50px; padding 10px;" onclick={confirmRMEmailOnly}>Share with Myself Only</button>
+    <button class="slds-button slds-button_brand" style="width: 150px; height: 50px; padding 10px;" onclick={confirmRMEmailShare}>Share with Myself and Customer</button>
+    <button class="slds-button slds-button_brand" style="width: 150px; height: 50px; padding 10px;" onclick={confirmEmailShare}>Share with Customer</button>
+</footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_Collectible_Reasons__c</fullName>
+    <label>Non-Collectible Reasons</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Collection_Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1st Disbursement Pending</fullName>
+                <default>false</default>
+                <label>1st Disbursement Pending</label>
+            </value>
+            <value>
+                <fullName>Cancellation</fullName>
+                <default>false</default>
+                <label>Cancellation</label>
+            </value>
+            <value>
+                <fullName>Legal notice from Runwal initiated</fullName>
+                <default>false</default>
+                <label>Legal notice from Runwal initiated</label>
+            </value>
+            <value>
+                <fullName>Fund Transfer</fullName>
+                <default>false</default>
+                <label>Fund Transfer</label>
+            </value>
+            <value>
+                <fullName>Transfer / Upgrade</fullName>
+                <default>false</default>
+                <label>Transfer / Upgrade</label>
+            </value>
+            <value>
+                <fullName>No Dues</fullName>
+                <default>false</default>
+                <label>No Dues</label>
+            </value>
+            <value>
+                <fullName>Legal notice from customer</fullName>
+                <default>false</default>
+                <label>Legal notice from customer</label>
+            </value>
+            <value>
+                <fullName>RERA Complaint</fullName>
+                <default>false</default>
+                <label>RERA Complaint</label>
+            </value>
+            <value>
+                <fullName>Sarfaesi</fullName>
+                <default>false</default>
+                <label>Sarfaesi</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>1st Disbursement Pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>Cancellation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>Legal notice from Runwal initiated</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>Fund Transfer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>Transfer / Upgrade</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>No Dues</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>Legal notice from customer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>RERA Complaint</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-collectible</controllingFieldValue>
+            <valueName>Sarfaesi</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

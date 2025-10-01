@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Address_Character_Length</fullName>
+    <active>true</active>
+    <errorConditionFormula>And(
+	OR(
+		LEN(STR_SUPPL1__c) &gt; 35,
+		LEN(STR_SUPPL2__c) &gt; 35,
+		LEN(STR_SUPPL3__c) &gt; 35
+	),
+	ISBLANK(SAP_CP_Code__c),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)
+
+
+
+/*	OR(
+		ISCHANGED(STR_SUPPL1__c),
+		ISCHANGED(STR_SUPPL2__c),
+		ISCHANGED(STR_SUPPL3__c)
+	)
+*/</errorConditionFormula>
+    <errorMessage>Pl limit the characters lenght for Address 1, Address 2 OR Address 3 to 35.</errorMessage>
+</ValidationRule>

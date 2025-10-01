@@ -1,0 +1,90 @@
+.textCenterAlign{
+    text-align: center;
+    padding-left: 0;
+}
+.main{
+    padding: 10px;
+}
+
+.export-button {
+   /* background:blue ; */
+    color: white; 
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 4px; 
+    font-size: 14px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    flex-flow: row;
+    width: 10%;
+    justify-content: center;
+    
+}
+.Exportbutton
+{    margin-bottom: 10px;
+    display:flex;
+    flex-flow: row;
+    width: 100%;
+    justify-content: flex-end; 
+}
+.export-button:hover {
+    /* background:  lightblue ;  */
+}
+.back-button {
+    background:blue ;
+    color: white; 
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 4px; 
+    font-size: 14px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+    
+}
+
+.back-button:hover {
+   background-color:white ; 
+}
+
+.filtered-cases-container > div > div {
+    display: flex;
+    align-items: center;
+}
+
+.custom-table-style {
+    margin-top: 20px; 
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.custom-table-style th,
+.custom-table-style td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.Row {
+    text-align: center;
+    display:flex;
+    flex-flow: row-reverse;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    
+}
+.RowText {
+    text-align: center;
+    display:flex;
+    flex-flow: row;
+    width: 100%;
+    justify-content: center;
+}
+
+.bordertable{
+border: 2px solid lightgray;
+border-collapse: collapse;
+}
+td,th {
+  border: 2px solid lightgray;  
+}

@@ -1,0 +1,38 @@
+<apex:component controller="SiteLoginController" id="loginComponent" >
+  <apex:form id="loginForm" forceSSL="true">
+      <div class="form-group">
+         <apex:pageMessages id="error"/>
+        <label for="exampleInputEmail1">User Name</label>
+            <apex:inputText styleclass="form-control" id="username" value="{!username}"/>
+      </div>
+       <div class="form-group">
+             <label for="exampleInputPassword1">Password</label>
+            <apex:inputSecret styleclass="form-control" id="password" value="{!password}"/>
+      </div>
+      
+          <apex:commandButton styleclass="btn" action="{!login}" value="{!$Label.site.login_button}" id="loginButton"/>
+     <div class="form-group">    
+         <apex:outputLink value="{!$Page.ForgotPassword}"> {!$Label.site.forgot_your_password_q}</apex:outputLink>
+    </div>
+    
+    <!-- <apex:outputPanel layout="block">
+      <apex:pageMessages id="error"/>
+      <apex:panelGrid columns="2">
+        <apex:outputLabel styleclass="form-control" value="{!$Label.site.username}" for="username"/> 
+             <apex:inputText styleclass="form-control" id="username" value="{!username}"/>
+         <apex:outputLabel  styleclass="form-control" value="{!$Label.site.password}" for="password"/> 
+             <apex:inputSecret styleclass="form-control" id="password" value="{!password}"/>
+        <apex:outputText value=""/>
+        <apex:commandButton styleclass="btn" action="{!login}" value="{!$Label.site.login_button}" id="loginButton"/>
+        <apex:outputText value=""/>
+        <apex:outputText value=""/>
+        <apex:outputText value=""/>
+        <apex:panelGroup id="theLinks">
+         
+          <apex:outputText value=" | " rendered="{!$Site.RegistrationEnabled}" />
+          <apex:outputLink value="{!$Page.SiteRegister}" rendered="{!$Site.RegistrationEnabled}">{!$Label.site.new_user_q}</apex:outputLink>
+        </apex:panelGroup>
+      </apex:panelGrid> 
+    </apex:outputPanel> -->
+  </apex:form>
+</apex:component>

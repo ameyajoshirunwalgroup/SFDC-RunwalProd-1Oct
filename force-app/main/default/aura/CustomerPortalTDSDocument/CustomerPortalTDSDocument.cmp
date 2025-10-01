@@ -1,0 +1,77 @@
+<aura:component Controller="CustomerPortalTDSCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <aura:attribute name="Sanctionfiles" type="ContentDocument[]"/> 
+    <aura:attribute name="TDSId" type="string" />
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:attribute name="TDSrecordId" type="String" default = "TDS__c[]"/> 
+    <aura:attribute name="TDSDocId" type="String" />
+    <aura:attribute name="SanctionId" type="String" />
+    <aura:attribute name="NocGenerated" type="String" />
+    <aura:attribute name="acceptFileTypes" type="String" />  
+    <aura:attribute name="SanctionuploadButton" type="Boolean"/>
+    <aura:attribute name="showFileHeader" type="Boolean" default="true" />
+    <aura:attribute name="fileHeaderText" type="String" default="TDS Documents Upload" />
+    <aura:attribute name="uploadMultiple" type="Boolean" default="true"/>      
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    
+    <div class="slds-card slds-card_boundary">  
+        
+        <!-- show or hide header -->
+        <aura:if isTrue="{!v.showFileHeader}">
+            <div class="slds-page-header">{!v.fileHeaderText}</div>  
+        </aura:if>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+            <div class="slds-p-around_small">
+                <lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                      accept="{!v.acceptFileTypes}" 
+                                      recordId="{!v.recordId}"   
+                                      onuploadfinished="{!c.sanctionUploadFinished}"
+                                      disabled = "{!v.SanctionuploadButton}"/>  
+            </div>
+        </div>
+        
+        <br/>
+        <div class="slds-form--compound">
+            <table class="slds-table slds-table--bordered">  
+                <!-- hide the table header if file is empty -->
+                <aura:if isTrue="{!not(empty(v.Sanctionfiles))}">
+                    <thead>  
+                        <tr>  
+                            <th>Preview TDS Files</th>  
+                            <th>Files Type</th>  
+                            <th>Delete Files</th>                     
+                        </tr>  
+                    </thead>  
+                </aura:if>
+                <tbody>
+                    <aura:iteration items="{!v.Sanctionfiles}" var="f">  
+                        <tr>  
+                            <td>
+                                <a href="javascript:void(0)" id="{!f.Id}" onclick="{!c.previewFile}">
+                                    {!f.Title}
+                                </a>
+                            </td>  
+                            <td>{!f.FileType}</td>      
+                            <td>
+                                <a href="javascript:void(0)" id="{!f.Id}" onclick="{!c.delFiles}">
+                                    <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                                </a>
+                            </td>
+                        </tr>  
+                    </aura:iteration>  
+                </tbody>  
+            </table>  
+            <!-- show spinner logo when needed -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+        </div> 
+        
+        <br/> 
+    </div>
+</aura:component>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Batch to Notify Presales-Sales Task Owner for Follow-Up</description>
+        <name>Batch_to_Notify_Presales_Sales_Task_Owner_for_Follow_Up</name>
+        <label>Batch to Notify Presales-Sales Task Owner for Follow-Up</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>BatchtoNotifyTaskOwnerFollowUp</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <nameSegment>BatchtoNotifyTaskOwnerFollowUp</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Batch to Notify Presales-Sales Task Owner for Follow-Up</description>
+    <environments>Default</environments>
+    <interviewLabel>Batch to Notify Presales-Sales Task Owner for Follow-Up {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Batch to Notify Presales-Sales Task Owner for Follow-Up</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Batch_to_Notify_Presales_Sales_Task_Owner_for_Follow_Up</targetReference>
+        </connector>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2025-07-15</startDate>
+            <startTime>09:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

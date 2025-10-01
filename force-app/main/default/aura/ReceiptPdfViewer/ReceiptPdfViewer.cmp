@@ -1,0 +1,27 @@
+<aura:component access="GLOBAL" extensible="false" controller="PDFController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+     <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+	<aura:attribute access="GLOBAL" name="pdfData" type="String" description="PDF data in base64 encoded format"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:attribute name="AccountNumber" type="String" default = "RW_Accounting_Document_Number__c"/> 
+    <aura:attribute name="CompanyCode" type="String" default = "RW_Company_Code__c"/>
+    <aura:attribute name="FiscalYear" type="String" default = "RW_Fiscal_Year__c"/>
+    <aura:attribute name="receipt" type="RW_Payment_Details__c[]"/>
+    <aura:attribute name="primaryEmail" type="String" default = "Primary_Applicant_Email__c"/> 
+    <div class="slds-align_absolute-center" >
+        <lightning:button variant="brand" class="slds-m-top_small" type="Submit" onclick="{!c.sendMail}" label="Send Receipt Pdf" />
+    </div>
+    
+    
+	<iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" ></iframe>
+    
+    <div class="slds-align_absolute-center" >
+        <lightning:button variant="brand" class="slds-m-top_small" type="Submit" onclick="{!c.sendMail}" label="Send Receipt Pdf" />
+    </div>
+
+</aura:component>

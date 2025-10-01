@@ -1,0 +1,12 @@
+<apex:component controller="RWProjectLogoController" access="global">
+    <apex:attribute assignto="{!projectId}" name="projId" type="string" description="Used for getting the paroject id" />
+    <apex:attribute assignto="{!strWidth}" name="wdth" type="string" description="Used for getting the Width" />
+    <apex:attribute assignto="{!strHeight}" name="hi8" type="string" description="Used for getting the Height" />
+    {!initialize}
+    <apex:image style="text-align: center; display: block; margin:auto;width:{!if(strWidth != null, strWidth, 'auto')};height:{!if(strHeight != null, strHeight, 'auto')}" url="/servlet/servlet.FileDownload?file={!attachmentId}"
+                rendered="{!(attachmentId != NULL)}" />
+    <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}"
+                style="text-align: center; display: block; margin:auto;width:{!if(strWidth != null, strWidth, 'auto')};height:{!if(strHeight != null, strHeight, 'auto')}" alt="Runwal" rendered="{!(attachmentId == NULL)}" /> -->
+    <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}"
+                style="text-align: center; display: block; margin:auto;width:{!if(strWidth != null, strWidth, 'auto')};height:{!if(strHeight != null, strHeight, 'auto')}" alt="Runwal" rendered="{!(attachmentId == NULL)}" />
+</apex:component>

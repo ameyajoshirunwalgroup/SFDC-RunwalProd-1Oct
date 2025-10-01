@@ -1,0 +1,147 @@
+<aura:component controller="CustomerPortalReferralController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	<aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="projectNames" type="List"/>
+    <aura:attribute name="ReferralWrapList" type="Map" default="{}" />
+    <aura:attribute name="referralObject" type="RW_Referral__c"
+         default="{ 'sobjectType': 'RW_Referral__c',
+                        'RW_First_Name__c': '',
+                        'RW_Last_Name__c': '',
+                        'RW_Email_Address__c': '',
+                        'RW_Contact_Phone__c': '',
+                        'RW_How_do_you_know_this_person__c': '',
+                        'RW_Project__c':'',
+                        'Opt_for_Referral__c':''
+                         }"/>
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <aura:attribute name="backgroundImageURL" type="String" default=""/>  
+    
+     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+     <!-- <div style="{!'position: relative; background:' + v.backgroundColor + ' url(' + v.backgroundImageURL +') repeat-y;background-position: center;background-size: cover;'}"> -->
+     <div >
+       
+    <div class="{!$Browser.isPhone ? 'screenpaddingMobile':'slds-grid slds-gutters slds-wrap paddingScreen'}">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_7-of-12" >
+            <!--<lightning:datatable
+                keyField="id"
+                data="{! v.data }"
+                columns="{! v.columns }"
+                hideCheckboxColumn="true"
+                onrowaction="{! c.handleRowAction }"
+                class="table-test"/-->
+            <div class="">
+            <div class="slds-page-header slds-box slds-box_small">
+                    <h1>Referral Status</h1>
+                </div>
+            </div>
+            <!--<div class="slds-p-bottom_medium slds-text-heading_medium slds-page-header"><b>Referral Status</b></div>-->
+            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+	<thead>
+		<tr class="slds-text-title_caps">
+            <th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                <div title="First Name">First Name</div>
+            </th>
+            <th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                <div title="Last Name">Last Name</div>
+            </th>
+            <th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                <div title="Project">Project</div>
+            </th>
+            <!--<th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                <div title="Lead ID">Lead ID</div>
+            </th>-->
+            <th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                <div title="Lead Status">Lead Status</div>
+            </th>
+		</tr>
+	</thead>
+                
+	<tbody>
+        <aura:iteration items="{!v.ReferralWrapList.referralRecords}" var="refvar" indexVar="index">
+		<tr>
+			<td class="slds-cell-wrap" scope="row" data-label="First Name">
+                <div>{!refvar.firstName}</div>
+				<!--<lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.onClick}"/>-->
+            </td>
+            <td class="slds-cell-wrap" scope="row" data-label="Last Name">
+                 <div>{!refvar.lastName}</div>
+			<!--<lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.onClick}"/>-->
+			</td>
+            <td class="slds-cell-wrap" scope="row" data-label="Project">
+                <div>{!refvar.project}</div>
+				<!--<lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.onClick}"/>-->
+			</td>
+          <!--  <td class="slds-cell-wrap" scope="row" data-label="Lead ID">
+                <div>{!refvar.leadId}</div>
+				
+			</td>-->
+            <td class="slds-cell-wrap" scope="row" data-label="Lead Status">
+                <div>{!refvar.leadStatus}</div>
+				<!--<lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.onClick}"/>-->
+			</td>
+		</tr>
+        </aura:iteration>
+	</tbody>
+</table>
+        </div>
+        
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-12 bgWhite">
+             <div class="padding10">
+             <div class="slds-page-header slds-box slds-box_small">
+             
+                    <h1>Submit a Referral</h1>
+                </div>
+             <!--<div class="slds-p-bottom_medium slds-text-heading_medium"><b>Submit a Referral</b></div>-->
+             <div class="slds-grid slds-gutters slds-wrap">
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                  <lightning:input type="text" label="First Name" aura:id="firstName"  value="{!v.referralObject.RW_First_Name__c}" required="true" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed"/>   
+                 </div>
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                  <lightning:input type="text" label="Last Name" aura:id="lastName"  value="{!v.referralObject.RW_Last_Name__c}" required="true" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed"/>   
+                 </div>
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                  <lightning:input type="email" label="Email ID" aura:id="emailId" messageWhenTypeMismatch="Please enter a valid email" value="{!v.referralObject.RW_Email_Address__c}" required="true" />   
+                 </div>
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                  <lightning:input type="text" label="Phone" aura:id="contactnumber"  value="{!v.referralObject.RW_Contact_Phone__c}" required="true" pattern="^[0-9]*$" messageWhenPatternMismatch="Please enter numbers only"/>   
+                 </div>
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                  <lightning:input type="text" label="How do you know them?" aura:id="howknown"  value="{!v.referralObject.RW_How_do_you_know_this_person__c}"/>   
+                 </div>
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                  <lightning:input type="checkbox" 
+                                 label="Pass on my referral benefit"   
+                                   unchecked="true"
+                                 aura:id="optForReferral"
+                                 name="consentCheckbox"
+                                 value="{!v.referralObject.Opt_for_Referral__c}"
+                                 onchange="{!c.handleInputChange}"/>    
+                 </div>
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                  <lightning:select  value="{!v.referralObject.RW_Project__c}" name="Project" label="Project" required="true">
+                           				<option value="">--None--</option>
+                      					<aura:iteration items="{!v.ReferralWrapList.projectNames}" var="provar" indexVar="index">
+                                            
+                                                    <option value="{!provar.projName}"> {!provar.projName}</option>            
+                     				   </aura:iteration>
+                                    </lightning:select>   
+                 </div>
+                 
+                 <div class="slds-align_absolute-center" >
+            		<lightning:button class="slds-m-top_small sizeButton textInput" variant="brand"  name="Submit" label="Submit" onclick="{! c.submitReferral }"/>
+                 </div>
+             </div>
+            </div> 
+        </div>
+    </div>
+    </div>  
+</aura:component>

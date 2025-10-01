@@ -1,0 +1,68 @@
+<aura:component controller="PresalesProjectDetailsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+<aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+<aura:attribute name="recordId" type="String" />
+<aura:attribute name="selectedCheckBoxValue" type="String"/>
+<aura:attribute name="optionsCheckBox" type="String[]" />
+<aura:attribute name="valueCheckBox" type="List" default=""/>
+<aura:attribute name="disableButton" type="boolean" default="true"/>
+<aura:attribute name="errorMessage" type="String" />  
+<aura:attribute name="show" type="Boolean" default="false" />
+ <!--Custom Styles for Modal Header and Footer--> 
+ <aura:html tag="style">
+    .cuf-content {
+    padding: 0 0rem !important;
+    }
+    .slds-p-around--medium {
+    padding: 0rem !important;
+    }       
+    .slds-modal__content{
+    overflow-y:hidden !important;
+    height:unset !important;
+    max-height:unset !important;
+    }
+</aura:html>
+    
+    
+    <!--Modal Header-->  
+     <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium">Send Project Details</h4>
+    </div>
+<!--End Modal Header-->  
+    <aura:if isTrue="{!not(empty(v.errorMessage))}">
+        <div class="slds-text-color_error slds-align_absolute-center">
+            <b> {!v.errorMessage} </b>
+        </div>
+    </aura:if>
+<!--Modal Body-->
+     
+
+    <aura:if isTrue="{!v.show}">
+     <div aura:id="myDiv" class="slds-align_absolute-center" style="color:RoyalBlue">
+        <p><b>To Share Project Details via "WhatsApp" contact System Admin to activate Custom Label for the same.</b></p>
+     </div>
+    </aura:if>
+    <div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+      <form class="slds-form--stacked">
+   
+    <lightning:checkboxGroup
+        aura:id="mygroup"
+        name="checkboxGroup"
+        label="Please select mode of Communication to send Brochure, Location Videos, Location Maps "
+        options="{! v.optionsCheckBox }"
+        value="{! v.valueCheckBox }"
+        onchange="{! c.handleChangeCheckboxGroup }"
+                             required="true"/>
+      
+        </form> 
+    </div>
+  
+<!--End of Modal Body--> 
+ 
+<!--Modal Footer-->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+       <lightning:button variant="Brand" class="slds-button" label="Send" onclick="{!c.handleSend}" disabled="{!v.disableButton}"/>
+      <lightning:button variant="Neutral" class="slds-button" label="Cancel" onclick="{!c.handleClose}"/>
+    </div>
+<!--End of Modal Footer-->
+</aura:component>

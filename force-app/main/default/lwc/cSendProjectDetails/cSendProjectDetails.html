@@ -1,0 +1,107 @@
+<template>
+
+<template if:true={showFirstScreen}>    
+
+<div class="slds-modal__header">
+    <h2 class="slds-text-heading_medium">Project Type</h2>
+</div>
+
+<div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1">
+
+<div class="slds-form--stacked">
+    <lightning-checkbox-group
+        label="Please select project type in order to send communications, email, project details"
+        options={projectTypeOptions}
+        value={selectedProjectTypes}
+        onchange={handleProjectTypeSelection}  
+        required> 
+    </lightning-checkbox-group>
+</div>
+</div> 
+<div class="slds-modal__footer slds-size_1-of-1"> 
+    <lightning-button label="Next" variant="brand" onclick={handleNext} class="slds-m-left_small"></lightning-button> 
+    <lightning-button label="Cancel" variant="neutral" onclick={handleClose} class="slds-m-left_small"></lightning-button>
+</div>  
+</template>  
+
+<!-- Existing Project Screen -->
+    <template if:true={showExistingProjectScreen}>
+
+        <div class="slds-modal__header">
+        <h2 class="slds-text-heading_medium">Send Project Details</h2>  
+    </div>
+
+    <div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1">
+        <div class="slds-form--stacked">
+            <lightning-checkbox-group
+                label="Please select mode of Communication"
+                options={communicationOptions}
+                value={selectedCommunicationModes}
+                onchange={handleChangeCheckboxGroup}
+                required>
+            </lightning-checkbox-group>
+        </div>
+    </div>
+
+
+    <div class="slds-modal__footer slds-grid slds-grid_align-spread slds-size_1-of-1">  
+            <div>
+                <lightning-button label="Previous" variant="neutral" onclick={handlePrevious}></lightning-button>
+            </div> 
+
+            <div class="slds-button-group">
+                <lightning-button label="Send" variant="brand" onclick={handleSend} class="slds-m-left_small"></lightning-button>
+                <lightning-button label="Cancel" variant="neutral" onclick={handleClose} class="slds-m-left_small"></lightning-button>
+            </div>
+        </div> 
+
+    </template>
+
+
+<template if:true={showCrossProjectScreen}>
+<div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1">
+    <h2 class="slds-text-heading_medium slds-m-bottom_small" 
+        style="font-weight: bold; text-align: center; width: 100%;">
+        Please select a project from the list below:
+    </h2>
+    </div> 
+    <!-- Search Input for Smart Search -->
+    <div class="slds-p-around_medium">
+        <lightning-input 
+            type="search" 
+            label="Search Projects"
+            onchange={handleSearch}
+            placeholder="Search by project name"  
+        ></lightning-input>
+    </div>  
+    <div>
+    <lightning-datatable 
+    key-field="id"
+    data={paginatedProjects}  
+    columns={columns}   
+    onrowselection={handleProjectChange} 
+    selected-rows={selectedRowIdsForCurrentPage} 
+    max-row-selection="5">
+</lightning-datatable>
+<div class="slds-m-top_medium slds-align_absolute-center"> 
+    <lightning-button label="Previous" onclick={handlePreviousPage} ></lightning-button>
+    <span class="slds-m-horizontal_small">Page {currentPage}</span>
+    <lightning-button label="Next" onclick={handleNextPage} >= filteredProjects.length}></lightning-button>
+</div>
+</div>  
+
+<div class="slds-modal__footer slds-grid slds-grid_align-spread slds-size_1-of-1">  
+        <div>
+            <lightning-button label="Previous" variant="neutral" onclick={handlePrevious2}></lightning-button>
+        </div> 
+
+        <div class="slds-button-group">
+            <lightning-button label="Next" variant="brand" onclick={handleSelectedProjects} class="slds-m-left_small"></lightning-button>
+            <lightning-button label="Cancel" variant="neutral" onclick={handleClose} class="slds-m-left_small"></lightning-button>
+        </div>
+    </div>
+
+</template>
+
+
+</template>

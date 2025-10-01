@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Prospect</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Prospects</value>
+    </caseValues>
+    <layouts>
+        <layout>Prospect Layout</layout>
+        <sections>
+            <label><!-- CRM Call Details --></label>
+            <section>CRM Call Details</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Presales Call details --></label>
+            <section>Presales Call details</section>
+        </sections>
+        <sections>
+            <label><!-- Retention Details --></label>
+            <section>Retention Details</section>
+        </sections>
+        <sections>
+            <label><!-- Sales Call Details --></label>
+            <section>Sales Call Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Prospect Layout Clone</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Presales Call details --></label>
+            <section>Presales Call details</section>
+        </sections>
+        <sections>
+            <label><!-- Retention Details --></label>
+            <section>Retention Details</section>
+        </sections>
+        <sections>
+            <label><!-- Sales Call Details --></label>
+            <section>Sales Call Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Prospect Layout Site Visit</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Presales Call details --></label>
+            <section>Presales Call details</section>
+        </sections>
+        <sections>
+            <label><!-- Retention Details --></label>
+            <section>Retention Details</section>
+        </sections>
+        <sections>
+            <label><!-- Sales Call Details --></label>
+            <section>Sales Call Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Prospect Layout without OTP</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Presales Call details --></label>
+            <section>Presales Call details</section>
+        </sections>
+        <sections>
+            <label><!-- Retention Details --></label>
+            <section>Retention Details</section>
+        </sections>
+        <sections>
+            <label><!-- Sales Call Details --></label>
+            <section>Sales Call Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Prospect Layout-SM</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Presales Call details --></label>
+            <section>Presales Call details</section>
+        </sections>
+        <sections>
+            <label><!-- Retention Details --></label>
+            <section>Retention Details</section>
+        </sections>
+        <sections>
+            <label><!-- Sales Call Details --></label>
+            <section>Sales Call Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Prospect Layout-presales manager</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Presales Call details --></label>
+            <section>Presales Call details</section>
+        </sections>
+        <sections>
+            <label><!-- Retention Details --></label>
+            <section>Retention Details</section>
+        </sections>
+        <sections>
+            <label><!-- Sales Call Details --></label>
+            <section>Sales Call Details</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Call Customer --></label>
+        <name>Call_Customer</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Send Project Details --></label>
+        <name>Send_Project_Details</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Prospects not allowed for Gardens and My City --></errorMessage>
+        <name>Prospects_not_allowed_for_these_projects</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Kindly Update Retention Customer SAP Code and Retention Closing Head Name --></errorMessage>
+        <name>Retention_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Channel Partner should be required --></errorMessage>
+        <name>Validation_for_Channel_Partner</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Customer Reference should be required --></errorMessage>
+        <name>Validation_for_Customer_Reference</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Select Employee/Manager. --></errorMessage>
+        <name>Validation_for_Employee_Reference</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Select lead sub source for Referral. --></errorMessage>
+        <name>Validation_for_Referral_Lead_Source</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Assign_SM --></label>
+        <name>Assign_SM</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Generate_OTP --></label>
+        <name>Generate_OTP</name>
+    </webLinks>
+</CustomObjectTranslation>

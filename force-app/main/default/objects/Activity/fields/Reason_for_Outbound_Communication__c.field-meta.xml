@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Outbound_Communication__c</fullName>
+    <label>Del Reason for Outbound Communication</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Communication_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Cross project</fullName>
+                <default>false</default>
+                <label>Cross project</label>
+            </value>
+            <value>
+                <fullName>Follow up</fullName>
+                <default>false</default>
+                <label>Follow up</label>
+            </value>
+            <value>
+                <fullName>Open calling</fullName>
+                <default>false</default>
+                <label>Open calling</label>
+            </value>
+            <value>
+                <fullName>Visit reminder</fullName>
+                <default>false</default>
+                <label>Visit reminder</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Outbound Call</controllingFieldValue>
+            <valueName>Cross project</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Outbound Call</controllingFieldValue>
+            <valueName>Follow up</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Outbound Call</controllingFieldValue>
+            <valueName>Open calling</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Outbound Call</controllingFieldValue>
+            <valueName>Visit reminder</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

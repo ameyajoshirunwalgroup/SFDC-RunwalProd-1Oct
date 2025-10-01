@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancellation_Sub_reason__c</fullName>
+    <label>Cancellation Sub reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Cancellation_Reason__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Z6</fullName>
+                <default>false</default>
+                <label>Cancer Patient</label>
+            </value>
+            <value>
+                <fullName>R6</fullName>
+                <default>false</default>
+                <label>Change of Mind</label>
+            </value>
+            <value>
+                <fullName>Competitor</fullName>
+                <default>false</default>
+                <label>Competitor</label>
+            </value>
+            <value>
+                <fullName>R1</fullName>
+                <default>false</default>
+                <label>Demise of the Main Applicant</label>
+            </value>
+            <value>
+                <fullName>R2</fullName>
+                <default>false</default>
+                <label>Dispute over Agreement Clauses</label>
+            </value>
+            <value>
+                <fullName>Z4</fullName>
+                <default>false</default>
+                <label>Financial Crisis</label>
+            </value>
+            <value>
+                <fullName>Z9</fullName>
+                <default>false</default>
+                <label>Legal Issue</label>
+            </value>
+            <value>
+                <fullName>Z5</fullName>
+                <default>false</default>
+                <label>Loss of Job</label>
+            </value>
+            <value>
+                <fullName>Media</fullName>
+                <default>false</default>
+                <label>Media</label>
+            </value>
+            <value>
+                <fullName>Z2</fullName>
+                <default>false</default>
+                <label>Medical Emergencies</label>
+            </value>
+            <value>
+                <fullName>Z7</fullName>
+                <default>false</default>
+                <label>Non Approval -Building Construction Plan</label>
+            </value>
+            <value>
+                <fullName>Z3</fullName>
+                <default>false</default>
+                <label>Non Approval of Bank Loan - Eligibility</label>
+            </value>
+            <value>
+                <fullName>Non Contactable</fullName>
+                <default>false</default>
+                <label>Non Contactable</label>
+            </value>
+            <value>
+                <fullName>R8</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+            <value>
+                <fullName>Z1</fullName>
+                <default>false</default>
+                <label>Personal Exigencies</label>
+            </value>
+            <value>
+                <fullName>R7</fullName>
+                <default>false</default>
+                <label>Policy Driven Canc- Payment Defaulter</label>
+            </value>
+            <value>
+                <fullName>Z8</fullName>
+                <default>false</default>
+                <label>Unit Transfer</label>
+            </value>
+            <value>
+                <fullName>R4</fullName>
+                <default>false</default>
+                <label>Unsuitable Possession Date</label>
+            </value>
+            <value>
+                <fullName>R3</fullName>
+                <default>false</default>
+                <label>Upgrade</label>
+            </value>
+            <value>
+                <fullName>R5</fullName>
+                <default>false</default>
+                <label>Vastu Compliance</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z6</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R6</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R2</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z4</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z9</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z5</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z2</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z7</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z3</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <valueName>Non Contactable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R8</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R7</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>Z8</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R4</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R3</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Unit cancelled</controllingFieldValue>
+            <controllingFieldValue>Unit transfer</controllingFieldValue>
+            <valueName>R5</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

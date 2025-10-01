@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Standard Customer Pay Plan Detail</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Standard Customer Pay Plan Details</value>
+    </caseValues>
+    <layouts>
+        <layout>Standard Customer Pay Plan Detail Layout</layout>
+        <sections>
+            <label><!-- Call Log Details --></label>
+            <section>Call Log Details</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Demand Details --></label>
+            <section>Demand Details</section>
+        </sections>
+        <sections>
+            <label><!-- Individual Components of Basic --></label>
+            <section>Individual Components of Basic</section>
+        </sections>
+        <sections>
+            <label><!-- Interest Details --></label>
+            <section>Interest Details</section>
+        </sections>
+        <sections>
+            <label><!-- Payment Details --></label>
+            <section>Payment Details</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- After Selecting Percentage Picklist Value of %Amount  ,You cannot  enter %/Amount Value greater than 100. --></errorMessage>
+        <name>After_Selected_PercentageAmount_Value</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting On Date Pick Value of Is to be Paid Pick List,On Date cann&apos;t be blank. --></errorMessage>
+        <name>After_Selecting_On_date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- % Amount Value cannot be blank,When Calculate Installment Amount as(%) or Total Charge Value Minus are blank --></errorMessage>
+        <name>Amount_cannt_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Select atleast Days or Months Picklist Value --></errorMessage>
+        <name>Enter_Days_Months_Value</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Entering in %Amount Value,You cannot insert in Calculate Installment Amount as(%) and in Total Charge Value Minus or After Entering in Calculate Installment Amount as(%) and in Total Charge Value Minus,You cannot enter in %Amount Value --></errorMessage>
+        <name>Entering_value_in_Amount_Value_and_Calcu</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You Cannot set Percentage in %Amount  if  From Date of Booking is selected  in Is to be paid &amp;  Day/Month  value is 0 and customer pay plan header is null. --></errorMessage>
+        <name>If_Is_to_be_paid_From_Date_of_Booking</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting From Dt. of Booking Picklist Value,You Cannot enter in &quot;On date&quot; field --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_ValidationAfterOn</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting On Date  Pick Value,You cannn&apos;t enter in Project Construction Stages --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_ValidationCS</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting On Date Pick Value,You cannn&apos;t enter in Days/Months --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_ValidationDay</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting On Date Pick Value,You cannn&apos;t enter in Day/Months Value --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_ValidationDayM</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting From Dt. of Booking Picklist Value,You cannot select Project Construction Stages. --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_Validation_Cons</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting  Dt. of Booking Picklist Value of Is to be Paid Day/Months Value cannot be left blank. --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_Validation_DayVa</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting Construction Stage Picklist  Value,Day/Months Value Cannot be left  blank. --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_Validation_DayVal</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting Construction Stage Pick Value,You cannn&apos;t enter in On date. --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_Validation_Ondate</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting Construction Stage Picklist Value,Project Construction Stages Cannot be left blank. --></errorMessage>
+        <name>Is_To_Be_Paid_PickList_Validation_Projec</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- On date should be less than the Effective from date of the Payment Plan. --></errorMessage>
+        <name>On_Date_Should_not_be_less_than_Effectiv</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting Percentage Picklist value of %/Amount ,You cannot enter in Calculate Installment Amount as(%) --></errorMessage>
+        <name>Select_Percent_Amount_Entering_in_Calcul</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting Percentage Picklist value of %/Amount ,You cannot enter in Total Charge Value Minus field --></errorMessage>
+        <name>Select_Percent_Amount_Entering_in_Minus</name>
+    </validationRules>
+</CustomObjectTranslation>

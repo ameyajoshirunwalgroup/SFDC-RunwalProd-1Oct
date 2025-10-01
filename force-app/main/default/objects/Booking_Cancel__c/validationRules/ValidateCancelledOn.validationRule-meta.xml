@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateCancelledOn</fullName>
+    <active>true</active>
+    <errorConditionFormula>(CancelledOn__c  &lt;  Booking__r.Effective_From__c ) || ( CancelledOn__c  &gt;  Today())</errorConditionFormula>
+    <errorDisplayField>CancelledOn__c</errorDisplayField>
+    <errorMessage>Date must be greater than Booking Date and not greater than Today Date</errorMessage>
+</ValidationRule>

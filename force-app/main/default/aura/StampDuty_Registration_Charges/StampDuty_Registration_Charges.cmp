@@ -1,0 +1,106 @@
+<aura:component controller = "RW_BookingStamp_Registration_Charges" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="consultantList" type="List" />
+    <aura:attribute name="consultantInfo" type="Object" />
+    <aura:attribute name="firstdiv" type="string"/>
+    <aura:attribute name="infocheck" type="string" default="none"/>
+    <aura:attribute name="emailVal" type="String" />
+    <aura:attribute name="emaildiv" type="string" default="none"/>
+    <aura:attribute name="welcomeStatus" type="List"/>
+    
+    
+    <aura:html tag="style">
+    .slds-modal__container {
+     min-width: 60vw;
+    }
+</aura:html>
+     <div class="slds-col slds-box slds-align_absolute-center slds-text-heading_medium" style="background-color :white;border:0px;height:33px;;border-bottom:1px solid #bdb3b3;padding-top:0px;">
+            <b>Stamp Duty and Registration charges</b>
+	</div>
+    
+    	<div style="{!'display:' + v.firstdiv + ';'}">
+   		    <div class="slds-grid slds-wrap">
+            <div class="slds-size_6-of-12" style="padding-left:10px;">
+   			 <div class="slds-col"> 
+           			 <lightning:select name="select" label="Select Registration Consultant" aura:id="consultantId" onchange="{!c.onChangeConsultant}" >
+       					 <aura:iteration items="{!v.consultantList}" var="con">
+        				   <option value="{!con.value}" text="{!con.label}" ></option> 
+       					 </aura:iteration>
+   					 </lightning:select>
+                </div>
+       		 </div>
+        
+        		 <div class="slds-size_6-of-12" style="padding-left:10px;">
+                                <lightning:input name="Stamp charges" type="number" format="currency" aura:id="consultationcharges" label="Consulation Charges" onchange="{!c.CheckLength}" />
+              </div>
+    </div>
+        	<div id="bankinfo" style="{!'display:' + v.infocheck + ';'}">
+                <div class="slds-size_6-of-12 slds-box slds-text-heading_medium" style="background-color :white;border:0px;height:33px;padding-top:15px;font-size:14px">
+           			 <b>Consultant Bank Information</b>
+				</div>
+                <div class="slds-grid slds-wrap">
+       		 <div class="slds-size_6-of-12" style="padding-left:10px;">
+                                <lightning:input name="AccountHolderName" disabled="true" value="{!v.consultantInfo.Account_Name__c}"  label="Account Holder Name" />
+                 				<lightning:input name="RecordID" aura:id="idInfo" disabled="true" value="{!v.consultantInfo.Id}" class="slds-hide"  />
+              </div>
+        
+        	 <div class="slds-size_6-of-12" style="padding-left:10px;">
+                                <lightning:input name="AccountNumber" disabled="true" value="{!v.consultantInfo.Account_No__c}"  label="Account Number" />
+              </div>
+        
+        		<div class="slds-size_6-of-12" style="padding-left:10px;">
+                                <lightning:input name="BankName" disabled="true" value="{!v.consultantInfo.Bank_Name__c}" label="Bank Name" />
+              </div>
+        
+        		<div class="slds-size_6-of-12" style="padding-left:10px;">
+                                <lightning:input name="IFSCCode" disabled="true" value="{!v.consultantInfo.IFSC_Code__c}" label="IFSC Code" />
+              </div>
+        
+        		<div class="slds-size_6-of-12" style="padding-left:10px;">
+                                <lightning:input name="BranchCode" disabled="true" value="{!v.consultantInfo.Branch__c}" label="Branch Code" />
+              </div>
+				
+                </div>          
+                    <div class="slds-align_absolute-center" style="padding-top:10px;">
+                <lightning:button  class="slds-button slds-button_brand" variant="brand" label="Save" onclick="{!c.saveCharges}"/>
+  				  </div>
+                
+    </div>
+        </div>         
+               
+                
+                
+             <div style="{!'display:' + v.emaildiv + ';'}">
+                 
+                <div class="slds-size_6-of-12 slds-box slds-text-heading_medium" style="background-color :white;border:0px;height:33px;padding-top:15px;font-size:14px">
+           			 <b>Email Content</b>
+				</div>   
+                 
+                 <div class="slds-align_absolute-center" style="padding-bottom:10px;">
+         			   <lightning:button  class="slds-button slds-button_brand" variant="brand" label="Send Email" onclick="{!c.customerEmail}"/>
+				</div>
+                    
+                <lightning:inputRichText value="{!v.emailVal}" placeholder="Type something interesting"/>
+               
+                 <div class="slds-align_absolute-center" style="padding-top:10px;">
+         			   <lightning:button  class="slds-button slds-button_brand" variant="brand" label="Send Email" onclick="{!c.customerEmail}"/>
+				</div>
+                 
+                </div>
+                
+                
+                
+				<!--<div class="slds-size_6-of-12 slds-box slds-text-heading_medium" style="background-color :white;border:0px;height:33px;padding-top:15px;font-size:14px">
+           			 <b>Formatted Email Content</b>
+				</div> 
+                <div aura:id="output" class="slds-box editor slds-text-longform">
+       			 <lightning:formattedRichText value="{!v.emailVal}" />
+   				</div> -->
+                
+        
+     
+    
+    <lightning:spinner aura:id="mySpinner" class="slds-hide" />
+    
+</aura:component>

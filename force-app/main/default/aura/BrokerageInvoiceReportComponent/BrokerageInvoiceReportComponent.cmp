@@ -1,0 +1,259 @@
+<aura:component controller="BrokerageInvoiceReportController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	
+    <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: Show !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 80% !important;
+        max-width: 80% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+     
+    </aura:html>
+    
+    
+    
+    
+    <aura:attribute name="aopCpDetails" type="Object[]"/>
+    <aura:attribute name="otherCpDetails" type="Object[]"/>
+    <aura:attribute name="startDate" type="Date"/>
+    <aura:attribute name="endDate" type="Date"/>
+    <aura:attribute name="schemeName" type="Id"/>
+    <aura:attribute name="broker" type="Id"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    
+    <div class="slds-modal__content">
+        <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                Brokerage Invoice Report 
+            </h3>
+            <div class="slds-size_3-of-12" style="padding-left:10px;">
+                <lightning:recordEditForm aura:id="unit" objectApiName="Brokerage_Summary__c">
+                    <b><lightning:inputField aura:id="schemeName" fieldName="Brokerage_Scheme__c" value="{!v.schemeName}" onchange="{!c.showData}"/></b>
+                </lightning:recordEditForm>
+            </div>
+            <div class="slds-size_3-of-12" style="padding-left:10px;">
+                <lightning:recordEditForm aura:id="unit" objectApiName="Brokerage_Summary__c">
+                    <b><lightning:inputField aura:id="broker" fieldName="Channel_Partner__c" value="{!v.broker}" onchange="{!c.showData}"/></b>
+                </lightning:recordEditForm>
+            </div><br/>
+            <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b>Start Date</b><lightning:input type="date" aura:Id="startDate" value="{!v.startDate}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b>End Date</b><lightning:input type="date" aura:Id="endDate"  value="{!v.endDate}" />
+                </lightning:layoutItem>-->
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<lightning:button variant="brand" label="Show Data" title="Brand action" onclick="{!c.showData}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<lightning:button variant="brand" label="Generate PDF" title="Brand action" onclick="{!c.generatePdf}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+            <br/><br/>
+            
+            
+            
+            <div style="font-size:12px;">
+            <aura:iteration items="{!v.aopCpDetails}" var="mp" indexVar="i">
+                <aura:if isTrue="{!mp.aopCpCount > 0}">
+                <aura:if isTrue="{!i == 0}">
+                
+                </aura:if>
+                <p>
+                    <b>Sir,<br/>
+                    M/S {!mp.aopcpName} has sold over {!mp.aopCpCount} units during the quarter <lightning:formattedDateTime value="{!mp.startDate}" year="numeric" month="short" /> to <lightning:formattedDateTime value="{!mp.endDate}" year="numeric" month="short" /> entitling it to {!mp.aopCpTotalPercent} % brokerage approved as per ladder scheme {!mp.schemeName} (AOP CP)</b>
+                </p><br/>
+            	<table>
+                <tr>
+                    <td colspan="25" style="word-break:word;border: 1px solid #666;text-align:center;"><b>BROKERAGE BILL - <lightning:formattedDateTime value="{!mp.startDate}" year="numeric" month="short" /> to <lightning:formattedDateTime value="{!mp.endDate}" year="numeric" month="short" /></b></td>
+                </tr>
+                <tr>
+                    <td colspan="11" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Unit Details</b></td>
+                    <td colspan="4" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Base Brokerage Invoice</b></td>
+                    <td colspan="8" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Ladder Brokerage Invoice</b></td>
+                    <td colspan="2" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Brokerage</b></td>
+                </tr>
+                <tr>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Sr.No.</b></td>
+                    	<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Company Code</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Unit Desc.</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Customer Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Channel Partner</b></td>
+                    	<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Booking</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Booking Date</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Received %</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Registration status</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Agreement Value</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Agreement Value for Brokerage</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>1% invoice (If Eligible)</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>1% brokerage Amt (If Eligible)</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Base)</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Base Brokerage Amt</b></td>
+                    	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-1)</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt</b></td>
+                    	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-2) (If Eligible)</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt (If Eligible)</b></td>
+                    	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-3) (If Eligible)</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt (If Eligible)</b></td>
+                    	<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-4) (If Eligible)</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt (If Eligible)</b></td>
+                    	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Brokerage %</b></td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Brokerage Amt</b></td>
+                    </tr>
+                
+                <aura:iteration items="{!mp.aopCpdetailist}" var="det" indexVar="i">
+                    <tr>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!i+1}</td>
+                        	<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.companyCode}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.unitName}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.customerName}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.channelPartner}</td>
+                        	<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.bookingName}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.bookingDate}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.receivedPercent}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.regStatus}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.agreVal}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.agreValBrk}</td>	
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.onePerInvoice}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.onePerBrkAmt}</td>
+                        	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.onePerInvoiceStatus}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.baseBrkerage}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.baseBrkerageAmt}</td>
+                        	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.baseBrkerageStatus}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad1Brokerage}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad1BrokerageAmt}</td>
+                        	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad1BrokerageStatus}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad2Brokerage}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad2BrokerageAmt}</td>
+                        	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad2BrokerageStatus}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad3Brokerage}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad3BrokerageAmt}</td>
+                        	<!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad3BrokerageStatus}</td>-->
+                        	<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad4Brokerage}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad4BrokerageAmt}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.totalBrokerage}</td>
+                            <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.totalBrokerageAmt}</td>
+                        </tr>
+                    
+                </aura:iteration>
+            </table>
+                    </aura:if>
+            </aura:iteration>
+                </div>
+            <br/><br/>
+            
+            
+            <aura:iteration items="{!v.otherCpDetails}" var="mp" indexVar="i">
+                <aura:if isTrue="{!mp.otherCpCount > 0}">
+                <aura:if isTrue="{!i == 0}">
+                
+                </aura:if>
+                <h2>
+                    <b>Sir,<br/>
+                    M/S {!mp.othercpName} has sold over {!mp.otherCpCount} units during the quarter <lightning:formattedDateTime value="{!mp.startDate}" year="numeric" month="short" /> to <lightning:formattedDateTime value="{!mp.endDate}" year="numeric" month="short" /> entitling it to {!mp.otherCpTotalPercent} % brokerage approved as per ladder scheme {!mp.schemeName} (Normal CP)</b>
+                </h2><br/>
+            	<table>
+                <tr>
+                    <td colspan="23" style="word-break:word;border: 1px solid #666;text-align:center;"><b>BROKERAGE BILL - <lightning:formattedDateTime value="{!mp.startDate}" year="numeric" month="short" /> to <lightning:formattedDateTime value="{!mp.endDate}" year="numeric" month="short" /></b></td>
+                </tr>
+                <tr>
+                    <td colspan="11" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Unit Details</b></td>
+                    <td colspan="2" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Base Brokerage Invoice</b></td>
+                    <td colspan="8" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Ladder Brokerage Invoice</b></td>
+                    <td colspan="2" style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Brokerage</b></td>
+                </tr>
+                <tr>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Sr.No.</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Company Code</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Unit Desc.</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Customer Name</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Channel Partner</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Booking</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Booking Date</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Received %</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Registration status</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Agreement Value</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Agreement Value for Brokerage</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Base)</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Base Brokerage Amt</b></td>
+                    <!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-1)</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt</b></td>
+                    <!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-2) (If Eligible)</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt (If Eligible)</b></td>
+                    <!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-3) (If Eligible)</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt (If Eligible)</b></td>
+                    <!--<td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Payment Status</b></td>-->
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Brokerage % (Ladder-4) (If Eligible)</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Ladder Brokerage Amt (If Eligible)</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Brokerage %</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Total Brokerage Amt</b></td>
+                </tr>
+                
+                <aura:iteration items="{!mp.otherCpdetailist}" var="det" indexVar="i">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!i+1} </td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.companyCode}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.unitName}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.customerName}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.channelPartner}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.bookingName}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.bookingDate}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.receivedPercent}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.regStatus}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.agreVal}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.agreValBrk}</td>	
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.baseBrkerage}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.baseBrkerageAmt}</td>
+                        <!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.baseBrkerageStatus}</td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad1Brokerage}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad1BrokerageAmt}</td>
+                        <!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad1BrokerageStatus}</td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad2Brokerage}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad2BrokerageAmt}</td>
+                        <!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad2BrokerageStatus}</td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad3Brokerage}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad3BrokerageAmt}</td>
+                        <!--<td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad3BrokerageStatus}</td>-->
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad4Brokerage}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.lad4BrokerageAmt}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.totalBrokerage}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!det.totalBrokerageAmt}</td>
+                    </tr>
+                </aura:iteration>
+            </table>
+                <br/><br/>
+                    </aura:if>
+            </aura:iteration>
+        </form>
+    </div>
+</aura:component>

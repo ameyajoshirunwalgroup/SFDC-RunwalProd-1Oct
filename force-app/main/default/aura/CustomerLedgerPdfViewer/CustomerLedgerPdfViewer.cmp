@@ -1,0 +1,17 @@
+<aura:component access="GLOBAL" extensible="false" controller="PDFController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+     <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+	<aura:attribute access="GLOBAL" name="pdfData" type="String" description="PDF data in base64 encoded format"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:attribute name="CustomerNumber" type="String" default = "SAP_Customer_Number__c"/> 
+    <aura:attribute name="CompanyCode" type="String" default = "RW_SAP_Company_Code__c"/>
+    <aura:attribute name="InterestLedger" type="Booking__c[]"/>
+  
+	<iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" ></iframe>
+
+</aura:component>

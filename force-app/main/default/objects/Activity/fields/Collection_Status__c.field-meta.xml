@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Collection_Status__c</fullName>
+    <label>Collection Status</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Due (default)</fullName>
+                <default>false</default>
+                <label>Due (default)</label>
+            </value>
+            <value>
+                <fullName>Paid with payment details received</fullName>
+                <default>false</default>
+                <label>Paid with payment details received</label>
+            </value>
+            <value>
+                <fullName>Paid with payment details pending</fullName>
+                <default>false</default>
+                <label>Paid with payment details pending</label>
+            </value>
+            <value>
+                <fullName>Partially paid</fullName>
+                <default>false</default>
+                <label>Partially paid</label>
+            </value>
+            <value>
+                <fullName>Promised to pay</fullName>
+                <default>false</default>
+                <label>Promised to pay</label>
+            </value>
+            <value>
+                <fullName>Unreachable</fullName>
+                <default>false</default>
+                <label>Unreachable</label>
+            </value>
+            <value>
+                <fullName>Non-collectible</fullName>
+                <default>false</default>
+                <label>Non-collectible</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

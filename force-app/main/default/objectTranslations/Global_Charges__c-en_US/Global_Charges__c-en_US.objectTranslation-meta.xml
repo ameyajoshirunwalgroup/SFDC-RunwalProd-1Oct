@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Global Charges</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Global Charges</value>
+    </caseValues>
+    <layouts>
+        <layout>Global Charges Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Global Charge Code must be three digit. --></errorMessage>
+        <name>Length_Code_Count</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting CLC  Pick Value,You cannn&apos;t enter in ACNO --></errorMessage>
+        <name>Posting_To_Fa_System_ACNO</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting ACNO Pick Value,You cannn&apos;t enter in  +PC --></errorMessage>
+        <name>Posting_To_Fa_System_CLC</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- After Selecting ACNO Pick Value,You cannn&apos;t enter in +ACH --></errorMessage>
+        <name>Posting_To_Fa_System_CLC_ACNO</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You Cannot Select Tax Charge for Tax --></errorMessage>
+        <name>Tax_Charge_must_be_value</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You cannn&apos;t enter in ACNO without selecting Posting to FA System Pick Value. --></errorMessage>
+        <name>Without_Selecting_Entering_in_ACNO</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You cannn&apos;t enter in ACH without selecting Posting to FA System Pick Value. --></errorMessage>
+        <name>Without_Selecting_Entering_in_CLC</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You cannn&apos;t enter in PC without selecting Posting to FA System Pick Value. --></errorMessage>
+        <name>Without_Selecting_Entering_in_PC</name>
+    </validationRules>
+</CustomObjectTranslation>

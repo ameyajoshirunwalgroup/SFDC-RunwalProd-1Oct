@@ -1,0 +1,296 @@
+<aura:component controller="CustomerLedgerController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">
+    <ltng:require scripts="{!$Resource.BillDesk}"
+     />
+    <aura:attribute name="BookingData" type="Object" />
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+     <aura:attribute name="hasreadTC" type="boolean" default="false"/>
+    <lightning:navigation aura:id="navService"/>
+     <aura:attribute name="pageReference" type="Object"/>
+    <aura:attribute name="msg" type="String"/>
+    <!--  <aura:attribute name="loaded" type="Boolean" default="false" />-->
+     <aura:attribute name="condition" type="Boolean"  />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+
+       
+    <div style="padding-left:5px;" class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--12-of-12 slds-text-heading_medium">
+                <label><b>Customer Ledger</b></label>
+    </div>
+    <!--<br/>
+    <br/>-->
+    <div class="slds-grid slds-wrap slds-gutters"> 
+        <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Total Demand Raised</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.TotalDemandRaised}" />
+                                </div>
+                            </div>
+        </div>
+        
+        <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                    <span><b>Total Amount Recieved</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.TotalAmountRecieved}" />
+                                </div>
+                            </div>
+        </div>
+        
+		<div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Total Discount</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.TotalDiscount}" />
+                                </div>
+                            </div>
+        </div>       
+         
+       <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Total Demand Outstanding</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.TotalDemandOutstanding}" />
+                                </div>
+                            </div>
+        </div> 
+       <aura:if isTrue="{!v.BookingData.SeperatePay}">
+         <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Total Demand Amount</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <!--<lightning:input type="number" formatter="currency" value="{!v.BookingData.ProjectSpecificAmount}" step='1' />--><!-- Commented by coServe 27-12-2023 -->
+                                    <lightning:input type="number" formatter="currency" value="{!v.BookingData.TotalDemandOutstanding}" step='1' /><!-- Added by coServe 27-12-2023 -->
+                                   
+                                    <lightning:button variant="neutral"
+                                          label="Pay"
+                                          title="Pay"
+                                          name="SinglePayment"
+                                          onclick="{! c.payProjectSpecificAmount }"/>
+                                 
+                                </div>
+                            </div>
+          
+        </div> 
+       
+        <aura:set attribute="else">
+        <aura:if isTrue="{!v.BookingData.Flag}">
+        <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Total Demand Amount</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <lightning:input type="number" name="number" formatter="currency" step='1' value="{!v.BookingData.TotalAmountPaid}" />
+                              		
+                                    <lightning:button variant="neutral"
+                                          label="Pay"
+                                          title="Pay"
+                                          onclick="{! c.payAmount }"/>
+                                 
+                                </div>
+                            </div>
+          
+        </div> 
+        <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Total GST Amount</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+            <!--changes done by Srinivas on 15/07/21-->
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                    <lightning:input type="number" formatter="currency" value="{!v.BookingData.TotalGSTPaid}" step='1'/>
+                                
+                                    <lightning:button variant="neutral" 
+                                          label="Pay"
+                                          title="Pay"
+                                          onclick="{! c.payGstAmount }"/>
+                                
+                                </div>
+                            </div>
+        </div> 
+        </aura:if>
+      </aura:set>
+            </aura:if>
+        
+       
+        
+    </div>  
+    <!--<br/>
+    <br/>-->
+    
+     <div class="slds-clearfix">
+        <div class="slds-grid slds-wrap">
+          
+            <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12">
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Overall TDS Payable</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                   <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.OverallTDSPayable}" />
+                                </div>
+                            </div>
+                
+                
+                
+            </div>
+            <div class="slds-p-top_small"></div>
+            <div class="slds-m-right_xx-small"></div>
+            <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12">
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Overall TDS Paid</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small slds-p-top_none">
+                                   <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.OverallTDSPaid}" />
+                                </div>
+                            </div>
+                
+                
+                
+            </div>
+            <div class="slds-p-top_small"></div>
+            <div class="slds-m-right_xx-small"></div>
+            <div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12">
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Net TDS Outstanding</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                               <div class="slds-p-around_small slds-p-top_none">
+                                   <lightning:input type="number" readonly="true" formatter="currency" value="{!v.BookingData.NetTDSOutstanding}" />
+                                </div>
+                            </div>
+                
+                
+               
+                
+            </div>
+            
+          
+        	<aura:if isTrue="{! or(v.BookingData.SeperatePay,v.BookingData.Flag)}">
+            <div class="slds-p-top_small"></div>
+            <div class="slds-m-right_xx-small"></div>
+     		<div class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--5-of-12" >
+            
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span><b>Click on <a onclick="{!c.redirectToTCPage}"><u>Terms &amp; Conditions</u></a> of Bill Desk Payment to read.
+                                            <br/> Note: Clicking and Reading Terms and Conditions is mandatory.</b></span>                        
+                                    </div>
+                                </div>
+                            </div>
+            
+                                     
+                                            
+           <!-- <lightning:button variant="brand" class="sizeButton slds-float_right textInput " label="Customer Ledger Download" title="Customer Ledger Download" onclick="{! c.downloadfile }" name="{!v.BookingData.customerNumber}"/> -->
+          <!--  <lightning:button variant="brand" class="sizeButton textInput" label="Report Missing Receipt" title="Report Missing Receipt" onclick="{! c.downloadfile }" name="{}"/> -->
+            
+        </div>
+            </aura:if>
+         </div>
+    </div>
+     
+    
+    <aura:if isTrue="{!v.isOpen}">
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                   
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Customer Ledger in PDF</h2>
+                    </header>
+                    
+                    <iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" ></iframe>
+                    
+                    
+                   
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                       
+                    </footer>
+                </div>
+            </section>
+    </aura:if>
+    
+    
+</aura:component>

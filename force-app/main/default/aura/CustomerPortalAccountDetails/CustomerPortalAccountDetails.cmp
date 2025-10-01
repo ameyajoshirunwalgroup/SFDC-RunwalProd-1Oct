@@ -1,0 +1,194 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="sanctionLettersAvailable" type="Boolean" />
+    <lightning:navigation aura:id="navService"/>
+    <aura:handler event="c:CustomerPortalSessionEvent" action="{!c.handleApplicationEventFired}"/>
+    <aura:attribute name="backgroundImageURL" type="String" default=""/>  
+    
+    <div style="{!'position: relative;  background:' + v.backgroundColor + ' url(' + v.backgroundImageURL +') repeat-y;background-position: center;background-size: cover;'}"> 
+         <div style="{!$Browser.isPhone ? 'padding:10px;':'padding:50px;'}">
+            <div style="background-color:white;">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-box slds-box_small">
+                            <div class="slds-page-header">
+                                <h1>Documents and Forms</h1>
+                            </div>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">
+                                    <div class="custom-box2">
+                                        <div class="slds-p-around_large">
+                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>-->
+                                                
+                                                <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!v.RunwalHomeWrapList}" label="KYC Details" title="KYC Details" onclick="{! c.openKYCDetails }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">
+                                    <div class="custom-box2">
+                                        <div class="slds-p-around_large">
+                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>-->
+                                                
+                                                <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!v.RunwalHomeWrapList}" label="Home Loan/Sanction Letters" title="Home Loan/Sanction Letters" onclick="{! c.openSanctionLetters }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">
+                                    <div class="custom-box2">
+                                        <div class="slds-p-around_large">
+                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>-->
+                                                
+                                                <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!v.RunwalHomeWrapList}" label="TDS Certificates" title="TDS Certificates" onclick="{! c.openTDSDetails }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">
+                                    <div class="custom-box2">
+                                        <div class="slds-p-around_large">
+                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>-->
+                                                
+                                                <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!v.RunwalHomeWrapList}" label="Name Confirmation Form" title="NCF Form" onclick="{! c.openNCFForm }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-box slds-box_small">
+                            <div class="slds-page-header">
+                                <h1>Applicant Profile</h1>
+                            </div>
+                            <!--lightning:layout-->
+                            <div class="slds-grid slds-wrap">
+                                <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                                    <!--lightning:layoutItem size="6" padding="around-small"-->
+                                    <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">
+                                        <div class="custom-box2">
+                                            <div class="slds-p-around_large">
+                                                <div class="slds-grid slds-gutters slds-wrap" >
+                                                    <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>-->
+                                                    
+                                                    <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!bookvar.BookingId}" label="{!'For Unit '+ bookvar.unitNumber}" title="For Unit" onclick="{! c.openApplicantDetails }" />
+                                                </div>
+                                            </div>
+                                        </div></div>
+                                    <!--/lightning:layoutItem-->
+                                </aura:iteration>
+                            </div>
+                            
+                            
+                            <!--<lightning:layoutItem size="6" padding="around-small">
+       <div class="custom-box">
+        <div class="slds-p-around_medium">
+         <div class="slds-grid slds-gutters slds-wrap" >
+          <button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>
+         </div>
+        </div>
+       </div>
+      </lightning:layoutItem>
+      <lightning:layoutItem size="6" padding="around-small">
+       <div class="custom-box">
+        <div class="slds-p-around_medium">
+         <div class="slds-grid slds-gutters slds-wrap" >
+          <button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit YYY</button>
+         </div>
+        </div>
+       </div>
+      </lightning:layoutItem> -->
+                            <!--/lightning:layout-->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-box slds-box_small">
+                            <div class="slds-page-header">
+                                <h1> Referral Section</h1>
+                            </div>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">  
+                                    
+                                    <div class="custom-box3">
+                                        <div class="slds-p-around_medium">
+                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">Referral Status</button>-->
+                                                <!-- <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!bookvar.BookingId}" label="{!'For Unit '+ bookvar.unitNumber}" title="For Unit" onclick="{! c.openInterestLedger }" />-->
+                                                <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="refStatus" label="Referral Status" title="Referral Status" onclick="{! c.openreferralScreen }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 "> 
+                                    <div class="custom-box3">
+                                        <div class="slds-p-around_medium">
+                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">Submit a Referral</button>-->
+                                                <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="subRef" label="Submit a Referral" title="Submit a Referral" onclick="{! c.openreferralScreen }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-box slds-box_small">
+                            <div class="slds-page-header">
+                                <h1>Interest Ledger</h1>
+                            </div>
+                            <div class="slds-grid slds-wrap">
+                                
+                                <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                                    <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 ">
+                                        
+                                        <div class="custom-box2">
+                                            <div class="slds-p-around_medium">
+                                                <div class="slds-grid slds-gutters slds-wrap" >
+                                                    <!--<button class="slds-button slds-button_brand slds-size_small textInput sizeButton">For Unit XXX</button>-->
+                                                    <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="{!bookvar.BookingId}" label="{!'For Unit '+ bookvar.unitNumber}" title="For Unit" onclick="{! c.openInterestLedger }" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </aura:iteration>
+                                
+                                
+                                <!--<lightning:layoutItem size="6" padding="around-small">
+       <div class="custom-box">
+        <div class="slds-p-around_medium">
+         <div class="slds-grid slds-gutters slds-wrap" >
+          <button class="slds-button slds-button_brand slds-size_small textInput sizeButton"> For Unit XXX</button>
+         </div>
+        </div>
+       </div>
+      </lightning:layoutItem>
+      <lightning:layoutItem size="6" padding="around-small">
+       <div class="custom-box">
+        <div class="slds-p-around_medium">
+         <div class="slds-grid slds-gutters slds-wrap" >
+          <button class="slds-button slds-button_brand slds-size_small textInput sizeButton"> For Unit YYY</button>
+         </div>
+        </div>
+       </div>
+      </lightning:layoutItem> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

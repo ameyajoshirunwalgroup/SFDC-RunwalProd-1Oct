@@ -1,0 +1,385 @@
+<aura:component controller="WelcomeCallRemarksCls" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,lightning:isUrlAddressable" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="rmkObj"  type="Map" default="{str1:null}"/>
+    <aura:attribute name="rmkList" type="List" />
+    <aura:attribute name="rmks" type="List" />
+    <aura:attribute name="remarkListData" type="List"></aura:attribute>
+    
+    <h1 style="text-align:center; font-weight: bold;">Welcome Call Remarks</h1>
+    <aura:iteration items="{!v.rmkList}" var="rem">
+        
+        
+        <lightning:card title="">
+            <aura:set attribute="footer">
+                <p style="text-align:right; font-weight: bold;">
+                    <aura:if isTrue="{!and(rem.remarks != null,rem.remarks != undefined)}">
+                        CreatedDate:
+                        <lightning:formattedDateTime value="{!rem.CreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                                     minute="2-digit"  hour12="true" style="text-align:right; font-weight: bold;" />  
+                    </aura:if>
+                </p>
+            </aura:set>
+            <p style="text-align:left; font-weight: bold;">
+                CreatedBy: {!rem.CreatedByName}
+            </p>
+            <aura:if isTrue="{!and(rem.remarks != null,rem.remarks != undefined)}">
+                <table class="slds-table slds-table_bordered slds-table--header-fixed_container">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col"> <div class="slds-truncate" title="Project">Field Name </div></th>
+                            <th scope="col"> <div class="slds-truncate" title="Project">Field Value</div></th>
+                            <th scope="col"> <div class="slds-truncate" title="Project">Remarks </div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <aura:if isTrue="{!and(rem.remarks.ApplicantName1 != null,rem.remarks.ApplicantName1 != undefined)}">
+                            <tr>
+                                <td>Applicant1 Name:</td>
+                                <td>{!rem.remarks.ApplicantName1}</td>
+                                <td>{!rem.remarks.remarkApplicantName1}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.EmailAddresses1 != null,rem.remarks.EmailAddresses1 != undefined)}">
+                            <tr>
+                                <td>Applicant1 Email Address:</td>
+                                <td>{!rem.remarks.EmailAddresses1}</td>
+                                <td>{!rem.remarks.remarkEmailAddresses1}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.MobileNo1 != null,rem.remarks.MobileNo1 != undefined)}">
+                            <tr>
+                                <td>Applicant1 Mobile No.</td>
+                                <td>{!rem.remarks.MobileNo1}</td>
+                                <td>{!rem.remarks.remarkMobileNo1}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PermanentAddress1 != null,rem.remarks.PermanentAddress1 != undefined)}">
+                            <tr>
+                                <td>Applicant1 Permanent Address:</td>
+                                <td>{!rem.remarks.PermanentAddress1}</td>
+                                <td>{!rem.remarks.remarkPermanentAddress1}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PrimaryPANDetails != null,rem.remarks.PrimaryPANDetails != undefined)}">
+                            <tr>
+                                <td>PANDetails:</td>
+                                <td>{!rem.remarks.PrimaryPANDetails}</td>
+                                <td>{!rem.remarks.remarkPrimaryPANDetails}</td>
+                            </tr>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(rem.remarks.ApplicantName2 != null,rem.remarks.ApplicantName2 != undefined)}">
+                            <tr>
+                                <td>Applicant2 Name:</td>
+                                <td>{!rem.remarks.ApplicantName2}</td>
+                                <td>{!rem.remarks.remarkApplicantName2}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.EmailAddresses2 != null,rem.remarks.EmailAddresses2 != undefined)}">
+                            <tr>
+                                <td>Applicant2 Email Address:</td>
+                                <td>{!rem.remarks.EmailAddresses2}</td>
+                                <td>{!rem.remarks.remarkEmailAddresses2}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.MobileNo2 != null,rem.remarks.MobileNo2 != undefined)}">
+                            <tr>
+                                <td>Applicant2 Mobile No.</td>
+                                <td>{!rem.remarks.MobileNo2}</td>
+                                <td>{!rem.remarks.remarkMobileNo2}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PermanentAddress2 != null,rem.remarks.PermanentAddress2 != undefined)}">
+                            <tr>
+                                <td>Applicant2 Permanent Address:</td>
+                                <td>{!rem.remarks.PermanentAddress2}</td>
+                                <td>{!rem.remarks.remarkPermanentAddress2}</td>
+                            </tr>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(rem.remarks.ApplicantName3 != null,rem.remarks.ApplicantName3 != undefined)}">
+                            <tr>
+                                <td>Applicant3 Name:</td>
+                                <td>{!rem.remarks.ApplicantName3}</td>
+                                <td>{!rem.remarks.remarkApplicantName3}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.EmailAddresses3 != null,rem.remarks.EmailAddresses3 != undefined)}">
+                            <tr>
+                                <td>Applicant3 Email Address:</td>
+                                <td>{!rem.remarks.EmailAddresses3}</td>
+                                <td>{!rem.remarks.remarkEmailAddresses3}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.MobileNo3 != null,rem.remarks.MobileNo3 != undefined)}">
+                            <tr>
+                                <td>Applicant3 Mobile No.</td>
+                                <td>{!rem.remarks.MobileNo3}</td>
+                                <td>{!rem.remarks.remarkMobileNo3}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PermanentAddress3 != null,rem.remarks.PermanentAddress3 != undefined)}">
+                            <tr>
+                                <td>Applicant3 Permanent Address:</td>
+                                <td>{!rem.remarks.PermanentAddress3}</td>
+                                <td>{!rem.remarks.remarkPermanentAddress3}</td>
+                            </tr>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(rem.remarks.ApplicantName4 != null,rem.remarks.ApplicantName4 != undefined)}">
+                            <tr>
+                                <td>Applicant4 Name:</td>
+                                <td>{!rem.remarks.ApplicantName4}</td>
+                                <td>{!rem.remarks.remarkApplicantName4}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.EmailAddresses4 != null,rem.remarks.EmailAddresses4 != undefined)}">
+                            <tr>
+                                <td>Applicant4 Email Address:</td>
+                                <td>{!rem.remarks.EmailAddresses4}</td>
+                                <td>{!rem.remarks.remarkEmailAddresses4}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.MobileNo4 != null,rem.remarks.MobileNo4 != undefined)}">
+                            <tr>
+                                <td>Applicant4 Mobile No.</td>
+                                <td>{!rem.remarks.MobileNo4}</td>
+                                <td>{!rem.remarks.remarkMobileNo4}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PermanentAddress4 != null,rem.remarks.PermanentAddress4 != undefined)}">
+                            <tr>
+                                <td>Applicant4 Permanent Address:</td>
+                                <td>{!rem.remarks.PermanentAddress1}</td>
+                                <td>{!rem.remarks.remarkPermanentAddress1}</td>
+                            </tr>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(rem.remarks.ApplicantName5 != null,rem.remarks.ApplicantName5 != undefined)}">
+                            <tr>
+                                <td>Applicant5 Name:</td>
+                                <td>{!rem.remarks.ApplicantName5}</td>
+                                <td>{!rem.remarks.remarkApplicantName5}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.EmailAddresses5 != null,rem.remarks.EmailAddresses5 != undefined)}">
+                            <tr>
+                                <td>Applicant5 Email Address:</td>
+                                <td>{!rem.remarks.EmailAddresses5}</td>
+                                <td>{!rem.remarks.remarkEmailAddresses5}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.MobileNo5 != null,rem.remarks.MobileNo5 != undefined)}">
+                            <tr>
+                                <td>Applicant5 Mobile No.</td>
+                                <td>{!rem.remarks.MobileNo5}</td>
+                                <td>{!rem.remarks.remarkMobileNo5}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PermanentAddress5 != null,rem.remarks.PermanentAddress5 != undefined)}">
+                            <tr>
+                                <td>Applicant5 Permanent Address:</td>
+                                <td>{!rem.remarks.PermanentAddress5}</td>
+                                <td>{!rem.remarks.remarkPermanentAddress5}</td>
+                            </tr>
+                        </aura:if>
+                        
+                        
+                        <aura:if isTrue="{!and(rem.remarks.Project != null,rem.remarks.Project != undefined)}">
+                            <tr>
+                                <td>Project:</td>
+                                <td>{!rem.remarks.Project}</td>
+                                <td>{!rem.remarks.remarkProject}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.FlatTypology != null,rem.remarks.FlatTypology != undefined)}">
+                            <tr>
+                                <td>Flat Typology:</td>
+                                <td>{!rem.remarks.FlatTypology}</td>
+                                <td>{!rem.remarks.remarkFlatTypology}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.Tower != null,rem.remarks.Tower != undefined)}">
+                            <tr>
+                                <td>Tower:</td>
+                                <td>{!rem.remarks.Tower}</td>
+                                <td>{!rem.remarks.remarkTower}</td>
+                            </tr>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(rem.remarks.Floor != null,rem.remarks.Floor != undefined)}">
+                            <tr>
+                                <td>Floor:</td>
+                                <td>{!rem.remarks.Floor}</td>
+                                <td>{!rem.remarks.remarkFloor}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.FlatNo != null,rem.remarks.FlatNo != undefined)}">
+                            <tr>
+                                <td>Flat No:</td>
+                                <td>{!rem.remarks.FlatNo}</td>
+                                <td>{!rem.remarks.remarkFlatNo}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.CarpetArea != null,rem.remarks.CarpetArea != undefined)}">
+                            <tr>
+                                <td>Carpet Area (in Sq.ft):</td>
+                                <td>{!rem.remarks.CarpetArea}</td>
+                                <td>{!rem.remarks.remarkCarpetArea}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.CarParkings != null,rem.remarks.CarParkings != undefined)}">
+                            <tr>
+                                <td>No of Car Parkings:</td>
+                                <td>{!rem.remarks.CarParkings}</td>
+                                <td>{!rem.remarks.remarkCarParkings}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.AgreementValue != null,rem.remarks.AgreementValue != undefined)}">
+                            <tr>
+                                <td>Agreement Value:</td>
+                                <td>{!rem.remarks.AgreementValue}</td>
+                                <td>{!rem.remarks.remarkAgreementValue}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.SourceOfBooking != null,rem.remarks.SourceOfBooking != undefined)}">
+                            <tr>
+                                <td>Source Of Booking:</td>
+                                <td>{!rem.remarks.SourceOfBooking}</td>
+                                <td>{!rem.remarks.remarkSourceOfBooking}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PaymentPlanType != null,rem.remarks.PaymentPlanType != undefined)}">
+                            <tr>
+                                <td>Payment Plan Type:</td>
+                                <td>{!rem.remarks.PaymentPlanType}</td>
+                                <td>{!rem.remarks.remarkPaymentPlanType}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.PaymentPlanMilestonesDetails != null,rem.remarks.PaymentPlanMilestonesDetails != undefined)}">
+                            <tr>
+                                <td> Payment Plan/Milestones Details:</td>
+                                <td>{!rem.remarks.PaymentPlanMilestonesDetails}</td>
+                                <td>{!rem.remarks.remarkPaymentPlanMilestonesDetails}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.ViewCostSheet != null,rem.remarks.ViewCostSheet != undefined)}">
+                            <tr>
+                                <td>View Cost Sheet:</td>
+                                <td>{!rem.remarks.ViewCostSheet}</td>
+                                <td>{!rem.remarks.remarkViewCostSheet}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.ReceiptListRemarks != null,rem.remarks.ReceiptListRemarks != undefined)}">
+                            <tr>
+                                <td>Payment Details:</td>
+                                <td>{!rem.remarks.ReceiptListRemarks}</td>
+                                <td>{!rem.remarks.remarkReceiptListRemarks}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <th><b>Name</b></th>
+                                            <th><b>Payment Mode</b></th>
+                                            <th><b>Amount</b></th>
+                                            <th><b>Date</b></th>
+                                            <th><b>Bank Name</b></th>
+                                            <th><b>Instrument Name</b></th>
+                                        </tr>
+                            	<aura:iteration items="{!v.remarkListData}" var="eachRemark">
+                                    <tr>
+                                        <td style="white-space: pre-wrap;">{!eachRemark.Name}</td>
+                                		<td style="white-space: pre-wrap;">{!eachRemark.Mode__c}</td>
+                                        <td style="white-space: pre-wrap;">{!eachRemark.Total_Amount__c}</td>
+                                        <td style="white-space: pre-wrap;">{!eachRemark.Cheque_DD_Date__c}</td>
+                                        <td style="white-space: pre-wrap;">{!eachRemark.DraweeBank__c}</td>
+                                        <td style="white-space: pre-wrap;">{!eachRemark.Cheque_DD__c}</td>
+                                    </tr>
+                                </aura:iteration>
+                                        </table>
+                                    </td>
+                            </tr>
+                        </aura:if>
+                        <!--<aura:if isTrue="{!and(rem.remarks.Amount != null,rem.remarks.Amount != undefined)}">
+  <tr>
+  <td>Amount:</td>
+  <td>{!rem.remarks.Amount}</td>
+  <td>{!rem.remarks.remarkAmount}</td>
+  </tr>
+  </aura:if>
+  <aura:if isTrue="{!and(rem.remarks.ReceiptType != null,rem.remarks.ReceiptType != undefined)}">
+  <tr>
+  <td>Receipt Type:</td>
+  <td>{!rem.remarks.ReceiptType}</td>
+  <td>{!rem.remarks.remarkReceiptType}</td>
+  </tr>
+  </aura:if>
+  <aura:if isTrue="{!and(rem.remarks.BankName != null,rem.remarks.BankName != undefined)}">
+  <tr>
+  <td>Bank Name:</td>
+  <td>{!rem.remarks.BankName}</td>
+  <td>{!rem.remarks.remarkBankName}</td>
+  </tr>
+  </aura:if>
+  <aura:if isTrue="{!and(rem.remarks.InstrumentName != null,rem.remarks.InstrumentName != undefined)}">
+  <tr>
+  <td>Instrument Name:</td>
+  <td>{!rem.remarks.InstrumentName}</td>
+  <td>{!rem.remarks.remarkInstrumentName}</td>
+  </tr>
+  </aura:if>-->
+                        <aura:if isTrue="{!and(rem.remarks.Modeoffunding != null,rem.remarks.Modeoffunding != undefined)}">
+                            <tr>
+                                <td>Mode of funding:</td>
+                                <td>{!rem.remarks.Modeoffunding}</td>
+                                <td>{!rem.remarks.remarkModeoffunding}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.BankingPreferenceforLoan != null,rem.remarks.BankingPreferenceforLoan != undefined)}">
+                            <tr>
+                                <td>Banking Preference for Loan:</td>
+                                <td>{!rem.remarks.BankingPreferenceforLoan}</td>
+                                <td>{!rem.remarks.remarkBankingPreferenceforLoan}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.RMName != null,rem.remarks.RMName != undefined)}">
+                            <tr>
+                                <td>RM Name:</td>
+                                <td>{!rem.remarks.RMName}</td>
+                                <td>{!rem.remarks.remarkRMName}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.RMcontactNumber != null,rem.remarks.RMcontactNumber != undefined)}">
+                            <tr>
+                                <td>RM contact Number:</td>
+                                <td>{!rem.remarks.RMcontactNumber}</td>
+                                <td>{!rem.remarks.remarkRMcontactNumber}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.RMworkhours != null,rem.remarks.RMworkhours != undefined)}">
+                            <tr>
+                                <td>RM work hours:</td>
+                                <td>{!rem.remarks.RMworkhours}</td>
+                                <td>{!rem.remarks.remarkRMworkhours}</td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!and(rem.remarks.RMemail != null,rem.remarks.RMemail != undefined)}">
+                            <tr>
+                                <td>RM-email:</td>
+                                <td>{!rem.remarks.RMemail}</td>
+                                <td>{!rem.remarks.remarkRMemail}</td>
+                            </tr>
+                        </aura:if>
+                        
+                    </tbody>
+                </table>
+            </aura:if>
+        </lightning:card>
+        
+    </aura:iteration>
+    
+</aura:component>

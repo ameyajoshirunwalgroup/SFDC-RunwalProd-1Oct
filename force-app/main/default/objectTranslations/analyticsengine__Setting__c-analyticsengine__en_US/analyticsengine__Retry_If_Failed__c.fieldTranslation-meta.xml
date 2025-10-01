@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- If the report fails, we can retry. The first retry will be immediate, subsequent retries will be spaced an hour apart. This helps if the report gets a Read Time Out error sometimes. --></help>
+    <label><!-- Retry If Failed --></label>
+    <name>analyticsengine__Retry_If_Failed__c</name>
+    <picklistValues>
+        <masterLabel>No Retry</masterLabel>
+        <translation><!-- No Retry --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Retry Five Times</masterLabel>
+        <translation><!-- Retry Five Times --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Retry Four Times</masterLabel>
+        <translation><!-- Retry Four Times --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Retry Immediately</masterLabel>
+        <translation><!-- Retry Immediately --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Retry Three Times</masterLabel>
+        <translation><!-- Retry Three Times --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Retry Two Times</masterLabel>
+        <translation><!-- Retry Two Times --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

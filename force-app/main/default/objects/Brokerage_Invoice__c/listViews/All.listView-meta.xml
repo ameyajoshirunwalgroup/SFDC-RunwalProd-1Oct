@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Channel_Partner__c</columns>
+    <columns>Project__c</columns>
+    <columns>Brokerage_Lookup__c</columns>
+    <columns>SAP_Document_No__c</columns>
+    <columns>Brokerage_Scheme_Name__c</columns>
+    <columns>Type_of_Client__c</columns>
+    <columns>Status__c</columns>
+    <columns>Approval_Status__c</columns>
+    <columns>Approval_Status_clearing__c</columns>
+    <columns>CP_Invoice_Approver_L5__c</columns>
+    <columns>Invoice_Date__c</columns>
+    <columns>Invoice_Number__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Brokerage_Lookup__c</field>
+        <operation>contains</operation>
+        <value>Additional</value>
+    </filters>
+    <label>All</label>
+</ListView>

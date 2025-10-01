@@ -1,0 +1,66 @@
+<template>
+    <lightning-card if:true={showError}>
+        <div class="slds-m-around_medium" style="height:100%; padding: 40px; border-width:3px; border-style:solid; border-color: #640103;">
+           <div class="slds-text-heading_large slds-align_absolute-center slds-m-bottom_medium">
+            <b>Applicant Details Missing</b>
+        </div>
+            <p class="slds-text-color_error">{errorMessage}</p>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-m-top_medium">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col" class="slds-size_1-of-2">Applicant Name</th>
+                        <th scope="col" class="slds-size_2-of-2">Missing Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={applicantData} for:item="applicant">
+                        <tr key={applicant.applicantName}>
+                           <td><b>{applicant.applicantName}</b></td>
+                            <td>{applicant.missingFields}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+
+    <!-- Main signing screen -->
+    <template if:false={showError}>
+        <template if:false={pageDisabled}>
+            <div class="slds-col"
+                style="height:100%; padding: 40px; border-width:3px; border-style:solid; border-color: #640103;">
+                <p class="slds-align_absolute-center" style="font-size:35px;font-weight:700;color:#640103;">
+                    Welcome To Runwal Aadhar Signing Portal
+                </p>
+                <br/><br/>
+                <div>
+                    <p style="font-size: 18px; text-align:center;">
+                        Welcome! Please follow the steps below to digitally sign your booking application document:
+                    </p><br/>
+                    <ul class="slds-list_dotted slds-m-left_large" style="font-size:14px;">
+                        <li>You will receive an email from our signing partner with a link to review and sign your
+                            application document.</li>
+                        <li>Click on the link in the email. This will take you to a secure document signing page.</li>
+                        <li>Once all applicants have signed, a confirmation message will be shown. You may also receive
+                            a signed copy in your email.</li>
+                    </ul>
+                </div>
+                <br/>
+
+                <!-- Terms and sign button -->
+                <div class="slds-m-around_medium">
+                    <lightning-input type="checkbox" label="I agree to the Terms and Conditions"
+                        onchange={handleTermsCheck}>
+                    </lightning-input>
+
+                    <template if:true={showProceedButton}>
+                        <div class="slds-align_absolute-center slds-m-top_medium">
+                            <lightning-button label="Proceed" variant="brand" onclick={handleTermsSign}>
+                            </lightning-button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

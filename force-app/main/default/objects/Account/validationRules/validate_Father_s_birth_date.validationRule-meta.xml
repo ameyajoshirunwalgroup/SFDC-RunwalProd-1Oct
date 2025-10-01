@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>validate_Father_s_birth_date</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(IF(!ISBLANK(Father_s_birth_date__c),Father_s_birth_date__c&gt;=  TODAY(), FALSE ),
+$Label.Disable_all_validations_from_Account == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Father_s_birth_date__c</errorDisplayField>
+    <errorMessage>Father’s birth date should not be today or greater than today.</errorMessage>
+</ValidationRule>

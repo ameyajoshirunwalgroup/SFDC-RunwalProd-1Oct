@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Completed_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ ISPICKVAL(RW_Registration_Status__c  , &quot;Registration Completed&quot;),
+ ISCHANGED( RW_Registration_Date__c ),
+ Project__r.Name == &apos;7 Mahalaxmi&apos;, /*Added by Vinay 21-05-2025*/
+  $User.LastName != &apos;SAP&apos; /*Added by Vinay 22-05-2025*/
+)</errorConditionFormula>
+    <errorMessage>Registration details can not be changed after Registration Completed</errorMessage>
+</ValidationRule>

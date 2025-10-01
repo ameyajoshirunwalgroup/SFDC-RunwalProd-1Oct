@@ -1,0 +1,101 @@
+<aura:component controller="EOIController" implements="flexipage:availableforRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:actionOverride">
+    <aura:attribute name="recordId" type="String"></aura:attribute>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+      <aura:attribute name="towerNames" type="String[]" />
+    <aura:attribute name="towerId" type="String" />
+    <aura:attribute name="recordTowerValue" type="String" />
+    <aura:attribute name="disableTowerField" type="Boolean"/>
+    
+    <!-- <aura:if isTrue="{!not(empty(v.recordId))}">
+    <lightning:recordForm
+        recordId="{!v.recordId}"
+        objectApiName="RW_Sub_Offer__c"
+        layoutType="Full"
+        mode="view" />
+    </aura:if>-->
+         
+
+        <lightning:card>
+    <lightning:recordEditForm aura:id="myRecordForm" recordId="{!v.recordId}" objectApiName="RW_Sub_Offer__c" onsubmit="{!c.handleSubmit}" onsuccess="{!c.handleSuccess}" onerror="{!c.handleError}">
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField fieldName="Name" />
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField fieldName="RW_Offer_Type__c" />
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField fieldName="RW_Start_Date__c" />
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField fieldName="RW_End_Date__c"/>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField aura:id="projectField" fieldName="Project__c" onchange="{!c.getTowers}"/>
+            </div>
+            
+           <!-- <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField fieldName="RW_Status__c" />
+            </div> -->
+            
+            <div class="slds-col slds-size_1-of-2">
+                 <div class="slds-grid slds-gutters slds-wrap" >
+                     				
+                                     <div class="slds-col slds-size_4-of-12">
+                                          <div class="slds-p-top_large textcolor">
+                                         <span>Tower</span>
+                					</div>
+                    				 </div>
+                                    <div class="slds-col slds-size_8-of-12 slds-p-left_none">
+         
+                                    <lightning:select  value="{!v.towerId}" name="tower" label="Tower Name" variant="label-hidden" onchange="{!c.settower}" disabled="{!v.disableTowerField}">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.towerNames}" var="val">
+                                             
+                                              <aura:if isTrue="{!and( not(empty(v.recordTowerValue)) , v.recordTowerValue == val.value) }">
+                                                <option value="{!v.towerId}" selected="true"> {!val.value}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val.key}"> {!val.value}</option>
+                                                  </aura:set>
+                                             </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                           
+                                        
+                </div>
+                </div>
+                                    <!--<lightning:input type="text" />-->
+                            </div>
+            
+           <!-- <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField fieldName="RW_Approval_Status__c" />
+            </div> -->
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField aura:id="offerId" fieldName="Offer__c"/>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-top_small">
+                <lightning:inputField fieldName="RW_Approval_Status__c" disabled="true"/>
+            </div>
+            
+              <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField fieldName="RW_Status__c" />
+            </div> 
+                <lightning:inputField aura:id="towerVal" fieldName="Tower__c" class ="slds-hide"/>
+             
+        </div>
+         <div class="slds-align_absolute-center" >
+            <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Save" />
+             
+             <lightning:button class="slds-m-top_small" variant="brand" name="Back" label="Back" onclick="{!c.redirectToOffer}"/>
+        </div>
+          
+    </lightning:recordEditForm>
+            </lightning:card>
+ 
+</aura:component>

@@ -1,0 +1,56 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="CustomerPortalFloatingCtrl">
+    <!--img src="{!$Resource.RunwalFooter}"/-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="intervalId" type="Integer" default="0"/>
+    <aura:attribute name="lstRunwalEvent" type="RW_Runwal_Event__c[]"/>
+    
+    <div class="c-container">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-4 slds-p-around_medium">
+                <div class="header-column">
+                    <p class="field-title" title="CONTACT US">CONTACT US</p><br/>
+                    <p>Runwal and Omkar Esquare 4th Floor, </p>
+                    <p>Off Eastern Express Highway, opp.</p>
+                    <p>Sion-Chunabhatti Signal, Sion(East),</p>
+                    <p>Mumbai-400 022.</p>
+                </div>
+            </div>
+            <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-4 slds-p-around_medium">
+                <div class="header-column">
+                    <p class="field-title" title="QUICK LINKS">QUICK LINKS</p>
+                    <a href="https://runwalgroup.in/">Home</a><br/>
+                    <a href="https://runwalgroup.in/corporate-profile">Corporate Profile</a><br/>
+                    <a href="https://runwalgroup.in/bliss">Runwal Bliss</a><br/>
+                    <a href="https://runwalgroup.in/greens">Runwal Greens</a><br/>
+                    <a href="https://runwalgroup.in/forests">Runwal Forests</a><br/>
+                    <a href="https://runwalgroup.in/pinnacle">Runwal Pinnacle</a><br/>
+                    
+                </div>
+            </div>
+            <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-4 slds-p-around_medium">
+                <div class="header-column">
+                    <!--p class="field-title" title="QUICK LINKS">QUICK LINKS</p-->
+                    <a href="https://runwalgardens.com/">Runwal Gardens</a><br/>
+                    <a href="https://runwalgroup.in/awards-section">Awards</a><br/>
+                    <a href="https://runwalgroup.in/nri">Customer's Guide</a><br/>
+                    <a href="https://runwalgroup.in/corporate-alliance">Corporate Alliance</a><br/>
+                    <a href="https://runwalgroup.in/community">Community Building</a><br/>
+                    <a href="https://runwalgroup.in/media">News Room</a><br/>
+                    <a href="https://runwalgroup.in/CSR">CSR</a><br/>
+                </div>
+            </div>
+            <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-4 slds-p-around_medium">
+                <div class="header-column">
+                    <!--p class="field-title" title="QUICK LINKS">QUICK LINKS</p-->
+                    <a href="https://runwalgroup.in/blog">Blogs</a><br/>
+                    <a href="https://runwalgroup.in/career">Careers</a><br/>
+                    <a href="https://runwalgroup.in/contact">Contact Us</a><br/>
+                    <a href="https://runwalgroup.in/sitemap">Sitemap</a><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--div id="parentDIV" style="overflow:hidden"-->
+</aura:component>

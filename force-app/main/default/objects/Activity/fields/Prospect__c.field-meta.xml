@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prospect__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Del Prospect</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>1 OR 2 OR 3</booleanFilter>
+        <filterItems>
+            <field>$Source.WhoId</field>
+            <operation>equals</operation>
+            <valueField>Prospect__c.Lead__r.Id</valueField>
+        </filterItems>
+        <filterItems>
+            <field>$Source.WhoId</field>
+            <operation>equals</operation>
+            <valueField>Prospect__c.Account__r.Id</valueField>
+        </filterItems>
+        <filterItems>
+            <field>$Source.WhatId</field>
+            <operation>equals</operation>
+            <valueField>Prospect__c.Opportunity__r.Id</valueField>
+        </filterItems>
+        <infoMessage>Prospect Related lookup filter error !!</infoMessage>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Prospect__c</referenceTo>
+    <relationshipLabel>Prospect Activities</relationshipLabel>
+    <relationshipName>Activities</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

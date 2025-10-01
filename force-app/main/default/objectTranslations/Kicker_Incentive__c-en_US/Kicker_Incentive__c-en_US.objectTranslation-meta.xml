@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Kicker Incentive</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Kicker Incentives</value>
+    </caseValues>
+    <layouts>
+        <layout>Kicker Incentive Cumulative Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Kicker Incentive Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Kicker Incentive Per Deal Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Kicker Incentive Unit Typology Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <label><!-- Cumulative --></label>
+        <name>Cumulative</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Per Deal Kicker --></label>
+        <name>Per_Deal_Kicker</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Unit Typology --></label>
+        <name>Unit_Typology</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Per Deal Amount Should not be blank. --></errorMessage>
+        <name>If_RT_per_deal_then_per_deal_amount_req</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Per Deal %  Should not be blank. --></errorMessage>
+        <name>If_Type_per_deal_then_per_deal_Per_req</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Per Deal % should be blank. --></errorMessage>
+        <name>Type_per_deal_amt_per_deal_per_not_req</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Per Deal Amount should be blank. --></errorMessage>
+        <name>Type_per_deal_then_per_deal_amt_not_req</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Run_Kicker_Scheme --></label>
+        <name>Run_Kicker_Scheme</name>
+    </webLinks>
+</CustomObjectTranslation>

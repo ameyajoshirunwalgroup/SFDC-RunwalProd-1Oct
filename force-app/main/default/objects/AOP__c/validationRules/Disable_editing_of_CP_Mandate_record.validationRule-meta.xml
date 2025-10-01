@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disable_editing_of_CP_Mandate_record</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISNEW()),
+RecordType.Name = &apos;CP Mandate&apos;,
+$Profile.Name != &apos;System Administrator&apos;,
+OR(
+ISCHANGED( Approver_L1__c ),
+ISCHANGED( Approver_L2__c ),
+ISCHANGED( Brokerage__c ),
+ISCHANGED( Brokerage_for_NRI__c ),
+ISCHANGED( Brokerage_for_Outstation__c ),
+ISCHANGED( CP_Invoice_Approver_L1__c ),
+ISCHANGED( CP_Invoice_Approver_L2__c ),
+ISCHANGED( CP_Invoice_Approver_L3__c ),
+ISCHANGED( CP_Invoice_Approver_L4__c ),
+ISCHANGED( CP_Invoice_Approver_L5__c ),
+ISCHANGED( CP_Mandate_Scheme__c ),
+ISCHANGED( End_Date__c ),
+ISCHANGED( Projects__c ),
+ISCHANGED( Start_Date__c ),
+ISCHANGED( RecordTypeId ),
+ISCHANGED( Start_Date__c )
+)
+)</errorConditionFormula>
+    <errorMessage>You can not edit this record. Please contact System Administrator.</errorMessage>
+</ValidationRule>

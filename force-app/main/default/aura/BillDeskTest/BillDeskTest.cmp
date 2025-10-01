@@ -1,0 +1,36 @@
+<aura:component Controller = "BillDeskTestCmpController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">
+	<ltng:require scripts="{!$Resource.BillDesk}" />
+    
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="msg" type="String"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="BookingData" type="Object" />
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+        
+    <aura:attribute name="bookingId" type="String"/>
+    <aura:attribute name="OpportunityId" type="String"/>
+    <aura:attribute name="towerId" type="String"/>
+    <aura:attribute name="Amount" type="String"/>
+    <aura:attribute name="ProjectUnit" type="String"/>
+    <aura:attribute name="TypeOfAmount" type="String"/>
+    <aura:attribute name="showSuccessMsg" type="Boolean"/>
+    <aura:attribute name="showFailMsg" type="Boolean"/>
+    
+   <aura:if isTrue="{!v.showSuccessMsg}">
+      <div class="slds-align_absolute-center slds-text-heading_large ">
+          <BR/><BR/><BR/>
+          Payment is successful.Payment details will be updated on portal in 2 days.
+    </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showFailMsg}">
+      <div class="slds-align_absolute-center slds-text-heading_large">
+          <BR/><BR/><BR/>
+        Payment is Failed.
+    </div>
+    </aura:if>
+    
+    
+    
+</aura:component>

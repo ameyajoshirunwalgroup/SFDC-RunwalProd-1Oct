@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UnregisterCP_Cannot_Edit_CP_Record</fullName>
+    <active>true</active>
+    <description>If Unregistered Channel Partner is checked then user cannot edit the record.</description>
+    <errorConditionFormula>AND(       
+
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+				Channel_Partner_From_CP_Portal__c = false,
+       NOT(ISNEW()),
+      Unregistered_Channel_Partner__c = true,
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>Unregistered_Channel_Partner__c</errorDisplayField>
+    <errorMessage>You Cannot edit record because Unregistered Channel Partner is checked.</errorMessage>
+</ValidationRule>

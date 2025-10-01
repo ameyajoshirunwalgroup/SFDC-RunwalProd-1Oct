@@ -1,0 +1,15 @@
+<template>
+    <lightning-card>
+    <lightning-quick-action-panel title="Quick Action Title">
+        <lightning-spinner alternative-text="Loading" size="small" if:true={isSpinner} ></lightning-spinner>
+        <div class="slds-p-around_large">
+            <lightning-input type="text" variant="standard" value={cmnt} name="name"  label="Approval Comments" onchange={handlecomment}></lightning-input>
+        </div>
+        <div slot="footer">						    
+    <lightning-button variant="brand" label="Submit For Approval" style = "margin-right:16px" onclick={submitapproval} ></lightning-button>
+    <lightning-button variant="brand" label="Back" style="margin-right:0px" onclick={back} ></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+
+    </lightning-card>
+</template>

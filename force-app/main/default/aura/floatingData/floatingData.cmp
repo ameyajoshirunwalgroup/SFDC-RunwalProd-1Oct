@@ -1,0 +1,25 @@
+<aura:component controller="CustomerPortalFloatingCtrl" implements="forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="intervalId" type="Integer" default="0"/>
+    <aura:attribute name="popssition" type="Integer" default="0"/>
+    <aura:attribute name="bolFloatFlag" type="Boolean"/>
+    <aura:attribute name="lstRunwalEvent" type="RW_Runwal_Event__c[]"/>
+    <aura:if isTrue="{!v.lstRunwalEvent.length>0}">
+    <div id="parentDIV" style="overflow:hidden;">
+        <aura:iteration items="{!v.lstRunwalEvent}" var="runData" indexVar="index">
+            <p style="position:relative;padding: 12px;display:none;" id="tofloat" class="tofloat">
+                <span class="eachLink" onmouseover="{!c.hadleMouseover}" onmouseout="{!c.handleMouseout}" name="{!runData.style}">
+                    <!--aura:if isTrue="{!index}">,</aura:if--> 
+                    <!--<a href="{!'/customer/s/rw-runwal-event?recordId='+runData.Id}">{!runData.RW_Scroller_Subject__c}</a>-->
+                    <a href="{!'/'+$Label.c.Community_Name+'/s/rw-runwal-event?recordId='+runData.Id}">{!runData.RW_Scroller_Subject__c}</a>-->
+                
+                    
+                </span>
+            </p>
+        </aura:iteration>
+    </div>
+        
+        </aura:if>
+    
+</aura:component>

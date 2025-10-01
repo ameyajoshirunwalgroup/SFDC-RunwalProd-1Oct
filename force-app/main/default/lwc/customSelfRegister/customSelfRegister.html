@@ -1,0 +1,562 @@
+<template>
+
+    <template if:true={firstform}>
+        <template if:true={showTermsAndConditionsLoading}>
+            <lightning-spinner class="termsAndConditionsLoading" alternative-text="Loading" size="medium">
+            </lightning-spinner>
+        </template>
+        <template if:true={showTermsAndConditions}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container terms-and-conditions-modal">
+
+                    <header class="slds-modal__header terms-and-conditions-header">
+                        <button class="terms-and-conditions-close" title="Close" onclick={closeTermsAndConditions}>
+                            <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"><a href="javascript:void(0);"
+                                class="terms-and-conditions-heading">Terms and Conditions</a></h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium terms-and-conditions-body custom-large-modal"
+                        id="termsAndConditionsModal">
+
+                        <p>Dear Sir,</p>
+                        <p><strong>Reg: STANDARD TERMS AND CONDITIONS FOR APPOINTMENT AS “CHANNEL PARTNER”</strong></p>
+
+                        <p>
+                            We welcome your initiative of referring our projects to your clients and trust that your
+                            clients must
+                            have found the projects an ideal place for their requirements.
+                        </p>
+                        <p>
+                            We take pleasure in appointing you as our “CHANNEL PARTNER” on a non-exclusive basis on the
+                            following
+                            terms and conditions for Runwal Enterprises:
+                        </p>
+
+                        <ol>
+                            <li>You shall not act or hold out as our Agent but shall only procure and solicit business
+                                for our projects as a Channel Partner.</li>
+                            <li>You shall procure booking of Villas / Apartments / Houses / Shops / Offices / Premises
+                                from prospective buyers introduced by you to the Company’s projects.</li>
+                            <li>You will not offer any discounts on our sale price or make any commitment to the client
+                                without written approval from the Company.</li>
+                            <li>You shall arrange meetings, conferences, exhibitions, or any other promotional events
+                                for the marketing of our projects with prior intimation to the Company.</li>
+                            <li>You shall exercise all reasonable care and skills to ensure that no fraudulent or
+                                illegal transactions are introduced to the Company.</li>
+                            <li>Any false statement or commitments made by you to the customers shall be your sole
+                                responsibility, and the Company shall not be bound by such commitments.</li>
+                            <li>If and when you have to publish any advertisement, you shall obtain prior written
+                                approval from the Company for its content, design, and medium of publication.</li>
+                            <li>It shall be your responsibility to ensure compliance with FEMA, RERA, and all other
+                                applicable laws while introducing clients to the Company.</li>
+                            <li>At the time of submission of an application form by a client, you shall ensure that all
+                                mandatory details are filled, and the necessary documents are attached.</li>
+                            <li>In consideration of your satisfactory services, the Company shall pay you a success fee
+                                as per the prevailing brokerage policy.</li>
+                            <li>Success fee is not payable on maintenance charges, legal charges, GST, stamp duty,
+                                registration, or any other statutory levies.</li>
+                            <li>The success fee is subject to revision, modification, or withdrawal at the sole
+                                discretion of the Company without prior notice.</li>
+                            <li>You are required to raise an invoice for the success fee within the stipulated time
+                                after the conditions for its payment are fulfilled.</li>
+                            <li>The success fee shall be paid only if the client introduced by you makes the payment as
+                                per the agreed schedule to the Company.</li>
+                            <li>At the launch of a project, we shall have the sole discretion to decide the price,
+                                payment schedule, and other commercial terms.</li>
+                            <li>Any approval/authorization/clearance for the booking shall be granted solely at the
+                                Company’s discretion.</li>
+                            <li>All payments will be received in the name of the Company directly from the client; you
+                                shall not collect any payment on behalf of the Company.</li>
+                            <li>This arrangement is effective from 1st April 2025 and shall continue until terminated by
+                                either party with written notice.</li>
+                            <li>All disputes, differences, or questions arising shall be settled by arbitration in
+                                accordance with the Arbitration and Conciliation Act, 1996.</li>
+                            <li>This agreement shall be subject to the jurisdiction of courts in Mumbai only.</li>
+                            <li>We shall not be responsible for anything stated to the client which is contrary to our
+                                brochures, agreements, or other written communications.</li>
+                            <li>You shall conduct our business in a manner that upholds the reputation and goodwill of
+                                the Company.</li>
+                            <li>You are required to comply with the aforesaid conditions and any other instructions
+                                issued by the Company from time to time.</li>
+                            <li>The Channel Partner is aware that as per the Company’s policies, no cash payment is to
+                                be accepted from customers under any circumstances.</li>
+                        </ol>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Accept</button>
+                    </footer>
+                </div>
+
+            </section>
+        </template>
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <p style="color:#0575d2;font-size: 22px;font-weight: 800;margin-left:10px;">Welcome to Runwal Elevate
+                </p>
+                <p style="color:#000000;font-size: 16px;margin-bottom: 30px;margin-top: 20px;margin-left:10px;">We
+                    welcome our esteemed channel partners to be part of our growth story and explore new opportunities
+                    with seamless technological experience</p>
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity"
+                                        title="Basic Details">
+                                        <span class="slds-assistive-text">Basic Details</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                    title="Basic Details">Basic Details</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_5-of-12">
+                <img class="imageclass" src={imagecon}>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_3-of-12">
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-p-around_medium lgc-bg">
+                            <lightning-radio-group name="Is Temp CP id generated" label="Is Temp CP id generated"
+                                options={optionisrera} value={istempcppresent} onchange={handleChangeisTemp}
+                                type="button" required>
+                            </lightning-radio-group>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Broker_Type__c} label="Channel Partner Type"
+                        placeholder="Select Type" options={options} onchange={handleChangepicklist} required>
+                    </lightning-combobox>
+                </div>
+                <!-- <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={salutation} label="Salutation" placeholder="Select Salutation"
+                        options={optionssalutation} onchange={handleChangeesalutation} required></lightning-combobox>
+                </div>-->
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Middle Name" placeholder="Middle Name"
+                        value={cpData.NAME_MIDDLE__c} onchange={handlemiddlename}></lightning-input>
+                </div>
+                <div if:false={NRI} class="slds-p-around_medium lgc-bg">
+                    <div if:true={cpData.Individual_CP__c}>
+                        <lightning-input type="text" label="PAN No." placeholder="PAN No."
+                            value={cpData.Broker_Pan_No__c} autocomplete="true" onchange={handlePanNoChange}
+                            pattern="[A-Z]{3}[PF][A-Z][0-9]{4}[A-Z]"
+                            message-when-pattern-mismatch="Please enter PAN No. In Capital Letter For eg. :- AOZPQ1234L"
+                            required>
+                        </lightning-input>
+                    </div>
+                    <div if:false={cpData.Individual_CP__c}>
+                        <lightning-input type="text" label="PAN No." placeholder="PAN No."
+                            value={cpData.Broker_Pan_No__c} autocomplete="true" onchange={handlePanNoChange}
+                            pattern="[A-Z]{3}[CF]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}"
+                            message-when-pattern-mismatch="Please enter PAN No. In Capital Letter For eg. :- AOZCQ1234L"
+                            required>
+                        </lightning-input>
+                    </div>
+                </div>
+                <div if:true={NRI} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="PAN No." placeholder="PAN No." value={cpData.Broker_Pan_No__c}
+                        autocomplete="true" onchange={handlePanNoChange}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Dialing_Country_Code1__c} label="Country Code"
+                        placeholder="Select Country Code" options={optionscountrycode}
+                        onchange={handleChangeecountrycode}></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Company Name (As per RERA)"
+                        value={cpData.Company_Name_As_per_RERA__c} placeholder="Company Name (As per RERA)*"
+                        onchange={handlecompanyname} required>
+                    </lightning-input>
+                </div>
+                <!-- <div class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Is RERA Applicable" label="Is RERA Applicable" options={optionisrera}
+                        value={isreraapplicable} onchange={handleChangeisrera} type="button" required>
+                    </lightning-radio-group>
+                </div> -->
+                <!-- <div if:true={showrerano} class="slds-p-around_medium lgc-bg"> -->
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="RERA Registration Number" placeholder="RERA Registration Number"
+                        value={cpData.RW_RERA_Registration_Number__c} onchange={handleReraChange}
+                        pattern="^[A-Z0-9_]{12,13}$"
+                        message-when-pattern-mismatch="Please enter a 12 or 13 digits valid RERA Number" required>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="date" label="RERA Valid till?" placeholder="Select RERA Expiry Date"
+                        min={today} value={cpData.RERA_Valid_till__c} onchange={handleReraExpDateChange} required>
+                    </lightning-input>
+                </div>
+                <!-- </div> -->
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Do you have a Competency Certificate?"
+                        label="Do you have a Competency Certificate?" options={optionisrera} value={isccapplicable}
+                        onchange={handleChangeisCC} type="button" required>
+                    </lightning-radio-group>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Place_of_Supply__c} label="Place of Operation"
+                        placeholder="Select Place of Operation" options={optionspos} onchange={handleChangepos}
+                        required></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Team_Size__c} label="Team Size" placeholder="Select Size"
+                        options={optionsteamsize} onchange={handleChangeteamsize}></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-dual-listbox value={expertise} label="Expertise" placeholder="Select Expertise"
+                        options={optionsExpertise} onchange={handleChangeexpertise} source-label="Available"
+                        selected-label="Selected"></lightning-dual-listbox>
+                </div>
+
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div if:true={showtempsec} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Temp CP Unique Id" placeholder="Temp CP Unique Id"
+                        value={cpData.RW_Broker_Number__c} autocomplete="true" onchange={handleTempNoChange} required>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Project__c} label="Project" placeholder="Select Project"
+                        options={optionsproject} onchange={handleprojectChange} required></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="First Name" placeholder="First Name."
+                        value={cpData.NAME_FIRST__c} onchange={handleFirstNameChange} required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Last Name" value={cpData.NAME_LAST__c} placeholder="Last Name"
+                        onchange={handleLastNameChange} required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Email" value={cpData.RW_Email__c} placeholder="Email"
+                        autocomplete="true" onchange={handleEmailChange} pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                        message-when-pattern-mismatch="Please enter a Email" required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Mobile No" value={cpData.RW_Mobile_No__c}
+                        placeholder="Mobile No" onchange={handlemobilenoChange} pattern="[0-9]{10}$"
+                        message-when-pattern-mismatch="Please enter a valid 10 Digits Number" required>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Are you NRI " label="Are you NRI " options={optionisnri}
+                        value={cpData.Are_you_NRI__c} onchange={handleChangeisnri} type="button" required>
+                    </lightning-radio-group>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Is GST Applicable" label="Is GST Applicable" options={optionisgst}
+                        value={isgstapplicable} onchange={handleChangeisgst} type="button" required>
+                    </lightning-radio-group>
+                </div>
+                <div if:true={showgst} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="GSTIN Number" placeholder="GSTIN Number"
+                        value={cpData.RW_GST_Number__c} onchange={handlegstChange} pattern="^[A-Z0-9_]{15}$"
+                        message-when-pattern-mismatch="Please enter a 15 digits valid GST Number" required>
+                    </lightning-input>
+                </div>
+                <div if:true={showccyes} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="date" label="CC Valid till?" min={today} placeholder="Select CC Expiry Date"
+                        value={cpData.CC_Valid_till__c} onchange={handleCCExpDateChange} required>
+                    </lightning-input>
+                </div>
+
+                <div if:true={showccno} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="date" label="CC Scheduled Exam Date" min={today}
+                        placeholder="Select CC Scheduled Exam Date" value={cpData.CC_Scheduled_Exam_Date__c}
+                        onchange={handleCCSchExmDateChange}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Experience__c} label="Experience" placeholder="Select Experience"
+                        options={optionsexperience} onchange={handleChangeexperience} required></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Average Quarterly Business (₹)"
+                        placeholder="Average Quarterly Business (₹)" value={aqb} onchange={handleaqb}>
+                    </lightning-input>
+                </div>
+                <!-- <lightning-record-edit-form object-api-name="Broker__c">
+                    <lightning-input-field field-name="Legal_Form__c"></lightning-input-field>
+                </lightning-record-edit-form> -->
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-dual-listbox value={developerworked} label="Developer Worked For"
+                        placeholder="Select Developer" options={getDevelopersWorkedFor}
+                        onchange={handleChangedeveloperworked} source-label="Available" selected-label="Selected">
+                    </lightning-dual-listbox>
+                </div>
+
+                <!--div class="slds-p-around_medium lgc-bg">
+            <lightning-radio-group name="Is IGST Applicable" label="Is IGST Applicable"
+                options={optionisigst} value={isigstapplicable} onchange={handleChangeisigst}
+                type="button"></lightning-radio-group>
+        </div-->
+            </div>
+
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity" title="Address">
+                                        <span class="slds-assistive-text">Address</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                    title="Address">Address</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_3-of-12">
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="House/Flat/Company" placeholder="House/Flat/Company"
+                        value={cpData.House_Flat_Company__c} onchange={handlehouseno} required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Street Address 2" placeholder="Street Address 2"
+                        value={cpData.STR_SUPPL2__c} onchange={handlestreet2}></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox name="Country" label="Country" placeholder="Select Country"
+                        options={levelValues} required onchange={handleLevelChange} value={selectedLevelValue}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="City" placeholder="City" value={cpData.City__c}
+                        onchange={handlecity} required>
+                    </lightning-input>
+                </div>
+
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Street Address 1" placeholder="Street Address 1"
+                        value={cpData.STREET__c} onchange={handlestreet} required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Street Address 3" placeholder="Street Address 3"
+                        value={cpData.STR_SUPPL3__c} onchange={handlestreet3}></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox name="State / Region" label="State / Region" placeholder="Select State / Region"
+                        options={secondaryLevelValues} onchange={handleSecondaryLevelChange}
+                        value={selectedSecondaryLevelValue} required>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Zip / Pin Code" placeholder="Zip / Pin Code"
+                        value={cpData.Pin_Code__c} onchange={handlepincode} required></lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity"
+                                        title="Bank Details">
+                                        <span class="slds-assistive-text">Bank Details</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                    title="Bank Details">Bank Details</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Cheque/DD favouring Name"
+                        placeholder="Cheque/Demand Drafts favouring Name" value={cpData.Cheque_DD_Favouring_Name__c}
+                        onchange={handlefavnameChange} required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Bank Account IFSC Code" value={cpData.IFSC_Code__c}
+                        placeholder="Bank Account IFSC Code" onchange={handlebankifscChange}
+                        pattern="^[A-Z]{4}0[A-Z0-9]{6}$" message-when-pattern-mismatch="Please enter a Valid IFSC Code"
+                        required>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={cpData.Bank_Name__c} label="Bank Name" placeholder="Select Bank Name"
+                        options={optionsbankname} onchange={handlebanknameChange} required></lightning-combobox>
+                </div>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Branch Code" placeholder="Branch Code"
+                        value={cpData.Branch_Code__c} onchange={handlebankcodeChange}></lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Bank Account Number" placeholder="Bank Account Number"
+                        value={cpData.Account_Number__c} onchange={handlebankaccnoChange} required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Branch Name" placeholder="Enter Branch Name"
+                        value={cpData.Bank_Branch__c} onchange={handlebranchnameChange} required></lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-6">
+                <div class="slds-col">
+                    <span class="sub-heading">Please read and accept our <a class="terms-and-conditions-link"
+                            href="javascript:void(0);" onclick={handleTermsAndConditions}>terms and conditions</a> to
+                        continue</span>
+                </div><br />
+            </div>
+        </div>
+        <template if:true={showfirstnextbutton}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_6-of-12">
+                    <lightning-button variant="brand" class="nextbtn" onclick={handleRegister} label="Next">
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+    </template>
+    <template if:true={showuploadmodal}>
+        <lightning-button variant="brand" label="Back" title="Back" onclick={backbutton} class="slds-m-left_x-small">
+        </lightning-button>
+        <lightning-card title="Upload Document" icon-name="custom:custom14">
+            <!--div class="slds-m-around_medium">4
+                    <lightning-input type="file" 
+                    accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                    label="Attachment" onchange={openfileUpload}></lightning-input>
+                </div-->
+            <div if:true={local} class="slds-p-around_medium lgc-bg">
+                <lightning-combobox value={typeofdoclocal} label="Type of Document" placeholder="Select Type"
+                    options={docoptionslocal} onchange={handleChangepicklistdocLocal} required></lightning-combobox>
+            </div>
+            <div if:true={NRI} class="slds-p-around_medium lgc-bg">
+                <lightning-combobox value={typeofdocNRI} label="Type of Document" placeholder="Select Type"
+                    options={docoptionsNRI} onchange={handleChangepicklistdocNRI} required></lightning-combobox>
+            </div>
+            <div class="slds-p-around_medium lgc-bg">
+                <template if:true={showLoadingSpinner}>
+                    <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                </template>
+                <lightning-input type="file" label="Upload Document" multiple onchange={openfileUpload2}
+                    accept={acceptedFormats}>
+                </lightning-input>
+            </div>
+
+            <!-- <div class="slds-m-around_medium">
+                <lightning-input type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf" label="Attachment"
+                    onchange={openfileUpload3}></lightning-input>
+            </div> -->
+            <div if:true={fileNames} class="slds-text-body_small slds-text-color_error">{fileNames}
+                <template if:true={showLoadingSpinner}>
+                    <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                </template>
+            </div><br />
+            <!--lightning-button variant="brand" label="Upload" title="Upload" onclick={handleClick} class="slds-m-left_x-small"></lightning-button-->
+            <!--template if:true={data} >
+                    <lightning-button variant="brand" label="submit" title="Submit" onclick={handleRegister} class="slds-m-left_x-small"></lightning-button>
+                </template-->
+        </lightning-card>
+        <!-- <template if:true={data}> -->
+        <lightning-card title="Uploaded Files" icon-name="standard:account">
+            <div style="width: auto;">
+                <lightning-datatable data={lstAllFiles} columns={columns} key-field="id">
+                </lightning-datatable>
+            </div>
+            <div class="slds-p-around_medium lgc-bg">
+                <template if:true={lstAllFiles}>
+                    <lightning-button variant="brand" label="submit" title="Submit" onclick={lastnextbuttonfuc}
+                        class="slds-m-left_x-small"></lightning-button>
+                </template>
+            </div>
+        </lightning-card>
+        <!-- </template> -->
+
+        <!-- <template for:each={lstAllFiles} for:item="fileIterator">
+            <tr class="slds-hint-parent" key={fileIterator}>
+                <th data-label="Opportunity Name" scope="row">
+                    <lightning-icon icon-name="doctype:image" size="small" title="Image"></lightning-icon>
+                    {fileIterator.Title}
+                </th>
+                <td data-label="Account Name">
+                    <div class="slds-truncate" title="Cloudhub">
+                        {fileIterator.FileType}
+                    </div>
+                </td>
+                <td data-label="Account Name">
+                    <div class="slds-truncate" title="Cloudhub">
+                        {fileIterator.ContentSizeKB} Byte
+                    </div>
+                </td>
+            </tr>
+        </template> -->
+
+    </template>
+    <template if:true={lastmessage}>
+        <lightning-card>
+            <p class="slds-align_absolute-center"><b>Thank You for registering with us</b></p>
+            <p class="slds-align_absolute-center"><b>Your account will be activated shortly</b></p>
+        </lightning-card>
+    </template>
+
+</template>

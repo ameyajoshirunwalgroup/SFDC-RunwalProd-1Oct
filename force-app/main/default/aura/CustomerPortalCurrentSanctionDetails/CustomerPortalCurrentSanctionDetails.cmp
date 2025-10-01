@@ -1,0 +1,27 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	--
+<aura:attribute name="loanRecordDetails" type="List" />  
+    --{!loanRecordDetails.sanctionletterDocumentId}
+    <div class="slds-form__row">
+                                    
+                                    <div class="slds-form__item" role="listitem">
+    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                             <aura:if isTrue="{!not(empty(loanRecordDetails.sanctionletterDocumentId))}">
+                                            <div>
+                                                <lightning:button variant="brand" class="sizeButton textInput" label="Preview Sanction Letter" title="Preview Sanction Letter" onclick="{! c.previewfile }" name="{!loanRecordDetails.sanctionletterDocumentId}"/>
+                                        	</div>
+                                            </aura:if>
+                                            </div>
+                                        
+                                         <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                           <aura:if isTrue="{!empty(loanRecordDetails.sanctionletterDocumentId)}">
+                                            <div class="slds-p-top_small">
+                                                <lightning:fileUpload name="{!loanRecordDetails.loanId}"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!loanRecordDetails.loanId}" 
+                                              onuploadfinished="{!c.uploadDocument}" class="" />
+                                        	</div>
+                                             </aura:if>
+                                            </div>
+        </div>
+    </div>
+</aura:component>

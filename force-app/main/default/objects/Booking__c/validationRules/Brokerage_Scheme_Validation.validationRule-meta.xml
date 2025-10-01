@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Brokerage_Scheme_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>/*AND(
+NOT(ISNEW() ),
+NOT(ISBLANK(Brokerage_Scheme__c )),
+NOT(ISPICKVAL(Type_of_Client__c, &apos;&apos;)),
+Type_Of_Client_Formula__c !=TEXT(Brokerage_Scheme__r.Type__c ),
+OR(ISCHANGED(Brokerage_Scheme__c),ISCHANGED(Type_Of_Client_Formula__c))
+)*/
+AND(
+NOT(ISNEW() ),
+NOT(ISBLANK(Brokerage_Scheme__c )),
+Type_Of_Client_Formula__c !=TEXT(Brokerage_Scheme__r.Type__c ),
+AND(DATEVALUE(Booking_Date__c) &lt;= DATE(2024,03,31)),
+OR(ISCHANGED(Brokerage_Scheme__c),ISCHANGED(Type_Of_Client_Formula__c)),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>Brokerage_Scheme__c</errorDisplayField>
+    <errorMessage>Client type mismatch in Booking and Brokerage Scheme (pl update either &quot;Brokerage Scheme&quot; or &quot;Type of Client&quot; as blank and retry)</errorMessage>
+</ValidationRule>

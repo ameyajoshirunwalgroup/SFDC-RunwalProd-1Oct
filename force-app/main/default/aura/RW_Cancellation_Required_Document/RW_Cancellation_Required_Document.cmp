@@ -1,0 +1,146 @@
+<aura:component controller = "RW_UnitTransferAndCancellation" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+ <aura:html tag="style">
+    .slds-modal__container {
+     min-width: 40vw;
+    }
+</aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="info" type="Object" />
+    <aura:attribute name="recordId" type="String"></aura:attribute>
+    <aura:attribute name="errormessage" type="String"/>     
+    <aura:attribute name="showConfirmDialog" type="boolean" default="false"/>
+    <aura:attribute name="checklistButton" type="Boolean"/>
+    <aura:attribute name="checkListTick" type="string" default="none"/>
+    <aura:attribute name="cancelButton" type="Boolean"/>
+    <aura:attribute name="cancelTick" type="string" default="none"/>
+    <aura:attribute name="deedButton" type="Boolean"/>
+    <aura:attribute name="deedTick" type="string" default="none"/>
+    <aura:attribute name="transferButton" type="Boolean"/>
+    <aura:attribute name="transferTick" type="string" default="none"/>
+    
+     <div class="slds-col" style="background-color :white;height:33px;">
+      <div class="slds-box slds-align_absolute-center" style="height:29px;border:0px;border-bottom:1px solid #bdb3b3">            
+  			<div class="slds-text-heading_medium" style="height:26px;">            
+            <b>Booking cancellation for approval</b>
+            </div>
+	</div>          
+	</div>
+    
+    
+   <aura:if isTrue="{!v.info.Status__c == 'Cancellation Initiated'}">
+   <aura:if isTrue="{!and((empty(v.errormessage)) , (v.info.Cancellation_Requested_Status__c == 'Cancellation Confirmed'))}">
+    <lightning:recordEditForm aura:id="myRecordForm" recordId="{!v.recordId}" objectApiName="Booking__c" onsubmit="{!c.handleSubmit}" >
+   <div class="slds-grid slds-gutters slds-wrap">
+           
+       <aura:if isTrue="{!v.info.Cancellation_Reason__c == 'Unit cancelled'}">
+        <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField aura:id="checklistdate" fieldName="Cancellation_checklist_Upload_Date__c" required="true" onchange="{!c.checklistValidation}" />
+       </div>
+  		<div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+               <lightning:fileUpload name="CancellationChecklist"  label="Attach Cancellation Checklist" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.recordId}"
+                                              onuploadfinished="{!c.checklistUpload}"  disabled = "{!v.checklistButton}"/> 
+       
+        	 <div style="{!'display:' + v.checkListTick + ';'}">
+            		<img src="/img/checkbox_checked.gif"/> 
+            </div>
+            
+        </div>
+       
+       <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField aura:id="cancellationdate" fieldName="Cancellation_Letter_Upload_Date__c" onchange="{!c.cancellationValidation}" required="true" />
+       </div>
+       <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+           <lightning:fileUpload name="CancellationLetter" label="Attach Cancellation Letter" multiple="{!v.multiple}" 
+                                 accept="{!v.accept}"  recordId="{!v.recordId}" onuploadfinished="{!c.letterUpload}"  disabled = "{!v.cancelButton}" />
+            <div style="{!'display:' + v.cancelTick + ';'}">
+            		<img src="/img/checkbox_checked.gif"/> 
+            </div>
+       </div>
+       <aura:if isTrue="{!v.info.RW_Registration_Status__c == 'Registration Completed'}">
+       <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField aura:id="deeddate" fieldName="Deed_of_Cancellation_Upload_Date__c" onchange="{!c.deedValidation}" required="true"  />
+       </div>
+          
+       <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+               <lightning:fileUpload name="CancellationDeed"  label="Attach Deed Document" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.recordId}"
+                                              onuploadfinished="{!c.deedUpload}" disabled = "{!v.deedButton}" />
+         
+       			<div style="{!'display:' + v.deedTick + ';'}">
+            		<img src="/img/checkbox_checked.gif"/> 
+           		 </div>
+           </div> 
+            </aura:if>  
+      </aura:if>
+       
+       <aura:if isTrue="{!v.info.Cancellation_Reason__c == 'Unit transfer'}">
+       <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField aura:id="transferdate" fieldName="Unit_Transfer_Request_Upload_Date__c" required="true" onchange="{!c.transferValidation}" />
+       </div>
+       <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+               <lightning:fileUpload name="attachUnittransfer"  label="Attach Unit Transfer Request form" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.recordId}"
+                                              onuploadfinished="{!c.unitTransferRequestFormUpload}" disabled = "{!v.transferButton}" /> 
+           
+           
+       			<div style="{!'display:' + v.transferTick + ';'}">
+            		<img src="/img/checkbox_checked.gif"/> 
+           		 </div>
+           
+           </div>
+       </aura:if>    
+       
+      
+    		<lightning:inputField aura:id="cancellationRequestDate" fieldName="Cancellation_Request_Date__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="approvalStatus" fieldName="Approval_Status__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="cancellationCheck" fieldName="Cancellation_Checklist_Uploaded__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="CancellationCheckList" fieldName="Cancellation_Checklist_Document__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="cancellationDeed" fieldName="Cancellation_Deed_Uploaded__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="CancellationDeedDocument" fieldName="Cancellation_Deed_Document__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="cancellationLet" fieldName="Cancellation_Letter_Uploaded__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="CancellationLetter" fieldName="Cancellation_Letter_Document__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="TransferRequestUp" fieldName="Transfer_Request_Uploaded__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="transferRequestForm" fieldName="Unit_Transfer_form_document__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="cancelReason" fieldName="Cancellation_Reason__c" class ="slds-hide"/>
+   			<lightning:inputField aura:id="registrationStatus" fieldName="RW_Registration_Status__c" class ="slds-hide"/>
+       
+       <aura:if isTrue="{!or((v.info.Cancellation_Reason__c == 'Unit transfer') , (v.info.Cancellation_Reason__c == 'Unit cancelled'))}">
+    <div class="slds-align_absolute-center" >
+ 	<lightning:button variant="brand" class="slds-m-top_small" label="Close" onclick="{!c.closePopup}"  />
+    <lightning:button variant="brand" class="slds-m-top_small" label="Retain Booking" onclick="{!c.retainBooking}"  />
+    <lightning:button variant="brand" class="slds-m-top_small" type="Submit" label="Submit Booking for Cancellation" />
+    </div>
+       </aura:if>
+       
+        </div>
+       </lightning:recordEditForm>
+       <aura:set attribute="else">
+             <div class="slds-text-color_error slds-align_absolute-center">
+          <b> {!v.errormessage} </b>
+         </div>
+        </aura:set>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.info.Cancellation_Requested_Status__c != 'Cancellation Confirmed'}">
+    <div class="slds-col" style="background-color : #263238;color:white;margin-top:100px;">
+      <div class="slds-box slds-align_absolute-center">            
+  			<div class="slds-text-heading_medium">            
+            <b>!! Before uploading cancellation documents, please update cancellation reason and generate cancellation checklist</b>
+            </div>
+	</div>          
+	</div>
+    </aura:if>
+    </aura:if> 
+    
+    <aura:if isTrue="{!and(and( and(v.bookingInfo.Status__c != 'Booking Cancelled – Refund Pending', v.bookingInfo.Status__c != 'Booking Cancelled – Refund Ready'), v.bookingInfo.Status__c != 'Booking Cancelled - Refunded'), v.bookingInfo.Status__c != 'Cancelled')}">
+       <div class="slds-col" style="background-color : #263238;color:white;margin-top:100px;">
+      <div class="slds-box slds-align_absolute-center">            
+  			<div class="slds-text-heading_medium">            
+            <!--<b>!! No Information.</b>-->
+            </div>
+	</div>          
+	</div> 
+    </aura:if>
+    
+</aura:component>

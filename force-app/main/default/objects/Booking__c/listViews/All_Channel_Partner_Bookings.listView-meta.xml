@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Channel_Partner_Bookings</fullName>
+    <columns>NAME</columns>
+    <columns>Status__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Project__c</columns>
+    <columns>Brokerage_Scheme__c</columns>
+    <columns>Base_Brokerage_2__c</columns>
+    <columns>Passback__c</columns>
+    <columns>Brokerage__c</columns>
+    <columns>Tower__c</columns>
+    <columns>Type_of_Client__c</columns>
+    <columns>RW_X9_99_Received__c</columns>
+    <columns>RW_Registration_Date__c</columns>
+    <columns>Booking_Date__c</columns>
+    <columns>Brokerage_Summary__c</columns>
+    <columns>Applied_Slab_Name__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Source_of_Booking__c</field>
+        <operation>equals</operation>
+        <value>Channel Partner</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Sent for Approval</value>
+    </filters>
+    <label>All Channel Partner Bookings</label>
+</ListView>

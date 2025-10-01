@@ -1,0 +1,87 @@
+<aura:component controller = "PDFController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="dem" type="List"/>
+    <aura:attribute name="receipt" type="List"/>
+    <aura:attribute name="demList" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute access="GLOBAL" name="pdfData" type="String" description="PDF data in base64 encoded format"/>
+    
+    <aura:attribute name="bookingId" type="String"/> 
+    <lightning:navigation aura:id="navService"/>
+    
+    <div class="slds-card">	
+        <div class="slds-card__header slds-grid">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-text-heading--small slds-truncate">Receipt Details for the Booking</h2>
+                    <lightning:button variant="brand" class="{!$Browser.isPhone ?'slds-align_absolute-center': 'slds-button slds-button--neutral slds-float_right'}" label="Report Missing Receipt" title="Report Missing Receipt" onclick="{! c.callContactUs }" />
+                </div>
+            </div>
+            
+        </div> 
+        
+        <div class="slds">
+            <div class="{!$Browser.isPhone ?'slds-table--header-fixed_container': ''}" style="{!$Browser.isPhone ?'height:150px;':''}" >
+            <div class="{!$Browser.isPhone ?'slds-scrollable':''}" style="{!$Browser.isPhone ?'max-height:200px;max-width:500px;':''}">
+            <table class="slds-table slds-table--bordered">
+                <thead>
+                    <tr class="slds-text-heading--label">
+                        <th scope="col"><span class="slds-truncate">Receipt Date</span></th>
+                        <th scope="col"><span class="slds-truncate">Reciept Number</span></th>
+                        <th scope="col"><span class="slds-truncate">Amount</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.receipt}" var="r" indexVar="rowIndex">
+                        <aura:if isTrue = "{!and(r.ReceiptStatus !='Reversed',r.DocumentType !='AB')}">
+                            <tr>
+                               
+                                <td><ui:outputText value="{!r.ReceiptDate}"/></td>
+                                <td><ui:outputText value="{!r.AccountDocumentNumber}"/></td>                               
+                                <td><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value="{!r.ReceiptAmount}"></lightning:input></td>
+                                <td><lightning:button type="button" onclick="{!c.receiptAsPdf}" class="{!r.disableReceiptDownload ?'slds-hide':'slds-button slds-button--neutral slds-float_center'}"  name ="{!r.ReceiptId}">Download</lightning:button>
+                                </td>
+                            </tr>
+                            
+                        </aura:if>
+                    </aura:iteration>
+                </tbody>
+            </table>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    <aura:if isTrue="{!v.isOpen}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Receipts in PDF</h2>
+                </header>
+                
+                <iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" ></iframe>
+                
+                
+                
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" 
+                                      label="Cancel"
+                                      title="Cancel"
+                                      onclick="{! c.closeModel }"/>
+                    
+                </footer>
+            </div>
+        </section>
+    </aura:if>
+    
+    
+</aura:component>

@@ -1,0 +1,77 @@
+.THIS {
+}
+
+.THIS .slds-image__crop iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%,0);
+    max-width: 200%;
+}
+.THIS iframe.priamry-iframe {
+    max-width: 100%;
+    height: 100%;
+    width: 100%;
+}
+
+.THIS .slds-image__crop{
+	height:100%;
+    padding-top: 0;
+}
+
+.THIS.slds-image:hover,
+.THIS.slds-file:hover,
+.THIS .slds-image:hover,
+.THIS .slds-file:hover {
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+transition: box-shadow 0.2s ease-in-out;
+}
+
+.THIS.slds-image:focus,
+.THIS.slds-file:focus,
+.THIS .slds-image:focus,
+.THIS .slds-file:focus {
+border: 1px solid #0070d2;
+box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.16); 
+}
+
+.THIS .slds-image:not(.slds-file_loading) a:hover:before, 
+.THIS .slds-image:not(.slds-file_loading) a:focus:before,
+.THIS .slds-file:not(.slds-file_loading) a:hover:before, 
+.THIS .slds-file:not(.slds-file_loading) a:focus:before,
+.THIS.slds-image:not(.slds-file_loading) a:hover:before, 
+.THIS.slds-image:not(.slds-file_loading) a:focus:before,
+.THIS.slds-file:not(.slds-file_loading) a:hover:before, 
+.THIS.slds-file:not(.slds-file_loading) a:focus:before,
+.THIS.slds-image:not(.slds-file_loading):hover:before,
+.THIS.slds-file:not(.slds-file_loading):hover:before,
+.THIS .slds-image:not(.slds-file_loading):hover:before,
+.THIS .slds-file:not(.slds-file_loading):hover:before,
+.THIS a.slds-image__crop:hover:before{
+top: inherit;
+right: inherit;
+bottom: inherit;
+left: inherit;
+background: none;
+}
+
+.THIS .slds-image:not(.slds-file_loading) a:hover:after, 
+.THIS .slds-image:not(.slds-file_loading) a:focus:after,
+.THIS .slds-file:not(.slds-file_loading) a:hover:after, 
+.THIS .slds-file:not(.slds-file_loading) a:focus:after,
+.THIS.slds-image:not(.slds-file_loading) a:hover:after, 
+.THIS.slds-image:not(.slds-file_loading) a:focus:after,
+.THIS.slds-file:not(.slds-file_loading) a:hover:after, 
+.THIS.slds-file:not(.slds-file_loading) a:focus:after,
+.THIS.slds-image:not(.slds-file_loading):hover:after,
+.THIS.slds-file:not(.slds-file_loading):hover:after,
+.THIS .slds-image:not(.slds-file_loading):hover:after,
+.THIS .slds-file:not(.slds-file_loading):hover:after,
+.THIS a.slds-image__crop:hover:after{
+top: inherit;
+left: inherit;
+width: inherit;
+height: inherit;
+background: none;
+transform: none; 
+}

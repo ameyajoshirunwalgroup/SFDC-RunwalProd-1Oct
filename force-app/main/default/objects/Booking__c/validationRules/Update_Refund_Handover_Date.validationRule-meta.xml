@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Update_Refund_Handover_Date</fullName>
+    <active>true</active>
+    <description>Refund handed over date cannot be future date</description>
+    <errorConditionFormula>Update_Refund_Handover_Date__c &gt; TODAY() &amp;&amp; $Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/</errorConditionFormula>
+    <errorMessage>Refund handed over date cannot be future date</errorMessage>
+</ValidationRule>

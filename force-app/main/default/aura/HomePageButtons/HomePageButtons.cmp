@@ -1,0 +1,75 @@
+<aura:component controller="CustomerPortalEnquiryController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="openModal" type="boolean" default="false"/>
+     <aura:attribute name="lstRef" type="RW_Referral__c" default="[]" />
+    <!--aura:attribute name="RunwalHomeWrapList" type="List" /-->
+    <aura:attribute name="ReferralWrapList" type="Map" default="{}" />
+    <aura:attribute name="projectNames" type="List"/>
+     <lightning:navigation aura:id="navService"/>
+    <!--lightning:navigation aura:id="navService"/-->
+		<lightning:card>
+			<div class="c-container">
+					<lightning:layoutItem size="4" padding="around-small">
+						
+							<div class="slds-grid slds-gutters slds-wrap" >
+								<div class="slds-col slds-size_3-of-12">
+                                    <div class="slds-p-around_medium">
+                                    <lightning:button name="{!bookvar}" variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput"  label="Message From the MD" title="Message From the MD" onclick="{! c.openMDMessage }" />
+									<!--<button class="slds-button slds-button_brand sizeButton textInput">Message From the MD</button>-->
+								</div>
+							</div>
+						</div>
+						<div class="slds-grid slds-gutters slds-wrap" >
+							<div class="slds-col slds-size_3-of-12">
+								<div class="slds-p-around_medium">
+									<!--<button class="slds-button slds-button_brand sizeButton textInput">Affordability Calculator</button>-->
+                                    <lightning:button name="{!bookvar}" variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput"  label="Affordability Calculator" title="Affordability Calculator" onclick="{! c.openAffordabilityCalc }" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="slds-grid slds-gutters slds-wrap" >
+							<div class="slds-col slds-size_3-of-12">
+								<div class="slds-p-around_medium">
+                                    <lightning:button variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput" name="subRef" label="Submit a Referral" title="Submit a Referral" onclick="{! c.openreferralScreen }" />
+									<!--<button class="slds-button slds-button_brand sizeButton textInput">Submit a Refferal</button>-->
+								</div>
+							</div>
+						</div>
+                        
+                        <div class="slds-p-around_medium">
+        <button class="slds-button slds-button_brand sizeButton textInput" onclick="{!c.handleOpenModal}">Enquire About Runwal Projects</button>  
+        <aura:if isTrue="{!v.openModal}">
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.handleCloseModal}">
+                            X
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 class="slds-text-heading--medium">Runwal</h1>
+                    </div>
+                     
+                    <!--Modal Box Header-->
+                     <div class="slds-modal__content slds-p-around_medium" >
+                        <p><b>
+                            <!-- Calling Other Component -->  
+                            <!--lightning:input Name="" label = "Last Name" readonly = "true"/-->
+                            <c:CustomerPortalReferral openModal="{!v.openModal}"/>
+                            </b>
+                        </p>
+                    </div>
+                    <!--Modal Box Button-->
+                    
+                </div>
+                    
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+        </aura:if>
+    </div>
+                        
+					</lightning:layoutItem>
+			</div>
+		</lightning:card>
+	
+</aura:component>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_Of_Client_Formula__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF
+	(DATEVALUE(Booking_Date__c) &lt;=  DATE(2024,03,31) ,
+		IF(
+			OR(ISPICKVAL(Type_of_Client__c,&apos;NRI&apos;),ISPICKVAL(Type_of_Client__c,&apos;Outstation&apos;)),&apos;NRI&apos;,
+				IF(OR(ISPICKVAL(Type_of_Client__c,&apos;Local&apos;),ISPICKVAL(Type_of_Client__c,&apos;Corporate&apos;)),&apos;Local&apos;,
+				&apos;&apos;
+			)
+		),
+	&quot;Local&quot;
+)</formula>
+    <label>Type Of Client(brokerage scheme)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

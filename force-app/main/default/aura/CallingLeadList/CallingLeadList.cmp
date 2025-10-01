@@ -1,0 +1,93 @@
+<aura:component controller="CallingLeadList" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	
+    <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: Show !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 80% !important;
+        max-width: 80% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+     
+    </aura:html>
+    
+    <aura:attribute name="campName" type="String"/>
+    <aura:attribute name="status" type="String"/>
+    <aura:attribute name="leadData" type="List"/>
+    <aura:attribute name="showData" type="Boolean"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div style="padding:1.5rem;">
+        <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                Calling Lead List 
+            </h3>
+            <div style="height:100%;">
+                <lightning:layout horizontalAlign="left" verticalAlign="end">
+                    <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                        <lightning:recordEditForm aura:id="ld" objectApiName="Lead">
+                            <b><lightning:inputField aura:id="camp" fieldName="Calling_Campaign__c" value="{!v.campName}" onchange="{!c.showData}"/></b>
+                        </lightning:recordEditForm>
+                    </lightning:layoutItem>-->
+                    <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                        <lightning:recordEditForm aura:id="ld" objectApiName="Lead">
+                            <b><lightning:inputField aura:id="camp" fieldName="Sales_Team_Calling_status__c" value="{!v.status}" onchange="{!c.showData}"/></b>
+                        </lightning:recordEditForm>
+                    </lightning:layoutItem>-->
+                    <lightning:layoutItem class="slds-p-around_xxx-small">
+                        <b><ui:inputSelect label="Campaign" class="slds-input" value="{!v.campName}" aura:id="camp" change="{!c.showData}"/></b>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-p-around_xxx-small">
+                        <b><ui:inputSelect label="Status" class="slds-input" value="{!v.status}" aura:id="status" change="{!c.showData}"/></b>
+                    </lightning:layoutItem>
+                    
+                </lightning:layout>
+            </div>
+            <br/><br/><br/><br/>
+            <aura:if isTrue="{!v.showData}">
+             <div style="width:50%;">
+                <lightning:button iconName="utility:refresh" class="slds-float_right" name="dayOfRegExp" variant="brand-outline" title="refresh" onclick="{!c.showData}"></lightning:button>
+            </div>
+            
+            <table style="width:50%;">
+                <tr>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Name</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Project</b></td>
+                    <td style="word-break:word;border: 1px solid #666;text-align:center;"><b>Sales Team - Calling status</b></td>
+                </tr>
+                <aura:iteration items="{!v.leadData}" var="lead">
+                	<tr>
+                    	<td style="word-break:word;border: 1px solid #666;text-align:center;">
+                            <a href="javascript:void(0)" id="{!lead.Id}" name="{!lead.Id}" onclick="{!c.openRec}">
+                                {!lead.Name}
+                            </a>
+                        </td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!lead.RW_Project__r.Name}</td>
+                        <td style="word-break:word;border: 1px solid #666;text-align:center;">{!lead.Sales_Team_Calling_status__c}</td>
+                    </tr>
+                </aura:iteration>
+            </table>
+            </aura:if>
+        </form>
+    </div>
+    
+    
+</aura:component>

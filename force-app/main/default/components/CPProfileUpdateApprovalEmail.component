@@ -1,0 +1,44 @@
+<apex:component controller="CPProfileUpdateApprovalEmailController" access="global" allowDML="true">
+    <apex:attribute name="ChannelPartnerId" type="String" description="Channel Partner Id" access="global" assignTo="{!cpId}"/>
+    <html>
+        <head>
+        </head>
+        <body >{!cpupdate}{!booking}
+            <table border="0" width="50%" border-collapse="collapse">
+                <tr><td> Dear {!approvername}, </td></tr>
+                <tr><td> &nbsp; </td></tr>
+            </table>
+            <p>We required your approval for below Channel Partner Profile Update</p>
+            Approval Link : {!ApprovalLink}<br/>
+            Record Link : {!Recordurl}<br/>
+            <table style="width:100%;border-collapse: collapse;border:1px solid #DCDCDC;">
+                <tbody>
+                    <tr>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">Fields</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">Old Vlaue</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">New Value</td>
+                    </tr>
+                    <tr>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">Name</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">{!cpprofileupdate[0].Old_CP_Name__c}</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">{!cpprofileupdate[0].New_CP_Name__c}</td>
+                    </tr>
+                    <tr>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">RERA No</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">{!cpprofileupdate[0].Old_RERA_No__c}</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">{!cpprofileupdate[0].New_RERA_No__c}</td>
+                    </tr>
+                    <tr>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">GST No</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">{!cpprofileupdate[0].Old_GST_No__c}</td>
+                        <td Style="text-align:center;border:1px solid black;width:15%;height:30px;font-size:13px">{!cpprofileupdate[0].New_GST_No__c}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Regards,
+            </p>
+            <p><b>Runwal Group</b></p>
+        </body>
+    </html>
+</apex:component>

@@ -1,0 +1,34 @@
+<aura:component access="GLOBAL" extensible="false" controller="PDFController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader">
+     <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+	<aura:attribute access="GLOBAL" name="pdfData" type="String" description="PDF data in base64 encoded format"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:attribute name="demandNumber" type="String" default = "RW_Billing_Document_Number__c"/> 
+    <aura:attribute name="demand" type="RW_Demand__c[]"/>
+    <aura:attribute name="primaryEmail" type="String" default = "Primary_Applicant_Email__c"/> 
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    
+                <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+    
+     <div class="slds-align_absolute-center" >
+            <lightning:button variant="brand" class="slds-m-top_small" type="Submit" onclick="{!c.sendMail}" label="Send Demand Pdf" />
+     </div>
+    
+	<iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" ></iframe>
+    
+     <div class="slds-align_absolute-center" >
+            <lightning:button variant="brand" class="slds-m-top_small" type="Submit" onclick="{!c.sendMail}" label="Send Demand Pdf" />
+     </div>
+</aura:component>

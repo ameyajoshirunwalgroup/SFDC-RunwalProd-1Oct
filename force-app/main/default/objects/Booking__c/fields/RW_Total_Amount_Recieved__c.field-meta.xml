@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Total_Amount_Recieved__c</fullName>
+    <label>Total Amount Recieved</label>
+    <summarizedField>RW_Registration_Challan__c.RW_SDR_Instrument_Amount__c</summarizedField>
+    <summaryForeignKey>RW_Registration_Challan__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

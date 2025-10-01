@@ -1,0 +1,298 @@
+.tab-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.red-text {
+    color: red;
+}
+.tab.active[c-centreSection360_centreSection360] {
+    background-color: #b98e33;
+    color: white;
+}
+.tabs {
+    display: flex;
+}
+.dark-golden-border {
+    border: 2px solid #b8860b; /* Dark golden color */
+    padding: 10px;
+    border-radius: 5px;
+}
+.ledger-link {
+    background-color: #white; /* Dark golden color */
+    color: blue;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+
+.tab {
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+    margin-right: 5px;
+    font-size: 14px;
+    border-radius: 5px 5px 0 0;
+}
+.element.style {
+    background-color: black;
+    color: white;
+}
+.tab:hover {
+    background-color: #ddd;
+}
+
+.CardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-bottom: 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+    border-radius: 10px; 
+    overflow: hidden; 
+    background-color: white; 
+}
+.container[c-customer360_customer360] {
+    display: flex;
+    height: 100vh;
+}
+.reduced-width-table {
+    width: 100%;
+    max-width: 100%; 
+}
+.reduced-width-table th, .reduced-width-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.5rem;
+}
+.booking-record {
+    flex-wrap: wrap; 
+    padding-left: 40px; 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    align-items: left;
+}
+.minwidth100 {
+    min-width: 100px;
+    font-size: 1.1rem;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.booking-field {
+    flex: 0 0 calc(50% - 20px); /* Adjust to fit two items per row */
+    margin-right: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box; 
+}
+.booking-field-label {
+    font-weight: bold;
+    margin-bottom: 5px; 
+}
+.CardHeader {
+    padding: 5px; 
+    text-align: left; 
+    font-size: 12px; 
+    margin-bottom: 10px; 
+    font-weight: bold;
+    background:#f9f9f9;
+    color: white;
+    width: fit-content;
+    padding: 10px;
+}
+.Main {
+    width: 100%;
+    min-height: 80vh;
+    background-color: white;
+    display: flex;
+    flex-flow: column;
+    padding: 20px;
+    position: relative;
+}
+.HeadingRow { 
+    background-color: white;
+    border: 2px solid #b98e33;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.HeadingRow > .HeadingTH {
+    padding: 10px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.HeadingSummary {
+    flex: 1 1 100px;
+    margin-top: 10px;
+    display: flex;
+    flex-flow: row;
+    gap: 10px;
+}
+.HeadingSummaryitem {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+.accordianlogo {
+    transform: rotate(-90deg);
+}
+.accordianlogo_active {
+    transform: rotate(0deg); 
+}
+.RecordItemSection {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+}
+.RecordItemSection {
+    animation: movedown 0.2s ease forwards;
+}
+.RecordItemCol1 {
+    position: relative;
+    color: #313340;
+    font-weight: bold;
+    font-size: 1rem;
+    flex: 0 0 auto;
+}
+.dashedline {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 1px;
+    border: 1px dashed #313340;
+    height: 100%;
+    z-index: 1;
+}
+.RecordFieldlabel {
+    background-color: white;
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.RecordFieldlabel:hover {
+    color: orange;
+}
+.RecordItem-Row {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    margin-left: 30px;
+    gap: 10px;
+}
+.RecordItem2 {
+    flex: 1 1 100px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    flex-flow: row;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    gap: 20px;
+    margin-left: 50px;
+    padding: 10px;
+}
+.RecordItem2_row {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    flex: 0 0 150px;
+}
+.RecordItem2_row_value {
+    font-weight: bold; 
+    font-size: 16px;
+}
+.RecordItem2_row_label {
+    color: #313340;
+}
+.collection-data-container {
+    margin-bottom: 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+    border-radius: 10px; 
+}
+.collection-header {
+    padding: 5px; 
+    text-align: left; 
+    font-size: 18px; 
+    margin-bottom: 10px; 
+    font-weight: bold;
+    background: burlywood;
+}
+.collection-record {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    align-items: left;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.collection-field {
+    flex: 0 0 calc(50% - 20px);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    text-align: left;
+}
+.collection-field-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.OPRowTable {
+    width: 100%;
+}
+.Opportunity-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    transition: background-color 0.3s;
+}
+.Opportunity-item:hover {
+    background-color: #f1f1f1;
+}
+.Opportunity-item input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+.Opportunity-item label {
+    font-size: 1rem;
+    color: #333;
+}
+.container {
+    display: flex;
+    height: 100vh;
+}
+.left-section, .right-section {
+    flex: 1.5;
+    overflow-y: auto;
+    padding: 10px;
+    width: 90%;
+}
+.left-section {
+    border-right: 1px solid #ddd;
+}
+.right-section {
+    flex: 1.5;
+    padding-left: 20px;
+}
+.CardContainer, .NavBar, .OPRowTable {
+    margin-bottom: 20px;
+}
+.checkbox-cell input[type="checkbox"] {
+    margin: 0;
+    width: 10px;
+}
+.center-section {
+    flex: 1.5;
+    padding: 10px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+}

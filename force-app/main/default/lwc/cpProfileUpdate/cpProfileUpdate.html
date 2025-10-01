@@ -1,0 +1,404 @@
+<template>
+
+    <template if:true={firstform}>
+        <template if:true={showTermsAndConditionsLoading}>
+            <lightning-spinner class="termsAndConditionsLoading" alternative-text="Loading" size="medium">
+            </lightning-spinner>
+        </template>
+        <template if:true={showTermsAndConditions}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container terms-and-conditions-modal">
+
+                    <header class="slds-modal__header terms-and-conditions-header">
+                        <button class="terms-and-conditions-close" title="Close" onclick={closeTermsAndConditions}>
+                            <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"><a href="javascript:void(0);"
+                                class="terms-and-conditions-heading">Terms and Conditions</a></h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium terms-and-conditions-body"
+                        id="termsAndConditionsModal">
+                        Clause 14 of the Standard Terms and Conditions to be amended as under:
+
+                        "You are required to raise bill for the appropriate amount of the fee, plus service tax, payable
+                        as
+                        mentioned above. The bill should clearly indicate the service tax, Service Tax Registration No.
+                        and
+                        the classification of the category and also the PAN No. We shall make payment of the fee only
+                        after
+                        the receipt of bill mentioning all the above said details. The fee would be released within 45
+                        days
+                        after 19.9% of the agreement value received from the customer and Agreement for Sale for the
+                        concerned flat has been executed and registered by the flat purchaser, whichever is later."
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Accept</button>
+                    </footer>
+                </div>
+
+            </section>
+        </template>
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity"
+                                        title="Basic Details">
+                                        <span class="slds-assistive-text">Basic Details</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                    title="Basic Details">Basic Details</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_5-of-12">
+                <img class="imageclass" src={imagecon}>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={value} label="Channel Partner Type" placeholder="Select Type"
+                        options={options} onchange={handleChangepicklist} readonly></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={salutation} label="Salutation" placeholder="Select Salutation"
+                        options={optionssalutation} onchange={handleChangeesalutation} required></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Middle Name" placeholder="Middle Name" value={middlename}
+                        onchange={handlemiddlename} pattern="[a-zA-Z]+" message-when-pattern-mismatch="Numbers and Special Characters are not allowed"></lightning-input>
+                </div>
+                <div if:false={NRI} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="PAN No." placeholder="PAN No." value={panno} autocomplete="true"
+                        onchange={handlePanNoChange} pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+                        message-when-pattern-mismatch="Please enter a valid PAN number For eg:ACDHS8343H" readonly>
+                    </lightning-input>
+                </div>
+                <div if:true={NRI} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="PAN No." placeholder="PAN No." value={panno} autocomplete="true"
+                        onchange={handlePanNoChange} readonly>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={countrycode} label="Country Code" placeholder="Select Country Code"
+                        options={optionscountrycode} onchange={handleChangeecountrycode}></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Company Name (As per RERA)" value={companyname}
+                        placeholder="Company Name (As per RERA)*" onchange={handlecompanyname} readonly={existingrera}>
+                    </lightning-input>
+                </div>
+                <div  class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Is RERA Applicable" label="Is RERA Applicable" options={optionisrera}
+                        value={isreraapplicable} onchange={handleChangeisrera} type="button" required>
+                    </lightning-radio-group>
+                </div>
+                <div  class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Is GST Applicable" label="Is GST Applicable" options={optionisgst}
+                        value={isgstapplicable} onchange={handleChangeisgst} type="button" required>
+                    </lightning-radio-group>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={pos} label="Place of Supply" placeholder="Select Place of Supply"
+                        options={optionspos} onchange={handleChangepos} readonly></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={teamsize} label="Team Size" placeholder="Select Size"
+                        options={optionsteamsize} onchange={handleChangeteamsize}></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-dual-listbox value={expertise} label="Expertise" placeholder="Select Expertise"
+                        options={optionsExpertise} onchange={handleChangeexpertise} source-label="Available"
+                        selected-label="Selected"></lightning-dual-listbox>
+                </div>
+
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={projectvalue} label="Project" placeholder="Select Project"
+                        options={optionsproject} onchange={handleprojectChange} readonly></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="First Name" placeholder="First Name." value={firstName}
+                        onchange={handleFirstNameChange} pattern="[a-zA-Z]+" message-when-pattern-mismatch="Numbers and Special Characters are not allowed" required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Last Name" value={lastName} placeholder="Last Name"
+                        onchange={handleLastNameChange} pattern="[a-zA-Z]+" message-when-pattern-mismatch="Numbers and Special Characters are not allowed" required></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Email" value={email} placeholder="Email" autocomplete="true"
+                        onchange={handleEmailChange} pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                        message-when-pattern-mismatch="Please enter a Email" readonly></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Mobile No" value={mobileno} placeholder="Mobile No"
+                        onchange={handlemobilenoChange} pattern="[0-9]{10}$"
+                        message-when-pattern-mismatch="Please enter a valid 10 Digits Number" required>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-radio-group name="Are you NRI " label="Are you NRI " options={optionisnri} value={isnri}
+                        onchange={handleChangeisnri} type="button" required></lightning-radio-group>
+                </div>
+                <div if:true={showrerano} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="RERA Registration Number" placeholder="RERA Registration Number"
+                        value={rerano} onchange={handleReraChange} pattern="^[A-Z0-9_]{12}$"
+                        message-when-pattern-mismatch="Please enter a 12 digits valid RERA Number" required="existingrera==false" readonly={existingrera}>
+                    </lightning-input>
+                </div>
+                <div if:true={showgst} class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="GSTIN Number" placeholder="GSTIN Number" value={gstno}
+                        onchange={handlegstChange} pattern="^[A-Z0-9_]{15}$"
+                        message-when-pattern-mismatch="Please enter a 15 digits valid GST Number" required="existinggst==false" readonly={existinggst}>
+                    </lightning-input>
+                </div>
+                
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={experience} label="Experience" placeholder="Select Experience"
+                        options={optionsexperience} onchange={handleChangeexperience} required></lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Average Quarterly Business (₹)"
+                        placeholder="Average Quarterly Business (₹)" value={aqb} onchange={handleaqb}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-dual-listbox value={developerworked} label="Developer Worked For"
+                        placeholder="Select Developer" options={optionsdeveloperworked}
+                        onchange={handleChangedeveloperworked} source-label="Available" selected-label="Selected">
+                    </lightning-dual-listbox>
+                </div>
+
+                <!--div class="slds-p-around_medium lgc-bg">
+            <lightning-radio-group name="Is IGST Applicable" label="Is IGST Applicable"
+                options={optionisigst} value={isigstapplicable} onchange={handleChangeisigst}
+                type="button"></lightning-radio-group>
+        </div-->
+            </div>
+
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity" title="Address">
+                                        <span class="slds-assistive-text">Address</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                    title="Address">Address</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_3-of-12">
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="House/Flat/Company" placeholder="House/Flat/Company"
+                        value={houseno} onchange={handlehouseno}></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Street Address 2" placeholder="Street Address 2" value={street2}
+                        onchange={handlestreet2}></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox name="Country" label="Country" placeholder="Select Country"
+                        options={levelValues} required onchange={handleLevelChange} value={selectedLevelValue}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="City" placeholder="City" value={city} onchange={handlecity}>
+                    </lightning-input>
+                </div>
+
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Street Address 1" placeholder="Street Address 1" value={street}
+                        onchange={handlestreet}></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Street Address 3" placeholder="Street Address 3" value={street3}
+                        onchange={handlestreet3}></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox name="State / Region" label="State / Region" placeholder="Select State / Region"
+                        options={secondaryLevelValues} onchange={handleSecondaryLevelChange}
+                        value={selectedSecondaryLevelValue}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Zip / Pin Code" placeholder="Zip / Pin Code" value={pincode}
+                        onchange={handlepincode}></lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity"
+                                        title="Bank Details">
+                                        <span class="slds-assistive-text">Bank Details</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                    title="Bank Details">Bank Details</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Cheque/DD favouring Name"
+                        placeholder="Cheque/Demand Drafts favouring Name" value={favname} onchange={handlefavnameChange}
+                        readonly></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Bank Account IFSC Code" value={ifsccode}
+                        placeholder="Bank Account IFSC Code" onchange={handlebankifscChange} readonly></lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-combobox value={bankname} label="Bank Name" placeholder="Select Bank Name"
+                        options={optionsbankname} onchange={handlebanknameChange} readonly> </lightning-combobox>
+                </div>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Branch Code" placeholder="Branch Code" value={brachcode}
+                        onchange={handlebankcodeChange} readonly></lightning-input>
+                </div>
+
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Bank Account Number" placeholder="Bank Account Number"
+                        value={accno} onchange={handlebankaccnoChange} readonly></lightning-input>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-input type="text" label="Branch Name" placeholder="Enter Branch Name" value={branchname}
+                        onchange={handlebranchnameChange} readonly></lightning-input>
+                </div>
+            </div>
+        </div>
+
+        <div if:true={nodocupload} class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning-button variant="brand" class="nextbtn" onclick={handleRegister} label="Update">
+                </lightning-button>
+            </div>
+        </div>
+        <div if:false={nodocupload} class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning-button variant="brand" class="nextbtn" onclick={handleRegister} label="Update">
+                </lightning-button>
+            </div>
+        </div>
+
+    </template>
+    <template if:true={showuploadmodal}>
+        <lightning-card title="Upload Document" icon-name="custom:custom14">
+            <!--div class="slds-m-around_medium">
+                    <lightning-input type="file" 
+                    accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                    label="Attachment" onchange={openfileUpload}></lightning-input>
+                </div-->
+            <div if:true={local} class="slds-p-around_medium lgc-bg">
+                <lightning-combobox value={typeofdoclocal} label="Type of Document" placeholder="Select Type"
+                    options={docoptionslocal} onchange={handleChangepicklistdocLocal} required></lightning-combobox>
+            </div>
+            <div if:true={NRI} class="slds-p-around_medium lgc-bg">
+                <lightning-combobox value={typeofdocNRI} label="Type of Document" placeholder="Select Type"
+                    options={docoptionsNRI} onchange={handleChangepicklistdocNRI} required></lightning-combobox>
+            </div>
+            <div class="slds-p-around_medium lgc-bg">
+                <lightning-file-upload label="Upload Document" name="Upload Document" accept={acceptedFormats}
+                    onuploadfinished={openfileUpload2} multiple>
+                </lightning-file-upload>
+            </div>
+            <div if:true={fileNames} class="slds-text-body_small slds-text-color_error">{fileNames}
+                <template if:true={showLoadingSpinner}>
+                    <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                </template>
+            </div><br />
+            <!--lightning-button variant="brand" label="Upload" title="Upload" onclick={handleClick} class="slds-m-left_x-small"></lightning-button-->
+            <!--template if:true={data} >
+                    <lightning-button variant="brand" label="submit" title="Submit" onclick={handleRegister} class="slds-m-left_x-small"></lightning-button>
+                </template-->
+        </lightning-card>
+        <template if:true={data}>
+            <lightning-card title="Uploaded Files" icon-name="standard:account">
+                <div style="width: auto;">
+                    <lightning-datatable data={data} columns={columns} key-field="id">
+                    </lightning-datatable>
+                </div>
+                <div class="slds-p-around_medium lgc-bg">
+                    <template if:true={data}>
+                        <lightning-button variant="brand" label="submit" title="Submit" onclick={lastnextbuttonfuc}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </template>
+                </div>
+            </lightning-card>
+        </template>
+    </template>
+    <template if:true={lastmessage}>
+        <lightning-card>
+            <p class="slds-align_absolute-center"><b>Thank You for registering with us</b></p>
+            <p class="slds-align_absolute-center"><b>Your account will be activated shortly</b></p>
+        </lightning-card>
+    </template>
+
+</template>

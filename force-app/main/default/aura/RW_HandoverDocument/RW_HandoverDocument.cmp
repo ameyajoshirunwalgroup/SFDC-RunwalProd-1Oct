@@ -1,0 +1,64 @@
+<aura:component controller = "RW_UnitTransferAndCancellation" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="errormessage" type="String"/> 
+    <aura:attribute name="info" type="Object" />
+    <aura:attribute name="uploadedCheck" type="string" default="none"/>
+    <aura:attribute name="handoverButton" type="boolean"/>
+    
+    <aura:html tag="style">
+    .slds-modal__container {
+     min-width: 40vw;
+    }
+</aura:html> 
+    
+     <div class="slds-col" style="background-color :white;height:33px;">
+      <div class="slds-box slds-align_absolute-center" style="height:29px;border:0px;border-bottom:1px solid #bdb3b3">            
+  			<div class="slds-text-heading_medium" style="height:26px;">            
+            <b>Refund Handover Document</b>
+            </div>
+                
+	</div>          
+	</div>
+    
+     <lightning:recordEditForm aura:id="myRecordForm" recordId="{!v.recordId}" objectApiName="Booking__c" onsubmit="{!c.handleSubmit}" >
+   		 <div class="slds-grid slds-gutters slds-wrap">
+      
+    	<aura:if isTrue="{!v.info.Status__c == 'Booking Cancelled – Refund Ready'}">
+        <div class="slds-col slds-size_1-of-2">
+                <lightning:inputField aura:id="refundDate" fieldName="Update_Refund_Handover_Date__c"  required="true" />
+       </div>
+  		<div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+               <lightning:fileUpload name="RefundHandOver"  label="Upload Handover Document" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.recordId}"
+                                              onuploadfinished="{!c.handoverDocument}" disabled = "{!v.handoverButton}" />
+            
+            <div style="{!'display:' + v.uploadedCheck + ';'}">
+            		<img src="/img/checkbox_checked.gif"/> 
+            </div>
+            
+       </div>
+        <lightning:inputField aura:id="refundUploaded" fieldName="Refund_handover_document_uploaded__c" class ="slds-hide"/>
+           <lightning:inputField aura:id="refundDocument" fieldName="Refund_Handover_Document__c" class ="slds-hide"/>    
+        
+        <div class="slds-align_absolute-center" >
+ 	<lightning:button variant="brand" class="slds-m-top_small" label="Close" onclick="{!c.closePopup}"  />
+    <lightning:button variant="brand" class="slds-m-top_small" type="Submit" label="Save" />
+    </div>
+        <aura:set attribute="else">
+             <div class="slds-col" style="background-color : #263238;color:white;margin-top:100px;">
+      <div class="slds-box slds-align_absolute-center">            
+  			<div class="slds-text-heading_medium">            
+            <b>!! Refund handover document is not ready</b>
+            </div>
+		</div>          
+	</div> 
+        </aura:set>
+           
+        </aura:if>
+               
+        </div>
+     
+     </lightning:recordEditForm>
+</aura:component>

@@ -1,0 +1,59 @@
+<aura:component controller="DigitalBookingController" implements="flexipage:availableforRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="errormessage" type="Object[]"/> 
+    <aura:attribute name="isError" type = "boolean" default="true"/>
+    <aura:attribute name = "inApproval" type ="boolean"/>
+    <aura:attribute name="comments" type="String"/>
+    <aura:attribute name="disabled" type="boolean" default="false"/>
+    <lightning:navigation aura:id="navService"/>
+
+    <aura:html tag="style">
+    .slds-modal__container {
+     min-width: 25w;
+    }
+</aura:html>
+    
+    <div class="slds-col" style="background-color :white;height:33px;">
+      <div class="slds-box slds-align_absolute-center" style="height:29px;border:0px;border-bottom:1px solid #bdb3b3">            
+  			<div class="slds-text-heading_medium" style="height:26px;">            
+            <b>Send Booking for Approval</b>
+            </div>
+	</div>          
+	</div>
+    
+    <aura:if isTrue="{!(v.isError)}">
+                   <div class="slds-m-around_medium slds-text-align_left">
+    <aura:iteration items="{!v.errormessage}" var="err">
+       <ul style="padding-left: 1rem; list-style-type: disc;">
+    <li class="slds-text-color_error slds-p-vertical_x-small">
+        <aura:if isTrue="{!not(empty(err.errorfield))}">
+            Please add SAP Milestone code for
+            <a data-sapid="{!err.ErrorMessage}"
+               onclick="{!c.handleClick}"
+               style="color:#0070d2; text-decoration:underline;">
+                {!err.errorfield}
+            </a>
+            <aura:set attribute="else">
+                {!err.ErrorMessage}
+            </aura:set>
+        </aura:if>
+    </li>
+</ul>
+
+    </aura:iteration>
+</div>
+
+        <aura:set attribute="else">
+            <div class="slds-align_absolute-center" >
+                <lightning:textarea name="comments" label="Requestor Comments" placeholder="Enter the comments" value="{!v.comments}"/>
+            </div>
+            <div class="slds-align_absolute-center" >
+                <lightning:button variant="brand" class="slds-m-top_small" type="Submit" label="Send for Approval" onclick="{!c.sendforapproval}" disabled="{!v.disabled}" />
+                <lightning:button variant="brand" class="slds-m-top_small" label="Cancel" onclick="{!c.closePopup}"  />
+            </div>
+        </aura:set>
+    </aura:if>
+    
+    
+    
+</aura:component>

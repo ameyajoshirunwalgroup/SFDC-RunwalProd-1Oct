@@ -1,0 +1,18 @@
+<aura:component controller="WhatsAppFeedbackCapmaignController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global">
+	
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:if isTrue="{!v.Spinner}">
+         <div class="slds-spinner_container">
+             <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                 <div class="slds-spinner__dot-a"></div>
+                 <div class="slds-spinner__dot-b"></div>
+             </div>
+         </div>
+    </aura:if>
+   
+    
+</aura:component>

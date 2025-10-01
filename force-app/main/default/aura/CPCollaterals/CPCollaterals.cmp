@@ -1,0 +1,60 @@
+<aura:component controller="CPBookingController" implements="forceCommunity:availableForAllPageTypes,lightning:actionOverride,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="isFirst" type="boolean" default="true"/>
+    <aura:attribute name="isSecond" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="pname" type="String" />
+    <aura:attribute name="projectid" type="Id" />
+    <aura:attribute name="brandList" type="List"/>
+    <aura:attribute name="modelList" type="List"/>
+    <aura:attribute name="selectedId" type="Id"/>
+    <aura:attribute name="pictureList" type="List"/>
+    <aura:attribute name="contentsA" type="List" default="[]"/>
+    <aura:attribute name="contentsB" type="List" default="[]"/>
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="prefixURL" type="String" default="https://cpdesk.runwalgroup.in/sfc/servlet.shepherd/version/download/"/>
+    <aura:attribute name="downloadURL" type="String" default="https://cpdesk.runwalgroup.in/s/sfc/servlet.shepherd/version/download/"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="c-container" >
+        <!--div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__name">
+                    <div class="slds-page-header__name-title">
+                        <h1>
+                            <span class="slds-page-header__title slds-truncate" title="Our Projects"><b><p>Collaterals</p></b></span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div-->
+        
+        <div class="c-container">
+            <lightning:layout multipleRows="true" >
+                <aura:iteration items="{!v.contentsA}" var="contentA">
+                    <lightning:layoutItem  size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <div >
+                            <ul class="slds-has-dividers_around-space">  
+                                <p align="justify">
+                                    <figure >
+                                        <h5 class="slds-tile__title slds-truncate" >
+                                            <figure ><!-- class="sldsimage sldsimagecard" -->
+                                                <div id="container">
+                                                    <a href="{!v.downloadURL + contentA.Id}" >
+                                                        <div id="{!contentA.Id}">
+                                                            <!--img src="{!v.prefixURL + content.Id}" alt="Description of the image" class="mainimage" style="WIDTH:360px; HEIGHT:230px"/-->
+                                                            <lightning:fileCard fileId="{!contentA.ContentDocumentId}" description="{!contentA.Title}"/>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                
+                                            </figure>
+                                        </h5>
+                                    </figure>
+                                </p>
+                            </ul>
+                        </div>
+                    </lightning:layoutItem>
+                </aura:iteration>
+            </lightning:layout>
+        </div>
+    </div>
+</aura:component>

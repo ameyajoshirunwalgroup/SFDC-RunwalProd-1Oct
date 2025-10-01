@@ -1,0 +1,73 @@
+<aura:component controller="EOIController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+	 
+    <aura:attribute name="isSuccess" type="Boolean" />
+    <aura:attribute name="projectName" type="String" />
+    <aura:attribute name="paymentType" type="String" />
+    <aura:attribute name="towerNames" type="String[]" />
+    <aura:attribute name="Amount" type="Decimal" />
+    <aura:attribute name="errorMessage" type="String" />
+
+     <div class="slds-align_absolute-center" >
+         <p>Please Select the Payment Type and enter the amount below for customer to pay</p>
+    </div>
+    
+     <div class="slds-grid slds-gutters slds-wrap" >
+         
+         
+          <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Payment Type</span>                        
+                                    </div>
+                                </div>
+                            </div>
+         
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                               <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-small slds-p-right_none">
+                                    <lightning:select  value="{!v.paymentType}" name="paymentType" label="Payment Type" variant="label-hidden">
+                           				<option value="">--None--</option>
+                                        <option value="EOI">EOI</option>
+                                        <!--<option value="Booking">Booking</option>-->
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                   </div>
+             </div>
+                            </div>
+         
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Amount</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                     <div class="slds-p-top_large slds-p-left_none">
+                                   <lightning:input type="number" name="amount" label="Amount" value="{!v.Amount}" formatter="currency"  variant="label-hidden"/>
+                                    </div>
+                                    </div>
+                            </div>
+
+    </div>
+    
+     <div class="slds-align_absolute-center" >
+         <div class="slds-p-around_large">
+         <lightning:button variant="brand" label="Send Payment Link" title="Send Payment Link" onclick="{! c.sendLink }" />
+         </div>
+         </div>
+    
+   <!-- <aura:if isTrue="{!v.isSuccess}">
+        <div class="slds-p-around_medium slds-text-align_center slds-text-color_success slds-text-heading_small">
+        An Email has been sent successfully to the customer.
+        </div>
+        <aura:set attribute="else">
+        <div class="slds-p-around_medium slds-text-align_center slds-text-color_error slds-text-heading_small">
+        {!v.errorMessage}
+        </div>
+    </aura:set>
+    </aura:if> -->
+                                           
+</aura:component>

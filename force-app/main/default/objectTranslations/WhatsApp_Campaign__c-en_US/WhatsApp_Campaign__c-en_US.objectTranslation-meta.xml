@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>WhatsApp Campaign</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>WhatsApp Campaigns</value>
+    </caseValues>
+    <layouts>
+        <layout>Customized Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Mass Email --></label>
+            <section>Mass Email</section>
+        </sections>
+        <sections>
+            <label><!-- Mass Whatsapp --></label>
+            <section>Mass Whatsapp</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Email Page</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Filtered Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Filter Criteria (Opportunity) --></label>
+            <section>Filter Criteria (Opportunity)</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Referral and Loyalty Email</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Send Campaign --></label>
+        <name>Send_Feedback_Link</name>
+    </quickActions>
+    <recordTypes>
+        <label><!-- Customized --></label>
+        <name>Customized</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Email --></label>
+        <name>Email</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Filtered --></label>
+        <name>Filtered</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Opportunity Email --></label>
+        <name>Opportunity_Email</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please add Email Template Name --></errorMessage>
+        <name>Email_Template_Check</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Make_SRO_Date_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(IF( AND( ISPICKVAL(RW_Registration_Type__c, &apos;E-Registration&apos;) , ISPICKVAL(RW_Registration_Status__c, &apos;Registration Completed&apos;) ) , ISBLANK( RW_Sub_Registrar_Office_Date__c ) , null),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>Please select the SRO Date if E- Registration</errorMessage>
+</ValidationRule>

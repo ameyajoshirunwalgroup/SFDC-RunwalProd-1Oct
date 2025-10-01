@@ -1,0 +1,491 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global"
+                controller="DependentPicklistUtility">
+    <!-- call doInit function on component load -->  
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    
+    <!-- aura attributes-->  
+    <aura:attribute name="listControllingValues" type="list" default="[]" description="to store controller field values"/>
+    <aura:attribute name="listDependingValues" type="list" default="" description="to store dependent field values"/>
+    <aura:attribute name="listSubDependingValues" type="list" description="to store dependent field values"/>
+    
+    <aura:attribute name="depnedentFieldMap" type="map" description="map to store dependent values with controlling value"/>
+    <aura:attribute name="subDepnedentFieldMap" type="map" description="map to store sub dependent values with controlling value"/>
+    <aura:attribute name="bDisabledDependentFld" type="boolean" default="true"/> 
+    <aura:attribute name="bDisabledSubDependentFld" type="boolean" default="true"/> 
+     <aura:attribute name="disablePANUpload" type="boolean" default="true"/> 
+    <aura:attribute name="disablePassportUpload" type="boolean" default="true"/> 
+    <aura:attribute name="disableOtherDocumentUpload" type="boolean" default="true"/> 
+    <aura:attribute name="bDisableOtherDocNumber" type="boolean" default="true"/>
+
+    <aura:attribute name="objDetail" type="RW_EOI__c" default="{'sobjectType' : 'RW_EOI__c'}"/>
+    <aura:attribute name="controllingFieldAPI" type="string" default="RW_Type_Of_Applicant__c" description="store field API name of Controller field"/>
+    <aura:attribute name="dependingFieldAPI" type="string" default="RW_Residential_Status__c" description="store field API name of dependent field"/>
+    <aura:attribute name="subDependingFieldAPI" type="string" default="RW_Document_Proof__c" description="store field API name of sub dependent field"/>
+    <aura:attribute name="residentialStatusRequired" type="Boolean" />
+    <aura:attribute name="addressProofDcoumentPicklists" type="String[]"/>
+    <aura:attribute name="OriginTypePicklistValues" type="String[]"/>
+    <aura:attribute name="recordId" type="string" />
+    <aura:attribute name="eoiId" type="string" />
+        <aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/> 
+      <aura:attribute name="encryptedToken" type="String" /> 
+        <aura:attribute name="multiple" type="Boolean" default="true"/>    
+        <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:attribute name="EOIWrap" type="Map" default="{}" />
+    <aura:attribute name="documentDetailData" type="List"/>
+    <aura:attribute name="residentialStatusSel" type="String"/>
+     <aura:attribute name="documentType" type="String"/>
+    <aura:attribute name="activeSections" type="List" default="[]" />
+    
+    <aura:registerEvent name="DocumentNumberValidate" type="c:KYCDocumentNumberValidate"/>
+    
+    <!--Controller Field-->
+
+
+
+    
+     <div class="slds-p-around_small">
+        
+         <div class="contentbox ">
+             <div >
+                <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" >
+         <lightning:accordionSection name="A" label="Document Upload Guide">
+
+                <p>1) This file must be in JPG/PDF/PNG/JPEG format.</p>
+                <p>2) This maximum file upload size is 5MB.</p>
+                <p>3) Please Select Type of Applicant and then Residential Status.</p>
+                <p>4) PAN Card Document Number is mandatory.</p>
+                <p>5) Upload option will be enabled once valid document number is filled.</p>
+                <p>5) Please fill PAN Number in Capitals Only.</p>
+             </lightning:accordionSection>
+             </lightning:accordion>
+         </div>
+            <div class="slds-box slds-box_x-small slds-page-header docheader slds-text-title_bold">Documents</div>  
+            <div class="slds-grid slds-gutters slds-wrap">  
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Type Of Applicant<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                     <div class="slds-p-around_small">
+    <lightning:layoutItem size="12" padding="around-small"> 
+        <lightning:select name="controllerFld"
+                          value="{!v.EOIWrap.RWTypeofapplicant}"
+                          label="Type Of Applicant"
+                          onchange="{!c.onControllerFieldChange}"
+                          required = "true"
+                          variant="label-hidden"
+                          >
+            <option value="">--None--</option>
+            <aura:iteration items="{!v.listControllingValues}" var="val" >
+                <aura:if isTrue="{! v.EOIWrap.RWTypeofapplicant == val}">
+                    <option value="{!val}" selected="true">{!val}</option>
+                    <aura:set attribute="else">
+                             <option value="{!val}">{!val}</option>
+                         </aura:set>
+                </aura:if>
+               
+            </aura:iteration>
+        </lightning:select>
+    </lightning:layoutItem>
+                          </div>
+                 </div>
+    
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Residential Status<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+    <!--Dependent Field-->
+                 <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                     <div class="slds-p-around_small">
+    <lightning:layoutItem size="12" padding="around-small">
+        <lightning:select name="dependentFld"
+                          value="{!v.EOIWrap.RWResidentialstatus}"
+                          label="Residential Status"
+                          disabled="{!v.bDisabledDependentFld}"
+                          onchange="{!c.onSubControllerFieldChange}"
+                          required="true"
+                          variant="label-hidden">
+            <option value="" >--- None ---</option>
+            <aura:iteration items="{!v.listDependingValues}" var="val">
+                <aura:if isTrue="{!v.EOIWrap.RWResidentialstatus == val}">
+                 <option value="{!val}" selected="true">{!val}</option>
+                    <aura:set attribute="else">
+                             <option value="{!val}">{!val}</option>
+                         </aura:set>
+                </aura:if>
+            </aura:iteration>
+        </lightning:select>
+    </lightning:layoutItem>
+                     </div>
+                </div>
+    
+    <!--sub Dependent Field-->
+                
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+<div class="slds-table--header-fixed_container">
+    <!--<div class="slds-scrollable_y" style="height:90%;">-->
+            <table class="slds-table slds-table_bordered slds-table--header-fixed">
+                
+               <!-- <thead>
+                    <tr class="slds-text-title_caps">
+                       
+                       <div class="slds-grid slds-gutters slds-wrap">
+                           <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            
+                               <div class="slds-truncate slds-text-align_center" >Document Name</div>
+                          
+                               </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                           
+                                <div class="slds-truncate slds-text-align_center">Document Number</div>
+          
+                                </div>
+                        
+                           <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            
+                               <div class="slds-truncate slds-text-align_center" >Upload</div>
+                       
+                               </div>
+                           </div>
+                        
+                    </tr>
+                </thead>-->
+                <tbody>
+                    <!--<aura:iteration items="{!v.listSubDependingValues}" var="val"> -->
+                    <tr>
+                        <div >
+                      <div class="slds-grid slds-gutters slds-wrap">
+                          
+                          <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus != ''}">
+                          <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin'}">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                          <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small">  
+                          <lightning:input type="text" value="{!v.EOIWrap.RWPassportNoDetails}" disabled="{!v.bDisabledSubDependentFld}" aura:id="Passport Number" label="Passport Number" placeholder="Document Number.." onblur="{!c.onFNPassportChange}" />
+                              </lightning:layoutItem>
+                              </div>
+                          </div>
+                               <aura:set attribute="else">
+                                    <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'For NRI'}">
+                                    <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                          <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small">  
+                          <lightning:input type="text" value="{!v.EOIWrap.RWPANDetails}" disabled="{!v.bDisabledSubDependentFld}" aura:id="PAN Card" label="PAN Card" placeholder="Document Number.." onblur="{!c.validatePAN}" />
+                              </lightning:layoutItem>
+                              </div>
+                          </div>-->
+                                        
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-left_small">
+                                        <span >PAN Card</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                                       <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                          <div class="slds-p-around_small">
+                              <div class="slds-p-top_medium">
+                               <lightning:layoutItem size="12" padding="around-small"> 
+                          <lightning:input type="text" value="{!v.EOIWrap.RWPANDetails}" disabled="{!v.bDisabledSubDependentFld}" aura:id="PAN Card NRI" label="PAN Card" placeholder="Document Number.." onblur="{!c.validatePAN}" variant="label-hidden"/>
+                              </lightning:layoutItem>
+                              </div>
+                              </div>
+                          </div>
+                                        
+                                   <aura:set attribute="else">
+                                   <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                          <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small">  
+                          <lightning:input type="text" value="{!v.EOIWrap.RWPANDetails}" disabled="{!v.bDisabledSubDependentFld}" aura:id="PAN Card" label="PAN Card" placeholder="Document Number.." onblur="{!c.validatePAN}" required="true"/>
+                              </lightning:layoutItem>
+                              </div>
+                          </div>-->
+                                       
+                                       <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-left_small">
+                                        <span >PAN Card<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                                       <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                          <div class="slds-p-around_small">
+                              <div class="slds-p-top_medium">
+                               <lightning:layoutItem size="12" padding="around-small"> 
+                          <lightning:input type="text" value="{!v.EOIWrap.RWPANDetails}" disabled="{!v.bDisabledSubDependentFld}" aura:id="PAN Card" label="PAN Card" placeholder="Document Number.." onblur="{!c.validatePAN}" required="true" variant="label-hidden"/>
+                              </lightning:layoutItem>
+                              </div>
+                              </div>
+                          </div>
+                                       
+                                       
+                                        </aura:set>
+                                   </aura:if>
+                              </aura:set>
+                          </aura:if>
+                          </aura:if>
+                          
+                         
+                          <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus != ''}">
+                          <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                        <div class="slds-text-align_center slds-p-around_small">
+                            <lightning:layoutItem size="12" padding="around-small"> 
+                                <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin'}">
+                                    <lightning:fileUpload name="Passport"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.eoiId}" disabled="{!v.disablePassportUpload}"
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                    <aura:set attribute="else">
+                                        <lightning:fileUpload name="PAN Card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.eoiId}" disabled="{!v.disablePANUpload}"
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                    </aura:set>
+                                </aura:if>
+                         
+                            </lightning:layoutItem>
+                           </div>
+                              
+                      
+                          </div>
+                          </aura:if>
+                          
+                         <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'For NRI'}">
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                 <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small">  
+                         <lightning:input type="text" aura:id="PassportDetails" disabled="{! v.bDisabledSubDependentFld }" label="Passport Details" placeholder="Document Number.." value="{!v.EOIWrap.RWPassportNoDetails}" onblur="{!c.onPassportChange}"/>  
+                                     </lightning:layoutItem>
+                                 </div>
+                                     </div>
+                             </aura:if>
+                          
+                          <aura:if isTrue="{! or(v.EOIWrap.RWResidentialstatus == 'For Company' , v.EOIWrap.RWResidentialstatus == 'Partnership Firm') }">
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                 <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small">  
+                         <lightning:input type="text" aura:id="RWPanCardNumberofAuthoritySignatory" disabled="{! v.bDisabledSubDependentFld }" label="Self-attested copy of Pan Card of Authority Signatory" placeholder="Document Number.." value="{!v.EOIWrap.RWPanCardNumberofAuthoritySignatory}" onblur="{!c.onPanCardNumberofAuthoritySignatoryChange}"/>  
+                                     </lightning:layoutItem>
+                                 </div>
+                                     </div>
+                             </aura:if>
+                          
+                         <aura:if isTrue="{! or(v.EOIWrap.RWResidentialstatus == 'Indian National' , v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin')}">
+                           <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                               <div class="slds-p-around_small">
+				
+                                <lightning:layoutItem size="12" padding="around-small">
+                                  
+                                     <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Indian National'}">
+                                    <lightning:select name="addressproof"
+                                                      value="{!v.EOIWrap.RWDocumentProof}"
+                                                      label="Document Proof"
+                                                      disabled="{!v.bDisabledSubDependentFld}"
+                                                      onchange="{!c.onOtherDocumentSelect}"
+                                                      >
+                                          <option value="">--None--</option>
+                                         <aura:iteration items="{!v.addressProofDcoumentPicklists}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWDocumentProof)) , v.EOIWrap.RWDocumentProof == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                    </aura:if>
+                                    
+                                    <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin'}">
+                                      <lightning:select name="TypeOfOrigin"
+                                                      value="{!v.EOIWrap.RWTypeOfOrigin}"
+                                                      label="Type Of Origin"
+                                                      disabled="{!v.bDisabledSubDependentFld}"
+                                                      onchange="{!c.onOtherDocumentSelect}"
+                                                      >
+                                          <option value="">--None--</option>
+                                         <aura:iteration items="{!v.OriginTypePicklistValues}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWTypeOfOrigin)) , v.EOIWrap.RWTypeOfOrigin == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>  
+                                    </aura:if>
+                                    
+                           
+                                </lightning:layoutItem>
+                                     </div>
+                       <!-- <div class="slds-truncate slds-text-align_center slds-p-top_large">{!val}</div> -->
+                          </div>
+                          </aura:if>
+                       
+                          <aura:if isTrue="{! or(v.EOIWrap.RWResidentialstatus == 'Indian National' , v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin')}">
+                           <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                          <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small"> 
+                                   <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Indian National'}">
+                                   <lightning:input type="text" aura:id="DocumentDetails" disabled="{!or(empty(v.EOIWrap.RWDocumentProof),v.bDisabledSubDependentFld)}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWDocumentNumber}"/>    
+                                   </aura:if>
+                                   <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin' }">
+                                   <lightning:input type="text" aura:id="OriginDetails" disabled="{!or(empty(v.EOIWrap.RWTypeOfOrigin),v.bDisabledSubDependentFld)}" label="Origin Details" placeholder="Document Number.." value="{!v.EOIWrap.RWOriginDetails}" onblur="{!c.onOriginDetailsChange}"/>  
+                                   </aura:if>
+                                   </lightning:layoutItem>
+                               </div>
+                          </div>
+                          </aura:if>
+                          
+                          
+                         <!--  <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                          <div class="slds-p-around_small">
+                               <lightning:layoutItem size="12" padding="around-small"> 
+                                <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus == 'Foreign Nationals Of Indian Origin' }">
+                                    _++ {!v.EOIWrap.RWTypeOfOrigin}
+                                    =={!v.objDetail.RW_Document_Proof__c}
+                                    <aura:if isTrue="{!v.objDetail.RW_Document_Proof__c == 'PIO card'}">
+                                    <lightning:input type="text" aura:id="Other Document" disabled="{!v.bDisabledSubDependentFld}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWOriginDetails}"/>
+                                        <aura:set attribute="else">
+                                            <aura:if isTrue="{!v.objDetail.RW_Document_Proof__c == 'OCI card'}">
+                                            !!<lightning:input type="text" aura:id="Other Document" disabled="{!v.bDisabledSubDependentFld}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWOriginDetails}"/>
+                                         <aura:set attribute="else">   
+                                        <aura:if isTrue="{!v.objDetail.RW_Document_Proof__c =='Passport'}">
+                                        **<lightning:input type="text" aura:id="Other Document" disabled="{!v.bDisabledSubDependentFld}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWPassportNoDetails}"/>
+                                        <aura:set attribute="else">
+                                        $$ <lightning:input type="text" aura:id="Other Document" disabled="true" label="Document Number" placeholder="Document Number.." />
+                                        </aura:set>
+     									</aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:set attribute="else">
+                                       <aura:if isTrue="{! or(v.EOIWrap.RWResidentialstatus == 'For Company', v.EOIWrap.RW_Residential_Status__c == 'Partnership Firm' )}">
+                                         <aura:if isTrue="{!v.EOIWrap.RWPanCardNumberofAuthoritySignatory}">
+                                          ^^ <lightning:input type="text" aura:id="Other Document" disabled="{!v.bDisabledSubDependentFld}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWPanCardNumberofAuthoritySignatory}"/>
+                                           <aura:set attribute="else">
+                                                <aura:if isTrue="{!v.EOIWrap.RWPassportNoDetails}">
+                                                     ##<lightning:input type="text" aura:id="Other Document" disabled="{!v.bDisabledSubDependentFld}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWPassportNoDetails}"/>
+                                                     <aura:set attribute="else">
+                                                        %% <lightning:input type="text" aura:id="Other Document" disabled="true" label="Document Number" placeholder="Document Number.." />
+                                                    </aura:set>
+                                               </aura:if>
+                                         
+                                        </aura:set>
+                                             
+                                           </aura:if>
+                                             <aura:set attribute="else">
+                                             @@<lightning:input type="text" aura:id="Other Document" disabled="{!v.bDisabledSubDependentFld}" label="Document Number" placeholder="Document Number.." onblur="{!c.validateOtherDocument}" value="{!v.EOIWrap.RWDocumentNumber}"/>
+                                           </aura:set>
+                                        </aura:if>
+                               </aura:set>
+                                   </aura:if>
+                                   
+                                    
+                                   </lightning:layoutItem>
+                              </div>
+                          </div> -->
+                      
+                       <aura:if isTrue="{! v.EOIWrap.RWResidentialstatus != ''}">
+                       <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                        <div class="slds-text-align_center slds-p-around_small">
+                            <lightning:layoutItem size="12" padding="around-small">  
+                       <lightning:fileUpload name="Other Documents"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.eoiId}"
+                                              disabled="{!v.disableOtherDocumentUpload}" onuploadfinished="{!c.uploadOtherDocument}" />  
+                            </lightning:layoutItem>
+                           </div>
+                      
+                          </div>
+                          </aura:if>
+                          
+                          
+                        </div>
+                        
+					</div>
+                    </tr>
+                        <!-- </aura:iteration> -->
+                </tbody>
+                   
+        </table>
+  
+                    </div>
+              </div>           
+                    
+
+                   
+                
+                
+   <!--  <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+     <div class="slds-p-around_small">
+    <lightning:layoutItem size="12" padding="around-small">
+        <lightning:select name="subDependentFld"
+                          value="{!v.objDetail.RW_Document_Type__c}"
+                          label="Document Type"
+                          disabled="{!v.bDisabledSubDependentFld}">
+            <aura:iteration items="{!v.listSubDependingValues}" var="val">
+                <option value="{!val}">{!val}</option>
+            </aura:iteration>
+        </lightning:select>
+    </lightning:layoutItem>
+         </div>
+                </div> -->
+                
+                <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                     <div class="slds-p-around_small">
+                <div style="width:100%">  
+                    <center>
+                        <lightning:fileUpload label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.recordId}"
+                                              onuploadfinished="{!c.UploadFinished}" />  
+                    </center>
+                </div>
+                     </div>
+            </div> -->
+                
+                <aura:if isTrue="{! not (empty(v.data))}">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                     <div class="slds-p-around_small">
+                <div style="height: 120px">
+        <lightning:datatable
+                keyField="id"
+                data="{! v.data }"
+                columns="{! v.columns }"
+                hideCheckboxColumn="true"
+                onrowaction="{! c.handleRowAction }"
+                class="table-test"/>
+                    
+                     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+            
+                    
+    </div>
+                    </div>
+                </div>
+                </aura:if>
+                
+                
+             </div>
+         </div>
+    </div>
+
+    
+</aura:component>

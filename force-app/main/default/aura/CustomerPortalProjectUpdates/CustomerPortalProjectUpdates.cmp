@@ -1,0 +1,115 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="selectedTabBookingId" type="String" />
+    <aura:attribute name="contructionphotos" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="testURL" type="String" default="https://runwal--prodsb--c.documentforce.com/servlet/rtaImage?eid=a2K6D0000005FIl&amp;feoid=00N6D000008R9dg&amp;refid=0EM6D000000FBJ1"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+    <div>
+        <lightning:card>
+            <lightning:tabset selectedTabId="{!v.selectedTabBookingId}">
+                <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                    <!--lightning:tab label="{!bookvar.BookingName}" id="{!bookvar.BookingId}" -->
+                    <lightning:tab label="{!'Project Updates for Booking '+ bookvar.unitNumber}" id="{!bookvar.BookingId}" onactive="{!c.onactiveTab}">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_9-of-12">
+                        <div class="slds-section slds-is-open">
+                           <!-- <h3 class="slds-section__title slds-theme_shade sectionBackground" >
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Construction Updates</span>
+                            </h3>-->
+                            <div class="slds-box slds-box_small">
+                            <div class="slds-page-header">
+                                <h1>Construction Updates</h1>
+                            </div>
+                            </div>
+                            
+                            <aura:iteration items="{!v.contructionphotos}" var="cus" indexVar="key">
+                                <div class="slds-box slds-theme_default">
+                                <b>{!cus.key}</b>
+                                <div class="slds-grid slds-gutters slds-wrap" >
+                                <aura:iteration items="{!cus.value}" var="cust" indexVar="keyy">
+                                    <!--{!cust.photoId}{!bookvar.documentdomainURL}-->
+                                   <!-- <img src="{!v.prefixURL + cust.photoId}" width="100" height="100"/> 0686D000000dmDtQAI-->
+                                    
+                            		<div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                    <!--<img src="{'/sfc/servlet.shepherd/version/download/'+ cust.photoId}"/>-->
+                                        <div  style="display: inline-block;">
+                                             <img style="height: 200px; width:200px;" src="{!'/sfc/servlet.shepherd/version/download/'+cust.photoId}" />   <!-- Commented by coServe 08-12-2022 --> <!-- Uncommented by coServe 13-11-2024 -->
+                                       <!-- <img style="height: 200px; width:200px;" src="{!bookvar.documentdomainURL+'/sfc/servlet.shepherd/version/download/'+cust.photoId}" />-->
+                                            <!--<img style="height: 200px; width:200px;" src="{!'/'+bookvar.communityName+'/sfc/servlet.shepherd/version/download/'+cust.photoId}" /> --> <!-- Added by coServe 08-12-2022 --><!-- Commented by coServe 13-11-2024 --> 
+                                        <span class="slds-align_absolute-center" >{!cust.description}</span>
+                                        </div>
+                                        </div>
+                                    
+                                   <!-- {!cust.photoId} **-->
+                                </aura:iteration>
+                                    </div>
+                                <br/><br/>
+                                </div>
+                            </aura:iteration>
+                            
+                            <!--<aura:iteration items="{!bookvar.towerConstructionDetails}" var="conUp">
+                                div class="slds-p-around_small slds-align_absolute-center slds slds-grid slds-wrap" 
+                                <div class="slds-form-element">
+                                    <img src="{!v.testURL}"></img>
+                                    {!conUp.RW_Tower_Construction_Photo__c}
+                                    <lightning:formattedRichText value="{!v.testURL}"/>
+                                    
+                                    lightning:input value="{!pro.TowerFloorPlanLink}" readonly="true" /
+                                </div>
+                            </aura:iteration>-->
+                        </div>
+                            </div>
+                        
+                         <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-12">
+                        <div class="slds-section slds-is-open">
+                            <!--<h3 class="slds-section__title slds-theme_shade sectionBackground" >
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Links</span>
+                            </h3>-->
+                            <div class="slds-box slds-box_small">
+                            <div class="slds-page-header">
+                                <h1>Links</h1>
+                            </div>
+                            
+                            <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                                <aura:if isTrue="{!not(empty(bookvar.ProjectBrochureLink))}">
+                                <div class="slds-p-around_small">
+									<!--<button class="slds-button slds-button_brand sizeButton textInput">Affordability Calculator</button>-->
+                                    <lightning:button name="{!bookvar}" variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput"  label="Project Brochure Link" title="Project Brochure Link" onclick="{! c.openBrochureLink }" />
+								</div>
+                                </aura:if>
+                                <aura:if isTrue="{!not(empty(bookvar.ProjectVideoLink))}">
+                                <div class="slds-p-around_small">
+									<!--<button class="slds-button slds-button_brand sizeButton textInput">Affordability Calculator</button>-->
+                                    <lightning:button name="{!bookvar}" variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput"  label="Project Video Link" title="Project Video Link" onclick="{! c.openprojectvideoLink }" />
+								</div>
+                                </aura:if>
+                                 <aura:if isTrue="{!not(empty(bookvar.TowerFloorPlanLink))}">
+                                <div class="slds-p-around_small">
+									<!--<button class="slds-button slds-button_brand sizeButton textInput">Affordability Calculator</button>-->
+                                    <lightning:button name="{!bookvar}" variant="brand" class="slds-button slds-button_brand slds-size_small  sizeButton textInput"  label="Tower Floor Plan Link" title="Tower Floor Plan Link" onclick="{! c.opentowerfloorplanlink }" />
+								</div>
+                                </aura:if>
+                                <!--<a style="color:blue" href="{!bookvar.ProjectBrochureLink}">Project Brochure Link </a><br/>    
+                                <a style="color:blue" href="{!bookvar.ProjectVideoLink}">Project Video Link </a> <br/>
+                                <a style="color:blue" href="{!bookvar.TowerFloorPlanLink}">Tower FLoor Plan Link </a> -->
+                                
+                            </div>
+                        </div>
+                            </div>
+                            </div>
+                        </div>
+                    </lightning:tab>
+                </aura:iteration>
+            </lightning:tabset>
+        </lightning:card>
+    </div>
+</aura:component>

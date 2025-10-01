@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contact_Number_Mother_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(IF( Contact_Number_Mother__c!= null, NOT(REGEX(Contact_Number_Mother__c, &quot;[0-9]{10}&quot;)), false)),
+$Label.Disable_all_validations_from_Account == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Contact_Number_Mother__c</errorDisplayField>
+    <errorMessage>Please enter valid Phone number.</errorMessage>
+</ValidationRule>

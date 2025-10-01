@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Update_SDR</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+Stamp_duty_payable_by_Runwal__c &gt; 0,
+ISCHANGED( RW_Registration_Date__c ),
+NOT( SDR_Updated__c ),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorMessage>Go to Related List --&gt; scroll down to SDR Payment Details --&gt; open the SDR record --&gt; update the Amount --&gt; save the record --&gt; come to Booking record and update the Registration date.</errorMessage>
+</ValidationRule>

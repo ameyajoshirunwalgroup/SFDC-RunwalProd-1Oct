@@ -1,0 +1,38 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                controller="CustomerPotalFaqsControler" access="global" >
+    <aura:attribute name="activeSections" type="List" default="[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit }"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:attribute name="lstFaqs" type="RW_FAQ__c[]"/>
+    <aura:attribute name="RW_Active__c" type="boolean" default="true"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="showMultiLanguage" type="Boolean"/>
+    <aura:attribute name="backgroundImageURL" type="String"/>
+    <div class="slds-align_absolute-center">
+        <lightning:card > 
+            <div style="{!'position: relative; height: 100%; background: url(' + v.backgroundImageURL +') no-repeat;background-position: center;background-size: cover;'}" >
+                <h1 class="title slds-text-heading--large" style="text-align:center; ">{!v.title}</h1>
+                <aura:if isTrue="{!$Label.c.Show_Multi_Language_FAQ_on_Customer_Portal == 'true'}">
+                    <div class="slds-float_right">
+                        <lightning:button  class="sizeButton textInput" label="Hindi" title="Hindi" onclick="{!c.hindiFaqs}"/>
+                        <lightning:button  class="sizeButton textInput" label="Marathi" title="Marathi" onclick="{!c.marathiFaqs}"/>
+                        <lightning:button  class="sizeButton textInput" label="English" title="English" onclick="{!c.englishFaqs}"/>
+                    </div>
+                </aura:if>
+                <br/><br/>
+                <div class="slds-p-around_small slds-align_absolute-center slds slds-grid slds-wrap" >
+                    <div class="slds-col slds-size_1-of-1">
+                        <aura:iteration items="{!v.lstFaqs}" var="Faq"> 
+                            <div class="slds-col slds-size_1-of-1" data-id="{!Faq.RW_Question__c}" aura:id="{!Faq.RW_Question__c}" >
+                                <lightning:formattedRichText value="{!Faq.RW_Question__c}"/>
+                                <lightning:formattedRichText aura:id="{!Faq.RW_Answer__c}" value="{!Faq.RW_Answer__c}"/>
+                            </div>
+                            <br/>
+                        </aura:iteration>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+        
+    </div>
+</aura:component>

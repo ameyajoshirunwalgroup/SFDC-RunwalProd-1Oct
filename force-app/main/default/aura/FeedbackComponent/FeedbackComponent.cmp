@@ -1,0 +1,198 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="FeedbackComponentController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="lstFeedBack" type="RW_Feedback__c[]"/>
+    <aura:attribute name="strTest" type="string" />
+    
+    <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system.min.css"/>
+    
+    <aura:if isTrue="{!v.lstFeedBack.length > 0}">
+        <div class="slds-align--absolute-center slds-m-around--medium">
+        	<b>Greeting from Runwal Homes. Please take a few moment and fill out the feedback form.</b>
+        </div>
+    	<div class="slds-page-header" role="banner">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                  Feedback :
+                </div>
+            </div>
+    	</div>
+    <!--</aura:if>-->
+    <aura:iteration var="objFB" items="{!v.lstFeedBack}">
+        <div class="slds-grid slds-m-around--medium">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 13px;font-weight: bold;">
+                Unit Name : {!objFB.RW_Unit_Name__c} 
+            </div>
+        </div>
+        <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-max-medium-table--stacked-horizontal">
+            <tbody>
+                <tr>
+                    <td>
+                        Were your concerns during pre-possession inspection resolved at the time of possession?
+                    </td>
+                    <td>
+                        
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Were_your_concerns_during_pre_poss__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+                	
+                <tr>
+                    <td>
+                        Was your possession documentation process handled well?
+                    </td>
+                    <td>
+                        
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Was_your_possession_docum_process__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Were all commitments made at the time of booking met with at the time of possession?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Were_all_commitments_made_at_time__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Please rate the overall possession experience on a scale  of 1 to 5.(1 being poor and 5 being excellent)
+                    </td>
+                    <td>
+                       <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Please_rate_the_overall_possession__c}">
+                                <ui:inputselectoption text="5" label="5" />
+                                <ui:inputselectoption text="4" label="4" />
+                                <ui:inputselectoption text="3" label="3" />
+                                <ui:inputselectoption text="2" label="2" />
+                                <ui:inputselectoption text="1" label="1" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Would you refer Runwal projects to your friends &amp; family?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Would_you_refer_Runwal_projects_to__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Was the quality of finishing satisfactory?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Was_the_quality_of_finishing_sati__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Was the quality of fixtures and fittings satisfactory?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Was_the_quality_of_fixtures_and_fitti__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Was the apartment cleaning done before handover?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.RW_Was_the_apartment_cleaning_done_befor__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Was the infrastructure (access, lifts, lobby, security, water &amp; electric connection etc.) satisfactory?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.Was_the_infrastructure_satisfactory__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Are you happy with ease of getting services such as internet, cable TV, milk supply, newspaper etc?
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.Are_you_happy_with_ease_of_getting_servi__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Maintenance services - do you have any concern? 
+                    </td>
+                    <td>
+                        <div class="slds-picklist__label">
+                            <ui:inputselect class="slds-input" value="{!objFB.Maintenance_services_do_you_have_any_c__c}">
+                                <ui:inputselectoption text="Yes" label="Yes" />
+                                <ui:inputselectoption text="No" label="No" />
+                            </ui:inputselect>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </aura:iteration>
+    <!--<aura:if isTrue="{!v.lstFeedBack != null}">-->
+        <div class="slds-align--absolute-center slds-m-around--medium">
+            <ui:button label="Save" Class="slds-button slds-button--brand" press="{!c.SaveFB}"/> 
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.lstFeedBack.length == 0}">
+        <div class="slds-align--absolute-center slds-m-around--medium">
+        	<b>No Active Feedback found</b>
+        </div>
+    </aura:if>
+</aura:component>

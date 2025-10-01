@@ -1,0 +1,243 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="DocumentComponentController">
+    <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system.min.css"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="lstOfUnit" type="string[]" />
+    <aura:attribute name="SelectedUnit" type="string" />
+    <aura:attribute name="ValidTo" type="string" />
+    <aura:attribute name="pdfContainer" type="Aura.Component[]" />
+    <aura:attribute name="CurrentConsStage" type="string" />
+    <aura:attribute name="lstPDF" type="string[]" />
+    <aura:attribute name="imageIndex" type="Integer" default="0" />
+    <aura:attribute name="lstAtts" type="WrapPortalDocument[]" />
+    <aura:attribute name="FileType2" type="string" />
+    <!--<aura:dependency resource="markup://force:navigateToComponent" type="EVENT" />-->
+
+    <!--<iframe aura:id="pdfFrame" src="/resource/ResourcePortal/lcins1_pdfjs/web/viewer.html" class="pdfFrame"></iframe>-->
+    
+    <div aura:id="PoPShow" class="hidePopup">
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-modal--large slds-fade-in-open hidePopup">
+            <div class="slds-modal__container" >
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.hidePopUp}">
+                    X
+                    </button>
+                    <aura:if isTrue="{!v.imageIndex > 0}">
+                        <ui:button label="Prev" class="slds-button slds-button#brand" press="{!c.changeImgBack}" />
+                    </aura:if>
+                     {!v.imageIndex+1} out of {!v.lstPDF.length}
+                    <aura:if isTrue="{!v.lstPDF.length > (v.imageIndex+1)}">
+                        <ui:button label="Next" class="slds-button slds-button#brand" press="{!c.changeImgForwrd}" />
+                    </aura:if>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium" style="height:650px">
+                    {!v.pdfContainer}
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </div>
+
+    <div aura:id="PoPShowConstage" class="hidePopup">
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-modal--large slds-fade-in-open hidePopup">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.hidePopUpConStage}">
+                        X
+                    </button>
+
+                </div>
+                <div class="slds-modal__content slds-p-around--medium" style="height:650px">
+                    <center><img src="{!v.CurrentConsStage}" style="width: 400px;height: 400px;" /></center>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </div>
+    
+    <div class="slds-align--absolute-center slds-m-around--medium">
+        <b>Project Unit :</b>&nbsp;
+        <div class="slds-picklist__label">
+            <ui:inputselect class="slds-input" value="{!v.SelectedUnit}">
+                <!--<ui:inputselectoption text="" label="-Select-" />-->
+                <aura:iteration items="{!v.lstOfUnit}" var="UnitNo">
+                    <ui:inputselectoption text="{!UnitNo}" label="{!UnitNo}" />
+                </aura:iteration>
+            </ui:inputselect>
+        </div>
+    </div>
+    
+    
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                View Documents :
+            </div>
+        </div>
+    </div>
+    <div class="slds-scrollable">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+        <tbody>
+            <tr>
+            	<td align="right" width="25%">
+                    <div class="slds-float--right">
+                	<b>Demand Letter</b>
+                    </div>
+                </td>
+                <td align="left" width="25%">
+                    <div class="slds-float--left">
+                	  <ui:button label="View" press="{!c.viewDemandLetter}"/> 
+                    </div>
+                </td>
+                <td align="right" width="25%">
+                    <div class="slds-float--right">
+                	<!--<b>Applicant Ledger</b>-->
+                    <b>Account statement</b>
+                    </div>
+                </td>
+                <td align="left" width="25%">
+                    <div class="slds-float--left">
+                	  <ui:button label="View" press="{!c.ApplicantLedger}"/> &nbsp; {!v.ValidTo}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            	<td align="right">
+                    <div class="slds-float--right">
+                	<b>Payment Receipt</b>
+                    </div>
+                </td>
+                <td align="left" width="25%">
+                    <div class="slds-float--left">
+                        <ui:button label="View" press="{!c.viewMoneyReceipt}" />
+                    </div>
+                </td>
+                <td align="right">
+                    <div class="slds-float--right">
+                        <b>Allotment Letter</b>
+                    </div>
+                </td>
+                <td align="left">
+                    <div class="slds-float--left">
+                        <ui:button label="View" press="{!c.viewAllotPDF}" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <div class="slds-float--right">
+                	<b>Reminder Letter</b>
+                    </div>
+                </td>
+                <td align="left">
+                    <div class="slds-float--left">
+                        <ui:button label="View" press="{!c.viewReminderPDF}" /> 
+                    </div>
+                </td>
+            
+                <td align="right">
+                    <div class="slds-float--right">
+                        <b>Latest Construction Stage</b>
+                    </div>
+                </td>
+                <td align="left">
+                    <div class="slds-float--left">
+                        <ui:button label="View" press="{!c.viewConstructionStage}" />
+                    </div>
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+    </div>
+    
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                Upload Documents :
+            </div>
+        </div>
+    </div>
+    <div class="slds-scrollable">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <tbody>
+            <tr>
+            	<td align="right" width="25%">
+                    <div class="slds-float--right">
+                	<!--<b>TDS Certificate</b>-->
+                    <b>Form 16B(TDS Certificate)</b>
+                    </div>
+                </td>
+                <td align="left" width="25%">
+                    <div class="slds-float--left">
+                	  <input type="file" class="file" aura:id="tdsfile" />
+                      <!--<c:fileupload aura:id="ContextDiagram" uploadedfileid="{!v.FileType2}" maxfilesize="500" foldername="ALMDocument" supportedfiletype="jpg,png,pdf,gif" />-->
+                    </div>
+                </td>
+                <td align="right" width="25%">
+                    <div class="slds-float--right">
+                	<!--<b>Form 16</b>-->
+                    <b>Payment Details</b>
+                    </div>
+                </td>
+                <td align="left" width="25%">
+                    <div class="slds-float--left">
+                	  <input type="file" class="file" aura:id="formfile" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            	<td align="right">
+                    <div class="slds-float--right">
+                	<!--<b>Registration Certificate</b>-->
+                    <b>Bank Loan Sanction Letter</b>
+                    </div>
+                </td>
+                <td align="left">
+                    <div class="slds-float--left">
+                	  <input type="file" class="file" aura:id="Regisfile" />
+                    </div>
+                </td>
+                <td align="right">
+                    <div class="slds-float--right">
+                	<b>Other</b>
+                    </div>
+                </td>
+                <td align="left">
+                    <div class="slds-float--left">
+                	  <input type="file" class="file" aura:id="Otherfile" />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <div class="slds-align--absolute-center slds-m-around--medium">
+        <ui:button label="Save" press="{!c.UploadAtt}"/> 
+    </div>
+    <div style="width:100%;height:100%">
+        <c:RWSpinner /> 
+    </div>
+    <!--<div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                My Uploaded Documents :
+            </div>
+        </div>
+    </div>
+    <table class="" role="grid">
+        <tbody>
+            <tr>
+                <td><b>Name</b></td>
+                <td><b>Description</b></td>
+                <td><b>Uploaded On</b></td>
+            </tr>
+            <aura:iteration var="EachWrap" items="{!v.lstAtts}">
+                <tr>
+                    <td><ui:outputURL value="{!EachWrap.strAttId}" label="{!EachWrap.strAttName}" target="_blank" /></td>
+                    <td>{!EachWrap.strAttDescr}</td>
+                    <td>{!EachWrap.strCreatedDate}</td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>-->
+</aura:component>

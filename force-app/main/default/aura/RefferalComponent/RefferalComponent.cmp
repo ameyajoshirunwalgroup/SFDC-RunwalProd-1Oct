@@ -1,0 +1,190 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="RefferalController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Lead" type="wrapLeadRecord[]"/>
+    <aura:attribute name="Opportunity" type="wrapOpportunityRecord[]"/> 
+    <aura:attribute name="Project" type="string[]" />
+    <aura:attribute name="SelectedProj" type="string" />
+    <aura:attribute name="LeadToBeInsert" type="wrapLeadRecord" default="{  'LastName'='xczxczc',
+        																    'FirstName'='',
+                                                                            'Email'='',
+                                                                            'Mobile'='',
+                                                                            'LeadSource'='',
+                                                                            'RefferalSource'=''}"/>
+    
+  <aura:attribute name="LastName" type="String" default=""/>
+  <aura:attribute name="FirstName" type="String" default=""/>
+  <aura:attribute name="Mobile" type="String" default=""/>
+  <aura:attribute name="Email" type="String" default=""/>
+	<ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system.min.css"/>
+    
+    <div class="slds-page-header" role="banner">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                    Referrals :
+                </div>
+            </div>
+    </div>
+    <div class="slds-scrollable">
+    	<table class="slds-table slds-table--bordered " role="grid">
+               
+			<tbody> 
+                <tr>
+                    <td><b>Name</b></td>
+                    <td><b>Lead Source</b></td>
+                    <td><b>Refferal Source</b></td>
+                    <td><b>Mobile</b></td>
+                    <td><b>Email</b></td>
+                    <td><b>Stage</b></td>
+                    <td><b>Redeem</b></td>
+                </tr>
+               <aura:iteration var="Lead" items="{!v.Lead}">
+                    <tr>
+                        <td>
+                             <ui:outputText value="{!Lead.FirstName}"/>&nbsp;<ui:outputText value="{!Lead.LastName}"/> 
+                        </td>
+                         <td>
+                              <ui:outputText value="{!Lead.LeadSource}"/>                             
+                        </td>
+                         <td>
+                             <ui:outputText value="{!Lead.RefferalSource}"/>                              
+                        </td>
+                         <td>
+                             <ui:outputText value="{!Lead.Mobile}"/>                              
+                        </td>
+                         <td>
+                             <ui:outputText value="{!Lead.Email}"/>                              
+                        </td>
+                        <td>
+                             <ui:outputText value="{!Lead.strStatus}"/>                              
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </aura:iteration>
+                <aura:iteration var="Opportunity" items="{!v.Opportunity}">
+                    <tr>
+                        <td>                                                        	
+                             <ui:outputText value="{!Opportunity.Name}"/>                            
+                        </td>
+                        <td>                                                        	
+                             <ui:outputText value="{!Opportunity.LeadSource}"/>                            
+                        </td>
+                        <td>                                                        	
+                             <ui:outputText value="{!Opportunity.strRefSource}"/>                            
+                        </td>
+                        <td>                                                        	
+                             <ui:outputText value="{!Opportunity.strMobile}"/>                            
+                        </td>
+                        <td>                                                        	
+                             <ui:outputText value="{!Opportunity.strEmail}"/>                            
+                        </td>
+                        <td>                                                        	
+                             <ui:outputText value="{!Opportunity.StageName}"/>
+							                            
+                        </td>
+                        <td>
+                            <div class="slds-no-flex">
+                            <aura:if isTrue="{!Opportunity.isBoolean}">
+                                
+                                <aura:set attribute="else">
+                                     <Ui:button labelClass="{!Opportunity.Id}"  class="slds-button slds-button--icon" press="{!c.handleRedeem}">
+                               			 <span aria-hidden="true" class="slds-button__icon--Right" title="Redeem">
+                                         Redeem
+                                         </span>
+                           			 </Ui:button>
+                                    
+                                </aura:set>
+                                    
+                            </aura:if> 
+                            </div>   
+                        </td>
+                    </tr>
+                </aura:iteration> 
+            </tbody>
+         </table>
+    </div>
+     <div class="slds-page-header" role="banner">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                  Insert New Referral
+                </div>
+            </div>
+    </div>
+     
+        <div class="slds-scrollable">
+            <table class="slds-table slds-table--bordered slds-table--col-bordered" >
+				<tbody>
+                <tr>
+                	<td width="15%" >
+                    	<div style="float:right">
+                        <b>First Name:</b>
+                            </div>
+                    </td>
+                    <td>
+                    	<ui:inputText value="{!v.FirstName}" aura:id="FirstName" class="slds-input" ></ui:inputText>
+                    </td>
+                </tr>
+                <tr >
+                	<td >
+                        <div style="float:right">
+                    	<b>Last Name:</b>
+                        </div>
+                    </td>
+                    <td>
+                    	<ui:inputText value="{!v.LastName}" aura:id="LastName" class="slds-input" ></ui:inputText>
+                    </td>
+                </tr>
+                <tr >
+                	<td >
+                        <div style="float:right">
+                    	<b>Mobile:</b>
+                        </div>
+                    </td>
+                    <td>
+                    	<ui:inputText value="{!v.Mobile}" aura:id="Mobile" class="slds-input" ></ui:inputText>
+                    </td>
+                </tr>
+                <tr >
+                	<td >
+                        <div style="float:right">
+                    	<b>Email</b>
+                        </div>
+                    </td>
+                    <td>
+                    	<ui:inputText value="{!v.Email}" aura:id="Email" class="slds-input" ></ui:inputText>
+                    </td>
+                </tr>
+                <tr >
+                	<td >
+                        <div style="float:right">
+                    	<b>Interested Project</b>
+                        </div>
+                    </td>
+                    <td>
+                    	<div class="slds-truncate">
+                            <div class="slds-picklist__label">
+                                <ui:inputselect class="slds-input" value="{!v.SelectedProj}">
+                                    <!--<ui:inputselectoption text="" label="-Select-" />-->
+                                    <aura:iteration items="{!v.Project}" var="ProjName">
+                                        <ui:inputselectoption text="{!ProjName}" label="{!ProjName}" />
+                                    </aura:iteration>
+                                </ui:inputselect>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+             </tbody>
+            </table>
+    </div>
+    
+     <div class="slds-card__footer">
+            <div class="slds-no-flex">
+                 <ui:button class="slds-button slds-button--neutral" press="{!c.insertLead}" >
+                    <span aria-hidden="true" class="slds-button__icon--Right" title="Insert New Lead">
+                        Save 
+                    </span>
+                </ui:button> 
+            </div>
+        </div>  
+</aura:component>

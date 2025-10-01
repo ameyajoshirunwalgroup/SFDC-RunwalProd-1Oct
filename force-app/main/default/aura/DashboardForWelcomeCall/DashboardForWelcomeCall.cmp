@@ -1,0 +1,78 @@
+<aura:component controller="DashboardForWelcomeCall" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute type="Booking__c[]" name="bookingList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.fetchBooking}"/>
+    <lightning:card title="My Pending Welcome Calls" >  
+        <p class="slds-p-horizontal_small">  
+            
+            <table class="slds-table slds-table_bordered slds-table--header-fixed_container slds-table_fixed-layout">  
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate" title="Project">Project</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Opportunity">Opportunity</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Booking Name">Booking Name</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Welcome Call">Welcome Call</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="WelcomeCall Status">WelcomeCall Status</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Pending From">Pending From[Days]</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Applicant Name">Applicant Name</div>
+                        </th><!--<th scope="col">
+                        <div class="slds-truncate" title="Relationship Manager">Relationship Manager</div>
+                        </th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.bookingList}" var="bk">
+                         <aura:if isTrue="{!and(not(empty(bk.Welcome_Calls__r)),bk.Welcome_Calls__r[0].RW_Welcome_Call_Status__c != 'Accept')}">
+                           <tr>
+                            <td data-label="Project">
+                                <div class="slds-truncate" title="">{!bk.Project__r.Name}</div>
+                            </td>
+                            <td data-label="Opportunity">
+                                <div class="slds-truncate" title="">{!bk.Opportunity__r.Name}</div>
+                            </td>
+                            <td data-label="Booking Name">
+                                <a href="{!'/one/one.app?#/sObject/'+ bk.Id + '/view'}" target="_blank">{! bk.Name }</a>
+                            </td>
+                            
+                             <aura:iteration items="{!bk.Welcome_Calls__r}" var="wC">
+                             <td data-label="Welcome Call">
+                                <a href="{!'/one/one.app?#/sObject/'+ wC.Id + '/view'}" target="_blank">{!wC.Name}</a>
+                             </td>
+                             <td data-label="WelcomeCall Status">
+                               <div class="slds-truncate" title="">{!wC.RW_Welcome_Call_Status__c}</div>
+                            </td>
+                            <td data-label="Pending From">
+                               <div class="slds-truncate" title="">{!wC.Welcome_Call_Pending__c}</div>
+                            </td>    
+                            </aura:iteration>
+                            <td data-label="Applicant Name">
+                                <div class="slds-truncate" title="">{!bk.Primary_Applicant_Name__c}</div>
+                            </td>
+                            <!--<td data-label="Relationship Manager">
+                                <div class="slds-truncate" title="">{!bk.Unit_No__r.Relationship_Manager__r.RM_Name__c}</div>
+                            </td>-->
+                        </tr>
+                       </aura:if>     
+                    </aura:iteration>
+                </tbody>
+            </table>
+            
+        </p>  
+    </lightning:card>   
+    
+</aura:component>

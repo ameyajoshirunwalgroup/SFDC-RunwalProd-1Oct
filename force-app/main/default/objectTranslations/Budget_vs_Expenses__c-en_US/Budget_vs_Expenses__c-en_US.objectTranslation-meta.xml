@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Budget vs Expenses</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Budget vs Expenses</value>
+    </caseValues>
+    <layouts>
+        <layout>Budget Layout</layout>
+        <sections>
+            <label><!-- Actual Expenses --></label>
+            <section>Actual Expenses</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Expenses Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <description><!-- This is Record type for Budget which will be WBS wise --></description>
+        <label><!-- Budget --></label>
+        <name>Budget</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- This is Record type for Expenses which will be Project wise --></description>
+        <label><!-- Expenses --></label>
+        <name>Expenses</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

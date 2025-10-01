@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Change_Secondary_Mobile_No</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+	!ISBLANK(PRIORVALUE(RW_Secondary_Mobile_No__pc)),
+	ISCHANGED( RW_Secondary_Mobile_No__pc),
+	$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+	$User.Id &lt;&gt; &apos;0050I000009gd3f&apos;,
+	$User.Id &lt;&gt; &apos;00528000005Fpi7&apos;,
+	$Profile.Name &lt;&gt; &quot;Team Leader&quot;,
+$Label.Disable_all_validations_from_Account == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+	)</errorConditionFormula>
+    <errorDisplayField>RW_Secondary_Mobile_No__pc</errorDisplayField>
+    <errorMessage>You Cannot Update Secondary No.</errorMessage>
+</ValidationRule>

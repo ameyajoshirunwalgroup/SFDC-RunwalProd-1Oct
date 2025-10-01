@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Source_Other_Than_Corporate</fullName>
+    <active>false</active>
+    <description>If Lead Source is Other than Corporate then Company Name becomes mandatory</description>
+    <errorConditionFormula>AND 
+( 
+(NOT(ISPICKVAL(  Lead_Source__c ,&apos;&apos;))), 
+OR( 
+NOT(ISPICKVAL( Lead_Source__c , &apos;Corporate&apos;)), 
+ISPICKVAL(  RW_Company_Name__c ,&apos;&apos;) 
+) 
+)</errorConditionFormula>
+    <errorDisplayField>RW_Company_Name__c</errorDisplayField>
+    <errorMessage>Please Enter a Value</errorMessage>
+</ValidationRule>

@@ -1,0 +1,198 @@
+<aura:component Controller="BookingFormController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="showFileHeader" type="Boolean" default="true" />
+    <aura:attribute name="uploadMultiple" type="Boolean" default="false"/>
+    <aura:attribute name="acceptFileTypes" type="String" /> 
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="BookingId" type="string" />
+    <aura:attribute name="BkgFrmFileUploadButton" type="Boolean"/>
+    <aura:attribute name="SignedFileUploadButton" type="Boolean"/>
+    <aura:attribute name="IOMFileUploadButton" type="Boolean"/>
+    <aura:attribute name="FileUploadButton" type="Boolean"/>
+    <aura:attribute name="BookingFormId" type="String" />
+    <aura:attribute name="SignedCostSheetId" type="String" />
+    <aura:attribute name="IOMId" type="String" />
+    <aura:attribute name="DeviationApprovalId" type="String" />
+    <aura:attribute name="TokenPaymentId" type="String" />
+    <aura:attribute name="BookingFormUploaded" type="Boolean" />
+    <aura:attribute name="SignedCostSheetUploaded" type="Boolean" />
+    <aura:attribute name="IOMUploaded" type="Boolean" />
+    <aura:attribute name="DeviationApprovalUploaded" type="Boolean" />
+    <aura:attribute name="TokenPaymentUploaded" type="Boolean" />
+    <aura:attribute name="BkgFormfiles" type="ContentDocument"/> 
+    <aura:attribute name="SignedCostSheetfiles" type="ContentDocument"/> 
+    <aura:attribute name="IOMfiles" type="ContentDocument"/> 
+    <aura:attribute name="DeviationApprovalfiles" type="ContentDocument"/> 
+    <aura:attribute name="TokenPaymentfiles" type="ContentDocument"/> 
+    <aura:attribute name="DocIds" type="String[]" />
+    
+    <div class="slds-card slds-card_boundary">
+    	<aura:if isTrue="{!v.showFileHeader}">
+            <div class="slds-page-header" style="font-size:20px;text-align:center"><b>Upload Files</b></div>  
+        </aura:if>
+    
+    <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+        <div class="slds-p-around_small">
+                <lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                      accept="{!v.acceptFileTypes}" 
+                                      recordId="{!v.recordId}"   
+                                      onuploadfinished="{!c.bookingFormUploadFinished}"
+                                      disabled = "{!v.FileUploadButton}"/> 
+            
+        </div>
+    </div>-->
+    
+    
+        <div class="slds-form--compound">
+            <table class="slds-table slds-table--bordered">  
+                <!-- hide the table header if file is empty -->
+                <!--<aura:if isTrue="{!not(empty(v.BkgFormfiles))}">-->
+                    <thead>  
+                        <tr>  
+                            <th>File Name</th> 
+                            <th>Uploaded?</th>
+                            <th>Preview Files</th>  
+                            <th>Files Type</th>  
+                            <th>Delete Files</th>                     
+                        </tr>  
+                    </thead>  
+                <!--</aura:if>-->
+                <tbody> 
+                    <tr>  
+                        <td><b>Booking Form with KYC Details of Customer</b><lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                                  accept="{!v.acceptFileTypes}" 
+                                                  recordId="{!v.recordId}"   
+                                                  onuploadfinished="{!c.formUploadFinished}"
+                                                  disabled = "{!v.BookingFormUploaded}"
+                                                  name = "Booking Form"/></td>
+                        <td><lightning:input type="checkbox" aura:id="bkgFrmCheckbox" checked="{!v.BookingFormUploaded}" required="true" value="{!v.BookingFormUploaded}" onchange="{!c.BookingFormCheck}"/></td>
+                        <!--<aura:iteration items="{!v.BkgFormfiles}" var="f"> -->
+                        <td>
+                            <a href="javascript:void(0)" id="{!v.BkgFormfiles.Id}" onclick="{!c.previewFile}">
+                                {!v.BkgFormfiles.Title}
+                            </a>
+                        </td>  
+                        <td>{!v.BkgFormfiles.FileType}</td>  
+                        <td>
+                            <aura:if isTrue = "{!v.BkgFormfiles.Id}">
+                            <a href="javascript:void(0)" id="{!v.BkgFormfiles.Id}" name="BookingForm" onclick="{!c.delFiles}">
+                                <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                            </a>
+                            </aura:if>
+                        </td>
+                        <!--</aura:iteration>-->
+                    </tr> <br/>
+                    <tr>  
+                        <td><b>Signed Cost Sheet</b><lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                                  accept="{!v.acceptFileTypes}" 
+                                                  recordId="{!v.recordId}"   
+                                                  onuploadfinished="{!c.formUploadFinished}"
+                                                  disabled = "{!v.SignedCostSheetUploaded}"
+                                                  name = "Signed Cost Sheet"/></td>
+                        <td><lightning:input type="checkbox" aura:id="signedCheckbox" checked="{!v.SignedCostSheetUploaded}" required="true" value="{!v.SignedCostSheetUploaded}" onchange="{!c.SignedCostSheetCheck}"/></td>
+                        <!--<aura:iteration items="{!v.SignedCostSheetfiles}" var="f"> -->
+                        <td>
+                            <a href="javascript:void(0)" id="{!v.SignedCostSheetfiles.Id}" onclick="{!c.previewFile}">
+                                {!v.SignedCostSheetfiles.Title}
+                            </a>
+                        </td>  
+                        <td>{!v.SignedCostSheetfiles.FileType}</td>  
+                        <td>
+                            <aura:if isTrue = "{!v.SignedCostSheetfiles.Id}">
+                            <a href="javascript:void(0)" id="{!v.SignedCostSheetfiles.Id}" name="SignedCostSheet" onclick="{!c.delFiles}">
+                                <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                            </a>
+                            </aura:if>
+                        </td>
+                        <!--</aura:iteration>-->
+                    </tr> <br/>
+                    <tr>  
+                        <td><b>Token Payment Details(swipe slip/cheque copy/UTR/UPI)</b><lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                                  accept="{!v.acceptFileTypes}" 
+                                                  recordId="{!v.recordId}"   
+                                                  onuploadfinished="{!c.formUploadFinished}"
+                                                  disabled = "{!v.TokenPaymentUploaded}"
+                                                  name = "Token Payment Details"/></td>
+                        <td><lightning:input type="checkbox" aura:id="tokenPayCheckbox" checked="{!v.TokenPaymentUploaded}" required="true" value="{!v.TokenPaymentUploaded}" onchange="{!c.tokenPayCheck}"/></td>
+                        <!--<aura:iteration items="{!v.TokenPaymentfiles}" var="f"> -->
+                        <td>
+                            <a href="javascript:void(0)" id="{!v.TokenPaymentfiles.Id}" onclick="{!c.previewFile}">
+                                {!v.TokenPaymentfiles.Title}
+                            </a>
+                        </td>  
+                        <td>{!v.TokenPaymentfiles.FileType}</td>  
+                        <td>
+                            <aura:if isTrue = "{!v.TokenPaymentfiles.Id}">
+                            <a href="javascript:void(0)" id="{!v.TokenPaymentfiles.Id}" name="TokenPaymentDetails" onclick="{!c.delFiles}">
+                                <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                            </a>
+                            </aura:if>
+                        </td>
+                        <!--</aura:iteration>-->
+                    </tr> <br/>
+                    <tr>  
+                        <td><b>IOM</b><lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                                  accept="{!v.acceptFileTypes}" 
+                                                  recordId="{!v.recordId}"   
+                                                  onuploadfinished="{!c.formUploadFinished}"
+                                                  disabled = "{!v.IOMUploaded}"
+                                                  name = "IOM"/></td>
+                        <td><lightning:input type="checkbox" aura:id="iomCheckbox" checked="{!v.IOMUploaded}" value="{!v.IOMUploaded}" onchange="{!c.IOMCheck}"/></td>
+                        <!--<aura:iteration items="{!v.IOMfiles}" var="f"> -->
+                        <td>
+                            <a href="javascript:void(0)" id="{!v.IOMfiles.Id}" onclick="{!c.previewFile}">
+                                {!v.IOMfiles.Title}
+                            </a>
+                        </td>  
+                        <td>{!v.IOMfiles.FileType}</td>  
+                        <td>
+                            <aura:if isTrue = "{!v.IOMfiles.Id}">
+                            <a href="javascript:void(0)" id="{!v.IOMfiles.Id}" name="iom" onclick="{!c.delFiles}">
+                                <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                            </a>
+                            </aura:if>
+                        </td>
+                        <!--</aura:iteration>-->
+                    </tr> <br/>
+                    <tr>  
+                        <td><b>Deviation Approvals</b><lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                                  accept="{!v.acceptFileTypes}" 
+                                                  recordId="{!v.recordId}"   
+                                                  onuploadfinished="{!c.formUploadFinished}"
+                                                  disabled = "{!v.DeviationApprovalUploaded}"
+                                                  name = "Deviation Approvals"/></td>
+                        <td><lightning:input type="checkbox" aura:id="deviationCheckbox" checked="{!v.DeviationApprovalUploaded}" value="{!v.DeviationApprovalUploaded}" onchange="{!c.deviationCheck}"/></td>
+                        <!--<aura:iteration items="{!v.DeviationApprovalfiles}" var="f"> -->
+                        <td>
+                            <a href="javascript:void(0)" id="{!v.DeviationApprovalfiles.Id}" onclick="{!c.previewFile}">
+                                {!v.DeviationApprovalfiles.Title}
+                            </a>
+                        </td>  
+                        <td>{!v.DeviationApprovalfiles.FileType}</td>  
+                        <td>
+                            <aura:if isTrue = "{!v.DeviationApprovalfiles.Id}">
+                            <a href="javascript:void(0)" id="{!v.DeviationApprovalfiles.Id}" name="DeviationApprovals" onclick="{!c.delFiles}">
+                                <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                            </a>
+                            </aura:if>
+                        </td>
+                        <!--</aura:iteration>-->
+                    </tr> <br/>
+                    
+                </tbody>  
+            </table>  
+            
+            <!-- show spinner logo when needed -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+        </div> 
+    
+    </div>
+</aura:component>

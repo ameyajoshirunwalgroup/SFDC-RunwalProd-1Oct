@@ -1,0 +1,133 @@
+<aura:component Controller="DMSDocumentsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="showFileHeader" type="Boolean" default="true" />
+    <aura:attribute name="uploadMultiple" type="Boolean" default="false"/>
+    <aura:attribute name="acceptFileTypes" type="String" /> 
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="BookingId" type="string" />
+    <aura:attribute name="DocIds" type="String[]" />
+    <aura:attribute name="DocType" type="String" />
+    <aura:attribute name="DocUrl" type="String" />
+    <aura:attribute name="docDetails" type="map" />
+    <aura:attribute name="customers" type="List" />
+    
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+    
+    <div >
+    	<aura:if isTrue="{!v.showFileHeader}">
+            <div class="slds-page-header" style="font-size:20px;text-align:center"><b>Upload Files</b></div>  
+        </aura:if>
+    
+        <div >
+            <table >  
+                    <thead>  
+                        <tr>  
+                            <th>File Type</th> 
+                            <th>Upload File</th>                     
+                        </tr>  
+                    </thead>  
+                <tbody> 
+                    <tr>  
+                        <td>
+                        	<lightning:select aura:id="options" name="select1" label="Select File Type" required="true" onchange="{!c.updateSelected}">
+                                <option value="">None</option>
+                                <option value="KYC">KYC</option>
+                                <option value="APPLICATION FORM">APPLICATION FORM</option>
+                                <option value="SALES CONFIRMATION SHEET">SALES CONFIRMATION SHEET</option>
+                                <option value="AGREEMENT FOR SALE">AGREEMENT FOR SALE</option>
+                                <option value="ROC">ROC</option>
+                                <option value="CANCELLATION DOCUMENTS">CANCELLATION DOCUMENTS</option>
+                                <option value="INTER OFFICE MEMO">INTER OFFICE MEMO</option>
+                                <option value="POSSESSION DOCUMENTS">POSSESSION DOCUMENTS</option>
+                                <option value="MISC">MISC</option>
+                                <option value="DEMANDS">DEMANDS</option>
+                                <option value="RECEIPTS">RECEIPTS</option>
+                                <option value="NOC">NOC</option>
+                                <option value="ALLOTMENT LETTER">ALLOTMENT LETTER</option>
+                            </lightning:select>
+                        </td>
+                        <td>
+                            <lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                                  accept="{!v.acceptFileTypes}" 
+                                                  recordId="{!v.recordId}"   
+                                                  onuploadfinished="{!c.formUploadFinished}"
+                                                  name = "DMS File"/>
+                        </td>
+                    </tr> <br/>
+                </tbody>  
+            </table> 
+            <!--<aura:if isTrue="{!v.DocUrl != null}">
+                <b>Preview File: <a href="{!v.DocUrl}" ><ui:outputText value="{!v.DocUrl}"/></a></b>
+            </aura:if>-->
+            
+            <!-- show spinner logo when needed -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            
+        </div> 
+        
+    
+    </div>
+    
+    
+    <div >
+    	<aura:if isTrue="{!v.showFileHeader}">
+            <div class="slds-page-header" style="font-size:20px;text-align:center"><b>View Files</b></div>  
+        </aura:if>
+    
+        <div >
+            <table >  
+                    <thead>  
+                        <tr>  
+                            <th>File Type</th> 
+                            <th>Preview File</th> 
+                            <th>Download File</th>
+                        </tr>  
+                    </thead>  
+                <tbody> 
+                    <aura:iteration items="{!v.docDetails}" var="doc" indexVar="key">
+                        <br/>
+                        <tr>  
+                        <td>
+                        	{!doc.key}
+                        </td>
+                        <td>
+                            <b><a href="{!doc.value[1]}" target="_blank"><ui:outputText value="{!doc.value[0]}"/></a></b>
+                        </td>
+                        <td>
+                            <b><a href="{!doc.value[2]}" target="_blank"><ui:outputText value="{!doc.value[0]}"/></a></b>
+                        </td>
+                    </tr><br/>
+                    </aura:iteration>
+                     <br/>
+                </tbody>  
+            </table> 
+            
+            <!-- show spinner logo when needed -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            
+        </div> 
+        
+    
+    </div>
+</aura:component>

@@ -1,0 +1,1495 @@
+<aura:component controller="WelcomeCallChecklist" 
+implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+<aura:attribute name="recordId" type="String" />
+<aura:attribute name="bookingList" type="object" />
+<aura:attribute  name="selectedCheckBoxes" type="List" default="[]"  />
+<aura:attribute  name="finalListOfValue" type="List" default="[]"  /> 
+<aura:attribute  name="mapOfKeyValue" type="Map"  default="{str1:null,str2:null,obj:null}" /> 
+<aura:attribute  name="mapOfKeyValueNew" type="Map"  default="{str1:null,str2:null,obj:null}" /> 
+<aura:attribute  name="mapOfKeyBoolean" type="Map"  default="{str1:null}" />
+<aura:attribute  name="inputValueList" type="List" default="[]" /> 
+<aura:attribute  name="prevCallRemarksListToShow" type="List" default="[]"/>
+<aura:attribute  name="prevCallRemarksObj" type="String"/> 
+<aura:attribute  name="CriticalNonCriticalMetaList" type="List" default="[]" /> 
+<aura:attribute name="BankingPreferenceforLoan" type="String" />
+<aura:attribute  name="idList" type="List" default="[]"  /> 
+<aura:attribute name="RW_Welcome_Call__c" type="object" />
+<aura:attribute name="checkBoxError" type="boolean" default="false"/>
+<aura:attribute  name="CriticalList" type="List" default="[]"  />
+<aura:attribute  name="CriticalMap" type="Map" default="{str1:null}"/>
+<aura:attribute  name="errorMsg" type="String"  />
+<aura:dependency resource="markup://force:navigateToSObject" type="EVENT"/>
+<aura:attribute name="counter" type="integer" default="0"/>
+<aura:attribute name="finalCount" type="integer" default="0"/>
+<aura:attribute name="finalCountNo" type="integer" default="0"/>
+<aura:attribute name="errorMsgAll" type="string" />
+<aura:attribute name="currentURL" type="String"   />
+<aura:attribute name="btnAcc" type="boolean" default="false"/>
+<aura:attribute name="btnRej" type="boolean" />
+<aura:attribute name="preMap" type="Map" default="{str1:null}"/>
+<aura:attribute name="preMapYesNo" type="Map" default="{}" />
+<aura:attribute name="preMapModeOfFund" type="Map" default="{}" />     
+<aura:attribute name="predatabln" type="boolean" default="false"/>
+<aura:attribute name="options" type="String[]" />
+<aura:attribute  name="selectedValue" type="String" />
+<aura:attribute  name="BankPreferenceforLoan" type="List" />
+<aura:attribute  name="BankPreferenceforLoan1" type="String"  />
+<aura:attribute  name="BankPreferenceforLoan2" type="String"  />
+<aura:attribute  name="BankPreferenceforLoan3" type="String"  />
+<aura:attribute  name="additionalRemarks" type="String" />
+<aura:attribute name="regPhone" type="String" description="Stores the phone number" />
+ <!--aura handler with waiting and donewaiting events-->
+ <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+ <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+ <aura:attribute name="BankNamePicklistOptions" type="String[]" />
+    
+ <aura:attribute name="RegConsltNameListOptions" type="String[]" /> 
+ <aura:attribute  name="regName" type="String"  />
+ <aura:attribute  name="charge" type="String"  />
+    
+ <aura:attribute name="isDhamaka" type="Boolean" default="false" />
+
+    
+ 
+ <!--component attributs -->
+ <aura:attribute name="spinner" type="boolean" default="True"/>
+ <aura:attribute name="showDhamakaOffer" type="boolean" default="False"/>
+ <aura:attribute name="BookingConfirmed" type="boolean" default="false"/>
+ <aura:attribute name="BookingNotConfirmed" type="boolean" default="false"/>
+ <aura:attribute name="welcomeCallCompleted" type="boolean" default="false"/>
+ <aura:attribute name="welcomeCallRejected" type="boolean" default="false"/>
+ <aura:attribute name="welcomeCallNotCompleted" type="boolean" default="false"/>
+ <aura:attribute name="welcomeCallNotRejected" type="boolean" default="false"/>
+ <aura:attribute name="SalesManagerIsNull" type="boolean" default="false"/>
+ 
+ <aura:attribute name="dropDownOpts" type="String[]" />
+ <aura:attribute name="applicantList"  type="List" />
+ <aura:attribute name="receiptList"  type="List" />
+<aura:attribute  name="ReceiptListRemarks" type="String"  />
+    
+    <aura:attribute name="hasNoWelcomeCall" type="boolean" /><!-- Added by Vinay 13-12-2024 -->
+    
+     <aura:attribute name="errorMessage" type="String" />
+<!--create a component attributs -->
+<!--<div id="ErrorMsg1">{!v.errorMsgAll} {!v.currentURL} </div>-->
+
+<!--Custom Styles for Modal Header and Footer--> 
+<aura:html tag="style">
+    
+      .slds-modal__content {
+      overflow-y: Show !important;
+      overflow-x: Show !important;
+      height:unset !important;
+      max-height:unset !important;
+     }
+
+     .slds-modal__container{
+      width: 100% !important;
+      max-width: 100% !important;
+     }
+      .attach-to-bottom{
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 100%;
+   }
+   .attach-to-Top{
+      position: absolute;
+      Top: 0px;
+      right: 0px;
+      width: 100%;
+  }
+ 
+</aura:html>
+
+
+
+    
+ <!--loading spinner start-->
+    
+    <aura:if isTrue="{!v.hasNoWelcomeCall}"> <!-- Added by Vinay 13-12-2024 -->
+          <div class="slds-modal__content">
+              <form class="slds-form--stacked">
+                  <h3 class="title slds-text-heading--small"  style="text-align:center; font-weight: bold;">
+                       Welcome Call not created since customer has not made minumum amount payment
+                  </h3>
+              </form>
+          </div>
+      </aura:if>
+    
+ <aura:if isTrue="{!v.spinner}">
+     <div aura:id="spinnerId" class="slds-spinner_container">
+         <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading...</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+         </div>
+     </div>
+   
+     
+ <aura:set attribute="else">
+
+ 
+   <aura:if isTrue="{!v.welcomeCallCompleted}">
+          <div class="slds-modal__content">
+             <form class="slds-form--stacked">
+                <h3 class="title slds-text-heading--small"  style="text-align:center; font-weight: bold;">  
+                    Welcome Call has been completed for this Booking
+                 </h3>
+             </form>
+             </div>
+    </aura:if>
+     
+  <aura:if isTrue="{!and(v.SalesManagerIsNull, v.BookingConfirmed)}">
+          <div class="slds-modal__content">
+             <form class="slds-form--stacked">
+                <h3 class="title slds-text-heading--small"  style="text-align:center; font-weight: bold;">  
+                    Sales Manager is blank for this booking
+                 </h3>
+             </form>
+             </div>
+  </aura:if>  
+   
+  <aura:if isTrue="{! and(v.BookingConfirmed, !v.SalesManagerIsNull)}">
+ 
+   <div class="modal-header slds-modal__header attach-to-Top">
+      <h2 class="title slds-text-heading--small"  style="text-align:center; font-weight: bold;">WelcomeCall Checklist</h2>
+   </div>
+    
+      <aura:if isTrue="{!not(empty(v.errorMessage))}">
+          <div class="slds-text-color_error slds-align_absolute-center">
+          <b> {!v.errorMessage} </b>
+          </div>
+        </aura:if>
+   <!--End Modal Header--> 
+   
+   
+   
+   <!--Modal Body--> 
+   
+   <div class="slds-modal__content">
+      <form class="slds-form--stacked">
+      <!-- <aura:if isTrue="{!v.bookingList.bkg.Status__c == 'Booking Confirmed'}">--> 
+      <table class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-p-around_none">
+     
+       <tbody>
+         <tr> 
+            <td colspan="2" style="background:#9CA1A1;"></td>
+            <td  style="background:#9CA1A1; text-align:center; font-weight: bold;" >Verified</td>
+            <td  style="background:#9CA1A1; text-align:center; font-weight: bold;" >Remarks[Highlighted input fields are Critical]</td>
+            
+          <aura:if isTrue="{!v.predatabln}">
+            <td  style="background:#9CA1A1; text-align:center; font-weight: bold;" > Previous WelcomeCall Remarks</td>
+         </aura:if>
+         </tr>  
+       
+        
+       <tr> 
+         <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" >Applicant Details</td>
+         <td  style="background:#9CA1A1;"></td>
+         <td  style="background:#9CA1A1;"></td>
+         <aura:if isTrue="{!v.predatabln}">
+         <td  style="background:#9CA1A1;"></td>
+         </aura:if>
+      </tr>
+   
+   
+      <aura:iteration items="{!v.applicantList}" var="app">
+         <aura:if isTrue="{!app.Applicant_Number__c =='Primary Applicant'}"> 
+   
+         <tr> 
+          <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" > Applicant 1 - {!app.Applicant_Number__c} </td>
+          <td  style="background:#9CA1A1;"></td>
+          <td  style="background:#9CA1A1;"></td>
+          <aura:if isTrue="{!v.predatabln}">
+            <td  style="background:#9CA1A1;"></td>
+         </aura:if>
+         </tr>
+   
+         
+        <tr>
+         <td>Applicant Name:</td>
+         <td>{!app.Name}</td>
+           <!-- {!v.bookingList.bkg.Primary_Applicant_Name__c}-->
+        <!-- <td><lightning:input type="checkbox" label="" name="ApplicantName" value="{!v.bookingList.bkg.Primary_Applicant_Name__c}" onchange="{! c.handleCheckbox }" /></td>-->
+         <td>
+            <lightning:select name="ApplicantName1" label="{!app.Name}" variant="label-hidden" class="label-hidden" 
+                 value="{!v.preMapYesNo.ApplicantName1}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+               <aura:iteration items="{!v.dropDownOpts}" var="item">
+                  <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+               </aura:iteration>
+               </lightning:select>
+          </td>
+         <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" 
+             aura:id="ApplicantName1" class="{!v.CriticalMap.ApplicantName1 ? 'changeMe' : ''}" value="{!v.inputValueList.ApplicantName1}"/></td> 
+         <aura:if isTrue="{!v.predatabln}">
+        <td>{!v.preMap.ApplicantName1}</td>
+        </aura:if>
+        </tr>
+   
+        <tr>
+         <td>Email Addresses:</td>
+         <td>{!app.Email_Address__c}</td>
+               <!--{!v.bookingList.bkg.Primary_Applicant_Email__c}-->
+          <td>
+            <lightning:select name="EmailAddresses1" label="{!app.Email_Address__c}" variant="label-hidden" class="label-hidden"
+                value="{!v.preMapYesNo.EmailAddresses1}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+               <aura:iteration items="{!v.dropDownOpts}" var="item">
+                  <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+               </aura:iteration>
+               </lightning:select>
+         </td> 
+          <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="EmailAddresses1" class="{!v.CriticalMap.EmailAddresses1 ? 'changeMe' : ''}"  value="{!v.inputValueList.EmailAddresses1}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.EmailAddresses1}</td>
+           </aura:if>
+        </tr>
+   
+        <tr>
+           <td>Mobile No.:</td>
+          <td>{!app.Mobile_Number__c}</td>
+   
+            <!-- {!v.bookingList.applicant.Mobile_Number__c}--> 
+         <td>
+             <lightning:select name="MobileNo1" label="{!app.Mobile_Number__c}" variant="label-hidden" class="label-hidden"
+                    value="{!v.preMapYesNo.MobileNo1}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+               <aura:iteration items="{!v.dropDownOpts}" var="item">
+                  <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+               </aura:iteration>
+               </lightning:select>
+          </td> 
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                 aura:id="MobileNo1"  class="{!v.CriticalMap.MobileNo1 ? 'changeMe' : ''}"  value="{!v.inputValueList.MobileNo1}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.MobileNo1}</td>
+          </aura:if>
+        </tr>
+   
+        <tr>
+           <td>Permanent Address:</td>
+           <td>{!app.Permanent_Address__c}</td>
+           <!--{!v.bookingList.applicant.Permanent_Address__c}-->
+           <td>
+            <lightning:select name="PermanentAddress1" label="{!app.Permanent_Address__c}" variant="label-hidden" class="label-hidden"
+                    value="{!v.preMapYesNo.PermanentAddress1}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+         </td> 
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="PermanentAddress1" class="{!v.CriticalMap.PermanentAddress1 ? 'changeMe' : ''}"  value="{!v.inputValueList.PermanentAddress1}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.PermanentAddress1}</td>
+         </aura:if>
+        </tr>
+
+        <tr>
+         <td>PAN Details:</td>
+         <td>{!app.PancardNo__c}</td>
+         <td>
+          <lightning:select name="PrimaryPANDetails" label="{!app.PancardNo__c}" variant="label-hidden" class="label-hidden" 
+                 value="{!v.preMapYesNo.PrimaryPANDetails}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+        </td> 
+         <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+              aura:id="PrimaryPANDetails" class="{!v.CriticalMap.PrimaryPANDetails ? 'changeMe' : ''}" value="{!v.inputValueList.PrimaryPANDetails}" /></td> 
+         <aura:if isTrue="{!v.predatabln}">
+         <td> {!v.preMap.PrimaryPANDetails}</td></aura:if>
+      </tr>
+        
+   
+      </aura:if>
+   
+   
+       <aura:if isTrue="{!app.Applicant_Number__c =='Second Applicant'}">  
+   
+       <tr> 
+        <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" > Applicant 2 - {!app.Applicant_Number__c} </td>
+        <td  style="background:#9CA1A1;"></td>
+        <td  style="background:#9CA1A1;"></td>
+        <aura:if isTrue="{!v.predatabln}">
+          <td  style="background:#9CA1A1;"></td>
+       </aura:if>
+       </tr>
+   
+       
+      <tr>
+       <td>Applicant Name:</td>
+       <td>{!app.Name}</td>
+         <!-- {!v.bookingList.bkg.Primary_Applicant_Name__c}-->
+      <!-- <td><lightning:input type="checkbox" label="" name="ApplicantName" value="{!v.bookingList.bkg.Primary_Applicant_Name__c}" onchange="{! c.handleCheckbox }" /></td>-->
+       <td>
+          <lightning:select name="ApplicantName2" label="{!app.Name}" variant="label-hidden" class="label-hidden"  
+            value="{!v.preMapYesNo.ApplicantName2}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+             <aura:iteration items="{!v.dropDownOpts}" var="item">
+                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+             </aura:iteration>
+             </lightning:select>
+        </td>
+       <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+              aura:id="ApplicantName2" class="{!v.CriticalMap.ApplicantName2 ? 'changeMe' : ''}" value="{!v.inputValueList.ApplicantName2}"/></td> 
+       <aura:if isTrue="{!v.predatabln}">
+      <td>{!v.preMap.ApplicantName2}</td>
+      </aura:if>
+      </tr>
+   
+      <tr>
+       <td>Email Addresses:</td>
+       <td>{!app.Email_Address__c}</td>
+             <!--{!v.bookingList.bkg.Primary_Applicant_Email__c}-->
+        <td>
+          <lightning:select name="EmailAddresses2" label="{!app.Email_Address__c}" variant="label-hidden" class="label-hidden" 
+           value="{!v.preMapYesNo.EmailAddresses2}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+             <aura:iteration items="{!v.dropDownOpts}" var="item">
+                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+             </aura:iteration>
+             </lightning:select>
+       </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="EmailAddresses2" class="{!v.CriticalMap.EmailAddresses2 ? 'changeMe' : ''}"  value="{!v.inputValueList.EmailAddresses2}" /></td> 
+         <aura:if isTrue="{!v.predatabln}">
+         <td> {!v.preMap.EmailAddresses2}</td>
+         </aura:if>
+      </tr>
+   
+      <tr>
+         <td>Mobile No.:</td>
+        <td>{!app.Mobile_Number__c}</td>
+   
+          <!-- {!v.bookingList.applicant.Mobile_Number__c}--> 
+       <td>
+           <lightning:select name="MobileNo2" label="{!app.Mobile_Number__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.MobileNo2}"  messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+             <aura:iteration items="{!v.dropDownOpts}" var="item">
+                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+             </aura:iteration>
+             </lightning:select>
+        </td> 
+         <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="MobileNo2" class="{!v.CriticalMap.MobileNo2 ? 'changeMe' : ''}" value="{!v.inputValueList.MobileNo2}" /></td> 
+         <aura:if isTrue="{!v.predatabln}">
+         <td> {!v.preMap.MobileNo2}</td>
+        </aura:if>
+      </tr>
+   
+      <tr>
+         <td>Permanent Address:</td>
+         <td>{!app.Permanent_Address__c}</td>
+         <!--{!v.bookingList.applicant.Permanent_Address__c}-->
+         <td>
+          <lightning:select name="PermanentAddress2" label="{!app.Permanent_Address__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.PermanentAddress2}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td> 
+         <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="PermanentAddress2" class="{!v.CriticalMap.PermanentAddress2 ? 'changeMe' : ''}"  value="{!v.inputValueList.PermanentAddress2}" /></td> 
+         <aura:if isTrue="{!v.predatabln}">
+         <td> {!v.preMap.PermanentAddress2}</td>
+       </aura:if>
+      </tr>
+      
+           
+      <tr>
+         <td>PAN Details:</td>
+         <td>{!app.PancardNo__c}</td>
+         <td>
+          <lightning:select name="Applicant2PAN" label="{!app.PancardNo__c}" variant="label-hidden" class="label-hidden" 
+                 value="{!v.preMapYesNo.Applicant2PAN}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+        </td> 
+         <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+              aura:id="Applicant2PAN" class="{!v.CriticalMap.Applicant2PAN ? 'changeMe' : ''}" value="{!v.inputValueList.Applicant2PAN}" required="true"/></td> 
+         <aura:if isTrue="{!v.predatabln}">
+         <td> {!v.preMap.Applicant2PAN}</td></aura:if>
+      </tr>  
+           
+   
+     </aura:if>
+   
+     <aura:if isTrue="{!app.Applicant_Number__c =='Third Applicant'}">  
+   
+      <tr> 
+       <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" > Applicant 3 - {!app.Applicant_Number__c} </td>
+       <td  style="background:#9CA1A1;"></td>
+       <td  style="background:#9CA1A1;"></td>
+       <aura:if isTrue="{!v.predatabln}">
+         <td  style="background:#9CA1A1;"></td>
+      </aura:if>
+      </tr>
+   
+      
+     <tr>
+      <td>Applicant Name:</td>
+      <td>{!app.Name}</td>
+        <!-- {!v.bookingList.bkg.Primary_Applicant_Name__c}-->
+     <!-- <td><lightning:input type="checkbox" label="" name="ApplicantName" value="{!v.bookingList.bkg.Primary_Applicant_Name__c}" onchange="{! c.handleCheckbox }" /></td>-->
+      <td>
+         <lightning:select name="ApplicantName3" label="{!app.Name}" variant="label-hidden" class="label-hidden" aura:id="selectItem3" 
+           value="{!v.preMapYesNo.ApplicantName3}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td>
+      <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+              aura:id="ApplicantName3" class="{!v.CriticalMap.ApplicantName3 ? 'changeMe' : ''}"  value="{!v.inputValueList.ApplicantName3}"/></td> 
+      <aura:if isTrue="{!v.predatabln}">
+     <td>{!v.preMap.ApplicantName3}</td>
+     </aura:if>
+     </tr>
+   
+     <tr>
+      <td>Email Addresses:</td>
+      <td>{!app.Email_Address__c}</td>
+            <!--{!v.bookingList.bkg.Primary_Applicant_Email__c}-->
+       <td>
+         <lightning:select name="EmailAddresses3" label="{!app.Email_Address__c}" variant="label-hidden" class="label-hidden" 
+            value="{!v.preMapYesNo.EmailAddresses3}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+      </td> 
+       <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="EmailAddresses3" class="{!v.CriticalMap.EmailAddresses3 ? 'changeMe' : ''}"  value="{!v.inputValueList.EmailAddresses3}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.EmailAddresses3}</td>
+        </aura:if>
+     </tr>
+   
+     <tr>
+        <td>Mobile No.:</td>
+       <td>{!app.Mobile_Number__c}</td>
+   
+         <!-- {!v.bookingList.applicant.Mobile_Number__c}--> 
+      <td>
+          <lightning:select name="MobileNo3" label="{!app.Mobile_Number__c}" variant="label-hidden" class="label-hidden" 
+               value="{!v.preMapYesNo.MobileNo3}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="MobileNo3" class="{!v.CriticalMap.MobileNo3 ? 'changeMe' : ''}" value="{!v.inputValueList.MobileNo3}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.MobileNo3}</td>
+       </aura:if>
+     </tr>
+   
+     <tr>
+        <td>Permanent Address:</td>
+        <td>{!app.Permanent_Address__c}</td>
+        <!--{!v.bookingList.applicant.Permanent_Address__c}-->
+        <td>
+         <lightning:select name="PermanentAddress3" label="{!app.Permanent_Address__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.PermanentAddress3}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+           <aura:iteration items="{!v.dropDownOpts}" var="item">
+              <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+           </aura:iteration>
+           </lightning:select>
+      </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+             aura:id="PermanentAddress3" class="{!v.CriticalMap.PermanentAddress3 ? 'changeMe' : ''}"  value="{!v.inputValueList.PermanentAddress3}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.PermanentAddress3}</td>
+      </aura:if>
+     </tr>
+     
+   
+    </aura:if>
+   
+    <aura:if isTrue="{!app.Applicant_Number__c =='Fourth Applicant'}">  
+   
+      <tr> 
+       <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" > Applicant 4 - {!app.Applicant_Number__c} </td>
+       <td  style="background:#9CA1A1;"></td>
+       <td  style="background:#9CA1A1;"></td>
+       <aura:if isTrue="{!v.predatabln}">
+         <td  style="background:#9CA1A1;"></td>
+      </aura:if>
+      </tr>
+   
+      
+     <tr>
+      <td>Applicant Name:</td>
+      <td>{!app.Name}</td>
+        <!-- {!v.bookingList.bkg.Primary_Applicant_Name__c}-->
+     <!-- <td><lightning:input type="checkbox" label="" name="ApplicantName" value="{!v.bookingList.bkg.Primary_Applicant_Name__c}" onchange="{! c.handleCheckbox }" /></td>-->
+      <td>
+         <lightning:select name="ApplicantName4" label="{!app.Name}" variant="label-hidden" class="label-hidden" aura:id="selectItem4" 
+            value="{!v.preMapYesNo.ApplicantName4}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td>
+      <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+            aura:id="ApplicantName4" class="{!v.CriticalMap.ApplicantName4 ? 'changeMe' : ''}" value="{!v.inputValueList.ApplicantName4}"/></td> 
+      <aura:if isTrue="{!v.predatabln}">
+     <td>{!v.preMap.ApplicantName4}</td>
+     </aura:if>
+     </tr>
+   
+     <tr>
+      <td>Email Addresses:</td>
+      <td>{!app.Email_Address__c}</td>
+            <!--{!v.bookingList.bkg.Primary_Applicant_Email__c}-->
+       <td>
+         <lightning:select name="EmailAddresses4" label="{!app.Email_Address__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.EmailAddresses4}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+      </td> 
+       <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="EmailAddresses4" class="{!v.CriticalMap.EmailAddresses4 ? 'changeMe' : ''}"  value="{!v.inputValueList.EmailAddresses4}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.EmailAddresses4}</td>
+        </aura:if>
+     </tr>
+   
+     <tr>
+        <td>Mobile No.:</td>
+       <td>{!app.Mobile_Number__c}</td>
+   
+         <!-- {!v.bookingList.applicant.Mobile_Number__c}--> 
+      <td>
+          <lightning:select name="MobileNo4" label="{!app.Mobile_Number__c}" variant="label-hidden" class="label-hidden" 
+           value="{!v.preMapYesNo.MobileNo4}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="MobileNo4" class="{!v.CriticalMap.MobileNo4 ? 'changeMe' : ''}" value="{!v.inputValueList.MobileNo4}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.MobileNo4}</td>
+       </aura:if>
+     </tr>
+   
+     <tr>
+        <td>Permanent Address:</td>
+        <td>{!app.Permanent_Address__c}</td>
+        <!--{!v.bookingList.applicant.Permanent_Address__c}-->
+        <td>
+         <lightning:select name="PermanentAddress4" label="{!app.Permanent_Address__c}" variant="label-hidden" class="label-hidden" 
+           value="{!v.preMapYesNo.PermanentAddress4}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+           <aura:iteration items="{!v.dropDownOpts}" var="item">
+              <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+           </aura:iteration>
+           </lightning:select>
+      </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="PermanentAddress4" class="{!v.CriticalMap.PermanentAddress4 ? 'changeMe' : ''}"  value="{!v.inputValueList.PermanentAddress4}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.PermanentAddress4}</td>
+      </aura:if>
+     </tr>
+     
+   
+    </aura:if>
+   
+    <aura:if isTrue="{!app.Applicant_Number__c =='Fifth Applicant'}">  
+   
+      <tr> 
+       <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" > Applicant 5 - {!app.Applicant_Number__c} </td>
+       <td  style="background:#9CA1A1;"></td>
+       <td  style="background:#9CA1A1;"></td>
+       <aura:if isTrue="{!v.predatabln}">
+         <td  style="background:#9CA1A1;"></td>
+      </aura:if>
+      </tr>
+   
+      
+     <tr>
+      <td>Applicant Name:</td>
+      <td>{!app.Name}</td>
+        <!-- {!v.bookingList.bkg.Primary_Applicant_Name__c}-->
+     <!-- <td><lightning:input type="checkbox" label="" name="ApplicantName" value="{!v.bookingList.bkg.Primary_Applicant_Name__c}" onchange="{! c.handleCheckbox }" /></td>-->
+      <td>
+         <lightning:select name="ApplicantName5" label="{!app.Name}" variant="label-hidden" class="label-hidden" aura:id="selectItem5" 
+           value="{!v.preMapYesNo.ApplicantName5}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td>
+      <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+           aura:id="ApplicantName5" class="{!v.CriticalMap.ApplicantName5 ? 'changeMe' : ''}" value="{!v.inputValueList.ApplicantName5}"/></td> 
+      <aura:if isTrue="{!v.predatabln}">
+     <td>{!v.preMap.ApplicantName5}</td>
+     </aura:if>
+     </tr>
+   
+     <tr>
+      <td>Email Addresses:</td>
+      <td>{!app.Email_Address__c}</td>
+            <!--{!v.bookingList.bkg.Primary_Applicant_Email__c}-->
+       <td>
+         <lightning:select name="EmailAddresses5" label="{!app.Email_Address__c}" variant="label-hidden" class="label-hidden" 
+           value="{!v.preMapYesNo.EmailAddresses5}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+      </td> 
+       <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="EmailAddresses5" class="{!v.CriticalMap.EmailAddresses5 ? 'changeMe' : ''}"  value="{!v.inputValueList.EmailAddresses5}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.EmailAddresses5}</td>
+        </aura:if>
+     </tr>
+   
+     <tr>
+        <td>Mobile No.:</td>
+       <td>{!app.Mobile_Number__c}</td>
+   
+         <!-- {!v.bookingList.applicant.Mobile_Number__c}--> 
+      <td>
+          <lightning:select name="MobileNo5" label="{!app.Mobile_Number__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.MobileNo5}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+            <aura:iteration items="{!v.dropDownOpts}" var="item">
+               <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+            </aura:iteration>
+            </lightning:select>
+       </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="MobileNo5" class="{!v.CriticalMap.MobileNo5 ? 'changeMe' : ''}" value="{!v.inputValueList.MobileNo5}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.MobileNo5}</td>
+       </aura:if>
+     </tr>
+   
+     <tr>
+        <td>Permanent Address:</td>
+        <td>{!app.Permanent_Address__c}</td>
+        <!--{!v.bookingList.applicant.Permanent_Address__c}-->
+        <td>
+         <lightning:select name="PermanentAddress5" label="{!app.Permanent_Address__c}" variant="label-hidden" class="label-hidden" 
+            value="{!v.preMapYesNo.PermanentAddress5}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+           <aura:iteration items="{!v.dropDownOpts}" var="item">
+              <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+           </aura:iteration>
+           </lightning:select>
+      </td> 
+        <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+              aura:id="PermanentAddress5" class="{!v.CriticalMap.PermanentAddress5 ? 'changeMe' : ''}"  value="{!v.inputValueList.PermanentAddress5}" /></td> 
+        <aura:if isTrue="{!v.predatabln}">
+        <td> {!v.preMap.PermanentAddress5}</td>
+      </aura:if>
+     </tr>
+     
+   
+    </aura:if>
+   
+   </aura:iteration>
+   
+           <!-- Added by Vinay 04-06-2025 Start -->
+           <tr> <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" >Customer Details</td>
+               <td  style="background:#9CA1A1;" ></td>
+               <td  style="background:#9CA1A1;" ></td>
+               <aura:if isTrue="{!v.predatabln}">
+                   <td  style="background:#9CA1A1;"></td>
+               </aura:if>
+               
+           </tr>
+           <tr>
+               <td>No of Family Members:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.No_of_family_members__c}</td>
+               <td>
+                   <lightning:select name="FamilyCount" label="{!v.bookingList.bkg.Opportunity__r.Account.No_of_Family_Members__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.FamilyCount}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="FamilyCount"  class="{!v.CriticalMap.FamilyCount ? 'changeMe' : ''}" value="{!v.inputValueList.FamilyCount}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.FamilyCount}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Residence Pincode:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.RW_Zip_Code__c}</td>
+               <td>
+                   <lightning:select name="ResidencePincode" label="{!v.bookingList.bkg.Opportunity__r.Account.RW_Zip_Code__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.ResidencePincode}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="ResidencePincode"  class="{!v.CriticalMap.ResidencePincode ? 'changeMe' : ''}" value="{!v.inputValueList.ResidencePincode}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.ResidencePincode}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Profession:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.RW_Occupation__c}</td>
+               <td>
+                   <lightning:select name="Profession" label="{!v.bookingList.bkg.Opportunity__r.Account.RW_Occupation__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.Profession}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="Profession"  class="{!v.CriticalMap.Profession ? 'changeMe' : ''}" value="{!v.inputValueList.Profession}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.Profession}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Distance To Office:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.Distance_To_Office__c}</td>
+               <td>
+                   <lightning:select name="OfficecDistance" label="{!v.bookingList.bkg.Opportunity__r.Account.Distance_To_Office__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.OfficecDistance}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="OfficecDistance"  class="{!v.CriticalMap.OfficecDistance ? 'changeMe' : ''}" value="{!v.inputValueList.OfficecDistance}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.OfficecDistance}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Company Name:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.RW_Company_Name__c}</td>
+               <td>
+                   <lightning:select name="CompanyName" label="{!v.bookingList.bkg.Opportunity__r.Account.RW_Company_Name__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.CompanyName}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="CompanyName"  class="{!v.CriticalMap.CompanyName ? 'changeMe' : ''}" value="{!v.inputValueList.CompanyName}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.CompanyName}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Industry:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.Industry}</td>
+               <td>
+                   <lightning:select name="Industry" label="{!v.bookingList.bkg.Opportunity__r.Account.Industry}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.Industry}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="Industry"  class="{!v.CriticalMap.Industry ? 'changeMe' : ''}" value="{!v.inputValueList.Industry}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.Industry}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Designation:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.RW_Designation__c}</td>
+               <td>
+                   <lightning:select name="Designation" label="{!v.bookingList.bkg.Opportunity__r.Account.RW_Designation__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.Designation}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="Designation"  class="{!v.CriticalMap.Designation ? 'changeMe' : ''}" value="{!v.inputValueList.Designation}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.Designation}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Yearly Family Income:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.Family_Income__c}</td>
+               <td>
+                   <lightning:select name="FamilyIncome" label="{!v.bookingList.bkg.Opportunity__r.Account.Family_Income__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.FamilyIncome}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="FamilyIncome"  class="{!v.CriticalMap.FamilyIncome ? 'changeMe' : ''}" value="{!v.inputValueList.FamilyIncome}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.FamilyIncome}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Reason To Purchase:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.Purpose__c}</td>
+               <td>
+                   <lightning:select name="PurchaseReason" label="{!v.bookingList.bkg.Opportunity__r.Account.Purpose__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.PurchaseReason}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="PurchaseReason"  class="{!v.CriticalMap.PurchaseReason ? 'changeMe' : ''}" value="{!v.inputValueList.PurchaseReason}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.PurchaseReason}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>No. Of Vehicles:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.Vehicles_owned__c}</td>
+               <td>
+                   <lightning:select name="VehiclesCount" label="{!v.bookingList.bkg.Opportunity__r.Account.Vehicles_owned__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.VehiclesCount}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="VehiclesCount"  class="{!v.CriticalMap.VehiclesCount ? 'changeMe' : ''}" value="{!v.inputValueList.VehiclesCount}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.VehiclesCount}</td>
+               </aura:if>
+           </tr>
+           <tr>
+               <td>Four Wheeler:</td>
+               <td>{!v.bookingList.bkg.Opportunity__r.Account.Four_Wheeler__c}</td>
+               <td>
+                   <lightning:select name="FourWheeler" label="{!v.bookingList.bkg.Opportunity__r.Account.Four_Wheeler__c}" variant="label-hidden" class="label-hidden" 
+                                     value="{!v.preMapYesNo.FourWheeler}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+                       <aura:iteration items="{!v.dropDownOpts}" var="item">
+                           <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                       </aura:iteration>
+                   </lightning:select>
+               </td> 
+               <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                                    aura:id="FourWheeler"  class="{!v.CriticalMap.FourWheeler ? 'changeMe' : ''}" value="{!v.inputValueList.FourWheeler}" /></td> 
+               <aura:if isTrue="{!v.predatabln}">
+                   <td> {!v.preMap.FourWheeler}</td>
+               </aura:if>
+           </tr>
+   			<!-- Added by Vinay 04-06-2025 Start -->
+   
+   
+   
+       <tr> <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" >General Details</td>
+            <td  style="background:#9CA1A1;" ></td>
+            <td  style="background:#9CA1A1;" ></td>
+            <aura:if isTrue="{!v.predatabln}">
+            <td  style="background:#9CA1A1;"></td>
+            </aura:if>
+            
+       </tr>
+        
+        <tr>
+           <td>Project:</td>
+           <td>{!v.bookingList.bkg.Project__r.Name}</td>
+           <td>
+            <lightning:select name="Project" label="{!v.bookingList.bkg.Project__r.Name}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.Project}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td> 
+           <td><lightning:input type="input"  pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="Project"  class="{!v.CriticalMap.Project ? 'changeMe' : ''}" value="{!v.inputValueList.Project}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.Project}</td>
+         </aura:if>
+        </tr>
+       <tr>
+           <td>Flat Typology:</td>
+           <td>{!v.bookingList.bkg.Unit_No__r.New_Type__c}</td>
+           <td>
+            <lightning:select name="FlatTypology" label="{!v.bookingList.bkg.Unit_No__r.New_Type__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.FlatTypology}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td> 
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="FlatTypology" class="{!v.CriticalMap.FlatTypology ? 'changeMe' : ''}" value="{!v.inputValueList.FlatTypology}"/></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.FlatTypology}</td>
+         </aura:if>
+        </tr>
+        <tr>
+           <td>Tower:</td>
+           <td>{!v.bookingList.bkg.Wing__c}</td>
+           <td>
+            <lightning:select name="Wing" label="{!v.bookingList.bkg.Wing__c}" variant="label-hidden" class="label-hidden" 
+              value="{!v.preMapYesNo.Wing}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td> 
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                 aura:id="Wing" class="{!v.CriticalMap.Wing ? 'changeMe' : ''}" value="{!v.inputValueList.Wing}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.Wing}</td></aura:if>
+        </tr>
+        <tr>
+           <td>Floor:</td>
+           <td>{!v.bookingList.bkg.Floor__c}</td>
+           <td>
+            <lightning:select name="Floor" label="{!v.bookingList.bkg.Floor__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.Floor}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="Floor" class="{!v.CriticalMap.Floor ? 'changeMe' : ''}" value="{!v.inputValueList.Floor}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.Floor}</td></aura:if>
+        </tr>
+        <tr>
+           <td>Flat No:</td>
+           <td>{!v.bookingList.bkg.Unit_No__r.RW_Param4__c}</td>
+           <td>
+            <lightning:select name="FlatNo" label="{!v.bookingList.bkg.Unit_No__r.RW_Param4__c}" variant="label-hidden" class="label-hidden" 
+              value="{!v.preMapYesNo.FlatNo}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="FlatNo" class="{!v.CriticalMap.FlatNo ? 'changeMe' : ''}" value="{!v.inputValueList.FlatNo}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.FlatNo}</td></aura:if>
+        </tr>
+        <tr>
+           <td>Carpet Area (in Sq.ft):</td>
+           <td>{!v.bookingList.bkg.Carpet_Area__c}</td>
+           <td>
+            <lightning:select name="CarpetArea" label="{!v.bookingList.bkg.Carpet_Area__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.CarpetArea}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="CarpetArea" class="{!v.CriticalMap.CarpetArea ? 'changeMe' : ''}" value="{!v.inputValueList.CarpetArea}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.CarpetArea}</td></aura:if>
+        </tr>
+        <tr>
+           <td>Total No. of Parking:</td>
+           <td>{!v.bookingList.bkg.Quotation__r.Total_No_of_Parking__c}</td>
+           <td>
+            <lightning:select name="CarParkings" label="{!v.bookingList.bkg.Quotation__r.Total_No_of_Parking__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.CarParkings}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                  aura:id="CarParkings" class="{!v.CriticalMap.CarParkings ? 'changeMe' : ''}" value="{!v.inputValueList.CarParkings}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.CarParkings}</td></aura:if>
+        </tr>
+        <tr>
+           <td>Agreement Value:</td>
+           <td>{!v.bookingList.bkg.Allotment_Premium__c}</td>
+           <td>
+            <lightning:select name="AgreementValue" label="{!v.bookingList.bkg.Allotment_Premium__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.AgreementValue}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                   aura:id="AgreementValue" class="{!v.CriticalMap.AgreementValue ? 'changeMe' : ''}" value="{!v.inputValueList.AgreementValue}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.AgreementValue}</td></aura:if>
+        </tr>
+           
+        <tr>
+           <td>Booking Date:</td>
+           <!--<td>{!v.bookingList.bkg.Booking_Date__c}</td>-->
+           <td><lightning:formattedDateTime value="{!v.bookingList.bkg.Booking_Date__c}" year="numeric" month="2-digit" day="2-digit" timeZone="UTC"/></td>
+           <td>
+            <lightning:select name="BookingDate" label="{!v.bookingList.bkg.Booking_Date__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.BookingDate}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="BookingDate" class="{!v.CriticalMap.BookingDate ? 'changeMe' : ''}" value="{!v.inputValueList.BookingDate}" required="true"/></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.BookingDate}</td></aura:if>
+        </tr>
+           
+           <!--<tr>
+           <td>Source Of Booking:</td>
+           <td>{!v.bookingList.bkg.Source_of_Booking__c}</td>
+           <td>
+            <lightning:select name="SourceOfBooking" label="{!v.bookingList.bkg.Source_of_Booking__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.SourceOfBooking}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="SourceOfBooking" class="{!v.CriticalMap.SourceOfBooking ? 'changeMe' : ''}" value="{!v.inputValueList.SourceOfBooking}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.SourceOfBooking}</td></aura:if>
+        </tr>--><!--Commented by Snehal 10-9-25 , CHECKLIST - SNAP ( SOURCE OF BOOKING)-->
+           
+        <aura:if isTrue="{!v.bookingList.bkg.Source_of_Booking__c == 'Channel Partner' }" >
+        <tr>
+           <td>Channel Partner: </td>
+           <td>{!v.bookingList.bkg.BrokerIId__r.Name}</td>
+           <td>
+            <lightning:select name="ChannelPartner" label="{!v.bookingList.bkg.BrokerIId__r.Name}" variant="label-hidden" class="label-hidden" 
+             value="Yes" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td></td>
+           <td></td>
+        </tr>
+		</aura:if>
+           
+        <aura:if isTrue="{!v.bookingList.bkg.Registration_consultant__c != null }" >  
+        <tr>
+            <td> Registration consultant:</td>
+            <td>
+                <lightning:select onchange="{!c.updateBooking}" value="{!v.bookingList.bkg.Registration_consultant__r.Name}"  variant="label-hidden" class="label-hidden" label="Registration consultant" name="{!v.bookingList.bkg.Registration_consultant__r.Consultation_Scanning_charges__c}">
+                    <aura:iteration items="{!v.RegConsltNameListOptions}" var="item">
+                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                    </aura:iteration>
+                </lightning:select><br/>
+                <lightning:input label="Consultation Charge: " name="{!v.bookingList.bkg.Registration_consultant__r.Name}" value="{!v.bookingList.bkg.Registration_consultant__r.Consultation_Scanning_charges__c}" oncommit="{!c.updateConsChrag}"></lightning:input>
+                <!--<p style="color:blue"><b>{!v.bookingList.bkg.Registration_consultant__r.Name}</b></p><br/>-->
+            </td> 
+            <td><lightning:select name="RegistrationConsultant" label="{!v.bookingList.bkg.Registration_consultant__r.Name}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.RegistrationConsultant}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select></td>
+            <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="RegistrationConsultant" class="{!v.CriticalMap.RegistrationConsultant ? 'changeMe' : ''}" value="{!v.inputValueList.RegistrationConsultant}" required="true"/></td>
+            <td></td>
+        </tr>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.bookingList.bkg.Registration_consultant__c == null }" >  
+        <tr>
+            <td> Registration consultant:</td>
+            <td>
+                <lightning:select onchange="{!c.updateBooking}" value="{!v.regName}"  variant="label-hidden" class="label-hidden" label="Registration consultant" name="{!v.charge}">
+                    <aura:iteration items="{!v.RegConsltNameListOptions}" var="item">
+                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                    </aura:iteration>
+                </lightning:select><br/>
+                <lightning:input label="Consultation Charge: " name="{!v.regName}" value="{!v.charge}" oncommit="{!c.updateConsChrag}"></lightning:input>
+                <!--<p style="color:blue"><b>{!v.bookingList.bkg.Registration_consultant__r.Name}</b></p><br/>-->
+            </td> 
+            <td><lightning:select name="RegistrationConsultant" label="{!v.bookingList.bkg.Registration_consultant__r.Name}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.RegistrationConsultant}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select></td>
+            <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="RegistrationConsultant" class="{!v.CriticalMap.RegistrationConsultant ? 'changeMe' : ''}" value="{!v.inputValueList.RegistrationConsultant}" required="true"/></td>
+            <td></td>
+        </tr>
+        </aura:if>
+          
+       <tr> <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" >Payment Schedule Details</td>
+         <td  style="background:#9CA1A1;" ></td>
+         <td style="background:#9CA1A1;" ></td>
+         <aura:if isTrue="{!v.predatabln}">
+         <td  style="background:#9CA1A1;"></td>
+         </aura:if>
+      </tr>
+       <tr>
+           <td>Payment Plan Type:</td>
+           <td>{!v.bookingList.bkg.Quotation__r.Plan_Type__c}</td>
+           <td>
+            <lightning:select name="PaymentPlanType" label="{!v.bookingList.bkg.Quotation__r.Plan_Type__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.PaymentPlanType}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                    aura:id="PaymentPlanType" class="{!v.CriticalMap.PaymentPlanType ? 'changeMe' : ''}" value="{!v.inputValueList.PaymentPlanType}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.PaymentPlanType}</td></aura:if>
+        </tr>
+        <tr>
+           <td>Payment Plan/Milestones Details:</td>
+           <td>{!v.bookingList.bkg.Quotation__r.PaymentPlan__r.Name}</td>
+           <td>
+            <lightning:select name="PaymentPlanMilestonesDetails" label="{!v.bookingList.bkg.Quotation__r.PaymentPlan__r.Name}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.PaymentPlanMilestonesDetails}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                  aura:id="PaymentPlanMilestonesDetails" class="{!v.CriticalMap.PaymentPlanMilestonesDetails ? 'changeMe' : ''}" value="{!v.inputValueList.PaymentPlanMilestonesDetails}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.PaymentPlanMilestonesDetails}</td></aura:if>
+        </tr>
+        <tr>
+           <td>View Cost Sheet:</td>
+           <td><a href="{!v.bookingList.link}"  target="_blank">View Cost Sheet:</a></td>
+           <td>
+            <lightning:select name="ViewCostSheet" label="{!v.bookingList.bkg.Quotation__r.Costsheet_format__c}" variant="label-hidden" class="label-hidden" 
+              value="{!v.preMapYesNo.FlatTypology}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="ViewCostSheet" class="{!v.CriticalMap.ViewCostSheet ? 'changeMe' : ''}" value="{!v.inputValueList.ViewCostSheet}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.ViewCostSheet}</td></aura:if>
+        </tr>
+        <tr> <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" >Payment Details</td>
+         <td>
+           
+            <lightning:select name="ReceiptListRemarks" label="{!v.receiptList}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.ReceiptListRemarks}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+         
+            
+         </td>
+         <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+              aura:id="ReceiptListRemarks" class="{!v.CriticalMap.ReceiptListRemarks ? 'changeMe' : ''}" value="{!v.inputValueList.ReceiptListRemarks}"  /></td>
+         <aura:if isTrue="{!v.predatabln}">
+         <td>{!v.preMap.ReceiptListRemarks}</td>
+         </aura:if>
+      </tr>
+           
+           <aura:iteration items="{!v.receiptList}" var="recpt">	
+               
+               <tr>
+                   <td colspan="2" style="background:rgb(243, 242); font-weight: bold; text-align:center;" >Receipt Number : {!recpt.Name}</td>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+               </tr>
+               <tr>	
+                   <td>PaymentMode :</td>	
+                   <td>{!recpt.Mode__c}</td>	
+                   <td></td>	
+                   <td></td>	
+                   <td></td>	
+                   
+               </tr>	
+               <tr>	
+                   <td>Amount :</td>	
+                   <td>{!recpt.Total_Amount__c}</td>	
+                   <td></td>	
+                   <td></td>	
+                   <td></td>	
+                   
+               </tr>	
+               <tr>	
+                   <td>Date :</td>	
+                   <td>{!recpt.Cheque_DD_Date__c}</td>	
+                   <td></td>	
+                   <td></td>	
+                   <td></td>	
+                   
+               </tr>	
+               <tr>	
+                   <td>Bank Name :</td>	
+                   <td>{!recpt.DraweeBank__c}</td>	
+                   <td></td>	
+                   <td></td>	
+                   <td></td>	
+                   
+               </tr>	
+               <tr>	
+                   <td>Instrument Name :</td>	
+                   <td>{!recpt.Cheque_DD__c}</td>	
+                   <td></td>	
+                   <td></td>	
+                   <td></td>	
+                   
+               </tr>	
+               
+               
+               <!-- </aura:if>-->	
+           </aura:iteration>   
+           
+           <!-- Modified by Dolly -->
+            <tr>
+                <td>Mode of funding:</td>
+                <td>
+                    <lightning:select name="mySelect"
+                                      aura:id="mySelect"
+                                      value="{!v.selectedValue}"
+                                       onchange="{!c.handleModeOfFundingChange}"
+                                      messageWhenValueMissing="Please select the Mode of funding"
+                                      required="true">
+                        <aura:iteration items="{!v.options}" var="item">
+                            <option text="{!item.label}" value="{!item.value}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+        </tr>
+
+        <aura:if isTrue="{!v.selectedValue == 'Bank Loan'}">
+            <tr>
+                <td>Bank1:</td>
+                <td>
+                    <lightning:select value="{!v.BankPreferenceforLoan1}"
+                                      onchange="{!c.handlebankLoan}"
+                                      aura:id="BankName1"
+                                      label="BankName1"
+                                      variant="label-hidden"
+                                      class="label-hidden"
+                                       messageWhenValueMissing="Please select the Bank Prefrence 1"
+                                      required="true">
+                        <aura:iteration items="{!v.BankNamePicklistOptions}" var="item">
+                            <option text="{!item.label}" value="{!item.value}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+            </tr>
+        
+            <aura:if isTrue="{! !empty(v.BankPreferenceforLoan1)}">
+                <tr>
+                    <td>Bank2:</td>
+                    <td>
+                        <lightning:select value="{!v.BankPreferenceforLoan2}"
+                                          onchange="{!c.handlebankLoan}"
+                                          aura:id="BankName2"
+                                          label="BankName2"
+                                          variant="label-hidden"
+                                          class="label-hidden"
+                                         >
+                            <aura:iteration items="{!v.BankNamePicklistOptions}" var="item">
+                                <option text="{!item.label}" value="{!item.value}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                    </td>
+                </tr>
+            </aura:if>
+        
+            <aura:if isTrue="{! and(!empty(v.BankPreferenceforLoan1), !empty(v.BankPreferenceforLoan2))}">
+                <tr>
+                    <td>Bank3:</td>
+                    <td>
+                        <lightning:select value="{!v.BankPreferenceforLoan3}"
+                                          onchange="{!c.handlebankLoan}"
+                                          aura:id="BankName3"
+                                          label="BankName3"
+                                          variant="label-hidden"
+                                          class="label-hidden"
+                                          >
+                            <aura:iteration items="{!v.BankNamePicklistOptions}" var="item">
+                                <option text="{!item.label}" value="{!item.value}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                    </td>
+                </tr>
+            </aura:if>
+        </aura:if>
+
+   
+       <tr> <td colspan="2" style="background:#9CA1A1; text-align:center; font-weight: bold;" >Important Information to be shared with customer</td>
+         <td  style="background:#9CA1A1;" ></td>
+         <td style="background:#9CA1A1;" ></td>
+         <aura:if isTrue="{!v.predatabln}">
+         <td  style="background:#9CA1A1;"></td>
+         </aura:if>
+      </tr>
+       
+       <tr>
+           <td>RM Name:</td>
+           <td>{!v.bookingList.bkg.Unit_No__r.Relationship_Manager__r.RM_Name__c}</td>
+           <td>
+            <lightning:select name="RMName" label="{!v.bookingList.bkg.Unit_No__r.Relationship_Manager__r.RM_Name__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.RMName}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="RMName" class="{!v.CriticalMap.Project ? 'RMName' : ''}" value="{!v.inputValueList.RMName}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.RMName}</td></aura:if>
+        </tr>
+        <tr>
+           <td>RM contact Number:</td>
+           <td>{!v.regPhone}</td>
+           <td>
+            <lightning:select name="RMcontactNumber" label="{!v.bookingList.bkg.Project__r.Contact_No__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.RMcontactNumber}"  messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+          <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+               aura:id="RMcontactNumber" class="{!v.CriticalMap.RMcontactNumber ? 'changeMe' : ''}" value="{!v.inputValueList.RMcontactNumber}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.RMcontactNumber}</td></aura:if>
+        </tr>
+        <tr>
+           <td>RM work hours:</td>
+           <td>{!v.bookingList.bkg.Unit_No__r.Relationship_Manager__r.RM_Work_Hours__c}</td>
+           <td>
+            <lightning:select name="RMworkhours" label="{!v.bookingList.bkg.Unit_No__r.Relationship_Manager__r.RM_Work_Hours__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.RMworkhours}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+          <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+             aura:id="RMworkhours" class="{!v.CriticalMap.RMworkhours ? 'changeMe' : ''}" value="{!v.inputValueList.RMworkhours}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.RMworkhours}</td></aura:if>
+        </tr>
+        <tr>
+           <td>RM-email:</td>
+           <td>{!v.bookingList.bkg.Project__r.Customer_Care_Email__c}</td>
+           <td>
+            <lightning:select name="RMemail" label="{!v.bookingList.bkg.Project__r.Customer_Care_Email__c}" variant="label-hidden" class="label-hidden" 
+             value="{!v.preMapYesNo.RMemail}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+          <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed" aura:id="RMemail" class="{!v.CriticalMap.RMemail ? 'changeMe' : ''}" value="{!v.inputValueList.RMemail}" /></td> 
+           <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.RMemail}</td></aura:if>
+            
+            
+          <!-- <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.RMemail}</td></aura:if> -->
+        </tr>
+           
+           <aura:if isTrue = "{!v.showDhamakaOffer}">
+               <tr>
+                   <td colspan="2" style="text-align:left;"> 
+                       Dhamaka Offer to be Sent
+                   </td>
+                   
+                   <td colspan="2" style="text-align:center;"> 
+                       <lightning:input type="checkbox" 
+                                        label="" 
+                                        name="Dhamaka" 
+                                        checked="{!v.isDhamaka}" 
+                                        onchange="{! c.handleCheckboxChange }" />
+                   </td>
+               </tr>
+           </aura:if>
+           
+        
+        <tr>
+            <td colspan="5" style="text-align:left;">
+               <lightning:textarea name="Remarks" label="Additional Remarks" aura:id="Remarks" class="remarksCss" value="{!v.additionalRemarks}" />
+            
+            </td>
+            <aura:if isTrue="{!v.predatabln}">
+            <td> {!v.preMap.Remarks}</td>
+            </aura:if>
+        </tr>
+        
+       </tbody>
+      
+       </table>
+      
+     </form>
+   </div>
+   
+ 
+   <!--End of Modal Body--> 
+   
+   
+   <!--Modal Footer-->
+   <div class="modal-footer slds-modal__footer attach-to-bottom">
+    
+       <lightning:button aura:id="Acc" variant="Brand" class="slds-button" label="Accept" onclick="{! c.handleAccept }" disabled="{!v.btnAcc}" /><!--disabled="{!v.btnAcc}" commented in full copy-->
+    <lightning:button aura:id="Hold" variant="Brand" class="slds-button" label="Hold" onclick="{!c.handleAccept}"/>
+     <lightning:button aura:id="Rej" variant="Brand" class="slds-button" label="Reject" onclick="{!c.handleAccept}" disabled="{!v.btnRej}"/>
+     <lightning:button aura:id="Cancel" variant="Neutral" class="slds-button" label="Cancel" onclick="{!c.handleClose}"/>
+   
+   </div>
+
+
+<aura:set attribute="else">
+        <aura:if isTrue="{!v.BookingNotConfirmed}">
+            <div class="slds-modal__content">
+               <form class="slds-form--stacked">
+                  <h3 class="title slds-text-heading--small"  style="text-align:center; font-weight: bold;">
+                  Site Head has not been Approved this Booking to Initiate Welcome Call
+                 </h3>
+               </form>
+               </div>
+            </aura:if>
+
+            <aura:if isTrue="{!v.welcomeCallRejected}">
+          <div class="slds-modal__content">
+             <form class="slds-form--stacked">
+                <h3 class="title slds-text-heading--small"  style="text-align:center; font-weight: bold;">  
+                  Welcome call got rejected. We cannot continue the call, unless SM resolves the discrepancy.
+                 </h3>
+             </form>
+             </div>
+    </aura:if>
+            
+        
+  </aura:set>
+
+</aura:if><!--BookingConfirmed and BookingNotConfirmed-->
+
+  </aura:set>
+</aura:if> <!-- Loading spinner end--> 
+<!--End of Modal Footer-->
+
+</aura:component>

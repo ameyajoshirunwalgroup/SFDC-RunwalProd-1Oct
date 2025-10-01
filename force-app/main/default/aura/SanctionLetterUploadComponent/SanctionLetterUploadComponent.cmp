@@ -1,0 +1,167 @@
+<aura:component Controller="SanctionLetterController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <aura:attribute name="Sanctionfiles" type="ContentDocument[]"/> 
+    <aura:attribute name="TPAfiles" type="ContentDocument[]"/> 
+    <aura:attribute name="loanId" type="string" />
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:attribute name="loanrecordId" type="String" default = "Loan__c[]"/> 
+    <aura:attribute name="SanctionId" type="String" />
+    <aura:attribute name="NocGenerated" type="String" />
+    <aura:attribute name="TPAId" type="String" /> 
+    <aura:attribute name="acceptFileTypes" type="String" />  
+    <aura:attribute name="SanctionuploadButton" type="Boolean"/>
+    <aura:attribute name="TPAuploadButton" type="Boolean"/>
+    <aura:attribute name="showFileHeader" type="Boolean" default="true" />
+    <aura:attribute name="fileHeaderText" type="String" default="Sanction File Upload" />
+    <aura:attribute name="fileHeaderText2" type="String" default="TPA File Upload" />
+    <aura:attribute name="uploadMultiple" type="Boolean" default="true"/>      
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    <aura:attribute name="TPAValue" type = "String"/>
+    
+    <aura:attribute name="SanctionStatus" type = "String"/>
+    <!--<aura:attribute name="disableTPAUpload" type="boolean" default="true"/>-->
+    
+    <aura:attribute name="HomeLoanTakenFrom" type = "String"/>
+    <aura:attribute name="errorMessage" type="String" />
+    
+   <div class="slds-card slds-card_boundary">  
+       
+       <!-- <aura:if isTrue="{!not(empty(v.errorMessage))}">
+          <div class="slds-text-color_error slds-align_absolute-center">
+          <b> {!v.errorMessage} </b>
+          </div>
+        </aura:if>-->
+        
+        <!-- show or hide header -->
+        <aura:if isTrue="{!v.showFileHeader}">
+            <div class="slds-page-header">{!v.fileHeaderText}</div>  
+        </aura:if>
+        
+        <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                <div class="slds-p-around_small">
+                                     <div class="slds-p-top_x-large">
+                                        <span>Sanction Letter Upload</span>                        
+                                    </div>
+                                </div>
+                            </div>-->
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+        <div class="slds-p-around_small">
+                <lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                      accept="{!v.acceptFileTypes}" 
+                                      recordId="{!v.recordId}"   
+                                      onuploadfinished="{!c.sanctionUploadFinished}"
+                                      disabled = "{!v.SanctionuploadButton}"/>  
+        </div>
+        </div>
+       
+       <br/>
+        <div class="slds-form--compound">
+            <table class="slds-table slds-table--bordered">  
+                <!-- hide the table header if file is empty -->
+                <aura:if isTrue="{!not(empty(v.Sanctionfiles))}">
+                    <thead>  
+                        <tr>  
+                            <th>Preview Sanction Files</th>  
+                            <th>Files Type</th>  
+                            <th>Delete Files</th>                     
+                        </tr>  
+                    </thead>  
+                </aura:if>
+                <tbody>
+                    <aura:iteration items="{!v.Sanctionfiles}" var="f">  
+                        <tr>  
+                            <td>
+                                <a href="javascript:void(0)" id="{!f.Id}" onclick="{!c.previewFile}">
+                                    {!f.Title}
+                                </a>
+                            </td>  
+                            <td>{!f.FileType}</td>      
+                            <td>
+                                <a href="javascript:void(0)" id="{!f.Id}" onclick="{!c.delFiles}">
+                                    <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                                </a>
+                            </td>
+                        </tr>  
+                    </aura:iteration>  
+                </tbody>  
+            </table>  
+            <!-- show spinner logo when needed -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+        </div> 
+       
+       <aura:if isTrue="{!v.showFileHeader}">
+            <div class="slds-page-header">{!v.fileHeaderText2}</div>  
+        </aura:if>
+       <!--
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span>TPA Files Upload</span>                        
+                                    </div>
+                                </div>
+                            </div>-->
+       
+       
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+        <div class="slds-p-around_small"> 
+                <lightning:fileUpload multiple="{!v.uploadMultiple}"   
+                                      accept="{!v.acceptFileTypes}" 
+                                      recordId="{!v.recordId}"   
+                                      onuploadfinished="{!c.TPAUploadFinished}" 
+                                      disabled = "{!v.TPAuploadButton}"/>
+                                       
+        </div>
+        </div>
+        
+        <br/> 
+        <div class="slds-form--compound">
+            <table class="slds-table slds-table--bordered">  
+                <!-- hide the table header if file is empty -->
+                <aura:if isTrue="{!not(empty(v.TPAfiles))}">
+                    <thead>  
+                        <tr>  
+                            <th>Preview TPA Files</th>  
+                            <th>Files Type</th>  
+                            <th>Delete Files</th>                     
+                        </tr>  
+                    </thead>  
+                </aura:if>
+                <tbody>
+                    <aura:iteration items="{!v.TPAfiles}" var="f">  
+                        <tr>  
+                            <td>
+                                <a href="javascript:void(0)" id="{!f.Id}" onclick="{!c.previewFile}">
+                                    {!f.Title}
+                                </a>
+                            </td>  
+                            <td>{!f.FileType}</td>      
+                            <td>
+                                <a href="javascript:void(0)" id="{!f.Id}" onclick="{!c.delTPAFiles}">
+                                    <lightning:icon size="x-small" iconName="utility:delete" alternativeText="Delete" />
+                                </a>
+                            </td>
+                        </tr>  
+                    </aura:iteration>  
+                </tbody>  
+            </table>  
+            <!-- show spinner logo when needed -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+        </div> 
+      
+    </div>
+</aura:component>

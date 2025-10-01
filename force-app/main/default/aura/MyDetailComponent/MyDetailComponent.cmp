@@ -1,0 +1,114 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="MyDetailComponentController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="lstWrap" type="wrapOppDetail[]"/>
+    <aura:attribute name="lstAtt" type="WrapAttachments[]"/>
+    <aura:attribute name="objAtt" type="WrapAttachments"/>
+    <aura:attribute name="imageIndex" type="Integer" default="0"/>
+	
+    <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system.min.css"/>
+    
+    <div class="slds-page-header" role="banner">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                  My Details
+                </div>
+            </div>
+    </div>
+
+    <div>
+        <c:RWSpinner />
+    </div>
+
+    <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-max-medium-table--stacked-horizontal">
+        <thead>
+            <tr class="slds-text-title--caps">
+            	<!-- <th scope="col">
+                	<div class="slds-truncate" title="Opportunity Name">Opportunity Name</div>
+                </th> -->
+                <th scope="col">
+                	<div class="slds-truncate" title="Project Name">Project Name</div>
+                </th>
+                <th scope="col">
+                	<div class="slds-truncate" title="Unit Name">Unit Name</div>
+                </th>
+                <th scope="col">
+                	<div class="slds-truncate" title="Stage Name">Stage Name</div>
+                </th>
+                <!-- <th scope="col">
+                	<div class="slds-truncate" title="Show">Show Stage</div>
+                </th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration var="Wrap" items="{!v.lstWrap}">
+                <tr>
+                    <!-- <th scope="row" data-label="Opportunity Name">
+        				<div class="slds-truncate"><ui:outputText value="{!Wrap.strOppName}"/> </div>
+      				</th> -->
+                    <th scope="row" data-label="Project Name">
+                        <div class="slds-truncate">
+                            <!-- <ui:outputText value="{!Wrap.strProjName}"/>  -->
+							<a href="javascript:void(0);">
+                                <div class="slds-truncate" title="{!Wrap.strProjName}">
+                                    <span  onclick="{!c.showStage}" id="{!Wrap.strProjectId}">
+                                        {!Wrap.strProjName}
+                                    </span>    
+                                </div>
+                            </a>
+                        </div>
+      				</th>
+                    <th scope="row" data-label="Unit Name">
+        				<div class="slds-truncate"><ui:outputText value="{!Wrap.strUnitName}"/> </div>
+      				</th>
+                    <th scope="row" data-label="Stage Name">
+        				<div class="slds-truncate"><ui:outputText value="{!Wrap.strConstName}"/> </div>
+      				</th>
+                    <!-- <th scope="row" data-label="Stage Name">
+        				<div class="slds-truncate">
+                            <a href="javascript:void(0);">
+                                <div class="slds-truncate" title="{!Wrap.strOppName}">
+                                    <span  onclick="{!c.fetchData}" id="{!Wrap.strProjectId}">
+                                        Click Here
+                                    </span>    
+                                </div>
+                            </a>
+                        </div>
+      				</th> -->
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+    <aura:renderIf isTrue="{!v.lstAtt != null}">
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                Construction Stages - 
+            </div>
+        </div>
+    </div>
+    <div class="slds-grid slds-align--absolute-center" style="margin-top: 13px;">
+        <div style="float:left;width:20%;padding: 1%;">
+            <div style="float:right">
+             <aura:if isTrue="{!v.imageIndex > 0}">
+                 <ui:button label="Prev" Class="slds-button slds-button#brand" press="{!c.changeImgBack}" /> 
+             </aura:if>
+            </div>
+        </div>
+        <div style="float:left;width:60%">
+        	<img src="{!v.objAtt.strAttId}" />&nbsp;&nbsp;
+        </div>
+        <div style="float:left;width:20%;padding: 1%;">
+            <aura:if isTrue="{! v.lstAtt.length > (v.imageIndex+1)}">
+                <ui:button label="Next" Class="slds-button slds-button--brand" press="{!c.changeImgForwrd}"/> 
+            </aura:if> 
+        </div>
+    </div>
+    <div class="slds-grid slds-align--absolute-center" style="margin-top: 13px;">
+        <aura:iteration var="att" items="{!v.lstAtt}">
+            <div class="slds-col slds-box slds-box--small slds-theme--shade slds-text-align--center">
+            	<img src="{!att.strAttId}" style="width: 80px;height: 80px;"/>
+            </div>
+        </aura:iteration> 
+    </div>
+    </aura:renderIf>
+</aura:component>

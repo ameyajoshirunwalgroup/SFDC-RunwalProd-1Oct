@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Iris_Sync_Cannot_Edit_CP_Record</fullName>
+    <active>false</active>
+    <description>If Iris sync is checked then user cannot edit the record.</description>
+    <errorConditionFormula>AND(       
+
+OR($Profile.Name &lt;&gt; &quot;System Administrator&quot;,$Profile.Name &lt;&gt;&quot;Integration User&quot;), 
+				Channel_Partner_From_CP_Portal__c = false,
+       NOT(ISNEW()),
+      RW_IRIS_Sync__c = true
+)</errorConditionFormula>
+    <errorMessage>You Cannot edit record as Iris sync is checked.</errorMessage>
+</ValidationRule>

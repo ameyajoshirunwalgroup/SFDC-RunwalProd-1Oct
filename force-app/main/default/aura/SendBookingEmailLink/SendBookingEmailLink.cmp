@@ -1,0 +1,177 @@
+<aura:component controller="DigitalBookingController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isSuccess" type="Boolean" />
+    <aura:attribute name="isQuotationTagged" type="Boolean" default="TRUE" />
+    <aura:attribute name="disable" type="Boolean" default="false" />
+    <aura:attribute name="quotationList" type="List"  />
+    <aura:attribute name="quotationId" type="String"  />
+    <aura:attribute name="quotationTowerMap" type="Map"/> 
+    <aura:attribute name="projectCarParkMap" type="Map"/>
+    <aura:attribute name="quotationMap" type="Map"/>   
+    <aura:attribute name="offers" type="list"  />
+    <aura:attribute name="suboffer" type="List"  />
+    <aura:attribute name="subofferName" type="String" />
+    <aura:attribute name="offerName" type="String" />
+    <aura:attribute name="projectName" type="String" />
+    <aura:attribute name="towerId" type="String" />
+    <aura:attribute name="towerNames" type="String[]" />
+    <aura:attribute name="Amount" type="Decimal" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="isError" type="boolean" default="false" />
+    <aura:attribute name="errorMsgs" type="Object" />
+    <aura:attribute name="PaymentGateway" type="String"/><!--PP-->
+        <aura:attribute name="Spinner" type="boolean" default="false" />
+
+       <aura:if isTrue="{! ( v.Spinner)}">
+            <div class="slds-spinner_container">
+                <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            
+    </aura:if>
+    <aura:if isTrue="{!v.isError}">
+        <lightning:card >
+            <aura:iteration items="{!v.errorMsgs}" var="err" indexVar="key">
+                <div class="slds-align_absolute-center slds-text-color_error" >
+                    <p>
+                        <ui:outputText value="{!err.ErrorMessage}"/>	  
+                    </p>
+                </div>
+            </aura:iteration>
+        </lightning:card>
+        <aura:set attribute="else">      
+            <aura:if isTrue="{!v.isQuotationTagged}">
+                
+                <div class="slds-align_absolute-center slds-text-heading_medium" >
+                    <p>Enter the Booking amount for the customer</p>
+                </div>
+                
+                <div class="slds-grid slds-gutters slds-wrap" >
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_x-large slds-p-right_none">
+                                <span>Quotation<span class="asterisk">*</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_x-small slds-p-right_none">
+                                <lightning:select  value="{!v.quotationId}" name="Quotation" label="Quotation" variant="label-hidden" onchange="{!c.getOffers}"  required="true"	>
+                                    <option value="">--None--</option>
+                                    <aura:iteration items="{!v.quotationList}" var="val">
+                                        <option value="{!val.value}"> {!val.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <aura:if isTrue="{!not(empty(v.quotationId))}">
+                        
+                        
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            <div class="slds-p-around_small">
+                                <div class="slds-p-top_x-large slds-p-right_none">
+                                    <span>Offer</span>                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            <div class="slds-p-around_small">
+                                <div class="slds-p-top_x-small slds-p-right_none">
+                                    <lightning:select  value="{!v.offerName}" name="offerName" label="Offer Name" variant="label-hidden" onchange="{!c.getSuboffers}">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.offers}" var="offer" indexVar="key">
+                                            <option value="{!offer.key}"> {!offer.key}</option>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                        </div>
+                        
+                         
+                        
+                        
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            <div class="slds-p-around_small">
+                                <div class="slds-p-top_x-large slds-p-right_none">
+                                    <span>Sub Offer</span>                        
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            <div class="slds-p-around_small">
+                                <div class="slds-p-top_x-small slds-p-right_none">
+                                    <lightning:select  value="{!v.subofferName}" name="subofferName" label="Sub Offer" variant="label-hidden" >
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.suboffer}" var="subofferVal" >
+                                            <option value="{!subofferVal}"> {!subofferVal}</option>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_x-large slds-p-right_none">
+                                <span>Amount<span class="asterisk">*</span></span>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_large slds-p-left_none">
+                                <lightning:input type="number" name="amount" label="Amount" value="{!v.Amount}" formatter="currency" step="0.01" variant="label-hidden" required="true"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PaymentGateway PrathamNadig -->    
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large slds-p-right_none">
+                                        <span>Payment Gateway<span class="asterisk">*</span></span>                       
+                                    </div>
+                                </div>
+                            </div>
+                  			<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                     <div class="slds-p-top_large slds-p-left_none">
+                                         <lightning:select name="PaymentGateway" aura:id ="PaymentGateway" value="{!v.PaymentGateway}" label="Payment Gateway" variant="label-hidden" required="true" messageWhenValueMissing="Choose one!">
+                                        	 <option value="">--None--</option>
+                                             <option value="CCAvenue">CCAvenue</option>
+                                             <option value="BillDesk">BillDesk</option>
+                                         </lightning:select>
+                                     </div>
+                                 </div>
+                            </div>
+        					<!-- PaymentGateway PrathamNadig -->
+                </div>
+                <div class="slds-align_absolute-center" >
+                    <div class="slds-p-around_large">
+                        <lightning:button aura:id="sendLink" variant="brand" label="Send Booking Link" title="Send Booking Link" onclick="{!c.sendBookingFormLink}" disabled="{!(v.disable||empty(v.quotationId)||empty(v.Amount))}"/>
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-align_absolute-center slds-text-color_error" >
+                        <p>Please tag the quotation to the opportunity before sending booking link</p>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    <!-- <aura:if isTrue="{!v.isSuccess}"><div class="slds-p-around_medium slds-text-align_center slds-text-color_success slds-text-heading_small">
+        An Email has been sent successfully to the customer.
+        </div><aura:set attribute="else"><div class="slds-p-around_medium slds-text-align_center slds-text-color_error slds-text-heading_small">
+        {!v.errorMessage}
+        </div></aura:set></aura:if> -->
+</aura:component>

@@ -1,0 +1,472 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	<aura:attribute name="applicantdetails" type="List" />
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/> 
+    <aura:registerEvent name="sessionupdateevent" type="c:CustomerPortalSessionEvent"/>
+        <aura:attribute name="multiple" type="Boolean" default="false"/> 
+    <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                    <div class="slds-section slds-is-open">
+                    <div class="slds-p-top_small"></div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                            <b class="headerstyle">Personal Details</b>
+                            <div class="slds-p-top_small"></div>
+                            <div class="slds-form" role="list">
+                                
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">APPLICANT TYPE</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.applicantType}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">FIRST NAME</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.firstName}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">LAST NAME</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.lastName}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                
+                               
+                                
+                            </div>
+                        </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+           <div class="slds-section slds-is-open">
+                    <div class="slds-p-top_small"></div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                            <b class="headerstyle">Document Status</b>
+                            <div class="slds-p-top_small"></div>
+                            <div class="slds-form" role="list">
+                                <aura:if isTrue="{!v.applicantdetails.residentialStatus =='Indian National'}">
+                                
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PAN CARD</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.panCard}" />
+                                                
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.panCardDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.panCardDocumentId}"/>
+                                           </div>
+                                            <aura:set attribute="else">
+                                            <lightning:fileUpload name="PAN Card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                        
+                                        
+                                                                                   
+                                    </div>
+                                    
+                                </div>
+                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Aadhar Card'}">
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">AADHAR CARD</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Aadhar Card'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.addressproofDocumentNumber}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.aadharDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.aadharDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Aadhar Card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Driving License'}">
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">DRIVING LICENSE</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Driving License'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.addressproofDocumentNumber}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.drivingLicenseDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.drivingLicenseDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Driving License"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Passport'}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PASSPORT</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Passport'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.addressproofDocumentNumber}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.passportDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.passportDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Passport"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                    
+                                    <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Electricity Bill'}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Electricity Bill</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Electricity Bill'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.addressproofDocumentNumber}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.electricitybillDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.electricitybillDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Electricity Bill"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Voter’s ID Card'}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Voter's ID Card</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.addressproofDocument == 'Voter’s ID Card'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.addressproofDocumentNumber}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.voterIdDocumentId))}">
+                                             <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.voterIdDocumentId}"/>
+                                            </div>
+                                                 <aura:set attribute="else">
+                                            <lightning:fileUpload name="Voter’s ID Card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.applicantdetails.residentialStatus =='Foreign Nationals Of Indian Origin'}">
+                                    <aura:if isTrue="{!v.applicantdetails.typeOfOrigin == 'PIO card'}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PIO card</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.typeOfOrigin == 'PIO card'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.origindetails}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.piocardDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.piocardDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="PIO card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                    
+                                    <aura:if isTrue="{!v.applicantdetails.typeOfOrigin == 'OCI card'}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">OCI card</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!v.applicantdetails.typeOfOrigin == 'OCI card'}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.origindetails}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.ocicardDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.ocicardDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="OCI card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                    
+                                    <aura:if isTrue="{!not(empty(v.applicantdetails.passportnodetails))}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Passport</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!not(empty(v.applicantdetails.passportnodetails))}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.passportnodetails}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.passportnodetailsDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.passportnodetailsDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Passport"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                    
+                                </aura:if>
+                                
+                                
+                                <aura:if isTrue="{!v.applicantdetails.residentialStatus =='For NRI'}">
+                                    <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PAN CARD</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.panCard}" />
+                                                
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.panCardDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.panCardDocumentId}"/>
+                                           </div>
+                                            <aura:set attribute="else">
+                                            <lightning:fileUpload name="PAN Card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                        
+                                        </div>
+                                        
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.passportnodetails))}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Passport</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!not(empty(v.applicantdetails.passportnodetails))}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.passportnodetails}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.passportnodetailsDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.passportnodetailsDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Passport"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                        
+                                    </div>
+                                </aura:if>
+                                
+                                <aura:if isTrue="{!or(v.applicantdetails.residentialStatus =='For Company',v.applicantdetails.residentialStatus =='Partnership Firm') }">
+                                    <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">PAN CARD</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.panCard}" />
+                                                
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.panCardDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.panCardDocumentId}"/>
+                                           </div>
+                                            <aura:set attribute="else">
+                                            <lightning:fileUpload name="PAN Card"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                        
+                                        </div> 
+                                        
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.panCardNumberofAuthoritySignatory))}">
+                                    <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">Self-attested copy of Pan Card of Authority Signatory</label>
+                                            <div class="slds-form-element__control">
+                                                <aura:if isTrue="{!not(empty(v.applicantdetails.panCardNumberofAuthoritySignatory))}">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.panCardNumberofAuthoritySignatory}" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                                        <aura:if isTrue="{!not(empty(v.applicantdetails.panCardNumberofAuthoritySignatoryDocumentId))}">
+                                            <div class="slds-p-left_xx-large">
+                                                <lightning:button variant="brand" class="previewButton textInput" label="Preview" title="Preview" onclick="{! c.previewfile }" name="{!v.applicantdetails.panCardNumberofAuthoritySignatoryDocumentId}"/>
+                                            </div>
+                                                <aura:set attribute="else">
+                                            <lightning:fileUpload name="Self-attested copy of Pan Card of Authority Signatory"  label="" multiple="{!v.multiple}"   
+                                              accept="{!v.accept}"  recordId="{!v.applicantdetails.bookingId}" 
+                                              onuploadfinished="{!c.uploadDocument}" />
+                                            </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    </aura:if>
+                                        
+                                        
+                                    </div>
+                                </aura:if>
+                            </div>
+                        </lightning:layoutItem>
+                        </lightning:layout>
+                    </div> 
+        </div>
+        
+                
+        <!--<div class="{!$Browser.isPhone ? 'slds-col slds-size_1-of-1 slds-large-size_2-of-12' :'slds-col slds-size_1-of-1 slds-large-size_2-of-12 slds-p-top_xx-large'}" >
+            <div class="{!$Browser.isPhone ? 'slds-align_absolute-center' :'slds-p-top_xx-large'}" >
+            <lightning:button variant="brand" class="sizeButton textInput" name="{!v.applicantdetails}" label="Request a Change" title="Request a Change" onclick="{! c.openApplicantDetails }" />
+        	</div>
+            </div>-->
+    </div>
+</aura:component>

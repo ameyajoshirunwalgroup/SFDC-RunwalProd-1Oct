@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Booking_Source_CP_New__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( ISBLANK(  Customer__r.Walk_in_Channel_Partner_Name__c ) , &quot;N/A&quot;, &quot;Name - &quot;+  Customer__r.Walk_in_Channel_Partner_Name__c +&quot; | Contact - &quot;+  Customer__r.Walk_in_Channel_Partner_Phone__c +&quot; | Email - &quot;+  Customer__r.Walk_in_Channel_Partner_Email__c )</formula>
+    <label>Booking Source (CP New)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

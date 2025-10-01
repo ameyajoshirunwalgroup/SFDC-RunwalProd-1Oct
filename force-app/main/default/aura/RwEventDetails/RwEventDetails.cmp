@@ -1,0 +1,11 @@
+<aura:component controller="CustomerPortalFloatingCtrl" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String"/>
+    <aura:if isTrue="{!v.recordId}">
+        <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="RW_Runwal_Event__c">
+            <div class="slds-box">
+                <lightning:outputField fieldName="RW_Event_Details__c" />
+            </div>
+        </lightning:recordViewForm>
+    </aura:if>
+</aura:component>

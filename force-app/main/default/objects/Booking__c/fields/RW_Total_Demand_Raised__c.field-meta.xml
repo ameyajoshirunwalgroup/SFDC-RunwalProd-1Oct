@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_Total_Demand_Raised__c</fullName>
+    <label>Total Demand Raised</label>
+    <summarizedField>RW_Demand__c.Demand_Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>RW_Demand__c.RW_Demand_Status__c</field>
+        <operation>notEqual</operation>
+        <value>Revoke</value>
+    </summaryFilterItems>
+    <summaryForeignKey>RW_Demand__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

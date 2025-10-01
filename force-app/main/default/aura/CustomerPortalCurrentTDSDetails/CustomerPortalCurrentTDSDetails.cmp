@@ -1,0 +1,163 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+<aura:attribute name="RunwalHomeWrapList" type="List" />
+<aura:attribute name="selectedTabBookingId" type="String" />
+<aura:attribute name="tdscertificateNumber" type="String" />
+<aura:attribute name="tdsamount" type="String" />
+<aura:attribute name="duplicatecertificatenumber" type="Boolean" />
+<aura:attribute name="uploadedTDSDocumentID" type="String" />
+<aura:attribute name="HasPreviousTDSCertificate" type="Boolean" default="false"/>
+<aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/> 
+<aura:attribute name="multiple" type="Boolean" default="false"/> 
+   
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    
+    <lightning:tabset onselect="{!c.tabSelected}">
+                 <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                     
+					 
+                     <lightning:tab label="{!'TDS Details for Booking '+ bookvar.unitNumber}" id="{!bookvar.BookingId}" onactive="{!c.onTabClick}">
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+        
+                <aura:if isTrue="{!v.HasPreviousTDSCertificate}">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                    <div class="slds-section slds-is-open">
+                    <div class="slds-p-top_small"></div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                            <b class="headerstyle">Last TDS Certificate Details</b>
+                            <div class="slds-p-top_small"></div>
+                            <div class="slds-form" role="list">
+                                <aura:iteration items="{!bookvar.tdsWrapperList}" var="tdsvar"> 
+
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">TDS CERTIFICATE NUMBER</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02"  value="{!tdsvar.tdscertificateNumber}" pattern="[a-zA-z0-9-]+" messageWhenPatternMismatch="Special Characters not allowed"/>
+                                           </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">TDS AMOUNT</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02"  value="{!tdsvar.tdsamount}" pattern="[0-9]+(\.[0-9][0-9]?)?" messageWhenPatternMismatch="Letters and Special Characters are not allowed"/>
+                                           </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            
+                                            <div>
+                                                <lightning:button variant="brand" class="sizeButton textInput" label="Preview TDS Certificate" title="Preview TDS Certificate" onclick="{! c.previewfile }" name="{!tdsvar.tdsDocumentId}"/>
+                                        	</div>
+                                            </div>
+                                        
+                                    
+                                    
+                                
+                                
+                                
+                                      
+                                        </div>
+                                    </div>
+
+                                </aura:iteration>
+                               
+                                
+                                
+                               
+                                
+                            </div>
+                        </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+        </div>
+        </aura:if>
+        <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+           
+            <div class="slds-section slds-is-open">
+                    <div class="slds-p-top_small"></div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                            <b class="headerstyle">Submit a New TDS Certificate</b>
+                            <div class="slds-p-top_small"></div>
+                            <div class="slds-form" role="list">
+
+
+                                     
+                                <div class="slds-form__row">
+                                    
+                                    <div class="slds-form__item" role="listitem">
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal ">
+
+                                            <div>
+                                               <lightning:input type="text" label="TDS Certificate Number" aura:id="tdscertificateNumber"  value="{!v.tdscertificateNumber}" onblur="{!c.checkTDSNumber}" name="{!bookvar}" pattern="[a-zA-z0-9-]+" messageWhenPatternMismatch="Special Characters not allowed"/> 
+                                                
+                                        	</div>
+
+                                            </div>
+                                        
+                                         <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                           
+                                            <div class="">
+                                                <lightning:fileUpload name="TDS"  label=""    
+                                              accept="{!v.accept}"  
+                                              onuploadfinished="{!c.uploadTDSDocument}" class="" disabled="{!or(v.duplicatecertificatenumber ,or(empty(v.tdscertificateNumber),empty(v.tdsamount)))}"/>
+                                        	</div>
+                                             
+                                            </div>
+                                        
+                                    
+                                    
+                                
+                                
+                                
+                                      
+                                        </div>
+                                    </div>
+									<div class="slds-form__row">
+                                         <div class="slds-form__item" role="listitem">
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal ">
+
+                                            <div>
+                                               <lightning:input type="number" formatter="currency" label="TDS Amount" aura:id="tdsamount" pattern="[0-9]+(\.[0-9][0-9]?)?" messageWhenPatternMismatch="Letters and Special Characters are not allowed"  value="{!v.tdsamount}"  /> 
+                                        	</div>
+
+                                            </div>
+                                             
+                                             <div class="slds-form-element slds-form-element_horizontal ">
+												<lightning:input type="text" label="Booking ID" aura:id="bookingId" class="slds-hide" value="{!bookvar.BookingId}"  /> 
+                                                <lightning:input type="text" label="Opportunity ID" aura:id="oppId" class="slds-hide" value="{!bookvar.opportunityId}"  /> 
+                                            <div>
+
+                                        	</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                
+									<div class="slds-form__row">
+                                         <div class="slds-align_absolute-center" >
+                                            <lightning:button class="{!or(or(empty(v.uploadedTDSDocumentID),empty(v.tdscertificateNumber)),empty(v.tdsamount)) ? 'slds-hide' :'slds-m-top_small sizeButton textInput'}" variant="neutral"  name="{!bookvar}" label="Submit" onclick="{! c.onsubmitTDS }" disabled="{!or(empty(v.uploadedTDSDocumentID),empty(v.tdscertificateNumber))}"/>
+                                         </div>
+                                	</div>
+                                
+                                
+                               
+                                
+                            </div>
+                        </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+              
+        </div>
+    </div>
+                     </lightning:tab>
+                     
+        </aura:iteration>
+    </lightning:tabset>
+</aura:component>

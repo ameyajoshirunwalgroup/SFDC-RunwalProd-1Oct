@@ -1,0 +1,1824 @@
+<aura:component controller="EOIController" implements="flexipage:availableforRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+	<ltng:require scripts="{!$Resource.BillDesk}"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:attribute name="data" type="String"/>
+    <aura:attribute name="encResp" type="String"/>
+    <aura:attribute name="orderNo" type="String" />
+    <aura:attribute name="opportunityId" type="String"/>
+    <aura:attribute name="ProjectName" type="String"/>
+    <aura:attribute name="eoiId" type="String"/>
+    <aura:attribute name="applicableOfferId" type="String"/>
+    <aura:attribute name="amount" type="String"/>
+    <aura:attribute name="towerId" type="String"/>
+    <aura:attribute name="eoilinkrecordid" type="String"/>
+    <aura:attribute name="unitTypes" type="String[]"/>
+    <aura:attribute name="budgetTypes" type="String[]"/>
+    <aura:attribute name="floorTypes" type="String[]"/>
+    <aura:attribute name="sizes" type="String[]"/> <!-- Added by coServe 09-10-2024 -->
+    <aura:attribute name="eoiAmounts" type="String[]"/> <!-- Added by coServe 09-10-2024 -->
+    <aura:attribute name="applicationSources" type="String[]"/> <!-- Added by coServe 09-10-2024 -->
+    <aura:attribute name="mahalakshmiTC" type="String"/><!-- Added by coServe 09-10-2024 -->
+    <aura:attribute name="easebuzzTC" type="String"/><!-- Added by coServe 11-10-2024 -->
+    <aura:attribute name="projectTC" type="String"/><!-- Added by coServe 11-10-2024 -->
+    <aura:attribute name="state" type="String[]"/>
+    <aura:attribute name="CountryPhoneCode" type="String[]"/>
+    <aura:attribute name="country" type="String[]"/>
+    <aura:attribute name="mailingcountry" type="String[]"/>
+    <aura:attribute name="mailingstate" type="String[]"/>
+    <aura:attribute name="EOIWrap" type="Map" default="{}" />
+    <aura:attribute name="PaymentDetailsWrap" type="Map" default="{}" />
+    <aura:attribute name="onPrint" type="Boolean"/>
+    <aura:attribute name="isLinkExpired" type="Boolean"/>
+    <aura:attribute name="OfferRecords" type="Object"/>
+    <aura:attribute name="LoggedInProfileName" type="String"/>
+    <aura:attribute name="accessCode" type="String"/>
+     <aura:attribute name="digitalPaymentAmount" type="String"/>
+    <aura:attribute name="GenderPicklistOptions" type="String[]"/>
+    <aura:attribute name="NationalityPicklistOptions" type="String[]"/>
+    <aura:attribute name="OccupationPicklistOptions" type="String[]"/>
+    <aura:attribute name="MaritalStatusPicklistOptions" type="String[]"/>
+    <aura:attribute name="DesignationPicklistOptions" type="String[]"/>
+     <aura:attribute name="PaymentModePicklistOptions" type="String[]"/>
+     <aura:attribute name="PaymentBankPicklistOptions" type="String[]"/>
+    <aura:attribute name="cityPicklistOptions" type="String[]"/>
+    <aura:attribute name="mailingcityPicklistOptions" type="String[]"/>
+    <aura:attribute name="showPaymentFields" type="Boolean"/>
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="communityURL" type="String" />
+    <aura:attribute name="hasError" type="boolean" default="false" />
+    <aura:attribute name="isPaymentSuccess" type="String"/>
+    <aura:attribute name="isPaymentFailure" type="String"/>
+    <aura:attribute name="isEOISuccess" type="Boolean"/>
+    <aura:attribute name="showGenerateOTP" type="Boolean" default="true" />
+    <aura:attribute name="showValidateOTP" type="Boolean" default="false" />
+    <aura:attribute name="showSubmitButton" type="Boolean"/>
+    <aura:attribute name="OTPEntered" type="String" />
+    <aura:attribute name="ActualOTP" type="String" />
+    <aura:attribute name="InvalidOTP" type="String" />
+    <aura:attribute name="hasState" type="Boolean" />
+    <aura:attribute name="hasCity" type="Boolean" />
+    <aura:attribute name="hasmailingState" type="Boolean" />
+    <aura:attribute name="hasmailingCity" type="Boolean" />
+    <aura:attribute name="dateValidationError" type="Boolean"/>
+    <aura:attribute name="chequedateValidationError" type="Boolean"/>
+    <aura:attribute name="ReadTermsandConditions" type="Boolean" />
+	<aura:attribute name="PaymentGateway" type="String"/>
+	<aura:attribute name="msg" type="String"/>
+    <aura:attribute name="ReadBillDeskTC" type="Boolean" />
+    <aura:attribute name="ReadEasebuzzTC" type="Boolean" /><!-- Added by coServe 11-10-2024 -->
+    <!--<aura:attribute name="MailPermAddrSame" type="Boolean" default="true"/> -->
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <aura:attribute name="KYCDocumentErrorMessage" type="String"/>
+    
+    <aura:handler name="DocumentNumberValidate" event="c:KYCDocumentNumberValidate"
+                  action="{!c.handleComponentEvent}"/>
+    
+    <aura:attribute name="pageReference" type="Object"/>
+    <lightning:navigation aura:id="navService"/>
+     <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+    
+    <aura:if isTrue="{!v.hasError}">
+       <div class="slds-text-color_error slds-align_absolute-center"><b>There was an error. Please check with administrator. </b> 
+        <aura:if isTrue="{!not(empty(v.errorMessage))}">
+          <b> Error Details - {!v.errorMessage} </b>
+        </aura:if>
+         </div>
+        <aura:set attribute="else">
+       
+             <!-- <aura:if isTrue="{!and (not(empty(v.encResp)),v.isPaymentSuccess == 'Success') }"> -->
+             <aura:if isTrue="{!and (or(not(empty(v.encResp)),not(empty(v.msg))),v.isPaymentSuccess == 'Success')}"> <!-- bkk -->
+        <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+            <div class="slds-text-color_success"><label>Thank You ! Your EOI Submission and Payment is successful . Your EOI Reference Number is <b>{!v.EOIWrap.RWName}</b> </label> </div>
+        </div>
+            <aura:set attribute="else">
+				<!-- <aura:if isTrue="{!and (not(empty(v.encResp)),v.isPaymentFailure == 'Failure') }"> -->
+                <aura:if isTrue="{!and (or(not(empty(v.encResp)),not(empty(v.msg))),v.isPaymentFailure == 'Failure')}"> <!-- bkk -->
+              <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+            <div class="slds-text-color_success"><label>Payment Failed . Please Try again after some time by opening the EOI Form link through email </label> </div>
+        	</div>
+                 <aura:set attribute="else">
+                  <aura:if isTrue="{!v.isEOISuccess }">
+                      <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+                        <div class="slds-text-color_success"><label>Thank You ! Your EOI is submitted successfully . Your EOI Reference Number is <b>{!v.EOIWrap.RWName}</b> </label> </div>
+                    </div>
+                       <aura:set attribute="else">
+                           
+                           <aura:if isTrue="{!v.isLinkExpired}">
+                               <div class="slds-text-color_error slds-align_absolute-center">
+                                   <b> Sorry, the link has expired. Please contact Runwal. </b>
+                               </div>
+                                <aura:set attribute="else">
+                           
+                           
+    <div class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="{!$Browser.isPhone ? 'slds-p-around_small slds-text-align_center' :'slds-p-around_small '}"  >
+                <div class="logoContainer"></div>
+                <img src="{!$Resource.Runwal}"/> 
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-p-top_x-large">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            <div class="slds-p-right_none"></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                                <div class="slds-p-around_small slds-text-heading_small">    
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-text-heading_medium slds-p-left_medium ' :'slds-p-top_x-large slds-text-heading_large slds-p-left_medium'}" >
+                                        <b><u>EXPRESSION OF INTEREST</u></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+            
+            <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                <div class="slds-p-around_small slds-text-heading_small">
+                    Thank you for expressing your interest in Project - <b>{!v.ProjectName}</b> . Your Reference number for EOI form is : <b>{!v.EOIWrap.RWName}</b>
+                </div>
+                <lightning:card>
+                    
+                    <div class="slds-clearfix">
+                        <div class="slds-float_right">
+                            Please note that all fields marked with an asterisk (*) are required.
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <!--<aura:if isTrue="{!v.ProjectName != 'Runwal Forest'}">-->
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">DETAILS OF APPLICANT</span>
+                        </h3>
+                        <div class="slds-grid slds-gutters slds-wrap" >
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span>Name of the Applicant</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWPrimaryFirstName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" value="{!v.EOIWrap.RWPrimaryFirstName}" required="true"/>
+                                    <!-- ^([^0-9]*)$ -->
+                                    <div class="slds-text-align_center ">
+                                        <span>First Name<span class="asterisk"> *</span></span>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-top_xx-small">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWPrimaryMiddleName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" value="{!v.EOIWrap.RWPrimaryMiddleName}" />
+                                    <div class="slds-text-align_center">
+                                        <span>Middle Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" pattern="[a-zA-Z]+" aura:id="RWPrimaryLastName" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" value="{!v.EOIWrap.RWPrimaryLastName}" required="true" />
+                                    <div class="slds-text-align_center">
+                                        <span>Last Name<span class="asterisk"> *</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Name of Company</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWNameofCompany}" />
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Permanent Address Line 1<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWPermanentAddressLine1" value="{!v.EOIWrap.RWPermanentAddressLine1}" required="true" maxlength="60"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Permanent Address Line 2</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWPermanentAddressLine2" value="{!v.EOIWrap.RWPermanentAddressLine2}" maxlength="40" />
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Permanent Address Line 3</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWPermanentAddressLine3" value="{!v.EOIWrap.RWPermanentAddressLine3}" maxlength="40"/>
+                                </div>
+                            </div>
+                            
+                           <!--   <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >City<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWCity" value="{!v.EOIWrap.RWCity}" required="true" />
+                                </div>
+                            </div> -->
+                            
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Country<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select onchange="{!c.onCountryValueChange}" value="{!v.EOIWrap.RWCountry}" name="RWCountry" aura:id="RWCountry" label="Country" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.country}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWCountry)) , v.EOIWrap.RWCountry == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select> 
+                                    <!-- <lightning:input type="text" /> -->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >State
+                                             <aura:if isTrue="{!v.hasState}">
+                                            <span class="asterisk"> *</span>
+                                            </aura:if>                     
+                                        </span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select onchange="{!c.onStateValueChange}" value="{!v.EOIWrap.RWState}" aura:id="RWState" name="RWState" label="State" variant="label-hidden">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.state}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWState)) , v.EOIWrap.RWState == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >City
+                                            <aura:if isTrue="{!v.hasCity}">
+                                            <span class="asterisk"> *</span>
+                                            </aura:if>
+                                        </span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select value="{!v.EOIWrap.RWCity}" name="RWCity" aura:id="RWCity" label="City" variant="label-hidden" >
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.cityPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWCity)) , v.EOIWrap.RWCity == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select> 
+                                    <!-- <lightning:input type="text" /> -->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Pin<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWPin" value="{!v.EOIWrap.RWPin}" pattern="^[0-9]+$" messageWhenPatternMismatch="Special Characters are not allowed" required="true"/>
+                                </div>
+                            </div>
+                            
+							 <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span>Mailing address same as Permanent address?</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-top_xx-large slds-p-left_small">
+                                    <lightning:input type="checkbox" aura:id="RWMailPerm" checked="{!v.EOIWrap.MailPermAddrSame}" onchange="{!c.onMailAddrChange}"/>
+                                </div>
+                            </div>
+                            
+                            <aura:if isTrue="{!not(v.EOIWrap.MailPermAddrSame)}">
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Mailing Address Line 1<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWMailingAddressLine1" value="{!v.EOIWrap.RWMailingAddressLine1}" required="true" maxlength="60"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Mailing Address Line 2</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWMailingAddressLine2" value="{!v.EOIWrap.RWMailingAddressLine2}" maxlength="40"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_medium">
+                                        <span >Mailing Address Line 3</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWMailingAddressLine3" value="{!v.EOIWrap.RWMailingAddressLine3}" maxlength="40"/>
+                                </div>
+                            </div>
+                            
+                              
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Country<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select onchange="{!c.onMailingCountryValueChange}" value="{!v.EOIWrap.RWMailingCountry}" name="RWMailingCountry" aura:id="RWMailingCountry" label="Country" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.mailingcountry}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWMailingCountry)) , v.EOIWrap.RWMailingCountry == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select> 
+                                    <!-- <lightning:input type="text" /> -->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >State<aura:if isTrue="{!v.hasmailingState}">
+                                            <span class="asterisk"> *</span>
+                                            </aura:if>                     </span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select onchange="{!c.onMailingStateValueChange}" value="{!v.EOIWrap.RWMailingState}" aura:id="RWMailingState" name="RWMailingState" label="State" variant="label-hidden">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.mailingstate}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWMailingState)) , v.EOIWrap.RWMailingState == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >City<aura:if isTrue="{!v.hasmailingCity}">
+                                            <span class="asterisk"> *</span>
+                                            </aura:if></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                           <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWMailingCity" value="{!v.EOIWrap.RWMailingCity}" required="true" />
+                                </div>
+                            </div>-->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select value="{!v.EOIWrap.RWMailingCity}" name="RWMailingCity" aura:id="RWMailingCity" label="City" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.mailingcityPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWMailingCity)) , v.EOIWrap.RWMailingCity == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select> 
+                                    <!-- <lightning:input type="text" /> -->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Pin<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="RWMailingPin" value="{!v.EOIWrap.RWMailingPin}"  required="true"/>
+                                </div>
+                            </div>
+                                
+                            </aura:if>
+                            
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Date Of Birth<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="Date" aura:id="RWDateOfBirth" value="{!v.EOIWrap.RWDateOfBirth}" required="true" onchange="{!c.checkDateValidation}"/>
+                                </div>
+                                 <aura:if isTrue="{!v.dateValidationError}">
+                                    <div class="slds-text-color_error slds-p-left_x-small">
+                                        Date cannot be today or in the future
+                                    </div>
+                                </aura:if> 
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Gender <span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select  value="{!v.EOIWrap.RWGender}" aura:id="RWGender" name="RWGender" label="Gender" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                         <aura:iteration items="{!v.GenderPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWGender)) , v.EOIWrap.RWGender == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Marital Status <span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select value="{!v.EOIWrap.RWMaritalStatus}" aura:id="RWMaritalStatus" name="RWMaritalStatus" label="Marital Status" variant="label-hidden" required="true">
+                                        <option value="">--None--</option>
+                                         <aura:iteration items="{!v.MaritalStatusPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWMaritalStatus)) , v.EOIWrap.RWMaritalStatus == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Nationality<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select   value="{!v.EOIWrap.RWNationality}" aura:id="RWNationality" name="RWNationality" label="Nationality" variant="label-hidden" required="true">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.NationalityPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWNationality)) , v.EOIWrap.RWNationality == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <aura:if isTrue="{!val == 'India'}">
+                                                     <option value="{!val}" selected="true"> {!val}</option>
+                                                         <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Occupation<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select  value="{!v.EOIWrap.RWOccupation}" aura:id="RWOccupation" name="RWOccupation" label="Occupation" variant="label-hidden" required="true">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.OccupationPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWOccupation)) , v.EOIWrap.RWOccupation == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Designation</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select  value="{!v.EOIWrap.RWDesignation}" name="RWDesignation" label="Designation" variant="label-hidden">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.DesignationPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWDesignation)) , v.EOIWrap.RWDesignation == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                          
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Mobile Number</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+        
+                                    
+                                    
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                        <div class="slds-p-around_small ">
+                                            <lightning:input type="tel" aura:id="RWPrimaryContactNo" pattern="[0-9]{10}" value="{!v.EOIWrap.RWPrimaryContactNo}" messageWhenPatternMismatch="Please enter valid 10 digit mobile number" disabled="true"/>
+                                        </div>
+                                    </div>
+                                    
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Alternate Mobile Number</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+        
+                                    
+                                    
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                        <div class="slds-p-around_small ">
+                                            <lightning:input type="tel" aura:id="RWPrimaryAlternateContactNo" pattern="[0-9]{10}" value="{!v.EOIWrap.RWPrimaryAlternateContactNo}" messageWhenPatternMismatch="Please enter valid 10 digit mobile number" />
+                                        </div>
+                                    </div>
+                                    
+                             
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Email<span class="asterisk"> *</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="email" aura:id="RWPrimaryEmail" value="{!v.EOIWrap.RWPrimaryEmail}" required="true" messageWhenTypeMismatch="Please enter a valid email"/>
+                                </div>
+                            </div>
+                            
+                            <!--  <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_x-large">
+                                <span >PAN Details</span>                        
+                            </div>
+                        </div>
+                    </div> -->
+                            <!--
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">
+                            <lightning:input type="text" value="{!v.EOIWrap.RWPANDetails}" aura:id="RWPANDetails" onblur="{!c.validatePAN}" required="true"/>
+                        </div>
+                    </div> -->
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Alternate Email</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="email" aura:id="RWPrimaryAlternateEmail" value="{!v.EOIWrap.RWPrimaryAlternateEmail}" messageWhenTypeMismatch="Please enter a valid email"/>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="slds-p-top_x-large">
+                                <span >Aadhar Details</span>                        
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">
+                            <lightning:input type="text" value="{!v.EOIWrap.RWPrimaryAadharDetails}" aura:id="RWPrimaryAadharDetails" onblur="{!c.validateAadhar}" />
+                        </div>
+                    </div>
+                    
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                        <div class="slds-p-around_small">
+                            <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large'}">
+                                <span >Passport Details</span>                        
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-p-around_small">
+                            <lightning:input type="text" value="{!v.EOIWrap.RWPrimaryPassportDetails}" aura:id="RWPrimaryPassportDetails" onblur="{!c.validatePassport}"/>
+                        </div>
+                    </div> -->
+                            
+                            <aura:if isTrue="{!v.ProjectName == '7 Mahalaxmi'}">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >Customer GST No.:</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small ">
+                                        <lightning:input type="text" aura:id="gst" value="{!v.EOIWrap.CustomerGST}"  />
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >Home Loan (Yes / No)</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small ">
+                                        <lightning:input type="text" aura:id="homeloan" value="{!v.EOIWrap.HomeLoan}"  />
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-p-top_x-large">
+                                    <div class="slds-border_top">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span>Name of Second Applicant</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWSecondaryFirstName}" aura:id="RWSecondaryFirstName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers are not allowed"/>
+                                    <div class="slds-text-align_center ">
+                                        <span>First Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWSecondaryMiddleName}" aura:id="RWSecondaryMiddleName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers are not allowed"/>
+                                    <div class="slds-text-align_center">
+                                        <span>Middle Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWSecondaryLastName}" aura:id="RWSecondaryLastName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers are not allowed"/>
+                                    <div class="slds-text-align_center">
+                                        <span>Last Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                           <aura:if isTrue="{!or(and(not(empty(v.EOIWrap.RWSecondaryLastName)) ,not(empty(v.EOIWrap.RWSecondaryFirstName))),v.ProjectName == '7 Mahalaxmi')}"> 
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Mobile Number</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="tel" value="{!v.EOIWrap.RWSecondaryContactNo}"  aura:id="RWSecondaryContactNo" pattern="[0-9]{10}"  messageWhenPatternMismatch="Please enter valid 10 digit mobile number"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Email</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="email" aura:id="RWSecondaryEmail" value="{!v.EOIWrap.RWSecondaryEmail}" messageWhenTypeMismatch="Please enter a valid email" />
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >PAN Details<aura:if isTrue="{!and(not(empty(v.EOIWrap.RWSecondaryLastName)) ,not(empty(v.EOIWrap.RWSecondaryFirstName)))}">
+                                        <span class="asterisk"> *</span>
+                                            </aura:if></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWSecondaryPANDetails}" aura:id="RWSecondaryPANDetails" onblur="{!c.validatePAN}" required="{!and(not(empty(v.EOIWrap.RWSecondaryLastName)) ,not(empty(v.EOIWrap.RWSecondaryFirstName)))}"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Alternate Email</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="email" aura:id="RWSecondaryAlternateEmail" value="{!v.EOIWrap.RWSecondaryAlternateEmail}" messageWhenTypeMismatch="Please enter a valid email"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Aadhar Details</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWSecondaryAadharDetails}" aura:id="RWSecondaryAadharDetails" onblur="{!c.validateAadhar}" />
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Passport Details</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWSecondaryPassportDetails}" aura:id="RWSecondaryPassportDetails" onblur="{!c.validatePassport}"/>
+                                </div>
+                            </div>
+                            </aura:if>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">PROVISIONAL DETAILS OF PREFERRED RESIDENCE</span>
+                        </h3>
+                        <div class="slds-grid slds-gutters slds-wrap" >
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6">
+                                
+                                <div class="slds-p-top_x-large slds-p-left_small">
+                                    <span >Preferred Unit Type</span>                        
+                                </div>
+                                
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-6">
+                                <div class="slds-grid slds-gutters slds-wrap" >
+                                    <aura:iteration items="{!v.unitTypes}" var="unitType">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-5">
+                                            <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-p-left_xx-large' : 'slds-p-top_x-large slds-float_left slds-text-align_center'}">
+                                                <aura:if isTrue="{!v.EOIWrap.RWPreferredUnitType == unitType}">
+                                                    <lightning:input type="checkbox" label="{!unitType}" aura:id="RWPreferredUnitType" value="{!v.EOIWrap.RWPreferredUnitType}" checked="true" onchange="{!c.setRWPreferredUnitType }"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:input type="checkbox" label="{!unitType}" aura:id="RWPreferredUnitType" value="{!v.EOIWrap.RWPreferredUnitType}" onchange="{!c.setRWPreferredUnitType }"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                            <!-- Added by coServe 11-10-2024 Start -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6">
+                                
+                                <div class="slds-p-top_x-large slds-p-left_small">
+                                    <span >Preferred Size</span>                        
+                                </div>
+                                
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-6">
+                                <div class="slds-grid slds-gutters slds-wrap" >
+                                    <aura:iteration items="{!v.sizes}" var="size">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-5">
+                                            <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-p-left_xx-large' : 'slds-p-top_x-large slds-float_left slds-text-align_center'}">
+                                                <aura:if isTrue="{!v.EOIWrap.PreferredSize == size}">
+                                                    <lightning:input type="checkbox" label="{!size}" aura:id="PreferredSize" value="{!v.EOIWrap.PreferredSize}" checked="true" onchange="{!c.setPreferredSize }"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:input type="checkbox" label="{!size}" aura:id="PreferredSize" value="{!v.EOIWrap.PreferredSize}" onchange="{!c.setPreferredSize }"/>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                            <!-- Added by coServe 11-10-2024 End -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6">
+                                
+                                <div class="slds-p-top_x-large slds-p-left_small">
+                                    <span >Preferred Budget</span>                        
+                                </div>
+                                
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-6">
+                                <div class="slds-grid slds-gutters slds-wrap " >
+                                    <aura:iteration items="{!v.budgetTypes}" var="budgetType">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-5 ">
+                                            <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-p-left_xx-large' : 'slds-p-top_x-large slds-float_left slds-text-align_center'}">
+                                                <aura:if isTrue="{!v.EOIWrap.RWPreferredBudget == budgetType}">
+                                                    <lightning:input type="checkbox"  label="{!budgetType}" aura:id="RWPreferredBudget" value="{!v.EOIWrap.RWPreferredBudget}" checked="true" onchange="{!c.setRWPreferredBudget }" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:input type="checkbox"  label="{!budgetType}" aura:id="RWPreferredBudget" value="{!v.EOIWrap.RWPreferredBudget}" onchange="{!c.setRWPreferredBudget }" />
+                                                        
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                            <!-- Added by coServe 11-10-2024 Start -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6">
+                                
+                                <div class="slds-p-top_x-large slds-p-left_small">
+                                    <span >EOI Amount</span>                        
+                                </div>
+                                
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-6">
+                                <div class="slds-grid slds-gutters slds-wrap " >
+                                    <aura:iteration items="{!v.eoiAmounts}" var="eoiAmount">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-5 ">
+                                            <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-p-left_xx-large' : 'slds-p-top_x-large slds-float_left slds-text-align_center'}">
+                                                <aura:if isTrue="{!v.EOIWrap.EOIAmount == eoiAmount}">
+                                                    <lightning:input type="checkbox"  label="{!eoiAmount}" aura:id="EOIAmount" value="{!v.EOIWrap.EOIAmount}" checked="true" onchange="{!c.setEoiAmount }" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:input type="checkbox"  label="{!eoiAmount}" aura:id="EOIAmount" value="{!v.EOIWrap.EOIAmount}" onchange="{!c.setEoiAmount }" />
+                                                        
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                            <!-- Added by coServe 11-10-2024 End -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Preferred Floors</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select  value="{!v.EOIWrap.RWPreferredFloors}" aura:id="RWPreferredFloors" name="RWPreferredFloors" label="Preferred Floors" variant="label-hidden">
+                           				<option value="">--None--</option>
+                                         <aura:iteration items="{!v.floorTypes}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWPreferredFloors)) , v.EOIWrap.RWPreferredFloors == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            
+                           <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-6">
+                                <div class="slds-grid slds-gutters slds-wrap " >
+                                    <aura:iteration items="{!v.floorTypes}" var="floorType">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-5 ">
+                                            <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-text-align_center' : 'slds-p-top_x-large slds-float_left slds-text-align_center'}">
+                                                <aura:if isTrue="{!v.EOIWrap.RWPreferredFloors == floorType}">
+                                                    <lightning:input type="checkbox"  label="{!floorType}" aura:id="RWPreferredFloors" value="{!v.EOIWrap.RWPreferredFloors}" checked="true" onchange="{!c.setRWPreferredFloors }" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:input type="checkbox"  label="{!floorType}" aura:id="RWPreferredFloors" value="{!v.EOIWrap.RWPreferredFloors}" onchange="{!c.setRWPreferredFloors }" />
+                                                        
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </div> -->
+                            
+                           <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWPreferredFloors}"/>
+                                </div>
+                            </div> -->
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Preferred Unit No</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWPreferredUnitNo}" />
+                                </div>
+                            </div>
+                            
+
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Any other preference, please specify</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" value="{!v.EOIWrap.RWAnyotherpreferencepleasespecify}"/>
+                                </div>
+                            </div>
+                            
+                            <aura:if isTrue="{!v.ProjectName == '7 Mahalaxmi'}">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >Demand Draft / Bank Draft / Pay Order / Cheque / Swipe Slip No</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" value="{!v.EOIWrap.DraftChequeNo}"/>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >dated</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" value="{!v.EOIWrap.DraftChequeDate}"/>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >drawn on bank</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" value="{!v.EOIWrap.BankName}"/>
+                                    </div>
+                                </div>
+                        </aura:if>
+                            
+                            
+                            <aura:if isTrue="{!v.LoggedInProfileName == 'Sales Manager'}">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >Tentative Agreement Value(To be filled by sales Manager):</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" value="{!v.EOIWrap.RWTentativeAgreementValue}" />
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >Tentative All inclusive Price(To be filled by sales Manager):</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" value="{!v.EOIWrap.RWTentativeAllInclusivePrice}" />
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <aura:if isTrue="{!v.onPrint}">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <!--<div class="slds-p-around_small">
+                            <div class="slds-p-top_x-large">
+                                <span >Tentative All inclusive Price(To be filled by sales Manager):</span>                        
+                            </div>
+                        </div>-->
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <div class="slds-p-around_small">
+                                        
+                                        <div class="slds-p-top_xx-large slds-text-align_center ">
+                                            <span>Signature of Applicant 1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <div class="slds-p-around_small">
+                                        
+                                        <div class="slds-p-top_xx-large slds-text-align_center ">
+                                            <span>Signature of Applicant 2</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    <aura:if isTrue="{!not(empty(v.OfferRecords))}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Applicable Offers</span>
+                            </h3>
+                            <div class="slds-p-around_small">
+                                <c:ApplicableOffers data="{!v.OfferRecords}"/>
+                            </div>
+                            
+                        </div>
+                    </aura:if>
+                        <aura:if isTrue="{!and (v.opportunityId,v.eoiId)}">
+                            <aura:if isTrue="{!v.EOIWrap.Id}">
+                            <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="Section Title">KYC DOCUMENTS</span>
+                                </h3>
+                                <div class="slds-p-around_small">
+                                <div class="slds-clearfix">
+                                    <div class="slds-p-around_small">
+                                        Disclaimer : We agree not to disclose these or allow them to be disclosed to any third party.
+                                    </div>
+                                </div>
+                                    <!--<c:KYCUpload recordId="{!v.eoiId}"/>-->
+                                    <c:KYCDependentPicklistUtility EOIWrap="{!v.EOIWrap}" eoiId="{!v.eoiId}" recordId="{!v.opportunityId}"></c:KYCDependentPicklistUtility>
+                                </div>
+                            </div>
+                            </aura:if>
+                            
+                            
+                            
+                            
+                        </aura:if> 
+                        
+                        <aura:if isTrue="{!v.ProjectName == '7 Mahalaxmi'}">
+                            <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="Section Title">SOURCE DETAILS</span>
+                                </h3>
+                                <div class="slds-grid slds-gutters slds-wrap" >
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_x-large">
+                                                <span >Application Source:</span>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-6">
+                                        <div class="slds-grid slds-gutters slds-wrap " >
+                                            <aura:iteration items="{!v.applicationSources}" var="source">
+                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-5 ">
+                                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-text-align_center' : 'slds-p-top_x-large slds-float_left slds-text-align_center'}">
+                                                        <aura:if isTrue="{!v.EOIWrap.ApplicationSource == source}">
+                                                            <lightning:input type="checkbox"  label="{!source}" aura:id="ApplicationSource" value="{!v.EOIWrap.ApplicationSource}" checked="true" onchange="{!c.setApplicationSource }" />
+                                                            <aura:set attribute="else">
+                                                                <lightning:input type="checkbox"  label="{!source}" aura:id="ApplicationSource" value="{!v.EOIWrap.ApplicationSource}" onchange="{!c.setApplicationSource }" />
+                                                                
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:iteration>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Source Details:</span>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+                                        <div class="slds-p-around_small">
+                                            <lightning:input type="text" value="{!v.EOIWrap.SourceDetails}" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                                        <div class="slds-p-around_small">
+                                            <b>If Channel Partner,</b>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Channel Partner’s Name &amp; Company:</span>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
+                                        <div class="slds-p-around_small">
+                                            <lightning:input type="text" value="{!v.EOIWrap.RWChannelPartnersCompany}" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Contact No.:</span>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                        <div class="slds-p-around_small">
+                                            <lightning:input type="text" value="{!v.EOIWrap.ChannelPartnerContactNo}" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >RERA No.:</span>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                        <div class="slds-p-around_small">
+                                            <lightning:input type="text" value="{!v.EOIWrap.RWRERANo}" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Email Id:</span>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+                                        <div class="slds-p-around_small">
+                                            <lightning:input type="text" value="{!v.EOIWrap.ChannelPartnerEmail}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </aura:if>
+                    
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">PAYMENT DETAILS</span>
+                        </h3>
+                        <div class="slds-grid slds-gutters slds-wrap" >
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_large">
+                                            <span >Amount</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="number" formatter="currency" aura:id="RWPaymentAmount" value="{!v.PaymentDetailsWrap.RWPaymentAmount}" disabled="{!or(v.PaymentDetailsWrap.RWModeOfPayment == 'Digital',v.PaymentDetailsWrap.RWModeOfPayment=='')}" />
+                                    </div>
+                                </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_large">
+                                        <span>Payment Mode<span class="asterisk">*</span></span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:select onchange="{!c.showPaymentFields}" aura:id ="RWModeOfPayment" value="{!v.PaymentDetailsWrap.RWModeOfPayment}" name="ModeOfPayment" label="Select Mode of Payment" variant="label-hidden" required="true" messageWhenValueMissing="Choose one!">
+                                        <option value="">--None--</option>
+                                        <aura:if isTrue="{!v.EOIWrap.paymentGatewayAvailable}">
+                                        <option value="Digital" selected="true">Digital</option>
+                                        </aura:if>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="DD/Pay Order">DD/Pay Order</option>
+                                        <option value="EFT">Card Swipe</option> -->
+                                       <!-- <aura:iteration items="{!v.PaymentModePicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWModeOfPayment)) , v.EOIWrap.RWModeOfPayment == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration> -->
+                                    </lightning:select>   
+                                    <!--<lightning:input type="text" />-->
+                                </div>
+                            </div>
+                            
+                            <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            </div>-->
+                            
+                            <aura:if isTrue="{!v.showPaymentFields}">   
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_medium">
+                                            <span>Instrument Number</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" aura:id="RWInstrumentNumber" value="{!v.PaymentDetailsWrap.RWInstrumentNumber}" maxlength="18"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_large">
+                                            <span >Instrument Date</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="date" aura:id="RWPaymentDate" value="{!v.PaymentDetailsWrap.RWPaymentDate}"  onchange="{!c.checkInstrumentDate}"/>
+                                    </div>
+                                     <aura:if isTrue="{!v.chequedateValidationError}">
+                                    <div class="slds-text-color_error slds-p-left_x-small">
+                                        Cheque Date cannot be before Last 3 months from today
+                                    </div>
+                                </aura:if> 
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_large">
+                                            <span>Drawee Bank</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                       
+                                        <lightning:select value="{!v.PaymentDetailsWrap.RWBankName}" name="RWBankName" label="Drawee Bank" variant="label-hidden">
+                                            <option value="">---None---</option>
+                                            
+                                            <aura:iteration items="{!v.PaymentBankPicklistOptions}" var="val">
+                                            <aura:if isTrue="{!and( not(empty(v.EOIWrap.RWBankName)) , v.EOIWrap.RWBankName == val) }">
+                                                <option value="{!val}" selected="true"> {!val}</option>
+                                                <aura:set attribute="else">
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:iteration>
+                                           <!-- <option value="Abhyudaya Co-operative Bank">Abhyudaya Co-operative Bank</option>
+                                            <option value="Ahmedabad Mercantile Co-Op Bank">Ahmedabad Mercantile Co-Op Bank</option>
+                                            <option value="Akola Janata Commercial Co-operative Bank">Akola Janata Commercial Co-operative Bank</option>
+                                            <option value="Akola Urban Co-operative Bank">Akola Urban Co-operative Bank</option>
+                                            <option value="Apna Sahakari Bank Ltd.">Apna Sahakari Bank Ltd.</option>
+                                            <option value="Allahabad Bank">Allahabad Bank</option>
+                                            <option value="Andaman and Nicobar State Co-operative Bank">Andaman and Nicobar State Co-operative Bank</option>
+                                            <option value="Andhra Bank">Andhra Bank</option>
+                                            <option value="Andhra Pradesh Mahesh Co-Op Urban Bank">Andhra Pradesh Mahesh Co-Op Urban Bank</option>
+                                            <option value="Andhra Pradesh State Co-operative Bank">Andhra Pradesh State Co-operative Bank</option>
+                                            <option value="Arunachal Pradesh State Co-operative Apex Bank">Arunachal Pradesh State Co-operative Apex Bank</option>
+                                            <option value="Assam Co-operative Apex Bank">Assam Co-operative Apex Bank</option>
+                                            <option value="Axis Bank">Axis Bank</option>
+                                            <option value="Bank of Baroda">Bank of Baroda</option>
+                                            <option value="Bank of India">Bank of India</option>
+                                            <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                                            <option value="Bassein Catholic Co-operative Bank">Bassein Catholic Co-operative Bank</option>
+                                            <option value="Bharat Co-operative Bank">Bharat Co-operative Bank</option>
+                                            <option value="Bharat Co-operative Bank (Mumbai)">Bharat Co-operative Bank (Mumbai)</option>
+                                            <option value="Bharati Sahakari Bank">Bharati Sahakari Bank</option>
+                                            <option value="Bihar State Co-operative Bank">Bihar State Co-operative Bank</option>
+                                            <option value="Bombay Mercantile Co-operative Bank">Bombay Mercantile Co-operative Bank</option>
+                                            <option value="Canara Bank">Canara Bank</option>
+                                            <option value="Catholic Syrian Bank Ltd.">Catholic Syrian Bank Ltd.</option>
+                                            <option value="Central Bank of India">Central Bank of India</option>
+                                            <option value="Chandigarh State Co-operative Bank">Chandigarh State Co-operative Bank</option>
+                                            <option value="Chhattisgarh Rajya Sahakari Bank Maryadit">Chhattisgarh Rajya Sahakari Bank Maryadit</option>
+                                            <option value="CITI bank">CITI bank</option>
+                                            <option value="Citizen Credit Co-operative Bank">Citizen Credit Co-operative Bank</option>
+                                            <option value="Corporation Bank">Corporation Bank</option>
+                                            <option value="Cosmos Co-operative Urban Bank">Cosmos Co-operative Urban Bank</option>
+                                            <option value="Darussalam Co Operative Urban Bank Ltd; hyderabad">Darussalam Co Operative Urban Bank Ltd; hyderabad</option>
+                                            <option value="DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK">DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK</option>
+                                            <option value="DCB Bank">DCB Bank</option>
+                                            <option value="Delhi State Co-operative Bank">Delhi State Co-operative Bank</option>
+                                            <option value="Dena Bank">Dena Bank</option>
+                                            <option value="Dombivli Nagari Sahakari Bank">Dombivli Nagari Sahakari Bank</option>
+                                            <option value="Eenadu Urban Co operative Bank">Eenadu Urban Co operative Bank</option>
+                                            <option value="Goa State Co-operative Bank">Goa State Co-operative Bank</option>
+                                            <option value="Goa Urban Co-operative Bank">Goa Urban Co-operative Bank</option>
+                                            <option value="Gopinath Patil Parsik Janata Sahakari Bank">Gopinath Patil Parsik Janata Sahakari Bank</option>
+                                            <option value="Greater Bombay Co-operative Bank">Greater Bombay Co-operative Bank</option>
+                                            <option value="Gujarat State Co-operative Agriculture &amp; Rural Development Bank">Gujarat State Co-operative Agriculture &amp; Rural Development Bank</option>
+                                            <option value="Gujarat State Co-operative Bank">Gujarat State Co-operative Bank</option>
+                                            <option value="Haryana State Co-opertive Apex Bank">Haryana State Co-opertive Apex Bank</option>
+                                            <option value="Himachal Pradesh State Co-operative Bank">Himachal Pradesh State Co-operative Bank</option>
+                                            <option value="ICICI Bank">ICICI Bank</option>
+                                            <option value="IDBI Bank   Industrial Development Bank of India">IDBI Bank   Industrial Development Bank of India</option>
+                                            <option value="IDBI Bank Limited">IDBI Bank Limited</option>
+                                            <option value="Indian Bank">Indian Bank</option>
+                                            <option value="Indian Mercantile Co-operative Bank">Indian Mercantile Co-operative Bank</option>
+                                            <option value="Indian Overseas Bank">Indian Overseas Bank</option>
+                                            <option value="IndusInd Bank Limited">IndusInd Bank Limited</option>
+                                            <option value="ING Vysya Bank">ING Vysya Bank</option>
+                                            <option value="Jalgaon Janata Sahakari Bank">Jalgaon Janata Sahakari Bank</option>
+                                            <option value="Jammu and Kashmir State Co-operative Bank">Jammu and Kashmir State Co-operative Bank</option>
+                                            <option value="Janakalyan Sahakari Bank">Janakalyan Sahakari Bank</option>
+                                            <option value="Janalaxmi Co-operative Bank">Janalaxmi Co-operative Bank</option>
+                                            <option value="Janata Sahakari Bank">Janata Sahakari Bank</option>
+                                            <option value="Jharkhand State Co-operative Bank">Jharkhand State Co-operative Bank</option>
+                                            <option value="Kallappanna Awade Ichalkaranji Janata Sahakari Bank">Kallappanna Awade Ichalkaranji Janata Sahakari Bank</option>
+                                            <option value="Kalupur Commercial Coop. Bank">Kalupur Commercial Coop. Bank</option>
+                                            <option value="Karad Urban Co-operative Bank">Karad Urban Co-operative Bank</option>
+                                            <option value="Karnataka Bank">Karnataka Bank</option>
+                                            <option value="Karnataka State Co-operative Apex Bank">Karnataka State Co-operative Apex Bank</option>
+                                            <option value="Karur Vysya Bank Limited.">Karur Vysya Bank Limited.</option>
+                                            <option value="Kerala State Co-operative Bank">Kerala State Co-operative Bank</option>
+                                            <option value="Kotak Mahindra Bank Limited">Kotak Mahindra Bank Limited</option>
+                                            <option value="MACO BANK">MACO BANK</option>
+                                            <option value="Madhya Pradesh Rajya Sahakari Bank Maryadit">Madhya Pradesh Rajya Sahakari Bank Maryadit</option>
+                                            <option value="Mahanagar Co-operative Bank">Mahanagar Co-operative Bank</option>
+                                            <option value="Maharashtra Bank">Maharashtra Bank</option>
+                                            <option value="Maharashtra State Co-operative Bank">Maharashtra State Co-operative Bank</option>
+                                            <option value="Manipur State Co-operative Bank">Manipur State Co-operative Bank</option>
+                                            <option value="Mapusa Urban Co-operative Bank of Goa">Mapusa Urban Co-operative Bank of Goa</option>
+                                            <option value="Meghalaya Co-operative Apex Bank">Meghalaya Co-operative Apex Bank</option>
+                                            <option value="Mehsana Urban Co-Op Bank">Mehsana Urban Co-Op Bank</option>
+                                            <option value="Mizoram Co-operative Apex Bank">Mizoram Co-operative Apex Bank</option>
+                                            <option value="Mogaveera Co-operative Bank">Mogaveera Co-operative Bank</option>
+                                            <option value="Nagaland State Co-operative Bank">Nagaland State Co-operative Bank</option>
+                                            <option value="Nagar Urban Co-operative Bank">Nagar Urban Co-operative Bank</option>
+                                            <option value="narayana madhubabu bank">narayana madhubabu bank</option>
+                                            <option value="New India Co-operative Bank">New India Co-operative Bank</option>
+                                            <option value="NKGSB Co-operative Bank">NKGSB Co-operative Bank</option>
+                                            <option value="Nutan Nagarik Sahakari Bank">Nutan Nagarik Sahakari Bank</option>
+                                            <option value="Oriental Bank of Commerce">Oriental Bank of Commerce</option>
+                                            <option value="Orissa State Co-operative Bank">Orissa State Co-operative Bank</option>
+                                            <option value="Other">Other</option>
+                                            <option value="Pondichery State Co-operative Bank">Pondichery State Co-operative Bank</option>
+                                            <option value="Pravara Sahakari Bank">Pravara Sahakari Bank</option>
+                                            <option value="Punjab &amp; Maharashtra Co-operative Bank">Punjab &amp; Maharashtra Co-operative Bank</option>
+                                            <option value="Punjab &amp; Sind Bank">Punjab &amp; Sind Bank</option>
+                                            <option value="Punjab National Bank">Punjab National Bank</option>
+                                            <option value="Punjab State Co-operative Bank">Punjab State Co-operative Bank</option>
+                                            <option value="Rajasthan State Co-operative Bank">Rajasthan State Co-operative Bank</option>
+                                            <option value="Rajdhani Nagar Sahkari Bank">Rajdhani Nagar Sahkari Bank</option>
+                                            <option value="Rajkot Nagrik Sahakari Bank">Rajkot Nagrik Sahakari Bank</option>
+                                            <option value="Ramella Ramesh Bank">Ramella Ramesh Bank</option>
+                                            <option value="Rohit Kataria Co-operative Bank">Rohit Kataria Co-operative Bank</option>
+                                            <option value="Rupee Co-operative Bank">Rupee Co-operative Bank</option>
+                                            <option value="Sangli District Primary Teachers Bank Ltd; Sangli">Sangli District Primary Teachers Bank Ltd; Sangli</option>
+                                            <option value="Sangli Urban Co-operative Bank">Sangli Urban Co-operative Bank</option>
+                                            <option value="Saraswat Co-operative Bank">Saraswat Co-operative Bank</option>
+                                            <option value="Sardar Bhiladwala Pardi Peoples Coop Bank">Sardar Bhiladwala Pardi Peoples Coop Bank</option>
+                                            <option value="Shamrao Vithal Co-operative Bank">Shamrao Vithal Co-operative Bank</option>
+                                            <option value="Shikshak Sahakari Bank">Shikshak Sahakari Bank</option>
+                                            <option value="Sikkim State Co-operative Bank">Sikkim State Co-operative Bank</option>
+                                            <option value="Solapur Janata Sahakari Bank">Solapur Janata Sahakari Bank</option>
+                                            <option value="State Bank of Bikaner and Jaipur">State Bank of Bikaner and Jaipur</option>
+                                            <option value="State Bank of Hyderabad">State Bank of Hyderabad</option>
+                                            <option value="State Bank of India">State Bank of India</option>
+                                            <option value="State Bank of Mysore">State Bank of Mysore</option>
+                                            <option value="State Bank of Patiala">State Bank of Patiala</option>
+                                            <option value="State Bank of Travancore">State Bank of Travancore</option>
+                                            <option value="Surat Peoples Coop Bank">Surat Peoples Coop Bank</option>
+                                            <option value="Syndicate Bank">Syndicate Bank</option>
+                                            <option value="Tamilnad Mercantile Bank Ltd.">Tamilnad Mercantile Bank Ltd.</option>
+                                            <option value="Telangana State Co-Operative Apex Bank Limited">Telangana State Co-Operative Apex Bank Limited</option>
+                                            <option value="Thane Bharat Sahakari Bank">Thane Bharat Sahakari Bank</option>
+                                            <option value="The Dhanalakshmi Bank Limited.">The Dhanalakshmi Bank Limited.</option>
+                                            <option value="The Federal Bank Ltd.">The Federal Bank Ltd.</option>
+                                            <option value="The HDFC Bank Ltd.">The HDFC Bank Ltd.</option>
+                                            <option value="The Jammu &amp; Kashmir Bank Ltd.">The Jammu &amp; Kashmir Bank Ltd.</option>
+                                            <option value="The Kalyan Janata Sahakari Bank">The Kalyan Janata Sahakari Bank</option>
+                                            <option value="The Kapole Co-operative Bank">The Kapole Co-operative Bank</option>
+                                            <option value="The Lakshmi Vilas Bank Ltd">The Lakshmi Vilas Bank Ltd</option>
+                                            <option value="The Nainital Bank Ltd.">The Nainital Bank Ltd.</option>
+                                            <option value="The Tamil Nadu State Apex Co-operative Bank">The Tamil Nadu State Apex Co-operative Bank</option>
+                                            <option value="TJSB Sahakari Bank">TJSB Sahakari Bank</option>
+                                            <option value="Tripura State Co-operative Bank">Tripura State Co-operative Bank</option>
+                                            <option value="Tumkur Grain Merchant's Co-operative Bank">Tumkur Grain Merchant's Co-operative Bank</option>
+                                            <option value="UCO Bank">UCO Bank</option>
+                                            <option value="Union Bank of India">Union Bank of India</option>
+                                            <option value="United Bank Of India">United Bank Of India</option>
+                                            <option value="Uttarakhand State Co-operative Bank">Uttarakhand State Co-operative Bank</option>
+                                            <option value="Uttar Pradesh Co-operative Bank">Uttar Pradesh Co-operative Bank</option>
+                                            <option value="Vijaya Bank">Vijaya Bank</option>
+                                            <option value="West Bengal State Co-operative Bank">West Bengal State Co-operative Bank</option>
+                                            <option value="Yes Bank">Yes Bank</option>
+                                            <option value="Zoroastrian Co-operative Bank">Zoroastrian Co-operative Bank</option>
+                                            -->
+                                        </lightning:select>
+                                    </div>
+                                </div>
+                                
+                                <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_x-large">
+                                            <span >Amount</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" aura:id="RWPaymentAmount" value="{!v.PaymentDetailsWrap.RWPaymentAmount}"  />
+                                    </div>
+                                </div> -->
+                            </aura:if>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">TERMS AND CONDITIONS</span>
+                             </h3> 
+                        	
+                            <div class="slds-grid slds-gutters slds-wrap" >
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-grid slds-gutters slds-wrap" >
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+                            <lightning:input type="checkbox" aura:id="tc" checked="{!v.EOIWrap.RWOptin}"  />
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_7-of-12">
+                                     I agree to the <a onclick="{!c.redirectToTCPage}"><u>Terms &amp; Conditions</u></a> of EOI
+                                            <br/> Note: Clicking and Reading Terms and Conditions is mandatory.
+                                            </div>
+                                        </div>
+                                 
+                                 </div>
+                            </div>
+                            </div>
+                        
+                        <!-- bkk -->
+                        <!--<aura:if isTrue="{!and(v.PaymentDetailsWrap.RWModeOfPayment == 'Digital',v.PaymentGateway == 'BillDesk')}">
+                            <div class="slds-grid slds-gutters slds-wrap" >
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-grid slds-gutters slds-wrap" >
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+                                                <lightning:input type="checkbox" aura:id="tc1" checked="{!v.EOIWrap.BillDeskTC}"  />
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_7-of-12">
+                                                I agree to the <a onclick="{!c.redirectToBillDeskTC}"><u>Terms &amp; Conditions</u></a> of BillDesk
+                                                <br/> Note: Clicking and Reading Terms and Conditions is mandatory.
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>-->
+                        <aura:if isTrue="{!and(v.PaymentGateway == 'EaseBuzz')}">
+                            <div class="slds-grid slds-gutters slds-wrap" >
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-grid slds-gutters slds-wrap" >
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+                                                <lightning:input type="checkbox" aura:id="tc1" checked="{!v.EOIWrap.ReadEasebuzzTC}"  />
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_7-of-12">
+                                                I agree to the <a onclick="{!c.redirectToEasebuzzTC}"><u>Terms &amp; Conditions</u></a> of EaseBuzz
+                                                <br/> Note: Clicking and Reading Terms and Conditions is mandatory.
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <br/><br/>
+                        </aura:if>
+                        <!--<div class="slds-grid slds-gutters slds-wrap" >
+                                <div class="slds-p-around_small" style="padding:20px;">
+                                    <lightning:formattedRichText value="{!v.projectTC}"/>
+                                </div>
+                            </div>-->
+                        
+                        <!-- bkk -->
+                    </div>
+                     <!--</aura:if>-->
+                    <div class="slds-align_absolute-center" >
+                        <aura:if isTrue="{!v.showGenerateOTP}">
+                      <lightning:button variant="brand" label="Generate OTP" title="Generate OTP" onclick="{! c.generateOTP }" />
+                        </aura:if>
+                         
+                        <aura:if isTrue="{!v.showValidateOTP}">
+                            <div class="slds-grid slds-gutters slds-wrap" >
+                                
+                                <aura:if isTrue="{!v.InvalidOTP}">
+                        
+                         <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                            </div>
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                       
+                                   <b class="slds-text-color_error "> Sorry, the entered OTP is incorrect. Please try again . </b>
+                            
+                        
+                             </div>
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                            </div>
+                      
+                             </aura:if>
+                                
+                                
+                                
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            </div>
+                                
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_medium">
+                                            <span>Please Enter the OTP Number Received on Phone/Email</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="text" aura:id="OTPNumber" value="{!v.OTPEntered}" />
+                                    </div>
+                                </div>
+                                
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            </div>
+                                    
+                        
+                        <div class="slds-align_absolute-center" >
+                        <lightning:button variant="brand" label="Validate OTP" title="Validate OTP" onclick="{! c.validateOTP }" /> 
+                        <lightning:button variant="brand" label="Resend OTP" title="Validate OTP" onclick="{! c.generateOTP }" /> 
+                                </div>
+                                </div> 
+                            </aura:if>
+                       <aura:if isTrue="{!v.showSubmitButton}">
+                        <form name="paymentForm" aura:id="paymentForm" action="{!$Label.c.ccAvenueURL}" method="POST">
+                            <input aura:id="encRequest" type="hidden" name="encRequest" value=""/>
+                            <!--<input type="hidden" name="access_code" value="AVYH03HH35BB77HYBB"/> -->
+                            
+                            <input type="hidden" name="access_code" value="{!v.accessCode}" />
+                            <aura:if isTrue="{!v.PaymentDetailsWrap.RWModeOfPayment =='Digital'}">
+                                <lightning:button variant="brand" label="Submit &amp; Pay" title="Pay" onclick="{! c.onformSubmit }" />
+                                <aura:set attribute="else">
+                                    <lightning:button variant="brand" label="Submit" title="Pay" onclick="{! c.onformSubmit }" />
+                                </aura:set>
+                            </aura:if>
+                            
+                        </form>
+                        </aura:if>
+                        
+                        <!-- <c:CCAvenueComponent data="{! concat(v.opportunityId,v.eoiId,v.eoilinkrecordid)}"></c:CCAvenueComponent> -->
+                        <!--<lightning:button variant="brand" label="Submit" title="Brand action" onclick="{! c.onformSubmit }" /> -->
+                       <!-- <lightning:button variant="brand" label="Print" title="Brand action" onclick="{! c.PrintForm }" /> -->
+                    </div>
+                </lightning:card>  
+            </div>
+
+                 </aura:set>
+            </aura:if>
+                      </aura:set>
+                </aura:if>
+                 </aura:set>
+            </aura:if>
+                 </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UnregCP_true_then_cannot_edit_checkbox</fullName>
+    <active>true</active>
+    <description>UnregCP true then cannot edit checkbox as false.</description>
+    <errorConditionFormula>AND(       
+
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+				Channel_Partner_From_CP_Portal__c = false,
+
+AND(PRIORVALUE(Unregistered_Channel_Partner__c), true,
+ISCHANGED(Unregistered_Channel_Partner__c)),
+      $Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+)</errorConditionFormula>
+    <errorDisplayField>Unregistered_Channel_Partner__c</errorDisplayField>
+    <errorMessage>You Cannot edit checkbox.</errorMessage>
+</ValidationRule>

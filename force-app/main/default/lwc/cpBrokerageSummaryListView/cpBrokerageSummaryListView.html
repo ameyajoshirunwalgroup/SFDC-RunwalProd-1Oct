@@ -1,0 +1,46 @@
+<template>
+    <lightning-card title="All Brokerage Summary Details">
+
+        <div class="slds-m-around_medium">
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-combobox type="search" onchange={handleKeyChange} class="slds-m-bottom_small"
+                        label="Search by Status" options={options} value={BssearchKey}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-input type="search" onchange={handleKeyBookingChange} class="slds-m-bottom_small"
+                        label="Search by Booking" value={searchKeyBooking}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button variant="brand" label="Export data" title="Export Data" onclick={exportData}></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+            <c-file-upload-data-table key-field="Id" data={data} columns={columns} sorted-by={sortedBy}
+            sorted-direction={sortedDirection} onrowselection={onRowSelection} selected-rows={allSelectedRows}
+            onrowaction={callRowAction} onsort={sortColumns}></c-file-upload-data-table>
+            <!--lightning-datatable data-id="table" key-field="Id" data={data} columns={columns} sorted-by={sortedBy}
+                sorted-direction={sortedDirection} onrowselection={onRowSelection} selected-rows={allSelectedRows}
+                onrowaction={callRowAction} onsort={sortColumns}>
+            </lightning-datatable-->
+            <br />
+            
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    Page {page} of {totalPage}
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right"
+                        onclick={nextHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+
+</template>

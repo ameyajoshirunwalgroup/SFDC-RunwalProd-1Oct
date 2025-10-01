@@ -1,0 +1,859 @@
+<template>
+	<div class="main">
+		<div class="main-table-container ">
+			<!-- Main table code (same as before) -->
+				
+			<div if:true={showFeedbackTable}>
+				<div class="Exportbutton">
+				
+					<!-- <button data-name="grandTotal" data-value="grandTotal" onclick={getAllData} class="export-button">Export All Data</button> -->
+					<a style="background-color:rgb(1, 118, 211);font-size:7px; color: white; 
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 4px; 
+    font-size: 14px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    flex-flow: row;
+    width: 11%;
+    justify-content: center;margin: 1rem;" data-name="unProcessedCases" data-value={unProcessedCaseCount} onclick={handleCellClick}>Unallocated Cases - {unProcessedCaseCount}
+					</a>
+					<a style="background-color:rgb(1, 118, 211); font-size:14px; color: white; 
+    padding: 4px 8px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    display: flex; 
+    flex-flow: row; 
+    width: 11%; 
+    justify-content: center; 
+    margin: 1rem;align-items: center;" 
+    label="Export Data" 
+    title="ExportData" 
+    onclick={getAllData}>
+    Export Data
+</a>
+
+					<!-- <a data-name="grandTotal" data-value="grandTotal" onclick={getAllData}>
+									Grand Total
+								</a> -->
+				</div>
+			</div>
+
+
+<div style="margin:1rem 0;">
+			<table if:true={showFeedbackTable}
+				class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal bordertable slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+				<!-- Table Header -->
+				<thead>
+					<tr>
+						<th style="padding-left:0;text-align:center;" rowspan="3">CP Status</th>
+						<th style="padding-left:0;text-align:center;" rowspan="3">Project</th>
+						<!-- <th>RM Name</th> -->
+						<th style="padding-left:0;text-align:center;" rowspan="3">Total Cases</th>
+						<th style="padding-left:0;text-align:center;" rowspan="3">Open Cases</th>
+						<th style="padding-left:0;text-align:center;" rowspan="3">Closed Cases</th>
+						<th style="padding-left:0;text-align:center;font-size: 15px;" colspan="8">Open Cases</th>
+					</tr>
+					<tr>
+						<th style="padding-left:0;text-align:center;">Stage 1</th>
+						<th style="padding-left:0;text-align:center;">Stage 2</th>
+						<th style="padding-left:0;text-align:center;" colspan="2">Stage 3</th>
+						<th style="padding-left:0;text-align:center;" colspan="2">Stage 4</th>
+						<th style="padding-left:0;text-align:center;">Stage 5</th>
+						<th style="padding-left:0;text-align:center;">Stage 6</th>	
+					</tr>
+					<tr>
+						<th style="padding-left:0;text-align:center;">Level 1</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(24 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(24 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 2<br/>(48 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(48 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 2<br/>(72 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(72 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1</th>
+					</tr>
+				</thead>
+
+
+				<tbody>
+
+
+					<!-- Iterate over the feedbackList and display each feedback item -->
+
+
+					<template for:each={registeredcaseList} for:item="feedback">
+
+						<tr key={feedback.projectName}>
+							<!-- Add click event listeners to each cell -->
+							<!-- <td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}> -->
+							<!-- Conditionally render the projectName cell with rowspan -->
+							<td if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan} style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;"  data-name="Registered" data-value="Registered" onclick={handleCellClick}>
+									Registered
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="registeredCases" data-value={feedback.registeredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.projectName}
+								</a>
+							</td>
+							<!-- </a> -->
+							<!-- </td> -->
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="registeredCases" data-value={feedback.registeredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.registeredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openregisteredCases" data-value={feedback.openregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;"> 
+								<a data-name="closedregisteredCases" data-value={feedback.closedregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.closedregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage1" data-value={feedback.openstage1}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage1}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage2" data-value={feedback.openstage2}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage2}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage3" data-value={feedback.openstage3}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage3}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage4" data-value={feedback.openstage4}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage4}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage5" data-value={feedback.openstage5}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage5}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage6" data-value={feedback.openstage6}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage6}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage7" data-value={feedback.openstage7}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage7}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openstage8" data-value={feedback.openstage8}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage8}
+								</a>
+							</td>
+						</tr>
+					</template>
+
+
+
+
+
+
+					<template for:each={unregisteredcaseList} for:item="feedback">
+						<tr key={feedback.projectName}>
+							<!-- Add click event listeners to each cell -->
+							<!-- <td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}> -->
+							
+							<td if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan} style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="UnRegistered" data-value="UnRegistered" onclick={handleCellClick}>
+									UnRegistered
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="unregisteredCases" data-value={feedback.unregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.projectName}
+								</a>
+							</td>
+							<!-- </a> -->
+							<!-- </td> -->
+							<td style="padding-left:0;text-align:center;"> 
+								<a data-name="unregisteredCases" data-value={feedback.unregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.unregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunregisteredCases" data-value={feedback.openunregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openunregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="closedunregisteredCases" data-value={feedback.closedunregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.closedunregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage1" data-value={feedback.openunstage1}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage1}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage2" data-value={feedback.openunstage2}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage2}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage3" data-value={feedback.openunstage3}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage3}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage4" data-value={feedback.openunstage4}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage4}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage5" data-value={feedback.openunstage5}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage5}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage6" data-value={feedback.openunstage6}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage6}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage7" data-value={feedback.openunstage7}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage7}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunstage8" data-value={feedback.openunstage8}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openstage8}
+								</a>
+							</td>
+						</tr>
+					</template>
+
+					
+
+					<template for:each={totalcaseList} for:item="feedback">
+						<tr key={feedback.totalCases}>
+							<!-- Add click event listeners to each cell -->
+							<!-- <td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}> -->
+
+							<td colspan="2" style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="grandTotal" data-value="grandTotal" onclick={handleCellClick}>
+									Grand Total
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="grandTotal" data-value="grandTotal" onclick={handleCellClick}>
+									{feedback.totalCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopencases" data-value="totalopencases" onclick={handleCellClick}>
+									{feedback.totalOpenCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalclosedcases" data-value="totalclosedcases" onclick={handleCellClick}>
+									{feedback.totalClosedCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage1cases" data-value="totalopenstage1cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage1Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;"> 
+								<a data-name="totalopenstage2cases" data-value="totalopenstage2cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage2Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage3cases" data-value="totalopenstage3cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage3Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage4cases" data-value="totalopenstage4cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage4Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage5cases" data-value="totalopenstage5cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage5Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage6cases" data-value="totalopenstage6cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage6Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage7cases" data-value="totalopenstage7cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage7Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopenstage8cases" data-value="totalopenstage8cases" onclick={handleCellClick}>
+									{feedback.totalOpenStage8Cases}
+								</a>
+							</td>
+						</tr>
+					</template>
+
+				</tbody>
+			</table>
+
+</div>
+
+
+<div style="margin:1rem 0;">
+			<!-- {registeredcaseList} -->
+			<table if:true={showFeedbackTable}
+				class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal bordertable slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+				<!-- Table Header -->
+				<thead>
+					<tr>
+						<th style="padding-left:0;text-align:center;" rowspan="3">CP Status</th>
+						<th style="padding-left:0;text-align:center;" rowspan="3">Project</th>
+						<!-- <th>RM Name</th> -->
+						<th style="padding-left:0;text-align:center;" rowspan="3">Total Cases</th>
+						<th style="padding-left:0;text-align:center;" rowspan="3">Open Cases</th>
+						<th style="padding-left:0;text-align:center;" rowspan="3">Closed Cases</th>
+						<th style="padding-left:0;text-align:center;font-size: 15px;" colspan="8">Closed Cases</th>
+					</tr>
+					<tr>
+						<th style="padding-left:0;text-align:center;">Stage 1</th>
+						<th style="padding-left:0;text-align:center;">Stage 2</th>
+						<th style="padding-left:0;text-align:center;" colspan="2">Stage 3</th>
+						<th style="padding-left:0;text-align:center;" colspan="2">Stage 4</th>
+						<th style="padding-left:0;text-align:center;">Stage 5</th>
+						<th style="padding-left:0;text-align:center;">Stage 6</th>	
+					</tr>
+					<tr>
+						<th style="padding-left:0;text-align:center;">Level 1</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(24 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(24 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 2<br/>(48 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(48 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 2<br/>(72 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1<br/>(72 Hrs)</th>
+						<th style="padding-left:0;text-align:center;">Level 1</th>
+					</tr>
+				</thead>
+
+
+				<tbody>
+
+
+					<!-- Iterate over the feedbackList and display each feedback item -->
+
+
+					<template for:each={registeredcaseList} for:item="feedback">
+
+						<tr key={feedback.projectName}>
+							<!-- Add click event listeners to each cell -->
+							<!-- <td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}> -->
+							<!-- Conditionally render the projectName cell with rowspan -->
+							<td if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan} style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;"  data-name="Registered" data-value="Registered" onclick={handleCellClick}>
+									Registered
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="registeredCases" data-value={feedback.registeredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.projectName}
+								</a>
+							</td>
+							<!-- </a> -->
+							<!-- </td> -->
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="registeredCases" data-value={feedback.registeredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.registeredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openregisteredCases" data-value={feedback.openregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;"> 
+								<a data-name="closedregisteredCases" data-value={feedback.closedregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.closedregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage1" data-value={feedback.stage1}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage1}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage2" data-value={feedback.stage2}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage2}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage3" data-value={feedback.stage3}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage3}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage4" data-value={feedback.stage4}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage4}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage5" data-value={feedback.stage5}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage5}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage6" data-value={feedback.stage6}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage6}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage7" data-value={feedback.stage7}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage7}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="stage8" data-value={feedback.stage8}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage8}
+								</a>
+							</td>
+						</tr>
+					</template>
+
+
+
+
+
+
+					<template for:each={unregisteredcaseList} for:item="feedback">
+						<tr key={feedback.projectName}>
+							<!-- Add click event listeners to each cell -->
+							<!-- <td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}> -->
+							
+							<td if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan} style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="UnRegistered" data-value="UnRegistered" onclick={handleCellClick}>
+									UnRegistered
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="unregisteredCases" data-value={feedback.unregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.projectName}
+								</a>
+							</td>
+							<!-- </a> -->
+							<!-- </td> -->
+							<td style="padding-left:0;text-align:center;"> 
+								<a data-name="unregisteredCases" data-value={feedback.unregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.unregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="openunregisteredCases" data-value={feedback.openunregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.openunregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="closedunregisteredCases" data-value={feedback.closedunregisteredCases}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.closedunregisteredCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage1" data-value={feedback.unstage1}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage1}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage2" data-value={feedback.unstage2}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage2}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage3" data-value={feedback.unstage3}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage3}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage4" data-value={feedback.unstage4}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage4}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage5" data-value={feedback.unstage5}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage5}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage6" data-value={feedback.unstage6}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage6}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage7" data-value={feedback.unstage7}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage7}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="unstage8" data-value={feedback.unstage8}
+									data-projectname={feedback.projectName} onclick={handleCellClick}>
+									{feedback.stage8}
+								</a>
+							</td>
+						</tr>
+					</template>
+
+					
+
+					<template for:each={totalcaseList} for:item="feedback">
+						<tr key={feedback.totalCases}>
+							<!-- Add click event listeners to each cell -->
+							<!-- <td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}> -->
+
+							<td colspan="2" style="padding-left:0;text-align:center;">
+								<a style="font-weight:bold;" data-name="grandTotal" data-value="grandTotal" onclick={handleCellClick}>
+									Grand Total
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="grandTotal" data-value="grandTotal" onclick={handleCellClick}>
+									{feedback.totalCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalopencases" data-value="totalopencases" onclick={handleCellClick}>
+									{feedback.totalOpenCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalclosedcases" data-value="totalclosedcases" onclick={handleCellClick}>
+									{feedback.totalClosedCases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage1cases" data-value="totalstage1cases" onclick={handleCellClick}>
+									{feedback.totalStage1Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;"> 
+								<a data-name="totalstage2cases" data-value="totalstage2cases" onclick={handleCellClick}>
+									{feedback.totalStage2Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage3cases" data-value="totalstage3cases" onclick={handleCellClick}>
+									{feedback.totalStage3Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage4cases" data-value="totalstage4cases" onclick={handleCellClick}>
+									{feedback.totalStage4Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage5cases" data-value="totalstage5cases" onclick={handleCellClick}>
+									{feedback.totalStage5Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage6cases" data-value="totalstage6cases" onclick={handleCellClick}>
+									{feedback.totalStage6Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage7cases" data-value="totalstage7cases" onclick={handleCellClick}>
+									{feedback.totalStage7Cases}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">
+								<a data-name="totalstage8cases" data-value="totalstage8cases" onclick={handleCellClick}>
+									{feedback.totalStage8Cases}
+								</a>
+							</td>
+						</tr>
+					</template>
+
+				</tbody>
+			</table>
+
+</div>
+
+			
+			<template if:true={show12MonthsSummaryValue}>
+				<table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table-style">
+					<caption style="text-align: center; font-weight: bold; font-size: 1.2em;">Last 12 Months Summary</caption>
+					<thead>
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">Year</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.year}</td>
+							</template>
+						</tr>
+
+					</thead>
+					<tbody>
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">Month</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.month}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">Registered CP Cases</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.registeredCases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">UnRegistered CP Cases</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.unregisteredCases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">Total Cases Opened</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.openCases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">Total Cases Closed</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.closedCases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" colspan="2">Closed Stage</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">-</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;">Stage 1</th>
+							<th style="padding-left:0;text-align:center;">Level 1</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage1Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;">Stage 2</th>
+							<th style="padding-left:0;text-align:center;">Level 1</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage2Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" rowspan="2">Stage 3</th>
+							<th style="padding-left:0;text-align:center;">Level 1</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage3Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<!-- <th style="padding-left:0;text-align:center;">Stage 3</th> -->
+							<th style="padding-left:0;text-align:center;">Level 2</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage4Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;" rowspan="2">Stage 4</th>
+							<th style="padding-left:0;text-align:center;">Level 1</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage5Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<!-- <th style="padding-left:0;text-align:center;"></th> -->
+							<th style="padding-left:0;text-align:center;">Level 2</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage6Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;">Stage 5</th>
+							<th style="padding-left:0;text-align:center;">Level 1</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage7Cases}</td>
+							</template>
+						</tr>
+
+						<tr>
+							<th style="padding-left:0;text-align:center;">Stage 6</th>
+							<th style="padding-left:0;text-align:center;">Level 1</th>
+							<template for:each={caseData} for:item="caseItem">
+								<td key={caseItem.month} style="padding-left:0;text-align:center;">{caseItem.stage8Cases}</td>
+							</template>
+						</tr>
+						<!-- <tr>
+							<th style="padding-left:0;text-align:center;">Total Cases</th>
+							<template for:each={caseData} for:item="feedbackItem">
+								<td key={feedbackItem.month} style="padding-left:0;text-align:center;">{feedbackItem.totalCases}</td>
+							</template>
+						</tr>
+						<tr>
+							<th style="padding-left:0;text-align:center;">Total Feedbacks</th>
+							<template for:each={caseData} for:item="feedbackItem">
+								<td key={feedbackItem.month} style="padding-left:0;text-align:center;">{feedbackItem.totalInteractions}</td>
+							</template>
+						</tr>
+						<tr>
+							<th style="padding-left:0;text-align:center;">Happy Cases</th>
+							<template for:each={caseData} for:item="feedbackItem">
+								<td key={feedbackItem.month} style="padding-left:0;text-align:center;">{feedbackItem.happyCases}</td>
+							</template>
+						</tr>
+						<tr>
+							<th style="padding-left:0;text-align:center;">Unhappy Cases</th>
+							<template for:each={caseData} for:item="feedbackItem">
+								<td key={feedbackItem.month} style="padding-left:0;text-align:center;">{feedbackItem.unhappyCases}</td>
+							</template>
+						</tr>
+						<tr>
+							<th style="padding-left:0;text-align:center;">Fair Cases</th>
+							<template for:each={caseData} for:item="feedbackItem">
+								<td key={feedbackItem.month} style="padding-left:0;text-align:center;">{feedbackItem.fairCases}</td>
+							</template>
+						</tr> -->
+					</tbody>
+				</table>
+			</template>
+
+
+
+		</div>
+		<div if:true={showFilteredCases} class="filtered-cases-container">
+			<div class="no-border-table">
+				<div class="RowText" style="font-weight: bold; color: #032D60; font-size: 20px;">Filtered Cases
+				</div>
+				<div class="Row">
+					<lightning-button variant="brand" label="Export Data" title="ExportData" onclick={exportData}>
+					</lightning-button>
+					<lightning-button variant="brand" label="Back" title="Back" onclick={goBack}></lightning-button>
+
+				</div>
+			</div>
+
+
+			<table
+				class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+				<thead>
+					<tr>
+						<th style="padding-left:0;text-align:center;">Case Number</th>
+						<th style="padding-left:0;text-align:center;">Project</th>
+						<th style="padding-left:0;text-align:center;">Status</th>
+						<th style="padding-left:0;text-align:center;">CP Name</th>
+						<th style="padding-left:0;text-align:center;">Created Date</th>
+						<th style="padding-left:0;text-align:center;">Closed Date</th>
+						<th style="padding-left:0;text-align:center;">Record Owner</th>
+						<th style="padding-left:0;text-align:center;">Registered/Unregistered</th>
+						<th style="padding-left:0;text-align:center;">Current Stage</th>
+						
+						<!-- Add more columns as needed -->
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Iterate over filtered cases and display each case -->
+					<template for:each={filteredCases} for:item="case1">
+						<tr key={case1.Id}>
+							<!-- <td style="padding-left:0;text-align:center;">
+								<a href="javascript:void(0);" onclick={handleCaseRecordClick}
+									data-case-id={case1.Id}>{case1.CaseNumber}</a>
+							</td> -->
+							<td style="padding-left:0;text-align:center;">
+								<a href="javascript:void(0);" onclick={handleCaseRecordClick} data-case-id={case1.Id}>
+									{case1.CaseNumber}
+								</a>
+							</td>
+							<td style="padding-left:0;text-align:center;">{case1.projectName}</td>
+							<td style="padding-left:0;text-align:center;">{case1.Status}</td>
+							<td style="padding-left:0;text-align:center;">{case1.contactName}</td>
+							<td style="padding-left:0;text-align:center;">{case1.createdDateFormatted}</td>
+							<td style="padding-left:0;text-align:center;">{case1.closedDateFormatted}</td>
+							<td style="padding-left:0;text-align:center;">{case1.closedBy}</td>
+							<td style="padding-left:0;text-align:center;">{case1.CPStatus}</td>
+							<td style="padding-left:0;text-align:center;">{case1.currentStage}</td>
+							<!-- Add more columns as needed -->
+						</tr>
+					</template>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</template>

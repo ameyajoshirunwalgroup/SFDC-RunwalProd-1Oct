@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>APF_RREPL</fullName>
+    <columns>NAME</columns>
+    <columns>RW_Bank_Name__c</columns>
+    <columns>Legal_Entity__c</columns>
+    <columns>Start_Date__c</columns>
+    <columns>End_Date__c</columns>
+    <columns>Minimum_Threshold__c</columns>
+    <columns>Maximum_Threshold__c</columns>
+    <columns>Net_Gross__c</columns>
+    <columns>Payout_Rate__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Legal_Entity_Name__c</field>
+        <operation>equals</operation>
+        <value>RREPL</value>
+    </filters>
+    <label>APF RREPL</label>
+</ListView>

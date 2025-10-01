@@ -1,0 +1,152 @@
+<aura:component controller = "PDFController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="dem" type="List"/>
+    <aura:attribute name="receipt" type="List"/>
+    <aura:attribute name="demList" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="expanded" type="boolean"/> 
+    <aura:attribute name="demandNumber" type="String" default = "RW_Billing_Document_Number__c"/>
+    <aura:attribute name="bookingId" type="String"/> 
+    <aura:attribute access="GLOBAL" name="pdfData" type="String" description="PDF data in base64 encoded format"/>
+    
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    
+    <lightning:navigation aura:id="navService"/>
+    
+    
+    
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid" style="border:2px solid #E0E0E0;background-color:#FAFAFA
+;">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-text-heading--small slds-truncate">Demand And Receipt Details</h2>
+                </div>
+            </div>
+            <div class="slds-no-flex">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+               
+                    <lightning:button name="{!v.bookingId}" class="slds-button slds-button--neutral slds-button--small" onclick ="{!c.callReceipts}"> View Receipt </lightning:button>
+                </div>
+            </div>
+        </div> 
+       
+        <section>
+            <div class="slds-align_absolute-center">
+                
+                <div class="slds-modal__content slds-p-around_medium " >
+                     <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle ="{!c.onAccordionClick}" >  
+                      	<div class="slds-table--header-fixed_container" style="height:520px;" >
+            			<div class="slds-scrollable" style="max-height:500px;max-width:900px;">
+                         <table class="slds-table slds-table--bordered slds-table--striped slds-table--cell-buffer ">
+                            
+                            <div aura:id="conEditForm">
+                                
+                               <tr>
+                                  <th style="font-weight:700;padding-left:5px;font-size:12px;" scope="col"><span class="slds-truncate">Demand Date</span></th>
+                                        <th style="font-weight:700;" scope="col"><span class="slds-truncate">Due Date</span></th>
+                                        <th style="font-weight:700;" scope="col"><span class="slds-truncate">Demand Amount</span></th>
+                                        <th style="font-weight:700;" scope="col"><span class="slds-truncate">GST Amount</span></th>      
+                                        <th style="font-weight:700;" scope="col"><span class="slds-truncate">Received</span></th> 
+                                        <th style="font-weight:700;" scope="col"><span class="slds-truncate">Amount Due</span></th>
+                                </tr>
+                                   
+                                    <aura:iteration items="{!v.dem}" var="d" indexVar="rowIndex">
+                                        <aura:if isTrue = "{!d.demandStatus != 'Revoke'}">
+                                        <tr>
+                                            <th style="display:none;" scope="row" data-index="{!rowIndex}" aura:id="articleOne" role="gridcell">
+                                             </th>  
+                                            <td style="width:140px;"><ui:outputText value="{!d.DemandDate}"/></td>
+                                            <td style="width:140px;"><ui:outputText value="{!d.demandDueDate}"/></td>            
+                                            <td style="width:140px;"><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value = "{!d.TotalDemandAmountCL}"></lightning:input></td>
+                                            <td style="width:140px;"><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value = "{!d.TotalGSTAmount}"></lightning:input></td>                                     
+                                            <td style="width:140px;"><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value = "{!d.recieved}"></lightning:input></td> 
+                                            <td style="width:140px;"><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value = "{!d.remainingAmount}"></lightning:input></td>
+                                            <!--<td style="width:140px;"><ui:outputText value="{!d.demandDueDate}"/> </td> -->
+                                             <td style="width:140px;"><lightning:button type="button" onclick="{!c.callPdfViewer}" class="{!d.disableDemandDownload ?'slds-hide':'slds-button slds-button--neutral slds-float_center'}"  name ="{!d.demandId}">Download</lightning:button></td>
+                                        </tr> 
+                                       
+                                        <lightning:accordionSection >
+                                        <!--Expanded section to display the child vendor invoices -->
+                                        <aura:if isTrue="{!v.expanded}"> 
+                                            
+                                          
+                                         <table class="slds-table slds-table--bordered slds-table--striped slds-table--cell-buffer" aura:id="articleOne">
+                                                <thead>          
+                                                    <tr class="slds-text-body_small "> 
+                                                        <!--<th scope="col" style="width:50px"><span class="slds-truncate">Demand Item Amount</span></th> -->
+                                                        <th scope="col" style="width:75px"><span class="slds-truncate">Milestone Name</span></th>
+                                                        
+                                                        <th scope="col" style="width:75px"><span class="slds-truncate">Principal Amount</span></th>
+                                                        <th scope="col" style="width:75px"><span class="slds-truncate">GST Amount</span></th>
+                                                        <!-- <th scope="col" style="width:75px"><span class="slds-truncate">Usage Code</span></th> -->
+                                                    </tr>
+                                                    
+                                                </thead>
+                                                <tbody>
+                                                    <aura:iteration items="{!d.demandItems}" var="dd">            
+                                                        
+                                                        <tr>   
+                                                            <th scope="row" ><ui:outputText value="{!dd.RW_Milestone_Name__c}"/></th>
+                                                            <!--<td ><ui:outputText value="{!dd.RW_Demand_Item_Amount__c}"/></td>  -->             
+                                                            <!-- <td ><ui:outputText value="{!dd.RW_Demand_Item_Amount__c}"/></td> -->
+                                                            <!--<td ><ui:outputText value="{!dd.RW_Demand_Item_Amount__c}"/></td>  -->             
+                                                            <td ><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value="{!dd.RW_Demand_Item_Amount__c}"></lightning:input></td> 
+                                                            <td ><lightning:input type="number" readonly="true" variant="label-hidden" formatter="currency" value="{!dd.RW_GST_Amount__c}"></lightning:input></td>               
+                                                            
+                                                        </tr>                                              
+                                                        
+                                                    </aura:iteration>
+                                                </tbody>
+                                            </table>
+                                            
+                                        </aura:if>
+                                            </lightning:accordionSection>
+                                        </aura:if>
+                                    </aura:iteration>
+                                
+                                         
+                               
+                            </div>
+                                 
+                        </table>
+                            </div>
+                         </div>
+                    </lightning:accordion>
+                </div>
+               
+                
+            </div>
+        </section>
+             
+    </div>
+    
+    <aura:if isTrue="{!v.isOpen}">
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                   
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Demand in PDF</h2>
+                    </header>
+                    
+                    <iframe aura:id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="600px"  class="pdfFrame" ></iframe>
+                    
+                    
+                   
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                       
+                    </footer>
+                </div>
+            </section>
+    </aura:if>
+    
+</aura:component>

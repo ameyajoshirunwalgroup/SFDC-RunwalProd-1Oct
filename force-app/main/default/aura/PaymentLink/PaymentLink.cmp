@@ -1,0 +1,198 @@
+<aura:component controller="EOIController" implements="flexipage:availableforRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+      <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+      <aura:attribute name="data" type="String"/>
+    <aura:attribute name="isPaymentSuccess" type="String"/>
+    <aura:attribute name="isPaymentFailure" type="String"/>
+    <aura:attribute name="encResp" type="String"/>
+    <aura:attribute name="orderNo" type="String" />
+     <aura:attribute name="paymentlinkrecordid" type="String"/>
+    <aura:attribute name="opportunityId" type="String"/>
+    <aura:attribute name="opportunityWrapper" type="Map" default="{}"/>
+    <aura:attribute name="EOIWrap" type="Map" default="{}"/>
+    <aura:attribute name="ProjectName" type="String"/>
+    <aura:attribute name="eoiId" type="String"/>
+    <aura:attribute name="communityURL" type="String" />
+    <aura:attribute name="PaymentDetailsWrap" type="Map" default="{}" /> 
+    <aura:attribute name="accessCode" type="String"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="hasError" type="boolean" default="false" />
+    <aura:attribute name="isLinkExpired" type="Boolean"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+    
+    <aura:if isTrue="{!v.hasError}">
+       <div class="slds-text-color_error slds-align_absolute-center"><b>There was an error. Please check with administrator. </b> 
+        <aura:if isTrue="{!not(empty(v.errorMessage))}">
+          <b> Error Details - {!v.errorMessage} </b>
+        </aura:if>
+         </div>
+        <aura:set attribute="else">
+    <aura:if isTrue="{!and (not(empty(v.encResp)),v.isPaymentSuccess == 'Success') }">
+        <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+            <div class="slds-text-color_success"><label>Thank You ! Your Payment is successful . Your EOI Reference Number is <b>{!v.EOIWrap.RWName}</b> </label> </div>
+        </div>
+          <aura:set attribute="else">
+              
+              <aura:if isTrue="{!v.isLinkExpired}">
+                               <div class="slds-text-color_error slds-align_absolute-center">
+                                   <b> Sorry, the link has expired. Please contact Runwal. </b>
+                               </div>
+                                <aura:set attribute="else">
+              
+                <aura:if isTrue="{!and (not(empty(v.encResp)),v.isPaymentFailure == 'Failure') }">
+              <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+            <div class="slds-text-color_success"><label>Payment Failed . Please Try again after some time by opening the EOI Form link through email </label> </div>
+        	</div>
+            <aura:set attribute="else">
+    <div class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="{!$Browser.isPhone ? 'slds-p-around_small slds-text-align_center' :'slds-p-around_small '}"  >
+                <div class="logoContainer"></div>
+                <img src="{!$Resource.Runwal}"/> 
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-p-top_x-large">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            <div class="slds-p-right_none"></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                                <div class="slds-p-around_small slds-text-heading_small">    
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-text-heading_medium slds-p-left_medium ' :'slds-p-top_x-large slds-text-heading_large slds-p-left_medium'}" >
+                                        <b><u>DIGITAL PAYMENT</u></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+   
+    
+    
+    <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+      
+         <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+                            Thank you for choosing to pay using Payment Gateway. Your Reference number for EOI is : <b>{!v.EOIWrap.RWName}</b>
+                        </div>
+        <lightning:card> 
+          
+          <div class="slds-section slds-is-open">
+                        
+                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">APPLICANT DETAILS</span>
+                        </h3>
+                        <div class="slds-grid slds-gutters slds-wrap" >
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Name</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="text" aura:id="Name" value="{!v.opportunityWrapper.OpportunityName}" disabled="true"/>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large' :'slds-p-top_x-large '}">
+                                        <span >Email</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                <div class="slds-p-around_small">
+                                    <lightning:input type="email" aura:id="Email" value="{!v.opportunityWrapper.Email}"  disabled="true"/>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                <div class="slds-p-around_small">
+                                    <div class="slds-p-top_x-large">
+                                        <span >Mobile Number</span>                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                        <div class="slds-p-around_small">
+                                            <lightning:input type="tel" aura:id="MobileNumber" pattern="[0-9]{10}" value="{!v.opportunityWrapper.MobileNumber}"  disabled="true"/>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+    <div class="slds-section slds-is-open">
+                         
+                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Payment Details</span>
+                        </h3>
+        <div class="slds-grid slds-gutters slds-wrap" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                    <div class="slds-p-around_small">
+                                        <div class="slds-p-top_large">
+                                            <span >Amount</span>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input type="number" formatter="currency" aura:id="RWPaymentAmount" value="{!v.PaymentDetailsWrap.RWPaymentAmount}" disabled="true" />
+                                    </div>
+        </div>
+          </div>
+    </div>
+    <div class="slds-align_absolute-center" >
+    <form name="paymentForm" aura:id="paymentForm" action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction" method="POST">
+                            <input aura:id="encRequest" type="hidden" name="encRequest" value=""/>
+                            <!--<input type="hidden" name="access_code" value="AVYH03HH35BB77HYBB"/> -->
+                            
+                            <input type="hidden" name="access_code" value="{!v.accessCode}" />
+                            <lightning:button variant="brand" label="Pay" title="Pay" onclick="{! c.onformSubmit }" />
+
+                            
+     </form>
+          </div>
+        </lightning:card>
+    </div>
+            </aura:set>
+              </aura:if>
+                  </aura:set>
+              </aura:if>
+        </aura:set>
+    </aura:if>
+        </aura:set>
+        </aura:if>
+</aura:component>

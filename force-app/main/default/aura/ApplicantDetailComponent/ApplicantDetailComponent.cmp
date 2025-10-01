@@ -1,0 +1,756 @@
+<aura:component Controller = "DigitalBookingController" implements="flexipage:availableforRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+    <aura:attribute name="applicantDetail" type="Applicant_details__C" />
+    <aura:attribute name="CityPicklistOptions" type="String[]" />
+    <aura:attribute name="GenderPicklistOptions" type="String[]"/>
+    <aura:attribute name="MaritalStatusPicklistOptions" type="String[]"/>
+    <aura:attribute name="PermStatePicklistOptions" type="String[]"/>
+        <aura:attribute name="OffStatePicklistOptions" type="String[]"/>
+        <aura:attribute name="TypeOfOriginOptions" type="String[]"/>
+        <aura:attribute name="bookingId" type="String"/>
+     <aura:attribute name="oppId" type="String"/>    
+    <aura:attribute name="readonly" type="boolean" default = "false"/>
+
+    <aura:attribute name="MailStatePicklistOptions" type="String[]"/>
+    
+    <aura:attribute name="statePicklist" type="Object"/>
+        <aura:attribute name="ResidentialPicklist" type="Object"/>
+    <aura:attribute name="ResidentialPicklistOptions" type="String[]"/>
+
+    <aura:attribute name="DesignationPicklistOptions" type="String[]"/>
+    <aura:attribute name="ApplicantPicklistOptions" type="String[]"/>
+    <aura:attribute name="OccupationPicklistOptions" type="string[]"/>
+    <aura:attribute name="NationalityPicklistOptions" type="string[]"/>
+    <aura:attribute name="SalutationPicklistOptions" type="string[]"/>
+    <aura:attribute name="ContactPersonPicklistOptions" type="string[]"/>
+    <aura:attribute name="CountryPicklistOptions" type="string[]"/>
+        <aura:attribute name="AddressProofDocument" type="string[]"/>
+    
+    <aura:attribute name="CurrentUser" type="Object"/>
+    <force:recordData recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Profile.Name"
+                      targetFields="{!v.CurrentUser}"/>
+    <aura:attribute name="ShowOriginal" type="boolean" default = "false"/>
+    <aura:attribute name="Masked" type="boolean" default = "false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+     
+    <div class="slds-grid slds-gutters slds-wrap" >
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Salutation<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select value="{!v.applicantDetail.Salutation__c}" name="RW_Salutation" required="true" label="Salutation" variant="label-hidden" disabled="{!v.readonly}" >
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.SalutationPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Salutation__c)) , v.applicantDetail.Salutation__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Email Address<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="email" aura:id="RW_Email" value="{!v.applicantDetail.Email_Address__c}" required="true" messageWhenTypeMismatch="Please enter a valid email" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >First Name<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <!--<lightning:input type="text" aura:id="RW_FirstName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" value="{!v.applicantDetail.First_Name__c}"  maxlength="40" required="true" disabled="{!v.readonly}"/>-->
+                <aura:if isTrue="{!v.applicantDetail.Salutation__c != 'M/S'}"> 
+                	<lightning:input type="text" aura:id="RW_FirstName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" value="{!v.applicantDetail.First_Name__c}"  maxlength="40" required="true" disabled="{!v.readonly}"/>
+                    <aura:set attribute="else">
+                    	<lightning:input type="text" aura:id="RW_FirstName" value="{!v.applicantDetail.First_Name__c}"  maxlength="40" required="true" disabled="{!v.readonly}"/>
+                    </aura:set>
+                </aura:if>
+            </div>
+        </div>
+        
+        <!--<aura:if isTrue="{!or(v.CurrentUser.Profile.Name == 'System Administrator', v.CurrentUser.Profile.Name == 'Home Loan', v.CurrentUser.Profile.Name == 'Relationship Manager',v.CurrentUser.Profile.Name == 'Auditor', v.CurrentUser.Profile.Name == 'Integration User', v.CurrentUser.Profile.Name == 'Sys Admin Integration')}"> -->
+        <aura:if isTrue="{!or(v.Masked == false, v.applicantDetail.Mobile_Number__c == null)}">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Mobile Number<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="tel" aura:id="RW_MobileNumber"  pattern="[0-9]{10}" messageWhenPatternMismatch="Please enter valid 10 digit mobile number" value="{!v.applicantDetail.Mobile_Number__c}" required="true" disabled="{!or(equals(v.applicantDetail.Applicant_Number__c,'Primary Applicant'),readOnly)}" />
+          </div>
+        </div>
+        </aura:if>
+        
+        <!--<aura:if isTrue="{!and(v.CurrentUser.Profile.Name != 'System Administrator', v.CurrentUser.Profile.Name != 'Home Loan', v.CurrentUser.Profile.Name != 'Relationship Manager', v.CurrentUser.Profile.Name != 'Auditor', v.CurrentUser.Profile.Name != 'Integration User', v.CurrentUser.Profile.Name != 'Sys Admin Integration')}"> -->
+        <aura:if isTrue="{!and(v.Masked == true, v.applicantDetail.Mobile_Number__c != null)}">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Mobile Number<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:formattedText value="{!v.applicantDetail.Mobile_No__c}" />
+          </div>
+        </div>
+        </aura:if>
+        
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Middle Name</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <!--<lightning:input type="text" aura:id="RW_MiddleName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed"  value="{!v.applicantDetail.Middle_Name__c}" disabled="{!v.readonly}" />-->
+                <aura:if isTrue="{!v.applicantDetail.Salutation__c != 'M/S'}"> 
+                	<lightning:input type="text" aura:id="RW_MiddleName" pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed"  value="{!v.applicantDetail.Middle_Name__c}" disabled="{!v.readonly}" />
+                    <aura:set attribute="else">
+                    	<lightning:input type="text" aura:id="RW_MiddleName" value="{!v.applicantDetail.Middle_Name__c}" disabled="{!v.readonly}" />
+                    </aura:set>
+                </aura:if>
+            </div>
+        </div>
+        
+        <!--<aura:if isTrue="{!or(v.CurrentUser.Profile.Name == 'System Administrator', v.CurrentUser.Profile.Name == 'Home Loan', v.CurrentUser.Profile.Name == 'Relationship Manager',v.CurrentUser.Profile.Name == 'Auditor', v.CurrentUser.Profile.Name == 'Integration User', v.CurrentUser.Profile.Name == 'Sys Admin Integration')}"> -->
+        <aura:if isTrue="{!v.Masked == false}">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Altername Mobile Number</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="tel" aura:id="RW_AlternateMobile"   value="{!v.applicantDetail.Secondary_Mobile_Number__c}"  disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        </aura:if>
+        
+        <!--<aura:if isTrue="{!and(v.CurrentUser.Profile.Name != 'System Administrator', v.CurrentUser.Profile.Name != 'Home Loan', v.CurrentUser.Profile.Name != 'Relationship Manager', v.CurrentUser.Profile.Name != 'Auditor', v.CurrentUser.Profile.Name != 'Integration User', v.CurrentUser.Profile.Name != 'Sys Admin Integration')}"> -->
+        <aura:if isTrue="{!v.Masked == true}">
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Altername Mobile Number</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:formattedText value="{!v.applicantDetail.Secondary_Mobile_No__c}" />
+            </div>
+        </div>        	
+        </aura:if>
+         
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Last Name<span class="asterisk">*</span> </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <!--<lightning:input type="text" aura:id="RW_LastName"  required="true" value="{!v.applicantDetail.Last_Name__c}" maxlength="40"  pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" disabled="{!v.readonly}" />-->
+                <aura:if isTrue="{!v.applicantDetail.Salutation__c != 'M/S'}"> 
+                	<lightning:input type="text" aura:id="RW_LastName"  required="true" value="{!v.applicantDetail.Last_Name__c}" maxlength="40"  pattern="[a-zA-Z]+" messageWhenPatternMismatch="Numbers and Special Characters are not allowed" disabled="{!v.readonly}" />
+                    <aura:set attribute="else">
+                    	<lightning:input type="text" aura:id="RW_LastName"  required="true" value="{!v.applicantDetail.Last_Name__c}" maxlength="40" disabled="{!v.readonly}" />
+                    </aura:set>
+                </aura:if>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Gender<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select value="{!v.applicantDetail.Gender__c}" name="RW_Gender" label="City" variant="label-hidden" required="true" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.GenderPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Gender__c)) , v.applicantDetail.Gender__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Nationality<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select  value="{!v.applicantDetail.Nationality_Picklist__c}" aura:id="RW_Nationality" name="RW_Nationality" variant="label-hidden" required="true" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.NationalityPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Nationality_Picklist__c)) , v.applicantDetail.Nationality_Picklist__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Date of Birth<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">              
+                <div class="slds-p-top_medium">
+                <ui:inputDate aura:id="RW_DateOfBirth"  required="true"  value="{!v.applicantDetail.DOB__c}" displayDatePicker="true" format="dd/MM/yyyy" disabled="{!v.readonly}"/>
+                </div> 
+               
+               <!-- <lightning:input  aura:id="RW_DateOfBirth" type="date" required="true" dateStyle = "short" value="{!v.applicantDetail.DOB__c}" disabled="{!v.readonly}" />-->
+          </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Contact Person Relationship</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select value="{!v.applicantDetail.Contact_Person_Relationship__c}" aura:id="RW_ContactPersonRelationship" name="RW_ContactPersonRelationship" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.ContactPersonPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Contact_Person_Relationship__c)) , v.applicantDetail.Contact_Person_Relationship__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Marital Status<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select value="{!v.applicantDetail.Marital_Status__c}" required="true" aura:id="RW_MaritalStatus" name="RW_MaritalStatus" label="Marital Status" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.MaritalStatusPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Marital_Status__c)) , v.applicantDetail.Marital_Status__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Landline Number</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="tel" aura:id="RW_Landline" value="{!v.applicantDetail.Landline_Number__c}" messageWhenPatternMismatch="Please enter valid 8-15 digit landline number" disabled="{!v.readonly}" pattern="[0-9]{8,15}"/>
+            </div>
+        </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Company Name<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RWCompanyName" value="{!v.applicantDetail.Organization_Name__c}" required="true" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Occupation<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select value="{!v.applicantDetail.Occupation__c}" required="true" aura:id="RW_Occupation" name="RW_Occupation" label="Occupation" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.OccupationPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Occupation__c)) , v.applicantDetail.Occupation__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Designation</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select  value="{!v.applicantDetail.Designation_picklist__c}" name="RW_Designation" aura:id="RW_Designation"  label="Designation" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.DesignationPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Designation_picklist__c)) , v.applicantDetail.Designation_picklist__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div> 
+     
+        <div class="slds-col slds-size_1-of-1">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">         
+                    <div class="slds-box slds-box_x-small slds-page-header  slds-text-heading_small"><b>Permanent Address Details</b></div> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Address Line 1<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_PermanentAddressLine1" maxlength="40" value="{!v.applicantDetail.Permanent_Address_Line_1__c}" required="true" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Address Line 2<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_PermanentAddressLine2" maxlength="40" value="{!v.applicantDetail.Permanent_Address_Line_2__c}" required="true" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Address Line 3</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_PermanentAddressLine3"  maxlength="40" value="{!v.applicantDetail.Permanent_Address_Line_3__c}" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Country<span class="asterisk">*</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select  value="{!v.applicantDetail.Country__c}" onchange="{!c.getPermState}" required="true" name="RW_PermCountry" aura:id="RW_PermCountry"  label="Permanent Country" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.CountryPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Country__c)) , v.applicantDetail.Country__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >State<span class="asterisk">*</span> </span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select  value="{!v.applicantDetail.State__c}" required="true" name="RW_PermState" aura:id="RW_PermState"  label="Permanent State" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.PermStatePicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.State__c)) , v.applicantDetail.State__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >City</span>
+                </div>
+            </div> 
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:select value="{!v.applicantDetail.City__c}" name="RW_PermCity" aura:id="RW_PermCity" label="City" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.CityPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.City__c)) , v.applicantDetail.City__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>    
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Pincode<span class="asterisk"> *</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RWPermPinCode" value="{! v.applicantDetail.Pincode__c}"  pattern="^[0-9]+$" messageWhenPatternMismatch="Special Characters are not allowed" required="true" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Mailing address same as Permanent address</span>
+                    <lightning:input  type="checkbox" aura:id = "RW_MailSame" checked="{!v.applicantDetail.Mailing_Address_same_as_PermanentAddress__c}" onchange="{!c.selectChange}"/>
+                </div>
+            </div>
+        </div>
+        
+        <aura:if isTrue="{! !v.applicantDetail.Mailing_Address_same_as_PermanentAddress__c}">
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">         
+                        <div class="slds-box slds-box_x-small slds-page-header  slds-text-heading_small"><b>Mailing Address Details</b></div> 
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >Address Line1<span class="asterisk">*</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                    <lightning:input type="text" aura:id="RW_MailingAddressLine1" value="{!v.applicantDetail.Mailing_Address_Line_1__c}" required="true" maxlength="40" disabled="{!v.readonly}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >Address Line2<span class="asterisk">*</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                    <lightning:input type="text" aura:id="RW_MailAddressLine21" value="{!v.applicantDetail.Mailing_Address_Line_2__c}" maxlength="40" required="true" disabled="{!v.readonly}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >Address Line3</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                    <lightning:input type="text" aura:id="RW_AddressLine3" value="{!v.applicantDetail.Mailing_Address_Line_3__c}" maxlength="40"/>
+                </div>
+            </div>
+             <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >Country<span class="asterisk">*</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                        <lightning:select onchange="{!c.getMailState}" value="{!v.applicantDetail.Mailing_Country__c}" required="true" name="RW_CommCountry" label="Country" variant="label-hidden" disabled="{!v.readonly}">
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.CountryPicklistOptions}" var="val">
+                            <aura:if isTrue="{!and( not(empty(v.applicantDetail.Mailing_Country__c)) , v.applicantDetail.Mailing_Country__c == val) }">
+                                <option value="{!val}" selected="true"> {!val}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!val}"> {!val}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >State<span class="asterisk">*</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                       <lightning:select value="{!v.applicantDetail.Mailing_State__c}" name="RW_ComState" aura:id="RW_ComState" label="State" variant="label-hidden" required="true" disabled="{!v.readonly}">
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.MailStatePicklistOptions}" var="val">
+                            <aura:if isTrue="{!and( not(empty(v.applicantDetail.Mailing_State__c)) , v.applicantDetail.Mailing_State__c == val) }">
+                                <option value="{!val}" selected="true"> {!val}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!val}"> {!val}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+            
+           
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >City</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                               <lightning:select value="{!v.applicantDetail.Mailing_City__c}" name="RW_MailCity" aura:id="RW_MailCity" label="City" variant="label-hidden" disabled="{!v.readonly}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.CityPicklistOptions}" var="val">
+                        <aura:if isTrue="{!and( not(empty(v.applicantDetail.Mailing_City__c)) , v.applicantDetail.Mailing_City__c == val) }">
+                            <option value="{!val}" selected="true"> {!val}</option>
+                            <aura:set attribute="else">
+                                <option value="{!val}"> {!val}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>    
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">
+                        <span >Pincode<span class="asterisk">*</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                <div class="slds-p-around_small">
+                    <lightning:input type="text" aura:id="RW_mailPin" value="{!v.applicantDetail.Mailing_Pincode__c}" required="true" disabled="{!v.readonly}"/>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{! !$Browser.isPhone}">
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-p-around_small">
+                    <div class="slds-p-top_medium">         
+                        <div class="slds-box slds-box_x-small slds-page-header  slds-text-heading_small"><b>Office Address Details</b></div> 
+                    </div>
+                </div>
+            </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Address Line1</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_OffAddress1" value="{!v.applicantDetail.Office_Address_Line_1__c}" maxlength="40" disabled="{!v.readonly}"/>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span>Address Line2</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_OffAddress2" value="{!v.applicantDetail.Office_Address_Line_2__c}" maxlength="40"  disabled="{!v.readonly}"/>
+            </div>
+        </div>
+    
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Address Line3</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_OffAddress3" value="{!v.applicantDetail.Office_Address_Line_3__c}" maxlenght="40" disabled="{!v.readonly}" />
+            </div>
+        </div>
+         <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Country</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                        <lightning:select onchange="{!c.getOfficeState}" value="{!v.applicantDetail.Organisation_Country__c}" name="RW_OrgCountry" label="Country" variant="label-hidden" disabled="{!v.readonly}">
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.CountryPicklistOptions}" var="val">
+                            <aura:if isTrue="{!and( not(empty(v.applicantDetail.Organisation_Country__c)) , v.applicantDetail.Organisation_Country__c == val) }">
+                                <option value="{!val}" selected="true"> {!val}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!val}"> {!val}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>  
+            
+            </div>
+        </div>
+            
+            
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Pincode</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RW_Off_pincode" value = "{!v.applicantDetail.Organisation_Pincode__c}"  disabled="{!v.readonly}"/>
+            </div>
+        </div>
+       
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Office Phone Number</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="phone" aura:id="RW_OfficePhone" value="{!v.applicantDetail.Organization_Phone_numbers__c}"  disabled="{!v.readonly}"/>
+            </div>
+        </div>
+      
+        </aura:if>
+          <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="slds-p-around_small">
+                <div class="slds-p-top_medium">
+                    <span >Other Details/Remarks</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+            <div class="slds-p-around_small">
+                <lightning:input type="text" aura:id="RWOtherRemark" value="{!v.applicantDetail.Other_Details_Remarks__c}" disabled="{!v.readonly}" />
+            </div>
+        </div>
+        
+      
+    </div>
+    
+     <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="Section Title">KYC DOCUMENTS</span>
+                                </h3>
+                                <div class="slds-p-around_small">
+                                <div class="slds-clearfix">
+                                    <div class="slds-p-around_small">
+                                        Disclaimer : We agree not to disclose these or allow them to be disclosed to any third party.
+                                    </div>
+                                </div>
+  <c:BookingKYCComponent readonly="{!v.readonly}" ApplicantPicklistOptions="{!v.ApplicantPicklistOptions}"
+                            ResidentialPicklist="{!v.ResidentialPicklist}" ResidentialPicklistOptions="{!v.ResidentialPicklistOptions}"
+     oppId="{!v.oppId}"     OriginTypePicklistValues="{!v.TypeOfOriginOptions}"   applicantDetail="{!v.applicantDetail}"  TypeOfOriginOptions="{!v.TypeOfOriginOptions}"   bookingId="{!v.bookingId}"         AddressProofDocument="{!v.AddressProofDocument}"></c:BookingKYCComponent>
+                                </div>
+                            </div>
+    
+  </aura:component>

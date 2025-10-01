@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Unit Number Structure</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Unit Number Structures</value>
+    </caseValues>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Maximum length cannot be greater than 5 OR Less than 1 --></errorMessage>
+        <name>Maximum_Length_of_Unit_Structure</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Sequence Number value Can only be between 1-5 --></errorMessage>
+        <name>Sequence_Number_Value</name>
+    </validationRules>
+</CustomObjectTranslation>

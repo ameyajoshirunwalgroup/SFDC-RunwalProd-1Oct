@@ -1,0 +1,650 @@
+<aura:component controller="RW_UnitTransferAndCancellation" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+	
+	<!-- init handler to retrieve the Booking information -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!--Attributes  to hold the values-->
+    <aura:attribute name="activeSections" type="List" default="['BookingDetails','PaymentDetails', 'PaymentDetailsUpgrade']" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+	<aura:attribute name="bookingInfo" type="Object"></aura:attribute>
+    <aura:attribute name="cancellationStatus" type="string"></aura:attribute>
+    <aura:attribute name="CGST" type="decimal"></aura:attribute>
+    <aura:attribute name="SGST" type="decimal"></aura:attribute>
+    <aura:attribute name="totalforfeitureamount" type="decimal"></aura:attribute>
+    <aura:attribute name="BrokerageAmount" type="decimal"></aura:attribute>
+    <aura:attribute name="InterestValue" type="decimal"></aura:attribute>
+    <aura:attribute name="Taxesifany" type="decimal"></aura:attribute>
+    <aura:attribute name="Otherforfeitureamount" type="decimal"></aura:attribute>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="unitId" type="Id" />
+    <aura:attribute name="unitInfo" type="Object"></aura:attribute>
+    
+    
+     <!-- This is to increase width of quick action modal pop-up -->
+    <aura:html tag="style">
+    .slds-modal__container {
+     min-width: 90vw;
+    }
+</aura:html> 
+
+   <div class="slds-col slds-box slds-align_absolute-center slds-text-heading_medium" style="background-color :white;border:0px;height:33px;;border-bottom:1px solid #bdb3b3;padding-top:0px;">
+                 
+  			          
+            <b>Unit Transfer and Cancellation</b>
+           <!-- <div style="float:right;">
+		 <lightning:button  class="slds-button slds-button_brand" variant="brand" label="Save Cancellation Reason" onclick="{!c.saveCancellationReason}"  />
+         <lightning:button class="slds-button slds-button_brand" variant="brand" label="Generate Cancellation Checklist" onclick="{!c.generateChecklist}"  />	 
+                </div> -->
+	</div>
+    <!--<aura:if isTrue="{!and(v.bookingInfo.Status__c != 'Booking Cancelled – Refund Pending' , v.bookingInfo.Status__c != 'Booking Cancelled – Refund Ready'), v.bookingInfo.Status__c != 'Booking Cancelled - Refunded'}">-->
+    <aura:if isTrue="{!and(and( and(v.bookingInfo.Status__c != 'Booking Cancelled – Refund Pending', v.bookingInfo.Status__c != 'Booking Cancelled – Refund Ready'), v.bookingInfo.Status__c != 'Booking Cancelled - Refunded'), v.bookingInfo.Status__c != 'Cancelled')}">
+    <aura:if isTrue="{!v.bookingInfo.Cancellation_Requested_Status__c == 'Cancellation Confirmed'}">
+       <div class="slds-col slds-align_absolute-center " style="background-color :white;border:0px;height:33px;padding-top:0px;">
+        	<aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit cancelled'}">
+       			<lightning:button class="slds-button slds-button_brand" variant="brand" label="Calculate Forfeiture Amount" onclick="{!c.cal}"  /> 
+                <lightning:button class="slds-button slds-button_brand" variant="brand" label="Save and Generate Checklist" onclick="{!c.saveCancellationReason}"  />
+               	
+           </aura:if>
+           <aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit transfer'}">
+            <lightning:button class="slds-button slds-button_brand" variant="brand" label="Save" onclick="{!c.unitTransferSave}"  />     
+           </aura:if>    
+        <!--<lightning:button class="slds-button slds-button_brand" variant="brand" label="Generate Checklist" onclick="{!c.generateChecklist}"  /> -->
+        </div>
+    
+    <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+        <lightning:accordionSection name="BookingDetails" label="Booking Details">
+             <!--<aura:set attribute="actions">
+                    <lightning:button class="slds-button slds-button_brand" variant="brand" label="Save Forfieture Details" onclick="{!c.saveCancellationReason}"  />
+               	<lightning:button class="slds-button slds-button_brand" variant="brand" label="Generate Checklist" onclick="{!c.generateChecklist}"  /> 
+            </aura:set> -->
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="projectName" disabled="true" value="{!v.bookingInfo.Project__r.Name}" label="Project Name" />
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="projectUnit" disabled="true" value="{!v.bookingInfo.Unit_No__r.RW_Param4__c }" label="Project Unit" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="towerName" disabled="true" value="{!v.bookingInfo.Unit_No__r.TowerName__r.Name }" label="Tower Name" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="crn" disabled="true" value="{!v.bookingInfo.Opportunity__r.SAP_Customer_Number__c}" label="CRN No" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="applicantName" disabled="true" value="{!v.bookingInfo.Primary_Applicant_Name__c}" label="Primary Applicant Name" />
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="otherApplicant" disabled="true" value="{!v.bookingInfo.Opportunity__r.Other_Applicants_Name__c}" label="Other Applicant Name" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="bookingStatus" disabled="true" value="{!v.bookingInfo.Status__c}" label="Booking Status" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                           <lightning:input name="bookingSource" disabled="true" value="{!v.bookingInfo.Source_of_Booking__c}" label="Source of Booking" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                          <lightning:input type="date"  disabled="true" name="input1" aura:id="bookingdate" value="{!v.bookingInfo.Booking_Date__c}" label="Date of booking"  />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                          <lightning:input type="date"  disabled="true" name="registrationstatus" aura:id="registrationStatus" value="{!v.bookingInfo.RW_Registration_Status__c}" label="Registration Status"  />
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                     
+                        
+                   	<lightning:select name="select" label="Select Cancellation Reason" required="true" value="{!v.bookingInfo.Cancellation_Reason__c}" aura:id="cancellationReason">
+                        <option value="--None--" text="--None--"></option>
+                        <option value="Unit cancelled" text="Unit cancelled"></option>
+                        <option value="Unit transfer" text="Unit transfer"></option>
+                     </lightning:select>   
+                    
+                    </div>
+                    <aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit cancelled'}">
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">                    
+                   	<lightning:select name="select" label="Select Sub Cancellation Reason" value="{!v.bookingInfo.Cancellation_Sub_reason__c}"  aura:id="cancellationSubReason" required="true">
+                        <option value="--None--" text="--None--"></option>
+                        <!--<option value="R6" text="Change of Mind"></option>
+                        <option value="R7" text="Policy Driven Cancellation- Payment Defaulter"></option>
+                        <option value="Z4" text="Financial Constraints"></option>
+                        <option value="Z3" text="Home Loan Eligibility"></option>
+                        <option value="Z2" text="Medical Exigency"></option>
+                        <option value="Z1" text="Personal Exigency"></option>
+                        <option value="R1" text="Demise of the Main Applicant"></option>
+                        <option value="R2" text="Dispute over Agreement Clauses	"></option>-->
+                        
+                        <option value="R6" text="Change of Mind"></option>
+                        <option value="R7" text="Policy Driven Canc- Payment Defaulter"></option>
+                        <option value="Z4" text="Financial Crisis"></option>
+                        <option value="Z3" text="Non Approval of Bank Loan - Eligibility"></option>
+                        <option value="Z2" text="Medical Emergencies"></option>
+                        <option value="Z1" text="Personal Exigencies"></option>
+                        <option value="R1" text="Demise of the Main Applicant"></option>
+                        <option value="R2" text="Dispute over Agreement Clauses"></option>                        
+                        <option value="R3" text="Upgrade"></option>
+                        <option value="R4" text="Unsuitable Possession Date"></option>
+                        <option value="R5" text="Vastu Compliance"></option>
+                         <option value="Z5" text="Loss of Job"></option>
+                        <option value="Z6" text="Cancer Patient"></option>
+                        <option value="Z7" text="Non Approval -Building Construction Plan"></option>
+                        <option value="Z8" text="Unit Transfer"></option>
+                         <option value="Z9" text="Legal Issue"></option>
+                          <option value="R8" text="Others"></option>
+                        <!--<option value="Media" text="Media"></option>-->
+                        <option value="Non Contactable" text="Non Contactable"></option>
+                        <!--<option value="Competitor" text="Competitor"></option>-->
+                       </lightning:select>   
+                    </div>
+                    </aura:if>
+                    <aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit transfer'}">
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">                    
+                   	
+                     <lightning:select name="select" label="Select Sub Cancellation Reason" value="{!v.bookingInfo.Cancellation_Sub_reason__c}"  aura:id="cancellationSubReasonUnitTransfer" required="true">
+                       <option value="--None--" text="--None--"></option>
+                       <!--  <option value="R6" text="Change of Mind	"></option>
+                        <option value="R3" text="Upgrade"></option>
+                        <option value="Z4" text="Financial Constraints"></option>
+                        <option value="R4" text="Unsuitable Possession Date"></option>
+                        <option value="R5" text="Vastu Compliance"></option>-->
+                         
+                         <option value="R6" text="Change of Mind"></option>
+                        <option value="R7" text="Policy Driven Canc- Payment Defaulter"></option>
+                        <option value="Z4" text="Financial Crisis"></option>
+                        <option value="Z3" text="Non Approval of Bank Loan - Eligibility"></option>
+                        <option value="Z2" text="Medical Emergencies"></option>
+                        <option value="Z1" text="Personal Exigencies"></option>
+                        <option value="R1" text="Demise of the Main Applicant"></option>
+                        <option value="R2" text="Dispute over Agreement Clauses"></option>                        
+                        <option value="R3" text="Upgrade"></option>
+                        <option value="R4" text="Unsuitable Possession Date"></option>
+                        <option value="R5" text="Vastu Compliance"></option>
+                         <option value="Z5" text="Loss of Job"></option>
+                        <option value="Z6" text="Cancer Patient"></option>
+                        <option value="Z7" text="Non Approval -Building Construction Plan"></option>
+                        <option value="Z8" text="Unit Transfer"></option>
+                         <option value="Z9" text="Legal Issue"></option>
+                          <option value="R8" text="Others"></option>
+                       </lightning:select> 
+                        
+                    </div>
+                    </aura:if>
+                     
+                    
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                        <lightning:select name="select" label="Cancellation Subtype" required="true" value="{!v.bookingInfo.Cancellation_Subtype__c}" aura:id="cancSubType">
+                            <option value="--None--" text="--None--"></option>
+                            <option value="Involuntary" text="Involuntary"></option>
+                            <option value="Voluntary" text="Voluntary"></option>
+                            <option value="Upgrade" text="Upgrade"></option>
+                            <option value="Downgrade" text="Downgrade"></option>
+                            <option value="Movement" text="Movement"></option>
+                         </lightning:select>   
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                        <lightning:select name="select" label="Mode of Cancellation" required="true" value="{!v.bookingInfo.Mode_of_Cancellation__c}" aura:id="modeofCanc">
+                            <option value="--None--" text="--None--"></option>
+                            <option value="Written" text="Written"></option>
+                            <option value="Verbal" text="Verbal"></option>
+                            <option value="Meeting" text="Meeting"></option>
+                         </lightning:select>   
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                    <lightning:input name="cancellationdescription" aura:id="cancellationdescription" label="Cancellation Description" value="{!v.bookingInfo.Reason_For_Cancellation__c}" required="true" />
+                    </div>
+                        
+                    
+                    <!--<div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                          <lightning:input type="date" name="input1" aura:id="cancelRequestDate" value="{!v.bookingInfo.Date_of_Cancellation__c}" label="Cancellation Request Confirmation Date"  />
+                    </div> -->
+                    
+                   <!-- <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                           <lightning:input name="cancellationRequestStatus" disabled="true" aura:id="cancellationRequestStatus" value="{!v.bookingInfo.Cancellation_Requested_Status__c}" label="Cancellation Request Status" />
+                    </div> -->
+                    
+                </div>               
+        </lightning:accordionSection>
+       
+        <aura:if isTrue = "{!and(v.bookingInfo.Cancellation_Reason__c == 'Unit cancelled', and(v.bookingInfo.Cancellation_Sub_reason__c != 'Z8', v.bookingInfo.Cancellation_Sub_reason__c != 'R3'))}">
+        <lightning:accordionSection name="PaymentDetails" label="Payment and Forfieture Details">
+            <div class="slds-grid slds-wrap">
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="AgreementValue" aura:id="AgreementValue" type="number" formatter="currency" disabled="true"  value="{!v.bookingInfo.Allotment_Premium__c}" label="Agreement Value" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalRecievedAmount" aura:id="TotalRecievedAmount"  type="number" required='true' formatter="currency" value="{!v.bookingInfo.RW_Total_Receipt_Amount_Received__c}" label="Total Received Amount (R)" /> 
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                           <lightning:input name="ForfeiPercentage" type="decimal"  required='true' aura:id="ForfeiPercentage"  value="{!v.bookingInfo.Forfeit_Percentage__c}" label="Forfeit Percentage" onchange="{!c.validatePercentage}" />
+                    </div>
+                
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                     <lightning:select name="select"  required='true' label="Select Forfeiture Amount Type" value="{!v.bookingInfo.Forfeiture_Amount_Type__c}" aura:id="ForfeitureAmounttype">
+                        <option value="--Select--" text="--None--"></option>
+                        <option value="Total received amount" text="Total received amount"></option>
+                        <option value="Agreement value" text="Agreement value"></option>
+                     </lightning:select>
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="Forfeiture Amount"  aura:id="ForfeitureAmount" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.Forfeiture_Amount__c}" label="Forfeiture Amount (A)" />
+                    </div>
+                      
+                	 <div class="slds-size_3-of-12"  style="padding-left:10px;">
+                           <lightning:input name="CGST" aura:id="CGST" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.CGST__c}" label="CGST (B)" />
+                    </div>
+            
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="SCGST" aura:id="SGST" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.SGST__c}" label="SCGST (C)" />
+                    </div>
+                
+                    
+            
+            		<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="BrokerageAmount" type="number" formatter="currency" aura:id="BrokerageAmount" required='true'  value="{!v.bookingInfo.Brokerage_Amount__c}" label="Brokerage Amount (D)" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="InterestValue" type="number" formatter="currency" aura:id="InterestValue" required='true'  value="{!v.bookingInfo.Interest_Value__c}" label="Interest Value (E)" />
+                    </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="Taxesifany" type="number" formatter="currency" aura:id="Taxesifany" required='true'  value="{!v.bookingInfo.Taxes_if_any__c}" label="Taxes (if any) (F)" />
+                    </div>
+                                      
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="TDS" type="number" formatter="currency" aura:id="TDS" required='true' value="{!v.bookingInfo.Total_TDS_Amount_Paid_In_Rs__c}" label="TDS (G)" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="MVATM" type="number" formatter="currency" aura:id="MVATM" required='true'  value="{!v.bookingInfo.MVAT__c}" label="MVAT(M) (H)" />
+                    </div>
+                	
+                	<div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="Otherforfeitureamount" type="number" formatter="currency" required='true' aura:id="Otherforfeitureamount" value="{!v.bookingInfo.GST_Tax_G__c}"  label="GST Tax (I)" />
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input aura:id="referralAmt" name="referralAmt"  type="number" formatter="currency" value="{!v.bookingInfo.Referral_Amount__c}" label="Referral Amount" />
+                    </div>
+                	
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="voucherScheme" disabled="true" value="{!v.bookingInfo.Scheme_of_Customer__r.Name}" label="Voucher Deductions " />
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalRefundAmount" type="number" disabled="true" formatter="currency" aura:id="TotalRefundAmount" value="{!v.bookingInfo.Total_Refund_Amount__c}" label="Total Refund Amount(R-(A+B+C+D+E+F+G+H+I))" />
+                    </div>
+            		
+            		<div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="FinalRefundAmount" type="number" formatter="currency" aura:id="FinalRefundAmount" required='true' value="{!v.bookingInfo.Final_Refund_Amount__c}" label="Final Refund Amount" />
+                    </div>
+                	
+                	 <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalForfeitureAmount" type="number" formatter="currency" aura:id="TotalForfeitureAmount" disabled="true"  value="{!v.bookingInfo.Total_Forfeiture_Amount__c}" label="Total Forfeiture Amount(A+B+C+D+E+F+G+H+I)" />
+                    </div>
+                
+					<div class="slds-size_3-of-12" style="padding-left:10px;">
+                     <lightning:select name="select"  required='true' label="Payment Refund Amount" value="{!v.bookingInfo.Payment_Refund_Amount__c}" aura:id="payRefAmt">
+                        <option value="--Select--" text="--None--"></option>
+                        <option value="Refund" text="Refund"></option>
+                        <option value="Forfeiture" text="Forfeiture"></option>
+                        <option value="Partial Refund" text="Partial Refund"></option>
+                        <option value="Internal Fund Transfer (Full)" text="Internal Fund Transfer (Full)"></option>
+                        <option value="Internal Fund Transfer (Partial)" text="Internal Fund Transfer (Partial)"></option>
+                     </lightning:select>
+                    </div>  
+                    <!--<div class="slds-size_3-of-12" style="padding-left:10px;">
+                        <lightning:input name="swipeCharges" type="number" formatter="currency" aura:id="swipeCharges" value="{!v.bookingInfo.Swipe_Charges__c}" label="Swipe Charges" />
+                    </div>-->
+                
+            </div> 
+        </lightning:accordionSection>
+        
+       <!-- <lightning:accordionSection name="ForfietureDetails" label="Forfieture Details">
+            <div class="slds-grid slds-wrap">
+                	
+                	
+                	
+                   
+                
+                
+                
+                    
+               		
+                 
+                	
+            
+            </div> 
+        </lightning:accordionSection> -->
+         <lightning:accordionSection name="ResaleDetails" label="Resale Details">
+            <div class="slds-grid slds-wrap">
+            	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                    <lightning:select name="select" label="Resale Status" value="{!v.bookingInfo.Resale_Status__c}" aura:id="ResaleStatus">
+                        <option value="None" text="None"></option>
+                        <option value="Sold" text="Sold"></option>
+                        <option value="Unsold" text="Unsold"></option>
+                    </lightning:select>
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                    <lightning:input name="newRate" type="number" formatter="currency" aura:id="newRate" value="{!v.bookingInfo.New_Rate__c}" label="New Rate" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                    <lightning:input name="newFlatAgrVal" type="number" formatter="currency" aura:id="newFlatAgrVal"  value="{!v.bookingInfo.New_Flat_Agreement_Value__c}" label="New Flat Agreement Value" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                    <lightning:input name="recvAmt" type="number" formatter="currency" aura:id="recvAmt" value="{!v.bookingInfo.Received_Amtount__c}" label="Received Amtount" />
+                </div>
+            </div> 
+        </lightning:accordionSection>
+        </aura:if>
+        
+        <aura:if isTrue = "{!and(v.bookingInfo.Cancellation_Reason__c == 'Unit cancelled', or(v.bookingInfo.Cancellation_Sub_reason__c == 'R3', v.bookingInfo.Cancellation_Sub_reason__c == 'Z8'))}">
+        <lightning:accordionSection name="PaymentDetailsUpgrade" label="Payment Details Upgrade">
+            <div class="slds-grid slds-wrap">
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="AgreementValue" aura:id="AgreementValue1" type="number" formatter="currency" disabled="true"  value="{!v.bookingInfo.Allotment_Premium__c}" label="Agreement Value" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalRecievedAmount" aura:id="TotalRecievedAmount1"  type="number" required='true' formatter="currency" value="{!v.bookingInfo.RW_Total_Receipt_Amount_Received__c}" label="Total Received Amount (R)" /> 
+                    </div>
+                      
+                	 <div class="slds-size_3-of-12"  style="padding-left:10px;">
+                           <lightning:input name="CGST" aura:id="CGST1" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.CGST__c}" label="CGST (B)" />
+                    </div>
+            
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="SCGST" aura:id="SGST1" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.SGST__c}" label="SCGST (C)" />
+                    </div>
+                
+                    
+            
+            		<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="BrokerageAmount" type="number" formatter="currency" aura:id="BrokerageAmount1" required='true'  value="{!v.bookingInfo.Brokerage_Amount__c}" label="Brokerage Amount (D)" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="InterestValue" type="number" formatter="currency" aura:id="InterestValue1" required='true'  value="{!v.bookingInfo.Interest_with_GST__c}" label="Interest with GST" />
+                    </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="Taxesifany" type="number" formatter="currency" aura:id="Taxesifany1" required='true'  value="{!v.bookingInfo.TAX__c}" label="TAX" />
+                    </div>
+                                      
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="TDS" type="number" formatter="currency" aura:id="TDS1" required='true' value="{!v.bookingInfo.Total_TDS_Amount_Paid_In_Rs__c}" label="TDS (G)" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="MVATM" type="number" formatter="currency" aura:id="MVATM1" required='true'  value="{!v.bookingInfo.MVAT__c}" label="MVAT(M) (H)" />
+                    </div>
+                	
+                	<div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="gst" type="number" formatter="currency" required='true' aura:id="gst1" value="{!v.bookingInfo.GST__c}"  label="GST" />
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input aura:id="referralAmt1" name="referralAmt"  type="number" formatter="currency" value="{!v.bookingInfo.Referral_Amount__c}" label="Referral Amount" />
+                    </div>
+                	
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="voucherScheme" disabled="true" value="{!v.bookingInfo.Scheme_of_Customer__r.Name}" label="Voucher Deductions " />
+                    </div>
+                
+                	<!--<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalRefundAmount" type="number" disabled="true" formatter="currency" aura:id="TotalRefundAmount1" value="{!v.bookingInfo.Total_Refund_Amount__c}" label="Total Refund Amount(R-(A+B+C+D+E+F+G+H+I))" />
+                    </div>-->
+                
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                        <lightning:input name="swipeCharges" type="number" formatter="currency" aura:id="swipeCharges1" required='true' value="{!v.bookingInfo.Swipe_Charges__c}" label="Swipe Charges" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                        <lightning:input name="brokeragePaid" type="number" formatter="currency" aura:id="brokeragePaid1" required='true' value="{!v.bookingInfo.Brokerage_Paid__c}" label="Brokerage Paid" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                        <lightning:input name="stmpDutyAmt" type="number" formatter="currency" aura:id="stmpDutyAmt" required='true' value="{!v.bookingInfo.Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c}" label="Stamp Duty Cheque Exchang Amt to be paid" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                        <lightning:input name="totalAmtToBeTransfrd" type="number" formatter="currency" aura:id="totalAmtToBeTransfrd" required='true' value="{!v.bookingInfo.Total_Amount_to_be_Transferred__c}" label="Total Amount To Be Transferred" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                        <lightning:input name="note" formatter="text" aura:id="note" required='true' value="{!v.bookingInfo.NOTE__c}" label="Comments" />
+                        
+                    </div>
+                
+            </div> 
+        </lightning:accordionSection>
+       
+         <lightning:accordionSection name="FlatTransferDetails" label="Flat Transfer Details">
+            <div class="slds-grid slds-wrap">
+            	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                    <lightning:recordEditForm aura:id="unit" objectApiName="Booking__c" onsuccess="{!c.unitDetails}">
+                        <lightning:inputField  fieldName="New_Unit__c" value="{!v.unitId}" onchange="{!c.unitDetails}"/>
+                    </lightning:recordEditForm>
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                    <lightning:input name="booking" type="text" aura:id="booking" value="{!v.unitInfo.Booking__r.Name}" label="Booking" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                    <lightning:input name="crn" type="number" aura:id="crn"  value="{!v.unitInfo.Booking__r.Opportunity__r.SAP_Customer_Number__c}" label="CRN" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                    <lightning:input name="applicant1" type="text" aura:id="applicant1" value="{!v.unitInfo.Booking__r.Primary_Applicant_Name__c}" label="1st Applicant" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;">
+                    <lightning:input name="newAgrVal" type="number" formatter="currency" aura:id="newAgrVal" value="{!v.unitInfo.Booking__r.Allotment_Premium__c}" label="New Agreement Value" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;">
+                    <lightning:input name="saleabeArea" type="number" aura:id="saleabeArea" value="{!v.unitInfo.Saleable_Area__c}" label="Saleable Area(Sq Ft)" />
+                </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;">
+                    <lightning:input name="nrr" type="number" formatter="currency" aura:id="nrr" value="{!v.unitInfo.Booking__r.Net_Rate__c}" label="Net Rate(NRR) of New Unit" />
+                </div>
+            </div> 
+        </lightning:accordionSection>
+        </aura:if>
+  		
+        </lightning:accordion>
+        <div class="slds-col slds-align_absolute-center " style="background-color :white;border:0px;height:33px;;border-bottom:1px solid #bdb3b3;padding-top:0px;">
+        <aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit cancelled'}">
+            	<lightning:button class="slds-button slds-button_brand" variant="brand"  label="Calculate Forfeiture Amount" onclick="{!c.cal}"  />
+       			 <lightning:button class="slds-button slds-button_brand" variant="brand" label="Save and Generate Checklist" onclick="{!c.saveCancellationReason}"  />
+           </aura:if>
+           <aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit transfer'}">
+            <lightning:button class="slds-button slds-button_brand" variant="brand" label="Save" onclick="{!c.unitTransferSave}"  />     
+           </aura:if>
+            <!--  <lightning:button class="slds-button slds-button_brand" variant="brand" label="Generate Checklist" onclick="{!c.generateChecklist}"  /> -->
+        </div>
+	</aura:if>
+    
+    <aura:if isTrue="{!v.bookingInfo.Cancellation_Requested_Status__c != 'Cancellation Confirmed'}">
+    <div class="slds-col" style="background-color : #263238;color:white;margin-top:100px;">
+      <div class="slds-box slds-align_absolute-center">            
+  			<div class="slds-text-heading_medium">            
+            <b>!! Cancellation Requested Status should be 'Cancelled Confirmed' before opening this form.</b>
+            </div>
+	</div>          
+	</div>
+    </aura:if>
+        <aura:set attribute="else">
+
+            <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+        <lightning:accordionSection name="BookingDetails" label="Booking Details">
+             <!--<aura:set attribute="actions">
+                    <lightning:button class="slds-button slds-button_brand" variant="brand" label="Save Forfieture Details" onclick="{!c.saveCancellationReason}"  />
+               	<lightning:button class="slds-button slds-button_brand" variant="brand" label="Generate Checklist" onclick="{!c.generateChecklist}"  /> 
+            </aura:set> -->
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="projectName" disabled="true" value="{!v.bookingInfo.Project__r.Name}" label="Project Name" />
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="projectUnit" disabled="true" value="{!v.bookingInfo.Unit_No__r.RW_Param4__c }" label="Project Unit" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="towerName" disabled="true" value="{!v.bookingInfo.Unit_No__r.TowerName__r.Name }" label="Tower Name" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="applicantName" disabled="true" value="{!v.bookingInfo.Primary_Applicant_Name__c}" label="Primary Applicant Name" />
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="otherApplicant" disabled="true" value="{!v.bookingInfo.Opportunity__r.Other_Applicants_Name__c}" label="Other Applicant Name" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="bookingStatus" disabled="true" value="{!v.bookingInfo.Status__c}" label="Booking Status" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                           <lightning:input name="bookingSource" disabled="true" value="{!v.bookingInfo.Source_of_Booking__c}" label="Source of Booking" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                          <lightning:input type="date"  disabled="true" name="input1" aura:id="bookingdate" value="{!v.bookingInfo.Booking_Date__c}" label="Date of booking"  />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                          <lightning:input type="date"  disabled="true" name="registrationstatus" aura:id="registrationStatus" value="{!v.bookingInfo.RW_Registration_Status__c}" label="Registration Status"  />
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                        
+                   	<lightning:select name="select" disabled="true" label="Select Cancellation Reason" required="true" value="{!v.bookingInfo.Cancellation_Reason__c}" aura:id="cancellationReason">
+                        <option value="--None--" text="--None--"></option>
+                        <option value="Unit cancelled" text="Unit cancelled"></option>
+                        <option value="Unit transfer" text="Unit transfer"></option>
+                     </lightning:select>   
+                    
+                    </div>
+                    
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">                    
+                   	<lightning:select name="select" disabled="true" label="Select Sub Cancellation Reason" value="{!v.bookingInfo.Cancellation_Sub_reason__c}"  aura:id="cancellationSubReason">
+                        <option value="--None--" text="--None--"></option>
+                        
+                        <option value="Z6" text="Cancer Patient"></option>
+                        <option value="R6" text="Change of Mind"></option>
+                        <option value="Competitor" text="Competitor"></option>
+                        <option value="R7" text="Policy Driven Cancellation- Payment Defaulter"></option>
+                        <option value="Z4" text="Financial Crisis"></option>
+                        <option value="Z9" text="Legal Issue"></option>
+                        <option value="Z5" text="Loss of Job"></option>
+                        <option value="Z3" text="Home Loan Eligibility"></option>
+                        <option value="Media" text="Media"></option>
+                        <option value="Z2" text="Medical Emergencies"></option>
+                        <option value="Z7" text="Non Approval -Building Construction Plan"></option>
+                        <option value="Z3" text="Non Approval of Bank Loan - Eligibility"></option>
+                        <option value="Non Contactable" text="Non Contactable"></option>
+                        <option value="R8" text="Others"></option>
+                        <option value="Z1" text="Personal Exigencies"></option>
+                        <option value="R1" text="Demise of the Main Applicant"></option>
+                        <option value="R2" text="Dispute over Agreement Clauses	"></option>                        
+                        <option value="R3" text="Upgrade"></option>
+                        <option value="Z8" text="Unit Transfer"></option>
+                        <option value="R4" text="Unsuitable Possession Date"></option>
+                        <option value="R5" text="Vastu Compliance"></option>
+                       </lightning:select>   
+                    </div>
+                   
+                             
+                    <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                    <lightning:input name="cancellationdescription" disabled="true" aura:id="cancellationdescription" label="Cancellation Description" value="{!v.bookingInfo.Reason_For_Cancellation__c}"  />
+                    </div>
+                        
+                    
+                    <!--<div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                          <lightning:input type="date" name="input1" aura:id="cancelRequestDate" value="{!v.bookingInfo.Date_of_Cancellation__c}" label="Cancellation Request Confirmation Date"  />
+                    </div> -->
+                    
+                   <!-- <div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                           <lightning:input name="cancellationRequestStatus" disabled="true" aura:id="cancellationRequestStatus" value="{!v.bookingInfo.Cancellation_Requested_Status__c}" label="Cancellation Request Status" />
+                    </div> -->
+                    
+                </div>               
+        </lightning:accordionSection>
+       
+        <aura:if isTrue = "{!v.bookingInfo.Cancellation_Reason__c == 'Unit cancelled'}">
+        <lightning:accordionSection name="PaymentDetails" label="Payment and Forfieture Details">
+            <div class="slds-grid slds-wrap">
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="AgreementValue" aura:id="AgreementValue" type="number" formatter="currency" disabled="true"  value="{!v.bookingInfo.Allotment_Premium__c}" label="Agreement Value" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalRecievedAmount" aura:id="TotalRecievedAmount" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.RW_Total_Receipt_Amount_Received__c}" label="Total Received Amount (R)" /> <!--"-->
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-top:5px;padding-left:10px;">
+                           <lightning:input name="ForfeiPercentage" type="decimal"  required='true' aura:id="ForfeiPercentage" disabled="true"  value="{!v.bookingInfo.Forfeit_Percentage__c}" label="Forfeit Percentage" />
+                    </div>
+                
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                     <lightning:select name="select"  required='true' label="Select Forfeiture Amount Type" value="{!v.bookingInfo.Forfeiture_Amount_Type__c}" disabled="true" aura:id="ForfeitureAmounttype">
+                        <option value="--Select--" text="--None--"></option>
+                        <option value="Total received amount" text="Total received amount"></option>
+                        <option value="Agreement value" text="Agreement value"></option>
+                     </lightning:select>
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="Forfeiture Amount"  aura:id="ForfeitureAmount" disabled="true" value="{!v.bookingInfo.Forfeiture_Amount__c}"  label="Forfeiture Amount (A)" />
+                    </div>
+                      
+                	 <div class="slds-size_3-of-12"  style="padding-left:10px;">
+                           <lightning:input name="CGST" aura:id="CGST" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.CGST__c}" label="CGST (B)" />
+                    </div>
+            
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="SCGST" aura:id="SGST" type="number" formatter="currency" disabled="true" value="{!v.bookingInfo.SGST__c}" label="SCGST (C)" />
+                    </div>
+                    
+            
+            		<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="BrokerageAmount" type="number" formatter="currency" disabled="true" aura:id="BrokerageAmount" required='true'  value="{!v.bookingInfo.Brokerage_Amount__c}" label="Brokerage Amount (D)" />
+                    </div>
+                    <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="InterestValue" type="number" formatter="currency" disabled="true" aura:id="InterestValue" required='true'  value="{!v.bookingInfo.Interest_Value__c}" label="Interest Value (E)" />
+                    </div>
+                <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="Taxesifany" type="number" formatter="currency" disabled="true" aura:id="Taxesifany" required='true'  value="{!v.bookingInfo.Taxes_if_any__c}" label="Taxes (if any) (F)" />
+                    </div>
+                                      
+                    <div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="TDS" type="number" formatter="currency" aura:id="TDS" disabled="true" required='true' value="{!v.bookingInfo.RW_Total_TDS_Outstanding__c}" label="TDS(G)" />
+                    </div>
+                	<div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="MVATM" type="number" formatter="currency" aura:id="MVATM" disabled="true" required='true'  value="{!v.bookingInfo.MVAT__c}" label="MVAT(M) (H)" />
+                    </div>
+                	
+                	<div class="slds-size_3-of-12" style="padding-left:10px;padding-top:5px;">
+                           <lightning:input name="Otherforfeitureamount" type="number" formatter="currency" required='true' disabled="true" aura:id="Otherforfeitureamount" value="{!v.bookingInfo.GST_Tax_G__c}"  label="GST Tax" />
+                    </div>
+                
+                	<div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalRefundAmount" disabled="true" type="number" formatter="currency" aura:id="TotalRefundAmount" value="{!v.bookingInfo.Total_Refund_Amount__c}" label="Total Refund Amount (R-(A+B+C+D+E+F+G+H+I))" />
+                    </div>
+            		
+            		<div class="slds-size_3-of-12" style="padding-left:10px;">
+                           <lightning:input name="FinalRefundAmount" type="number" formatter="currency" disabled="true" aura:id="FinalRefundAmount" required='true' value="{!v.bookingInfo.Final_Refund_Amount__c}" label="Final Refund Amount" />
+                    </div>
+                	
+                	 <div class="slds-size_3-of-12" style="padding-left:10px;">
+                                <lightning:input name="TotalForfeitureAmount" type="number" formatter="currency" aura:id="TotalForfeitureAmount" disabled="true"  value="{!v.bookingInfo.Total_Forfeiture_Amount__c}" label="Total Forfeiture Amount (A+B+C+D+E+F+G+H+I)" />
+                    </div>
+                	
+                	
+            
+            </div> 
+        </lightning:accordionSection>
+        </aura:if>
+  		
+        </lightning:accordion>
+             <div class="slds-col-4" style="background-color : #263238;color:white;">
+     		 <div class="slds-box slds-align_absolute-center">            
+  			<div class="slds-text-heading_medium">            
+            <b>!!This booking is already cancelled</b>
+            </div>
+	</div>          
+	</div> 
+        </aura:set>
+        
+    </aura:if>
+    
+
+
+    <lightning:spinner aura:id="mySpinner" class="slds-hide" />
+</aura:component>

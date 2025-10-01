@@ -1,0 +1,52 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+<aura:attribute name="RunwalHomeWrapList" type="List" />  
+<aura:attribute name="selectedTabBookingId" type="String" /> 
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    
+     <lightning:tabset selectedTabId="{!v.selectedTabBookingId}">
+                 <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                     <lightning:tab label="{!'Applicant Profile for Booking '+ bookvar.unitNumber}" id="{!bookvar.BookingId}">
+    
+    <!--<aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">-->
+						 <lightning:accordion aura:id="accordion" activeSectionName="Primary Applicant" allowMultipleSectionsOpen="true">
+                         <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                             <aura:if isTrue="{!appdetvar.appNumber == 'Primary Applicant'}">
+                            <lightning:accordionSection name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                                <c:CustomerPortalIndividualApplicantDetails applicantdetails="{!appdetvar}"/>
+                             </lightning:accordionSection>
+                             </aura:if>
+                        </aura:iteration> 
+                             <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                             <aura:if isTrue="{!appdetvar.appNumber == 'Second Applicant'}">
+                            <lightning:accordionSection name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                             	<c:CustomerPortalIndividualApplicantDetails applicantdetails="{!appdetvar}"/>
+                             </lightning:accordionSection>
+                             </aura:if>
+                        </aura:iteration>
+                             <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                             <aura:if isTrue="{!appdetvar.appNumber == 'Third Applicant'}">
+                            <lightning:accordionSection name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                             	<c:CustomerPortalIndividualApplicantDetails applicantdetails="{!appdetvar}"/>
+                             </lightning:accordionSection>
+                             </aura:if>
+                        </aura:iteration>
+                             <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                             <aura:if isTrue="{!appdetvar.appNumber == 'Fourth Applicant'}">
+                            <lightning:accordionSection name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                             <c:CustomerPortalIndividualApplicantDetails applicantdetails="{!appdetvar}"/>
+                             </lightning:accordionSection>
+                             </aura:if>
+                        </aura:iteration>
+                             <aura:iteration items="{!bookvar.appDetailsWrapperList}" var="appdetvar"> 
+                             <aura:if isTrue="{!appdetvar.appNumber == 'Fifth Applicant'}">
+                            <lightning:accordionSection name="{!appdetvar.appNumber}" label="{!appdetvar.appNumber}">
+                             <c:CustomerPortalIndividualApplicantDetails applicantdetails="{!appdetvar}"/>
+                             </lightning:accordionSection>
+                             </aura:if>
+                        </aura:iteration>
+                        
+        				</lightning:accordion>
+                     </lightning:tab>
+                </aura:iteration>
+    </lightning:tabset>
+</aura:component>

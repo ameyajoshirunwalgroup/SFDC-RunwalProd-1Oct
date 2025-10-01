@@ -1,0 +1,488 @@
+<aura:component Controller = "DigitalBookingController" implements="flexipage:availableforRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+    <ltng:require scripts="{!$Resource.BillDesk}" /> 
+    <aura:attribute name="Spinner" type="boolean" default="true"/>
+    <aura:attribute name="childSpinner" type="boolean" default="false"/>
+    <aura:attribute name="isLinkExpired" type="boolean" default="true"/>
+    <aura:attribute name="isGatewayAvailable" type="boolean" default="false"/>
+    <aura:attribute name="isBookingSuccess" type="boolean" default="false"/>
+    <aura:attribute name="isPaymentFailure" type="String" />
+    <aura:attribute name="communityURL" type="String" />
+    <aura:attribute name="LinkId" type ="String" />
+    <aura:attribute name="encResp" type="String"/>
+    <aura:attribute name="isPaymentSuccess" type="String"/>
+    <aura:attribute name="orderNo" type="String" />
+    <aura:attribute name="isInvalid" type="boolean" default="false"/>
+    <aura:attribute name="objectName" type="string" default="Applicant_Details__c"/>
+    <aura:attribute name="pickListMap" type="map"/>
+    <aura:attribute name="parentFieldLabel" type="string" />
+    <aura:attribute name="childFieldLabel" type="string"/>
+    <aura:attribute name="CityPicklistOptions" type="String[]" />
+    <aura:attribute name="GenderPicklistOptions" type="String[]"/>
+    <aura:attribute name="MaritalStatusPicklistOptions" type="String[]"/>
+    <aura:attribute name="DesignationPicklistOptions" type="String[]"/>
+    <aura:attribute name="ApplicantPicklistOptions" type="String[]"/>
+    <aura:attribute name="AddressProofDocument" type="String[]"/>
+    <aura:attribute name="OccupationPicklistOptions" type="string[]"/>
+    <aura:attribute name="NationalityPicklistOptions" type="string[]"/>
+    <aura:attribute name="SalutationPicklistOptions" type="string[]"/>
+    <aura:attribute name="TypeOfOriginOptions" type="string[]"/>
+    <aura:attribute name="EncryptedProjectId" type="string"/>
+    <aura:attribute name="showGenerateOTP" type="Boolean" default="true" />
+    <aura:attribute name="showValidateOTP" type="Boolean" default="false" />
+    <aura:attribute name="digitalPaymentMode" type="Boolean" default="false" />
+    <aura:attribute name="showSubmitButton" type="Boolean"  default="f" />
+    <aura:attribute name="OTPEntered" type="String" />
+    <aura:attribute name="ActualOTP" type="String" />
+    <aura:attribute name="InvalidOTP" type="String" />
+    <aura:attribute name="ContactPersonPicklistOptions" type="string[]"/>
+    <aura:attribute name="CountryPicklistOptions" type="string[]" />
+    <aura:attribute name="applicableOffer" type ="Applicable_Offer__c[]" />
+    <aura:attribute name="availedOffer" type ="Applicable_Offer__c[]" />
+    <aura:attribute name="accessCode" type="String"/>
+    <aura:attribute name="selectTab" type="String" default="tabNum0"/>
+    <aura:attribute name="PaymentGateway" type="String"/>
+    <aura:attribute name="msg" type="String"/>
+    <aura:attribute name="bRecId" type="String"/> 
+    <aura:attribute name="BillDeskTC" type="Boolean" default='false'/>
+    <aura:attribute name="RecieptsList" type ="Receipt__c[]" />
+    <lightning:navigation aura:id="navService"/>
+    
+    <aura:attribute name="dependentPicklist" type ="Map" default="{State__c:'Country__c',Subtype_Of_Applicant__c:'Type_Of_Applicant__c'}"/>
+    <aura:attribute name="data" type="String"/>
+    <!-- <aura:attribute name="optyId" type="String"/>-->
+    <!--<aura:attribute name="bookId" type="String"/>-->
+    <!-- <aura:attribute name="linkId" type="String"/>-->
+    <aura:attribute name="booking" type ="Booking__c" />
+    <aura:attribute name="gateway" type ="Payment_Gateway__mdt" />
+    <aura:attribute name="applicantDetails" type ="Applicant_details__C[]" />
+    <aura:attribute name="UnitNo" type="String"/>
+    <aura:attribute name="Project" type="String"/>
+    <aura:attribute name="maxApplicants" type="Decimal" />
+    <aura:attribute name="addDisabled" type="boolean" default="false"/>
+    <aura:attribute name="removeDisabled" type="boolean" default="false"/>
+    <aura:attribute name="statePicklist" type="Object"/>
+    <aura:attribute name="ResidentialPicklist" type="Object"/>
+    <aura:attribute name="ReadTermsandConditions" type="Boolean" default="false" />
+    <aura:attribute name="tokenAmount" type="Decimal"  />
+    <aura:attribute name="errorList" type ="Object" />
+    <aura:attribute name="applicantValidationError" type="Boolean"/>
+    <aura:attribute name="paymentsValidationError" type="Boolean"/>
+    <aura:attribute name="paymentsValidationErrorList" type="List"/>
+    
+    <aura:attribute name="applicantErrorList" type="List"/>
+    <!--<aura:handler name="change" value="{!v.applicantDetails}" action="{!c.setTab}"/>-->
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    
+    <div class="slds-grid slds-gutters slds-wrap background_color">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="{!$Browser.isPhone ? 'slds-p-around_small slds-text-align_center' :'slds-p-around_small '}"  >
+                <div class="logoContainer"></div>
+                <img src="{!$Resource.Runwal}"/>
+            </div>
+        </div>
+        <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12"><div class="{!$Browser.isPhone ? 'slds-p-around_small slds-text-align_center' :'slds-p-around_small '}"  ><div class="logoContainer"></div><img src="{!$Resource.Runwal}"/></div></div>-->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-p-top_x-large">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12"></div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            <div class="slds-p-right_none"></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 ">
+                            <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                                <div class="slds-p-around_small slds-text-heading_small">
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-text-heading_medium slds-p-left_medium slds-align_absolute-center' :'slds-p-top_x-large slds-text-heading_large slds-p-left_medium slds-align_absolute-center'}" >
+                                        <b>
+                                            <u>BOOKING FORM</u>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">xxx</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <aura:if isTrue="{!v.isInvalid}">
+            <div class="slds-text-heading_medium slds-align_absolute-center slds-text-color_error slds-text-title_bold">                
+                Invalid URL has been entered, Please contact your Sales Manager
+            </div>
+            <aura:set attribute="else">           
+                <aura:if isTrue="{!and (or(not(empty(v.encResp)),not(empty(v.msg))),v.isPaymentSuccess == 'Success')}">
+                    <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+                        <div class="slds-text-color_success"><label>Thank You ! Your Booking Submission and Payment is successful . Your Booking Reference Number is <b>{!v.booking.Name}</b> </label> </div>
+                    </div>
+                    
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!and (or(not(empty(v.encResp)),not(empty(v.msg))),v.isPaymentFailure == 'Failure')}">
+                            <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+                                <div class="slds-text-color_success"><label>Payment Failed . Please Try again after some time by opening the booking Form link through email </label> </div>
+                            </div>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.isBookingSuccess }">  
+                                    <div class="slds-p-around_small slds-text-heading_small slds-align_absolute-center">
+                                        <div class="slds-text-color_success"><label>Thank You ! Your Booking has been submitted successfully . Your booking Reference Number is <b>{!v.booking.Name}</b> </label> </div>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        
+                                        <aura:if isTrue="{! not(v.isLinkExpired)}">
+                                            <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                                                <div class="slds-p-around_small slds-text-heading_small">
+                                                    
+                                                    <div class="slds-text-title_bold">Thank you for expressing your interest in Apartment : {!v.UnitNo} in Project : {!v.Project}</div>
+                                                    <br/>    Your Reference number for Booking form is : <b>{!v.booking.Name}</b>
+                                                    
+                                                </div>
+                                                <lightning:card>
+                                                    <div class="slds-clearfix">
+                                                        <div class="slds-float_right">
+                                                            Please note that all fields marked with an asterisk (*) are required.
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-section slds-is-open slds-text-heading_small">
+                                                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">BOOKING DETAILS</span>
+                                                        </h3>
+                                                        <div class="slds-grid slds-gutters slds-wrap" >
+                                                            <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Source</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Source</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Sub-Source</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                        <div class="slds-p-around_small">
+                                            <div class="slds-p-top_medium">
+                                                <span >Sub-Source</span>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <div class="slds-p-top_medium">
+                                                                        <span >Sales Manager</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <lightning:input type="text" aura:id="RW_SaleManager" value="{!v.booking.Sales_Managers__c	}" disabled="true" />
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <div class="slds-p-top_medium">
+                                                                        <span >Sourcing Manager</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <lightning:input type="text" aura:id="RW_SaleManager" value="{!v.booking.Sourcing_Mananger__c	}" disabled="true" />
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <div class="slds-p-top_medium">
+                                                                        <span >Token Amount</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <lightning:input type="text" aura:id="RW_TokenAmount" value="{!v.booking.Token_Amount__c}" disabled="true" />
+                                                                </div>
+                                                            </div>
+                                                       <!--     <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <div class="slds-p-top_medium">
+                                                                        <span >Final Quotation</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    <div class="slds-p-top_medium">
+                                                                        <span >Quotation</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>-->
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="slds-section slds-is-open">
+                                                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">APPLICANT DETAILS</span>
+                                                        </h3>
+                                                        <div class="slds-clearfix">
+                                                            <div class="slds-float_left  slds-p-around_small">
+                                                                <lightning:button label="Add Applicant" iconName="utility:add" iconPosition="right"  variant="brand" onclick="{!c.addApplicant }" disabled="{!v.addDisabled}"/>
+                                                                <lightning:button label="Remove Applicant" iconName="utility:delete" iconPosition="right" variant="destructive" onclick="{! c.removeApplicant }" disabled="{!v.removeDisabled}"/>
+                                                                <aura:if isTrue="{!(v.applicantValidationError)}">
+                                                                    
+                                                                    <div class="slds-clearfix;" style="padding:15px;">
+                                                                        <div class="slds-float_none" style="background-color:#c23934;color:white;border-radius: 8px 8px 2px 2px;font-size:13px;">
+                                                                           <lightning:icon iconName="utility:error" alternativeText="Error!" title="Error" /> Please resolve the below errors
+                                                                        </div>
+                                                                        <aura:iteration items="{!v.applicantErrorList}" var="errors">
+                                                                            
+                                                                            <div class="slds-text-heading_medium slds-align_left slds-text-color_error slds-text-title_bold">                
+                                                                                <lightning:icon iconName="utility:error" alternativeText="Error!" title="Error" />
+                                                                                {!errors}
+                                                                            </div>
+                                                                        </aura:iteration>
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                    
+                                                                </aura:if>
+                                                            </div>
+                                                        </div>
+                                                        <lightning:tabset  variant="scoped" class ="slds-text-heading_small" aura:id="applicanttab"  selectedTabId = "{!v.selectTab}">
+                                                            <aura:if isTrue="{! not( v.childSpinner)}">                                   
+                                                                <aura:iteration items="{!v.applicantDetails}" var="applicant" indexVar="key">
+                                                                    <lightning:tab label="{#'Applicant '+(key+1)}" aura:id="jf" id="{!'tabNum' + key}" >
+                                                                        <c:ApplicantDetailComponent aura:id="appDetails" applicantDetail="{! applicant}" SalutationPicklistOptions="{!v.SalutationPicklistOptions}" GenderPicklistOptions="{!v.GenderPicklistOptions	}" 
+                                                                                                    NationalityPicklistOptions="{!v.NationalityPicklistOptions}" MaritalStatusPicklistOptions="{!v.MaritalStatusPicklistOptions}" OccupationPicklistOptions="{!v.OccupationPicklistOptions}"
+                                                                                                    DesignationPicklistOptions="{!v.DesignationPicklistOptions}" ContactPersonPicklistOptions="{!v.ContactPersonPicklistOptions}"
+                                                                                                    CountryPicklistOptions="{!v.CountryPicklistOptions}" statePicklist="{!v.statePicklist}" CityPicklistOptions="{!v.CityPicklistOptions}" ApplicantPicklistOptions="{!v.ApplicantPicklistOptions}" ResidentialPicklist="{!v.ResidentialPicklist}"
+                                                                                                    AddressProofDocument="{!v.AddressProofDocument}" TypeOfOriginOptions="{!v.TypeOfOriginOptions}" bookingId="{!v.booking.Id}"   oppId="{!v.booking.Customer__c}"/>
+                                                                    </lightning:tab>
+                                                                </aura:iteration>
+                                                                <aura:set attribute="else">
+                                                                    <div class="slds-spinner_container">
+                                                                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                                            <div class="slds-spinner__dot-a"></div>
+                                                                            <div class="slds-spinner__dot-b"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </lightning:tabset>
+                                                    </div>
+                                                    <aura:if isTrue="{!not(empty(v.applicableOffer))}">
+                                                        <div class="slds-section slds-is-open">
+                                                            <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Applicable Offers</span>
+                                                            </h3>
+                                                            <div class="slds-p-around_small">
+                                                                <c:ApplicableOffers data="{!v.applicableOffer}"/>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!not(empty(v.availedOffer))}">
+                                                        <div class="slds-section slds-is-open">
+                                                            <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Availed Offers</span>
+                                                            </h3>
+                                                            <div class="slds-p-around_small">
+                                                                <c:ApplicableOffers data="{!v.availedOffer}"/>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!not(empty(v.RecieptsList))}">
+                                                        
+                                                        <div class="slds-section slds-is-open">
+                                                            <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">PAYMENT DETAILS</span>
+                                                            </h3>
+                                                            <aura:if isTrue="{!(v.paymentsValidationError)}">
+                                                      <div class="slds-clearfix;" style="padding:15px;">
+                                                          <div class="slds-float_none" style="background-color:#c23934;color:white;border-radius: 8px 8px 2px 2px;font-size:13px;">
+                                                              <lightning:icon iconName="utility:error" alternativeText="Error!" title="Error" /> Please resolve the below errors
+                                                                       </div>
+                                                                    <aura:iteration items="{!v.paymentsValidationErrorList}" var="errors">
+                                                                            
+                                                                            <div class="slds-text-heading_medium slds-align_left slds-text-color_error slds-text-title_bold">                
+                                                                                <lightning:icon iconName="utility:error" alternativeText="Error!" title="Error" />
+                                                                                {!errors}
+                                                                            </div>
+                                                                        </aura:iteration>
+                                                                    </div>
+                                                                
+                                                            </aura:if>
+                                                            <div class="slds-clearfix">
+                                                                <div class="slds-float_right">
+                                                                    <span class="asterisk">Please select Payment mode to proceed.</span>
+                                                                </div>
+                                                            </div>
+                                                            <c:PaymentsComponent digitalPaymentMode ="{!v.digitalPaymentMode}" tokenAmount="{!v.tokenAmount}" isGatewayAvailable="{!v.isGatewayAvailable}" booking="{!v.booking}" RecieptsList="{!v.RecieptsList}" />
+                                                        </div>
+                                                        
+                                                    </aura:if>
+                                                    
+                                                    <div class="slds-section slds-is-open">
+                                                        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+                                                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">TERMS AND CONDITIONS</span>
+                                                        </h3>
+                                                        <div class="slds-clearfix">
+                                                            <div class="slds-float_right">
+                                                                <span class="asterisk">Please read Terms and Condition before proceeding</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-grid slds-gutters slds-wrap" >
+                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                                                                <div class="slds-p-around_small">
+                                                                    
+                                                                    <div class="slds-grid slds-gutters slds-wrap" >
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+                                                                            <lightning:input type="checkbox" aura:id="tc" checked="{!v.booking.Terms_and_Conditions__c}"  />
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_7-of-12">
+                                                                            I agree to the <a onclick="{!c.redirectToTCPage}"><u>Terms &amp; Conditions</u></a> of Booking
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                       
+                                                        <!--PLN-->
+                                                        <aura:if isTrue="{!and(v.digitalPaymentMode,v.PaymentGateway == 'BillDesk')}">
+                                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                                                                    <div class="slds-p-around_small">
+                                                                        
+                                                                        <div class="slds-grid slds-gutters slds-wrap" >
+                                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+                                                                                <lightning:input type="checkbox" aura:id="tc1" checked="{!v.BillDeskTC}"  />
+                                                                            </div>
+                                                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_7-of-12">
+                                                                                I agree to the <a onclick="{!c.redirectToBillDeskTC}"><u>Terms &amp; Conditions</u></a> of BillDesk
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </aura:if>
+                                                        <!--PLN-->
+                                                        
+                                                    </div>
+                                                    
+                                                    <div class="slds-align_absolute-center" >
+                                                        <aura:if isTrue="{!v.showGenerateOTP}">
+                                                            <lightning:button variant="brand" label="Generate OTP" title="Generate OTP" onclick="{! c.generateOTP }" />
+                                                        </aura:if>
+                                                        <aura:if isTrue="{!v.showValidateOTP}">
+                                                            <div class="slds-grid slds-gutters slds-wrap" >
+                                                                
+                                                                <aura:if isTrue="{!v.InvalidOTP}">
+                                                                    
+                                                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                                                        
+                                                                        <b class="slds-text-color_error "> Sorry, the entered OTP is incorrect. Please try again . </b>
+                                                                        
+                                                                        
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                                                                    </div>
+                                                                    
+                                                                </aura:if>
+                                                                
+                                                                
+                                                                
+                                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                                    <div class="slds-p-around_small">
+                                                                        <div class="slds-p-top_medium">
+                                                                            <span>Please Enter the OTP Number Received on Phone/Email</span>                        
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                                    <div class="slds-p-around_small">
+                                                                        <lightning:input type="text" aura:id="OTPNumber" value="{!v.OTPEntered}" />
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                                                                </div>
+                                                                
+                                                                
+                                                                <div class="slds-align_absolute-center" >
+                                                                    <lightning:button variant="brand" label="Validate OTP" title="Validate OTP" onclick="{! c.validateOTP }" /> 
+                                                                    <lightning:button variant="brand" label="Resend OTP" title="Validate OTP" onclick="{! c.generateOTP }" /> 
+                                                                </div>
+                                                            </div> 
+                                                        </aura:if>
+                                                        <aura:if isTrue="{!v.showSubmitButton}">
+                                                            <form name="paymentForm" aura:id="paymentForm" action="{!$Label.c.ccAvenueURL}" method="POST">
+                                                                <input aura:id="encRequest" type="hidden" name="encRequest" />                           
+                                                                <input type="hidden" aura:id="access_code"  name="access_code" />
+                                                                
+                                                                <aura:if isTrue="{!v.digitalPaymentMode}">
+                                                                    <lightning:button variant="brand" disabled="{!not(v.booking.Terms_and_Conditions__c)}" label="Submit &amp; Pay" title="Pay" onclick="{! c.paymentgatewaybooking }" />
+                                                                    <aura:set attribute="else">
+                                                                        <lightning:button variant="brand" label="Submit" title="Pay" onclick="{! c.chqBooking }" disabled="{!not(v.booking.Terms_and_Conditions__c)}"/>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                                
+                                                            </form>
+                                                        </aura:if>
+                                                        
+                                                    </div>
+                                                </lightning:card>
+                                                
+                                            </div>
+                                            
+                                            <aura:set attribute="else">
+                                                <div class="slds-text-heading_medium slds-align_absolute-center slds-text-color_error slds-text-title_bold">                
+                                                    The Link is expired.Please contact your Sales Manager
+                                                </div>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    <aura:if isTrue="{! ( v.Spinner)}">
+            <div class="slds-spinner_container">
+                <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            
+    </aura:if>
+</aura:component>

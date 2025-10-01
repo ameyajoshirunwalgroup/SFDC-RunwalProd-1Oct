@@ -1,0 +1,91 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="ExhibitionsComponentController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="lstWrap" type="WrapExhibitionData[]"/>
+    
+    <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system.min.css"/>
+    
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate" style="font-size: 15px;font-weight: bold;">
+                Events
+            </div>
+        </div>
+    </div>
+    
+    <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-max-medium-table--stacked-horizontal">
+        <thead>
+            <tr class="slds-text-title--caps">
+                <th scope="col">
+                	<div class="slds-truncate" title="Name">Name</div>
+                </th>
+                
+                <th scope="col">
+                	<div class="slds-truncate" title="Content">Content</div>
+                </th>
+                
+                <th scope="col">
+                	<div class="slds-truncate" title="From">From</div>
+                </th>
+                
+                <th scope="col">
+                	<div class="slds-truncate" title="To">To</div>
+                </th>
+                
+                <th scope="col">
+                	<div class="slds-truncate" title="Image">Image</div>
+                </th>
+                
+                <th scope="col">
+                	<div class="slds-truncate" title="Comming">I am Coming</div>
+                </th>
+                
+                <th scope="col">
+                	<div class="slds-truncate" title="how">With how many</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration var="Wrap" items="{!v.lstWrap}">
+                <tr>
+                    <th scope="row" data-label="Name">
+        				<div class="slds-truncate" style="font-weight: bold;"><ui:outputText value="{!Wrap.strMasterNam}"/> </div>
+      				</th>
+                    <th scope="row" data-label="Content">
+        				<div class="slds-truncate"><ui:outputRichText value="{!Wrap.strContent}" linkify="true"/> </div>
+      				</th>
+                    <th scope="row" data-label="From">
+        				<div class="slds-truncate"><ui:outputText value="{!Wrap.strFrom}"/> </div>
+      				</th>
+                    <th scope="row" data-label="To">
+        				<div class="slds-truncate"><ui:outputText value="{!Wrap.strTo}"/> </div>
+      				</th>
+                    <th scope="row" data-label="Image">
+        				<div class="slds-truncate"> 
+                            <aura:if isTrue="{!Wrap.strImgId != null}">
+                            	<img src="{!Wrap.strImgId}" style="width: 400px;height: 200px;"/> 
+                            </aura:if>
+                        </div>
+      				</th>
+                    <th scope="row" data-label="I am Coming">
+                        <div class="slds-truncate">
+                            <ui:inputcheckbox value="{!Wrap.IMComming}" disabled="{!Wrap.isSaved}" />
+                        </div>
+                    </th>
+                    <th scope="row" data-label="With how many">
+                        <div class="slds-truncate"><ui:inputtext value="{!Wrap.strNumber}" disabled="{!Wrap.isSaved}" /> </div>
+                    </th>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+    <aura:if isTrue="{!v.lstWrap != null}">
+        <div class="slds-align--absolute-center slds-m-around--medium">
+            <ui:button label="Save" Class="slds-button slds-button--brand" press="{!c.addExhibition}"/> 
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.lstWrap == null}">
+        <div class="slds-align--absolute-center slds-m-around--medium">
+        	<b>No Active Exhibition found</b>
+        </div>
+    </aura:if>
+</aura:component>

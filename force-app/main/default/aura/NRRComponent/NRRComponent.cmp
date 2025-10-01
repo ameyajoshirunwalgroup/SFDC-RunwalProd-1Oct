@@ -1,0 +1,311 @@
+<aura:component controller="NRRController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	
+    <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: Show !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 70% !important;
+        max-width: 70% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+     
+    </aura:html>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="NRR" type="object" />
+    <aura:attribute name="oppId" type="String" />
+    <aura:attribute name="CurrentUser" type="Object"/>
+    <force:recordData recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Profile.Name"
+                      targetFields="{!v.CurrentUser}"/>
+    
+    <aura:if isTrue="{!v.CurrentUser.Profile.Name == 'System Administrator'}">
+    	<div class="slds-modal__content">
+        <form class="slds-form--stacked">
+            <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                NRR
+            </h3><br/>
+            <table class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-p-around_none">
+                <thead>
+                <tr> 
+                    <th></th>
+                    <th></th>
+                    <th>Units</th>
+                    <th></th>
+                </tr>     
+            </thead>
+                <tbody>
+                    <tr>
+                    	<td>Opportunity</td>
+                        <td><lightning:recordEditForm objectApiName="Project_Unit__c">
+                            <lightning:inputField fieldName="RW_Customer__c" variant="label-hidden" onchange="{!c.selectOpp}" />
+                            </lightning:recordEditForm>
+                        </td>
+                        <td></td>
+                        <td style="border-bottom-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td><b>Customer Name</b></td>
+                        <td>{!v.NRR.Customer_Name__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Project Name</td>
+                        <td>{!v.NRR.Project_Name__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Flat No</td>
+                        <td>{!v.NRR.Flat_No__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Type - Saleable area (in sq.ft.)</td>
+                        <td>{!v.NRR.Saleable_Area__c}</td>
+                        <td>Sq.ft</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Booking date</td>
+                        <td><lightning:formattedDateTime value ="{!v.NRR.Booking_Date__c}" year="numeric" month="2-digit" day="2-digit"/></td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>No of Car Parkings</td>
+                        <td><lightning:input type="number" label="" name="parkings" value="{!v.NRR.No_of_Parkings__c}" onchange="{!c.updateParkings}"/></td>
+                        <td></td>
+                        <td style="border-bottom-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Base Price</td>
+                        <!--<td>{!v.NRR.Base_Price__c}</td>-->
+                        <td>{!v.NRR.Base_Price_with_Car_Parks__c}</td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: PAGE premium</td>
+                        <td>{!v.NRR.PAGE_premium__c}</td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: Floor Rise</td>
+                        <td>{!v.NRR.Floor_Rise__c}</td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: Garden Premium/NPV/ any other premium</td>
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Garden_Premium_NPV_any_other_premium__c}"/></td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: Premium 1</td>
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Premium_1__c}"/></td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Add: Premium 2</td>
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Premium_2__c}"/></td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: Discount 1</td>
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Discount_1__c}"/></td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: Discount 2</td>
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Discount_2__c}"/></td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>CP passback if Applicable</td>
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.CP_passback_if_Applicable__c}"/></td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: Discount 3 (CP Pass back)</td>
+                        <!--<td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Discount_3_CP_Pass_back__c}"/></td>-->
+                        <td>{!v.NRR.Discount_3_CP_Pass_back__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Total rate</b></td>
+                        <td>{!v.NRR.Total_Rate__c}</td>
+                        <td>PSF</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Agreement Value</b></td>
+                        <td>{!v.NRR.Agreement_Value__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Add: Development Charges</b></td>
+                        <td>{!v.NRR.Development_Charges__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Add: SD in AV</b></td>
+                        <td>{!v.NRR.SD_in_AV__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Agreement value</b></td>
+                        <td>{!v.NRR.Total_Agreement_Value__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <!--<tr>
+                        <td><b>Check : AV as per cost sheet</b></td>
+                        <td>{!v.NRR.AV_as_per_cost_sheet__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>-->
+                    <tr>
+                    	<td>GST %</td>
+                        <td><lightning:input type="number" label="" name="gst" value="{!v.NRR.GST__c}" onchange="{!c.updateGST}"/></td>
+                        <td></td>
+                        <td style="border-bottom-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>AV After {!v.NRR.Project_Unit__r.RW_Project__r.GST_Percentage_Discount__c}% GST discount</b></td>
+                        <td>{!v.NRR.AV_After_2_GST_discount__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>AV for Brokerage (after deduction)</b></td>
+                        <td>{!v.NRR.AV_for_Brokerage_after_deduction__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Passback%</b></td>
+                        <td>{!v.NRR.Passback__c}%</td>
+                        <td></td>
+                        <td><b>Base brokerage</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Brokerage to be paid</b></td>
+                        <td>{!v.NRR.Brokerage_to_be_paid__c}%</td>
+                        <td></td>
+                        <td><b>{!v.NRR.Base_Brokerage__c}%</b></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: CP Pay-out/ Referral payout</td>
+                        <td>{!v.NRR.CP_Pay_out_Referral_payout__c}</td>
+                        <td>Rs.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    	<td>Less:Interest Cost - NPV/Subvention/Deffered/Flexi Payment Cost</td>
+                        <td>{!v.NRR.Interest_Cost_NPV_Subvention_Deffered__c}</td>
+                        <td>Rs.</td>
+                        <td>{!v.NRR.Garden_Premium_NPV_any_other_premium__c}</td>
+                    </tr>
+                    <tr>
+                    	<td>Less: Other Cost if any (Eg. SD Waiver)</td>
+                        <!--<td>{!v.NRR.Other_Cost_if_any_Eg_SD_Waiver__c}</td>-->
+                        <td><lightning:input type="text" label="" name="flatNo" value="{!v.NRR.Other_Cost_if_any_Eg_SD_Waiver__c}"/></td>
+                        <td>Rs.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    	<td>Less: SD impact if applicable</td>
+                        <td>{!v.NRR.SD_impact_if_applicable__c}</td>
+                        <td></td>
+                        <td>
+                        	<lightning:select value="{!v.NRR.SD_Impact_Applicable__c}" onchange="{!c.handleUpdate}">
+                                <option value="No">No</option> 
+                                <option value="Yes">Yes</option>
+                            </lightning:select>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td>Add: GST ITC Benefit</td>
+                        <td>{!v.NRR.GST_ITC_Benefit__c}</td>
+                        <td>Rs.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    	<td>Net value </td>
+                        <td>{!v.NRR.Net_value__c}</td>
+                        <td>Rs.</td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Net Realisation</b></td>
+                        <td><b>{!v.NRR.Net_Realisation__c}</b></td>
+                        <td><b>PSF</b></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td><b>Approved NRR</b></td>
+                        <!--<td><b>{!v.NRR.Approved_NRR__c}</b></td>-->
+                        <td><b><lightning:input type="text" label="" name="approvedNrr" value="{!v.NRR.Approved_NRR__c}"/></b></td>
+                        <td><b>PSF</b></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Source</td>
+                        <td>{!v.NRR.Source__c}</td>
+                        <td></td>
+                        <td style="border-top-style: hidden;"></td>
+                    </tr>
+                    <tr>
+                    	<td>Payment Plan</td>
+                        <td style="text-align:center;" colspan="2">{!v.NRR.Payment_Plan__c}</td>
+                        <td style="border-top-style:hidden;"></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <br/><br/>
+            <div class="slds-align_absolute-center">
+            	<lightning:button aura:id="update" variant="Brand" class="slds-button" label="Calculate" onclick="{!c.handleUpdate}" />
+                <lightning:button aura:id="print" variant="Brand" class="slds-button" label="Print NRR" onclick="{!c.printNRR}" />
+            </div>
+            
+        </form>
+    </div>
+    
+    </aura:if>
+    
+    
+</aura:component>

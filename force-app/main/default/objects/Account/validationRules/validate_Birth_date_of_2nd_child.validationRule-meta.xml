@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>validate_Birth_date_of_2nd_child</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(IF(!ISBLANK(Birth_date_of_2nd_child__c),Birth_date_of_2nd_child__c&gt;=  TODAY(), FALSE ),
+$Label.Disable_all_validations_from_Account == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Birth_date_of_2nd_child__c</errorDisplayField>
+    <errorMessage>Birth date of 2nd child should not be today or greater than today.</errorMessage>
+</ValidationRule>

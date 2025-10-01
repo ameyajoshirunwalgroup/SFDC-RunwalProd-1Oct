@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Base_Brokerage_Without_AOP__c</fullName>
+    <formula>IF(
+	OR(
+		ISPICKVAL(Type__c,&apos;Local&apos;),
+		ISPICKVAL(Type__c,&apos;Both&apos;)
+	),
+	Base_Brokerage_for_Local_Bookings__c-AOP_CP__c,
+	Base_Brokerage_for_OS_NRI__c - AOP_CP__c
+ )
+
+/*IF( ISPICKVAL(Type__c,&apos;Local&apos;) ,Base_Brokerage_for_Local_Bookings__c-AOP_CP__c,		
+				Base_Brokerage_for_OS_NRI__c - AOP_CP__c
+ )*/</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Base Brokerage Without AOP%</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

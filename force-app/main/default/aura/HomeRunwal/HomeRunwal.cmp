@@ -1,0 +1,267 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="RunwalHomeWrap" type="Map" default="{}" />
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="lastlogingtrthanToday" type="Boolean" default="false" />
+    <div>
+        <lightning:card>
+            <lightning:tabset selectedTabId="Booking 1">
+                <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                    <lightning:tab label="{!'Booking Details for '+ bookvar.unitNumber}" id="{!'Booking '+ add(index,1)}">
+                        
+                        
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto" padding="around-small">
+                                <div class="slds-form-element__row">
+                                    
+                                    <div class="slds-p-top_x-large"></div>
+                                    <div class="slds-p-left_x-small">
+                                        <div class="slds-p-top_small"></div>
+                                        <div class="slds-form__row">
+                                            <div class="slds-form__item" role="listitem">
+                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">TOTAL DEMAND RAISED</label>
+                                                    
+                                                    <div class="slds-form-element__control">
+                                                        <lightning:input type="number" id="single-form-element-id-02" readonly="true" formatter="currency" value="{!bookvar.TotalDemandRaised}" />
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-p-top_small"></div>
+                                        <div class="slds-form__row">
+                                            <div class="slds-form__item" role="listitem">
+                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                                    <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">TOTAL DEMAND PAID</label>
+                                                    
+                                                    <div class="slds-form-element__control">
+                                                        <lightning:input type="number" readonly="true" formatter="currency" id="single-form-element-id-02"  value="{! bookvar.TotalDemandPaid}"/>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto" padding="around-small"> 
+                                <div class="slds-form-element__row">
+                                    
+                                    
+                                    <div class="slds-p-left_x-small">
+                                        
+                                        <aura:if isTrue="{!bookvar.inspectionStatus == 'Snagging Completed'}">
+                                     		<div class="slds-p-top_x-large"></div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                        <label class="slds-form-element__label" for="single-form-element-id-02">POSSESION DATE</label>
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <lightning:input type="text" readonly="true" id="single-form-element-id-02"  value="{!bookvar.expectedPossesionDate}" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <aura:set attribute="else">
+                                            <aura:if isTrue="{!bookvar.SDRStatus == 'Received'}">
+                   
+                                         <!--   <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                        <label class="slds-form-element__label" for="single-form-element-id-02">Next Demand Raised</label>
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <lightning:input type="text" id="single-form-element-id-02"  class="slds-input" value="{!'INR '+ bookvar.TotalDemandRaised}" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                            <div class="slds-p-top_xx-large"></div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                        <label class="slds-form-element__label" for="single-form-element-id-02">REGISTRATION DATE</label>
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <lightning:input type="text" readonly="true" id="single-form-element-id-02" value="{!bookvar.ExpectedRegistrationDate}" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+
+                                     </aura:if>
+                                                </aura:set>
+                                        </aura:if>
+                                        
+                                        <!--<aura:iteration items="{!bookvar.demandWrapperList}" var="demandvar"> -->
+                                        <div class="slds-form__row">
+                                            <div class="slds-form__item" role="listitem">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                            
+                            
+                            
+                                
+                                
+                                <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto" padding="around-small"> 
+                                    <div class="slds-form-element__row">
+                                        
+                                        
+                                        <div class="slds-p-left_x-small">
+                                            <div class="slds-p-top_small"></div>
+                                            
+                                            
+                                            <!--<aura:iteration items="{!bookvar.demandWrapperList}" var="demandvar"> -->
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    
+                                                    <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+                                                        <thead>
+                                                            <tr class="slds-text-title_caps">
+                                                                <th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                                                                    <div title="Demand Due Date">Demand Due Date</div>
+                                                                </th>
+                                                                <th class="slds-cell-shrink slds-cell-wrap" scope="col">
+                                                                    <div title="Total Demand Amount Payable">Total Demand Amount Payable</div>
+                                                                </th>
+                                                                
+                                                            </tr>
+                                                        </thead>
+                                                        
+                                                        <tbody>
+                                                            <aura:iteration items="{!bookvar.demandWrapperList}" var="demandvar"> 
+                                                            <aura:if isTrue="{!and(demandvar.demandStatus != 'Paid',demandvar.demandStatus != 'Revoke')}">
+                                                                <tr>
+                                                                    <td class="slds-cell-wrap" scope="row" data-label="Demand Due Date">
+                                                                       <!-- <div>{!demandvar.demandDueDate}</div>-->
+                                                                        <div><lightning:input type="text" id="single-form-element-id-02" readonly="true"  value="{!demandvar.demandDueDate}" /></div>
+                                                                        <!--<lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.onClick}"/>-->
+                                                                    </td>
+                                                                    <td class="slds-cell-wrap" scope="row" data-label="Total Demand Amount Payable">
+                                                                        <!--<div>{!demandvar.TotalDemandAmount}</div>-->
+                                                                        <div><lightning:input type="number" id="single-form-element-id-02" readonly="true" formatter="currency" value="{!demandvar.TotalDemandAmount}" /></div>
+                                                                        <!--<lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.onClick}"/>-->
+                                                                    </td>
+                                                                    
+                                                                </tr>
+                                                            </aura:if>
+                                                            </aura:iteration>
+                                                        </tbody>
+                                                    </table>
+                                                    
+                                                    
+                                                    <!--<c:CustomerPortalBookingDemands aura:id="Demand1" demandData = "{!bookvar.NextDemandDate}"/>  -->                                                        
+                                                </div>
+                                            </div>
+                                            <!-- </aura:iteration>-->
+                                            
+                                            
+                                            <div class="slds-p-top_small"></div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </lightning:layoutItem> 
+                           
+                            
+                            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto" padding="around-small">
+                            </lightning:layoutItem>
+                            <!--<aura:if isTrue="{!bookvar.SDRStatus == 'Received'}">
+                                <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto" padding="around-small">
+                                    <div class="slds-form-element__row">
+                                        
+                                        <div class="slds-p-top_large"></div>
+                                        <div class="slds-p-left_x-small">
+                                            <div class="slds-p-top_small"></div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                        <label class="slds-form-element__label" for="single-form-element-id-02">Next Demand Raised</label>
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <lightning:input type="text" id="single-form-element-id-02"  class="slds-input" value="{!'INR '+ bookvar.TotalDemandRaised}" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-p-top_small"></div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                        <label class="slds-form-element__label" for="single-form-element-id-02">Registration Date</label>
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <lightning:input type="text" id="single-form-element-id-02"  class="slds-input" value="{!bookvar.ExpectedRegistrationDate}" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </lightning:layoutItem>
+                            </aura:if>-->
+                            
+                            <!--<aura:if isTrue="{!bookvar.inspectionStatus == 'Snagging Completed'}">
+                                <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto" padding="around-small">
+                                    <div class="slds-form-element__row">
+                                        
+                                        <div class="slds-p-top_large"></div>
+                                        <div class="slds-p-left_x-small">
+                                            <div class="slds-p-top_small"></div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                        <label class="slds-form-element__label" for="single-form-element-id-02">Possesion Date</label>
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <lightning:input type="text" id="single-form-element-id-02"  class="slds-input" value="{!bookvar.expectedPossesionDate}" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                </lightning:layoutItem>
+                            </aura:if>-->
+                            
+                        </lightning:layout>
+                    </lightning:tab>
+                </aura:iteration>
+                
+            </lightning:tabset>
+        </lightning:card>
+        <lightning:card title="{!v.customLabel}">
+            <p class="slds-p-horizontal_small">{!v.customLabel}</p>
+        </lightning:card>
+
+    </div>
+    <aura:if isTrue="{!v.lastlogingtrthanToday}">
+       <c:customerPortalPopup accountId = "{!v.accountId}"/>
+    </aura:if>
+  
+</aura:component>

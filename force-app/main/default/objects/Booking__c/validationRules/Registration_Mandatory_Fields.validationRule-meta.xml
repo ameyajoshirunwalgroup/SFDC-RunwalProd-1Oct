@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Mandatory_Fields</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(IF(AND(ISPICKVAL(RW_Registration_Status__c ,&apos;Registration Completed&apos;),ISPICKVAL(Type_of_Client__c ,&apos;Local&apos;),Is_Special_Brokerage_Scheme__c = false,
+DATEVALUE(Booking_Date__c ) &gt;DATEVALUE(&quot;2021-01-01&quot;) ),
+AND(OR(ISBLANK(RW_BRL_Number__c),ISBLANK(RW_Registration_Date__c),ISBLANK(RW_Expected_Registration_Date__c), ISBLANK(TEXT(RW_Registration_Type__c)))), null),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>To make Registration Completed. BLR No, Registration Date, Expected Registration Date &amp; Registration Type is Mandatory</errorMessage>
+</ValidationRule>

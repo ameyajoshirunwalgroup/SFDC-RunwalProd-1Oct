@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_RERA_certificate__c</fullName>
+    <formula>AND(ISPICKVAL(Latest_RERA_Upload_Status__c, &apos;Approved&apos;),RERA_Valid_till__c &gt;= Today())</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Valid RERA certificate</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,148 @@
+<template>
+    <div if:true={showRERA}>
+        <lightning-card title="Update RERA Details">
+            <lightning-layout class="x-small">
+
+                <!-- <lightning-file-upload label="Upload Latest RERA Certificate" name="Upload Latest RERA Certificate"
+                        accept={acceptedFormats} onuploadfinished={openfileUpload2} multiple>
+                    </lightning-file-upload> -->
+
+                <!-- <lightning-card title="Upload Document" icon-name="custom:custom14">
+                        <lightning-combobox value={typeofdoclocal} label="Type of Document" placeholder="Select Type"
+                            options={docoptionslocal} onchange={handleChangepicklistdocLocal} required>
+                        </lightning-combobox>
+                    </lightning-card> -->
+                <div class="slds-p-around_medium slds-size_1-of-1 lgc-bg">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </template>
+                    <lightning-layout horizontal-align="spread" pull-to-boundary="small">
+                        <!-- First half -->
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input type="date" label="RERA Valid till?" placeholder="Select RERA Expiry Date"
+                                min={today} value={reraexpDate} onchange={handleReraExpDateChange} required>
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <!-- Second half -->
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input type="file" label="Upload Document" onchange={openfileUpload2}
+                                accept={acceptedFormats}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+
+
+            </lightning-layout>
+
+            <!--div class="slds-col">
+                <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handlesave} label="Submit"></lightning-button>
+                </div-->
+            <!-- <template if:true={data}>
+                <lightning-card title="Uploaded Files" icon-name="standard:account">
+                    <div style="width: auto;">
+                        <lightning-datatable data={data} columns={columns} key-field="id">
+                        </lightning-datatable>
+                    </div>
+
+                </lightning-card>
+            </template>
+
+            <template if:true={data}>
+                <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handlesave}
+                    label="Submit">
+                </lightning-button>
+            </template> -->
+
+            <!-- <lightning-card title="Uploaded Files" icon-name="standard:account"> -->
+
+            <!-- </lightning-card> -->
+
+
+        </lightning-card>
+        <!-- <lightning-card if:true={isPresent}>
+                <p class="slds-align_absolute-center"><b>RERA No. Already Exists</b></p>
+            </lightning-card> -->
+    </div>
+    <div if:true={showCC}>
+        <lightning-card title="Update CC Details">
+            <lightning-layout class="x-small">
+                <!-- <lightning-layout-item flexibility="auto" padding="around-small">
+                    <lightning-input type="date" label="CC Valid till?" placeholder="Select CC Expiry Date" min={today}
+                        value={ccexpDate} onchange={handleCCExpDateChange} required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <lightning-file-upload label="Upload Latest CC Certificate" name="Upload Latest CC Certificate"
+                        accept={acceptedFormats} onuploadfinished={openfileUpload2} multiple>
+                    </lightning-file-upload>
+                </lightning-layout-item> -->
+
+                <div class="slds-p-around_medium slds-size_1-of-1 lgc-bg">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </template>
+                    <lightning-layout horizontal-align="spread" pull-to-boundary="small">
+                        <!-- First half -->
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input type="date" label="CC Valid till?" placeholder="Select CC Expiry Date"
+                                min={today} value={ccexpDate} onchange={handleCCExpDateChange} required>
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <!-- Second half -->
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input type="file" label="Upload Document" onchange={openfileUpload2}
+                                accept={acceptedFormats}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+
+            </lightning-layout>
+            <!--div class="slds-col">
+                <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handlesave} label="Submit"></lightning-button>
+                </div-->
+            <!-- <template if:true={data}>
+                <lightning-card title="Uploaded Files" icon-name="standard:account">
+                    <div style="width: auto;">
+                        <lightning-datatable data={data} columns={columns} key-field="id">
+                        </lightning-datatable>
+                    </div>
+
+                </lightning-card>
+            </template>
+            <template if:true={data}>
+                <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handlesave}
+                    label="Submit">
+                </lightning-button>
+            </template> -->
+        </lightning-card>
+    </div>
+    <div if:true={isRERAUnderApproval}>
+        <lightning-card>
+            <p class="slds-align_absolute-center"><b>Please wait until the Existing RERA Approval is Completed!!</b></p>
+        </lightning-card>
+    </div>
+    <div if:true={isCCUnderApproval}>
+        <lightning-card>
+            <p class="slds-align_absolute-center"><b>Please wait until the Existing CC Approval is Completed!!</b></p>
+        </lightning-card>
+    </div>
+
+    <lightning-card title="Uploaded Files" icon-name="standard:account">
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-datatable data={lstAllFiles} columns={columns} key-field="id">
+            </lightning-datatable>
+        </div>
+        <div class="slds-p-around_medium lgc-bg">
+            <template if:true={showSubmit}>
+                <div class="slds-align_absolute-center">
+                    <lightning-button variant="brand" label="Submit" title="Submit" onclick={handlesave}>
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

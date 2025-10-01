@@ -1,0 +1,32 @@
+<aura:component access="GLOBAL" controller="SelectAPFController" extensible="false" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+	<aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+    <aura:attribute type="APF__c[]" name="apfList"/>
+    <aura:attribute name="connectorCode" type="String" />
+    <aura:attribute name="selectedApf" type="String" />
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="showTable" type="Boolean" default = "false" />
+      
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:input type="text" label="Enter Connector Code" aura:id="code" value="{!v.connectorCode}" required="true"/>
+    <lightning:button variant="Brand" class="slds-button" label="Search" onclick="{!c.fetchApf}"/>
+    <br/><br/>
+
+    <aura:if isTrue="{!v.showTable}">
+        <b>Connector Code: {!v.connectorCode}</b><br/><br/>
+        <lightning:datatable data="{!v.apfList}"
+                             columns="{!v.mycolumns}"
+                             keyField="id"
+                             hideCheckboxColumn="false"
+                             onrowselection="{!c.getSelectedAPF}"
+                             maxRowSelection="1"/>
+        <lightning:button variant="Brand" class="slds-button" label="Save" onclick="{!c.saveApf}"/>
+    </aura:if>
+
+</aura:component>

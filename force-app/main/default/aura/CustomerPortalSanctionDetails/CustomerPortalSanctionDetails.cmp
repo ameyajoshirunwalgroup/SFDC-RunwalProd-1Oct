@@ -1,0 +1,94 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="Bookingrec" type="List" />
+    <aura:attribute name="selectedTabBookingId" type="String" />
+    <aura:attribute name= "RunwalWrapList" type ="List"/>
+    <aura:attribute name="HasPreviousLoanSanctionMap" type="Boolean" default="false"/>
+    <aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/> 
+    <aura:attribute name="multiple" type="Boolean" default="false"/> 
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+
+                <!-- <aura:if isTrue="{!bookvar.loanWrapperList.length >0}">-->
+            
+                <!-- <aura:if isTrue="{!bookvar.loanWrapperList.length >0}"> -->
+                  <div class="slds-grid slds-wrap slds-gutters">
+                        <aura:if isTrue="{!v.HasPreviousLoanSanctionMap}">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                                <div class="slds-section slds-is-open">
+                                    <div class="slds-p-top_small"></div>
+                                    <lightning:layout multipleRows="true">
+                                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                                            <b class="headerstyle">Previous Sanction Details</b>
+                                            <div class="slds-p-top_small"></div>
+                                            <div class="slds-form" role="list">
+                                                <aura:iteration items="{!v.Bookingrec.loanWrapperList}" var="loanvar"> 
+                                                    <aura:if isTrue="{!loanvar.loanstatus == 'Loan Closed'}">
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                                    
+                                                                    <div>
+                                                                        <lightning:button variant="brand" class="sizeButton textInput" label="Preview Sanction Letter" title="Preview Sanction Letter" onclick="{! c.previewfile }" name="{!loanvar.sanctionletterDocumentId}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                
+                                            </div>
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                            <div class="slds-section slds-is-open">
+                                <div class="slds-p-top_small"></div>
+                                <lightning:layout multipleRows="true">
+                                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                                        <b class="headerstyle">Current Sanction Details</b>
+                                        <div class="slds-p-top_small"></div>
+                                        <div class="slds-form" role="list">
+                                            <aura:iteration items="{!v.Bookingrec.loanWrapperList}" var="loanvar"> 
+                                                <aura:if isTrue="{!loanvar.loanstatus != 'Loan Closed' }">
+                                                    
+                                                    <div class="slds-form__row">
+                                                        
+                                                        <div class="slds-form__item" role="listitem">
+                                                            
+                                                            <div class="slds-form-element slds-form-element_horizontal slds-is-editing ">
+                                                                <aura:if isTrue="{!not(empty(loanvar.sanctionletterDocumentId))}">
+                                                                    <div>
+                                                                        <lightning:button variant="brand" class="sizeButton textInput" label="Preview Sanction Letter" title="Preview Sanction Letter" onclick="{! c.previewfile }" name="{!loanvar.sanctionletterDocumentId}"/>
+                                                                    </div>
+                                                                </aura:if>
+                                                            </div>
+                                                            
+                                                            <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                                                <aura:if isTrue="{!empty(loanvar.sanctionletterDocumentId)}">
+                                                                    <div class="slds-p-top_small">
+                                                                        <lightning:fileUpload name="{!loanvar.loanId}"  label="" multiple="{!v.multiple}"   
+                                                                                              accept="{!v.accept}"  recordId="{!loanvar.loanId}" 
+                                                                                              onuploadfinished="{!c.uploadDocument}" class="" />
+                                                                    </div>
+                                                                </aura:if>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </aura:if>
+                                            </aura:iteration>
+                                            
+                                        </div>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </div>
+                            
+                        </div>
+                    </div> 
+                
+    
+    
+</aura:component>

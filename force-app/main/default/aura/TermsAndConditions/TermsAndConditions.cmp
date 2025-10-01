@@ -1,0 +1,75 @@
+<aura:component controller="EOIController" implements="forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="towerId" type="String"/>
+        <aura:attribute name="projectId" type="String"/>
+
+    <aura:attribute name="tcMessage" type="String"/>
+     <aura:attribute name="errorMessage" type="String" />
+
+    <aura:attribute name="hasError" type="boolean" default="false" />
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:if isTrue="{!v.Spinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+
+     <aura:if isTrue="{!v.hasError}">
+       <div class="slds-text-color_error slds-align_absolute-center"><b>There was an error. Please check with administrator. </b> 
+        <aura:if isTrue="{!not(empty(v.errorMessage))}">
+          <b> Error Details - {!v.errorMessage} </b>
+        </aura:if>
+         </div>
+        <aura:set attribute="else">
+    <div class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            <div class="{!$Browser.isPhone ? 'slds-p-around_small slds-text-align_center' :'slds-p-around_small '}"  >
+                <div class="logoContainer"></div>
+                <img src="{!$Resource.Runwal}"/> 
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-p-top_x-large">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12">
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+                            <div class="slds-p-right_none"></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                                <div class="slds-p-around_small slds-text-heading_small">    
+                                    <div class="{!$Browser.isPhone ? 'slds-p-top_x-large slds-text-heading_medium slds-p-left_medium ' :'slds-p-top_x-large slds-text-heading_large slds-p-left_medium'}" >
+                                        <b><u>TERMS AND CONDITIONS</u></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+        <div class="{!$Browser.isPhone ? 'slds-p-horizontal_small' : 'slds-p-horizontal_xx-large'}">
+                <lightning:card>
+                    <div class="slds-p-around_small">
+            <lightning:formattedRichText value="{!v.tcMessage}" placeholder="Type something interesting"/>
+         </div>
+                    </lightning:card>
+        </div>
+   
+         </aura:set>
+    </aura:if>
+</aura:component>

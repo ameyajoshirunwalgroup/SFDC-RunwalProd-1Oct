@@ -1,0 +1,5 @@
+({
+	getUploadedFiles : function(component, event){
+        
+    }
+})

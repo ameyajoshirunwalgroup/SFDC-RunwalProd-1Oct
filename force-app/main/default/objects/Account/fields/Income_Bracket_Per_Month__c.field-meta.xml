@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Income_Bracket_Per_Month__c</fullName>
+    <label>Income Bracket (Per Month)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Less than 50k</fullName>
+                <default>false</default>
+                <label>Less than 50k</label>
+            </value>
+            <value>
+                <fullName>50k to 75k</fullName>
+                <default>false</default>
+                <label>50k to 75k</label>
+            </value>
+            <value>
+                <fullName>75k to 1 Lac</fullName>
+                <default>false</default>
+                <label>75k to 1 Lac</label>
+            </value>
+            <value>
+                <fullName>1 Lac to 1.50 Lac</fullName>
+                <default>false</default>
+                <label>1 Lac to 1.50 Lac</label>
+            </value>
+            <value>
+                <fullName>1.50 Lac to 2 Lac</fullName>
+                <default>false</default>
+                <label>1.50 Lac to 2 Lac</label>
+            </value>
+            <value>
+                <fullName>2 Lac to 3 Lac</fullName>
+                <default>false</default>
+                <label>2 Lac to 3 Lac</label>
+            </value>
+            <value>
+                <fullName>Greater than 3 Lac</fullName>
+                <default>false</default>
+                <label>Greater than 3 Lac</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

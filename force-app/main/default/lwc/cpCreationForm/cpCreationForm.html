@@ -1,0 +1,70 @@
+<template>
+    <template if:true={isOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleClose}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium">New Record</h2>
+                </header>
+
+                <!-- Body -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <!-- Left Column -->
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <lightning-input name="firstName" label="First Name" value={cpFields.firstName}
+                                onchange={handleChange} required>
+                            </lightning-input>
+                            <lightning-input name="middleName" label="Middle Name" value={cpFields.middleName}
+                                onchange={handleChange}>
+                            </lightning-input>
+                            <lightning-input name="lastName" label="Last Name" value={cpFields.lastName}
+                                onchange={handleChange} required>
+                            </lightning-input>
+                            <lightning-input type="text" name="company" label="Company Name" value={cpFields.company}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <lightning-input type="email" name="email" label="Email" placeholder="you@example.com"
+                                value={cpFields.email} onchange={handleChange} required>
+                            </lightning-input>
+                            <lightning-input type="tel" name="mobileno" label="Phone" value={cpFields.mobileno}
+                                onchange={handleChange} pattern="[0-9]{10}"
+                                message-when-pattern-mismatch="Please enter a 10-digit mobile number" required>
+                            </lightning-input>
+                            <lightning-input type="text" name="panno" label="PAN No." placeholder="ABCFA1234D"
+                                value={cpFields.panno} autocomplete="true" pattern="^[A-Z]{5}[0-9]{4}[A-Z]$"
+                                onchange={handleChange}
+                                message-when-pattern-mismatch="Please enter a valid PAN in format: ABCFA1234D" required>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Footer -->
+                <footer class="slds-modal__footer slds-text-align_center">
+                    <lightning-button class="slds-m-right_small" variant="neutral" label="Cancel" onclick={handleClose}>
+                    </lightning-button>
+                    <lightning-button class="slds-m-right_small" variant="neutral" label="Save & New"
+                        onclick={handleSaveAndNew} disabled={disablesubmitbtn}></lightning-button>
+                    <lightning-button variant="brand" label="Save" onclick={handleSubmit} disabled={disablesubmitbtn}>
+                    </lightning-button>
+                    <template if:true={showLoadingSpinner}>
+                        <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                    </template>
+                </footer>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

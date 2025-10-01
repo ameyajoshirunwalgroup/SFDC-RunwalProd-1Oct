@@ -1,0 +1,152 @@
+<template>
+    <div class="Main">
+    <div class="tab-container">
+        <div class="element.style">
+        <button class="tab" onclick={showPersonalDetails} data-tab="personal" style={personalButtonStyle}>Personal Details</button>
+        <button class="tab" onclick={showBookingDetails} data-tab="booking" style={bookingButtonStyle}>Booking Details</button>
+        <!--<button class="tab" onclick={showCallDetails} data-tab="call" style={bookingCallStyle}>Last Call Info</button>-->
+        <button class="tab" onclick={openCustomerDetailsForm} data-tab="customer" style={bookingCallStyle}>Customer Details</button> <!-- Added by Vinay 20-06-2025 -->
+        </div>
+    </div>
+ <template if:true={isPersonalDetails}>
+    <template for:each={bookingData} for:item="bk">
+        <div key={bk.ObjectId} class="CardContainer dark-golden-border">
+            <div class="CardHeader"></div>
+            <div class="booking-record grid-container">
+                <b><lightning-input key={field.ObjectId} type="checkbox" label="DND" checked={isDND} onchange={handleDND}></lightning-input></b>
+                <template for:each={bk.ApplicantDetails} for:item="field">
+                    <div key={field.ObjectId} class="booking-field grid-item">
+                        <span class="collection-field-label">{field.clabel} :</span>
+                        <span class="collection-field-value"> {field.cvalue}</span>
+                    </div>
+                </template>
+								<div class="click-to-call-container">
+										<span class="collection-field-label">Click to call :</span>
+										<button class="slds-button slds-button_icon slds-m-left_x-small" title="Call" onclick={click2Call} data-phonenumber={bk.PhoneNumber}>
+												<lightning-icon icon-name="standard:call" alternative-text="Call" size="medium"></lightning-icon>
+												<span class="slds-assistive-text">Call</span>
+										</button>
+								</div>
+                                <template if:true={showStopCaseEmailsCheckbox}>
+                                    <div>
+                                        <b><lightning-input key={field.ObjectId} type="checkbox" label="Stop Case Emails" checked={isStopCaseEmails} onchange={handleStopCaseEmails}></lightning-input></b>
+                                    </div>
+                                </template>
+								<div>
+										<a href="javascript:void(0);"  onclick={handleResetPassword}><b>Click here to send reset password link to the customer</b></a>
+								</div>
+								<div>
+										<a href="javascript:void(0);"  onclick={handleAllInteractionClick}><b>Last 3 Interactions</b></a>
+								</div>
+								
+
+                                   
+        </div>
+        </div>
+    </template>
+</template>
+
+<template if:true={isLastCallDetails}>
+    <template for:each={bookingData} for:item="bk">
+        <div key={bk.ObjectId} class="CardContainer dark-golden-border">
+            <div class="CardHeader"></div>
+            <div class="booking-record grid-container">
+                <template for:each={bk.LastCallDetails} for:item="field">
+                    <div key={field.ObjectId} class="booking-field grid-item">
+                        <span class="collection-field-label">{field.clabel} :</span>
+                        <span class="collection-field-value"> {field.cvalue}</span>
+                    </div>
+                </template>
+            
+        </div>
+        </div>
+    </template>
+</template>
+    <template if:true={isBookingDetails}>
+        <template for:each={bookingData} for:item="bk">
+            <div key={bk.ObjectId} class="CardContainer dark-golden-border">
+                <div class="CardHeader"></div>
+                <div class="booking-record grid-container">
+                    <template for:each={bk.fieldset} for:item="field">
+                        <div key={field.ObjectId} class="booking-field grid-item">
+                            <template if:false={field.isURL}>
+                                <div class="booking-field-pair">
+                                    <span class="booking-field-label">{field.label} :</span>
+                                    <span class="booking-field-value"> {field.value}</span>
+                                </div>
+                            </template>
+                            <template if:true={field.isURL}>
+                                <div class="booking-field-pair">
+                                    <span class="booking-field-label"> {field.label} :</span>
+                                    <a href={field.value} target="_blank" class="booking-field-value"> {field.isURLName}</a>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                      <div class="booking-field grid-item">
+                            <!--<span class="booking-field-label"> Customer Ledger :</span>-->
+                            <button class="ledger-link" data-id={bk.ObjectId} onclick={handleLedgerClick}>Customer Ledger</button>
+                        </div>
+                      <div class="booking-field grid-item">
+                           <!--<span class="booking-field-label"> Interest Ledger :</span>-->
+                            <button class="ledger-link" data-id={bk.CustomerCode} data-companycode={bk.CompanyCode} onclick={handleInterestLedgerClick}>Interest Ledger</button>
+                        </div>
+                </div>
+            </div>
+        </template>
+         </template>
+<template if:true={isModalOpen}>
+    <section role="dialog" class="slds-modal slds-fade-in-open large-modal">
+        <div class="slds-modal__container">
+
+            <!-- Modal/Popup Header -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close"
+                        title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                </button>
+                <h2 class="slds-text-heading_medium">All Tasks</h2>
+            </header>
+
+            <!-- Modal/Popup Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                <table  style="table-layout: fixed;">
+                   <thead>
+                        <tr class="slds-text-title_caps">
+                            <th style="word-break:word;width:30px;"  scope="col">Subject</th>
+                            <th style="word-break:word;width:20px;"  scope="col">Task Type</th>
+                            <th style="word-break:word;width:50px;"  scope="col">Communication Type</th>
+                            <th style="word-break:word;width:30px;" scope="col">Call Status</th>
+                            <th style="word-break:word;width:20px;" scope="col">Call Time</th>
+                            <th style="word-break:word;width:100px;"  scope="col">Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={taskData} for:item="task">
+                            <tr key={task.Id}>
+                                <td style="word-break:word;width:30px;">{task.Subject}</td>
+                                <td style="word-break:word;width:20px;">{task.Task_Type__c}</td>
+                                <td style="word-break:word;width:50px;">{task.Communication_Type__c}</td>
+                                <td style="word-break:word;width:30px;">{task.Call_Status__c}</td>
+                                <td style="word-break:word;width:20px;">{task.Call_Time__c}</td>
+                                <td style="word-break:word;width:100px;">{task.Description} </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+
+    <!-- Modal Backdrop -->
+    <div if:true={isModalOpen} class="slds-backdrop slds-backdrop_open"></div>
+   
+     <!-- <iframe
+    src={pdfUrl}
+   
+  ></iframe> -->
+    </div>
+</template>

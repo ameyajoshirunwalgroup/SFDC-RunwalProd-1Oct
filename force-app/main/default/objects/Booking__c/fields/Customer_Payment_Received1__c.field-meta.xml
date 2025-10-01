@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Payment_Received1__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(RW_X9_99_Received__c == true,&apos;more than 9.9%&apos;,
+			Text(round(( (RW_Total_Amount_Received_Without_GST__c*100)/Allotment_Premium__c),2))&amp;&apos;%&apos;)</formula>
+    <label>Customer Payment Received%</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,23 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="selectedTabBookingId" type="String" />
+    <aura:attribute name="HasPreviousLoanSanctionMap" type="Boolean" default="false"/>
+    <aura:attribute name="accept" type="List" default="['.jpeg','.pdf','.png','.jpg']"/> 
+    <aura:attribute name="multiple" type="Boolean" default="false"/> 
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <lightning:tabset selectedTabId="{!v.selectedTabBookingId}">
+        <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+            
+            
+            <lightning:tab label="{!'Sanction &amp; Loan Details for Booking '+ bookvar.unitNumber}" id="{!bookvar.BookingId}">
+                <aura:if isTrue="{!bookvar.loanWrapperList.length >0}"> 
+                    <c:CustomerPortalSanctionDetails Bookingrec="{!bookvar}" RunwalWrapList = "{!v.RunwalHomeWrapList}"/> 
+                    <aura:set attribute ="else">
+                        <c:CustomerPortalHomeLoan Bookingrec="{!bookvar}" RunwalWrapList = "{!v.RunwalHomeWrapList}" />        
+                    </aura:set>                
+                </aura:if>
+            </lightning:tab>
+        </aura:iteration>
+    </lightning:tabset>
+</aura:component>

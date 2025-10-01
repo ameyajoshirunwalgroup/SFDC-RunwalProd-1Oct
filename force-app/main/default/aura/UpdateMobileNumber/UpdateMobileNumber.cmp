@@ -1,0 +1,90 @@
+<aura:component controller="UpdateMobileNumberController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutheader" access="global" >
+	
+    <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: Show !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 60% !important;
+        max-width: 60% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+     
+    </aura:html>
+    
+    <aura:attribute name="mobileNum" type="Integer" />
+    <aura:attribute name="secondaryMobileNum" type="Integer" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="countryCodeValues" type="String[]"/>
+    <aura:attribute name="dailingCountryValues" type="String[]"/>
+    <aura:attribute name="selectedCountryCode" type="String" />
+    <aura:attribute name="selectedDailingCountry" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="CurrentUser" type="Object"/>
+    
+    <force:recordData recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Profile.Name"
+                      targetFields="{!v.CurrentUser}"/>
+    
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div class="slds-spinner_container">
+            <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.CurrentUser.Profile.Name == 'System Administrator'}">
+        <div>
+        <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                Update Mobile Number
+         </h3>
+    </div>
+    	<lightning:input type="Number" label="Mobile Number" aura:id="mobNum" value="{!v.mobileNum}"/>
+    </aura:if>
+     <aura:if isTrue="{!v.CurrentUser.Profile.Name != 'System Administrator'}">
+        <div>
+        <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                Update Secondary Mobile Number
+         </h3>
+    </div>
+    </aura:if>
+    <!--<lightning:input type="Number" label="Mobile Number" aura:id="mobNum" value="{!v.mobileNum}"/>-->
+    <lightning:input type="Number" label="Secondary Mobile Number" aura:id="secMobNum" value="{!v.secondaryMobileNum}"/>
+    <aura:if isTrue="{!v.secondaryMobileNum != null}">
+        <lightning:select name="countryCode" label="Country Code" aura:id="countryCode" value="{!v.selectedCountryCode}">
+            <option text="None" value="None"/>
+            <aura:iteration items="{!v.countryCodeValues}" var="code">
+                <option text="{!code}" value="{!code}"/>
+            </aura:iteration>
+        </lightning:select>
+        <lightning:select name="dailingCountry" label="Dailing Country" aura:id="dailingCountry" value="{!v.selectedDailingCountry}">
+            <option text="None" value="None"/>
+            <aura:iteration items="{!v.dailingCountryValues}" var="country">
+                <option text="{!country}" value="{!country}"/>
+            </aura:iteration>
+        </lightning:select>
+    </aura:if>
+    <br/>
+    <lightning:button variant="Brand" class="slds-button" label="Update" onclick="{!c.updateNum}"/>
+    
+</aura:component>

@@ -1,0 +1,37 @@
+<aura:component controller="CustomerLedgerController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="BookingData" type="Object" />
+    <aura:attribute name="RunwalHomeWrapList" type="List" />
+    <aura:attribute name="demandWrapperList" type="List"/>
+     <aura:attribute name="msg" type="String"/>
+  
+    <aura:attribute name="applicantDetail" type="Applicant_Details__c" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="backgroundImageURL" type="String" default=""/>  
+    <!--<aura:handler event="c:CustomerPortalSessionEvent" action="{!c.handleApplicationEventFired}"/> -->
+    <lightning:navigation aura:id="navService"/>
+    
+     <div style="{!'position: relative;  background:' + v.backgroundColor + ' url(' + v.backgroundImageURL +') repeat-y;background-position: center;background-size: cover;'}"> 
+    <div style="{!$Browser.isPhone ? 'padding:10px;':'padding:40px;'}">
+        <lightning:card>
+            <lightning:tabset selectedTabId="Booking 1">
+                <aura:iteration items="{!v.RunwalHomeWrapList}" var="bookvar" indexVar="index">
+                    
+                   
+                    <lightning:tab label="{!'Customer Ledger for Booking '+ bookvar.unitNumber }" id="{!'Booking '+ add(index,1)}">
+                        
+                        
+                        
+                        
+                            <c:CustomerLedger RunwalHomeWrapList= '{!bookvar.demandWrapperList}' BookingData ='{!bookvar}' msg='{!v.msg}' />                      
+                            <c:CustomerPortalDemandItem dem='{!bookvar.demandWrapperList}' receipt='{!bookvar.receiptWrapperList}' bookingId='{!bookvar.BookingId}'/>   
+                      
+                        
+                    </lightning:tab>
+               
+                </aura:iteration>
+            </lightning:tabset>
+        </lightning:card>
+    </div>
+    </div>
+</aura:component>

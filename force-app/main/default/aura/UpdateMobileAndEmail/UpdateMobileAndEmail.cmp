@@ -1,0 +1,157 @@
+<aura:component controller="UpdateMobileAndEmailController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutheader" access="global"  >
+	
+    <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: Show !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 60% !important;
+        max-width: 60% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .toastMessage.forceActionsText{
+        white-space : pre-line !important;
+        }
+     
+    </aura:html>
+    
+    <aura:attribute name="mobileNum" type="Integer" />
+    <aura:attribute name="secondaryMobileNum" type="Integer" />
+    <aura:attribute name="email" type="Integer" />
+    <aura:attribute name="secondaryEmail" type="Integer" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="countryCodeValues" type="String[]"/>
+    <aura:attribute name="secCountryCodeValues" type="String[]"/>
+    <aura:attribute name="dailingCountryValues" type="String[]"/>
+    <aura:attribute name="selectedCountryCode" type="String" />
+    <aura:attribute name="selectedSecCountryCode" type="String" />
+    <aura:attribute name="selectedDailingCountry" type="String" />
+    <aura:attribute name="oppRec" type="Opportunity" />
+    <aura:attribute name="mobileNumMasked" type="Integer" />
+    <aura:attribute name="secMobileNumMasked" type="Integer" />
+    <aura:attribute name="showContinue" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div class="slds-spinner_container">
+            <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div>
+        <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                Update Mobile Number And Email
+         </h3>
+    </div>
+    <br/><br/>
+    <table style="table-layout: fixed;" class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+        <tr>
+            <th style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Field</b></th>
+        	<th style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Existing Values</b></th>
+        	<th style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>New Values</b></th>
+        </tr>
+        <tr>
+            <td style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Country Code</b></td>
+        	<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.Account.Country_Code__c}</td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+            	<lightning:select name="countryCode" aura:id="countryCode" value="{!v.selectedCountryCode}">
+                    <option text="None" value="None"/>
+                    <aura:iteration items="{!v.countryCodeValues}" var="code">
+                        <option text="{!code}" value="{!code}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </td>
+        </tr>
+        <tr>
+            <td style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Primary Mobile No.</b></td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.Mobile_Number__c}</td>
+            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.mobileNumMasked}</td>-->
+            <td style="word-break:word;border: 1px solid #666;width:40px;">
+                <lightning:input type="Number" aura:id="mobNum" value="{!v.mobileNum}"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Secondary Country Code</b></td>
+        	<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.Account.Country_Code_2__c}</td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+            	<lightning:select name="countryCode" aura:id="countryCode" value="{!v.selectedSecCountryCode}">
+                    <option text="None" value="None"/>
+                    <aura:iteration items="{!v.secCountryCodeValues}" var="code">
+                        <option text="{!code}" value="{!code}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </td>
+        </tr>
+        <tr>
+            <td style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Secondary Mobile No.</b></td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.Secondary_Mobile_No_Masked__c}</td>
+            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.secMobileNumMasked}</td>-->
+            <td style="word-break:word;border: 1px solid #666;width:40px;">
+                <lightning:input type="Number" aura:id="secMobNum" value="{!v.secondaryMobileNum}"/>
+            </td>
+        </tr>
+        
+        
+        
+        <!--<tr>
+            <td style="word-break:word;border: 1px solid #666;width:20px;text-align:center;"><b>Dailing Country</b></td>
+        	<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.Account.Dialing_Country_2__c}</td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+            	<lightning:select name="dailingCountry" aura:id="dailingCountry" value="{!v.selectedDailingCountry}">
+                    <option text="None" value="None"/>
+                    <aura:iteration items="{!v.dailingCountryValues}" var="country">
+                        <option text="{!country}" value="{!country}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </td>
+        </tr>-->
+        <tr>
+            <td style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Primary Email</b></td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.RW_Email__c}</td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                <lightning:input type="Email" aura:id="email" value="{!v.email}"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="word-break:word;border: 1px solid #666;width:22px;text-align:center;"><b>Secondary Email</b></td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!v.oppRec.RW_Secondary_Email__c}</td>
+            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                <lightning:input type="Email" aura:id="secEmail" value="{!v.secondaryEmail}"/>
+            </td>
+        </tr>
+    </table>
+    <br/>
+    <div class="slds-align_absolute-center" >
+        <aura:if isTrue="{!v.showContinue == false}">
+        	<lightning:button variant="Brand" class="slds-button" label="Update" onclick="{!c.updateNum}" />
+        </aura:if>
+    	
+        <aura:if isTrue="{!v.showContinue}">
+        	<lightning:button variant="Brand" class="slds-button" label="Continue" onclick="{!c.updateDetails}" />
+        </aura:if>
+        
+    </div>
+    
+    
+</aura:component>

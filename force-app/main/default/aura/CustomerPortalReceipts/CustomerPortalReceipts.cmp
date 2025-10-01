@@ -1,0 +1,65 @@
+<aura:component controller = "CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="receipts" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="expanded" type="boolean"/>  
+    
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-text-heading--small slds-truncate">Receipt Details for the Booking are shown Below!</h2>
+                </div>
+            </div>
+        </div> 
+        
+        <section>
+            <div>
+                
+                <div class="slds-modal__content slds-p-around_medium" >
+                      
+                        <table class="slds-table slds-table--bordered slds-table--striped slds-table--cell-buffer ">
+                            <div aura:id="conEditForm">
+                                <thead>          
+                                    <tr class="slds-text-heading--small"> 
+                                        <th scope="col"><span class="slds-truncate">Account Document Number</span></th>
+                                        <th scope="col"><span class="slds-truncate">Bank Reference Number</span></th>
+                                        <th scope="col"><span class="slds-truncate">Branch Name</span></th>
+                                        <th scope="col"><span class="slds-truncate">Clearing Document Number</span></th>
+                                        <th scope="col"><span class="slds-truncate">Company Code</span></th>
+                                        <th scope="col"><span class="slds-truncate">Customer Id</span></th>   
+                                        <th scope="col"><span class="slds-truncate">DemandNumber</span></th> 
+                                        
+                                    </tr>
+                                    
+                                </thead>
+                               
+                                <tbody >
+                                    <aura:iteration items="{!v.dem}" var="d" indexVar="rowIndex">
+                                        <tr>
+                                            
+                                            <th scope="row" data-index="{!rowIndex}" aura:id="articleOne" role="gridcell">
+                                             </th>  
+                                            <td><ui:outputText value="{!d.AccountDocumentNumber}"/></td>
+                                            <td><ui:outputText value="{!d.BankReferenceNumber}"/></td>
+                                            <td><ui:outputText value="{!d.BranchName}"/></td>                
+                                            <td><ui:outputText value="{!d.ClearingDocumentNumber}"/></td>
+                                            <td><ui:outputText value="{!d.CompanyCode}"/> </td>  
+                                            <td><ui:outputText value="{!d.CustomerId}"/></td>
+                                            <td><ui:outputText value="{!d.DemandNumber}"/> </td>
+                                            <td><button type="button" onclick="" class="slds-button slds-button--neutral slds-float_center"  id="{!d.Id}">Download</button></td>
+                                            
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                                
+                            </div>
+                        </table>
+                 
+                </div>
+                
+            </div>
+        </section>
+    </div>
+    
+</aura:component>

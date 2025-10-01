@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Book_Now_Pending_Ageing__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+  ISBLANK(Opportunity__r.Booking__r.Id),
+  TODAY() - DATEVALUE(CreatedDate),
+  DATEVALUE(Opportunity__r.Booking__r.CreatedDate) - DATEVALUE(CreatedDate)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Days passed between booking &amp; blocking</inlineHelpText>
+    <label>Book Now Pending Ageing</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

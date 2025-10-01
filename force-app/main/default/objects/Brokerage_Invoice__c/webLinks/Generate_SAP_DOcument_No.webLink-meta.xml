@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Generate_SAP_DOcument_No</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <linkType>url</linkType>
+    <masterLabel>Generate SAP Document No.</masterLabel>
+    <openType>replace</openType>
+    <protected>false</protected>
+    <url>/apex/BrokerageInvoiceSAP?InvoiceIds={!Brokerage_Invoice__c.Id}&amp;EnterCondTypeforSAPDocNo=false</url>
+</WebLink>

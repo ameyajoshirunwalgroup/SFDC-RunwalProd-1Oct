@@ -1,0 +1,2922 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Booking</fullName>
+    <active>true</active>
+    <label>New Booking</label>
+    <picklistValues>
+        <picklist>AFS_Internal_Signoff_Status__c</picklist>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent for Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Bank_Loan_Status__c</picklist>
+        <values>
+            <fullName>Need help to apply</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanctioned</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Booking_Confirmation_Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent for Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CP_Invoice_Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved By L1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved By L2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected By L1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected By L2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted for Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Call_Disposition_L2__c</picklist>
+        <values>
+            <fullName>Change of Mind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dependency on CC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dependency on Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dependency on Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Constraints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greetings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Misselling</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment schedule</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Re-allocation not done</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third-party</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong number</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Call_Disposition__c</picklist>
+        <values>
+            <fullName>Call back request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ringing%2FSwitched Off%2FNot reachable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Welcome call accepted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Welcome call rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong number%2FNo Number</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_Reason__c</picklist>
+        <values>
+            <fullName>Unit cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit transfer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_Requested_Status__c</picklist>
+        <values>
+            <fullName>Cancellation Confirmed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Sought</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retained</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_Sub_reason__c</picklist>
+        <values>
+            <fullName>Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non Contactable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R6</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z6</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Z9</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_Subtype__c</picklist>
+        <values>
+            <fullName>Downgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Involuntary</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Movement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Voluntary</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_in_SAP__c</picklist>
+        <values>
+            <fullName>Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent to SAP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Success</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>City__c</picklist>
+        <values>
+            <fullName>Nagpur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pune</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Customer_Category_Type__c</picklist>
+        <values>
+            <fullName>Barter Deal Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CIP-Canc%2E in Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management Bookings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Regular</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Dispatch_Mode__c</picklist>
+        <values>
+            <fullName>Soft Copy via Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Soft copy via email and hardcopy</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Forfeiture_Amount_Type__c</picklist>
+        <values>
+            <fullName>Agreement value</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Total received amount</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Funding_Status__c</picklist>
+        <values>
+            <fullName>Loan Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Funded</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Future_Correspondence_Contact__c</picklist>
+        <values>
+            <fullName>1st Applicant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2nd Applicant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3rd Applicant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4th Applicant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5th Applicant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Interest_to_be_Applied__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Loan_Bank__c</picklist>
+        <values>
+            <fullName>AU SMALL FINANCE BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aadhar Housing Finance ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aavas Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhinav Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Abhyudaya Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ahmedabad Mercantile Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Janata Commercial Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Akola Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andaman and Nicobar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh Mahesh Co-Op Urban Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apna Sahakari Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Axis Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bajaj Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Baroda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bassein Catholic Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Petroleum Corporation Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharati Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bombay Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CITI bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canara Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Catholic Syrian Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Central Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citizen Credit Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cosmos Co-operative Urban Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DATTATRAYA MAHARAJ KALAMBE JAOLI SAHAKARI BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DCB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DHFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNS bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Darussalam Co Operative Urban Bank Ltd%3B hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dena Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dombivli Nagari Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edelweiss Financial Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eenadu Urban Co operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Godrej Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gopinath Patil Parsik Janata Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greater Bombay Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Agriculture %26 Rural Development Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HDFC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HSBC Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana State Co-opertive Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hinduja Housing Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Home Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDBI Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDFC First Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ING Vysya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>India Infoline Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Mercantile Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Overseas Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IndusInd Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janakalyan Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janalaxmi Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jio finance limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalupur Commercial Coop%2E Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karad Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka State Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karur Vysya Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kotak Mahindra Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>L%26T Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LIC Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MACO BANK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh Rajya Sahakari Bank Maryadit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mahanagar Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mapusa Urban Co-operative Bank of Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mehsana Urban Co-Op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram Co-operative Apex Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mogaveera Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Dist Cntrl Bnk Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Municipal Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NKGSB Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagar Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National bank for agr dev</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New India Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutan Nagarik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oriental Bank of Commerce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PIRAMAL CAPITAL %26 HOUSING FINANCE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PNB Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pravara Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab %26 Maharashtra Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab National Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBL Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajdhani Nagar Sahkari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajkot Nagrik Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramella Ramesh Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rohit Kataria Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rupee Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SBI Caps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli District Primary Teachers Bank Ltd%3B Sangli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sangli Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saraswat Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sardar Bhiladwala Pardi Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamrao Vithal Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shikshak Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shriram Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solapur Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Bikaner and Jaipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Hyderabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Mysore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Patiala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of Travancore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat Peoples Coop Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Syndicate Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TJSB Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tata Capital Housing Finance Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telangana State Co-Operative Apex Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Bharat Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Dhanalakshmi Bank Limited%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kalyan Janata Sahakari Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Kapole Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Lakshmi Vilas Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Nainital Bank Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Naval Dockyard Co Operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Tamil Nadu State Apex Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Grain Merchant%27s Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCO Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Union Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank Of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttarakhand State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijaya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal State Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zoroastrian Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>narayana madhubabu bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>MG_Months_Year__c</picklist>
+        <values>
+            <fullName>Month%28s%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Years%28s%29</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>MG_Per_Amt__c</picklist>
+        <values>
+            <fullName>Amount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Percentage</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Mode_of_Cancellation__c</picklist>
+        <values>
+            <fullName>Meeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verbal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Written</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Monthly_Collection_Status__c</picklist>
+        <values>
+            <fullName>Collectable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-Collectable</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POA_Name__c</picklist>
+        <values>
+            <fullName>Ajay Sawant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ameya Joshi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amit Vyas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deepak Pimpalkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalpesh Patel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manish Kotian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meenal Sharma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pradnesh Pingale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raghvendra Poojary</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rama Vishwakarma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saurabh Chaturvedi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shriniwas Dalvi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Umesh Patil</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vikas Bobade</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payment_Refund_Amount__c</picklist>
+        <values>
+            <fullName>Forfeiture</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal Fund Transfer %28Full%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal Fund Transfer %28Partial%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partial Refund</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refund</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_AFS_to_registration_office_status__c</picklist>
+        <values>
+            <fullName>AFS document Not yet shared</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AFS document shared</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Agreement_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Agreement_for_Sales_document__c</picklist>
+        <values>
+            <fullName>Generated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not yet generated</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Cancellation_initiated_by__c</picklist>
+        <values>
+            <fullName>1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Challan_Status__c</picklist>
+        <values>
+            <fullName>Challan Not Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Challan Pending</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Challan Received</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Country_Phone_Code__c</picklist>
+        <values>
+            <fullName>%2B 345</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 242</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 246</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 264</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 268</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 441</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 473</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 649</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 767</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 809</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 868</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1 876</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B1664</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B20</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B212</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B213</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B216</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B220</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B221</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B222</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B223</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B224</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B226</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B227</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B228</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B229</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B230</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B231</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B232</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B233</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B234</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B235</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B236</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B237</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B238</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B240</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B241</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B242</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B244</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B245</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B246</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B248</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B249</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B250</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B251</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B253</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B254</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B256</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B257</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B260</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B261</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B262</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B263</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B264</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B265</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B266</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B267</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B268</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B269</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B291</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B297</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B298</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B299</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B30</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B31</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B32</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B33</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B34</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B350</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B351</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B352</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B353</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B354</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B355</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B356</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B358</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B359</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B36</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B370</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B371</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B372</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B374</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B375</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B376</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B377</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B378</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B380</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B381</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B382</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B385</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B386</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B387</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B39</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B40</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B41</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B420</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B421</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B423</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B43</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B44</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B45</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B46</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B47</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B48</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B49</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B500</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B501</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B502</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B503</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B504</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B505</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B506</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B507</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B509</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B51</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B52</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B53</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B537</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B54</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B55</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B56</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B57</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B590</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B593</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B594</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B595</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B596</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B597</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B598</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B60</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B61</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B62</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B63</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B64</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B65</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B66</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B672</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B674</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B675</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B676</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B677</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B678</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B679</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B681</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B682</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B683</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B685</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B686</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B687</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B688</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B689</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B690</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B7 7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B81</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B855</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B86</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B880</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B90</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B91</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>%2B92</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B93</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B94</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B95</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B960</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B961</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B962</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B964</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B965</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B966</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B967</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B968</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B971</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B972</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B973</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B974</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B975</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B976</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B977</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B992</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B993</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B994</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B995</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B996</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2B998</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Registration_Done__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Registration_Status__c</picklist>
+        <values>
+            <fullName>Registration Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration Pending</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Registration Scheduled</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Registration_Type__c</picklist>
+        <values>
+            <fullName>E-Registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Offline Registration</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Release_of_Charge_issue_status__c</picklist>
+        <values>
+            <fullName>Not yet received</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Received</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_SDR_Delay_Reason__c</picklist>
+        <values>
+            <fullName>Agreement not ready</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved Registration Deviation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Loan sanction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Not reachable%2F Responding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer considering cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer considering project change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer considering unit change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer delaying</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer insisting on full IOD and%2For CC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer keen on auspicious dates</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loan Eligibility issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Main Applicant Deceased</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI - No POA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Booking</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>No Funds for SDR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>POA Signature Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Awaited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SDR and%2For NCF Awaited</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_SDR_Status__c</picklist>
+        <values>
+            <fullName>Not Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SDR Pending</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Signed_Agreement__c</picklist>
+        <values>
+            <fullName>Not yet shared</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shared with Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shared with Customer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Unit_Type__c</picklist>
+        <values>
+            <fullName>Jodi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Single</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_confirmation_letter_Received_Status__c</picklist>
+        <values>
+            <fullName>Details Incorporated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not yet received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Received</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason_For_CRM_returns_to_sales__c</picklist>
+        <values>
+            <fullName>Physical Document Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Welcome Call Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Referred_By__c</picklist>
+        <values>
+            <fullName>Employee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Manager</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Registration_Due_Status__c</picklist>
+        <values>
+            <fullName>Due</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Due</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Resale_Status__c</picklist>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unsold</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Managers__c</picklist>
+        <values>
+            <fullName>Annanya Kamani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anuj Sabhlok</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arnav Singh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhavya Kaushal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Debrah Marian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dhanraj Anklikar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dipika Badhe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gulshan Soni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardik Parekh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jovita Abreo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karan Sogthi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kosha Bhansali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kruti Bhandare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kunal Parmar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manish Roy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manoj Chellani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mohit Ramsinghani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mukul Mehta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Naresh Haseja</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nishant Katiyal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No sourcing manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Piyush Chawla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prajot Dighe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pranay Kamath</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Preeti Kumari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Priyanki Barasia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rahul Verma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seema Kale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Siddharth Rajak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snehal Kolambe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sujeet Yadav</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Suvo Datta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tejvir Sohal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vaibhav Gaur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vickhil Thakkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vipin Agrawal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vivek R Singh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vivek Singh</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sharing_Per_Amt__c</picklist>
+        <values>
+            <fullName>Amount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sharing Per%2E%2FAmt%2E</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Source_of_Booking__c</picklist>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employee %2F Managemen</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Temp Channel Partner</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sourcing_Mananger__c</picklist>
+        <values>
+            <fullName>Annanya Kamani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anuj Sabhlok</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arnav Singh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bhavya Kaushal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Debrah Marian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dhanraj Anklikar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dipika Badhe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gulshan Soni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardik Parekh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jaswinder Singh Rain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karan Sogthi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kosha Bhansali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kruti Bhandare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manish Roy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manoj Chellani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mohit Ramsinghani</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mukul Mehta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Naresh Haseja</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nishant Katiyal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No sourcing manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Piyush Chawla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prajot Dighe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pranay Kamath</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Priyanki Barasia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rahul Verma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seema Kale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Siddharth Rajak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snehal Kolambe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sujeet Yadav</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tejvir Sohal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vaibhav Gaur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vickhil Thakkar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vipin Agrawal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>State__c</picklist>
+        <values>
+            <fullName>Andaman %26 Nicobar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arunachal Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Assam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bihar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chandigarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chhattisgarh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dadar %26 Nagar Haveli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Daman %26 Diu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delhi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haryana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Himachal Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jammu and Kashmir</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jharkhand</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kerala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lakshadweep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madhya Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manipur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meghalaya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mizoram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nagaland</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orissa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pondichery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rajasthan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sikkim</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tamil Nadu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telangana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tripura</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttar Pradesh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uttaranchal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Bengal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Booking Blocked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Cancelled %E2%80%93 Refund Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Cancelled %E2%80%93 Refund Ready</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Cancelled - Refunded</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Confirmed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking In Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Received - Payment Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Registered</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Initiated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Processed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent for Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent for Revision</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UnProcessed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit Booked</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sub_Source__c</picklist>
+        <values>
+            <fullName>Corporate Tie Ups</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employee reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exhibitions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Client</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing client reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hoardings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inserts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loyalty Programme</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management Reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media Campaigns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newspaper</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Social Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Websites</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Test_Picklist__c</picklist>
+        <values>
+            <fullName>A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type_of_Client__c</picklist>
+        <values>
+            <fullName>Corporate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Local</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outstation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Unit_Trasfer_to_Project__c</picklist>
+        <values>
+            <fullName>Different Project</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Same Project</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Verification_status__c</picklist>
+        <values>
+            <fullName>Accepted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not started</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

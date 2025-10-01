@@ -1,0 +1,7 @@
+<template>
+    <lightning-card title="New Case">
+    <lightning-record-form object-api-name={objectApiName}
+        fields={fields} columns="1" mode="edit" onsubmit={handleSubmit} onchange={handleOnchange} onsuccess={handleSuccess} oncancel={handleCancel} required>
+    </lightning-record-form>
+</lightning-card>
+</template>

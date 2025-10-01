@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Channel Partner</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Channel Partners</value>
+    </caseValues>
+    <layouts>
+        <layout>Broker Layout</layout>
+        <sections>
+            <label><!-- Additional Info --></label>
+            <section>Additional Info</section>
+        </sections>
+        <sections>
+            <label><!-- Address Details --></label>
+            <section>Address Details</section>
+        </sections>
+        <sections>
+            <label><!-- Approval Details --></label>
+            <section>Approval Details</section>
+        </sections>
+        <sections>
+            <label><!-- Bank Details --></label>
+            <section>Bank Details</section>
+        </sections>
+        <sections>
+            <label><!-- Channel Partner Analysis --></label>
+            <section>Channel Partner Analysis</section>
+        </sections>
+        <sections>
+            <label><!-- Registration Details --></label>
+            <section>Registration Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Broker Layout - CP Access</layout>
+        <sections>
+            <label><!-- Additional Info --></label>
+            <section>Additional Info</section>
+        </sections>
+        <sections>
+            <label><!-- Address Details --></label>
+            <section>Address Details</section>
+        </sections>
+        <sections>
+            <label><!-- Approval Details --></label>
+            <section>Approval Details</section>
+        </sections>
+        <sections>
+            <label><!-- Bank Details --></label>
+            <section>Bank Details</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Registration Details --></label>
+            <section>Registration Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Broker Layout - CP Access1</layout>
+        <sections>
+            <label><!-- Additional Info --></label>
+            <section>Additional Info</section>
+        </sections>
+        <sections>
+            <label><!-- Address Details --></label>
+            <section>Address Details</section>
+        </sections>
+        <sections>
+            <label><!-- Approval Details --></label>
+            <section>Approval Details</section>
+        </sections>
+        <sections>
+            <label><!-- Bank Details --></label>
+            <section>Bank Details</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Registration Details --></label>
+            <section>Registration Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Broker Layout1</layout>
+        <sections>
+            <label><!-- Additional Info --></label>
+            <section>Additional Info</section>
+        </sections>
+        <sections>
+            <label><!-- Address Details --></label>
+            <section>Address Details</section>
+        </sections>
+        <sections>
+            <label><!-- Approval Details --></label>
+            <section>Approval Details</section>
+        </sections>
+        <sections>
+            <label><!-- Bank Details --></label>
+            <section>Bank Details</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Registration Details --></label>
+            <section>Registration Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Channel Partner Portal Layout</layout>
+        <sections>
+            <label><!-- Additional Info --></label>
+            <section>Additional Info</section>
+        </sections>
+        <sections>
+            <label><!-- Channel Partner Analysis --></label>
+            <section>Channel Partner Analysis</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Temp CP</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Fields --></label>
+            <section>Fields</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <label><!-- Channel Partner --></label>
+        <name>Channel_Partner</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Temporary CPs --></description>
+        <label><!-- Temp Channel Partner --></label>
+        <name>Temp_Channel_Partner</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Pl limit the characters lenght for Address 1, Address 2 OR Address 3 to 35. --></errorMessage>
+        <name>Address_Character_Length</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter a valid mobile no. --></errorMessage>
+        <name>Broker_phone_validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You Cannot edit record as Iris sync is checked. --></errorMessage>
+        <name>Iris_Sync_Cannot_Edit_CP_Record</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Channel Partner Pan No cannot be blank --></errorMessage>
+        <name>Is_NRI_CP</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- For NON Individual CP, Combination of first name and last name must not be as same as CP Record name. --></errorMessage>
+        <name>ORG_name_check</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- PAN number letters should be in uppercase only. --></errorMessage>
+        <name>PAN_should_contain_uppercase_letters</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You Cannot edit checkbox. --></errorMessage>
+        <name>UnregCP_true_then_cannot_edit_checkbox</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You Cannot edit record because Unregistered Channel Partner is checked. --></errorMessage>
+        <name>UnregisterCP_Cannot_Edit_CP_Record</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please fill up the GST Registration Number. --></errorMessage>
+        <name>validate_GST_Registration_Number</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- RERA Registration Number. cannot be blank --></errorMessage>
+        <name>validate_RERA_Registration_Number</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter an valid pan number. --></errorMessage>
+        <name>validate_pan_no</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please fill up the Proof of Income. --></errorMessage>
+        <name>validate_proof_of_income</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter an valid service tax number. --></errorMessage>
+        <name>validate_service_tax_no</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Update_GST_No --></label>
+        <name>Update_GST_No</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_RERA_No --></label>
+        <name>Update_RERA_No</name>
+    </webLinks>
+</CustomObjectTranslation>

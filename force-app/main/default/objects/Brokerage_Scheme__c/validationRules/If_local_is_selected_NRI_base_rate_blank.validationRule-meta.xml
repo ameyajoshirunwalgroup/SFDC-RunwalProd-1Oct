@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>If_local_is_selected_NRI_base_rate_blank</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL(  Type__c ,&quot;Local&quot; ) , NOT(ISNULL(  Base_Brokerage_for_OS_NRI__c )) )</errorConditionFormula>
+    <errorDisplayField>Base_Brokerage_for_OS_NRI__c</errorDisplayField>
+    <errorMessage>Base Brokerage For OS / NRI Should be blank</errorMessage>
+</ValidationRule>

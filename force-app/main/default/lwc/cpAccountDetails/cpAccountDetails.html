@@ -1,0 +1,25 @@
+<template>
+    <lightning-record-edit-form record-id={CPId} object-api-name={objectApiName} onsuccess={handleSuccess}>
+        <lightning-messages></lightning-messages>
+        <template for:each={fieldList} for:item="field">
+            <div key={field} class="slds-grid" if:false={showEditField}>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-output-field field-name={field}>
+                    </lightning-output-field>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-button-icon icon-name="utility:edit" onclick={handleEdit}>
+                    </lightning-button-icon>
+                </div>
+            </div>
+            <div key={field} class="slds-grid" if:true={showEditField}>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={field} readonly>
+                    </lightning-input-field>
+                </div>
+            </div>
+        </template>
+        <lightning-button type="submit" name="submit" label="Save">
+        </lightning-button>
+    </lightning-record-edit-form>
+</template>

@@ -1,0 +1,23 @@
+<aura:component implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global" controller="CloneOpportunityController">
+	<aura:attribute name="showErrorMsg" type="Boolean" default = "false"/>
+    <aura:attribute name="errorMsg" type="String" default = ""/>
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="visibleButton" type="Boolean" default=""/>
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="closeModalBox" action="{!c.closeModalBox}"></aura:method>
+    
+    <div class="slds-modal slds-modal_large slds-fade-in-open slds-p-around--small">
+        <div class="slds-modal__container" style="width: 120%; left: -10%;">
+            <aura:if isTrue="{!v.loading}">
+            <lightning:spinner alternativeText="Loading" />
+        </aura:if>
+            <header class="slds-modal__header modal-header">
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Clone Opportunity</h2>
+            </header>
+			<div class="slds-modal__content slds-p-around_medium">
+            </div>
+        </div>
+    </div>
+        
+</aura:component>

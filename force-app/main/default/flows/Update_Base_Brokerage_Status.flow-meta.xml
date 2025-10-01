@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_Registration_date_and_9_90_Received</name>
+        <label>Check Registration date and 9.90 Received</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Update_Not_Due_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Status Not Due</defaultConnectorLabel>
+        <rules>
+            <name>Status_Due</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RW_X9_99_Received__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Registration_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_Base_Brokerage_Status_Due</targetReference>
+            </connector>
+            <label>Status Due</label>
+        </rules>
+    </decisions>
+    <description>Update Base Brokerage Status for  bookings applicable for aop.</description>
+    <environments>Default</environments>
+    <interviewLabel>Update Base Brokerage Status {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Base Brokerage Status</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Not_Due_Status</name>
+        <label>Update Not Due Status</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Base Brokerage</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Not Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Brokerages__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Status_Base_Brokerage_Status_Due</name>
+        <label>Update Status Base Brokerage Status Due</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Base Brokerage</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Brokerages__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Registration_date_and_9_90_Received</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Booking Confirmed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Is_AOP_CP_Applicable__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Brokerage_Summary__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Source_of_Booking__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Channel Partner</stringValue>
+            </value>
+        </filters>
+        <object>Booking__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

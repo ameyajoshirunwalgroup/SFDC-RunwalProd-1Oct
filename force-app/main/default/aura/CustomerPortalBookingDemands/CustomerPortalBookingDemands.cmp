@@ -1,0 +1,60 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="RunwalHomeWrapList" type="List"/>
+    <aura:attribute name="demandData" type="Date"/>
+    
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+            
+            <div class="slds-section slds-is-open">
+     
+                <div class="slds-p-top_small"></div>
+                
+                
+                
+                
+                
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                        <div class="slds-form-element__row">
+                            
+                            <div class="slds-p-top_large"></div>
+                            <div class="slds-p-left_x-small">
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label" for="single-form-element-id-02">Demand Due Date</label>
+                                            
+                                            <div class="slds-form-element__control">
+                                                <lightning:input type="text" id="single-form-element-id-02"  class="slds-input" value="{!v.demandData}" />
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-p-top_small"></div>
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label" for="single-form-element-id-02">Total Demand Amount Payable</label>
+                                            
+                                            <div class="slds-form-element__control">
+                                                <lightning:input type="text" id="single-form-element-id-02" class="slds-input" value=""/>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </div>
+    </div> 
+    
+</aura:component>

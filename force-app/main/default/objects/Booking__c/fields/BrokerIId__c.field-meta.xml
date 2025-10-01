@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BrokerIId__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Channel Partner Id</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5)) AND 6</booleanFilter>
+        <filterItems>
+            <field>Broker__c.Deactivated__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.Source_of_Booking__c</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>Broker__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.Source_of_Booking__c</field>
+            <operation>equals</operation>
+            <value>Temp Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>Broker__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Temp Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Booking Confirmed</value>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Broker__c</referenceTo>
+    <relationshipLabel>Booking20</relationshipLabel>
+    <relationshipName>Booking20</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <type>Lookup</type>
+</CustomField>

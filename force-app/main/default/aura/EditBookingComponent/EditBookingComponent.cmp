@@ -1,0 +1,172 @@
+<aura:component Controller = "DigitalBookingController" implements="flexipage:availableforRecordHome,force:hasRecordId">
+    <aura:attribute name="SalutationPicklistOptions" type="String[]"/>
+    <aura:attribute name="GenderPicklistOptions" type="String[]"/>
+    <aura:attribute name="NationalityPicklistOptions" type="String[]"/>
+    <aura:attribute name="MaritalStatusPicklistOptions" type="String[]"/>
+    <aura:attribute name="DesignationPicklistOptions" type="String[]"/>
+    <aura:attribute name="ContactPersonPicklistOptions" type="String[]"/>
+    <aura:attribute name="AddressProofDocument" type="String[]"/>
+    <aura:attribute name="OccupationPicklistOptions" type="String[]"/>
+    <aura:attribute name="CountryPicklistOptions" type="String[]"/>
+    <aura:attribute name="opportunityId" type="String"/>
+    
+    
+    <aura:attribute name="readonly" type="boolean" default="true"/>
+    <aura:attribute name="kycVerified" type="boolean" default="true"/>
+    <aura:attribute name="showConfirmDialog" type="boolean" default="false"/>
+    
+    
+    <aura:attribute name="statePicklist" type="Object"/>
+    <aura:attribute name="CityPicklistOptions" type="String[]"/>
+    <aura:attribute name="ApplicantPicklistOptions" type="String[]"/>
+    <aura:attribute name="ResidentialPicklist" type="Object"/>
+    <aura:attribute name="TypeOfOriginOptions" type="String[]"/>
+    <aura:attribute name="applicantDetails" type ="Applicant_details__C[]" />
+    <aura:attribute name="maxApplicants" type ="Decimal" />
+    <aura:attribute name="addDisabled" type="boolean" default="false"/>
+    <aura:attribute name="removeDisabled" type="boolean" default="false"/>
+    <aura:attribute name="childSpinner" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="applicantErrorList" type="List"/>
+    <aura:attribute name="applicantValidationError" type="Boolean"/>
+    
+    <aura:attribute name="objectName" type="string" default="Applicant_Details__c"/>
+    <aura:attribute name="dependentPicklist" type ="Map" default="{State__c:'Country__c',Subtype_Of_Applicant__c:'Type_Of_Applicant__c'}"/>
+    
+    
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title slds-theme_shade sectionBackground">
+            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">APPLICANT DETAILS</span>
+        </h3>
+        
+        <!--Component Start-->
+        <div class="slds-m-around_medium">
+            
+            <aura:if isTrue="{!v.showConfirmDialog}">
+                <!--Modal Box Start-->
+                <div role="dialog" class="slds-modal slds-fade-in-open ">
+                    <div class="slds-modal__container">
+                        <!--Modal Box Header Start-->
+                        <header class="slds-modal__header">
+                            <h1 class="slds-text-heading--medium">Confirmation</h1>
+                        </header>
+                        <!--Modal Box Header End-->
+                        
+                        <!--Modal Box Content Start-->
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <center><b>Are you sure you want confirm All the Applicant Details are verified?</b></center>
+                        </div>
+                        <!--Modal Box Content End-->
+                        
+                        <!--Modal Box Button Start-->
+                        <footer class="slds-modal__footer">
+                            <lightning:button name='No' label='No' onclick='{!c.handleConfirmDialogNo}'/>
+                            <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleConfirmDialogYes}'/>
+                        </footer>
+                        <!--Modal Box Button End-->
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>            
+            </aura:if>
+        </div>
+        <!--Component End--> 
+        
+        
+        
+        <div class="slds-clearfix">
+            <aura:if isTrue="{!  v.readonly}">     
+                <div class="slds-float_center  slds-p-around_small">
+                    <lightning:button label="Edit" iconName="utility:edit" iconPosition="right"  variant="brand" onclick="{!c.editform }"/>                
+                    <lightning:button name="Confirm Applicant Details" variant="brand" label="Confirm Applicant Details" onclick="{!c.handleConfirmDialog}" disabled="{!v.kycVerified}"/>
+                    
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-float_right  slds-p-around_small">
+                        <lightning:button label="Save" iconName="utility:save" iconPosition="right"  variant="brand" onclick="{!c.saveform }"/>                
+                        <lightning:button label="Cancel" iconName="utility:cancel" iconPosition="right"  variant="brand" onclick="{!c.cancelform }"/>                
+                    </div>
+                </aura:set>
+            </aura:if>
+            <aura:if isTrue="{! not( v.readonly)}">     
+                <div class="slds-float_left  slds-p-around_small">
+                    <lightning:button label="Add Applicant" iconName="utility:add" iconPosition="right"  variant="brand" onclick="{!c.addApplicant }" disabled="{!v.addDisabled}"/>
+                    <lightning:button label="Remove Applicant" iconName="utility:delete" iconPosition="right" variant="destructive" onclick="{! c.removeApplicant }" disabled="{!v.removeDisabled}"/>
+                    <aura:if isTrue="{!(v.applicantValidationError)}">
+                        
+                        <div class="slds-clearfix;" style="padding:15px;">
+                            <div class="slds-float_none" style="background-color:#c23934;color:white;border-radius: 8px 8px 2px 2px;font-size:13px;">
+                                <lightning:icon iconName="utility:error" alternativeText="Error!" title="Error" /> Please resolve the below errors
+                            </div>
+                            <aura:iteration items="{!v.applicantErrorList}" var="errors">
+                                
+                                <div class="slds-text-heading_medium slds-align_left slds-text-color_error slds-text-title_bold">                
+                                    <lightning:icon iconName="utility:error" alternativeText="Error!" title="Error" />
+                                    {!errors}
+                                </div>
+                            </aura:iteration>
+                        </div>
+                        
+                        
+                        
+                    </aura:if>
+                </div>
+            </aura:if>
+        </div>
+        <lightning:tabset  variant="scoped" class ="slds-text-heading_small" aura:id="applicanttab" >
+            <aura:if isTrue="{! not( v.childSpinner)}">     
+                <aura:if isTrue="{!not(empty(v.statePicklist))}">
+                    
+                    <aura:iteration items="{!v.applicantDetails}" var="applicant" indexVar="key">
+                        <lightning:tab label="{#'Applicant '+(key+1)}"  id="{!applicant.Id}" aura:id="tab">
+                            <c:ApplicantDetailComponent aura:id="appDetails" applicantDetail="{! applicant}" SalutationPicklistOptions="{!v.SalutationPicklistOptions}" GenderPicklistOptions="{!v.GenderPicklistOptions	}" 
+                                                        NationalityPicklistOptions="{!v.NationalityPicklistOptions}" MaritalStatusPicklistOptions="{!v.MaritalStatusPicklistOptions}" OccupationPicklistOptions="{!v.OccupationPicklistOptions}"
+                                                        DesignationPicklistOptions="{!v.DesignationPicklistOptions}" ContactPersonPicklistOptions="{!v.ContactPersonPicklistOptions}"
+                                                        CountryPicklistOptions="{!v.CountryPicklistOptions}" statePicklist="{!v.statePicklist}" CityPicklistOptions="{!v.CityPicklistOptions}" ApplicantPicklistOptions="{!v.ApplicantPicklistOptions}" ResidentialPicklist="{!v.ResidentialPicklist}"
+                                                        readonly="{!v.readonly}"           AddressProofDocument="{!v.AddressProofDocument}" TypeOfOriginOptions="{!v.TypeOfOriginOptions}" bookingId="{!v.recordId}"  oppId="{!v.opportunityId}"/>
+                        </lightning:tab>
+                    </aura:iteration>
+                </aura:if>
+                <aura:set attribute="else">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                    
+                </aura:set>
+            </aura:if>
+            
+        </lightning:tabset>
+        <div class="slds-clearfix">
+            <aura:if isTrue="{!  v.readonly}">     
+                <div class="slds-float_left slds-p-around_small">
+                    <lightning:button label="Edit" iconName="utility:edit" iconPosition="right"  variant="brand" onclick="{!c.editform }"/>                
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-float_right  slds-p-around_small">
+                        <lightning:button label="Save" iconName="utility:save" iconPosition="right"  variant="brand" onclick="{!c.saveform }"/>                
+                        <lightning:button label="Cancel" iconName="utility:cancel" iconPosition="right"  variant="brand" onclick="{!c.cancelform }"/>                
+                    </div>
+                </aura:set>
+            </aura:if>
+            
+        </div>           
+        
+        <aura:if isTrue="{! ( v.Spinner)}">  
+            <div class="slds-spinner_container">
+                <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            
+            
+        </aura:if>
+    </div>
+    
+</aura:component>

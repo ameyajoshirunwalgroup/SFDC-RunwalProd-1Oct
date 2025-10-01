@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CRM_Call_Status__c</fullName>
+    <label>Del_CRM Call Status</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Connected to the preferred agent</fullName>
+                <default>false</default>
+                <label>Connected to the preferred agent</label>
+            </value>
+            <value>
+                <fullName>Connected to the preferred agent phone</fullName>
+                <default>false</default>
+                <label>Connected to the preferred agent phone</label>
+            </value>
+            <value>
+                <fullName>Connected to another agent</fullName>
+                <default>false</default>
+                <label>Connected to another agent</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

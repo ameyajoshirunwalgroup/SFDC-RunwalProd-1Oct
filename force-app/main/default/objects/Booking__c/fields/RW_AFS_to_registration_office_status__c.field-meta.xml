@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RW_AFS_to_registration_office_status__c</fullName>
+    <label>AFS sent to registration office status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>AFS document shared</fullName>
+                <default>false</default>
+                <label>AFS document shared</label>
+            </value>
+            <value>
+                <fullName>AFS document Not yet shared</fullName>
+                <default>false</default>
+                <label>AFS document Not yet shared</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

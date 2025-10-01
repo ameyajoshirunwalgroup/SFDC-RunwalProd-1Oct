@@ -1,0 +1,109 @@
+<template>
+	<div class="Main">
+		<template if:true={shownewModal}>
+			<!-- <template if:true={newModal}> -->
+			<c-customer-portal-popup account-id={recordId} onclose={handleCloseModal}></c-customer-portal-popup>
+			<!-- </template>  -->
+		</template>
+		<div class="container">
+			<div class="left-section">
+				<div class="NavBar">
+					<div style="color:black;text-align:center;">Profile Completeness -
+						<a style="font-weight:bold;" class={completenessClass} onclick={handlePopup}>
+							{completeness}%</a>
+					</div>
+					<div class="Opportunity-list">
+						<table class="slds-table slds-table_bordered reduced-width-table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Opportunity Name</th>
+									<th>Booking Name</th>
+									<th>CRN</th>
+								</tr>
+							</thead>
+							<tbody>
+								<template if:true={opportunities.length}>
+									<template for:each={opportunities} for:item="opp">
+										<tr key={opp.Id}>
+											<td class="checkbox-cell" style="width:10px;">
+												<input type="checkbox" class="Opp_checkbox" name={opp.Id}
+					data-opportunity-id={opp.Id}
+					data-opportunity-stage={opp.StageName}
+					onchange={handleCheckboxChange} />
+											</td>
+											<td>
+												<a href="#" data-id={opp.Id} onclick={navigateToRecord}>{opp.Name}</a>
+											</td>
+											<td>
+												<a href="#" data-id={opp.Booking__c}
+													onclick={navigateToRecord}>{opp.Booking__r.Name}</a>
+											</td>
+											<td class="crn">
+												{opp.SAP_Customer_Number__c}
+											</td>
+										</tr>
+									</template>
+								</template>
+
+								<template if:true={error}>
+									<tr>
+										<td colspan="7">
+											<p>Error loading opportunities</p>
+										</td>
+									</tr>
+								</template>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="CardContainer dark-golden-border">
+					<div class="CardHeader">Knowledge Bank</div>
+					<div class="search-container">
+						<input type="text" id="searchInput" placeholder="Search..."  onchange={handleSearchInput} />
+						<button onclick={searchRecords}>Submit</button>
+					</div>
+					<template if:true={filesList}>
+						<div class="pdf-link-container">
+							<template for:each={filesList} for:item="file">
+								<div key={file.value} class="pdf-item">
+									<span>Custom 360 Guide</span>
+									<button data-id={file.value} onclick={previewHandler}>Preview</button>
+								</div>
+							</template>
+						</div>
+					</template>
+				</div>
+				<div if:true={showPopup} class="popup">
+					<div class="popup-content">
+						<span class="close-btn" onclick={closePopup}>&times;</span>
+						<template if:true={results.length}>
+							<template for:each={results} for:item="result">
+								<div key={result.Id}>
+									<p><strong>Question:</strong> {result.Question__c}</p>
+									<p><strong>Response:</strong> {result.Response__c}</p>
+								</div>
+							</template>
+						</template>
+						<template if:false={results.length}>
+							<p>No matching records found.</p>
+						</template>
+					</div>
+
+				</div>
+
+				<template for:each={bookingData} for:item="bk">
+					<div key={bk.ObjectId} class="CardContainer dark-golden-border">
+						<div key={bk.ObjectId} class="CardHeader">Call Punch</div>
+						<div key={bk.ObjectId} class="booking-record">
+							<div key={bk.ObjectId} class="booking-field" for:each={bk.ApplicantDetails}
+								for:item="field">
+
+							</div>
+						</div>
+					</div>
+				</template>
+			</div>
+		</div>
+	</div>
+</template>

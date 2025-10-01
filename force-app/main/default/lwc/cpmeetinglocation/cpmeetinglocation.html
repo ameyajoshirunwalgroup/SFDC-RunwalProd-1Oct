@@ -1,0 +1,18 @@
+<template>
+    <div class="container">
+        <button class="primary-button" onclick={handleButtonClick} disabled={isTaskCompleted}>
+            Capture Location
+        </button>
+        <div class="location-info">
+            <label class="location-label">CP Meeting Location:</label>
+            <p class="location-value">{currentaddress}</p>
+        </div>
+    </div>
+    
+    <!-- Spinner shown only when showSpinner is true -->
+    <template if:true={showSpinner}>
+        <div class="spinner-container">
+            <lightning-spinner class="spinner" alternative-text="Loading"></lightning-spinner>
+        </div>
+    </template>
+</template>

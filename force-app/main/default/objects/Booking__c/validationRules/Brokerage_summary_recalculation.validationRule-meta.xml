@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Brokerage_summary_recalculation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(
+	And(
+		ISCHANGED(Calculate_Brokerage__c),
+		Not(ISBLANK(Brokerage_Summary__c)),
+		Calculate_Brokerage__c,
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+	),
+	And(
+		ISCHANGED(Calculate_Brokerage__c),
+		not(Calculate_Brokerage__c),
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+	),
+	And(
+		Calculate_Brokerage__c,
+		not(ISPICKVAL(Source_of_Booking__c,&apos;Channel Partner&apos;))
+	)
+),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Calculate_Brokerage__c</errorDisplayField>
+    <errorMessage>Brokerage summary is already present
+OR this field cannot be updated as blank
+OR Source is not Channel Partner</errorMessage>
+</ValidationRule>

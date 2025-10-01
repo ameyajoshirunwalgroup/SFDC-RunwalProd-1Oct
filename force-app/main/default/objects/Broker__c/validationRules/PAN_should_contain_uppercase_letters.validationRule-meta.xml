@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PAN_should_contain_uppercase_letters</fullName>
+    <active>true</active>
+    <description>PAN number letters should be in uppercase only.</description>
+    <errorConditionFormula>AND(Broker_Pan_No__c &lt;&gt; UPPER (Broker_Pan_No__c ) ,
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorDisplayField>Broker_Pan_No__c</errorDisplayField>
+    <errorMessage>PAN number letters should be in uppercase only.</errorMessage>
+</ValidationRule>

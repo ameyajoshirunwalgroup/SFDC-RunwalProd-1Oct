@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Booking_Date_validation_Brokerage_Scheme</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISNEW() ),
+NOT(ISBLANK(Brokerage_Scheme__c )),
+AND(
+OR(
+AND( DATEVALUE(Booking_Date__c) &lt;= Brokerage_Scheme__r.Start_Date__c,
+DATEVALUE(Booking_Date__c) != Brokerage_Scheme__r.Start_Date__c),
+AND( DATEVALUE(Booking_Date__c)&gt;= Brokerage_Scheme__r.End_Date__c ,
+DATEVALUE(Booking_Date__c)!= Brokerage_Scheme__r.End_Date__c )),
+OR(ISCHANGED(Brokerage_Scheme__c),ISCHANGED(Booking_Date__c))
+
+),
+$Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorMessage>Please update the correct Booking Date. (Booking Date mismatch).</errorMessage>
+</ValidationRule>

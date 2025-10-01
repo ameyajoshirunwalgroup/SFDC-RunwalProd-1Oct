@@ -1,0 +1,332 @@
+<aura:component controller="CustomerPortalHomeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+	<aura:attribute name="applicantdetails" type="List" />
+    <aura:attribute name="applicantdetailsCopy" type="List" />
+    <aura:attribute name="existingfirstName" type="String" />
+     <aura:attribute name="existinglastName" type="String" />
+     <aura:attribute name="existingemail" type="String" />
+     <aura:attribute name="existingmobile" type="String" />
+     <aura:attribute name="existingcompany" type="String" />
+     <aura:attribute name="existingaddress" type="String" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="complaintRecord" type="Case" default="{}"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                    <div class="slds-section slds-is-open">
+                    <div class="slds-p-top_small"></div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" flexibility="auto" padding="horizontal-medium" class="slds-box slds-box_small">
+                            
+                            <div class="slds-page-header">
+                                <h1>Personal Details</h1>
+                            </div>
+                          
+                           <!-- <b class="headerstyle">Personal Details</b>-->
+                            <div class="slds-p-top_small"></div>
+                            <div class="slds-form" role="list">
+                                <div class="slds-form__row">
+                                    <div class="slds-form__item" role="listitem">
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">FIRST NAME</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.firstName}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                            <label class="slds-form-element__label slds-p-top_small" for="single-form-element-id-02">LAST NAME</label>
+                                            <div class="slds-form-element__control">
+                                                <lightning:input readonly="true" type="text" id="single-form-element-id-02" value="{!v.applicantdetails.lastName}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="slds-p-top_small"></div>
+								<div class="slds-form__row">
+									<div class="slds-form__item" role="listitem">
+										<div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+											<label class="slds-form-element__label slds-p-top_x-small" for="single-form-element-id-email">EMAIL ID</label>
+												
+												<lightning:input type="text" readonly="true" id="single-form-element-id-email" value="{!v.applicantdetails.email}" />
+                                           
+										</div>
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+											<label class="slds-form-element__label slds-p-top_x-small" for="single-form-element-id-email">PHONE</label>
+												
+												<lightning:input type="text" readonly="true" id="single-form-element-id-email" value="{!v.applicantdetails.mobile}" />
+                                           
+										</div>
+									</div>
+								</div>
+                                
+                                <div class="slds-p-top_small"></div>
+								<div class="slds-form__row">
+									<div class="slds-form__item" role="listitem">
+										<div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+											<label class="slds-form-element__label slds-p-top_x-small" for="single-form-element-id-email">ADDRESS</label>
+												
+												<lightning:input type="text" readonly="true" id="single-form-element-id-email" value="{!v.applicantdetails.address}" />
+                                           
+										</div>
+                                        <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+											<label class="slds-form-element__label slds-p-top_x-small" for="single-form-element-id-email">COMPANY</label>
+												<lightning:input type="text" readonly="true" id="single-form-element-id-email" value="{!v.applicantdetails.companyname}" />
+                                           
+										</div>
+									</div>
+								</div>
+                               
+                                
+                            </div>
+                        </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+        </div>
+        
+        <div class="{!$Browser.isPhone ? 'slds-col slds-size_1-of-1 slds-large-size_4-of-12' :'slds-col slds-size_1-of-1 slds-large-size_4-of-12 slds-p-top_xx-large'}" >
+            <div class="{!$Browser.isPhone ? 'slds-align_absolute-center' :'slds-p-top_xx-large'}" >
+            <lightning:button variant="brand" name="{!v.applicantdetails}" label="Edit Profile" title="Edit Profile" class="{!v.applicantdetails.registrationStatus !='Registration Completed' ? 'sizeButton textInput':'slds-hide'}" onclick="{! c.openApplicantDetails }" />
+        	</div>
+            </div>
+    </div>
+    
+    <aura:if isTrue="{!v.isOpen}">
+    
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.handleCloseModal}">
+                            X
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 class="slds-text-heading--medium">Edit Profile</h1>
+                    </div>
+                     
+                    <!--Modal Box Header-->
+                     <div class="slds-modal__content slds-p-around_medium slds-is-relative" >
+                         
+                         <aura:if isTrue="{!v.Spinner}">
+         
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+           
+                </aura:if>
+                         
+                        <p><b>
+                            <!-- Calling Other Component -->  
+                            <!--lightning:input Name="" label = "Last Name" readonly = "true"/-->
+                            <div class="slds-grid slds-gutters slds-wrap">
+        <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            
+        </div>-->
+      <!--  <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+                 <div class="slds-p-top_x-large">
+                    <span>Request Change Description</span>                        
+                 </div>
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	 <lightning:textarea name="description" value="{!v.complaintRecord.Description}"/>
+        </div>
+                   -->             
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+       			<div class="slds-p-top_x-large">
+                    <span>First Name</span>                        
+                 </div>
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	  <lightning:input type="text" id="single-form-element-id-02" value="{!v.applicantdetails.firstName}" />
+        </div>
+                                
+                                
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+        
+        	 <div class="slds-p-top_x-large">
+                    <span>Last Name</span>                        
+                 </div>
+            
+      
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	 <lightning:input type="text" id="single-form-element-id-02" value="{!v.applicantdetails.lastName}" />
+        </div>
+                                
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+        
+        	 <div class="slds-p-top_x-large">
+                    <span>Email</span>                        
+                 </div>
+            
+      
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	 <lightning:input type="text" id="single-form-element-id-02" value="{!v.applicantdetails.email}" />
+        </div>
+                                
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+        
+        	 <div class="slds-p-top_x-large">
+                    <span>Phone</span>                        
+                 </div>
+            
+      
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	 <lightning:input type="text" id="single-form-element-id-02" value="{!v.applicantdetails.mobile}" />
+        </div>
+                                
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+        
+        	 <div class="slds-p-top_x-large">
+                    <span>Company</span>                        
+                 </div>
+            
+      
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	 <lightning:input type="text" id="single-form-element-id-02" value="{!v.applicantdetails.companyname}" />
+        </div>
+                                
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            
+        
+        	 <div class="slds-p-top_x-large">
+                    <span>Address</span>                        
+                 </div>
+            
+      
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+        	 <lightning:input type="textarea" id="single-form-element-id-02" value="{!v.applicantdetails.address}" />
+        </div>
+        <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            
+        </div>-->
+              <div class="slds-align_absolute-center slds-p-top_small" >
+             <lightning:button variant="brand" label="Submit" title="Submit" onclick="{! c.onsubmit }"  /> 
+             <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.closeModal }"  /> 
+             </div>
+             </div>
+                            </b>
+                        </p>
+                    </div>
+                    <!--Modal Box Button-->
+                    
+                </div>
+                    
+            </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>    
+        
+        
+    <!--<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                   
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Change Request</h2>
+                    </header>
+                    
+                    <div class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+            <div class="slds-p-around_small">
+                 <div class="slds-p-top_x-large">
+                    <span>Request Change Description</span>                        
+                 </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+        	 <lightning:textarea name="description" value="{!v.description}"/>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
+            
+        </div>
+              <div class="slds-align_absolute-center" >
+             <lightning:button variant="brand" label="Submit" title="Submit" onclick="{! c.onrejectSubmit }"  /> 
+             <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.oncancel }"  /> 
+             </div>
+             </div>
+                    
+                   
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                       
+                    </footer>
+                </div>
+            </section>-->
+    </aura:if>
+    
+    
+</aura:component>

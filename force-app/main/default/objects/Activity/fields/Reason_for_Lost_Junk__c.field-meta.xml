@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Lost_Junk__c</fullName>
+    <label>Reason for Lost/Junk</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Call_Disposition_Custom__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Channel Partner</fullName>
+                <default>false</default>
+                <label>Channel Partner</label>
+            </value>
+            <value>
+                <fullName>DND</fullName>
+                <default>false</default>
+                <label>DND</label>
+            </value>
+            <value>
+                <fullName>Feels Rates Are High</fullName>
+                <default>false</default>
+                <label>Feels Rates Are High</label>
+            </value>
+            <value>
+                <fullName>Looking For Negotiations/Offer</fullName>
+                <default>false</default>
+                <label>Looking For Negotiations/Offer</label>
+            </value>
+            <value>
+                <fullName>Lost to Competition</fullName>
+                <default>false</default>
+                <label>Lost to Competition</label>
+            </value>
+            <value>
+                <fullName>No Budget</fullName>
+                <default>false</default>
+                <label>No Budget</label>
+            </value>
+            <value>
+                <fullName>Not As Per Vastu</fullName>
+                <default>false</default>
+                <label>Not As Per Vastu</label>
+            </value>
+            <value>
+                <fullName>Not Contactable</fullName>
+                <default>false</default>
+                <label>Not Contactable</label>
+            </value>
+            <value>
+                <fullName>Not In Configutation</fullName>
+                <default>false</default>
+                <label>Not In Configutation</label>
+            </value>
+            <value>
+                <fullName>Not In Possession Time Line</fullName>
+                <default>false</default>
+                <label>Not In Possession Time Line</label>
+            </value>
+            <value>
+                <fullName>Not In Preferred Location</fullName>
+                <default>false</default>
+                <label>Not In Preferred Location</label>
+            </value>
+            <value>
+                <fullName>Not Looking For Any Property</fullName>
+                <default>false</default>
+                <label>Not Looking For Any Property</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+            <value>
+                <fullName>Unavailability Of Required Apartment</fullName>
+                <default>false</default>
+                <label>Unavailability Of Required Apartment</label>
+            </value>
+            <value>
+                <fullName>BPCL not done</fullName>
+                <default>false</default>
+                <label>BPCL not done</label>
+            </value>
+            <value>
+                <fullName>Not responding</fullName>
+                <default>false</default>
+                <label>Not responding</label>
+            </value>
+            <value>
+                <fullName>ringing after 5 attempts</fullName>
+                <default>false</default>
+                <label>ringing after 5 attempts</label>
+            </value>
+            <value>
+                <fullName>call back</fullName>
+                <default>false</default>
+                <label>call back</label>
+            </value>
+            <value>
+                <fullName>follow up</fullName>
+                <default>false</default>
+                <label>follow up</label>
+            </value>
+            <value>
+                <fullName>Details shared but no response</fullName>
+                <default>false</default>
+                <label>Details shared but no response</label>
+            </value>
+            <value>
+                <fullName>will take more then 3 month</fullName>
+                <default>false</default>
+                <label>will take more then 3 month</label>
+            </value>
+            <value>
+                <fullName>Not enquired</fullName>
+                <default>false</default>
+                <label>Not enquired</label>
+            </value>
+            <value>
+                <fullName>Wrong no</fullName>
+                <default>false</default>
+                <label>Wrong no</label>
+            </value>
+            <value>
+                <fullName>Invalid no</fullName>
+                <default>false</default>
+                <label>Invalid no</label>
+            </value>
+            <value>
+                <fullName>Language barrier</fullName>
+                <default>false</default>
+                <label>Language barrier</label>
+            </value>
+            <value>
+                <fullName>asked to call back</fullName>
+                <default>false</default>
+                <label>asked to call back</label>
+            </value>
+            <value>
+                <fullName>Continuous 15 Not Connected Calls</fullName>
+                <default>false</default>
+                <label>Continuous 15 Not Connected Calls</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>DND</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Feels Rates Are High</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Looking For Negotiations/Offer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Lost to Competition</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>No Budget</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Not As Per Vastu</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Not In Configutation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Not In Possession Time Line</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Not In Preferred Location</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Not Looking For Any Property</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Others</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>Unavailability Of Required Apartment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lost</controllingFieldValue>
+            <valueName>BPCL not done</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Not Contactable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Not responding</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>ringing after 5 attempts</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Details shared but no response</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>will take more then 3 month</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Not enquired</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Wrong no</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Invalid no</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Language barrier</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>asked to call back</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Junk</controllingFieldValue>
+            <valueName>Continuous 15 Not Connected Calls</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

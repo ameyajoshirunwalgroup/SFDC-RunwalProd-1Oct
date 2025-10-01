@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Inbound__c</fullName>
+    <label>Del Reason for Inbound Communication</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Communication_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Directional query</fullName>
+                <default>false</default>
+                <label>Directional query</label>
+            </value>
+            <value>
+                <fullName>Email Blast</fullName>
+                <default>false</default>
+                <label>Email Blast</label>
+            </value>
+            <value>
+                <fullName>Existing Client</fullName>
+                <default>false</default>
+                <label>Existing Client</label>
+            </value>
+            <value>
+                <fullName>Missed / Abandon call</fullName>
+                <default>false</default>
+                <label>Missed / Abandon call</label>
+            </value>
+            <value>
+                <fullName>Project information</fullName>
+                <default>false</default>
+                <label>Project information</label>
+            </value>
+            <value>
+                <fullName>SMS blast</fullName>
+                <default>false</default>
+                <label>SMS blast</label>
+            </value>
+            <value>
+                <fullName>Invalid Enquiry</fullName>
+                <default>false</default>
+                <label>Invalid Enquiry</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>Directional query</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>Email Blast</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>Existing Client</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>Missed / Abandon call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>Project information</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>SMS blast</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Inbound Call</controllingFieldValue>
+            <valueName>Invalid Enquiry</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

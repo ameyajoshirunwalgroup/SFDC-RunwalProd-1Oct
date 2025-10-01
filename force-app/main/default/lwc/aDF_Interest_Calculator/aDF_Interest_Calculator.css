@@ -1,0 +1,63 @@
+.custom-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.small-input {
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+.slider {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.highlighted-amount {
+    font-weight: bold;
+    background-color: #e3e3e0;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #050605;
+    text-align: center;
+    font-size: 1.4rem;
+    border: 1px solid #030303;
+}
+/* simpleInterestCalculator.css */
+.custom-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+.highlighted-amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2e844a; /* SLDS success color */
+}
+
+.slider {
+    width: 100%;
+    appearance: none;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #0070d2, #00a1e0);
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #aabac8;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #555;
+}

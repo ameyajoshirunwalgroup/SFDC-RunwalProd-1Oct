@@ -1,0 +1,87 @@
+<template>
+    <lightning-card variant="Narrow">
+      <!-- Attractive Heading Section -->
+<div class="slds-text-align_center slds-text-heading_large slds-p-around_medium slds-text-title_bold slds-theme_shade">
+    <span style="color: #16325c; font-size: 1.8rem;">SI Calculator</span>
+</div>
+        <div class="slds-p-around_medium custom-container">
+
+            <!-- Principal Amount and ADF Threshold in Same Row -->
+            <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                <!-- Principal Amount -->
+                <div class="slds-col">
+                    <label class="slds-form-element__label slds-text-title_bold">Principal Amount (Rs.)</label>
+                    <lightning-input type="number" value={Principal} class="small-input"
+                        onchange={handlePrincipalChange}>
+                    </lightning-input>
+                </div>
+
+<!-- <div class="slds-m-top_medium">-->
+    <div class="slds-col">
+                <label class="slds-form-element__label slds-text-title_bold">Rate of Interest (%)</label>
+                <lightning-input type="percentage" class="small-input" value={ROI} readonly>
+                </lightning-input>
+            </div>
+                <!-- ADF Threshold Amount -->
+               <!-- <div class="slds-col">
+                    <label class="slds-form-element__label slds-text-title_bold">ADF Threshold Amount (Rs.)</label>
+                    <lightning-input type="number" value={ADFThresholdAmount} class="small-input" readonly>
+                    </lightning-input>
+                </div>-->
+            </div>
+
+            <!-- Range Slider for Principal -->
+            <label for="principalRange">{Principal}</label>
+            <input
+                type="range"
+                min="100000"
+                max="10000000"
+                step="100"
+                value={Principal}
+                onchange={handlePrincipalChange}
+                class="slider"
+                id="principalRange"
+            />
+
+            <!-- Rate of Interest Section -->
+
+            <!-- 
+            <lightning-input type="number" value={ROI} class="small-input" onchange={handleROIChange}>
+            </lightning-input>
+            <input type="range" min="1" max="20" step="0.5" value={ROI}
+                onchange={handleROIChange} class="slider" />
+            -->
+
+           
+
+            <!-- Start Date and End Date in One Line -->
+            <div class="slds-grid slds-gutters slds-m-top_medium slds-m-bottom_medium">
+                <div class="slds-col">
+                    <lightning-input type="date" label="Start Date" value={startDate} onchange={handleStartDateChange}
+                        class="slds-text-title_bold" required>
+                    </lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input type="date" label="End Date" value={endDate} onchange={handleEndDateChange}
+                        class="slds-text-title_bold" required>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <!-- Calculated Interest and Total Amount -->
+            <div class="highlighted-amount slds-m-bottom_medium slds-text-title_bold slds-text-color_success">
+                <template if:true={CalculatedInterest}>
+                    <lightning-formatted-text value={CalculatedInterest}></lightning-formatted-text><br />
+                    <lightning-formatted-text value={TotalAmount}></lightning-formatted-text>
+                </template>
+            </div>
+
+            <!-- Calculate Button -->
+            <div class="slds-align_absolute-center">
+                <lightning-button variant="brand" label="Calculate" title="Calculate" onclick={handleCalculations}>
+                </lightning-button>
+            </div>
+
+        </div>
+    </lightning-card>
+</template>

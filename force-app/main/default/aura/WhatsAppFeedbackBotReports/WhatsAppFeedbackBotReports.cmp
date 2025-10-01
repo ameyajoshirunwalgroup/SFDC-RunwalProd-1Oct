@@ -1,0 +1,2410 @@
+<aura:component controller="WhatsAppFeedbackBotReportsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <aura:html tag="style">
+    
+      .slds-modal__content {
+        overflow-y: Show !important;
+        overflow-x: scroll !important;
+        height:unset !important;
+        max-height:unset !important;
+        padding: 1.5rem !important;
+        }
+    
+        .slds-modal__container{
+        width: 70% !important;
+        max-width: 70% !important;
+        }
+        .attach-to-bottom{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        .attach-to-Top{
+        position: absolute;
+        Top: 0px;
+        right: 0px;
+        width: 70%;
+        }
+        
+        .slds-table--fixed-layout {
+          table-layout: fixed;
+          width: 100%;
+          white-space: nowrap;
+		}
+     
+    </aura:html>
+    
+    <ltng:require styles="{! $Resource.SLDS090 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:attribute name="countDetails" type="Map"/>
+    <aura:attribute name="npsMap" type="Object[]"/>
+    <aura:attribute name="custInstMap" type="Object[]"/>
+    <aura:attribute name="team" type="String"/>
+    <aura:attribute name="team2" type="String"/>
+    <aura:attribute name="type" type="String"/>
+    <aura:attribute name="dateRange" type="String"/>
+    <aura:attribute name="report" type="String"/>
+    <aura:attribute name="dayOfRegRemarks" type="List"/>
+    <aura:attribute name="dayOfKetHadnRemarks" type="List"/>
+    <aura:attribute name="postPossRemarks" type="List"/>
+    <aura:attribute name="recDetails" type="Object[]"/>
+    <aura:attribute name="dayOfRegData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="dayOfPosData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="postPosData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="salesExpData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="caseClsData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="callDipData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="endOfConvData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="showEventTable" type="Boolean"/>
+    <aura:attribute name="showdayofReg" type="Boolean"/>
+    <aura:attribute name="showdayofPos" type="Boolean"/>
+    <aura:attribute name="showpostPos" type="Boolean"/>
+    <aura:attribute name="showsalesExp" type="Boolean"/>
+    <aura:attribute name="selectedEvent" type="String"/>
+    <aura:attribute name="eventsReport" type="Boolean"/>
+    <aura:attribute name="npsReport" type="Boolean"/>
+    <aura:attribute name="showNPSTable" type="Boolean"/>
+    <aura:attribute name="showNPSdayofReg" type="Boolean"/>
+    <aura:attribute name="showNPSdayofPos" type="Boolean"/>
+    <aura:attribute name="showNPSpostPos" type="Boolean"/>
+    <aura:attribute name="showNPSCaseCls" type="Boolean"/>
+    <aura:attribute name="showNPSCalDisp" type="Boolean"/>
+    <aura:attribute name="showNPSEndOfConv" type="Boolean"/>
+    <aura:attribute name="showNPSsalesExp" type="Boolean"/>
+    <aura:attribute name="showallEventTable" type="Boolean"/>
+    <aura:attribute name="allRecDetails" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="userTeam" type="String"/>
+    <aura:attribute name="userName" type="String"/>
+    <aura:attribute name="npsData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="npsDataPPD" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="showNPSDataTable" type="Boolean"/>
+    <aura:attribute name="showNPSDataTablePPD" type="Boolean"/>
+    <aura:attribute name="selectedCapmaign" type="String"/>
+    <aura:attribute name="CampaignPicklistOptions" type="String[]"/>
+    <aura:attribute name="campFBData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="campQuestions" type="String[]"/>
+    <aura:attribute name="campCountDetails" type="Map"/>
+    <aura:attribute name="campRecDetails" type="Object[]"/>
+    <aura:attribute name="showCampTable" type="Boolean"/>
+    <aura:attribute name="showCampAllDetTable" type="Boolean"/>
+    <aura:attribute name="showCampCountTable" type="Boolean"/>
+    <aura:attribute name="campNPSData" type="Object"/>
+    <aura:attribute name="campNPSDetails" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="campNPSDetailsTable" type="Boolean"/>
+    <aura:attribute name="showCampNpsTable" type="Boolean"/>
+    <aura:attribute name="year" type="String[]"/>
+     <aura:attribute name="visitType" type="String"/>    
+    <aura:attribute name="userValue" type="String" default = ""/>
+    <aura:attribute name="year1" type="String"/>
+    <aura:attribute name="year2" type="String"/>
+    <aura:attribute name="year3" type="String"/>
+    <aura:attribute name="year4" type="String"/>
+    <aura:attribute name="year5" type="String"/>
+    <aura:attribute name="yearVal" type="String"/>
+    <aura:attribute name="monthVal" type="String"/>
+    <aura:attribute name="new_user" type="String"/>
+    <aura:attribute name="npsExpData" type="WhatsApp_Feedback__c[]"/>
+    <aura:attribute name="periodWiseData" type="Boolean"/>
+    <aura:attribute name="yearMonthWiseData" type="Boolean"/>
+    <aura:attribute name="disableOverallExportButton" type="Boolean"/>
+    <aura:attribute name="showCPCaseDashboard" type="Boolean"/>
+    <aura:attribute name="currentTarget" type="String"/>
+    <aura:attribute name="npsSummary" type="Object[]"/>
+    <aura:attribute name="custInstSummary" type="Object[]"/>
+    <aura:attribute name="showPostPossessionForFM" type="Boolean"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!and(v.showPostPossessionForFM,or(v.team2 == 'All',v.team2 == 'FM'))}">
+    	<c:postPossessionFeedbackDashboardForFM aura:id="lWCChild" />
+    </aura:if>
+    <aura:if isTrue="{!v.team2 != 'FM'}">
+        
+    <aura:if isTrue="{!v.report == 'Events Report'}">
+    	<div class="slds-modal__content">
+        <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+               <aura:if isTrue="{!and(v.team != null,v.team != '')}">
+                	WhatsApp Feedback Report - Events - {!v.team}
+                    <aura:set attribute="else">
+                    	WhatsApp Feedback Report - Events
+                    </aura:set>
+                </aura:if>
+            </h3><br/>
+            
+            <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                        <ui:inputselectoption text="Events Report" label="Events Report" />
+                        <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                        <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                        <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                       <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                        <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Date Range: " aura:Id="dateRange" class="slds-input" value="{!v.dateRange}" change="{!c.dateChange}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="LAST_N_DAYS:7" label="Last 7 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:15" label="Last 15 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:30" label="Last 30 Days" />
+                        <ui:inputselectoption text="LAST_N_MONTHS:3" label="Last 90 Days" />
+                        <ui:inputselectoption text="LAST_N_MONTHS:6" label="Last 180 Days" />
+                        <ui:inputselectoption text="THIS_MONTH" label="Current Month" />
+                        <ui:inputselectoption text="THIS_FISCAL_YEAR" label="Current FY" />
+                        <ui:inputselectoption text="LAST_FISCAL_YEAR" label="Previous FY" />
+                        <ui:inputselectoption text="Custom" label="Custom" />
+                    </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="2024" label="2024" />
+                        <ui:inputselectoption text="2023" label="2023" />
+                        <ui:inputselectoption text="2022" label="2022" />
+                        <ui:inputselectoption text="2021" label="2021" />
+                        <ui:inputselectoption text="2020" label="2020" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Month: " aura:Id="month" class="slds-input" value="{!v.monthVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="1" label="January" />
+                        <ui:inputselectoption text="2" label="February" />
+                        <ui:inputselectoption text="3" label="March" />
+                        <ui:inputselectoption text="4" label="April" />
+                        <ui:inputselectoption text="5" label="May" />
+                        <ui:inputselectoption text="6" label="June" />
+                        <ui:inputselectoption text="7" label="July" />
+                        <ui:inputselectoption text="8" label="August" />
+                        <ui:inputselectoption text="9" label="September" />
+                        <ui:inputselectoption text="10" label="October" />
+                        <ui:inputselectoption text="11" label="November" />
+                        <ui:inputselectoption text="12" label="December" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <br/><br/>
+            
+            
+            <!--<aura:if isTrue="{!v.report == 'Events Report'}">-->
+            	<table style="width:50%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-p-around_none">
+            	<thead>
+                    <tr> 
+                        <th style="width:40%;">Event</th>
+                        <th style="text-align:center;width:15%;">Excellent</th>
+                        <th style="text-align:center;width:15%;">Very Good</th>
+                        <th style="text-align:center;width:15%;">Good</th>
+                        <th style="text-align:center;width:15%;">Bad</th>
+                    </tr>     
+                </thead>
+                <tbody>
+                    <aura:if isTrue="{!or(v.team2 == 'All',v.team2 == 'Sales')}">
+                        <tr>
+                            <td>
+                                <b><a href="javascript:void(0)" id="dayofReg" onclick="{!c.salesExp}">Sales Experience</a></b></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Sales Experience_Excellent" onclick="{!c.recordDet}">
+                                {!v.countDetails.salesExp_Excellent}
+                                </a></td> 
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Sales Experience_Very Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.salesExp_Very_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Sales Experience_Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.salesExp_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Sales Experience_Bad" onclick="{!c.recordDet}">
+                                {!v.countDetails.salesExp_Bad}
+                                </a></td>
+                        </tr>
+                    </aura:if>
+                    <aura:if isTrue="{!or(v.team2 == 'All',v.team2 == 'CRM')}">
+                        <tr>
+                            <td style="width:40px;">
+                                <b><a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofReg}">Day of Registration</a></b></td>
+                            <!--<td>{!v.countDetails.dayofReg_Excellent}</td> -->
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Registration_Excellent" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayofReg_Excellent}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Registration_Very Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayofReg_Very_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Registration_Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayofReg_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Registration_Bad" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayofReg_Bad}
+                                </a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b><a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofPos}">Day of Possession / Key Handover</a></b></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Possession_Excellent" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayOfRKeyHand_Excellent}
+                                </a></td> 
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Possession_Very Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayOfRKeyHand_Very_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Possession_Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayOfRKeyHand_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Day of Possession_Bad" onclick="{!c.recordDet}">
+                                {!v.countDetails.dayOfRKeyHand_Bad}
+                                </a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b><a href="javascript:void(0)" id="dayofReg" onclick="{!c.postPos}">Post Possession Handover</a></b></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Post 60 Days Possession_Excellent" onclick="{!c.recordDet}">
+                                {!v.countDetails.post60Days_Excellent}
+                                </a></td> 
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Post 60 Days Possession_Very Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.post60Days_Very_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Post 60 Days Possession_Good" onclick="{!c.recordDet}">
+                                {!v.countDetails.post60Days_Good}
+                                </a></td>
+                            <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Post 60 Days Possession_Bad" onclick="{!c.recordDet}">
+                                {!v.countDetails.post60Days_Bad}
+                                </a></td>
+                        </tr>
+                    </aura:if>
+                    
+                    
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="overall_Excellent" onclick="{!c.overallRecordDet}">{!v.countDetails.overall_Excellent}</a></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="overall_Very Good" onclick="{!c.overallRecordDet}">{!v.countDetails.overall_Very_Good}</a></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="overall_Good" onclick="{!c.overallRecordDet}">{!v.countDetails.overall_Good}</a></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="overall_Bad" onclick="{!c.overallRecordDet}">{!v.countDetails.overall_Bad}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--</aura:if>-->
+            
+            <!--<br/><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofReg}">
+                <b>Detailed Report on Day of Registration</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofPos}">
+                <b>Detailed Report on Day of Possession / Key Handover</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.postPos}">
+                <b>Detailed Report on Post Possession Handover</b>
+            </a>-->
+            <div id="showEventTableData">
+            <aura:if isTrue="{!v.showEventTable}">
+                <br/><br/>
+            	<table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Project</th>
+                            <th>Feedback Type</th>
+                            <th>Customer</th>
+                            <!--<th>Mobile</th>-->
+                            <th>CRN</th>
+                            <th>Questions</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.recDetails}" var="rec">
+                            <tr>
+                                <td style="width:40px;"><a href="javascript:void(0)" id="{!rec.recId}" name="{!rec.recId}" onclick="{!c.openRec}">
+                                    {!rec.name}
+                                </a></td>
+                                <td>{!rec.project}</td>
+                                <td>{!rec.feedbackType}</td>
+                                <td><a href="javascript:void(0)" id="{!rec.oppId}" name="{!rec.oppId}" onclick="{!c.openRec}">
+                                    {!rec.customer}
+                                </a></td>
+                                <!--<td>{!rec.mobile}</td>-->
+                                <td>{!rec.crn}</td>
+                                <td>
+                                    <table>
+                                        <aura:iteration items="{!rec.questions}" var="q">
+                                            <tr>{!q}</tr>
+                                        </aura:iteration>
+                                    </table>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showallEventTable">
+            <aura:if isTrue="{!v.showallEventTable}">
+                <br/><br/>
+            	<table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Project</th>
+                            <th>Feedback Type</th>
+                            <th>Customer</th>
+                            <!--<th>Mobile</th>-->
+                            <th>CRN</th>
+                            <th>Questions</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.allRecDetails}" var="rec">
+                            <tr>
+                                <td style="width:40px;"><a href="javascript:void(0)" id="{!rec.recId}" name="{!rec.recId}" onclick="{!c.openRec}">
+                                    {!rec.name}
+                                </a></td>
+                                <td>{!rec.project}</td>
+                                <td>{!rec.feedbackType}</td>
+                                <td><a href="javascript:void(0)" id="{!rec.oppId}" name="{!rec.oppId}" onclick="{!c.openRec}">
+                                    {!rec.customer}
+                                </a></td>
+                                <!--<td>{!rec.mobile}</td>-->
+                                <td>{!rec.crn}</td>
+                                <td>
+                                    <table>
+                                        <aura:iteration items="{!rec.questions}" var="q">
+                                            <tr>{!q}</tr>
+                                        </aura:iteration>
+                                    </table>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </aura:if>
+            </div>
+            <br/><br/>
+            <div id="showdayofRegData">
+            <aura:if isTrue="{!v.showdayofReg}">
+                
+                <h3  class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Day of Registration
+                </h3><br/>
+            	<lightning:button class="slds-float_right" name="dayOfRegExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                <br/><br/>
+            	<table style="table-layout: fixed;" >
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Project</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate your experience with the CRM relationship manager on the accuracy of information and query resolution ?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate your CRM Relationship Manager on accessibility / connectivity?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate your experience at the registration office?</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the responsiveness of all your queries by your sales manager?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate your relationship manager's accessibility?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the accuracy of information given by your relationship manager post booking to registration of your unit?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the responsiveness of all your queries by your relationship manager?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How was your experience on the day of registration at the registration office?</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Remarks</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.dayOfRegData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c} 
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Project__c}</td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_2__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_3__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_4__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_5__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_6__c}</td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_8__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_9__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_10__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">{!reg.Answer_11__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Answer_12__c}</td>-->
+                        </tr>
+                    </aura:iteration>
+                </table>
+                    
+            </aura:if>
+            </div>
+            <div id="showdayofPosData">
+            <aura:if isTrue="{!v.showdayofPos}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Day of Possession / Key Handover
+                </h3><br/>
+                <lightning:button class="slds-float_right" name="dayOfPosExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                <br/><br/>
+            	<table style="table-layout: fixed;" >
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Project</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate your CRM Relationship Manager on accessibility / connectivity?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate your experience with CRM Relationship Manager handling your queries and details</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How  would you rate the accuracy of information provided to you at the point of booking  by sales ?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate the experience on the day of possession and handover of your unit ?</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate your experience of receiving your set of keys on handover?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate your experience of receiving documentation on handover?</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Remarks</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.dayOfPosData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Project__c}</td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_13__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_14__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_15__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_16__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_17__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_18__c}</td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">{!reg.Answer_19__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Answer_20__c}</td>-->
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showpostPosData">
+            <aura:if isTrue="{!v.showpostPos}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Post Possession Handover
+                </h3><br/>
+                <lightning:button class="slds-float_right" name="postPosExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                <br/><br/>
+            	<table style="table-layout: fixed;" >
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Project</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the accessibility of the Facilities team?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the query resolution of the facilities team?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you Rate the condition of the property handed over to you?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate the experience of readiness and workmanship for CP and Sanitary fittings in your apartment/shop/office.</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate the experience of readiness and workmanship for electrical fittings, doors and windows in your apartment/shop/office.</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the amenities and features that Runwal Group has provided in the project?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would rate the cleanliness of the Lift Lobby, Lifts, Main entrance lobby and Other Common Areas</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Remarks</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.postPosData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Project__c}</td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_21__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_22__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_23__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_24__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_25__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_26__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Answer_27__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">{!reg.Answer_28__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Answer_29__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            
+            <div id="showsalesExpData">
+            <aura:if isTrue="{!v.showsalesExp}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Sales Experience
+                </h3><br/>
+                <lightning:button class="slds-float_right" name="salesExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                <br/><br/>
+            	<table style="table-layout: fixed;" >
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Project</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate your experience of visiting Runwal Sales Office?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the experience of viewing the Show Apartment?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the amenities and features that Runwal Group has provided in the project?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>Rate your experience with the sales manager on the accuracy of information and query resolution at the point of sale ?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>How would you rate the Sales Manager on the accessibility and responsiveness?</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Remarks</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.salesExpData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Project__c}</td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Sales_Experience_Answer_1__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Sales_Experience_Answer_2__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Sales_Experience_Answer_3__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Sales_Experience_Answer_4__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!reg.Sales_Experience_Answer_5__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">{!reg.Sales_Experience_Answer_7__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.Sales_Experience_Answer_6__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            
+            
+        </form>
+    </div>
+	</aura:if>
+    
+    <aura:if isTrue="{!v.report == 'NPS Report'}">
+    	<div class="slds-modal__content" style="overflow-x:auto;">
+        <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                <aura:if isTrue="{!and(v.team != null,v.team != '')}">
+                	WhatsApp Feedback Report - NPS - {!v.team}
+                    <aura:set attribute="else">
+                    	WhatsApp Feedback Report - NPS
+                    </aura:set>
+                </aura:if>
+            </h3><br/>
+            <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <aura:if isTrue="{!v.team2 != 'FM'}">
+                            <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                            <ui:inputselectoption text="Events Report" label="Events Report" />
+                            <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                            <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                            <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                            <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                            <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />
+                        </aura:if>
+                        <aura:if isTrue="{!or(v.team2 == 'All',v.team2 == 'FM')}">
+                            <ui:inputselectoption text="Post Possession Handover" label="Post Possession Handover" />
+                        </aura:if>
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+            	<lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Period: " aura:Id="dateRange" class="slds-input" value="{!v.dateRange}" change="{!c.dateChange}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="LAST_N_DAYS:7" label="Last 7 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:15" label="Last 15 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:30" label="Last 30 Days" />
+                        <ui:inputselectoption text="LAST_N_MONTHS:3" label="Last 90 Days" />
+                        <ui:inputselectoption text="LAST_N_MONTHS:6" label="Last 180 Days" />
+                        <ui:inputselectoption text="THIS_MONTH" label="Current Month" />
+                        <ui:inputselectoption text="THIS_FISCAL_YEAR" label="Current FY" />
+                        <ui:inputselectoption text="LAST_FISCAL_YEAR" label="Previous FY" />
+                        <ui:inputselectoption text="Custom" label="Custom" />
+                    </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="0" label="{!v.year1}" />
+                        <ui:inputselectoption text="1" label="{!v.year2}" />
+                        <ui:inputselectoption text="2" label="{!v.year3}" />
+                        <ui:inputselectoption text="3" label="{!v.year4}" />
+                        <ui:inputselectoption text="4" label="{!v.year5}" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Year: " aura:id="npsyear" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <aura:iteration items="{!v.year}" var="yr" indexVar="i">
+                            <ui:inputselectoption text="{!i}" label="{!yr}" />
+                        </aura:iteration>
+                        </ui:inputselect></b>
+                </lightning:layoutItem>-->
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Month: " aura:Id="month" class="slds-input" value="{!v.monthVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="1" label="January" />
+                        <ui:inputselectoption text="2" label="February" />
+                        <ui:inputselectoption text="3" label="March" />
+                        <ui:inputselectoption text="4" label="April" />
+                        <ui:inputselectoption text="5" label="May" />
+                        <ui:inputselectoption text="6" label="June" />
+                        <ui:inputselectoption text="7" label="July" />
+                        <ui:inputselectoption text="8" label="August" />
+                        <ui:inputselectoption text="9" label="September" />
+                        <ui:inputselectoption text="10" label="October" />
+                        <ui:inputselectoption text="11" label="November" />
+                        <ui:inputselectoption text="12" label="December" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem alignmentBump="left" class="slds-p-around_xxx-small">
+            		<lightning:button name="npsExp" variant="Brand" label="Export All Data" title="export" onclick="{!c.exportData}" disabled="{!v.disableOverallExportButton}"></lightning:button>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <br/>
+            <aura:if isTrue="{!v.showNPSTable}">
+                <div >
+                <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                    <thead>
+                                                
+                          
+                    </thead>
+                    <tbody>
+                    
+                        <aura:iteration items="{!v.npsMap}" var="npsData" indexVar="i">
+                            
+                            <tr>
+                                <td style="width:10%;"><b>{!npsData.project}</b></td>
+                                <td >
+                                    <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                                        <aura:if isTrue="{!i == 0}">
+                                        <tr >
+                                       		<td rowspan="2" style="text-align:center;"><b>Event</b></td>
+                                            <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                            <td colspan="2" style="text-align:center;background-color:#5acf67;"><b>Promoters</b></td>
+                                            <td colspan="2" style="text-align:center;background-color:#7fc8f1;"><b>Passives</b></td>
+                                            <td colspan="6" style="text-align:center;background-color:#f9898d;"><b>Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#5acf67;"><b>% Promoters</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#7fc8f1;width:150px;"><b>% Passives</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#f9898d;width:150px;"><b>% Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#77e7f7;width:150px;"><b>NPS SCORE</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;background-color:#5acf67;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                            <td style="text-align:center;background-color:#5acf67;"><b>9</b></td>
+                                            <td style="text-align:center;background-color:#7fc8f1;"><b>8</b></td>
+                                            <td style="text-align:center;background-color:#7fc8f1;"><b>7</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>6</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>5</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>4</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>3</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>2</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;width:10px;"><b>1</b></td>
+                                            
+                                        </tr>
+                                        </aura:if>
+                                        <aura:if isTrue="{!i != 0}">
+                                        <tr >
+                                       		<td rowspan="2" style="text-align:center;"><b>Event</b></td>
+                                            <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                            <td colspan="2" style="text-align:center;"><b>Promoters</b></td>
+                                            <td colspan="2" style="text-align:center;"><b>Passives</b></td>
+                                            <td colspan="6" style="text-align:center;"><b>Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;"><b>% Promoters</b></td>
+                                            <td rowspan="2" style="text-align:center;width:150px;"><b>% Passives</b></td>
+                                            <td rowspan="2" style="text-align:center;width:150px;"><b>% Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;width:150px;"><b>NPS SCORE</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                            <td style="text-align:center;"><b>9</b></td>
+                                            <td style="text-align:center;"><b>8</b></td>
+                                            <td style="text-align:center;"><b>7</b></td>
+                                            <td style="text-align:center;"><b>6</b></td>
+                                            <td style="text-align:center;"><b>5</b></td>
+                                            <td style="text-align:center;"><b>4</b></td>
+                                            <td style="text-align:center;"><b>3</b></td>
+                                            <td style="text-align:center;"><b>2</b></td>
+                                            <td style="text-align:center;width:10px;"><b>1</b></td>
+                                            
+                                        </tr>
+                                        </aura:if>
+                                        
+                                    <aura:iteration items="{!npsData.fbNps}" var="fb">
+                                        <tr >
+                                            
+                                            <td style="overflow-x: auto;text-align:center;">
+                                                <b><a href="javascript:void(0)" id="{!fb.fbType}" name="{!npsData.project}" onclick="{!c.detailedRep}">{!fb.fbType}</a></b></td>
+                                            <td style="text-align:center;"><b>{!fb.nps_T}</b></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_10'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_10}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_09'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_9}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_08'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_8}</a></td>
+                                            <td style="text-align:center;">
+                                            	<a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_07'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_7}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_06'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_6}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_05'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_5}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_04'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_4}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_03'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_3}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_02'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_2}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_01'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_1}</a></td>
+                                            <aura:if isTrue="{!fb.promoters_per != null}">
+                                                <td style="text-align:center;" class="{!fb.promoters_per > 75 ? 'gt75p' : ''}" >
+                                                    <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_promoters'}" onclick="{!c.npsRecordDetPPD}">{!fb.promoters_per}</a></td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                             <aura:if isTrue="{!fb.passives_per != null}">
+                                                <td style="text-align:center;" >
+                                                    <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_passives'}" onclick="{!c.npsRecordDetPPD}">{!fb.passives_per}</a></td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                             <aura:if isTrue="{!fb.detractors_per != null}">
+                                                <td style="text-align:center;" class="{!fb.detractors_per > 75 ? 'gt75d' : ''}" >
+                                                    <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_detractors'}" onclick="{!c.npsRecordDetPPD}">{!fb.detractors_per}</a></td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:if isTrue="{!fb.nps_score != null}">
+                                                <td style="text-align:center;">{!fb.nps_score}</td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                        </tr>
+                                    </aura:iteration>
+                                        <tr style="background-color: #f2f4f7">
+                                        	<td style="overflow-x: auto;text-align:center;"><b>Total</b></td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_T_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_10_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_9_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_8_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_7_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_6_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_5_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_4_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_3_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_2_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_1_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.promoters_per_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.passives_per_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.detractors_per_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_score_T}</td>
+                                        </tr>
+                                    </table>
+                                    </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                    </div>
+                
+                <br/>
+                <div class="slds-modal__content" style="overflow-x:auto;">
+                <form class="slds-form--stacked">
+                    <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                        NPS Score Summary for last 12 months
+                    </h3><br/>
+                </form>
+                <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                    <aura:iteration items="{!v.npsSummary}" var="summary" indexVar="i">
+                        
+                        <aura:if isTrue="{!OR(i == 0, i == 1)}">
+                            <tr>
+                                <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{!summary.fbType}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month1}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month2}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month3}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month4}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month5}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month6}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month7}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month8}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month9}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month10}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month11}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month12}</b></td>
+                            </tr>
+                        </aura:if>
+                        <aura:if isTrue="{!AND(i != 0, i != 1)}">
+                            <tr>
+                                <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{!summary.fbType}</b></td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month1}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month2}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month3}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month4}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month5}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month6}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month7}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month8}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month9}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month10}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month11}</td>
+                                <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month12}</td>
+                            </tr>
+                        </aura:if>
+                    </aura:iteration>
+                </table>
+            </div>
+            </aura:if>
+            <br/><br/>
+            
+            
+            <!--<a href="javascript:void(0)" id="dayofReg" onclick="{!c.caseCls}">
+                <b>Detailed Report on Case Closure</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.calDisp}">
+                <b>Detailed Report on Call Disposition</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.endOfBot}">
+                <b>Detailed Report on End of Bot Conversation</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofReg}">
+                <b>Detailed Report on Day of Registration</b>	
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofPos}">
+                <b>Detailed Report on Day of Possession / Key Handover</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.postPos}">
+                <b>Detailed Report on Post Possession Handover</b>
+            </a>
+            <br/><br/>-->
+            <div id="showNPSdayofRegData">
+            <aura:if isTrue="{!v.showNPSdayofReg}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Day of Registration
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="dayOfRegExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+                
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.dayOfRegData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSdayofPosData">
+            <aura:if isTrue="{!v.showNPSdayofPos}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Day of Possession / Key Handover
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="dayOfPosExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.dayOfPosData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                            	<a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSpostPosData">
+            <aura:if isTrue="{!v.showNPSpostPos}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Post Possession Handover
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="postPosExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.postPosData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSsalesExpData">
+            <aura:if isTrue="{!v.showNPSsalesExp}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Sales Experience
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="salesExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.salesExpData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSCaseClsData">
+            <aura:if isTrue="{!v.showNPSCaseCls}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                      Detailed Report on Case Closure
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.caseClsData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity__r.Name}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSCalDispData">
+            <aura:if isTrue="{!v.showNPSCalDisp}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Call Disposition
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.callDipData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity__r.Name}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSEndOfConvData">
+            <aura:if isTrue="{!v.showNPSEndOfConv}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on End of Bot Conversation
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.endOfConvData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity__r.Name}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSDataTableData">
+            <aura:if isTrue="{!v.showNPSDataTable}">
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="recDet" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+                <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                	<tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    <aura:iteration items="{!v.npsData}" var="nps">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Id}" name="{!nps.Id}" onclick="{!c.openRec}">
+                                    {!nps.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Opportunity__c}" name="{!nps.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!nps.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!nps.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSDataTablePPD">
+            <aura:if isTrue="{!v.showNPSDataTablePPD}">
+                <div>
+                	<lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="recDetPPD" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+                <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                	<tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    <aura:iteration items="{!v.npsDataPPD}" var="nps">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Id}" name="{!nps.Id}" onclick="{!c.openRec}">
+                                    {!nps.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Opportunity__c}" name="{!nps.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!nps.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!nps.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            </form>
+        </div>
+    </aura:if>
+    
+    
+    <aura:if isTrue="{!v.report == 'Customer Insights'}">
+    	<div class="slds-modal__content" style="overflow-x:auto;">
+        <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                <aura:if isTrue="{!and(v.team != null,v.team != '')}">
+                	WhatsApp Feedback Report - Customer Insights - {!v.team}
+                    <aura:set attribute="else">
+                    	WhatsApp Feedback Report - Customer Insights
+                    </aura:set>
+                </aura:if>
+            </h3><br/>
+            <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                        <ui:inputselectoption text="Events Report" label="Events Report" />
+                        <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                        <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                       <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                       <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                        <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />                        
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+            	<lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Period: " aura:Id="dateRange" class="slds-input" value="{!v.dateRange}" change="{!c.dateChange}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="LAST_N_DAYS:7" label="Last 7 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:15" label="Last 15 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:30" label="Last 30 Days" />
+                        <ui:inputselectoption text="LAST_N_MONTHS:3" label="Last 90 Days" />
+                        <ui:inputselectoption text="LAST_N_MONTHS:6" label="Last 180 Days" />
+                        <ui:inputselectoption text="THIS_MONTH" label="Current Month" />
+                        <ui:inputselectoption text="THIS_FISCAL_YEAR" label="Current FY" />
+                        <ui:inputselectoption text="LAST_FISCAL_YEAR" label="Previous FY" />
+                        <ui:inputselectoption text="Custom" label="Custom" />
+                    </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="0" label="2024" />
+                        <ui:inputselectoption text="1" label="2023" />
+                        <ui:inputselectoption text="2" label="2022" />
+                        <ui:inputselectoption text="3" label="2021" />
+                        <ui:inputselectoption text="4" label="2020" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Month: " aura:Id="month" class="slds-input" value="{!v.monthVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="1" label="January" />
+                        <ui:inputselectoption text="2" label="February" />
+                        <ui:inputselectoption text="3" label="March" />
+                        <ui:inputselectoption text="4" label="April" />
+                        <ui:inputselectoption text="5" label="May" />
+                        <ui:inputselectoption text="6" label="June" />
+                        <ui:inputselectoption text="7" label="July" />
+                        <ui:inputselectoption text="8" label="August" />
+                        <ui:inputselectoption text="9" label="September" />
+                        <ui:inputselectoption text="10" label="October" />
+                        <ui:inputselectoption text="11" label="November" />
+                        <ui:inputselectoption text="12" label="December" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem alignmentBump="left" class="slds-p-around_xxx-small">
+            		<lightning:button name="custInsExp" variant="Brand" label="Export All Data" title="export" onclick="{!c.exportData}" disabled="{!v.disableOverallExportButton}"></lightning:button>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <br/>
+            <aura:if isTrue="{!v.showNPSTable}">
+                <div >
+                <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                    <thead>
+                                                
+                          
+                    </thead>
+                    <tbody>
+                    
+                        <aura:iteration items="{!v.custInstMap}" var="npsData" indexVar="i">
+                            
+                            <tr>
+                                <td style="width:10%;"><b>{!npsData.project}</b></td>
+                                <td >
+                                    <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                                        <aura:if isTrue="{!i == 0}">
+                                        <tr >
+                                       		<td rowspan="2" style="text-align:center;"><b>Event</b></td>
+                                            <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                            <td colspan="2" style="text-align:center;background-color:#5acf67;"><b>Promoters</b></td>
+                                            <td colspan="2" style="text-align:center;background-color:#7fc8f1;"><b>Passives</b></td>
+                                            <td colspan="6" style="text-align:center;background-color:#f9898d;"><b>Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#5acf67;"><b>% Promoters</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#7fc8f1;width:150px;"><b>% Passives</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#f9898d;width:150px;"><b>% Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;background-color:#77e7f7;width:150px;"><b>NPS SCORE</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;background-color:#5acf67;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                            <td style="text-align:center;background-color:#5acf67;"><b>9</b></td>
+                                            <td style="text-align:center;background-color:#7fc8f1;"><b>8</b></td>
+                                            <td style="text-align:center;background-color:#7fc8f1;"><b>7</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>6</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>5</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>4</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>3</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;"><b>2</b></td>
+                                            <td style="text-align:center;background-color:#f9898d;width:10px;"><b>1</b></td>
+                                            
+                                        </tr>
+                                        </aura:if>
+                                        <aura:if isTrue="{!i != 0}">
+                                        <tr >
+                                       		<td rowspan="2" style="text-align:center;"><b>Event</b></td>
+                                            <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                            <td colspan="2" style="text-align:center;"><b>Promoters</b></td>
+                                            <td colspan="2" style="text-align:center;"><b>Passives</b></td>
+                                            <td colspan="6" style="text-align:center;"><b>Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;"><b>% Promoters</b></td>
+                                            <td rowspan="2" style="text-align:center;width:150px;"><b>% Passives</b></td>
+                                            <td rowspan="2" style="text-align:center;width:150px;"><b>% Detractors</b></td>
+                                            <td rowspan="2" style="text-align:center;width:150px;"><b>NPS SCORE</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                            <td style="text-align:center;"><b>9</b></td>
+                                            <td style="text-align:center;"><b>8</b></td>
+                                            <td style="text-align:center;"><b>7</b></td>
+                                            <td style="text-align:center;"><b>6</b></td>
+                                            <td style="text-align:center;"><b>5</b></td>
+                                            <td style="text-align:center;"><b>4</b></td>
+                                            <td style="text-align:center;"><b>3</b></td>
+                                            <td style="text-align:center;"><b>2</b></td>
+                                            <td style="text-align:center;width:10px;"><b>1</b></td>
+                                            
+                                        </tr>
+                                        </aura:if>
+                                        
+                                    <aura:iteration items="{!npsData.fbNps}" var="fb">
+                                        <tr >
+                                            
+                                            <td style="overflow-x: auto;text-align:center;">
+                                                <b><a href="javascript:void(0)" id="{!fb.fbType}" name="{!npsData.project}" onclick="{!c.detailedRep}">{!fb.fbType}</a></b></td>
+                                            <td style="text-align:center;"><b>{!fb.nps_T}</b></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_10'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_10}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_09'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_9}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_08'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_8}</a></td>
+                                            <td style="text-align:center;">
+                                            	<a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_07'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_7}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_06'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_6}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_05'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_5}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_04'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_4}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_03'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_3}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_02'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_2}</a></td>
+                                            <td style="text-align:center;">
+                                                <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_01'}" onclick="{!c.npsRecordDet}">
+                            						{!fb.nps_1}</a></td>
+                                            <aura:if isTrue="{!fb.promoters_per != null}">
+                                                <td style="text-align:center;" class="{!fb.promoters_per > 75 ? 'gt75p' : ''}" >
+                                                    <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_promoters'}" onclick="{!c.npsRecordDetPPD}">{!fb.promoters_per}</a></td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                             <aura:if isTrue="{!fb.passives_per != null}">
+                                                <td style="text-align:center;" >
+                                                    <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_passives'}" onclick="{!c.npsRecordDetPPD}">{!fb.passives_per}</a></td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                             <aura:if isTrue="{!fb.detractors_per != null}">
+                                                <td style="text-align:center;" class="{!fb.detractors_per > 75 ? 'gt75d' : ''}" >
+                                                    <a href="javascript:void(0)" id="{!npsData.project+'_'+fb.fbType+'_detractors'}" onclick="{!c.npsRecordDetPPD}">{!fb.detractors_per}</a></td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:if isTrue="{!fb.nps_score != null}">
+                                                <td style="text-align:center;">{!fb.nps_score}</td>
+                                                <aura:set attribute="else">
+                                                    <td style="text-align:center;"><b>-</b></td>
+                                                </aura:set>
+                                            </aura:if>
+                                        </tr>
+                                    </aura:iteration>
+                                        <tr style="background-color: #f2f4f7">
+                                        	<td style="overflow-x: auto;text-align:center;"><b>Total</b></td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_T_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_10_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_9_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_8_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_7_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_6_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_5_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_4_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_3_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_2_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_1_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.promoters_per_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.passives_per_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.detractors_per_T}</td>
+                                            <td style="overflow-x: auto;text-align:center;">{!npsData.fbNpsTotals.nps_score_T}</td>
+                                        </tr>
+                                    </table>
+                                    </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                    </div>
+                <br/>
+                <div class="slds-modal__content" style="overflow-x:auto;">
+                    <form class="slds-form--stacked">
+                        <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                            NPS Score Summary for last 12 months
+                        </h3><br/>
+                    </form>
+                    <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                        <aura:iteration items="{!v.custInstSummary}" var="summary" indexVar="i">
+                            
+                            <aura:if isTrue="{!OR(i == 0, i == 1)}">
+                                <tr>
+                                    <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{!summary.fbType}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month1}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month2}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month3}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month4}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month5}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month6}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month7}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month8}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month9}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month10}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month11}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>{!summary.month12}</b></td>
+                                </tr>
+                            </aura:if>
+                            <aura:if isTrue="{!AND(i != 0, i != 1)}">
+                                <tr>
+                                    <td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;"><b>{!summary.fbType}</b></td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month1}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month2}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month3}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month4}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month5}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month6}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month7}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month8}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month9}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month10}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month11}</td>
+                                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!summary.month12}</td>
+                                </tr>
+                            </aura:if>
+                        </aura:iteration>
+                    </table>
+                </div>
+                
+            </aura:if>
+            <br/><br/>
+            <!--<a href="javascript:void(0)" id="dayofReg" onclick="{!c.caseCls}">
+                <b>Detailed Report on Case Closure</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.calDisp}">
+                <b>Detailed Report on Call Disposition</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.endOfBot}">
+                <b>Detailed Report on End of Bot Conversation</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofReg}">
+                <b>Detailed Report on Day of Registration</b>	
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.dayofPos}">
+                <b>Detailed Report on Day of Possession / Key Handover</b>
+            </a><br/>
+            <a href="javascript:void(0)" id="dayofReg" onclick="{!c.postPos}">
+                <b>Detailed Report on Post Possession Handover</b>
+            </a>
+            <br/><br/>-->
+            <div id="showNPSdayofRegData">
+            <aura:if isTrue="{!v.showNPSdayofReg}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Day of Registration
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.dayOfRegData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity__r.Name}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSdayofPosData">
+            <aura:if isTrue="{!v.showNPSdayofPos}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Day of Possession / Key Handover
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.dayOfPosData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                            	<a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity__r.Name}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSpostPosData">
+            <aura:if isTrue="{!v.showNPSpostPos}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Post Possession Handover
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.postPosData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity__r.Name}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSCaseClsData">
+            <aura:if isTrue="{!v.showNPSCaseCls}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                      Detailed Report on Case Closure
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="caseCls" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.caseClsData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSCalDispData">
+            <aura:if isTrue="{!v.showNPSCalDisp}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on Call Disposition
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="callDisp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.callDipData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSEndOfConvData">
+            <aura:if isTrue="{!v.showNPSEndOfConv}">
+                <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;">  
+                    Detailed Report on End of Bot Conversation
+                </h3><br/>
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                </div>
+            	<table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.endOfConvData}" var="reg">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Id}" name="{!reg.Id}" onclick="{!c.openRec}">
+                                    {!reg.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!reg.Opportunity__c}" name="{!reg.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!reg.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!reg.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!reg.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSDataTableData">
+            <aura:if isTrue="{!v.showNPSDataTable}">
+                <div>
+                	<lightning:button variant="Brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="recDet" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+                <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                	<tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    <aura:iteration items="{!v.npsData}" var="nps">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Id}" name="{!nps.Id}" onclick="{!c.openRec}">
+                                    {!nps.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Opportunity__c}" name="{!nps.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!nps.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!nps.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            <div id="showNPSDataTablePPD">
+            <aura:if isTrue="{!v.showNPSDataTablePPD}">
+                <div>
+                	<lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goBack}"></lightning:button>
+                    <lightning:button class="slds-float_right" name="recDetPPD" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </div>
+                <table style="table-layout: fixed;width:100%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                	<tr>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                        <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                        <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Mobile</b></td>-->
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                    </tr>
+                    <aura:iteration items="{!v.npsDataPPD}" var="nps">
+                        <tr>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Id}" name="{!nps.Id}" onclick="{!c.openRec}">
+                                    {!nps.Name}
+                                </a></td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Project__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.CRN__c}</td>
+                            <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;">
+                                <a href="javascript:void(0)" id="{!nps.Opportunity__c}" name="{!nps.Opportunity__c}" onclick="{!c.openRec}">
+                                    {!nps.Opportunity_Name__c}
+                                </a>
+                            </td>
+                            <!--<td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;">{!nps.Mobile__c}</td>-->
+                            <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!nps.NPS__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </aura:if>
+            </div>
+            </form>
+        </div>
+        
+        
+        
+    </aura:if>
+    <br/>
+    
+    <aura:if isTrue="{!v.report == 'Campaign Report'}">
+    <!-- Existing code for Campaign Report table goes here -->
+</aura:if>
+
+    <aura:if isTrue="{!v.report == 'Case CSAT Report'}">
+    <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                <aura:if isTrue="{!and(v.team != null,v.team != '')}">
+                	  Feedback Report - Case RM Feedback Report - {!v.team}
+                    <aura:set attribute="else">
+                    	 Feedback Report - Case RM Feedback Report 
+                    </aura:set>
+                </aura:if>
+            </h3><br/>
+     <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                        <ui:inputselectoption text="Events Report" label="Events Report" />
+                        <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                        <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                        <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                       <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                        <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />                        
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+         	<lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Period: " aura:Id="dateRange" class="slds-input" value="{!v.dateRange}" change="{!c.dateChange}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="LAST_N_DAYS:7" label="Last 7 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:15" label="Last 15 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:30" label="Last 30 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:90" label="Last 90 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:180" label="Last 180 Days" />
+                        <ui:inputselectoption text="THIS_MONTH" label="Current Month" />
+                        <ui:inputselectoption text="THIS_FISCAL_YEAR" label="Current FY" />
+                        <ui:inputselectoption text="LAST_FISCAL_YEAR" label="Previous FY" />
+                        <ui:inputselectoption text="Custom" label="Custom" />
+                    </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="2024" label="{!v.year1}" />
+                        <ui:inputselectoption text="2023" label="{!v.year2}" />
+                        <ui:inputselectoption text="2022" label="{!v.year3}" />
+                        <ui:inputselectoption text="2021" label="{!v.year4}" />
+                        <ui:inputselectoption text="2020" label="{!v.year5}" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Year: " aura:id="npsyear" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <aura:iteration items="{!v.year}" var="yr" indexVar="i">
+                            <ui:inputselectoption text="{!i}" label="{!yr}" />
+                        </aura:iteration>
+                        </ui:inputselect></b>
+                </lightning:layoutItem>-->
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Month: " aura:Id="month" class="slds-input" value="{!v.monthVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="1" label="January" />
+                        <ui:inputselectoption text="2" label="February" />
+                        <ui:inputselectoption text="3" label="March" />
+                        <ui:inputselectoption text="4" label="April" />
+                        <ui:inputselectoption text="5" label="May" />
+                        <ui:inputselectoption text="6" label="June" />
+                        <ui:inputselectoption text="7" label="July" />
+                        <ui:inputselectoption text="8" label="August" />
+                        <ui:inputselectoption text="9" label="September" />
+                        <ui:inputselectoption text="10" label="October" />
+                        <ui:inputselectoption text="11" label="November" />
+                        <ui:inputselectoption text="12" label="December" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+    </lightning:layout>
+   <c:test  period="{!v.dateRange}" year="{!v.yearVal}" month="{!v.monthVal}"/>
+    </form>
+</aura:if>
+<aura:if isTrue="{!v.report == 'Visit/Revisit CSAT Report'}">
+    <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+               
+                <aura:if isTrue="{!and(v.team != null,v.team != '')}">
+                   Feedback Report - Visit/Revisit Feedback Report- {!v.team}
+                    <aura:set attribute="else">
+                    	  Feedback Report -  Visit/Revisit Feedback Report
+                    </aura:set>
+                </aura:if>
+            </h3><br/>
+     <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                        <ui:inputselectoption text="Events Report" label="Events Report" />
+                        <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                        <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                        <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                       <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                        <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />                        
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+         	<lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Period: " aura:Id="dateRange" class="slds-input" value="{!v.dateRange}" change="{!c.dateChange}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="LAST_N_DAYS:7" label="Last 7 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:15" label="Last 15 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:30" label="Last 30 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:90" label="Last 90 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:180" label="Last 180 Days" />
+                        <ui:inputselectoption text="THIS_MONTH" label="Current Month" />
+                        <ui:inputselectoption text="THIS_FISCAL_YEAR" label="Current FY" />
+                        <ui:inputselectoption text="LAST_FISCAL_YEAR" label="Previous FY" />
+                        <ui:inputselectoption text="Custom" label="Custom" />
+                    </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="2024" label="{!v.year1}" />
+                        <ui:inputselectoption text="2023" label="{!v.year2}" />
+                        <ui:inputselectoption text="2022" label="{!v.year3}" />
+                        <ui:inputselectoption text="2021" label="{!v.year4}" />
+                        <ui:inputselectoption text="2020" label="{!v.year5}" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Year: " aura:id="npsyear" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <aura:iteration items="{!v.year}" var="yr" indexVar="i">
+                            <ui:inputselectoption text="{!i}" label="{!yr}" />
+                        </aura:iteration>
+                        </ui:inputselect></b>
+                </lightning:layoutItem>-->
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Month: " aura:Id="month" class="slds-input" value="{!v.monthVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="1" label="January" />
+                        <ui:inputselectoption text="2" label="February" />
+                        <ui:inputselectoption text="3" label="March" />
+                        <ui:inputselectoption text="4" label="April" />
+                        <ui:inputselectoption text="5" label="May" />
+                        <ui:inputselectoption text="6" label="June" />
+                        <ui:inputselectoption text="7" label="July" />
+                        <ui:inputselectoption text="8" label="August" />
+                        <ui:inputselectoption text="9" label="September" />
+                        <ui:inputselectoption text="10" label="October" />
+                        <ui:inputselectoption text="11" label="November" />
+                        <ui:inputselectoption text="12" label="December" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+          <lightning:layoutItem class="slds-p-around_xxx-small">
+        <b><ui:inputselect label="Type: " aura:id="visitType" class="slds-input" value="{!v.visitType}" change="{!c.visitTypeChange}">
+            <ui:inputselectoption text="" label="-Select-" />
+            <ui:inputselectoption text="Visit" label="Visit" />
+            <ui:inputselectoption text="Revisit" label="Revisit" />
+        </ui:inputselect></b>
+    </lightning:layoutItem>
+    </lightning:layout>
+   <!--<c:visitFeedbackDashboard  period="{!v.dateRange}" year="{!v.yearVal}" month="{!v.monthVal}"  visitType="{!v.visitType}"/>-->
+    </form>
+</aura:if>
+    
+    
+    
+    <aura:if isTrue="{!v.report == 'Channel Partner Case Report'}">
+         
+        <!-- Existing code for Channel Partner Case Report table goes here -->
+        <form class="slds-form--stacked">
+            <h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                <aura:if isTrue="{!and(v.userName != null,v.userName != '')}">
+                    Channel Partner Case Report - {!v.userName}
+                    <aura:set attribute="else">
+                        Channel Partner Case Report 
+                    </aura:set>
+                </aura:if>
+            </h3><br/>
+            
+            <lightning:layout horizontalAlign="left" verticalAlign="end">                
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                        <ui:inputselectoption text="Events Report" label="Events Report" />
+                        <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                        <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                       <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                       <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                        <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />                        
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Period: " aura:Id="dateRange" class="slds-input" value="{!v.dateRange}" change="{!c.dateChange}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="LAST_N_DAYS:7" label="Last 7 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:15" label="Last 15 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:30" label="Last 30 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:90" label="Last 90 Days" />
+                        <ui:inputselectoption text="LAST_N_DAYS:180" label="Last 180 Days" />
+                        <ui:inputselectoption text="THIS_MONTH" label="Current Month" />
+                        <ui:inputselectoption text="THIS_FISCAL_YEAR" label="Current FY" />
+                        <ui:inputselectoption text="LAST_FISCAL_YEAR" label="Previous FY" />
+                        <ui:inputselectoption text="Custom" label="Custom" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="2024" label="{!v.year1}" />
+                        <ui:inputselectoption text="2023" label="{!v.year2}" />
+                        <ui:inputselectoption text="2022" label="{!v.year3}" />
+                        <ui:inputselectoption text="2021" label="{!v.year4}" />
+                        <ui:inputselectoption text="2020" label="{!v.year5}" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+                <!--<lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Year: " aura:id="npsyear" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <aura:iteration items="{!v.year}" var="yr" indexVar="i">
+                            <ui:inputselectoption text="{!i}" label="{!yr}" />
+                        </aura:iteration>
+                        </ui:inputselect></b>
+                </lightning:layoutItem>-->
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                    <b><ui:inputselect label="Month: " aura:Id="month" class="slds-input" value="{!v.monthVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="1" label="January" />
+                        <ui:inputselectoption text="2" label="February" />
+                        <ui:inputselectoption text="3" label="March" />
+                        <ui:inputselectoption text="4" label="April" />
+                        <ui:inputselectoption text="5" label="May" />
+                        <ui:inputselectoption text="6" label="June" />
+                        <ui:inputselectoption text="7" label="July" />
+                        <ui:inputselectoption text="8" label="August" />
+                        <ui:inputselectoption text="9" label="September" />
+                        <ui:inputselectoption text="10" label="October" />
+                        <ui:inputselectoption text="11" label="November" />
+                        <ui:inputselectoption text="12" label="December" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+              <lightning:layoutItem class="slds-p-around_xxx-small">
+                    <lightning:recordEditForm objectApiName="Booking__c">
+                        <lightning:inputField fieldName="Retention_Presales_User__c" aura:id="new_user"  variant="label-hidden" value="{!v.userValue}" onchange="{!c.onChange}" />
+                    </lightning:recordEditForm>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <aura:if isTrue="{!v.showCPCaseDashboard}">
+                <c:testCPcases  period="{!v.dateRange}" year="{!v.yearVal}" month="{!v.monthVal}" new_user = "{!v.userValue}"/>
+            </aura:if>
+        </form>
+
+    </aura:if>
+
+    <aura:if isTrue="{!v.report == 'Campaign Report'}">
+    	<div class="slds-modal__content" style="overflow-x:auto;">
+        <form class="slds-form--stacked">
+        	<h3 class="title slds-text-heading--medium"  style="text-align:center; font-weight: bold;"> 
+                WhatsApp Feedback Report - Campaign
+                <!--<aura:if isTrue="{!and(v.team != null,v.team != '')}">
+                	WhatsApp Feedback Report - Campaign - {!v.team}
+                    <aura:set attribute="else">
+                    	WhatsApp Feedback Report - Campaign
+                    </aura:set>
+                </aura:if>-->
+            </h3><br/>
+            <lightning:layout horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><ui:inputselect label="Report: " aura:Id="report" class="slds-input" value="{!v.report}" change="{!c.repChange}">
+                        <!--<ui:inputselectoption text="" label="-Select-" />-->
+                        <ui:inputselectoption text="NPS Report" label="NPS Report" />
+                        <ui:inputselectoption text="Events Report" label="Events Report" />
+                        <!--<ui:inputselectoption text="Customer Insights" label="Customer Insights" />-->
+                        <ui:inputselectoption text="Campaign Report" label="Campaign Report" />
+                        <ui:inputselectoption text="Case CSAT Report" label="Case CSAT Report" />
+                       <!-- <ui:inputselectoption text="Visit/Revisit CSAT Report" label="Visit/Revisit CSAT Report" />-->
+                        <ui:inputselectoption text="Channel Partner Case Report" label="Channel Partner Case Report" />
+                        </ui:inputselect></b>
+                </lightning:layoutItem>
+            	<lightning:layoutItem class="slds-p-around_xxx-small">
+                	<b><lightning:select name="campaign" label="Campaign" aura:id="campaign" value="{!v.selectedCapmaign}" onchange="{!c.campChange}">
+                        <option value="">--None--</option>
+       					 <aura:iteration items="{!v.CampaignPicklistOptions}" var="camp">
+        				   <option value="{!camp}" text="{!camp}" ></option> 
+       					 </aura:iteration>
+   					 </lightning:select></b>
+                </lightning:layoutItem>
+                <lightning:layoutItem alignmentBump="left" class="slds-p-around_xxx-small">
+            		<lightning:button name="campExp" variant="Brand" label="Export Data" title="export" onclick="{!c.exportData}"></lightning:button>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <br/>
+            
+            <aura:if isTrue="{!v.showCampNpsTable}">
+                <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                    <tbody>
+                        <table  class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                            <tr >
+                                <td rowspan="2" style="text-align:center;"><b>Campaign</b></td>
+                                <td rowspan="2" style="text-align:center;"><b>Total</b></td>
+                                <td colspan="2" style="text-align:center;background-color:#5acf67;"><b>Promoters</b></td>
+                                <td colspan="2" style="text-align:center;background-color:#7fc8f1;"><b>Passives</b></td>
+                                <td colspan="6" style="text-align:center;background-color:#f9898d;"><b>Detractors</b></td>
+                                <td rowspan="2" style="text-align:center;background-color:#5acf67;"><b>% Promoters</b></td>
+                                <td rowspan="2" style="text-align:center;background-color:#7fc8f1;width:150px;"><b>% Passives</b></td>
+                                <td rowspan="2" style="text-align:center;background-color:#f9898d;width:150px;"><b>% Detractors</b></td>
+                                <td rowspan="2" style="text-align:center;background-color:#77e7f7;width:150px;"><b>NPS SCORE</b></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;background-color:#5acf67;border-left: 1px inset;width:10px;"><b>10</b></td>
+                                <td style="text-align:center;background-color:#5acf67;"><b>9</b></td>
+                                <td style="text-align:center;background-color:#7fc8f1;"><b>8</b></td>
+                                <td style="text-align:center;background-color:#7fc8f1;"><b>7</b></td>
+                                <td style="text-align:center;background-color:#f9898d;"><b>6</b></td>
+                                <td style="text-align:center;background-color:#f9898d;"><b>5</b></td>
+                                <td style="text-align:center;background-color:#f9898d;"><b>4</b></td>
+                                <td style="text-align:center;background-color:#f9898d;"><b>3</b></td>
+                                <td style="text-align:center;background-color:#f9898d;"><b>2</b></td>
+                                <td style="text-align:center;background-color:#f9898d;width:10px;"><b>1</b></td>
+                            </tr>
+                            <tr>
+                                <td style="overflow-x: auto;text-align:center;">
+                                    <b><a href="javascript:void(0)" id="{!v.campNPSData.fbType}" name="{!v.campNPSData.fbType}" onclick="{!c.campFBDetails}">{!v.campNPSData.fbType}</a></b></td>
+                                <td style="text-align:center;"><b>{!v.campNPSData.nps_T}</b></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_10'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_10}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_09'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_9}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_08'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_8}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_07'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_7}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_06'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_6}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_05'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_5}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_04'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_4}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_03'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_3}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_02'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_2}</a></td>
+                                <td style="text-align:center;">
+                                    <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_01'}" onclick="{!c.campNpsRecordDet}">
+                                        {!v.campNPSData.nps_1}</a></td>
+                                <aura:if isTrue="{!v.campNPSData.promoters_per != null}">
+                                    <td style="text-align:center;" class="{!v.campNPSData.promoters_per > 75 ? 'gt75p' : ''}" >
+                                        <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_promoters'}" onclick="{!c.campNpsRecordDet}">{!v.campNPSData.promoters_per}</a></td>
+                                    <aura:set attribute="else">
+                                        <td style="text-align:center;"><b>-</b></td>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{!v.campNPSData.passives_per != null}">
+                                    <td style="text-align:center;" >
+                                        <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_passives'}" onclick="{!c.campNpsRecordDet}">{!v.campNPSData.passives_per}</a></td>
+                                    <aura:set attribute="else">
+                                        <td style="text-align:center;"><b>-</b></td>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{!v.campNPSData.detractors_per != null}">
+                                    <td style="text-align:center;" class="{!v.campNPSData.detractors_per > 75 ? 'gt75d' : ''}" >
+                                        <a href="javascript:void(0)" id="{!v.campNPSData.fbType+'_detractors'}" onclick="{!c.campNpsRecordDet}">{!v.campNPSData.detractors_per}</a></td>
+                                    <aura:set attribute="else">
+                                        <td style="text-align:center;"><b>-</b></td>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{!v.campNPSData.nps_score != null}">
+                                    <td style="text-align:center;">{!v.campNPSData.nps_score}</td>
+                                    <aura:set attribute="else">
+                                        <td style="text-align:center;"><b>-</b></td>
+                                    </aura:set>
+                                </aura:if>
+                            </tr>
+                        </table>
+                    </tbody>
+                </table>
+            </aura:if>
+            <br/><br/>
+            
+            <aura:if isTrue="{!v.showCampTable}">
+            	<table style="width:50%;" class="slds-table slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-p-around_none">
+            	<thead>
+                    <tr> 
+                        <th style="width:40%;">Campaign</th>
+                        <th style="text-align:center;width:15%;">Excellent</th>
+                        <th style="text-align:center;width:15%;">Very Good</th>
+                        <th style="text-align:center;width:15%;">Good</th>
+                        <th style="text-align:center;width:15%;">Bad</th>
+                    </tr>     
+                </thead>
+                <tbody>
+                	<tr>
+                        <td style="width:40px;">
+                            <b><a href="javascript:void(0)" id="campDet" onclick="{!c.campFBDetails}">{!v.selectedCapmaign}</a></b></td>
+                        <!--<td>{!v.countDetails.dayofReg_Excellent}</td> -->
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Excellent" onclick="{!c.campRecordDet}">
+                            {!v.campCountDetails.Excellent}
+                        </a></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Very Good" onclick="{!c.campRecordDet}">
+                            {!v.campCountDetails.Very_Good}
+                        </a></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Good" onclick="{!c.campRecordDet}">
+                            {!v.campCountDetails.Good}
+                        </a></td>
+                        <td style="text-align:center;width:20px;"><a href="javascript:void(0)" id="Bad" onclick="{!c.campRecordDet}">
+                            {!v.campCountDetails.Bad}
+                        </a></td>
+                    </tr>
+                </tbody>
+            </table>
+            </aura:if>
+            <br/>
+            <aura:if isTrue="{!v.showCampAllDetTable}">
+            	<table style="table-layout: fixed;" >
+            	<tr>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                    <aura:iteration items="{!v.campQuestions}" var="q">
+                        <td style="word-break:word;border: 1px solid #666;width:70px;text-align:center;"><b>{!q}</b></td>
+                    </aura:iteration>
+                    <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                </tr>
+                <aura:iteration items="{!v.campFBData}" var="dt">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                            <a href="javascript:void(0)" id="{!dt.Id}" name="{!dt.Id}" onclick="{!c.openRec}">{!dt.Name}</a>
+                        </td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!dt.CRN__c}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                            <a href="javascript:void(0)" id="{!dt.Opportunity__c}" name="{!dt.Opportunity__c}" onclick="{!c.openRec}">{!dt.Opportunity__r.Name}</a>
+                        </td>
+                        <aura:if isTrue="{!dt.Camp_Answer_1__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_1__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_2__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_2__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_3__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_3__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_4__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_4__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_5__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_5__c}</td>
+                        </aura:if>
+                    	<aura:if isTrue="{!dt.Camp_Answer_6__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_6__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_7__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_7__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_8__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_8__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_9__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_9__c}</td>
+                        </aura:if>
+                        <aura:if isTrue="{!dt.Camp_Answer_10__c != null}">
+                        	<td style="word-break:word;border: 1px solid #666;width:100px;text-align:center;">{!dt.Camp_Answer_10__c}</td>
+                        </aura:if>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!dt.NPS__c}</td>
+                    </tr>
+                </aura:iteration>
+            </table>
+            </aura:if>
+            <aura:if isTrue="{!v.campNPSDetailsTable}">
+                
+            	<table style="table-layout: fixed;" >
+            	<tr>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Name</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>Project</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:40px;text-align:center;"><b>CRN</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:50px;text-align:center;"><b>Customer</b></td>
+                    <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;"><b>NPS</b></td>
+                </tr>
+                <aura:iteration items="{!v.campNPSDetails}" var="dt">
+                    <tr>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                            <a href="javascript:void(0)" id="{!dt.Id}" name="{!dt.Id}" onclick="{!c.openRec}">{!dt.Name}</a>
+                        </td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!dt.Project__c}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!dt.CRN__c}</td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">
+                            <a href="javascript:void(0)" id="{!dt.Opportunity__c}" name="{!dt.Opportunity__c}" onclick="{!c.openRec}">{!dt.Opportunity__r.Name}</a>
+                        </td>
+                        <td style="word-break:word;border: 1px solid #666;width:30px;text-align:center;">{!dt.NPS__c}</td>
+                    </tr>
+                </aura:iteration>
+            </table>
+            </aura:if>
+            <br/><br/>
+            <aura:if isTrue="{!v.showCampCountTable}">
+            	<table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Project</th>
+                        <th>Feedback Type</th>
+                        <th>Customer</th>
+                        <!--<th>Mobile</th>-->
+                        <th>CRN</th>
+                        <th>Questions</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                	<aura:iteration items="{!v.campRecDetails}" var="rec">
+                        <tr>
+                            <td style="width:40px;"><a href="javascript:void(0)" id="{!rec.recId}" name="{!rec.recId}" onclick="{!c.openRec}">
+                                {!rec.name}
+                                </a></td>
+                            <td>{!rec.project}</td>
+                            <td>{!rec.feedbackType}</td>
+                            <td><a href="javascript:void(0)" id="{!rec.oppId}" name="{!rec.oppId}" onclick="{!c.openRec}">
+                                {!rec.customer}
+                                </a></td>
+                            <!--<td>{!rec.mobile}</td>-->
+                            <td>{!rec.crn}</td>
+                            <td>
+                                <table>
+                                    <aura:iteration items="{!rec.questions}" var="q">
+                                        <tr>{!q}</tr>
+                                    </aura:iteration>
+                                </table>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            </aura:if>
+            </form>
+        </div>
+    </aura:if>
+    <br/><br/><br/>
+    
+    </aura:if>
+
+</aura:component>

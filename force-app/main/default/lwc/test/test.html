@@ -1,0 +1,200 @@
+<template>
+	<div class="main">
+		<div class="main-table-container ">
+			<!-- Main table code (same as before) -->
+			<div if:true={showFeedbackTable}>
+				<div class="Exportbutton">
+				<button onclick={exportAllData} class="export-button">Export All Data</button>
+				</div>
+			</div>
+			<table if:true={showFeedbackTable}
+				class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal bordertable slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+				<!-- Table Header -->
+				<thead>
+					<tr>
+						<th>Project</th>
+						<th>RM Name</th>
+						<th class="textCenterAlign">Total Cases</th>
+						<th class="textCenterAlign">Total Feedbacks</th>
+						<th class="textCenterAlign">Total Happy</th>
+						<th class="textCenterAlign">Total Fair</th>
+						<th class="textCenterAlign">Total Unhappy</th>
+						<th class="textCenterAlign">Total Reopened</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Iterate over the feedbackList and display each feedback item -->
+					<template for:each={feedbackList} for:item="feedback">
+						<tr key={feedback.project}>
+							<!-- Add click event listeners to each cell -->
+							<td class="projectName" if:true={feedback.isProjectvisible} rowspan={feedback.rowSpan}>
+								<a data-name="Project Name" data-value={feedback.project} onclick={handleCellClick}>
+									{feedback.project}</a>
+							</td>
+							<td class="textCenterAlign">
+								 <span data-name="RM Name" data-value={feedback.rmName} data-projectname={feedback.project}>
+        {feedback.rmName}
+    </span>
+							</td>
+							<td class="textCenterAlign">
+
+								<a data-name="Total case" data-value={feedback.rmName}
+									data-projectname={feedback.project} data-rmname={feedback.rmName}
+									onclick={handleCellClick}>
+									{feedback.TotalCase}
+								</a>
+
+
+							</td>
+							<td class="textCenterAlign">
+
+								<a data-name="RM Name" data-value={feedback.rmName} data-projectname={feedback.project}
+									onclick={handleCellClick}>
+									{feedback.totalInteractions}
+								</a>
+
+
+							</td>
+							<td class="textCenterAlign">
+								<a data-name="Status" data-value="Happy" data-projectname={feedback.project}
+									data-rmname={feedback.rmName} onclick={handleCellClick}>{feedback.totalHappy}
+								</a>
+							</td>
+							<td class="textCenterAlign">
+								<a data-name="Status" data-value="Fair" data-projectname={feedback.project}
+									data-rmname={feedback.rmName} onclick={handleCellClick}>{feedback.Fair}
+								</a>
+							</td>
+							<td class="textCenterAlign">
+								<a data-name="Status" data-value="Unhappy" data-projectname={feedback.project}
+									data-rmname={feedback.rmName} onclick={handleCellClick}>{feedback.totalUnhappy}
+								</a>
+							</td>
+							<td class="textCenterAlign">
+								<a data-name="Status" data-value="Reopened" data-projectname={feedback.project}
+									data-rmname={feedback.rmName} onclick={handleCellClick}>{feedback.Reopened}
+								</a>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+
+			<table if:true={showFeedbackTable}
+				class="slds-table slds-table_cell-buffer slds-table_bordered custom-table-style">
+				<caption style="text-align: center; font-weight: bold; font-size: 1.2em;">Last 12 Months Feedbacks
+					Summary</caption>
+				<thead>
+					<tr>
+						<th class="textCenterAlign">Year</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<td key={feedbackItem.month} class="textCenterAlign">{feedbackItem.year}</td>
+						</template>
+					</tr>
+
+				</thead>
+				<tbody>
+					<tr>
+						<th>Month</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<th key={feedbackItem.month} class="textCenterAlign">{feedbackItem.month}</th>
+						</template>
+					</tr>
+					<tr>
+						<th class="textCenterAlign">Total Cases</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<td key={feedbackItem.month} class="textCenterAlign">{feedbackItem.totalCases}</td>
+						</template>
+					</tr>
+					<tr>
+						<th class="textCenterAlign">Total Feedbacks</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<td key={feedbackItem.month} class="textCenterAlign">{feedbackItem.totalInteractions}</td>
+						</template>
+					</tr>
+					<tr>
+						<th class="textCenterAlign">Happy Cases</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<td key={feedbackItem.month} class="textCenterAlign">{feedbackItem.happyCases}</td>
+						</template>
+					</tr>
+					<tr>
+						<th class="textCenterAlign">Unhappy Cases</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<td key={feedbackItem.month} class="textCenterAlign">{feedbackItem.unhappyCases}</td>
+						</template>
+					</tr>
+					<tr>
+						<th class="textCenterAlign">Fair Cases</th>
+						<template for:each={feedbackData} for:item="feedbackItem">
+							<td key={feedbackItem.month} class="textCenterAlign">{feedbackItem.fairCases}</td>
+						</template>
+					</tr>
+				</tbody>
+			</table>
+
+
+
+		</div>
+		<div if:true={showFilteredCases} class="filtered-cases-container">
+			<div class="no-border-table">
+				<div class="RowText" style="font-weight: bold; color: #032D60; font-size: 20px;">Filtered Cases
+				</div>
+				<div class="Row">
+					<lightning-button variant="brand" label="Export Data" title="ExportData" onclick={exportData}></lightning-button>
+					<lightning-button variant="brand" label="Back" title="Back" onclick={goBack}></lightning-button>
+
+				</div>
+			</div>
+
+
+			<table
+				class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_col-bordered slds-no-row-hover slds-table_striped slds-border_left slds-border_right">
+				<thead>
+					<tr>
+						<th class="textCenterAlign">Case Number</th>
+						<th class="textCenterAlign">Subject</th>
+						<th class="textCenterAlign">Status</th>
+						<th class="textCenterAlign">TL Name</th>
+						<th class="textCenterAlign">RM Name</th>
+						<th class="textCenterAlign">Closed Date</th>
+						<th class="textCenterAlign">Aging</th>
+						<th class="textCenterAlign">Feedback Rating</th>
+						<th class="textCenterAlign">Feedback Remark</th>
+						<th class="textCenterAlign">Project</th>
+						<th class="textCenterAlign">Date open</th>
+						<th class="textCenterAlign">Case Type</th>
+						<th class="textCenterAlign">Tower</th>
+						<th class="textCenterAlign">Unit</th>
+						<!-- Add more columns as needed -->
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Iterate over filtered cases and display each case -->
+					<template for:each={filteredCases} for:item="case1">
+						<tr key={case1.Id}>
+							<td class="textCenterAlign">
+								<a href="javascript:void(0);" onclick={handleCaseRecordClick}
+									data-case-id={case1.Id}>{case1.CaseNumber}</a>
+							</td>
+							<td class="textCenterAlign">{case1.Subject}</td>
+							<td class="textCenterAlign">{case1.Status}</td>
+							<td class="textCenterAlign">{case1.ManagerName}</td>
+							<td class="textCenterAlign">{case1.RW_RM_Name__c}</td>
+							<td class="textCenterAlign">{case1.closedDateFormatted}</td>
+							<td class="textCenterAlign">{case1.Ageing__c}</td>
+							<td class="textCenterAlign">{case1.CSAT_Feedback_Rating__c}</td>
+							<td class="textCenterAlign">{case1.CSAT_Feedback_Remark__c}</td>
+							<td class="textCenterAlign">{case1.RW_Project__r.Name}</td>
+							<td class="textCenterAlign">{case1.createdDateFormatted}</td>
+							<td class="textCenterAlign">{case1.RecordType.Name}</td>
+							<td class="textCenterAlign">{case1.Tower__c}</td>
+							<td class="textCenterAlign">{case1.Unit_Name__c}</td>
+							<!-- Add more columns as needed -->
+						</tr>
+					</template>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</template>
