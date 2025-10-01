@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Survey_Email_with_Link</fullName>
+        <description>Survey Email with Link</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email_on_Survey__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Survey_Notification_After_Site_Visit</template>
+    </alerts>
+</Workflow>

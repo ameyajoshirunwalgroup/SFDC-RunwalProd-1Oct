@@ -1,0 +1,28 @@
+<apex:page Controller="GenerateOtpControllerforProspect" showHeader="false" sidebar="false" >
+  <apex:form >
+      <center style="margin-top:5%">
+    <apex:pageMessages ></apex:pageMessages>
+      <div>
+          <apex:outputPanel rendered="{!otp}">
+             <label style="padding:5px; float:left; position:relative; left:550px;" > OTP Generate For: </label>
+               <apex:inputField value="{!otpobj.OTP_Generate_For__c}" required="true" rendered="{!otp}"/>
+           </apex:outputpanel>
+      </div>
+       <div style="padding:10px; margin-left:5%;">
+          <apex:actionStatus id="SaveButtonStatus">
+            <apex:facet name="stop">
+              <apex:outputPanel >
+                <apex:commandButton action="{!sendOTP}" value="Generate OTP" status="SaveButtonStatus" rendered="{!otp}" />
+              </apex:outputPanel>
+            </apex:facet>
+            <apex:facet name="start">
+               <apex:outputPanel >
+                 <apex:commandButton disabled="true" />
+               </apex:outputPanel>
+            </apex:facet>
+          </apex:actionStatus>
+            <apex:commandButton action="{!Back}" value="Go Back" reRender="many" style="position:relative;left:30px; margin-right:100px;"/>
+       </div>
+      </center>   
+   </apex:form>
+</apex:page>

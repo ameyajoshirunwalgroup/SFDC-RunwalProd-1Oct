@@ -1,0 +1,210 @@
+<apex:page docType="html-5.0" controller="Surveycontroller" showHeader="false" sidebar="false" standardStylesheets="true" cache="false" lightningStylesheets="false">
+<html
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+<head>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+            <script src="/soap/ajax/54.0/connection.js"></script>
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="description" content=""/>
+            <meta name="author" content=""/>
+            <!--<apex:stylesheet value="{!URLFOR($Resource.bootstrap, '/bootstrap/css/bootstrap.min.css')}" />
+            <apex:includeScript value="{!URLFOR($Resource.bootstrap, '/bootstrap/js/bootstrap.min.js')}" />-->
+<style>
+.star-rating fieldset {
+  font-size:0;
+  white-space:nowrap;
+  display:inline-block;
+  width:250px;
+  height:50px;
+  overflow:hidden;
+  position:relative;
+  background:
+      url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="%23DDDDDD" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
+  background-size: contain;
+}
+
+.star-rating input { 
+   -moz-appearance:none;
+   -webkit-appearance:none;
+   opacity: 0;
+   display:inline-block;
+   width: 100%;
+   height: 100%; 
+   margin:0;
+   padding:0;
+   z-index: 2;
+   position: relative;
+}
+
+.star-rating input:hover + label,
+.star-rating input:checked + label {
+     opacity:1;    
+   }
+
+.star-rating label {
+   opacity: 0;
+   position: absolute;
+   left: 0;
+   top: 0;
+   height: 100%;
+   width: 20%;
+   z-index: 4;
+   background: 
+      url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="%23FFDF88" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
+   background-size: contain;
+ }
+
+.star-rating td ~ td label {
+  width: 40%;
+  z-index: 3;  
+}
+.star-rating td ~ td ~ td label {
+  width: 60%;
+  z-index: 2;
+}
+.star-rating td ~ td ~ td ~ td label {
+  z-index: 1;
+  width: 80%;
+}
+.star-rating td ~ td ~ td ~ td ~ td label {
+  z-index: 0;
+  width: 100%;
+}
+.form-control.raised-box {
+                font-weight:bold;
+                padding: 10px;
+                border: 1px solid #708090;
+                box-shadow:  -1px 1px #708090,
+                     +2px 2px #708090,
+                     +3px 3px #708090,
+                     +4px 4px #708090,
+                     +5px 5px #708090;
+}
+.button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+</style>
+</head>
+        
+<body>  
+ <apex:actionStatus id="status">
+    <apex:facet name="start">
+    <div class="fadeMe">
+        &nbsp;
+    </div>
+    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+            <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+        </div>
+    </div>
+    </apex:facet>
+ </apex:actionStatus>
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds">    
+  <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp">   
+        <!-- CREATE/EDIT TASK -->
+      <div aria-labelledby="newtaskform">
+        <!-- BOXED AREA -->
+        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+          <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">{!survey.Project__c}</legend> 
+            
+          <!-- CREATE NEW TASK FORM -->
+            <apex:form id="newtaskform" styleClass="slds-form--inline">
+             <apex:PageMessages id="pageMsgs"/>
+             
+            <apex:outputpanel id="renderedBlock">
+           
+            <apex:outputText style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;" styleClass="form-control" value="Please Rate the Following" rendered="{!isDisplay}"/>
+            
+            <br/><br/>
+            <table id="table_id" style="width:100%;font-size:1em;">
+                    <apex:repeat rendered="{!IF(AND(isExpired == false,isDone == false),true,false)}" value="{!typeQ}" var="f">                     
+                    <tr><td><b>{!f} </b></td>
+                    <apex:repeat rendered="{!IF(AND(isExpired == false,isDone == false),true,false)}" value="{!mapQuestion[f]}" var="maplist">
+                    <tr>
+                    <td style="border:0px;">
+                                        
+                    <div class="form-group col-md-4">
+                    <label>
+                    <apex:outputText >( </apex:outputText>
+                    <apex:outputText style="font-family: Arial, Helvetica, sans-serif;font-size: 16px;" styleClass="form-control" value="{!maplist.Question_Text_Number__c}"/>
+                    <apex:outputText >)</apex:outputText>
+                    &nbsp;
+                    <apex:outputText style="font-family: Arial, Helvetica, sans-serif;font-size: 16px;" styleClass="form-control" value="{!maplist.Question_Text__c}"/>
+                    </label> 
+                    </div> 
+                     
+                    <br/>
+                    <!-- </tr>
+                    <tr> -->
+                    <div class="form-group col-md-4">
+                    <!--<apex:inputField style="width: 100%;padding: 12px 20px;margin: 8px 0;display: inline-block;border: 2px solid #555;border-radius: 4px;box-sizing: border-box;" styleClass="form-control" rendered="{!IF(maplist.RecordType.Name == 'Picklist Questions',true,false)}" value="{!maplist.Answer_Picklist__c}"/>-->
+                    <apex:inputField style="width: 100%;padding: 12px 20px;margin: 8px 0;display: inline-block;border: 2px solid #555;border-radius: 4px;box-sizing: border-box;" styleClass="form-control" rendered="{!IF(maplist.RecordType.Name == 'Free Text Questions',true,false)}" value="{!maplist.AnswerText__c}"/> 
+                    <apex:outputPanel rendered="{!IF(maplist.RecordType.Name == 'Picklist Questions',true,false)}" styleClass="star-rating">
+                            <div style="text-align: left">
+                         
+                                 <apex:selectRadio id="theRadio" value="{!maplist.Answer_Picklist__c}" layout="lineDirection" onclick="dummy();" > 
+                                      <!-- <apex:actionSupport event="onclick" reRender="newtaskform"/> -->  
+                                        <apex:selectOption itemValue="1" id="one" ></apex:selectOption>
+                                        <apex:selectOption itemValue="2" id="two" ></apex:selectOption>
+                                        <apex:selectOption itemValue="3" id="three"></apex:selectOption>
+                                        <apex:selectOption itemValue="4" id="four" ></apex:selectOption>
+                                        <apex:selectOption itemValue="5" id="five" ></apex:selectOption>
+                                 </apex:selectRadio> 
+                            </div>           
+                    </apex:outputPanel>
+                    <apex:outputPanel id="reasonpanel" rendered="{!IF(AND(maplist.RecordType.Name == 'Picklist Questions',maplist.Survey__r.Survey_For_Activity__c == 'Booking'),true,false)}">
+                    <apex:outputLabel style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;">Comments if any</apex:outputLabel>
+                    &nbsp;
+                    <apex:inputField id="reason" style="width: 50%;height: 12px;padding: 12px 20px;margin: 8px 0;display: inline-block;border: 2px solid #555;border-radius: 4px;box-sizing: border-box;" styleClass="form-control" value="{!maplist.Reason_For_Low_Rating__c}"/>  <!-- html-disabled="true"  rendered="{!IF(AND(maplist.RecordType.Name == 'Picklist Questions',maplist.Survey__r.Survey_For_Activity__c == 'Booking'),true,false)}" -->
+                    </apex:outputPanel>
+                    </div>
+                    <br/>
+                    </td>
+                    </tr>
+                    </apex:repeat>
+                     
+                    
+                    <tr><td style="border:0px;" colspan="2">&nbsp;</td></tr>
+                    
+                    </tr>
+                    </apex:repeat>
+                    </table>
+                    <br/>       
+            </apex:outputpanel>        
+<div align="center" draggable="false" >                     
+<apex:commandButton style="padding: 10px 24px;width: 220px;font-size: 18px;" rendered="{!IF(AND(isTrue == false,isExpired == false,isDone == false,show == true),true,false)}" styleClass="slds-button slds-button--brand slds-button--small button2" value="Submit" action="{!save}" status="status"/> 
+</div>
+</apex:form>
+</fieldset >
+</div>
+</div>
+</div>
+<script>
+function dummy()
+{
+    //var rate_value;
+    //if (document.getElementById('one').checked) {
+         //var rate_value = document.getElementById('one').value;
+    //}
+    //alert('IN FUNCTION DUMMY');
+    
+    //document.getElementById("newtaskform:renderedBlock:reasonpanel:reason").style.html-disabled = 'false';
+    
+    //if (getElementByID("one").value == 1 || getElementByID("two").value == 2)
+    //{
+        //getElementByID("reason").style.html-disabled = "false";
+    //}
+}
+</script>
+</body>
+</html>    
+</apex:page>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Send_CP_Invoice_Email_to_MIS</fullName>
+        <description>Send CP Invoice Email to MIS</description>
+        <protected>false</protected>
+        <recipients>
+            <field>CP_Invoice_Approver_L1__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Channel_Partner_Portal_Emails/CP_Invoice_Approval_Process_To_Submitter</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approved_By_L1</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By L1 - CP MIS Team</literalValue>
+        <name>Approved By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L1_Clearing</fullName>
+        <field>Approval_Status_clearing__c</field>
+        <literalValue>Approved By L1</literalValue>
+        <name>Approved By L1 Clearing</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L2</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By L2 - Site Heads</literalValue>
+        <name>Approved By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L2_Clearing</fullName>
+        <field>Approval_Status_clearing__c</field>
+        <literalValue>Approved By L2</literalValue>
+        <name>Approved By L2 Clearing</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L3</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By L3 - MIS CRM / CRM Accounts</literalValue>
+        <name>Approved By L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L4</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By L4 - Billing CRM</literalValue>
+        <name>Approved By L3</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L5</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By L3 - Accounts</literalValue>
+        <name>Approved By L4</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Clearing_Submitted</fullName>
+        <field>Approval_Status_clearing__c</field>
+        <literalValue>Submitted for Approval</literalValue>
+        <name>Clearing Submitted</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Date_Approved_By_Submitter</fullName>
+        <field>Date_Approved_By_Submitter__c</field>
+        <formula>NOW()</formula>
+        <name>Date Approved By Submitter</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Date_Approved_by_L1</fullName>
+        <field>Date_Approved_by_L1__c</field>
+        <formula>NOW()</formula>
+        <name>Date Approved by L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Date_Approved_by_L2</fullName>
+        <field>Date_Approved_by_L2__c</field>
+        <formula>NOW()</formula>
+        <name>Date Approved by L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Date_Approved_by_L3</fullName>
+        <field>Date_Approved_by_L3__c</field>
+        <formula>NOW()</formula>
+        <name>Date Approved by L3</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Date_Approved_by_L4</fullName>
+        <field>Date_Approved_by_L4__c</field>
+        <formula>NOW()</formula>
+        <name>Date Approved by L4</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L1</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By L1 - CP MIS Team</literalValue>
+        <name>Rejected by L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L1_Clearing</fullName>
+        <field>Approval_Status_clearing__c</field>
+        <literalValue>Rejected By L1</literalValue>
+        <name>Rejected by L1 Clearing</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L2</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By L2 - Site Heads</literalValue>
+        <name>Rejected by L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L2_Clearing</fullName>
+        <field>Approval_Status_clearing__c</field>
+        <literalValue>Rejected By L2</literalValue>
+        <name>Rejected by L2 Clearing</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L3</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By L3 - MIS CRM / CRM Accounts</literalValue>
+        <name>Rejected by L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L4</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By L4 - Billing CRM</literalValue>
+        <name>Rejected by L3</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_L5</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By L3 - Accounts</literalValue>
+        <name>Rejected by L4</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_RL1</fullName>
+        <field>Approval_Status_clearing__c</field>
+        <literalValue>Rejected By L1</literalValue>
+        <name>Rejected by L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted_for_Approval</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Submitted for Approval</literalValue>
+        <name>Submitted for Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

@@ -1,0 +1,236 @@
+<apex:page standardController="Task"  extensions="CustomTaskControllerClass" showHeader="false" standardStylesheets="true" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <html
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <style>
+                .spinnerBg {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0.2;
+                z-index: 999999;
+                left: 0;
+                top: 0;
+                }
+                
+                .Assigned {
+                position: fixed;
+                background: url('{!URLFOR($Resource.CIFLoading)}');
+                background-size: 50px 50px;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                z-index: 1004;
+                left: 0%;
+                top: 0%;
+                }
+            </style>
+            
+            <title>Task Edit</title>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+            <script src="/soap/ajax/54.0/connection.js"></script>
+        </head>
+        <body>
+            
+             <apex:actionstatus id="spinnerStatus">
+                        <apex:facet name="start">
+                            <div class="spinnerBg" />
+                            <div class="Assigned" />
+                        </apex:facet>
+                    </apex:actionstatus>
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <div class="fadeMe">
+        &nbsp;
+    </div>
+                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                            <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                        </div>
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+            <!-- REQUIRED SLDS WRAPPER -->
+            <div class="slds">
+                <!-- PRIMARY CONTENT WRAPPER -->
+                <div class="myapp">
+                    <!-- CREATE/EDIT TASK -->
+                    <div aria-labelledby="newtaskform">
+                        <!-- BOXED AREA -->
+                        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+                            <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">Visit Form</legend>
+                            <!-- CREATE NEW TASK FORM -->
+                            <apex:form id="newtaskform" styleClass="slds-form--inline">
+                                <div class="slds-notify slds-notify--alert slds-theme--inverse-text slds-theme--alert-texture">
+                                    <apex:pageMessages id="error"/>
+                                </div>
+                                <apex:pageBlock id="pgBlock" mode="edit">
+                                     <apex:pageBlockButtons location="Both" styleClass="slds-button-group">
+                      <apex:actionStatus id="go">
+                        <apex:facet name="stop">
+                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Save" action="{!save}" status="spinnerStatus"  disabled="false" rerender="go,pageMsgs"/>
+                        </apex:facet>
+                        <apex:facet name="start">
+                          <apex:commandButton status="go" styleClass="slds-button slds-button--brand slds-button--small" value="Save" disabled="true" />
+                        </apex:facet>
+                      </apex:actionStatus>
+                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate"/>
+                    </apex:pageBlockButtons>
+                                    <apex:pageBlockSection id="pgBlockSectionCallInfo" title="System Details" collapsible="false" columns="2">
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Customer Name</apex:outputLabel>
+                                            <apex:outputField id="Opportunity" value="{!Task.whoId}" />
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Opportunity Name</apex:outputLabel>
+                                            <apex:outputField id="Opportunity" value="{!Task.whatId}" />
+                                        </apex:pageBlockSectionItem>
+                                        <apex:outputField id="Subject" value="{!Task.Subject}" />
+                                    </apex:pageBlockSection>
+                                    <apex:pageBlockSection id="pgBlockSectionVisitDetails" title="Visit Details" collapsible="false" columns="2" rendered="{!NOT(task.Revisit__c)}">
+                                        <apex:pageBlockSectionItem rendered="{!NOT(task.Revisit__c)}">
+                                            <apex:outputLabel >Visit Date</apex:outputLabel>
+                                            <apex:InputField id="DueDate" value="{!Task.ActivityDate}" required="true" />
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageBlockSectionItem rendered="{!NOT(task.Revisit__c)}">
+                                            <apex:outputLabel >Visitor Name</apex:outputLabel>
+                                            <apex:InputField id="VisitorName" value="{!Task.Visitor_Name__c}" required="true" />
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageblockSectionItem >
+                                            <apex:outputLabel > Visit Status</apex:outputLabel>
+                                            <apex:inputField id="scallrating" value="{!Task.Call_Rating__c}" required="true"/>
+                                        </apex:pageblockSectionItem> 
+                                        <apex:inputField id="reasonsForLost" value="{!Task.Reason_For_Lost__c}" required="false"/>
+                                        <apex:inputField id="ciform" value="{!Task.CI_Form__c}" />
+                                       
+                                        <apex:inputField id="contri" value="{!Task.Own_Contribution__c}" required="true"/>
+                                        <apex:inputField id="loanEligiblity" value="{!Task.Loan_Eligibility__c}" required="false"/> 
+                                      <!--  <apex:inputField id="visitstatus" value="{!Task.Event_Status__c}" required="false"/> -->
+                                        
+                                        <apex:pageblockSectionItem >
+                                            <apex:outputlabel > Tentative Revisit Date</apex:outputlabel>
+                                            <apex:inputField id="NextActionDate" value="{!Task.Next_Action_Date__c}" required="false" />
+                                        </apex:pageblockSectionItem>
+                                            
+                                      <!--     <apex:inputField id="visitedwith" value="{!Task.Visited_With__c}" required="false"/> -->
+                                         <apex:inputField id="Budget" value="{!Task.Budget_In_Lakh__c}" required="true"/>
+                                          <apex:inputField id="config" value="{!Task.Configuration__c}" required="true"/>
+                                           <apex:inputField id="timeline" value="{!Task.Time_Line__c}" required="true"/>
+                                            <apex:inputField id="PreferredLocation" value="{!Task.Preferred_Location__c}" required="true"/>
+                                             <apex:inputField id="Urgency" value="{!Task.Urgency__c}" required="true"/>
+                                             <apex:inputField id="FamilyStakeholderBuyIn" value="{!Task.Family_Stakeholder_Buy_In__c}" required="true"/>
+                                              <apex:inputField id="InventoryPreference" value="{!Task.Inventory_Preference__c}" required="true"/>
+                                              <apex:inputField id="AmenitiesCompliance" value="{!Task.Amenities_Compliance_with_Customer_Prefe__c}"/>
+                                              <apex:inputField id="EngagedwithCompetition" value="{!Task.Engaged_with_Competition__c}" required="true"/>
+                                              <apex:inputField id="LoanPreApproval" value="{!Task.Loan_Pre_Approval__c}" required="true"/> 
+                                            
+                                        <apex:inputField id="floorChoice" value="{!Task.Floor_Choices__c}" required="false"/>
+                                        <apex:inputField id="vaastu" value="{!Task.Vaastu_Entry_Towards__c}" required="false"/>
+                                        <apex:inputField id="facing" value="{!Task.Facing__c}" required="false"/>
+                                        <apex:inputField id="balcony" value="{!Task.With_Balcony__c}" required="false"/>
+                                         <!-- <apex:inputField id="PresalesUser" value="{!Task.Pre_Sales_user__c}" required="false"/>-->
+                                        <apex:inputField id="noOfCarParking" value="{!Task.Number_of_Cars__c}" required="false"/>
+                                        <apex:inputField id="serventRoom" value="{!Task.With_Servant_Room__c}" required="false"/>
+                                        <apex:inputField value="{!Task.Type_Of_Meeting__c}" required="true"/>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Other Requirements</apex:outputLabel>
+                                            <apex:inputField id="comments" value="{!Task.Registraion_Status__c}" required="false"/>
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Visit Remarks</apex:outputLabel>
+                                            <apex:inputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" required="true"/>
+                                        </apex:pageBlockSectionItem>
+                                        <!-- <apex:pageBlockSectionItem ><apex:outputLabel >Prospect</apex:outputLabel><apex:inputField id="prospect" value="{!Task.Prospect__c}" required="true"/></apex:pageBlockSectionItem> -->
+                                    </apex:pageBlockSection>
+                                    <apex:outputPanel id="test">
+                                        <apex:pageBlockSection id="test2" title="Channel Partner Details" collapsible="false" columns="2" rendered="{!if(task.Revisit__c == false && Task.Walk_in_Source__c == 'Channel Partner' && Task.Walk_in_Sub_Source__c == 'Channel Partner',true,false)}">
+                                            <apex:inputField id="ChannelPartner" value="{!Task.Channel_Partner__c}" required="true"/>
+                                        </apex:pageBlockSection>
+                                    </apex:outputPanel>
+                                    <!--------------- ****** Revisit Section Starts ****** ----------------------->
+                                    <apex:pageBlockSection id="pgBlockSectionRevisitDetails" title="Revisit Details" collapsible="false" columns="2" rendered="{!task.Revisit__c}">
+                                        <!-- Shifted From  System Details Section to Visit Details Section - Netra -->
+                                        <apex:pageBlockSectionItem rendered="{!task.Revisit__c}">
+                                            <apex:outputLabel >Revisit Date</apex:outputLabel>
+                                            <apex:InputField id="DueDate" value="{!Task.ActivityDate}" required="true" />
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem rendered="{!(task.Revisit__c)}">
+                                            <apex:outputLabel >Visitor Name</apex:outputLabel>
+                                            <apex:InputField id="VisitorName" value="{!Task.Visitor_Name__c}" required="false" />
+                                        </apex:pageBlockSectionItem>
+                                        <!-- <apex:pageBlockSectionItem rendered="{!task.Revisit__c}">
+                                            <apex:outputLabel >Next Action Date</apex:outputLabel>
+                                            <apex:InputField id="NextDate"  value="{!Task.Next_Action_Date__c}" Required="false"/>
+                                        </apex:pageBlockSectionItem> -->
+                                       <apex:pageblockSectionItem >
+                                       <apex:outputPanel > Visit Status</apex:outputPanel>
+                                       <apex:inputField id="scallrating" value="{!Task.Call_Rating__c}" required="true" /> 
+                                       </apex:pageblockSectionItem>
+                                       <apex:inputField id="reasonsForLost" value="{!Task.Reason_For_Lost__c}" required="false"/>
+                                       <!-- <apex:inputField id="ciform" value="{!Task.CI_Form__c}" /> -->
+                                       <!-- <apex:inputField id="visitstatus" value="{!Task.Event_Status__c}" required="true"/> -->
+                                        <apex:inputField value="{!Task.RW_Sales_Associate__c}" required="true"/>
+                                        <apex:inputField value="{!Task.Type_Of_Meeting__c}" required="true"/>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Closing Head</apex:outputLabel>
+                                            <apex:inputField value="{!Task.RW_Sourcing_Closing_Head__c}" required="false"/>
+                                        </apex:pageBlockSectionItem>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Anarock Sourcing Manager</apex:outputLabel>
+                                            <apex:inputField value="{!Task.Anarock_Sourcing_Manager__c}" required="false"/>
+                                        </apex:pageBlockSectionItem>
+                                        <apex:inputField value="{!task.Pre_Sales_user__c}"/>
+                                        <apex:inputfield value="{!task.Booked__c}" required="true"/>
+                                        <apex:inputfield value="{!task.Reason_for_not_booking__c}" required="true"/>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputLabel >Revisit Remarks</apex:outputLabel>
+                                            <apex:inputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" required="true"/>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        
+                                    </apex:pageBlockSection>
+                                    <apex:outputPanel >
+                                        <apex:pageBlockSection title="Channel Partner Details" collapsible="false" columns="2" rendered="{!if(task.Revisit__c == true && walksource == 'Channel Partner' && walksubsource == 'Channel Partner',true,false)}">
+                                            <apex:outputField id="ChannelPartner" value="{!task.Channel_Partner__c}" />
+                                            <apex:outputLabel >
+                                                <b>Xcelerate Id </b> &nbsp;&nbsp;&nbsp;                  
+                             
+                                                <apex:outputText id="XcelerateId" value="{!xcelerateID}"/>
+                                            </apex:outputLabel>
+                                        </apex:pageBlockSection>
+                                    </apex:outputPanel>
+                                </apex:pageBlock>
+                            </apex:form>
+                            <!-- CREATE NEW TASK FORM -->
+                        </fieldset>
+                        <!-- / BOXED AREA -->
+                    </div>
+                    <!-- / CREATE NEW TASK -->
+                </div>
+                <!-- / PRIMARY CONTENT WRAPPER -->
+            </div>
+            <!-- / REQUIRED SLDS WRAPPER -->
+            <!-- JAVASCRIPT -->
+            <script>
+      var j$ = jQuery.noConflict();
+ 
+        j$(document).ready(function() {
+        });
+     </script>
+            <script>
+         function ShowWalkInSource()
+         { 
+             
+         }    
+     </script>
+            <!-- / JAVASCRIPT -->
+        </body>
+    </html>
+</apex:page>

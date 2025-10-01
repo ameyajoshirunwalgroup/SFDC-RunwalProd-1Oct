@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Auto_check_Deduct_Token_Checkbox</fullName>
+        <field>Deduct_Token__c</field>
+        <literalValue>1</literalValue>
+        <name>Auto check Deduct Token Checkbox</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Remarks</fullName>
+        <field>Remark__c</field>
+        <formula>Remarks__c</formula>
+        <name>Remarks</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Sharing_Rule_CPPH_Name</fullName>
+        <description>Sharing Rule : CPPH Name</description>
+        <field>CPPH_Name__c</field>
+        <formula>Customer_Pay_Plan_Header__r.Name</formula>
+        <name>Sharing Rule : CPPH Name</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>To_be_Paid</fullName>
+        <field>Is_to_be__c</field>
+        <formula>IF
+(
+
+AND(ISPICKVAL( Is_to_be_Paid__c , &apos;Construction Stage&apos;),NOT( ISBLANK(Days_Months_Value__c ) )),
+   Text(Days_Months_Value__c)  &amp;   Text(Days_Months__c) &amp; &apos; after Stage : &apos;  &amp;  Project_Construction_Stages__r.Name,
+
+  IF(ISPICKVAL( Is_to_be_Paid__c , &apos;Construction Stage&apos;) ,Project_Construction_Stages__r.Name,
+       IF( ISPICKVAL( Is_to_be_Paid__c , &apos;From Dt. of Booking&apos;) ,   Text(Days_Months_Value__c)  &amp;   Text(Days_Months__c)  &amp; &apos; from date of booking.&apos;,
+            IF( ISPICKVAL( Is_to_be_Paid__c , &apos;From Dt. of Registration&apos;) ,   Text(Days_Months_Value__c)  &amp;   Text(Days_Months__c)  &amp; &apos; from date of registration.&apos;,
+              IF( ISPICKVAL( Is_to_be_Paid__c , &apos;Registration&apos;), &apos;On Registration&apos; ,
+                 IF( ISPICKVAL( Is_to_be_Paid__c , &apos;On Date&apos;), &apos;On &apos; &amp;  Text(On_date__c),&apos;&apos; 
+                 )
+              )
+           ) 
+       )
+   )
+)</formula>
+        <name>To be Paid</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Udate_Unique_Construction_stage</fullName>
+        <field>Unique_ConstructionStage__c</field>
+        <formula>Project__c+ Standard_Pay_Plan_Header__c +  Standard_Pay_Plan_Header__r.Payment_Plan__c +Project_Construction_Stages__c</formula>
+        <name>Udate Unique Construction stage</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Value_update</fullName>
+        <field>Value__c</field>
+        <formula>IF(
+ AND( ISPICKVAL( Amount__c , &apos;Percentage&apos;) , NOT(  Amount_Value__c  == 0) ) ,
+ TEXT(Amount_Value__c  ) &amp; &apos; % of Total Charge Value&apos;, 
+    IF(
+       AND( ISPICKVAL( Amount__c , &apos;Amount&apos;) , NOT( Amount_Value__c  == 0 ) ),
+       &apos;Rs. &apos; &amp;  TEXT(Amount_Value__c  ) ,
+       IF(
+    AND( ISPICKVAL( Amount__c , &apos;Amount&apos;) , NOT( ISBLANK( Calculate_Installment_Amount_as__c ) ) , NOT( ISBLANK( Total_Charge_Value_Minus__c ) ) ) ,
+   TEXT( Calculate_Installment_Amount_as__c   ) &amp; &apos; % of Total Charge Value&apos;  &amp; &apos; - Rs.&apos;  &amp; TEXT(Total_Charge_Value_Minus__c),
+    IF(
+    AND(  ISPICKVAL( Amount__c , &apos;Amount&apos;)  , NOT( ISBLANK( Calculate_Installment_Amount_as__c ) ) ) ,
+    TEXT( Calculate_Installment_Amount_as__c   ) &amp; &apos; % of Total Charge Value&apos; ,
+    IF( AND( ISPICKVAL( Amount__c , &apos;Amount&apos;) , NOT( ISBLANK( Total_Charge_Value_Minus__c ) ) ) ,
+ &apos; 0 % of Total Charge Value&apos;  &amp; &apos; - Rs.&apos;  &amp; TEXT(Total_Charge_Value_Minus__c), 
+&apos;0 % of Total Charge Value - Rs. 0&apos;) 
+) 
+
+) 
+  ) 
+
+
+)</formula>
+        <name>Value update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>update_actual_revise_date</fullName>
+        <field>Actual_Revise_Due_Date__c</field>
+        <formula>Due_Date__c</formula>
+        <name>update actual revise date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Auto check Deduct Token Checkbox</fullName>
+        <actions>
+            <name>Auto_check_Deduct_Token_Checkbox</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Standard_Customer_Pay_Plan_Detail__c.Total_Charge_Value_Minus__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Installment No Auto Update</fullName>
+        <active>true</active>
+        <formula>true</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Sharing Rule %3A CPPH Blank</fullName>
+        <actions>
+            <name>Sharing_Rule_CPPH_Name</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>Sharing Rule : CPPH Blank</description>
+        <formula>1=1</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Udate Unique Construction stage</fullName>
+        <actions>
+            <name>Udate_Unique_Construction_stage</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>Not( OR(ISBLANK( Standard_Pay_Plan_Header__c), Isblank( Standard_Pay_Plan_Header__r.Payment_Plan__c), isblank(Project_Construction_Stages__c)))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Actual revise date</fullName>
+        <actions>
+            <name>update_actual_revise_date</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Standard_Customer_Pay_Plan_Detail__c.Due_Date__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Standard_Customer_Pay_Plan_Detail__c.Actual_Revise_Due_Date__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Related List Of Payment Plan</fullName>
+        <actions>
+            <name>Remarks</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>To_be_Paid</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Value_update</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>true</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

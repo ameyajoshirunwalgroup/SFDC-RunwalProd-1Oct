@@ -1,0 +1,21 @@
+<apex:page docType="html-5.0" controller="ToolingApiPageController" title="Deployment CheckList" showHeader="true" applyBodyTag="true" applyHtmlTag="true">
+<apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <b>From Date :</b> <apex:input type="datetime-local" value="{!StartDate}" id="sttdate" required="true"/>
+                    <br/><br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>To Date :</b> <apex:input type="datetime-local" value="{!EndDate}" id="enddate" required="true"/>
+                     <br/><br/><br/>
+     
+                    <div align="center"  draggable="false">
+                        <apex:commandButton value="Generate CheckList" action="{!callPage}"  style="float:left"/>
+                   </div>
+                </apex:outputPanel>
+               
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock></apex:form>
+    
+</apex:page>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Account_Redeem_Notification</fullName>
+        <description>Account Redeem Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Account_Temlate/Account_Redeemed</template>
+    </alerts>
+    <alerts>
+        <fullName>Email_on_Account_Redeem_True</fullName>
+        <description>Email on Account Redeem True</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Account_Temlate/Email_on_Account_Redeem_True</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Update_Customer_Portal_Account_Custom_fi</fullName>
+        <field>IsCustomerPortal</field>
+        <literalValue>1</literalValue>
+        <name>Update Customer Portal Account Custom fi</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Email on Account Redeem True</fullName>
+        <actions>
+            <name>Email_on_Account_Redeem_True</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Account.RW_Redeem__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <description>Email on Account Redeem True</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>RW_Account_Redeem</fullName>
+        <actions>
+            <name>Account_Redeem_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Account.RW_Redeem__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Customer Portal Account Custom field</fullName>
+        <actions>
+            <name>Update_Customer_Portal_Account_Custom_fi</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Account.IsCustomerPortal</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>

@@ -1,0 +1,37 @@
+<apex:page id="pageId" standardController="Payment_Plan__c" extensions="ShowPaymentPlanController" sidebar="false">
+    
+    <apex:form id="formId" style="margin-top:10px;"> 
+           
+        <apex:pageBlock id="pb_detail" title="Payment Plan Details">
+            
+            <table style="width: 100%;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;text-align: left; font-family:Georgia, serif" cellspacing="0" cellpadding="8">
+                <tr>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;font-weight:bold;font-size:10px;background-color:#CC527A;">Project Stages</td>
+                    <apex:repeat value="{!lstPayPlanHeader}" var="PayPlan">
+                        <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;background-color: #D0E7C8;"><apex:outputLabel style="font-weight:bold; font-size:10px;" value="{!PayPlan.Charge_Code__r.Name}" /></td>
+                    </apex:repeat>
+                </tr>
+                <apex:repeat value="{!lstPayPlanDetails}" var="HeaderList">
+                    <tr>
+                        <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;background-color: #FAFBD5;">
+                            <apex:variable value="{!1}" var="counter" />
+                            <apex:repeat value="{!HeaderList}" var="DetailedList">
+                                <apex:outputLabel style="font-size:10px" rendered="{!IF(counter == 1, true, false)}"><b>{!DetailedList.Is_to_be__c}</b></apex:outputLabel>
+                                <apex:variable value="{!counter + 1}" var="counter" />
+                            </apex:repeat>
+                        </td>
+                        <apex:repeat value="{!lstPayPlanHeader}" var="PayPlan">
+                            <td style="border-right: 1px solid black;border-left: 1px solid black;border-bottom:1px solid black;background-color: white;">
+                                <apex:repeat value="{!HeaderList}" var="DetailList">
+                                    <apex:outputLink rendered="{!IF(PayPlan.Id == DetailList.Standard_Pay_Plan_Header__c,true,false)}" target="_blank" value="/{!DetailList.Id}" style="text-decoration:none;cursor:pointer;font-size:10px;color:blue">{!DetailList.Value__c}</apex:outputLink>
+                                    <apex:outputLink rendered="{!IF(PayPlan.Id == DetailList.Standard_Pay_Plan_Header__c,true,false) && DetailList.OC_Milestone__c}" target="_blank" value="/{!DetailList.Id}" style="text-decoration:none;cursor:pointer;font-size:10px;color:red">OC Milestone - ✓</apex:outputLink>
+                                    <apex:outputLabel rendered="{!IF(PayPlan.Id == DetailList.Standard_Pay_Plan_Header__c,true,false) && DetailList.Registration_Linked__c}" style="font-size:8px;color:#CC527A">(Registration Linked)</apex:outputLabel>
+                                </apex:repeat>
+                            </td>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

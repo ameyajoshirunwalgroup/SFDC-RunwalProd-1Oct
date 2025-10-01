@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Gardens_Sharing</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Gardens Sharing</label>
+        <sharedTo>
+            <group>Gardens_NPS</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name_Sharing__c</field>
+            <operation>equals</operation>
+            <value>Runwal Gardens,Runwal Edge Dombivli</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Mumbai_Sharing</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Mumbai Sharing</label>
+        <sharedTo>
+            <group>Mumbai_NPS</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name_Sharing__c</field>
+            <operation>equals</operation>
+            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Pinnacle,Runwal Forests,7 Mahalaxmi</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>MyCity_Sharing</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>MyCity Sharing</label>
+        <sharedTo>
+            <group>MyCity_NPS</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name_Sharing__c</field>
+            <operation>equals</operation>
+            <value>Runwal MyCity</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Primrose_MHADA_Access</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Primrose MHADA Access</label>
+        <sharedTo>
+            <group>P_MHADA_NPS</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name_Sharing__c</field>
+            <operation>equals</operation>
+            <value>Primrose MHADA</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

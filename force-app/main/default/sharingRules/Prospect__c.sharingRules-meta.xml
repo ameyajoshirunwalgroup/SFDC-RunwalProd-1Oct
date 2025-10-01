@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Loyalty_Prospect_Sharring</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Loyalty Prospect Sharring</label>
+        <sharedTo>
+            <group>Refferal_Loyalty_Group</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Lead_Source__c</field>
+            <operation>equals</operation>
+            <value>R Circle Caller,Referral,Loyalty,Employee / Managemen</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Prospects_to_be_viewed_by_Presales</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Prospects to be viewed by Presales</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>Pre_Sales_Head</roleAndSubordinatesInternal>
+        </sharedTo>
+        <criteriaItems>
+            <field>Lead_Source__c</field>
+            <operation>notEqual</operation>
+            <value>Channel Partner,Loyalty,Corporate</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Prospect_sharing_for_Bliss_and_Avenue</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Prospect sharing for Bliss and Avenue</label>
+        <sharedTo>
+            <group>R_Bliss_Avenue</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Pinnacle,Runwal Avenue,5th Avenue - Runwal Avenue,Runwal Bliss,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Prospect_sharing_for_Forests</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Prospect sharing for Forests</label>
+        <sharedTo>
+            <group>R_Forest</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Forests</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Prospect_sharing_for_Gardens</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Prospect sharing for Gardens</label>
+        <sharedTo>
+            <group>R_Garden</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Gardens,Runwal Garden City</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Prospect_sharing_for_Mahalakshmi</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Prospect sharing for Mahalakshmi</label>
+        <sharedTo>
+            <group>R_Mahalakshmi</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>7 Mahalaxmi</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Prospect_sharing_for_MyCity</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Prospect sharing for MyCity</label>
+        <sharedTo>
+            <group>R_MyCity</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal MyCity,Runwal Garden City</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Prospect_sharing_for_Pinnacle_and_Greens</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Prospect sharing for Pinnacle and Greens</label>
+        <sharedTo>
+            <group>R_Pinnacle_Greens</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Pinnacle,Runwal Greens</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

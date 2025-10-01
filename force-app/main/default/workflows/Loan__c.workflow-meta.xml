@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Home_Loan_Call_Escalation_24Hrs</fullName>
+        <description>Home Loan Call Escalation 24Hrs</description>
+        <protected>false</protected>
+        <recipients>
+            <field>TL_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Home_Loan_Call_Escalation_24Hrs</template>
+    </alerts>
+    <alerts>
+        <fullName>Home_Loan_Call_Escalation_48Hrs</fullName>
+        <description>Home Loan Call Escalation 48Hrs</description>
+        <protected>false</protected>
+        <recipients>
+            <field>HL_Reporting_1_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Home_Loan_Call_Escalation_24Hrs</template>
+    </alerts>
+    <alerts>
+        <fullName>Loan_Escalation_24hrs</fullName>
+        <description>Loan Escalation 24hrs</description>
+        <protected>false</protected>
+        <recipients>
+            <field>HL_Reporting_1_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Loan_Escalation_24Hrs</template>
+    </alerts>
+    <alerts>
+        <fullName>Loan_Escalation_48hrs</fullName>
+        <description>Loan Escalation 48hrs</description>
+        <protected>false</protected>
+        <recipients>
+            <field>HL_Reporting_2_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Loan_Escalation_48Hrs</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Update_Registration_Date</fullName>
+        <field>Registration_Date__c</field>
+        <formula>RW_Booking__r.RW_Registration_Date__c</formula>
+        <name>Update Registration Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Home Loan Call Escalation 24Hrs</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Loan__c.Next_Call_Date__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Home_Loan_Call_Escalation_48Hrs</name>
+                <type>Alert</type>
+            </actions>
+            <offsetFromField>Loan__c.Next_Call_Date__c</offsetFromField>
+            <timeLength>48</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Home_Loan_Call_Escalation_24Hrs</name>
+                <type>Alert</type>
+            </actions>
+            <offsetFromField>Loan__c.Next_Call_Date__c</offsetFromField>
+            <timeLength>24</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <rules>
+        <fullName>Home Loan RM Escalations</fullName>
+        <active>true</active>
+        <criteriaItems>
+            <field>Loan__c.HL_RM_Name__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Loan__c.HL_TL_Name__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Loan_Escalation_48hrs</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>48</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Loan_Escalation_24hrs</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>24</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <rules>
+        <fullName>Update Registration Date</fullName>
+        <actions>
+            <name>Update_Registration_Date</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>RW_Booking__c != null</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+</Workflow>

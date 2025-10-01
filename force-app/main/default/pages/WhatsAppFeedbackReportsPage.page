@@ -1,0 +1,21 @@
+<apex:page sidebar="false" showHeader="false">
+    <apex:includeLightning />
+    <!--Lightning Container-->
+    <div style="width:100%;height:100px;" id="LightningContainer"/>
+     
+    <script type="text/javascript">
+    //get account Id from URL
+    var team = "{!$CurrentPage.parameters.team}";
+    var type = "{!$CurrentPage.parameters.type}";
+     
+    //Create Lightning Component
+    $Lightning.use("c:WhatsAppFeedbackReportsApp", function() {
+        $Lightning.createComponent("c:WhatsAppFeedbackBotReports", 
+                                   { "team" : team,
+                                     "type" : type}, //Pass Parameter
+                                   "LightningContainer", function(component) {
+                                       console.log('Component created');
+                                   });
+    });
+    </script>
+</apex:page>

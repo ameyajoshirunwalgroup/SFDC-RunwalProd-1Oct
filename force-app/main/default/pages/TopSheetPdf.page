@@ -1,0 +1,407 @@
+<apex:page controller="TopSheetPdfController" renderAs="pdf" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" >
+    <html>
+        <head>
+            <style type="text/css" media="print">
+                @page {
+                size: A4;
+                size: 10.27in 13.69in;
+                @bottom-center {          
+                content: "Page " counter(page) " of " counter(pages);
+                
+                }
+                }
+                body{
+                margin:0;
+                padding:0;            
+                font-family:"Google Sans", Roboto, arial, sans-serif !important;
+                font-family: 'Calibri';
+                }                
+                
+                @page {
+                margin-bottom: 64px;
+                margin-top: 64px;
+                
+                @top-center {
+                content: element(header,first-except);
+                }
+                @bottom-center {
+                content: element(footer,first-except);
+                }
+                }            
+                .header{
+                position: running(header);
+                }
+                .footer {
+                display:block;
+                position: running(footer);
+                z-index:-999;
+                }            
+                
+            </style>  
+        </head>
+        <apex:form >
+            <body>
+                <table  border="1" cellspacing="2" cellpadding="3" style="border-collapse: collapse;border:1px solid black !important;width: 100%;" align="center"  >
+                    <tr>
+                        <th Style="text-align:center;height:60px;" colspan="4">Certificate of Payment (COP) - CP Bills</th>
+                        
+                    </tr>
+                    <tr>
+                        <td border = "0" style='height:60px;font-size:16px;' colspan="4"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name of Project : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {!InvoiceList[0].Project__c} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Phase :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <apex:outputText rendered="{!if(InvoiceList[0].Phase__c =='All Inventory',True,False)}">
+                                NA</apex:outputText>
+                            <apex:outputText rendered="{!if(InvoiceList[0].Phase__c !='All Inventory',True,False)}">
+                                
+                                {!InvoiceList[0].Phase__c} </apex:outputText></td>
+                        <!--<td border = "0" style='height:60px;' ></td>
+<td border = "0" style='height:60px;' > </td>-->
+                        
+                    </tr>
+                    <!-- <tr>
+<td>Phase:</td>
+<td>NA</td>
+<td></td>
+
+</tr>-->
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr >
+                            <th Style="font-size:13px;">A.Tower and Unit Details</th>
+                            <td></td> 
+                            <td></td>
+                        </tr>
+                        <tr> 
+                            <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp; Tower and Unit No</td>
+                            <td  width = "30%" Style="font-size:15px;background-color:#fef2cb;text-align:center;" ><b>{!InvoiceList[0].Tower_Unit__c} </b></td>
+                            <td Style="font-size:15px;background-color:#fef2cb;" ></td>
+                        </tr>
+                        <tr> 
+                            <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp; SAP Document No</td>
+                            <td  width = "30%" Style="font-size:15px;background-color:#fef2cb;text-align:center;" ><b>{!InvoiceList[0].SAP_Document_No__c} </b></td>
+                            <td Style="font-size:15px;background-color:#fef2cb;" ></td>
+                        </tr>
+                        <tr>
+                            <td><br/></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <th Style="font-size:13px;">B. Details of Customer</th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp; Name of Customer </td>
+                            <td Style="font-size:14px;text-align:center;">{!InvoiceList[0].Customer_Name__c}</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <tr>
+                        <td><br/></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr>
+                            <th Style="font-size:13px;">C. Detail of Booking: </th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr>
+                            <td Style="font-size:14px;"> &nbsp;&nbsp;&nbsp; Date of Booking </td>
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">
+                                <apex:outputText value="{0,date,dd-MM-yy}"> &nbsp;<apex:param value="{!BookingList[0].Booking_Date__c}" /> </apex:outputText></td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>    
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        
+                        <tr>
+                            <td Style="font-size:14px;"> &nbsp;&nbsp;&nbsp; Agreement Value - As per SCS </td>
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!AVAllotmentPremium}&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                      <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">                        
+                        <tr>
+                            <td Style="font-size:14px;"> &nbsp;&nbsp;&nbsp; Less:- BCAM +FCAM </td>
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!BookingList[0].F_B_CAM__c}&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">                        
+                        <tr>
+                            <td Style="font-size:14px;"> &nbsp;&nbsp;&nbsp; Less:- SDR </td>
+                             <!--<td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!BookingList[0].Stamp_duty_Paid2__c}&nbsp;</td> -->
+                            <!--<td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!BookingList[0].Stamp_duty_payable_by_Runwal__c}&nbsp;</td> -->
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!If(BookingList[0].Stamp_duty_Paid2__c > BookingList[0].Stamp_duty_payable_by_Runwal__c, BookingList[0].Stamp_duty_Paid2__c, BookingList[0].Stamp_duty_payable_by_Runwal__c)}&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">                        
+                        <tr>
+                            <td Style="font-size:14px;"> &nbsp;&nbsp;&nbsp; Less:- Development Charges </td>
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!BookingList[0].Development_Charge__c}&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr>
+                            <td Style="font-size:14px;" > &nbsp;&nbsp;&nbsp; Agreement Value - for Brokerage calculation </td>
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!AVforBrokers}&nbsp;</td>
+                            <td Style="font-size:12px;">(Post Adjustment for F/B CAM/SD Registration)</td>
+                        </tr>   
+                    </apex:outputText>
+                    <tr>
+                        <td><br/></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th Style="font-size:13px;">&nbsp; Details of CP</th>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Company Name</td>
+                        <td Style="font-size:13px;text-align:center;text-transform:uppercase;">{!CPList[0].Company_Name_As_per_RERA__c}&nbsp;</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Associated Person</td>
+                        <td Style="font-size:14px;text-align:center;">{!CPList[0].Representative_Name__c}&nbsp;</td>
+                        <td></td>
+                    </tr>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name != 'Kicker Incentive',True,False)}">
+                        <tr>
+                            <th Style="font-size:13px;">D. Details of Receipts</th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr>
+                            <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Received Amount </td>
+                            
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;">{!ReceiptAmount}&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr>
+                            <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Payment Received %</td>
+                            <td Style="font-size:14px;text-align:center;font-weight: bold;background-color:#f2f2f2;">{!BookingList[0].Payment_Received__c}%&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <tr>
+                        <th Style="font-size:13px;">E. Brokerage Entitlement </th>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Summary__r.Kicker_Type__c != 'Cumulative',True,False)}">
+                        <tr>
+                            <td Style="font-size:14px; ">&nbsp;&nbsp;&nbsp;Registration Status</td>
+                            <td Style="font-size:14px;text-align:center;font-weight: bold;">{!BookingList[0].RW_Registration_Status__c}&nbsp;</td>
+                            <td></td>
+                        </tr>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name  == 'Kicker Incentive' || InvoiceList[0].Brokerage_Lookup__r.name  == 'Base Brokerage' || InvoiceList[0].Brokerage_Lookup__r.name  == 'Additional Brokerage'  || InvoiceList[0].Brokerage_Lookup__r.name  == 'Retrofit Brokerage' ||  InvoiceList[0].Brokerage_Lookup__r.name  == '1% Brokerage',True,False)}">
+                        <tr>
+                            <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name == 'Base Brokerage' && InvoiceList[0].Brokerage_Lookup__r.AOP_CP__c == 
+                                                       false,True,False)}">
+                                <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Brokerage - Base</td>
+                            </apex:outputText>
+                            <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name =='1% Brokerage'&& InvoiceList[0].Brokerage_Lookup__r.AOP_CP__c, True,False)}">
+                                <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;1% Brokerage</td>
+                            </apex:outputText>
+                            <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name = 'Additional Brokerage',True,False)}">
+                                <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Additional - Brokerage</td>
+                                
+                            </apex:outputText>
+                            <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name  == 'Kicker Incentive',True,False)}">
+                                <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Kicker - Incentive</td>
+                            </apex:outputText>
+                             <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name  == 'Retrofit Brokerage',True,False)}">
+                                <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Retrofit - Brokerage</td>
+                            </apex:outputText>
+                            
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:center;font-weight: bold;">{!InvoiceList[0].Brokerage__c }%&nbsp; </td>
+                            <td Style="font-size:14px;background-color:#fef2cb;text-align:right;font-weight: bold;background-color:#f2f2f2;">{!BrokerageAmount}&nbsp;</td>
+                        </tr>
+                    </apex:outputText>
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Brokerage - Other Incentive</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Brokerage - Total Amount</td>
+                        <td Style="font-size:14px;text-align:center;background-color:#f2f2f2;font-weight: bold;">{!BrokerageTotalAmount}&nbsp;</td>
+                        <td Style = "background-color:#f2f2f2;"></td>
+                    </tr> <tr>
+                    <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Taxes</td>
+                    <td Style = "background-color:#f2f2f2;"></td>
+                    <td Style = "background-color:#f2f2f2;"></td>
+                    </tr> 
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;CGST 9%</td>
+                        <td Style="font-size:14px;text-align:center;">{!CurrencyCGST}&nbsp;</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;SGST 9%</td>
+                        <td Style="font-size:14px;text-align:center;">{!CurrencySGST}&nbsp;</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;IGST 18%</td>
+                        <td Style="font-size:14px;text-align:center;">{!CurrencyIGST}&nbsp;</td>
+                        <td></td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-size:14px;">
+                            <apex:outputPanel rendered="{!InvoiceList[0].Invoice_Date__c >= Date(2024, 10, 1)}"> 
+                                &nbsp;&nbsp;&nbsp;TDS @2%
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!InvoiceList[0].Invoice_Date__c < Date(2024, 10, 1)}"> 
+                                &nbsp;&nbsp;&nbsp;TDS @5%
+                            </apex:outputPanel>
+                        </td>
+
+                        <td Style="font-size:14px;text-align:center;background-color:#f2f2f2;">{!CurrencyTDS}&nbsp;</td>
+                        <td Style = "background-color:#f2f2f2;"></td>
+                    </tr>
+                   
+                    <tr>
+                        <td Style="font-size:14px;font-weight: bold;">&nbsp;&nbsp;&nbsp;Brokerage Amt-Post TDS</td>
+                        <td Style="font-size:14px;text-align:center;background-color:#f2f2f2;font-weight: bold;">{!CurrencyBrAmtPostTDS}&nbsp;</td>
+                        <td Style = "background-color:#f2f2f2;"></td>
+                    </tr>
+                    <br/><br/> 
+                   
+                    <table border="0"  cellspacing="2" cellpadding="3" style="border-collapse: collapse;border:1px solid black !important;width: 100%;" align="center" >
+                        <tr style='font-size:14px ;'>
+                        <td>Prepared by,</td>
+                        <td>Verified by,</td>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L3__r.name  == '',False,True)}">
+                        <td>Approved by,</td>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                          <td>Approved by,</td>
+                        </apex:outputText>
+                        <td>Approved(for Payment) by,</td>
+                       </tr>
+                        <tr>
+                        <th></th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                
+                        </tr>
+                      <tr>
+                        <th></th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                
+                        </tr>
+                        <tr>
+                        <th></th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                
+                        </tr>
+                        <tr>
+                        <th></th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                
+                        </tr>
+                         <tr>
+                        <td>______________</td>
+                        <td>______________ </td>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L3__r.name  == '',False,True)}">
+                        <td>______________</td>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                        <td>______________</td>
+                        </apex:outputText>
+                        <td>______________</td>                
+                        </tr>
+                        <tr style='font-size:13px ;'>
+                        <td>{!InvoiceList[0].CP_Invoice_Approver_L1__r.name}</td>
+                        <td>{!InvoiceList[0].CP_Invoice_Approver_L2__r.name}</td>
+                         <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L3__r.name  == '',False,True)}">
+                        <td>{!InvoiceList[0].CP_Invoice_Approver_L3__r.name}</td>
+                            </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                        <td>{!InvoiceList[0].CP_Invoice_Approver_L4__r.name}</td>
+                        </apex:outputText>
+                        <td >{!InvoiceList[0].CP_Invoice_Approver_L5__r.name}</td>                    
+                        </tr>
+                        <tr style='font-size:12px ;'>
+                        <th>CP-MIS</th>
+                        <th>CP-Bill Team </th>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L3__r.name == '',False,True)}">
+                        <th>MIS Team</th>
+                       </apex:outputText>
+
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                        <th>Audit Team</th>
+                        </apex:outputText>
+                        <th>Account Team</th>  
+                         <tr>
+                        <th></th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                
+                        </tr>
+                          <tr>
+                        <th></th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                
+                        </tr>
+                        </tr>
+                         <tr style='font-size:13px ;' >
+                        <td>Date:</td>
+                        <td>Date:</td>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                        <td>Date:</td>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                        <td>Date:</td>
+                        </apex:outputText>
+                       <td>Date:</td>
+                    </tr>   
+                        <tr style='font-size:13px ;'>
+                        <td >{!InvoiceList[0].Date_Approved_By_Submitter_Formula__c}  </td>
+                        <td >{!InvoiceList[0].Date_Approved_ByL1_formula__c}  </td>
+                         <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L3__r.name  == '',False,True)}">
+                        <td>{!InvoiceList[0].Date_Approved_ByL2_formula__c}</td>
+                            </apex:outputText>
+                        <apex:outputText rendered="{!if(InvoiceList[0].CP_Invoice_Approver_L4__r.name  == '',False,True)}">
+                        <td>{!InvoiceList[0].Date_Approved_ByL3_formula__c}  </td> 
+                        </apex:outputText>
+                       <td>{!InvoiceList[0].Date_Approved_ByL4_formula__c}  </td>
+
+                
+                    </tr>   
+  <tr>
+    <td colspan="5"></td>
+  </tr>
+                    </table>
+                   
+                </table>
+            </body>
+        </apex:form>
+    </html>
+</apex:page>

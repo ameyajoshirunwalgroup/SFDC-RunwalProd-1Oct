@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Bank_Loan_Sanction_Letter</fullName>
+        <description>Bank Loan Sanction Letter</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_RM_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Opportunity_Templates/Bank_Loan_Sanction_Letter_Submitted</template>
+    </alerts>
+    <alerts>
+        <fullName>Email_to_Opp_Owner_on_Applicant_Ledger_Generated_true</fullName>
+        <description>Email to Opp Owner on Applicant Ledger Generated true</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Opportunity_Templates/Email_to_Opp_Owner_on_Applicant_Ledger_Generated_true</template>
+    </alerts>
+    <alerts>
+        <fullName>Email_to_Opp_s_Account_on_Customer_Applied_for_Applicant_Ledger_true</fullName>
+        <description>Email to Opp&apos;s Account on Customer Applied for Applicant Ledger true</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Opportunity_Templates/Email_to_Opp_s_Account_on_Customer_Applied_for_Applicant_Ledger_true</template>
+    </alerts>
+    <alerts>
+        <fullName>Email_to_RM_for_change_in_reference_name</fullName>
+        <description>Email to RM for change in reference name.</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_RM_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Opportunity_Templates/Email_to_RM_for_reference_name</template>
+    </alerts>
+    <alerts>
+        <fullName>Form_16B_TDS_Certificate</fullName>
+        <description>Form 16B(TDS Certificate)</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_RM_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Opportunity_Templates/Form_16B_TDS_Certificate_Submitted</template>
+    </alerts>
+    <alerts>
+        <fullName>News_Letter_Email_Alert</fullName>
+        <description>News Letter Email Alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/News_Letter</template>
+    </alerts>
+    <alerts>
+        <fullName>Notify_Sales_Manager_On_Opportunity</fullName>
+        <description>Notify Sales Manager On Opportunity</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Sales_Manager_User__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Opportunity_Templates/Notify_Sales_Manager_On_Opportunity</template>
+    </alerts>
+    <alerts>
+        <fullName>Opportunity_Redeemed_Notification</fullName>
+        <description>Opportunity Redeemed Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Opportunity_Templates/opportunity_Redeemed</template>
+    </alerts>
+    <alerts>
+        <fullName>Other_Docs</fullName>
+        <description>Other Docs</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_RM_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Opportunity_Templates/Other_Docs_Submitted</template>
+    </alerts>
+    <alerts>
+        <fullName>Payment_Details</fullName>
+        <description>Payment Details</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_RM_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Opportunity_Templates/Payment_Details_Submitted</template>
+    </alerts>
+    <alerts>
+        <fullName>Possession_Feedback_for_customer</fullName>
+        <description>Possession Feedback for customer</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Possession_Feedback_for_customer</template>
+    </alerts>
+    <alerts>
+        <fullName>Referral_Loyalty_Email_Alert</fullName>
+        <description>Referral/Loyalty Email Alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Referral_Loyalty_Email</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Account_Billing_City</fullName>
+        <field>BillingCity</field>
+        <formula>TEXT( City__c )</formula>
+        <name>Account Billing City</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+        <targetObject>AccountId</targetObject>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Account_Billing_Country</fullName>
+        <field>BillingCountry</field>
+        <formula>TEXT( Country__c )</formula>
+        <name>Account Billing Country</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+        <targetObject>AccountId</targetObject>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Account_Billing_State</fullName>
+        <field>BillingState</field>
+        <formula>TEXT( State__c )</formula>
+        <name>Account Billing State</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+        <targetObject>AccountId</targetObject>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Status_To_Approved</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Approval Status To Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Status_To_Sent</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Sent for Approval</literalValue>
+        <name>Approval Status To Sent</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Status_To_Sent_Reject</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Approval Status To Sent Reject</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved</fullName>
+        <field>Mobile_Email_Update_Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Change_Opportunity_Record_Type</fullName>
+        <field>RecordTypeId</field>
+        <lookupValue>Detailed_Opportunity</lookupValue>
+        <lookupValueType>RecordType</lookupValueType>
+        <name>Change Opportunity Record Type</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>LookupValue</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>OppStageBlocked</fullName>
+        <field>StageName</field>
+        <literalValue>Unit Blocked</literalValue>
+        <name>OppStageBlocked</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Project_Name_update1</fullName>
+        <field>Project_Name__c</field>
+        <formula>RW_Project__r.Name</formula>
+        <name>Project Name update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected</fullName>
+        <field>Mobile_Email_Update_Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_site_visit</fullName>
+        <field>StageName</field>
+        <literalValue>Site Visit</literalValue>
+        <name>Stage site visit</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Status_Approved</fullName>
+        <field>Mobile_Email_Update_Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Status Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Opportunity_Status</fullName>
+        <field>Opportunity_Status__c</field>
+        <formula>RW_Opportunity_Status__c</formula>
+        <name>Update Opportunity Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status</fullName>
+        <field>Mobile_Email_Update_Approval_Status__c</field>
+        <literalValue>Sent for Approval</literalValue>
+        <name>Update Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>update_change_in_walkin_sub_source</fullName>
+        <field>Walkin_sub_source_change__c</field>
+        <formula>Walkin_sub_source_change__c + 1</formula>
+        <name>update change in walkin sub source</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>update_number_change_WS</fullName>
+        <field>Walk_in_Source_change__c</field>
+        <formula>Walk_in_Source_change__c+1</formula>
+        <name>update number change WS</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Bank Loan Sanction Letter</fullName>
+        <actions>
+            <name>Bank_Loan_Sanction_Letter</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <formula>AND(!ISNULL(RW_Bank_Loan_Sanction_Letter_Submitted__c), ISCHANGED(RW_Bank_Loan_Sanction_Letter_Submitted__c))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Email to RM for reference name</fullName>
+        <actions>
+            <name>Email_to_RM_for_change_in_reference_name</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <description>Email to RM for change in reference name.</description>
+        <formula>AND ( !ISNULL(RW_Given_Reference_Name__c), !ISBLANK(RW_Given_Reference_Name__c), ISCHANGED(RW_Given_Reference_Name__c) )</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Expected Date of Closure</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Opportunity.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Form 16B%28TDS Certificate%29</fullName>
+        <actions>
+            <name>Form_16B_TDS_Certificate</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <formula>AND(!ISNULL(RW_Form_16B_TDS_Certificate_Submitted__c), ISCHANGED(RW_Form_16B_TDS_Certificate_Submitted__c))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Opportunity Address to Account Billing Address</fullName>
+        <actions>
+            <name>Account_Billing_City</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Account_Billing_Country</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Account_Billing_State</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <formula>TRUE</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Opportunity Record Type Change</fullName>
+        <actions>
+            <name>Change_Opportunity_Record_Type</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>true</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Oppstage on creation</fullName>
+        <actions>
+            <name>OppStageBlocked</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>AND(!ISBLANK(RW_Project_Unit__c), !ISNULL(RW_Project_Unit__c))</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Other Docs</fullName>
+        <actions>
+            <name>Other_Docs</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <formula>AND(!ISNULL(RW_Other_Document_Submitted__c), ISCHANGED(RW_Other_Document_Submitted__c))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Payment Details</fullName>
+        <actions>
+            <name>Payment_Details</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <formula>AND(!ISNULL(RW_Payment_Details_Submitted__c), ISCHANGED(RW_Payment_Details_Submitted__c))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>RW_Opportunity_Redeem</fullName>
+        <actions>
+            <name>Opportunity_Redeemed_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Opportunity.RW_Redeem__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Send Email to Opp Owner on Applicant Ledger Generated true</fullName>
+        <actions>
+            <name>Email_to_Opp_Owner_on_Applicant_Ledger_Generated_true</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Opportunity.RW_Applicant_Ledger_Generated__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <description>Send Email to Opp Owner on Applicant Ledger Generated true</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Send Email to Opp%27s Account on Customer Applied for Applicant Ledger true</fullName>
+        <actions>
+            <name>Email_to_Opp_s_Account_on_Customer_Applied_for_Applicant_Ledger_true</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Opportunity.RW_Customer_Applied_for_Applicant_Ledger__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <description>Send Email to Opp&apos;s Account on Customer Applied for Applicant Ledger true</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Site visit opp status</fullName>
+        <actions>
+            <name>Stage_site_visit</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Opportunity.StageName</field>
+            <operation>equals</operation>
+            <value>Qualification</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Opportunity.RW_Number_of_Visits__c</field>
+            <operation>greaterOrEqual</operation>
+            <value>1</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Task Call Customer</fullName>
+        <actions>
+            <name>Call_Customer</name>
+            <type>Task</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Opportunity.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Opportunity Status</fullName>
+        <actions>
+            <name>Update_Opportunity_Status</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>true</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update_Project_Name_Basis_Project_Lookup_Value_Opportunity</fullName>
+        <actions>
+            <name>Project_Name_update1</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Opportunity.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>update change in walkin source</fullName>
+        <actions>
+            <name>update_number_change_WS</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>ISCHANGED(Walkin_Source__c )</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>update change in walkin sub source</fullName>
+        <actions>
+            <name>update_change_in_walkin_sub_source</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>ISCHANGED(  Walkin_SubSource__c )</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>update closed date</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Opportunity.StageName</field>
+            <operation>notEqual</operation>
+            <value>Unit Booked</value>
+        </criteriaItems>
+        <description>update closed date</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <offsetFromField>Opportunity.CreatedDate</offsetFromField>
+            <timeLength>45</timeLength>
+            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+        <workflowTimeTriggers>
+            <offsetFromField>Opportunity.CreatedDate</offsetFromField>
+            <timeLength>180</timeLength>
+            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <tasks>
+        <fullName>Call_Customer</fullName>
+        <assignedToType>owner</assignedToType>
+        <dueDateOffset>1</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <offsetFromField>Opportunity.CreatedDate</offsetFromField>
+        <priority>Normal</priority>
+        <protected>false</protected>
+        <status>Not Started</status>
+        <subject>Call Customer</subject>
+    </tasks>
+</Workflow>

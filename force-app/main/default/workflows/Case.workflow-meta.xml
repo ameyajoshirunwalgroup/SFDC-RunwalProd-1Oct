@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>CPL1_Escalation_email_alert</fullName>
+        <description>CPL1 Escalation email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/aseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>CPL1_Escalation_email_alert1</fullName>
+        <description>CPL1 Escalation email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/aseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>CP_Case_Closed_to_Channel_Partner_Email_Alert</fullName>
+        <description>CP Case Closed to Channel Partner Email Alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/CP_Portal_Case_Closed_Email</template>
+    </alerts>
+    <alerts>
+        <fullName>CP_Case_Closed_to_Channel_Partner_Email_Alert_Unregistered</fullName>
+        <description>CP Case Closed to Channel Partner Email Alert(UnRegistered)</description>
+        <protected>false</protected>
+        <recipients>
+            <field>SuppliedEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/CP_Portal_Case_Closed_Email_Unregistered</template>
+    </alerts>
+    <alerts>
+        <fullName>CP_New_Case_Creation_Email_Alert</fullName>
+        <description>CP New Case Creation Email Alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/CP_Portal_New_Case_Creation_Email</template>
+    </alerts>
+    <alerts>
+        <fullName>CP_New_Case_Creation_Email_Alert_Unregistered</fullName>
+        <description>CP New Case Creation Email Alert(UnRegistered)</description>
+        <protected>false</protected>
+        <recipients>
+            <field>SuppliedEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/CP_Portal_Email_to_Case_Creation_Email_Unregistered</template>
+    </alerts>
+    <alerts>
+        <fullName>Case_Assignment_Notification</fullName>
+        <description>Case Assignment Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/Case_Assignment_Email</template>
+    </alerts>
+    <alerts>
+        <fullName>Case_Closure_Email_Notification</fullName>
+        <description>Case Closure Email Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <field>SuppliedEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/Case_Closure_Notification</template>
+    </alerts>
+    <alerts>
+        <fullName>Case_Closure_Feedback_Email_Notification</fullName>
+        <description>Case Closure Feedback Email Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Case_Closure_Feedback</template>
+    </alerts>
+    <alerts>
+        <fullName>Case_Resolved_Email_Notification</fullName>
+        <description>Case Resolved Email Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <field>SuppliedEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/Case_Resolved_Notification</template>
+    </alerts>
+    <alerts>
+        <fullName>Email_Notification_To_Customer</fullName>
+        <description>Email Notification To Customer</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <field>SuppliedEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/New_case_Notification</template>
+    </alerts>
+    <alerts>
+        <fullName>Escalation_Email_Alert</fullName>
+        <description>Escalation Email Alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Immediate_Manager_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Fifth_Escalation_Email</fullName>
+        <description>Fifth Escalation Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_5_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Fifth_Escalation_Email_New</fullName>
+        <description>Fifth Escalation Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_5_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-customercare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Fourth_Escalation</fullName>
+        <description>Fourth Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_4_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Fourth_Escalation_Email</fullName>
+        <description>Fourth Escalation Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_4_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Fourth_Escalation_email_alert</fullName>
+        <description>Fourth Escalation email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_4_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-customercare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Reopened_Case</fullName>
+        <description>Reopened Case</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Immediate_Manager_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Case_Folder/Case_Reopened</template>
+    </alerts>
+    <alerts>
+        <fullName>Second_Escalation</fullName>
+        <description>Second Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_2_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Second_Escalation1</fullName>
+        <description>Second Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_2_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Second_Escalation_email_alert_new</fullName>
+        <description>Second Escalation email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_2_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Second_Escalation_new</fullName>
+        <description>Second Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_2_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Sixth_Escalation_Email_New</fullName>
+        <description>Sixth  Escalation Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_6_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-customercare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Third_Escalation</fullName>
+        <description>Third Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_3_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Third_Escalation1</fullName>
+        <description>Third Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_3_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Third_Escalation2</fullName>
+        <description>Third Escalation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_3_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-customercare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Third_Escalation_email_alert_new</fullName>
+        <description>Third Escalation email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Reporting_3_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-customercare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/SUPPORTCaseescalationnotificationSAMPLE</template>
+    </alerts>
+    <alerts>
+        <fullName>Unregistered_Email_Notification_To_Customer</fullName>
+        <description>Unregistered Email Notification To Customer</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <field>SuppliedEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Case_Folder/New_Case_Unregistered_Email_Notification</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approval_Status</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Submit for Approval</literalValue>
+        <name>Approval Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Status_Rejected</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Approval Status Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Step_Approved</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Approval Step Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Case_Escalated</fullName>
+        <field>RW_Is_Escalated__c</field>
+        <literalValue>1</literalValue>
+        <name>Case Escalated</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Case_Escalated1</fullName>
+        <field>RW_Is_Escalated__c</field>
+        <literalValue>1</literalValue>
+        <name>Case Escalated</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Case_Status</fullName>
+        <field>Status</field>
+        <literalValue>Escalated</literalValue>
+        <name>Case Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Closed_Case</fullName>
+        <field>Status</field>
+        <literalValue>Case Closed</literalValue>
+        <name>Closed Case</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Escalated_Time_To_Now</fullName>
+        <field>RW_Escalated_Time__c</field>
+        <formula>NOW()</formula>
+        <name>Escalated Time To Now</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Escalation_L1_Status</fullName>
+        <field>Escalation_Case_Resolved_Status__c</field>
+        <formula>&apos;&apos;+Text((NOW()-CP_Case_Assignment_Date__c))</formula>
+        <name>Escalation L1 Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>First_Escalation</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>First Escalation</literalValue>
+        <name>First Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>First_Escalation1</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>First Escalation</literalValue>
+        <name>First Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Fourth_Escalation</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Fourth Escalation</literalValue>
+        <name>Fourth Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Last_Escalation</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Fourth Escalation</literalValue>
+        <name>Last Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Reopen_Escalation</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Reopen Escalation</literalValue>
+        <name>Reopen Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Reopened_Date_and_Time</fullName>
+        <field>RW_Case_Reopened_Date__c</field>
+        <formula>NOW()</formula>
+        <name>Reopened Date and Time</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Second_Escalation</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Second Escalation</literalValue>
+        <name>Second Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Second_Escalation1</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Second Escalation - 1</literalValue>
+        <name>Second Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Second_Escalation_2</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Second Escalation - 2</literalValue>
+        <name>Second Escalation 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Second_Escalation_2New</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Second Escalation - 2</literalValue>
+        <name>Second Escalation - 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L3</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L3</literalValue>
+        <name>Stage L3</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L4</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L4</literalValue>
+        <name>Stage L4</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L5</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L5</literalValue>
+        <name>Stage L5</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L6</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L6</literalValue>
+        <name>Stage L6</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L6New</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L6</literalValue>
+        <name>Stage L6</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L7</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L7</literalValue>
+        <name>Stage L7</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L7New</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L7</literalValue>
+        <name>Stage L7</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L8</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L8</literalValue>
+        <name>Stage L8</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_L8New</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L8</literalValue>
+        <name>Stage L8</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_to_L5</fullName>
+        <field>Current_Stage__c</field>
+        <literalValue>CP-L5</literalValue>
+        <name>Stage to L5</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Third_Escalation</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Third Escalation</literalValue>
+        <name>Third Escalation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Third_Escalation_1</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Third Escalation - 1</literalValue>
+        <name>Third Escalation 1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Third_Escalation_2</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Third Escalation - 2</literalValue>
+        <name>Third Escalation 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Third_Escalation_2New</fullName>
+        <field>RW_Case_Escalation__c</field>
+        <literalValue>Third Escalation - 2</literalValue>
+        <name>Third Escalation 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Description</fullName>
+        <field>Case_Description__c</field>
+        <formula>TRIM(LEFT(Description, 255))</formula>
+        <name>Update Description</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <outboundMessages>
+        <fullName>locobuzz__Send_Close_Case_To_Locobuzz</fullName>
+        <apiVersion>59.0</apiVersion>
+        <description>This is used to send Close Case to Locobuzz</description>
+        <endpointUrl>https://cx-api.locobuzz.com/api/SFDCAppExchange/TicketStatusChangeV2</endpointUrl>
+        <fields>Id</fields>
+        <fields>Status</fields>
+        <fields>locobuzz__BrandGuid__c</fields>
+        <fields>locobuzz__Locobuzz_ID__c</fields>
+        <fields>locobuzz__Ticket_Id__c</fields>
+        <includeSessionId>true</includeSessionId>
+        <integrationUser>ey.admin@runwal.com</integrationUser>
+        <name>Send Close Case To Locobuzz</name>
+        <protected>false</protected>
+        <useDeadLetterQueue>false</useDeadLetterQueue>
+    </outboundMessages>
+    <rules>
+        <fullName>Case Closure Feedback Notification</fullName>
+        <actions>
+            <name>Case_Closure_Feedback_Email_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>false</active>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Case Closed</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Remarks_by_RM__c</field>
+            <operation>equals</operation>
+            <value>Closed Satisfactory,Closed Un-satisfactory</value>
+        </criteriaItems>
+        <description>send feedback email when case status is closed.</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Case Closure Notification</fullName>
+        <actions>
+            <name>Case_Closure_Email_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Case Closed</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.SuppliedEmail</field>
+            <operation>notEqual</operation>
+            <value>customer.care@runwal.com</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.locobuzz__Locobuzz_ID__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Account.Stop_Case_Emails__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Stop_Emails__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Case Reopened Date and Time</fullName>
+        <actions>
+            <name>Reopened_Date_and_Time</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Reopened</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Case Resolved notification</fullName>
+        <actions>
+            <name>Case_Resolved_Email_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Resolved</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>New_case_Notification</fullName>
+        <actions>
+            <name>Email_Notification_To_Customer</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6</booleanFilter>
+        <criteriaItems>
+            <field>Case.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.ContactEmail</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Contact.Email</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Customer</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Account.Stop_Case_Emails__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Stop_Emails__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <description>This WF is used to send email notification to customer as soon as case gets created</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Reopened Notification</fullName>
+        <actions>
+            <name>Reopened_Case</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Reopened</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Description</fullName>
+        <actions>
+            <name>Update_Description</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.Description</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

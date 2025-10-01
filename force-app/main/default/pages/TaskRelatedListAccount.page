@@ -1,0 +1,341 @@
+<apex:page standardController="Account" extensions="TaskRelatedListclass" showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">    
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+  <script src="/soap/ajax/54.0/connection.js"></script>
+</head>
+<body>    
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds">    
+  <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp">   
+          <div class="slds-tabs--scoped" id="tabs">
+                <ul class="slds-tabs--scoped__nav" role="tablist">
+                    <apex:repeat value="{!taskType}" var="t"> <!-- Loop through list of taskType -->
+                        <li class="slds-tabs__item slds-text-heading--label"  role="presentation" id="{!t}"><a role="tab" href="#tabs-{!t}" tabindex="-1" aria-selected="false" aria-controls="tabs-{!t}" >{!t}</a></li> 
+                    </apex:repeat>
+                 </ul>
+                 <apex:repeat value="{!taskType}" var="t1"> <!-- Look through list of taskType -->
+                     <div id="tabs-{!t1}" class="slds-tabs__content slds-hide" role="tabpanel">
+                        <a href="#" id="btn-{!t1}" onclick="createTask('{!t1}')" class="slds-button slds-button--brand slds-button--small">{!commandButtonMap[t1]}</a>
+                        <div id="tasklist-{!t1}" class="slds-p-vertical--medium">
+                        </div>
+                    </div>
+                </apex:repeat>
+          </div>
+    </div>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->    
+    <!-- JAVASCRIPT -->
+    <script>
+      var j$ = jQuery.noConflict();
+      var test;
+        j$(document).ready(function() {
+            var currentTaxIndex = null;
+            
+            if (sessionStorage.getItem('tab-index') != null) {
+               // alert('inside if');
+                currentTabIndex = sessionStorage.getItem('tab-index');
+                console.log(currentTabIndex);
+                j$("[id^='"+ currentTabIndex + "']").addClass("slds-active");
+                j$("[id^='"+ currentTabIndex + "'] a").attr("aria-selected","true");
+                j$("[id^='"+ currentTabIndex + "'] a").attr("tab-index","0");
+                j$("[id^='tabs-"+ currentTabIndex + "']").addClass("slds-show");
+                ////------------------------------- added by vikas for edit option shows ----------------------/////////
+                //TaskRelatedListclass.isSystemAdmin(updateOutputDiv2);
+                TaskRelatedListclass.isSystemAdmin(currentTabIndex,updateOutputDiv2,{escape:false});
+                TaskRelatedListclass.getTasksByType(currentTabIndex,'{!Account.Id}',updateOutputDiv,{escape:false});
+                TaskRelatedListclass.getButtonAccess(currentTabIndex,updateButtonDiv,{escape:false});
+                //alert('currentTabIndex:: '+currentTabIndex);
+                if(currentTabIndex.indexOf('Site Visit') != -1) {
+                    TaskRelatedListclass.isRevisit('{!Account.Id}', updateVisitButton, {escape:false});
+                    
+                   
+                }
+            } 
+            
+            else {
+                currentTabIndex = "Enquiry Received";
+               // alert('inside else');
+                j$("[id^='"+ currentTabIndex + "']").addClass("slds-active");
+                j$("[id^='"+ currentTabIndex + "'] a").attr("aria-selected","true");
+                j$("[id^='"+ currentTabIndex + "'] a").attr("tab-index","0");
+                j$("[id^='tabs-"+ currentTabIndex + "']").addClass("slds-show");
+                sessionStorage.setItem('tab-index', currentTabIndex);
+                TaskRelatedListclass.getTasksByType(currentTabIndex,'{!Account.Id}',updateOutputDiv,{escape:false});
+                TaskRelatedListclass.getButtonAccess(currentTabIndex,updateButtonDiv,{escape:false});
+                if(currentTabIndex.indexOf('Site Visit') != -1) {
+                    TaskRelatedListclass.isRevisit(currentTabIndex, updateVisitButton, {escape:false});
+                    
+                }
+            }
+            
+            $tab = j$("#tabs li").click(
+                     function (event) {
+                     j$("#tabs li").each(function(index,element){
+                        console.log('this:' + j$( this ) + 'a:' + j$("[id^='"+ element.id + "'] a"))
+                        j$( this ).removeClass("slds-active");
+                        j$("[id^='"+ element.id + "'] a").attr("aria-selected","false");
+                        j$("[id^='"+ element.id + "'] a").attr("tab-index","-1");
+                        j$("[id^='tabs-"+ element.id + "']").removeClass("slds-show");
+                        j$("[id^='tabs-"+ element.id + "']").addClass("slds-hide");
+                     });
+                    currentTabIndex = event.currentTarget.id;
+                    sessionStorage.setItem('tab-index', currentTabIndex);
+                    j$("[id^='"+ currentTabIndex + "']").addClass("slds-active");
+                    j$("[id^='"+ currentTabIndex + "'] a").attr("aria-selected","true");
+                    j$("[id^='"+ currentTabIndex + "'] a").attr("tab-index","0");
+                    j$("[id^='tabs-"+ currentTabIndex + "']").addClass("slds-show");
+                    TaskRelatedListclass.isSystemAdmin(currentTabIndex,updateOutputDiv2,{escape:false});
+                    TaskRelatedListclass.getTasksByType(currentTabIndex,'{!Account.Id}',updateOutputDiv,{escape:false});
+                    TaskRelatedListclass.getButtonAccess(currentTabIndex,updateButtonDiv,{escape:false});
+                    //alert('currentTabIndex:: '+currentTabIndex);
+                    if(currentTabIndex.indexOf('Site Visit') != -1) {
+                        TaskRelatedListclass.isRevisit('{!Account.Id}', updateVisitButton, {escape:false});
+                         
+                    }
+            });
+            
+
+        });
+        ////------------------------------- added by vikas for edit option shows ----------------------/////////
+       function updateOutputDiv2(result, event) {
+      
+           //alert('result:: '+result);
+           //alert('event:: '+event.status); 
+      
+           test = result;
+          
+       
+       }
+   
+      function updateOutputDiv(recordList, event) {
+       
+            var tabName = sessionStorage.getItem('tab-index');
+            var tList = 'tasklist-' + sessionStorage.getItem('tab-index');
+            var outputDiv = document.getElementById(tList);   
+           
+            if(event.status) {
+                var html = '<div class="slds-scrollable--x"><table class="slds-table slds-table--bordered">'; 
+                if(tabName.indexOf('Registration') != -1) {   
+                    html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Assigned To</th><th class="slds-is-sortable"  scope="col">Status</th>';
+                    html += '<th scope="col"class="slds-is-sortable"  >Subject</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Ageing</th></tr></thead><tbody>';  
+                } else if(tabName.indexOf('Presales Call') != -1) 
+                {   
+                    html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Description</th><th class="slds-is-sortable"  scope="col">Call Attempt Status</th><th class="slds-is-sortable"  scope="col">Call Attempted By</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th></thead><tbody>';
+                    
+                } else if(tabName.indexOf('Sales Call') != -1) {
+                     html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Subject</th>';
+                    html += '<th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th><th scope="col"class="slds-is-sortable"  >Decription</th></tr></thead><tbody>';  
+                }else if(tabName.indexOf('CRM Call') != -1) {
+                     html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Subject</th>';
+                    html += '<th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th><th scope="col"class="slds-is-sortable"  >Decription</th><th scope="col"class="slds-is-sortable">Call Status</th><th scope="col"class="slds-is-sortable">Call Recording Link</th>   </tr></thead><tbody>';  
+                }
+                
+                else {
+                    html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Subject</th>';
+                    html += '<th scope="col"class="slds-is-sortable"  >Name</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th></tr></thead><tbody>';  
+                }
+                for (var i = 0;i < recordList.length;i++){
+                 
+                   ////------------------------------- added by vikas for edit option shows ----------------------/////////
+                  //alert('test:: '+test);
+                   if(test === 1){
+                        html += '<tr><td><a href=\'#\' onclick=\"completeTask(\''+recordList[i].Id+'\',\''+recordList[i].Task_Type__c+'\')\">Edit</a>&nbsp;&nbsp;&nbsp;<a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
+                      
+                     }
+                     /*else if(test === 2 && recordList[i].Task_Type__c.indexOf('Site Visit') != -1){
+                        html += '<tr><td><a href=\'#\' onclick=\"completeTask(\''+recordList[i].Id+'\',\''+recordList[i].Task_Type__c+'\')\">Edit</a>&nbsp;&nbsp;&nbsp;<a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
+                      
+                     }  */
+                     else {
+                        html += '<tr><td><a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
+                     }
+                      var d = new Date(recordList[i].ActivityDate);
+ 
+                      //Remove first 4 characters (day), the seconds and the GMT offset
+                      var dateString = d.toString();
+                      console.log('dateString:' + dateString);
+                      dateString = dateString.substring(4,dateString.lastIndexOf(':')-6);
+                     
+                      //Attempt to format datetime using sfdc DateUtil method
+                    /*
+                   try{ 
+                            dateString = DateUtil.getDateStringFromUserLocale(d);
+                       }catch(err){
+                            //Fail silently or alert devs DateUtil method is no longer working
+                       } */
+                       
+                      if(tabName.indexOf('Registration') != -1) {
+                          html += '<td>' + recordList[i].Owner.Name + '</td>';
+                          html += '<td>' + recordList[i].Registraion_Status__c + '</td>';
+                          html += '<td>' + recordList[i].Subject + '</td>';
+                          html += '<td>' + dateString + '</td>';
+                          html += '<td>' + '</td>';
+                      }else if(tabName.indexOf('Presales Call') != -1)
+                      {
+                          html += '<td>' + recordList[i].Description + '</td>';
+                          html += '<td>' + recordList[i].Call_Status__c+ '</td>';
+                          html += '<td>' + recordList[i].Attempted_By__c + '</td>';
+                          html += '<td>' + dateString + '</td>';
+                          html += '<td>' + recordList[i].Call_Time__c + '</td></tr>';
+                      }
+                      else if(tabName.indexOf('Sales Call') != -1){
+                          html += '<td>' + recordList[i].Subject + '</td>';
+                          html += '<td>' + dateString + '</td>';
+                          html += '<td>' + recordList[i].Call_Time__c + '</td>';
+                          html += '<td>' + recordList[i].Description + '</td></tr>';  
+                      }
+                      else if(tabName.indexOf('CRM Call') != -1){
+                          html += '<td>' + recordList[i].Subject + '</td>';
+                          html += '<td>' + dateString + '</td>';
+                          html += '<td>' + recordList[i].Call_Time__c + '</td>';
+                          html += '<td>' + recordList[i].Description + '</td>';  
+                          html += '<td>' + recordList[i].Call_Status__c + '</td>';  // Added by Sheetal on 26/11/2021
+                          html += '<td>' + recordList[i].Voice_Log_URL__c + '</td></tr>'; // Added by Sheetal on 26/11/2021
+                      }
+                      else {
+                          console.log(dateString);
+                          html += '<td>' + recordList[i].Subject + '</td>';
+                          html += '<td>' + recordList[i].What.Name + '</td>';
+                          html += '<td>' + dateString + '</td>';
+                          html += '<td>' + recordList[i].Call_Time__c + '</td></tr>';  
+                      }
+                      
+                                     
+                }
+                html = html + '</tbody></table></div>';
+                outputDiv.innerHTML = html;
+            } else if(event.type === 'exception') {
+                    alert('event exception:' + event.message);
+            } else{
+                    alert('event failed:' + event.message);
+            }    
+      }
+      
+      function viewTask(taskId, tasktype) {
+        if(tasktype.indexOf('Site Visit') != -1) {
+           window.open("/apex/VisitFormViewPage?id="+taskId+ "&cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+           
+        } else if (tasktype.indexOf('HWC') != -1){  //vdnb call to hwc
+            window.open("/apex/VDNBCallViewPage?id="+taskId+ "&cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+        }
+         else if (tasktype.indexOf('Enquiry Received') != -1){
+            window.open("/apex/EnquiryFormViewPage?id="+taskId+ "&cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+        }
+           else if (tasktype.indexOf('Home Loan') != -1){
+            window.open("/apex/HomeLoanEditPage?id="+taskId+ "&tasktype="+tasktype+ " &cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+        }else if (tasktype.indexOf('Registration') != -1){
+            window.open("/apex/RegistrationTaskEdit?id="+taskId+ "&cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+        } 
+       else {
+             window.open("/apex/CallAttemptViewPage2?id="+taskId+ "&cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+        }
+      }
+     
+     function completeTask(taskId, tasktype) {
+        if(tasktype.indexOf('Site Visit') != -1) {
+            window.open("/apex/VisitFormEditPage?id="+taskId+ "&origin=CompleteTask&status=Completed&cancelURL={!Account.Id}&retURL={!Account.Id}", "_parent")
+        }
+        else if (tasktype.indexOf('HWC') != -1){
+            window.open("/apex/VDNBCallEditPage?id="+taskId+ "&origin=CompleteTask&status=Completed&cancelURL={!Account.Id}&retURL={!Account.Id}", "_parent")
+        }
+        else if (tasktype.indexOf('Enquiry Received') != -1){
+            window.open("/apex/EnquiryFormViewPage?id="+taskId+ "&origin=CompleteTask&status=Completed&cancelURL={!Account.Id}&retURL={!Account.Id}", "_parent")
+        }
+         else if (tasktype.indexOf('Home Loan') != -1){
+            window.open("/apex/HomeLoanEditPage?id="+taskId+ "&subject=" + tasktype+ "&tasktype=" + tasktype+ "&origin=CompleteTask&status=Completed&cancelURL={!Account.Id}&retURL={!Account.Id}&origin=ViewTask", "_parent")
+        } else if (tasktype.indexOf('Registration') != -1){
+            window.open("/apex/RegistrationTaskEdit?id="+taskId+"&cancelURL={!Account.Id}&retURL={!Account.Id}", "_parent")
+        } 
+        else {
+        //Anuja changed url page from CallAttemptViewPage to CallAttemptViewPage2
+             window.open("/apex/CallAttemptEditPage2?id="+taskId+ "&origin=CompleteTask&status=Completed&cancelURL={!Account.Id}&retURL={!Account.Id}", "_parent")
+        }
+      }
+      
+      function updateButtonDiv(result,event){
+        if(event.status) {
+            if(!result){
+                console.log('result:' + result);
+                sessionStorage.getItem('tab-index');
+                var btn = 'btn-' + sessionStorage.getItem('tab-index');
+                var btnDiv = j$("[id^='" + btn + "']");
+                btnDiv.attr("disabled",""); 
+                btnDiv.prop("onclick",null);
+                console.log('btnDiv:' + btnDiv);      
+            }
+        }else if(event.type=='exception'){
+            alert('event exception:' + event.message);
+        } else {
+            alert('event failed:' + event.message);
+        }
+      }
+      
+      function updateVisitButton(result,event){
+        if(event.status) {
+            if(result){
+                console.log('result:' + result);
+                sessionStorage.getItem('tab-index');
+                var btn = 'btn-' + sessionStorage.getItem('tab-index');
+                var btnDiv = j$("[id^='" + btn + "']");
+                btnDiv.text("New Revisit"); 
+            }
+        }else if(event.type=='exception'){
+            alert('event exception:' + event.message);
+        } else {
+            alert('event failed:' + event.message);
+        }
+      }
+      
+      function createTask(task) {
+            var userInfo = sforce.connection.getUserInfo();
+            var userName = userInfo.userName;
+            if(task=='Presales Call') {
+                var Subject = "Called  {!Account.Name}";
+                var origin = 'New Presales Call'
+            } else if(task =='Site Visit') {
+                var Subject = "Visit Done for {!Account.Name}";
+                var origin = 'New Site Visit'
+            } else if(task == 'Sales Call') {
+                var Subject = "Called {!Account.Name}";
+                var origin = 'New Sales Call'
+            }else if(task == 'CRM Call') {
+                var Subject = "Called {!Account.Name}";
+                var origin = 'New CRM Call'
+            }
+            else if(task == 'HWC') {
+                var Subject = "Called {!Account.Name}";
+                var origin = 'New HWC'
+            } else {
+                var Subject = task;
+                var origin = 'Page';
+            }
+            if(task ==  'Site Visit')
+            {
+                window.open("/apex/VisitFormEditPage?subject=" + Subject + "&status=Completed&tasktype=" + task + "&origin=" + origin +"&who_id={!Account.RW_Full_Contact_Id__c}&what_id={!Account.id}&retURL=/{!Account.Id}&saveURL=/{!Account.Id}&cancelURL=/{!Account.Id}", "_parent");
+            }
+            else if(task ==  'HWC')
+            {
+                window.open("/apex/VDNBCallEditPage?subject=" + Subject + "&status=Completed&tasktype=" + task + "&origin=" + origin +"&who_id={!Account.RW_Full_Contact_Id__c}&what_id={!Account.id}&retURL=/{!Account.Id}&saveURL=/{!Account.Id}&cancelURL=/{!Account.Id}", "_parent");
+            }else if(task ==  'Home Loan'){
+            
+                window.open("/apex/HomeLoanEditPage?subject=" + Subject + "&status=Scheduled&tasktype=" + task + "&origin=" + origin +"&who_id={!Account.RW_Full_Contact_Id__c}&what_id={!Account.id}&retURL=/{!Account.Id}&saveURL=/{!Account.Id}&cancelURL=/{!Account.Id}", "_parent");
+            }else if(task ==  'Registration'){
+                window.open("/apex/RegistrationTaskEdit?subject=" + Subject + "&status=Scheduled&tasktype=" + task + "&origin=" + origin +"&who_id={!Account.RW_Full_Contact_Id__c}&what_id={!Account.id}&retURL=/{!Account.Id}&saveURL=/{!Account.Id}&cancelURL=/{!Account.Id}", "_parent");
+            }
+            else{ 
+            //Anuja changed url page from CallAttemptViewPage to CallAttemptViewPage2
+                window.open("/apex/CallAttemptEditPage2?subject=" + Subject + "&status=Completed&tasktype=" + task + "&origin=" + origin +"&who_id={!Account.RW_Full_Contact_Id__c}&what_id={!Account.id}&retURL=/{!Account.Id}&saveURL=/{!Account.Id}&cancelURL=/{!Account.Id}", "_parent");
+            }
+        }
+    </script>
+    <!-- / JAVASCRIPT -->
+</body>
+</html>
+</apex:page>

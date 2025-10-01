@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_Unique_CODE</fullName>
+        <field>Unique_Project_Code__c</field>
+        <formula>Project__c +&apos;-&apos;+ Code__c</formula>
+        <name>Update Unique CODE</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Unique_Sequence</fullName>
+        <field>Unique_Sequence_No__c</field>
+        <formula>Project__r.Id +&apos;-&apos;+ Text(Sequence_No__c)</formula>
+        <name>Update Unique Sequence</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Upadte Unique CODE No On Project Construction Stage</fullName>
+        <actions>
+            <name>Update_Unique_CODE</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Project_Construction_Stages__c.Code__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Upadte Unique Sequence No  On Project Construction Stage</fullName>
+        <actions>
+            <name>Update_Unique_Sequence</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Project_Construction_Stages__c.Sequence_No__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

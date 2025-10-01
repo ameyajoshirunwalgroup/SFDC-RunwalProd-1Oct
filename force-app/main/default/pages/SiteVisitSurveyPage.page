@@ -1,0 +1,433 @@
+<apex:page standardController="Opportunity" extensions="SiteVisitSurveyController" sidebar="false" showHeader="false" standardStylesheets="false" deferLastCommandUntilReady="true" cache="false" docType="html-5.0">
+    
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Site Visit Survey</title>
+            <apex:includescript value="{!$Resource.AutoCompleteJs}" />
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+            <link rel="stylesheet" href="{!URLFOR($Resource.RunwalCSS,'/css/runwal.css')}" />
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script>
+            $( document ).ready(function() {
+                applyDatePicker();
+            });
+            
+            function applyDatePicker()
+            {
+                $( ".clsDatePicker" ).datepicker({
+                    dateFormat: "dd/mm/yy",
+                    changeYear: true,
+                    yearRange: "-50:+0"
+                });
+            }
+            </script>
+                
+            <style>
+            /* @media(max-width: 1024px){
+                html, html body { overflow: auto; -webkit-overflow-scrolling: touch; }
+                body { position: absolute;left: 0;right: 0;top: 0;bottom: 0; }
+            } */
+            .addressBlk select {
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+                -moz-border-radius: 0;
+                -webkit-border-radius: 0;
+                border-radius: 0;
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                width: 100%;
+                outline: none;
+            }
+
+            input[type="checkbox"].customechkBox {
+                width: 20px;
+                height: 15px;
+                position: relative;
+                top: 5px;
+                margin-right: 5px;
+            }
+
+            .spinnerBg {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0.2;
+                z-index: 999999;
+                left: 0;
+                top: 0;
+            }
+
+            .Assigned {
+                position: fixed;
+                background: url('{!URLFOR($Resource.CIFLoading)}');
+                background-size: 50px 50px;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                z-index: 1004;
+                left: 0%;
+                top: 0%;
+            }
+
+            .errorMsg {
+                color: red;
+            }
+
+            .btn-success-custm {
+                color: #fff !important;
+                background-color: #5cb85c;
+                border-color: #4cae4c !important;
+            }
+
+            .btn-danger-custm {
+                color: #fff !important;
+                background-color: #c9302c;
+                border-color: #c9302c !important;
+            }
+
+            .btn-custm {
+                display: inline-block;
+                margin-bottom: 0;
+                font-weight: normal;
+                text-align: center;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                background-image: none;
+                border: 1px solid transparent;
+                white-space: nowrap;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857;
+                border-radius: 4px;
+            }
+        </style>
+        </head>
+        
+        <body>
+            <div class="container">
+                <apex:form styleClass="form">
+                    <apex:pageBlock >
+                        <div class="row mrgn_t15">
+                            <div class="col-sm-3">
+                                <!--<img src="images/runwal_greens.png" alt="Runwal Greens" width="200" />-->
+                                <c:RWProjectLogo projid="{!opp.RW_Project__c}" wdth="140px" />
+                            </div>
+                            <div class="col-sm-6 text-center">
+                                <h1 class="heading1"><span>Site Visit Survey</span></h1>
+                            </div>
+                            <div class="col-sm-3 text-right">
+                                <!--<img src="images/runwal_logo.png" alt="Runwal Logo" width="60" />-->
+                                <!--<apex:image id="theImage" value="{!$Resource.RunwalLogo}"
+                                            style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" /> -->
+                                <apex:image id="theImage" value="{!$Resource.RunwalLogo_New}"
+                                            style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runwal" />
+                            </div>
+                        </div>
+                        <div style="color:red">
+                            <b><apex:pageMessages ></apex:pageMessages></b>
+                        </div>
+                        <br/>
+                        <div class="frmContainer">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	How do you prefer searching house property?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.How_do_you_prefer_searching_property__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	How did you find out about {!opp.RW_Project__r.Name}?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.How_did_you_find_out_about_Runwal__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	What locations are you considering for property purchase?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.What_locations_are_you_considering__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	What is the reason for your home purchase?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.What_is_the_reason_for_home_purchase__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	Which other property have you considered or visited?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Which_other_property_you_considered__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	How would you compare this Property to other properties that you have seen so far?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Amenities:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Property_Comparison_Amenities__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Location:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Property_Comparison_Location__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Connectivity:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Property_Comparison_Connectivity__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Prices:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Property_Comparison_Prices__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	What did you like about {!opp.RW_Project__r.Name} project?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.What_did_you_like_about_Runwal__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	What did you not like about {!opp.RW_Project__r.Name} project?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.What_did_you_not_like_about_Runwal__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	How can we make your experience better?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.How_can_we_make_your_experience_better__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">If Others please specify</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.How_can_make_experience_better_Others__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	On a scale of zero to ten how likely would you be to recommend us to your friends and Family?</label>
+                                        <!--<div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Rating__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Rating__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	Any added comments/suggestions/feedback?</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Additional_Comments__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                    	<label class="frmlabel">*	Other Details:</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8">
+                                    <div class="form-group">
+                                        <label style="padding-left:25px;" class="frmlabel">Name:</label>
+                                        <div class="frmElem">
+                                            <div class="col-xs-5 col-lg-5">
+                                                <apex:inputfield value="{!opp.Other_Details_First_Name__c}" styleclass="form-control" />
+                                                <div class="text-center " style="font-size: 12px; color: #608506; font-weight: bold; ">First Name</div>
+                                            </div>
+                                            <div class="col-xs-5 col-lg-5">
+                                                <apex:inputfield value="{!opp.Other_Details_Last_Name__c}" styleclass="form-control" required="true" />
+                                                <div class="text-center " style="font-size: 12px; color: #608506; font-weight: bold; ">Last Name</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Name:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Other_Details_Name__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">DOB:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Other_Details_DOB__c}" styleclass="form-control clsDatePicker" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Gender:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Other_Details_Gender__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Occupation:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Other_Details_Occupation__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    	<label style="padding-left:25px;" class="frmlabel">Home Location:</label>
+                                        <div class="frmElem">
+                                            <div class="col-sm-12">
+                                                <apex:inputfield value="{!opp.Other_Details_Home_Location__c}" styleclass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12" style="margin-bottom: 15px;">
+                        	<apex:commandButton styleclass="pull-right btn-custm btn-success-custm pull-right" value="Submit" action="{!save}" status="status"/> 
+                            <apex:commandButton styleclass="pull-left btn-custm btn-danger-custm" value="Back to Opportunity" action="{!backToOpp}" status="status"/> 
+                        </div>
+                        
+                        
+                    </apex:pageBlock>
+                </apex:form>
+            </div>
+        </body>
+    </html>
+    
+</apex:page>

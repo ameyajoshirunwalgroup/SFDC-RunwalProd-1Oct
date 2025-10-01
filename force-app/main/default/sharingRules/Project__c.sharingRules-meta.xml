@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Home_Loan_RM_Garden_Dombivali</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Home Loan RM - Garden/Dombivali</label>
+        <sharedTo>
+            <group>Home_Loan_RM_Garden_Dombivali</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Runwal Gardens</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Home_Loan_RM_Mumbai</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Home Loan RM - Mumbai</label>
+        <sharedTo>
+            <group>Home_Loan_RM_Mumbai</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value>Runwal Gardens</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingGuestRules>
+        <fullName>Project_Sharing_Guest_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Project Sharing Guest User</label>
+        <sharedTo>
+            <guestUser>Runwal_Cares</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Runwal Bliss</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

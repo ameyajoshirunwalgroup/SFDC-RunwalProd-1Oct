@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Digital_Link_Expire_Date</fullName>
+        <field>RW_Link_Expiry_Time__c</field>
+        <formula>NOW()</formula>
+        <name>Digital Link Expire Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Digital_Link_Status_Update</fullName>
+        <field>RW_Link_Status__c</field>
+        <literalValue>Expired</literalValue>
+        <name>Digital Link Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Digital Link Expiry</fullName>
+        <active>true</active>
+        <criteriaItems>
+            <field>RW_Digital_Link_Status__c.RW_Link_Status__c</field>
+            <operation>equals</operation>
+            <value>Active</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Digital_Link_Expire_Date</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <actions>
+                <name>Digital_Link_Status_Update</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <offsetFromField>RW_Digital_Link_Status__c.RW_Link_Sent_Time__c</offsetFromField>
+            <timeLength>2</timeLength>
+            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+</Workflow>

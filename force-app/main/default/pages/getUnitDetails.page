@@ -1,0 +1,17 @@
+<apex:page controller="UnitControllerD" >
+    <apex:form >
+        <apex:pageBlock title="Unit Details of {!Unit.Name}">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Get Cost Details" action="{!getAllCharges}"/>
+            </apex:pageBlockButtons>            
+              <apex:pageBlockTable id="chargesTable" value="{!allChargesMap}" var="key">
+                    <apex:column headerValue="Charge Headers">  
+                      {!key}  
+                    </apex:column>  
+                    <apex:column headerValue="Charge Values">  
+                      {!allChargesMap[key]}  
+                    </apex:column>
+               </apex:pageBlockTable>
+       </apex:pageBlock>
+   </apex:form>
+</apex:page>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Cancellation_Notifiation_To_CRM_Head</fullName>
+        <description>Cancellation Notifiation To CRM Head</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Level_Three_Approver__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <recipients>
+            <field>Level_Two_Approver__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <recipients>
+            <field>Sales_Manager__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>RW_Booking/Cancellation_notification_to_all_head</template>
+    </alerts>
+    <alerts>
+        <fullName>Rejection_email_notification_to_RM</fullName>
+        <description>Rejection email notification to RM</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <recipients>
+            <field>Level_Three_Approver__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <recipients>
+            <field>Level_Two_Approver__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <recipients>
+            <field>Sales_Manager__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>RW_Booking/Booking_cancellation_rejection_notification</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approval_Status</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Approval Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Status_Update</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Sent for Approval</literalValue>
+        <name>Approval Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Status_recalled</fullName>
+        <field>Approval_Status__c</field>
+        <name>Approval Status recalled</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_status_change</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Approval status change</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Booking_Conf_Status_Update</fullName>
+        <field>Booking_Confirmation_Approval_Status__c</field>
+        <name>Booking Conf Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Booking_Confirmation_Approval_Status</fullName>
+        <field>Booking_Confirmation_Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Booking Confirmation Approval Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Booking_Confirmation_Approve_Sen_Status</fullName>
+        <field>Booking_Confirmation_Approval_Status__c</field>
+        <literalValue>Sent for Approval</literalValue>
+        <name>Booking Confirmation Approve Sen Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Booking_Confirmation_Rejection_Status</fullName>
+        <field>Booking_Confirmation_Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Booking Confirmation Rejection Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Booking_Confirmed</fullName>
+        <field>Status__c</field>
+        <literalValue>Booking Confirmed</literalValue>
+        <name>Booking Confirmed</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Booking_cancelled</fullName>
+        <field>Status__c</field>
+        <literalValue>Booking Cancelled – Refund Pending</literalValue>
+        <name>Booking cancelled</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>CP_Clearing_Approved_By_L1</fullName>
+        <field>CP_Invoice_Approval_Status__c</field>
+        <literalValue>Approved By L1</literalValue>
+        <name>CP Clearing - Approved By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>CP_Clearing_Approved_By_L2</fullName>
+        <field>CP_Invoice_Approval_Status__c</field>
+        <literalValue>Approved By L2</literalValue>
+        <name>CP Clearing - Approved By L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>CP_Clearing_Rejected_By_L1</fullName>
+        <field>CP_Invoice_Approval_Status__c</field>
+        <literalValue>Rejected By L1</literalValue>
+        <name>CP Clearing - Rejected By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>CP_Clearing_Rejected_By_L2</fullName>
+        <field>CP_Invoice_Approval_Status__c</field>
+        <literalValue>Rejected By L2</literalValue>
+        <name>CP Clearing - Rejected By L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>CP_Clearing_Submitted</fullName>
+        <field>CP_Invoice_Approval_Status__c</field>
+        <literalValue>Submitted for Approval</literalValue>
+        <name>CP Clearing - Submitted</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Cancellation_Approval_Date_Unit_Transfer</fullName>
+        <field>Cancellation_approved_date__c</field>
+        <formula>Today()</formula>
+        <name>Cancellation Approval Date Unit Transfer</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Cancellation_Rejected</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Cancellation Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Cancellation_approval_date</fullName>
+        <field>Cancellation_approved_date__c</field>
+        <formula>Today()</formula>
+        <name>Cancellation approval date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Change_Booking_Record_Type</fullName>
+        <field>RecordTypeId</field>
+        <lookupValue>Detailed_Booking</lookupValue>
+        <lookupValueType>RecordType</lookupValueType>
+        <name>Change Booking Record Type</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>LookupValue</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Recall_Status</fullName>
+        <field>Status__c</field>
+        <literalValue>Booking Received</literalValue>
+        <name>Recall Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Request_Cancellation_status</fullName>
+        <field>Cancellation_Requested_Status__c</field>
+        <literalValue>Retained</literalValue>
+        <name>Request Cancellation status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Sent_for_Approval</fullName>
+        <field>Status__c</field>
+        <literalValue>Sent for Approval</literalValue>
+        <name>Sent for Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Sent_for_Revision</fullName>
+        <field>Status__c</field>
+        <literalValue>Sent for Revision</literalValue>
+        <name>Sent for Revision</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Sent_to_SAP</fullName>
+        <field>Cancellation_in_SAP__c</field>
+        <literalValue>Sent to SAP</literalValue>
+        <name>Sent to SAP</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Status_Update</fullName>
+        <field>Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Unit_Transferred</fullName>
+        <field>Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>Unit Transferred</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Booking_confirmed_date</fullName>
+        <field>RW_Booking_Confirmed_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>Update Booking confirmed date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Interest_applied</fullName>
+        <field>Interest_to_be_Applied__c</field>
+        <literalValue>Yes</literalValue>
+        <name>Update Interest applied</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Project_Name</fullName>
+        <field>Project_Name__c</field>
+        <formula>Project__r.Name</formula>
+        <name>Update Project Name</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_interset_apllied_to_No</fullName>
+        <field>Interest_to_be_Applied__c</field>
+        <literalValue>No</literalValue>
+        <name>Update interset apllied to No</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>approval_date</fullName>
+        <field>Cancellation_approved_date__c</field>
+        <formula>Today()</formula>
+        <name>approval date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>unit_transfered</fullName>
+        <field>Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>unit transfered</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Change Booking Record Type</fullName>
+        <actions>
+            <name>Change_Booking_Record_Type</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>true</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Project Name</fullName>
+        <actions>
+            <name>Update_Project_Name</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Booking__c.Project_Name__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+</Workflow>

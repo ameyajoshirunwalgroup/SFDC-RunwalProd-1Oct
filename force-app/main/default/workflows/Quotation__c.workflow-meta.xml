@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Send_approval_Rejected_email_to_level_two_approval</fullName>
+        <description>Send approval Rejected email to level two approval</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Level_Two_Approver__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Quotation_Approval_Rejected_email</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approved</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved1</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ApprovedNew</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_L1</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Approved by level 1</literalValue>
+        <name>Approved L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_L2</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Approved by level  2</literalValue>
+        <name>Approved L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_One_Status_Update</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>&apos;Approval Pending&apos;</formula>
+        <name>Level One Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_One_Status_UpdateNew</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>&apos;Approval Pending&apos;</formula>
+        <name>Level One Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_One_Status_Update_Rejection</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>Level_One_Approver__r.Username + &apos; Rejected&apos;</formula>
+        <name>Level One Status Update - Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_One_Status_Update_RejectionNew</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>Level_One_Approver__r.Username + &apos; Rejected&apos;</formula>
+        <name>Level One Status Update - Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_Three_Status_Update</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>&apos;Approved&apos;</formula>
+        <name>Level Three Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_Three_Status_Update_Rejection</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>Level_Three_Approver__r.Username + &apos; Rejected&apos;</formula>
+        <name>Level Three Status Update - Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_Two_Status_Update</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>&apos;Approval Pending&apos;</formula>
+        <name>Level Two Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_Two_Status_Update_Rejection</fullName>
+        <field>Current_Approval_Status__c</field>
+        <formula>Level_Two_Approver__r.Username + &apos; Rejected&apos;</formula>
+        <name>Level Two Status Update - Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quote_status_Rejected</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Quote status Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quote_status_valid</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Quote status valid</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quotes_status</fullName>
+        <description>Quotes status  = Valid</description>
+        <field>Quote_Status__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Quotes status valid</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quotes_status_Rejected</fullName>
+        <description>Quotes  Status =  Rejected</description>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Quotes status Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_L1</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected by  level 1</literalValue>
+        <name>Rejected L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_L2</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected by  level  2</literalValue>
+        <name>Rejected L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejection</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>RejectionNew</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

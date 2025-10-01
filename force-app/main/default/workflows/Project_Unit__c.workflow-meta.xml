@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>fifth_day_reminder_unit_hold</fullName>
+        <description>fifth day reminder unit hold</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Current_Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Reminder_5th_day_unit_hold</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Blank_Base_Rate</fullName>
+        <field>RW_Base_Rate__c</field>
+        <name>Blank Base Rate</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Bed_Rooms</fullName>
+        <field>Bed_Rooms__c</field>
+        <name>Blank Bed Rooms</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Booking_Date</fullName>
+        <field>RW_Booking_Date__c</field>
+        <name>Blank Booking Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Booking_Source</fullName>
+        <field>Booking_Source1__c</field>
+        <name>Blank Booking Source</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Built_UP_Unit_Area</fullName>
+        <field>RW_Built_UP_Unit_Area__c</field>
+        <name>Blank Built UP Unit Area</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Carpet_Area</fullName>
+        <field>Carpet_Area__c</field>
+        <name>Blank Carpet Area</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Floor_Rise</fullName>
+        <field>RW_Floor_Rise__c</field>
+        <name>Blank Floor Rise</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_PLC</fullName>
+        <field>RW_PLC__c</field>
+        <name>Blank PLC</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Saleable_Area</fullName>
+        <field>Saleable_Area__c</field>
+        <name>Blank Saleable Area</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Sales_Manager</fullName>
+        <field>RW_Sales_Manager__c</field>
+        <name>Blank Sales Manager</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Unit_Area</fullName>
+        <field>RW_Unit_Area__c</field>
+        <name>Blank Unit Area</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Blank_Unit_Rate</fullName>
+        <field>RW_Unit_Rate__c</field>
+        <name>Blank Unit Rate</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Inactive_Checkbox_to_false</fullName>
+        <field>RW_Seventh_Day__c</field>
+        <literalValue>0</literalValue>
+        <name>Inactive Checkbox to false</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>PU_status_Available</fullName>
+        <field>RW_Unit_Status__c</field>
+        <literalValue>Available</literalValue>
+        <name>PU status Available</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Project_unit_Name_updation</fullName>
+        <field>Name</field>
+        <formula>(RW_Param1__c +if(OR(ISBLANK(RW_Param1__c),AND(ISBLANK(RW_Param2__c),ISBLANK(RW_Param3__c),ISBLANK(RW_Param4__c),ISBLANK(RW_Param5__c))),&apos;&apos;, RW_Delimeter__c)+ 
+RW_Param2__c +if(OR(ISBLANK(RW_Param2__c),AND(ISBLANK(RW_Param3__c),ISBLANK(RW_Param4__c),ISBLANK(RW_Param5__c))),&apos;&apos;, RW_Delimeter__c)+ 
+RW_Param3__c +if(OR(ISBLANK(RW_Param3__c),AND(ISBLANK(RW_Param4__c),ISBLANK(RW_Param5__c))),&apos;&apos;, RW_Delimeter__c)+ 
+RW_Param4__c +if(OR(ISBLANK(RW_Param4__c),AND(ISBLANK(RW_Param5__c))),&apos;&apos;, RW_Delimeter__c)+ 
+RW_Param5__c )</formula>
+        <name>Project unit Name updation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Pu7thDay</fullName>
+        <field>RW_Seventh_Day__c</field>
+        <literalValue>1</literalValue>
+        <name>Pu7thDay</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_current_customer_email</fullName>
+        <field>RW_Current_Customer_Email__c</field>
+        <formula>/*RW_Customer__r.Owner.Email*/
+/*&apos;shraddha.shahari@runwalgroup.in&apos;    Commented by Vinay 27-05-2025*/ 
+
+IF(RW_Customer__r.Owner.IsActive, RW_Customer__r.Owner.Email, &apos;shraddha.shahari@runwalgroup.in&apos;)</formula>
+        <name>Update current customer email</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Blocked Reminder</fullName>
+        <active>true</active>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <criteriaItems>
+            <field>Project_Unit__c.RW_Unit_Status__c</field>
+            <operation>equals</operation>
+            <value>Blocked</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Unit__c.Is_Booking_Tagged__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>fifth_day_reminder_unit_hold</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>5</timeLength>
+            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Pu7thDay</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>7</timeLength>
+            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <rules>
+        <fullName>Booking Source</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Project_Unit__c.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Inactive Checkbox to false</fullName>
+        <actions>
+            <name>Inactive_Checkbox_to_false</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Project_Unit__c.RW_Seventh_Day__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>PU name updation</fullName>
+        <actions>
+            <name>Project_unit_Name_updation</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Project_Unit__c.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Refuge Units</fullName>
+        <actions>
+            <name>Blank_Base_Rate</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Bed_Rooms</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Booking_Date</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Booking_Source</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Built_UP_Unit_Area</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Carpet_Area</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Saleable_Area</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Sales_Manager</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Unit_Area</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Blank_Unit_Rate</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Project_Unit__c.RW_Unit_Status__c</field>
+            <operation>equals</operation>
+            <value>Refuge Units</value>
+        </criteriaItems>
+        <description>When Project Unit Status is changed to &apos;Refuge Units&apos;, booking parameters should become blank.</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Test WF</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Project_Unit__c.RW_Unit_Status__c</field>
+            <operation>notEqual</operation>
+            <value>Available</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update customer email</fullName>
+        <actions>
+            <name>Update_current_customer_email</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>!ISBLANK(RW_Customer__c)</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>bookin source</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Project_Unit__c.CreatedDate</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

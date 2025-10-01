@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>All_projects_Presales_leads</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>All projects Presales leads</label>
+        <sharedTo>
+            <group>All_presales_leads</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>notEqual</operation>
+            <value>,Loyalty,Corporate,NRI,Channel Partner,Temp Channel Partner,Employee / Managemen,Outstation,Referral,Tenants,Rcircle webinar,R Circle</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>CP_Leads</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Channel Partner leads</description>
+        <label>CP Leads</label>
+        <sharedTo>
+            <group>CP_sourcing_Group</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Pinnacle</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>CP_group_Forests</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>CP group - Forests</description>
+        <label>CP group - Forests</label>
+        <sharedTo>
+            <group>CP_Sourcing_group_Forests</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Forests</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>CP_group_Mahalaxmi</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>CP group - Mahalaxmi</description>
+        <label>CP group - Mahalaxmi</label>
+        <sharedTo>
+            <group>CP_Sourcing_group_Mahalaxmi</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>7 Mahalaxmi</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Leads_to_be_viewed_by_Presales</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Leads to be viewed by Presales</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>Pre_Sales_Head</roleAndSubordinatesInternal>
+        </sharedTo>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>notEqual</operation>
+            <value>,Loyalty,Corporate,Channel Partner,Temp Channel Partner,Referral,Rcircle webinar,R Circle</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>CP_Lead_Status__c</field>
+            <operation>notEqual</operation>
+            <value>Active</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>NRI_OS_Loyalty_Sharing</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>NRI_OS_Loyalty Sharing</label>
+        <sharedTo>
+            <group>NRI_OS_Loyalty_Group</group>
+        </sharedTo>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <field>RW_Type_of_Client__c</field>
+            <operation>equals</operation>
+            <value>NRI,Outstation</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Loyalty,Employee / Managemen,Referral,R Circle</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Project_Runwal_Avenue</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Project Runwal Avenue</label>
+        <sharedTo>
+            <group>Project_Avenue</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Avenue</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Project_Runwal_Pinnacle</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Project Runwal Pinnacle</label>
+        <sharedTo>
+            <group>Project_Pinnacle</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Pinnacle</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Refferal_Loyalty_Group</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Refferal Loyalty Group</label>
+        <sharedTo>
+            <group>Refferal_Loyalty_Group</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Loyalty,Employee / Managemen,Referral,R Circle</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>notEqual</operation>
+            <value>Runwal MyCity,Runwal Garden City</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Refferal_Loyalty_Group_Domb</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Refferal Loyalty Group - Domb</label>
+        <sharedTo>
+            <group>Refferal_Loyalty_Group_Domb</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Loyalty,Employee / Managemen,Referral,R Circle</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal MyCity,Runwal Garden City</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_Bliss_and_Avenue</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for Bliss and Avenue</label>
+        <sharedTo>
+            <group>R_Bliss_Avenue</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_Forests</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for Forests</label>
+        <sharedTo>
+            <group>R_Forest</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Forests</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_Gardens</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for Gardens</label>
+        <sharedTo>
+            <group>R_Garden</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Gardens,Runwal Garden City</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_Mahalaxmi</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for Mahalaxmi</label>
+        <sharedTo>
+            <group>R_Mahalakshmi</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>7 Mahalaxmi</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_MyCity</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for MyCity</label>
+        <sharedTo>
+            <group>R_MyCity</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal MyCity,Runwal Garden City</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_Pinnacle_and_Greens</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for Pinnacle and Greens</label>
+        <sharedTo>
+            <group>R_Pinnacle_Greens</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Pinnacle,Runwal Greens</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Sharing_rule_for_Lead_Bliss</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Sharing rule for Lead Bliss</label>
+        <sharedTo>
+            <group>Project_Bliss_Avenue</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Bliss,Runwal Avenue,Garden Heights</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Sharing_rule_for_Lead_Gardens</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Sharing rule for Lead Gardens</description>
+        <label>Sharing rule for Lead Gardens</label>
+        <sharedTo>
+            <group>Project_Gardens</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>contains</operation>
+            <value>Gardens</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Sharing_rule_for_Lead_RGE2</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Sharing rule for Lead RGE2</label>
+        <sharedTo>
+            <group>R_Galleria_2_and_Edge_2</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>R Galleria 2 and Edge 2</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Sharing_rule_for_lead_Greens</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Sharing rule for lead Greens</label>
+        <sharedTo>
+            <group>Project_Greens</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Greens</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Site_Head_Sharing_Rule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>This will allow site head read write access for project Runwal Forests</description>
+        <label>Site Head Sharing Rule Lead-Forests</label>
+        <sharedTo>
+            <group>Project_Forests</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Forests</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Site_Head_Sharing_Rule_Lead_Mahalaxmi</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>This will allow site head read write access for project 7 Mahalaxmi</description>
+        <label>Site Head Sharing Rule Lead-Mahalaxmi</label>
+        <sharedTo>
+            <group>Project_Mahalaxmi</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>7 Mahalaxmi</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Whatsapp_bot_marketing</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Whatsapp bot - marketing</label>
+        <sharedTo>
+            <group>Marketing</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>WhatsApp Bot</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>calling_campaign</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>calling campaign</label>
+        <sharedTo>
+            <group>Refferal_Loyalty_Group</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Calling_Closing_SM__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Calling_Campaign__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>cp_group_Avenue_Bliss</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>cp - group Avenue &amp; Bliss</label>
+        <sharedTo>
+            <group>CP_Sourcing_group_Bliss_Avenue</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Bliss,Runwal Avenue</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>cp_group_gardens</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>cp - group gardens</label>
+        <sharedTo>
+            <group>CP_Sourcing_group_Gardens</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Gardens,Runwal Garden City,R Galleria 2 and Edge 2</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

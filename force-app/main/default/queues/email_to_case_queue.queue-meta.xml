@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <name>email to case queue</name>
+    <queueMembers>
+        <roles>
+            <role>Bliss_Relationship_Manager</role>
+            <role>Bliss_Team_Lead</role>
+            <role>CRM_Team_Lead_Avenue</role>
+            <role>CRM_Team_Lead_Bliss</role>
+            <role>CRM_Team_Lead_Forests</role>
+            <role>CRM_Team_Lead_Pinnacle</role>
+            <role>CRM_Team_Member_Avenue</role>
+            <role>CRM_Team_Member_Bliss</role>
+            <role>CRM_Team_Member_Forests</role>
+            <role>CRM_Team_Member_Pinnacle</role>
+            <role>Forests_Relationship_Manager</role>
+            <role>Forests_Team_Lead</role>
+        </roles>
+    </queueMembers>
+    <queueSobject>
+        <sobjectType>Case</sobjectType>
+    </queueSobject>
+</Queue>

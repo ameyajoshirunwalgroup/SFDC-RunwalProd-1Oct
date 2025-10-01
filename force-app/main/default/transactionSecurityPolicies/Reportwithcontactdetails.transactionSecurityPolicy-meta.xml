@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TransactionSecurityPolicy xmlns="http://soap.sforce.com/2006/04/metadata">
+    <action>
+        <block>false</block>
+        <endSession>false</endSession>
+        <freezeUser>false</freezeUser>
+        <notifications>
+            <inApp>false</inApp>
+            <sendEmail>true</sendEmail>
+            <user>system.admin@runwal.com</user>
+        </notifications>
+        <twoFactorAuthentication>false</twoFactorAuthentication>
+    </action>
+    <active>false</active>
+    <customEmailContent>&lt;p&gt;&lt;strong&gt;&lt;u&gt;Policy&lt;/u&gt;&lt;/strong&gt; - Report with contact details&lt;/p&gt;&lt;p&gt;&lt;strong&gt;&lt;u&gt;Event name&lt;/u&gt;&lt;/strong&gt; - {{policy.EventName}}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;&lt;u&gt;Report id&lt;/u&gt;&lt;/strong&gt; - {{event.ReportId}}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;&lt;u&gt;Activity&lt;/u&gt;&lt;/strong&gt; - {{event.Operation}}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;&lt;u&gt;By User&lt;/u&gt;&lt;/strong&gt; - {{event.Username}}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;&lt;u&gt;Count of Data &lt;/u&gt;&lt;/strong&gt;- {{event.RowsProcessed}}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;&lt;u&gt;Columns downloaded&lt;/u&gt;&lt;/strong&gt; :-&lt;/p&gt;&lt;p&gt;{{event.ColumnHeaders}}&lt;/p&gt;</customEmailContent>
+    <developerName>Reportwithcontactdetails</developerName>
+    <eventName>ReportEvent</eventName>
+    <flow>PolicyCondition_ZnAsAFIzkVBUfyqzPBSY</flow>
+    <masterLabel>Report with contact details</masterLabel>
+    <type>CustomConditionBuilderPolicy</type>
+</TransactionSecurityPolicy>

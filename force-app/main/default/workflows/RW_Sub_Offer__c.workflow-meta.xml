@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>SubOffer_Approval</fullName>
+        <description>SubOffer Approval</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Sub_Offer_Approval_Notification</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approval_Sent_Status</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Sent for Approval</literalValue>
+        <name>Approval Sent Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_Sub_Offer</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Approved Sub Offer</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_Sub_offer</fullName>
+        <field>RW_Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Rejected Sub offer</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

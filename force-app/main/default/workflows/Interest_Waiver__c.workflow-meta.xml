@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Notify_Customer_Once_Waiver_Approved</fullName>
+        <description>Notify Customer Once Waiver Approved</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Notify_Customer_on_Interest_Waiver_Approved</template>
+    </alerts>
+    <alerts>
+        <fullName>Notify_Project_Lead_For_Waiver_Limit_Exceed</fullName>
+        <description>Notify Project Lead For Waiver Limit Exceed</description>
+        <protected>false</protected>
+        <recipients>
+            <field>CRM_Head__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <recipients>
+            <field>Project_Lead__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Notify_Project_Lead_For_Waiver_Limit_ExceedNotify_Project_Lead</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approved</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_CEO</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By CEO</literalValue>
+        <name>Approved By CEO</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_CRM_Head</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By CRM Head</literalValue>
+        <name>Approved By CRM Head</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_Project_Lead</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By Project Lead</literalValue>
+        <name>Approved By Project Lead</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>L1_Approved_Date</fullName>
+        <field>PL_Approved_Date__c</field>
+        <formula>Today()</formula>
+        <name>L1 Approved Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>L2_Approved_Date</fullName>
+        <field>CRM_Head_Approved_Date__c</field>
+        <formula>Today()</formula>
+        <name>L2 Approved Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>L3_Approved_Date</fullName>
+        <field>CEO_Approved_Date__c</field>
+        <formula>Today()</formula>
+        <name>L3 Approved Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_By_CEO</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By CEO</literalValue>
+        <name>Rejected By CEO</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_CRM_Head</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By CRM Head</literalValue>
+        <name>Rejected by CRM Head</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_by_Project_Lead</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By Project Lead</literalValue>
+        <name>Rejected by Project Lead</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Submitted for Approval</literalValue>
+        <name>Submitted</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>
