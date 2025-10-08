@@ -25,9 +25,9 @@ public with sharing class RW_UnitTransferAndCancellation {
     public static Booking__c getBookingInformation(string bookingId){
         Booking__c bookingInfo= [select Project__r.Name ,Allotment_Premium__c, GST_Tax_G__c ,RM_Name__c, Project__r.CRMHead__r.Name, Project__r.Overall_CRM_Head__r.Name, Unit_No__r.RW_Param4__c,Unit_No__r.TowerName__r.Name, Unit_No__r.Name, Opportunity__r.Primary_Name__c, Opportunity__r.Applicant_Name__c, Opportunity__r.Other_Applicants_Name__c, Status__c, Source_of_Booking__c, Opportunity__r.StageName, Basic_Booking_Amount__c, RW_GST_On_Interest__c, Credited_Amount__c, RW_Total_GST_Amount__c, RW_Total_TDS_Outstanding__c, Total_TDS_Amount_Paid_In_Rs__c, Reason_For_Cancellation__c, Date_of_Cancellation__c, Cancellation_Requested_Status__c, Cancellation_Reason__c,Cancellation_Sub_reason__c, Forfeiture_Amount__c, Brokerage_Amount__c, Interest_Value__c, Taxes_if_any__c, Forfeiture_Amount_Type__c,Other_Forfeiture_Amount__c, Forfeit_Percentage__c, Total_Forfeiture_Amount__c, CGST__c, SGST__c, Booking_Date__c, RW_Registration_Status__c, Primary_Applicant_Name__c,  MVAT__c, Total_Refund_Amount__c, Final_Refund_Amount__c, Quotation__r.Agreement_Value__c, Quotation__r.Agreement_Value_D__c,  RW_Total_Receipt_Amount_Received__c, Opportunity__r.SAP_Customer_Number__c, Cancellation_Subtype__c, Mode_of_Cancellation__c,Payment_Refund_Amount__c,Resale_Status__c,New_Rate__c,New_Flat_Agreement_Value__c,Received_Amtount__c,
                                  Scheme_of_Customer__r.Name, Referral_Amount_Cancellation_Checklist__c,Referral_Amount__c, Interest_with_GST__c, 
-                                 TAX__c, GST__c, Total_Amount_to_be_Transferred__c, Swipe_Charges__c, NOTE__c, New_Unit__c, RW_Total_Interest__c, 
+                                 TAX__c, GST__c, Total_Amount_to_be_Transferred__c, Swipe_Charges__c, NOTE__c, RW_Total_Interest__c, 
                                  RW_Total_Amount_Collected__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c
-                                 FROM Booking__c  Where id = : bookingId ];        
+                                 FROM Booking__c  Where id = : bookingId ];   // Removed the field New Unit from SOQL by Vinay 01-10-2025
         
         List<Brokerage_Invoice__c> brokInvoices = [SELECT Id, Total_Amount_Paid__c FROM Brokerage_Invoice__c WHERE Booking__c =: bookingId];
         Decimal brokerageAmount = 0;
@@ -259,8 +259,8 @@ public with sharing class RW_UnitTransferAndCancellation {
                 Total_Demand_Raised_Principal__c,RW_Total_Interest__c,Total_Brokerage_Amount__c,RW_Registration_Date__c,Net_Rate__c, Unit_No__r.RW_Param1__c,
                 Unit_No__r.RW_Param2__c,TAX__c,FBL5N__c,Swipe_Charges__c,RW_Total_Amount_Received_Without_GST__c,GST__c,Interest_with_GST__c,
                 Total_Amount_to_be_Transferred__c,Project__r.Accounts_Head__c, Unit_No__r.Relationship_Manager__r.TL_Name__c,NOTE__c,Brokerage_Paid__c,
-                Project__r.CRM_MIS_Head__r.Name, New_Unit__c, New_Unit__r.Booking__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c
-                From Booking__c Where Id=:recordId LIMIT 1];
+                Project__r.CRM_MIS_Head__r.Name, New_Unit__r.Booking__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c
+                From Booking__c Where Id=:recordId LIMIT 1]; // Removed the field New Unit from SOQL by Vinay 01-10-2025
         
         List<Booking__c> newBkg = [SELECT Id, Net_Rate__c, Allotment_Premium__c, Unit_No__r.Saleable_Area__c, Primary_Applicant_Name__c,
                    Opportunity__r.SAP_Customer_Number__c, Booking_Date__c, Unit_No__r.RW_Param1__c,
@@ -596,10 +596,9 @@ public with sharing class RW_UnitTransferAndCancellation {
                                    FROM Project_Unit__c WHERE Id =: unitId]; 
         Booking__c bkg = new Booking__c();
         bkg.Id = bkgId;
-        bkg.New_Unit__c = unitId;
-        BookingTriggerHandler.byPass = true;
+        /*BookingTriggerHandler.byPass = true; // Commented by Vinay 01-10-2025 as there is no use of updating the record since we removed the line ;
         update bkg;
-        BookingTriggerHandler.byPass = false;
+        BookingTriggerHandler.byPass = false;*/
         return unitInfo;
     }
 

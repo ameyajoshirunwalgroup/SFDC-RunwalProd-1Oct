@@ -127,7 +127,7 @@ global class GetCurrentLoggedInAgents {
                 //if(autoCallbackProjects.size() > 0){
                     for(Lead ld : leadsToUpdate){ //Added by Vinay 14-08-2025
                         //if(ld.Integration_Source__c == 'Website' && ld.RW_Project__c != null && autoCallbackProjects.contains(ld.RW_Project__c)){
-                        if(ld.Integration_Source__c == 'Website' && System.label.Allow_Auto_Callback == 'Yes'){
+                        if(ld.Integration_Source__c == 'Website'){
                             Scheduled_Call__c sc = new Scheduled_Call__c();
                             sc.Related_Record_Id__c = ld.Id;
                             sc.Schedule_Date__c = Datetime.now().addSeconds(10);
@@ -140,7 +140,7 @@ global class GetCurrentLoggedInAgents {
                             leadMap.put(ld.Id, ld);
                         }
                     }
-                    insert schedulesToCreate;
+                    //insert schedulesToCreate;
                     if(leadMap.keySet().size() > 0){ //Added by Vinay 26-09-2025
                         TaskManagementServices.createTaskforEnquiries(leadMap);
                     }
@@ -306,7 +306,9 @@ global class GetCurrentLoggedInAgents {
                             leadMap.put(ld.Id, ld);
                         }
                     }
-                    insert schedulesToCreate;
+                    if(schedulesToCreate.size() > 0){
+                        insert schedulesToCreate;
+                    }
                     if(leadMap.keySet().size() > 0){ //Added by Vinay 26-09-2025
                         TaskManagementServices.createTaskforEnquiries(leadMap);
                     }

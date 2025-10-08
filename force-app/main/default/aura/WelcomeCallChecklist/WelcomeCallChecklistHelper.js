@@ -542,7 +542,7 @@
         console.log('finalCount___'+finalCount);
         //console.log('selectedCheckBoxes___'+selectedCheckBoxes.length);
         component.set("v.counter" , finalCount);  
-
+		console.log('CriticalList.length - > ',CriticalList.length);
         if(finalCount === CriticalList.length){
             component.set("v.btnAcc",false);
             //component.set("v.btnRej",true);

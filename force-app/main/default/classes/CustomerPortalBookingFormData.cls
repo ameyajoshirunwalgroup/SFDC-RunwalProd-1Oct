@@ -139,9 +139,9 @@ set;
              opportunity__r.RW_Walkin_Channel_Partner__r.RW_Email__c,project__r.TermsAndConditions__c,
              opportunity__r.RW_Walkin_Channel_Partner__c,opportunity__r.RW_Configuration__c, 
              Booking_Date__c, Wing__c, Token_Amount__c, opportunity__r.RW_Walkin_Channel_Partner__r.Representative_Name__c,
-             Contact_No_of_Referer_Customer_Custome__c, Allotment_Premium__c, No_of_Parking__c, Quotation__r.Total_No_of_Parking__c, Company__c, Sales_Managers__c 
+             Contact_No_of_Referer_Customer_Custome__c, Allotment_Premium__c, No_of_Parking__c, Quotation__r.Total_No_of_Parking__c, Sales_Managers__c 
              From Booking__c Where id =: BookingId
-            ];
+            ]; // Removed the field Company__c from soql by Vinay 01-10-2025
         system.debug(b);
         Token = b[0].Token_Amount__c;
         TokenInWords = S_NumberToWord.convertNumbertoWords(Token);

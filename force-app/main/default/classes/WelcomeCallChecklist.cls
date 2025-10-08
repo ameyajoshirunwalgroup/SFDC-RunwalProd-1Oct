@@ -215,7 +215,7 @@ public without sharing class WelcomeCallChecklist {
     @AuraEnabled
     public static WrpClsWelcomeObj callCheckList(string strBookingId){
         WrpClsWelcomeObj welCall = new WrpClsWelcomeObj();
-        Booking__c objBooking = [SELECT Id,Name,Project__r.Project_Location__r.Name,Sales_Manager__c,Status__c,Welcome_Call_Done_By__c,Floor__c,Opportunity__c,Booking_Date__c,Project__r.Name,
+        Booking__c objBooking = [SELECT Id,Name,Project__r.Project_Location__r.Name,Sales_Manager__c,Status__c,Floor__c,Opportunity__c,Booking_Date__c,Project__r.Name,
                                  BrokerIId__r.Name,Registration_consultant__r.Name,Registration_consultant__r.Consultation_Scanning_charges__c,
                                  Registration_consultant__c,Project__r.Contact_No__c,Project__r.Customer_Care_Email__c,
                                  Unit_No__r.RW_Param4__c,Quotation__r.Plan_Type__c,Quotation__r.PaymentPlan__r.Name,toLabel(Unit_No__r.New_Type__c),
@@ -230,7 +230,7 @@ public without sharing class WelcomeCallChecklist {
                                  Opportunity__r.Account.Vehicles_owned__c,Opportunity__r.Account.Four_Wheeler__c,
                                  (SELECT Id,name,RW_Welcome_Call_Completed__c,RW_Welcome_Call_Status__c
                                  FROM Welcome_Calls__r Limit 1)
-                                 FROM Booking__c WHERE Id =: strBookingId Limit 1];
+                                 FROM Booking__c WHERE Id =: strBookingId Limit 1]; // Removed the field Welcome_Call_Done_By__c from SOQL by Vinay 01-10-2025
         system.debug('objBooking___'+objBooking);
         
         List<Applicant_Details__c> applicantList =[SELECT Name,PancardNo__c,Email_Address__c,Permanent_Address__c,Mobile_Number__c,Applicant_Number__c FROM Applicant_Details__c 

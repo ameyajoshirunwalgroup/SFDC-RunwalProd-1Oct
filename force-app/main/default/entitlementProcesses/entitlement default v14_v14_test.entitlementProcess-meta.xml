@@ -30,18 +30,6 @@
         <minutesToComplete>5</minutesToComplete>
         <timeTriggers>
             <actions>
-                <name>Second_Escalation</name>
-                <type>Alert</type>
-            </actions>
-            <actions>
-                <name>Second_Escalation</name>
-                <type>FieldUpdate</type>
-            </actions>
-            <timeLength>10</timeLength>
-            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
-        </timeTriggers>
-        <timeTriggers>
-            <actions>
                 <name>Fourth_Escalation</name>
                 <type>Alert</type>
             </actions>
@@ -62,6 +50,18 @@
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>15</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <timeTriggers>
+            <actions>
+                <name>Second_Escalation</name>
+                <type>Alert</type>
+            </actions>
+            <actions>
+                <name>Second_Escalation</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>10</timeLength>
             <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
         </timeTriggers>
         <timeTriggers>

@@ -176,7 +176,7 @@ public class CustomerPortalBookingFormDataTest
         Relationship_Manager__c ObjRm = new Relationship_Manager__c();
         ObjRm.Tower__c = objTwr.Id;
         ObjRm.Project__c = objpr.Id;
-        ObjRm.User__c = tuser.Id;
+        ObjRm.User__c = tuser1.Id;
         ObjRm.Contact_Number__c='9987654323';
         insert ObjRm; 
         

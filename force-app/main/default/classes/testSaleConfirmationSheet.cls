@@ -185,6 +185,7 @@ public class testSaleConfirmationSheet
              objPCS.Description__c='Commencement of Raft/Foundation';
              objPCS.Planned_date_of_completion__c = System.today().addDays(365);
              objPCS.Tower__c = t.Id;
+             objPCS.Sequence_No__c = 1;
              insert objPCS;
              
             // payment plan creation associated to the construction stages

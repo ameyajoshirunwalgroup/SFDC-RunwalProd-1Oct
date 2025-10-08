@@ -31,6 +31,18 @@
         <minutesToComplete>2880</minutesToComplete>
         <timeTriggers>
             <actions>
+                <name>Second_Escalation</name>
+                <type>Alert</type>
+            </actions>
+            <actions>
+                <name>Second_Escalation</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>1440</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <timeTriggers>
+            <actions>
                 <name>Escalation_Email_Alert</name>
                 <type>Alert</type>
             </actions>
@@ -67,18 +79,6 @@
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>2880</timeLength>
-            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
-        </timeTriggers>
-        <timeTriggers>
-            <actions>
-                <name>Second_Escalation</name>
-                <type>Alert</type>
-            </actions>
-            <actions>
-                <name>Second_Escalation</name>
-                <type>FieldUpdate</type>
-            </actions>
-            <timeLength>1440</timeLength>
             <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
         </timeTriggers>
         <useCriteriaStartTime>true</useCriteriaStartTime>

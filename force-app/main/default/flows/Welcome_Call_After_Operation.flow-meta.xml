@@ -83,7 +83,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>is_Updated</name>
-            <conditionLogic>((1 AND 2) OR (3 AND 4) OR (5 AND 6) OR (7 AND 8)) OR 9</conditionLogic>
+            <conditionLogic>((1 AND 2) OR (3 AND 4) OR (5 AND 6) OR (7 AND 8))</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.RW_Mode_of_funding__c</leftValueReference>
                 <operator>IsChanged</operator>
@@ -138,13 +138,6 @@
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>IsNew</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>

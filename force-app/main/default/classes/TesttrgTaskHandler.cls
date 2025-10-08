@@ -166,6 +166,10 @@ public class TesttrgTaskHandler {
         insert tsk;
         
         ScheduleOzonetelCalls.callSchedule(new List<Task>{tsk});
+        sc.Ozonetel_Row_Id__c = '1234';
+        update sc;
+        DeleteScheduledCalls job = new DeleteScheduledCalls();
+		job.execute(null);
     }
     
     @isTest
@@ -203,5 +207,6 @@ public class TesttrgTaskHandler {
         insert tsk;
         
         ScheduleOzonetelCalls.callSchedule(new List<Task>{tsk});
+        
     }
 }
