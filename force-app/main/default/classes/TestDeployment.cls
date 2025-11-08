@@ -1,5 +1,5 @@
 public with sharing class TestDeployment {
     public TestDeployment() {
-        System.debug('Check1');
+        System.debug('Check2');
     }
 }
