@@ -32,9 +32,9 @@ jobs:
             sf org login jwt --client-id "${{ secrets.CONSUMER_KEY_FULLCOPY }}" --jwt-key-file private-key.pem --username "${{ secrets.DEPLOYMET_USERNAME_FULLCOPY }}" --instance-url "${{ secrets.INSTANCE_URL_FULLCOPY }}"
             TARGET_ORG="${{ secrets.DEPLOYMET_USERNAME_FULLCOPY }}"
           elif [ "$TARGET_BRANCH" = "main" ]; then
-            echo "${{ secrets.SALESFORCE_PRIVATE_KEY_PRODUCTION }}" > private-key.pem
-            sf org login jwt --client-id "${{ secrets.SALESFORCE_CLIENT_ID_PRODUCTION }}" --jwt-key-file private-key.pem --username "${{ secrets.SALESFORCE_USERNAME_PRODUCTION }}" --instance-url "${{ secrets.SALESFORCE_LOGIN_URL_PRODUCTION }}"
-            TARGET_ORG="${{ secrets.SALESFORCE_USERNAME_PRODUCTION }}"
+            echo "${{ secrets.JWT_SERVER_KEY }}" > private-key.pem
+            sf org login jwt --client-id "${{ secrets.CONSUMER_KEY_PROD }}" --jwt-key-file private-key.pem --username "${{ secrets.DEPLOYMET_USERNAME_PROD }}" --instance-url "${{ secrets.INSTANCE_URL_PROD }}"
+            TARGET_ORG="${{ secrets.DEPLOYMET_USERNAME_PROD }}"
           else
             echo "Invalid target branch: $TARGET_BRANCH"
             exit 1
