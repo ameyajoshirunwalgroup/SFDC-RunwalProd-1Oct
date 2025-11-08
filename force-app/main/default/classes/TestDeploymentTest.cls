@@ -1,7 +1,7 @@
 @isTest
 public with sharing class TestDeploymentTest {
     @isTest
-    public TestDeploymentTest() {
+    public static void TestDeploymentTestMethod() {
         TestDeployment TestDeploymentObj = new TestDeployment();
 
     }
