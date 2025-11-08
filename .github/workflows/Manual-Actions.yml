@@ -1,0 +1,137 @@
+name: Manual Actions
+on:
+  workflow_dispatch:
+    inputs:
+      actionType:
+        description: 'Select what to run (Validation, Deployment)'
+        type: choice
+        options:
+          - Validation
+          - Deployment
+        required: true
+      prNumber:
+        description: 'Pull Request Number'
+        required: true
+        default: ''
+      testlevel:
+        description: 'Test Level'
+        type: choice
+        options:
+          - NoTestRun
+          - RunLocalTests
+          - RunSpecifiedTests
+          - RunAllTestsInOrg
+        required: true
+      testclasses:
+        description: 'Specify which test classes to run(comma-separated) if using RunSpecifiedTests'
+        default: ''
+        required: false
+jobs:
+  manualActions:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write   
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+      - name: Install Salesforce CLI
+        run: |
+          npm install --global @salesforce/cli@latest
+      - name: Set Deployment Variables
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: set-vars
+        run: |
+            PR=${{ github.event.inputs.prNumber }}
+            echo "Fetching PR #$PR ..."
+            gh pr view $PR --json baseRefName,headRefName,mergedAt > pr.json
+
+            BASE_BRANCH=$(jq -r .baseRefName pr.json)
+            HEAD_BRANCH=$(jq -r .headRefName pr.json)
+            MERGED_AT=$(jq -r .mergedAt pr.json)
+            if [ "$MERGED_AT" != "" ]; then
+              echo "PR_MERGED=true" >> $GITHUB_ENV
+            else
+              echo "PR_MERGED=false" >> $GITHUB_ENV
+            fi
+
+            # If RunSpecifiedTests, add test classes
+            if [ "${{ github.event.inputs.testlevel }}" = "RunSpecifiedTests" ] && [ -z "${{ github.event.inputs.testclasses }}" ]; then
+              echo "❌ ERROR: Test classes must be provided when using RunSpecifiedTests."
+              exit 1
+            fi
+            echo "PR_TARGET_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+            echo "PR_HEAD_BRANCH=$HEAD_BRANCH" >> $GITHUB_ENV
+            echo "DEPLOY_MODE=pr" >> $GITHUB_ENV
+            echo "PR_NUMBER=$PR" >> $GITHUB_ENV
+      - name: Checkout selected branch
+        run: |
+          BRANCH_NAME=$PR_HEAD_BRANCH
+          echo "Checking out branch $BRANCH_NAME ..."
+          git fetch origin $BRANCH_NAME
+          git checkout $BRANCH_NAME
+      - name: Authenticate with Salesforce
+        run: |
+          TARGET_BRANCH=$PR_TARGET_BRANCH
+          if [ "$TARGET_BRANCH" = "qa" ]; then
+            echo "${{ secrets.SALESFORCE_PRIVATE_KEY_QA }}" > private-key.pem
+            sf org login jwt --client-id "${{ secrets.SALESFORCE_CLIENT_ID_QA }}" --jwt-key-file private-key.pem --username "${{ secrets.SALESFORCE_USERNAME_QA }}" --instance-url "${{ secrets.SALESFORCE_LOGIN_URL_QA }}"
+            TARGET_ORG="${{ secrets.SALESFORCE_USERNAME_QA }}"
+          elif [ "$TARGET_BRANCH" = "uat" ]; then
+            echo "${{ secrets.SALESFORCE_PRIVATE_KEY_UAT }}" > private-key.pem
+            sf org login jwt --client-id "${{ secrets.SALESFORCE_CLIENT_ID_UAT }}" --jwt-key-file private-key.pem --username "${{ secrets.SALESFORCE_USERNAME_UAT }}" --instance-url "${{ secrets.SALESFORCE_LOGIN_URL_UAT }}"
+            TARGET_ORG="${{ secrets.SALESFORCE_USERNAME_UAT }}"
+          elif [ "$TARGET_BRANCH" = "main" ]; then
+            echo "${{ secrets.SALESFORCE_PRIVATE_KEY_PRODUCTION }}" > private-key.pem
+            sf org login jwt --client-id "${{ secrets.SALESFORCE_CLIENT_ID_PRODUCTION }}" --jwt-key-file private-key.pem --username "${{ secrets.SALESFORCE_USERNAME_PRODUCTION }}" --instance-url "${{ secrets.SALESFORCE_LOGIN_URL_PRODUCTION }}"
+            TARGET_ORG="${{ secrets.SALESFORCE_USERNAME_PRODUCTION }}"
+          else
+            echo "Invalid branch: $TARGET_BRANCH"
+            exit 1
+          fi
+          echo "TARGET_ORG=$TARGET_ORG" >> $GITHUB_ENV
+      - name: Detect and Run Metadata Change
+        id: detect-changes
+        run: |
+          COMPARE_REF=origin/$PR_TARGET_BRANCH
+          echo "Comparing changes between $COMPARE_REF and $PR_HEAD_BRANCH ..."
+          CHANGED_FILES=$(git diff --name-only $COMPARE_REF origin/$PR_HEAD_BRANCH | grep '^force-app/' || true)
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No metadata changes detected."
+            exit 78
+          fi
+          CHANGED_PATHS=$(echo "$CHANGED_FILES" | tr '\n' ' ' | sed 's/,$//')
+
+          echo "Validated paths: $CHANGED_PATHS"
+          
+          if [ "${{ github.event.inputs.actionType }}" = "Validation" ] && [ "${{ github.event.inputs.testlevel }}" = "RunSpecifiedTests" ]; then
+            TEST_CLASSES=$(echo "${{ github.event.inputs.testclasses }}" | tr ',' ' ')
+            sf project deploy start --dry-run --target-org $TARGET_ORG --source-dir $CHANGED_PATHS --ignore-conflicts --test-level ${{ github.event.inputs.testlevel }} --tests $TEST_CLASSES
+
+          elif [ "${{ github.event.inputs.actionType }}" = "Validation" ]; then
+            sf project deploy start --dry-run --target-org $TARGET_ORG --source-dir $CHANGED_PATHS --ignore-conflicts --test-level ${{ github.event.inputs.testlevel }}
+
+          elif  [ "${{ github.event.inputs.actionType }}" = "Deployment" ] && [ "${{ github.event.inputs.testlevel }}" = "RunSpecifiedTests" ]; then
+            TEST_CLASSES=$(echo "${{ github.event.inputs.testclasses }}" | tr ',' ' ')
+            sf project deploy start --target-org $TARGET_ORG --source-dir $CHANGED_PATHS --ignore-conflicts --test-level ${{ github.event.inputs.testlevel }} --tests $TEST_CLASSES
+
+          elif  [ "${{ github.event.inputs.actionType }}" = "Deployment" ]; then
+            sf project deploy start --target-org $TARGET_ORG --source-dir $CHANGED_PATHS --ignore-conflicts --test-level ${{ github.event.inputs.testlevel }} 
+
+          else
+            exit 0
+          fi
+      - name: Merge PR after successful deployment
+        if: github.event.inputs.actionType == 'Deployment' && success() && env.PR_MERGED == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+            gh pr merge $PR_NUMBER --squash --delete-branch
+            echo "✅ PR #$PR_NUMBER merged successfully."
+      
