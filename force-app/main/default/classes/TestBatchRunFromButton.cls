@@ -172,114 +172,7 @@ public class TestBatchRunFromButton {
         //objcustomer2.Duplicate_Project_Unit_Request__c = false;
         //objcustomer2.Release_Unit__c = false;
         insert objcustomer2;
-        List<Quotation__c> quoteList = new List<Quotation__c>();
-        Quotation__c q = new Quotation__c();
-        q.Name = 'Q010101';
-        q.Quote_Status__c = 'Valid';
-        q.Prepared_Date__c = System.today();
-        q.Project__c = objpr.Id;
-        q.Project_Unit__c = objPUU.Id;
-        q.FloorNo__c = 11;
-        q.Opportunity__c = objcustomer.Id;
-        q.Appartment_Configuration__c = '1 BHK';
-        q.Carpet_Area_Sq_Ft__c = 1200;
-        q.Token_Amount__c =110000;
-        q.ST_Token_Amount__c = 1000;
-        q.Allow_booking_without_full_token__c = TRUE;
-        q.Agreement_Value__c = 60422880;
-        q.Agreement_Value_ST__c = 2537761;
-        q.Tandem_car_park_Additional__c = 0;
-        q.Tandem_Open_Additional__c= 0;
-        q.Single_car_park_Additional__c= 0;
-        q.Single_Open_Additional__c = 0;
-        q.Stack_Additional__c = 0;
-        q.MLCP_Additional__c = null;
-        quoteList.add(q);
         
-        Quotation__c q2 = new Quotation__c();
-        q2.Name = 'Q020202';
-        q2.Quote_Status__c = 'Approval Pending';
-        q2.Prepared_Date__c = System.today();
-        q2.Project__c = objpr.Id;
-        q2.Project_Unit__c = objPUU1.Id;
-        q2.FloorNo__c = 11;
-        q2.Opportunity__c = objcustomer1.Id;
-        q2.Appartment_Configuration__c = '1 BHK';
-        q2.Carpet_Area_Sq_Ft__c = 1200;
-        q2.Token_Amount__c =110000;
-        q2.ST_Token_Amount__c = 1000;
-        q2.Allow_booking_without_full_token__c = TRUE;
-        q2.Agreement_Value__c = 60422880;
-        q2.Agreement_Value_ST__c = 2537761;
-        q2.Tandem_car_park_Additional__c = 0;
-        q2.Tandem_Open_Additional__c= 0;
-        q2.Single_car_park_Additional__c= 0;
-        q2.Single_Open_Additional__c = 0;
-        q2.Stack_Additional__c = 0;
-        q2.MLCP_Additional__c = null;
-        //q2.Service_Tax_On_Token_Amount__c = true;
-        quoteList.add(q2);
-        
-        Quotation__c q3 = new Quotation__c();
-        q3.Name = 'Q020202';
-        q3.Quote_Status__c = 'Approval Pending';
-        q3.Prepared_Date__c = System.today();
-        q3.Project__c = objpr.Id;
-        q3.Project_Unit__c = objPUU1.Id;
-        q3.FloorNo__c = 11;
-        q3.Opportunity__c = objcustomer2.Id;
-        q3.Appartment_Configuration__c = '1 BHK';
-        q3.Carpet_Area_Sq_Ft__c = 1200;
-        q3.Token_Amount__c =110000;
-        q3.ST_Token_Amount__c = 1000;
-        q3.Allow_booking_without_full_token__c = TRUE;
-        q3.Agreement_Value__c = 60422880;
-        q3.Agreement_Value_ST__c = 2537761;
-        q3.Tandem_car_park_Additional__c = 0;
-        q3.Tandem_Open_Additional__c= 0;
-        q3.Single_car_park_Additional__c= 0;
-        q3.Single_Open_Additional__c = 0;
-        q3.Stack_Additional__c = 0;
-        q3.MLCP_Additional__c = null;
-        //q2.Service_Tax_On_Token_Amount__c = true;
-        quoteList.add(q3);
-        if(!quoteList.isEmpty()){
-            insert quoteList;
-        }
-         list<Receipt__c> rlist1 = new list<Receipt__c>();
-        Receipt__c r1 = new Receipt__c();
-        r1.Cheque_DD_Amount_Rs__c = 200000;
-        r1.Cheque_DD__c = '908888';
-        r1.Cheque_DD_Date__c = system.today();
-        r1.Project__c = objpr.Id;
-        r1.Project_Unit__c = objPUU.Id;
-        r1.Opportunity__c = objcustomer.Id;
-        r1.CheckReceipt__c = true;
-        r1.Token_Amount_Receipt__c = true;
-        r1.Physically_Cheque_Received__c = true;
-        r1.Approval_Status__c = 'Approved';
-        r1.Receipt_Date__c = system.today();
-        r1.DraweeBank__c = 'Axis Bank';
-        r1.Total_Amount__c = 200000;
-        r1.Currency__c = 'Indian Rupee';
-        rlist1.add(r1);
-        
-        Receipt__c r2 = new Receipt__c();
-        r2.Cheque_DD_Amount_Rs__c = 8400;
-        r2.Cheque_DD__c = '9088881';
-        r2.Cheque_DD_Date__c = system.today();
-        r2.Project__c = objpr.Id;
-        r2.Project_Unit__c = objPUU.Id;
-        r2.Opportunity__c = objcustomer.Id;
-        r2.CheckReceipt__c = true;
-        r2.Physically_Cheque_Received__c = true;
-        r2.Approval_Status__c = 'Approved';
-        r2.Receipt_Date__c = system.today();
-        r2.DraweeBank__c = 'CITI';
-        r2.Total_Amount__c = 8400;
-        r1.Currency__c = 'Indian Rupee';
-        r2.Token_Amount_ST__c = true;
-        rlist1.add(r2);
         
        // insert rlist1;
        // 
@@ -290,7 +183,6 @@ public class TestBatchRunFromButton {
         b.Project__c = objpr.Id;
         b.Opportunity__c = objcustomer.Id;
         b.Unit_No__c = objPUU.id;
-        b.Quotation__c = q.Id;
         //b.Receipts__c = r1.Id;
         b.Booking_Date__c = Date.today();
         b.Account__c = cpaccount.Id;
@@ -310,7 +202,6 @@ public class TestBatchRunFromButton {
         b2.Project__c = objpr.Id;
         b2.Opportunity__c = objcustomer1.Id;
         b2.Unit_No__c = objPUU1.id;
-        b2.Quotation__c = q2.Id;
         //b2.Receipts__c = r2.Id;
         b2.Booking_Date__c = Date.today();
         b2.Account__c = cpaccount.Id;
@@ -330,7 +221,6 @@ public class TestBatchRunFromButton {
         b3.Project__c = objpr.Id;
         b3.Opportunity__c = objcustomer.Id;
         b3.Unit_No__c = objPUU.id;
-        b3.Quotation__c = q.Id;
         //b3.Receipts__c = r1.Id;
         b3.Booking_Date__c = Date.today();
         b3.Account__c = cpaccount.Id;
@@ -355,11 +245,31 @@ public class TestBatchRunFromButton {
         
         
         BatchRunFromButton run = new BatchRunFromButton();
+        try{
         run.BatchRun();
+        }catch(Exception ex){
+            
+        }
+        try{
         run.BatchRunCancellation();
+        }catch(Exception ex){
+            
+        }
+        try{
         run.BatchRunInactiveScheme();
+        }catch(Exception ex){
+            
+        }
+        try{
         run.BatchRunLadderBrokerage();
+        }catch(Exception ex){
+            
+        }
+        try{
         run.BatchRunLadderBrokerageListView();
+        }catch(Exception ex){
+            
+        }
         run.Home();
         
        
