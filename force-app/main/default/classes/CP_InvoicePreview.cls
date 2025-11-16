@@ -177,15 +177,21 @@ this.totalWithTaxStr = INFormat(this.totalWithTax);
                 LIMIT 1
             ];
             
+            Profile currentProfile = [
+                SELECT Id, Name 
+                FROM Profile 
+                WHERE Id = :UserInfo.getProfileId()
+            ];
+            
             // Validate required fields on CP_Brokerage__c
             List<String> validationErrors = new List<String>();
-            if(cpBrokerage.If_GST_is_applicable__c == null){
+            if((currentProfile.Name == 'Partner Community Login User' || currentProfile.Name == 'Partner Community User') && cpBrokerage.If_GST_is_applicable__c == null){
                 validationErrors.add('Please Select If GST is Applicable (Y/N)');
             }
-            if(String.isBlank(cpBrokerage.Invoice_Number__c)){
+            if((currentProfile.Name == 'Partner Community Login User' || currentProfile.Name == 'Partner Community User') && String.isBlank(cpBrokerage.Invoice_Number__c)){
                 validationErrors.add('Please Enter Invoice Number');
             }
-            if(cpBrokerage.Channel_Partner__c == null){
+            if((currentProfile.Name == 'Partner Community Login User' || currentProfile.Name == 'Partner Community User') && cpBrokerage.Channel_Partner__c == null){
                 validationErrors.add('Channel Partner is required');
             }
             
