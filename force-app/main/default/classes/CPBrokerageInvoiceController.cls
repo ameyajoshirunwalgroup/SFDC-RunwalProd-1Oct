@@ -37,7 +37,7 @@ public without sharing class CPBrokerageInvoiceController {
           String b = 'Approved By L2';
     
         String query =
-            'SELECT Id, Name, Invoice_Number__c, Invoice_Date__c, If_GST_is_applicable__c,Total_Brokerage__c,' +
+            'SELECT Id, Name, Invoice_Number__c, Invoice_Date__c, If_GST_is_applicable__c,Total_Brokerage__c,Company_Name__c,Invoice_Status__c,Status__c,' +
             ' Approval_Status__c, Approval_Status_clearing__c, Brokerage_Type__c,' +
             ' Channel_Partner__c,Legal_Entity__c,Legal_Entity__r.Name, CreatedDate, LastModifiedDate' +
             ' FROM CP_Brokerage__c' + ' WHERE  (Approval_Status_clearing__c = :a OR Approval_Status_clearing__c = :b)'+' AND Channel_Partner__c = :cpAccountId';
