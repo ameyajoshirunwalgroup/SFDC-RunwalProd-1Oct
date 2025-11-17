@@ -11,7 +11,7 @@
 * 1.0 | November 17, 2025 |   | Initial Version
 **/
 
-public with sharing class CPBrokerageInvoiceController {
+public without sharing class CPBrokerageInvoiceController {
 
     @AuraEnabled(cacheable=true)
     public static List<CP_Brokerage__c> getCpBrokerages(
