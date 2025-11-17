@@ -1,4 +1,4 @@
-public with sharing class ContentManagerService {
+public without sharing class ContentManagerService {
     
     @AuraEnabled
     public static String getContentDetails(String recordId) {
@@ -24,7 +24,7 @@ public with sharing class ContentManagerService {
     public static void deleteContentDocument(String recordId) {
         Database.delete(recordId);
     }*/
-    @AuraEnabled
+  /*  @AuraEnabled
     public static void invoicestatus(String status,String recid){
         System.debug('status::'+status);
         System.debug('recid::'+recid);
@@ -38,7 +38,72 @@ public with sharing class ContentManagerService {
         }
         
         
+    }*/
+
+   @AuraEnabled
+public static void invoicestatus(String status, String recid){
+    System.debug('status:: ' + recid);
+    System.debug('recId:: ' + recid);
+    
+    // Validate inputs
+    if (String.isBlank(recid) || String.isBlank(status)) {
+        throw new AuraHandledException('Record ID and Status are required');
     }
+    
+    try {
+        // Convert String to Id to use getSObjectType()
+        Id recordId = recid;
+        String objectType = recordId.getSObjectType().getDescribe().getName();
+        
+        System.debug('Object Type: ' + objectType);
+        
+        if (objectType == 'Brokerage_Invoice__c') {
+            updateBrokerageInvoiceStatus(status, recid);
+        } else if (objectType == 'CP_Brokerage__c') {
+            updateCPBrokerageStatus(status, recid);
+        } else {
+            throw new AuraHandledException('Unsupported object type: ' + objectType);
+        }
+    } catch (System.StringException e) {
+        throw new AuraHandledException('Invalid record ID format: ' + recid);
+    } catch (Exception e) {
+        throw new AuraHandledException('Error updating record: ' + e.getMessage());
+    }
+}
+
+public static void updateBrokerageInvoiceStatus(String status, String recid) {
+    List<Brokerage_Invoice__c> invList = [
+        SELECT Id, Invoice_Status__c 
+        FROM Brokerage_Invoice__c 
+        WHERE Id = :recid 
+        LIMIT 1
+    ];
+    
+    if (invList.isEmpty()) {
+        throw new AuraHandledException('Brokerage Invoice record not found with ID: ' + recId);
+    }
+    
+    Brokerage_Invoice__c inv = invList[0];
+    inv.Invoice_Status__c = status;
+    update inv;
+}
+
+public static void updateCPBrokerageStatus(String status, String recid) {
+    List<CP_Brokerage__c> cpList = [
+        SELECT Id, Invoice_Status__c 
+        FROM CP_Brokerage__c 
+        WHERE Id = :recid 
+        LIMIT 1
+    ];
+    
+    if (cpList.isEmpty()) {
+        throw new AuraHandledException('CP Brokerage record not found with ID: ' + recid);
+    }
+    
+    CP_Brokerage__c cp = cpList[0];
+    cp.Invoice_Status__c = status;
+    update cp;
+}
     public static string ContentType(String fileType) {
 
         switch on fileType.toLowerCase(){
