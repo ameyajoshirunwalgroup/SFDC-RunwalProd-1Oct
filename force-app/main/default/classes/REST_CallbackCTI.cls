@@ -43,7 +43,7 @@ global class REST_CallbackCTI {
         system.debug('customerNumber::'+customerNumber);
         
         String objName;//Added by coServe 23-082024
-        if(UUI != null && UUI != '' && UUI.startsWithIgnoreCase('0')){ //Added by coServe 23-082024
+        if(UUI != null && UUI != '' && (UUI.startsWithIgnoreCase('0')  || UUI.startsWithIgnoreCase('a1'))){ //Added by coServe 23-082024
             Id recId = UUI; 
             objName = recId.getSObjectType().getDescribe().getName();
         }
