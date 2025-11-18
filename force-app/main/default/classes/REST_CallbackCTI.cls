@@ -277,7 +277,7 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
         }
 
         // Added by Aditya for Loan Module
-        if(objName!=null && objName == 'Loan__c'){
+        if(objName!=null && objName == 'Loan__c' && callType == 'Inbound'){
             try {
                 task t = new task();
                 t.status = callStatus;
