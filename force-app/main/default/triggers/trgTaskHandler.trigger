@@ -189,10 +189,10 @@ objTaskNew.Lead_Account_Name__c = le.name;
                         if(t.Disposition_Type__c != 'NotAnswered' && t.Visit_Form_No__c != Null ){t.Subject = 'CP Call';}
                         
                     }
-                    /* else if(t.RecordTypeId == HomeLoanRecordTypeId){		//Added by Sheetal 
-t.Task_Type__c = 'Home Loan Call';
-if(t.Disposition_Type__c != 'NotAnswered' && t.Visit_Form_No__c != Null ){t.Subject = 'Home Loan Call';}
-}*/
+                    else if(t.RecordTypeId == HomeLoanRecordTypeId){		//Added by Sheetal 
+                        t.Task_Type__c = 'Home Loan Call';
+                        if(t.Disposition_Type__c != 'NotAnswered' && t.Visit_Form_No__c != Null ){t.Subject = 'Home Loan Call';}
+                    }
                     if(t.CallType == 'Inbound'){
                         t.Communication_Type__c = 'Inbound Call';
                     }
