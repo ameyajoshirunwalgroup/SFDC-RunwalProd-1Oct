@@ -161,4 +161,8 @@ system.debug(erp.Status__c == 'Failure' && erp.Error_Type__c == 'Timeout Error')
         }
     }
     
+    @InvocableMethod(Label='Re-Trigger failed Sales Orders')
+    public static void reTriggerSalesOrder (List<Id> ids){ //Added by Vinay 13-11-2025
+        SalesOrderUpdateCallout.UpdateSO(new Set<Id>(ids));
+    }
 }
