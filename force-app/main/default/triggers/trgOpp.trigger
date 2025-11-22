@@ -92,7 +92,7 @@ opp.Customer_Reference_Opportunity__c = lstopp[0].id;
                 //Added by Prashant 04-06-2025 End..///// Update Total Referral Incentive as Referral incentive %(1.5% for now) of AV.
                 if(opp.Walkin_Source__c == 'Referral' &&  opp.RW_Walkin_Customer_Reference__c != NULL && opp.StageName != 'Cancelled'){
                     system.debug('Inside Referral Trigger');
-                    if((oldMap == null && trigger.newMap.get(opp.Id).RW_Walkin_Customer_Reference__c!=null) ||(oldMap!=null && trigger.oldMap.get(opp.Id).RW_Walkin_Customer_Reference__c != trigger.newMap.get(opp.Id).RW_Walkin_Customer_Reference__c)){
+                    if((trigger.oldMap == null && trigger.newMap.get(opp.Id).RW_Walkin_Customer_Reference__c!=null) ||(trigger.oldMap!=null && trigger.oldMap.get(opp.Id).RW_Walkin_Customer_Reference__c != trigger.newMap.get(opp.Id).RW_Walkin_Customer_Reference__c)){
                         refOpps.add(opp);
                     }
                 }
