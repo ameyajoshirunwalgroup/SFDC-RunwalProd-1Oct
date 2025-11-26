@@ -269,6 +269,7 @@ public with sharing class BookingClass {
     List < Car_Parking_Charge__c > BasementParkingList = new List < Car_Parking_Charge__c > ();
     List < Car_Parking_Charge__c > PodiumParkingList = new List < Car_Parking_Charge__c > ();
     List < Car_Parking_Charge__c > PuzzleCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 28-03-2025
+    List < Car_Parking_Charge__c > StackCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 21-11-2025
     
     List < Applicant_Details__c > listApplicant = new list < Applicant_Details__c > ();
     List < Receipt_Details__c > listReceiptDetails = new list < Receipt_Details__c > (); 
@@ -345,6 +346,7 @@ set;
         BasementParkingList = new List < Car_Parking_Charge__c > ();
         PodiumParkingList = new List < Car_Parking_Charge__c > ();
         PuzzleCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 28-03-2025
+        StackCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 21-11-2025
         
         ReceiptLstTobeUpdate = new List < Receipt__c > ();
         
@@ -744,7 +746,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
         }
         if (boookingObj.Opportunity__c != null && unitId == null && ProjectId == null) {
             //system.debug('get quote if only opty');
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Quote_Status__c,Puzzle_Car_Park__c
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Quote_Status__c,Puzzle_Car_Park__c,Stack_Additional_1__c
                            from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project_Unit__r.RW_Project__c =: optyList[0].RW_Project__c and Project_Unit__r.RW_Unit_Status__c = 'Vacant'
                            and Booking__c =: null
                           ];
@@ -758,7 +760,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
             }
             
         } else if (boookingObj.Opportunity__c != null && unitId != null && ProjectId == null) {
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,Podium__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Service_Tax_On_Token_Amount__c, Project_Unit__r.RW_Project__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project_Unit__c =: unitId and Project_Unit__r.RW_Project__c =: optyList[0].RW_Project__c and(Project_Unit__r.RW_Unit_Status__c = 'Available'
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,Podium__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Service_Tax_On_Token_Amount__c, Project_Unit__r.RW_Project__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c,Stack_Additional_1__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project_Unit__c =: unitId and Project_Unit__r.RW_Project__c =: optyList[0].RW_Project__c and(Project_Unit__r.RW_Unit_Status__c = 'Available'
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    OR Project_Unit__r.RW_Unit_Status__c = 'Blocked') and Booking__c =: null];
             system.debug('queryResult2' + queryResult);
             if (queryResult.size() > 0) {
@@ -772,7 +774,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
             
         } else if (boookingObj.Opportunity__c != null && ProjectId != null && unitId == null) {
             system.debug('get quote if ProjectId  is not null and ProjectId  :-' + ProjectId);
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and Project_Unit__r.RW_Unit_Status__c = 'Available'
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c,Stack_Additional_1__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and Project_Unit__r.RW_Unit_Status__c = 'Available'
                            and Booking__c =: null
                           ];
             //system.debug('queryResult' + queryResult);
@@ -804,7 +806,7 @@ i = 1;
 } */
         else if (boookingObj.Opportunity__c != null && ProjectId != null && unitId != null) {
             system.debug('get quote if ProjectId  is not null and ProjectId  :-' + ProjectId + 'get quote if opty and unitId ' + unitId);
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c,Stack_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and(Project_Unit__r.RW_Unit_Status__c = 'Available'
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c,Stack_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and(Project_Unit__r.RW_Unit_Status__c = 'Available'
                                                                                                                                                                                                                                                                                                                                                                                                                                               OR Project_Unit__r.RW_Unit_Status__c = 'Hold' OR Project_Unit__r.RW_Unit_Status__c = 'Blocked') and Project_Unit__c =: unitId and Booking__c =: null];
             system.debug('queryResult' + queryResult);
         }
@@ -858,10 +860,10 @@ i = 1;
     public PageReference getTokenAmount() {
         //system.debug('Selected Val' + selectedQuote);
         if (selectedQuote != null) {
-            QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c,Basement_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c,Podium__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c,Basement_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
                             Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c, Parking_Type__c,Project__r.CEO__c, Puzzle_Car_Park__c,Stamp_duty_payable_by_Runwal__c,
                             Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,Discount_9_Type__c,Discount_9_L__c, Quote_Status__c,Project_Unit__r.TowerName__c,Agreement_Value_for_brokers__c,Brokerage_Agreement_Value__c,Discount_10_Type__c,Discount_10_L__c,Discount_11_L__c,Discount_11_Type__c,Is_Special_Brokerage_Scheme__c,walkin_Source__c,Total_Car_Park_Amount__c,
-                            Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c
+                            Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/Development_Charges_L__c
                             FROM Quotation__c WHERE Id =: selectedQuote
                            ];
             
@@ -879,6 +881,9 @@ i = 1;
                 boookingObj.No_of_parking__c = QuoteDetails[0].No_of_parking__c;
                 boookingObj.Parking_Type__c = QuoteDetails[0].Parking_Type__c;
                 boookingObj.Is_Special_Brokerage_Scheme__c =  QuoteDetails[0].Is_Special_Brokerage_Scheme__c;   //Added by Sheetal on 03/03/2023
+                if(QuoteDetails[0].Development_Charges_L__c != null && QuoteDetails[0].Development_Charges_L__c != 0)
+                	boookingObj.Development_Charge__c = QuoteDetails[0].Development_Charges_L__c; /*Added by Prashant to add map development charges with booking.19-11-25...*/
+                
                 
                 if(QuoteDetails[0].Project_Unit__c  != Null){			//Added by Sheetal
                     boookingObj.Tower__c = QuoteDetails[0].Project_Unit__r.TowerName__c;
@@ -1061,6 +1066,15 @@ boookingObj.Is_AOP_CP_Applicable__c = true;
                     System.debug('PuzzleCarPark Size ..........)  ' + PuzzleCarParkList.size());
                     
                 }
+                if (QuoteDetails[0].Stack_Additional_1__c != null) { //Added by Vinay 21-11-2025
+                    StackCarParkList = [Select id, Parking__c, Category__c, Status__c, Name, Booking__c From Car_Parking_Charge__c where Parking__c =: 'Stack'
+                                         and Status__c =: 'Vacant'
+                                         and Category__c =: 'Additional'
+                                         and Project__c =: boookingObj.Project__c
+                                        ];
+                    System.debug('StackCarPark Size ..........)  ' + StackCarParkList.size());
+                    
+                }
                 
             }
             if (!Test.isRunningTest())
@@ -1218,6 +1232,15 @@ boookingObj.Booking_Date__c = System.Now();
         if (QuoteDetails != null && QuoteDetails.size() > 0 && PuzzleCarParkList.size() < QuoteDetails[0].Puzzle_Car_Park__c) {
             system.debug('PuzzleCarParkList error');
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Required number of Puzzle Car parking is unavailable');
+            ApexPages.addMessage(myMsg);
+            i = 1;
+            System.debug('--i: ' + i);
+            
+        }
+        //Stack Car Park -- Added by Vinay 21-11-2025
+        if (QuoteDetails != null && QuoteDetails.size() > 0 && StackCarParkList.size() < QuoteDetails[0].Stack_Additional_1__c) {
+            system.debug('StackCarParkList error');
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Required number of Stack Car parking is unavailable');
             ApexPages.addMessage(myMsg);
             i = 1;
             System.debug('--i: ' + i);
@@ -2601,7 +2624,7 @@ System.debug('--i: ' + i);
             system.debug('sc ----->>>> '+sc);
             if(QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner'){
                 system.debug('Inside Booking date >= scheme start date');
-                brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
+                brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
                                    Start_Date__c <=: bookingDate and (End_Date__c = null or End_Date__c >=: bookingDate) and Approval_Status__c = 'Approved by Level 2'];
                 
                 system.debug('brokerageScheme::'+brokerageScheme);
@@ -2633,7 +2656,7 @@ System.debug('--i: ' + i);
             if(!sc.isEmpty()){
                 if(QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner'){
                     system.debug('Inside Booking date <= scheme start date');
-                    brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
+                    brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
                                        Approval_Status__c = 'Approved by Level 2'];
                     system.debug('brokerageScheme::'+brokerageScheme);
                 }
@@ -2655,7 +2678,7 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
 
 //Added by Prashant to compress code for this cls. // END 9-7-25
         
-         if(QuoteDetails != null && !QuoteDetails.isEmpty() &&  (QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner') ){
+        /* if(QuoteDetails != null && !QuoteDetails.isEmpty() &&  (QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner') ){
             
             // if(QuoteDetails[0].Agreement_Value_for_brokers__c != 0 || QuoteDetails[0].Agreement_Value_for_brokers__c != Null)
             
@@ -2726,9 +2749,19 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
                 boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((boookingObj.Passback_Amount__c / QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                 
             }
-        } 
+        } */
         //Added by Prashant to tag the scheme based on the booking date. END 9-4-25////
         //
+        //
+
+        //Added by Prashant to update logic to add scheme brokerage based on type of client - 22-10-25. START///////
+        system.debug('Base Brokerage Before -->>'+boookingObj.Base_Brokerage__c);
+        boookingObj = BookingClass2.updateBrokerageSchemeDetails(boookingObj, QuoteDetails, brokerageScheme);
+        system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);
+        //Added by Prashant to update logic to add scheme brokerage based on type of client - 22-10-25. END///////
+
+        
+        
         
         //////////////////////////////////////Added BY Aniket Ends Here on 29-09-2022////////////////////////////////////////
         //////////////////////////////////////Receipt Mandatory Checks//////////////////////////////////////////
@@ -3077,6 +3110,17 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                     if (boookingObj.Id != null)
                         PuzzleCarParkList[j].Booking__c = boookingObj.Id;
                     ParkingListToUpdate.add(PuzzleCarParkList[j]);
+                    
+                }
+                
+            }
+            if (QuoteDetails != null && !QuoteDetails.isEmpty() && QuoteDetails[0].Stack_Additional_1__c> 0) { //Added by Vinay 21-11-2025
+                system.debug('StackCarParkList Requires');
+                for (integer j = 0; j < QuoteDetails[0].Stack_Additional_1__c; j++) {
+                    StackCarParkList[j].Status__c = 'Booked';
+                    if (boookingObj.Id != null)
+                        StackCarParkList[j].Booking__c = boookingObj.Id;
+                    ParkingListToUpdate.add(StackCarParkList[j]);
                     
                 }
                 

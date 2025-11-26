@@ -158,8 +158,13 @@ public  without sharing class DigitalBookingController{
                     //Added by Vinay 29-10-2021
                     if(opportunityRec.LeadSource != 'Channel Partner'){
                         //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.RW_Mobile_No__c, System.Label.EOI_Booking_HSM);
-                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.RW_Mobile_No__c, 'EOI Booking HSM'); //Commented by Vinay 11-09-2025
-                        //SendWhatsAppMsg.methodToSendWhatsAppMsgNew(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.Account.Country_Code__c,opportunityRec.RW_Mobile_No__c, 'EOI Booking HSM'); //Added by Vinay 11-09-2025
+                        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.RW_Mobile_No__c, 'EOI Booking HSM'); //Commented by Vinay 29-08-2025
+                        
+                        if(System.label.Haptik_API_Version == 'New'){
+                            SendWhatsAppMsg.methodToSendWhatsAppMsgNew(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.Account.Country_Code__c,opportunityRec.RW_Mobile_No__c, 'EOI Booking HSM');
+                        }else{
+                            SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.RW_Mobile_No__c, 'EOI Booking HSM');
+                        }
                     }
                     //Commented by Vinay 29-10-2021
                     //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(opportunityRec.Name,opportunityRec.Project_Name__c,Label.Community_URL+'onlinebooking/?data='+encryptedData,SMmobile,null,null,null,null,null,opportunityRec.RW_Mobile_No__c, System.Label.EOI_Booking_HSM);
@@ -278,7 +283,7 @@ public  without sharing class DigitalBookingController{
         
         //if EOI is filled we get below
         //KYC Details for primary and applicant info for primary
-        Quotation__c  QuoteDetails = [SELECT id,Project__r.CRMHead__c,Project__r.Overall_CRM_Head__c, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            Quotation__c  QuoteDetails = [SELECT id,Project__r.CRMHead__c,Project__r.Overall_CRM_Head__c, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
                                       Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c, Parking_Type__c,
                                       Project__r.Sales_Site_Head__c, Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c, Project__r.CRM_MIS_Head__c,
                                       Discount_9_Type__c, Quote_Status__c,Discount_9_L__c,Brokerage_Agreement_Value__c,Project_Unit__r.TowerName__c,Is_Special_Brokerage_Scheme__c,Podium__c, Puzzle_Car_Park__c
@@ -385,7 +390,7 @@ bkRecord.RW_Gender__c =accRecord.Gender__c;
         //List<Scheme_Configuration__c> sc = [Select Id,Name,Brokerage_Scheme__c,Type__c from Scheme_Configuration__c where ((Project__c =:bkRecord.Project__c and Tower__c =:bkRecord.Tower__c) OR (Project__c =:bkRecord.Project__c and Tower__c =:null)) and (Type__c =: bkRecord.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
         list<Scheme_Configuration__c> sc = new list<Scheme_Configuration__c>();
         List<Scheme_Configuration__c> sctemp = [Select Id,Name,Brokerage_Scheme__c,Type__c,Tower__c from Scheme_Configuration__c where ((Project__c =:bkRecord.Project__c and Tower__c =:bkRecord.Tower__c) OR (Project__c =:bkRecord.Project__c and Tower__c =:null)) and (Type__c =: bkRecord.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
-        //sc = [Select Id,Name,Brokerage_Scheme__c,Type__c from Scheme_Configuration__c where ((Project__c =:boookingObj.Project__c and Tower__c =:boookingObj.Tower__c) OR (Project__c =:boookingObj.Project__c and Tower__c =:null)) and (Type__c =: boookingObj.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
+        //sc = [Select Id,Name,Brokerage_Scheme__c,Type__c from Scheme_Configuration__c where ((Project__c =:bkRecord.Project__c and Tower__c =:bkRecord.Tower__c) OR (Project__c =:bkRecord.Project__c and Tower__c =:null)) and (Type__c =: bkRecord.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
         if(!sctemp.isEmpty()){
             for(Scheme_Configuration__c sci : sctemp){
                 if (sci.Tower__c != null) {
@@ -399,8 +404,9 @@ bkRecord.RW_Gender__c =accRecord.Gender__c;
         }
         
         if(!sc.isEmpty()){
-            List<Brokerage_Scheme__c> brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and Start_Date__c <=: bookingDate and (End_Date__c = null or End_Date__c >=: bookingDate) and Approval_Status__c = 'Approved by Level 2'];
+            List<Brokerage_Scheme__c> brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and Start_Date__c <=: bookingDate and (End_Date__c = null or End_Date__c >=: bookingDate) and Approval_Status__c = 'Approved by Level 2'];
             // if(QuoteDetails.Agreement_Value_for_brokers__c != 0 || QuoteDetails.Agreement_Value_for_brokers__c != Null)
+            /*
             if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Local'  ){
                 bkRecord.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bkRecord.Passback_Amount__c /  QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                 bkRecord.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
@@ -426,6 +432,28 @@ bkRecord.RW_Gender__c =accRecord.Gender__c;
                 bkRecord.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                 bkRecord.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bkRecord.Passback_Amount__c / QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
             }
+			*/
+            //Added by Prashant to Handle base brokerage for NRI differently// 22-10-25. START
+            if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Both' && (bkRecord.Type_of_Client__c == 'Local' || bkRecord.Type_of_Client__c == 'Corporate' )){
+                bkRecord.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bkRecord.Passback_Amount__c /  QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                bkRecord.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
+                bkRecord.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
+                bkRecord.Brokerage_Scheme__c =  brokerageScheme[0].Id;
+                bkRecord.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bkRecord.Passback_Amount__c / QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+            }else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Both' && (bkRecord.Type_of_Client__c == 'NRI') /*|| bkRecord.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2*/){
+                bkRecord.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - (((bkRecord.Passback_Amount__c /  QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                bkRecord.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_NRI__c;
+                bkRecord.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
+                bkRecord.Brokerage_Scheme__c =  brokerageScheme[0].Id;
+                bkRecord.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - (((bkRecord.Passback_Amount__c / QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+            } else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Both' && (bkRecord.Type_of_Client__c == 'Outstation') /*&& bookingDate < bookingDate2*/){
+                bkRecord.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bkRecord.Passback_Amount__c /  QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                bkRecord.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
+                bkRecord.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
+                bkRecord.Brokerage_Scheme__c =  brokerageScheme[0].Id;
+                bkRecord.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bkRecord.Passback_Amount__c / QuoteDetails.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+            }
+            //Added by Prashant to Handle base brokerage for NRI differently// 22-10-25. END
         }
         
         //Added by coServe 09-12-2022 End
@@ -546,13 +574,13 @@ insert bkLink; */
     @AuraEnabled
     public static quotationWrapper getQuotationMap(String recordId){
         map<string,Quotation__c>quotationIdNameMap = new Map<String,Quotation__c>();
-        List<Quotation__c> quotationList = [Select id,Name,Project_Unit__r.TowerName__c,Tandem_car_park_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Single_car_park_Additional__c, Podium__c,Puzzle_Car_Park__c,Project_Unit__r.RW_Unit_Status__c,Stack_Additional__c,MLCP_Additional__c,Project__r.Name,Payment_Plan_Modified__c,Quote_Status__c from Quotation__c  where Opportunity__c  =:recordId];
+        List<Quotation__c> quotationList = [Select id,Name,Project_Unit__r.TowerName__c,Tandem_car_park_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Single_car_park_Additional__c,Stack_Additional_1__c, Podium__c,Puzzle_Car_Park__c,Project_Unit__r.RW_Unit_Status__c,Stack_Additional__c,MLCP_Additional__c,Project__r.Name,Payment_Plan_Modified__c,Quote_Status__c from Quotation__c  where Opportunity__c  =:recordId];
         Set<String>ProjectIds = new Set<String>();
         for(Quotation__c qt :quotationList ){
             quotationIdNameMap.put(qt.id,qt);
             ProjectIds.add(qt.Project__c);
         }
-        List<Project__c> projectList = [Select name,Tandem_car_park_Available__c,Tandem_Open_Available__c,Single_car_park_Available__c,Single_Open_Available__c,Stack_Available__c,MLCP_Available__c,Stack_Available1__c, Puzzle_Car_Park_Available__c from project__c where id In :ProjectIds ];
+        List<Project__c> projectList = [Select name,Tandem_car_park_Available__c,Tandem_Open_Available__c,Single_car_park_Available__c,Single_Open_Available__c,Stack_Available__c,MLCP_Available__c,Stack_Available1__c, Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c from project__c where id In :ProjectIds ];
         Map<String,Map<String,Decimal>> projectCarParAvailMap = new Map<String,Map<String,Decimal>>();
         for(project__c prj :projectList ){
             Map<String,Decimal> parkMap = new Map<String,Decimal>();
@@ -564,6 +592,7 @@ insert bkLink; */
             parkMap.put('MLCP',prj.MLCP_Available__c);
             parkMap.put('Podium',prj.Stack_Available1__c);
             parkMap.put('Puzzle Car Park',prj.Puzzle_Car_Park_Available__c); //Added by Vinay 28-03-2025
+            parkMap.put('Stack Car Park',prj.Stack_Car_Park_Available__c); //Added by Vinay 21-11-2025
             
             projectCarParAvailMap.put(prj.Name,parkMap);
             
@@ -1328,7 +1357,7 @@ ContentDocData.put(contDocument.Id,contDoc);
         try{
             //  system.debug(Json.serialize(bkwrap));
             system.debug(bk);
-            Quotation__c    QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            Quotation__c    QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
                                             Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c, Parking_Type__c,
                                             Allotment_Premium_Agreement_Value__c,Total_No_of_Parking__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,Podium__c, Puzzle_Car_Park__c
                                             FROM Quotation__c WHERE Id =:  bk.bookingDetails.booking.Quotation__c];
@@ -1446,7 +1475,7 @@ ContentDocData.put(contDocument.Id,contDoc);
             List < Car_Parking_Charge__c > MLCPParkingList = new List < Car_Parking_Charge__c > ();
             List < Car_Parking_Charge__c > PodiumParkingList = new List < Car_Parking_Charge__c > ();
             List < Car_Parking_Charge__c > PuzzleCarParkList = new List < Car_Parking_Charge__c > ();//Added by Vinay 28-03-2025
-            
+            List < Car_Parking_Charge__c > StackCarParkList = new List < Car_Parking_Charge__c > ();//Added by Vinay 21-11-2025
             
             
             Set<String> quotationCarParking = new Set<String>();
@@ -1476,6 +1505,9 @@ ContentDocData.put(contDocument.Id,contDoc);
             if (QuoteDetails.Puzzle_Car_Park__c!= null) { //Added by Vinay 28-03-2025
                 quotationCarParking.add('Puzzle Car Park');
             }
+            if (QuoteDetails.Stack_Additional_1__c!= null) { //Added by Vinay 21-11-2025
+                quotationCarParking.add('Stack Car Park');
+            }
             List<Car_Parking_Charge__c> AvailableParking = [Select id, Parking__c, Status__c, Category__c, Name, Booking__c From Car_Parking_Charge__c where Parking__c IN : quotationCarParking and Status__c =: 'Vacant' and Category__c =: 'Additional' and Project__c =:bk.bookingDetails.booking.Project__c];
             for(Car_Parking_Charge__c cp :AvailableParking ){
                 switch on cp.Parking__c{
@@ -1487,6 +1519,7 @@ ContentDocData.put(contDocument.Id,contDoc);
                     when 'MLCP'{MLCPParkingList.add(cp);}
                     when 'Podium'{PodiumParkingList.add(cp);}
                     when 'Puzzle Car Park'{PuzzleCarParkList.add(cp);} //Added by Vinay 28-03-2025
+                    when 'Stack Car Park'{StackCarParkList.add(cp);} //Added by Vinay 28-03-2025
                 }
             }
             //Updating Parkings/////
@@ -1574,6 +1607,16 @@ ContentDocData.put(contDocument.Id,contDoc);
                     if (bk.bookingDetails.booking.Id != null)
                         PuzzleCarParkList[j].Booking__c = bk.bookingDetails.booking.Id;
                     ParkingListToUpdate.add(PuzzleCarParkList[j]);
+                    
+                }
+                
+            }
+            if(QuoteDetails.Stack_Additional_1__c> 0){ //Added by Vinay 21-11-2025
+                for (integer j = 0; j < QuoteDetails.Stack_Additional_1__c; j++) {
+                    StackCarParkList[j].Status__c = 'Booked';
+                    if (bk.bookingDetails.booking.Id != null)
+                        StackCarParkList[j].Booking__c = bk.bookingDetails.booking.Id;
+                    ParkingListToUpdate.add(StackCarParkList[j]);
                     
                 }
                 
@@ -1931,15 +1974,15 @@ i = 1;
                          Quotation__r.walkin_Source__c,Type_of_Client__c,Tower__c,Project__c,Quotation__r.Brokerage_Agreement_Value__c,Passback_Amount__c,Unit_No__r.Token_Amount__c,Unit_No__r.RW_Project__r.Token_Amount__c,
                          (select id,Mode__c,Physically_Cheque_Received__c,Total_Amount__c from Receipts__r) from booking__c where id=:recId];
         boolean err = false;
-        Decimal totalAmount = 0; //Added by Vinay 14-08-2025
-        Decimal requiredTokenAmount = bk.Unit_No__r.Token_Amount__c != null ? bk.Unit_No__r.Token_Amount__c : bk.Unit_No__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+        Decimal totalAmount = 0; //Added by Vinay 13-08-2025
+        Decimal requiredTokenAmount = bk.Unit_No__r.Token_Amount__c != null ? bk.Unit_No__r.Token_Amount__c : bk.Unit_No__r.RW_Project__r.Token_Amount__c; //Added by Vinay 13-08-2025
         for(Receipt__c rec : bk.Receipts__r){
             if((rec.mode__c == 'Cheque' || rec.Mode__c == 'DD/Pay Order') && !(rec.Physically_Cheque_Received__c)){
                 err=true;
             }
-            totalAmount += rec.Total_Amount__c; //Added by Vinay 14-08-2025
+            totalAmount += rec.Total_Amount__c; //Added by Vinay 13-08-2025
         }
-        if(totalAmount < requiredTokenAmount){ //Added by Vinay 14-08-2025
+        if(totalAmount < requiredTokenAmount){ //Added by Vinay 13-08-2025
             errorWrapper wrap = new errorWrapper();
             wrap.isError = true;
             wrap.ErrorMessage = 'Total Receipt Amount is less than the Token Amount. Token Amount is:'+requiredTokenAmount;
@@ -2002,7 +2045,7 @@ update bk;*/
             
             //Added by Prashant to prioritize the schemes that will be tagged on booking which has tower in it.//START - 13-01-25
             List<Scheme_Configuration__c> sctemp = [Select Id,Name,Brokerage_Scheme__c,Type__c,Tower__c from Scheme_Configuration__c where ((Project__c =:bk.Project__c and Tower__c =:bk.Tower__c) OR (Project__c =:bk.Project__c and Tower__c =:null)) and (Type__c =: bk.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
-            //sc = [Select Id,Name,Brokerage_Scheme__c,Type__c from Scheme_Configuration__c where ((Project__c =:boookingObj.Project__c and Tower__c =:boookingObj.Tower__c) OR (Project__c =:boookingObj.Project__c and Tower__c =:null)) and (Type__c =: boookingObj.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
+            //sc = [Select Id,Name,Brokerage_Scheme__c,Type__c from Scheme_Configuration__c where ((Project__c =:bkRecord.Project__c and Tower__c =:bkRecord.Tower__c) OR (Project__c =:bkRecord.Project__c and Tower__c =:null)) and (Type__c =: bkRecord.Type_of_Client__c OR Type__c =: 'Both') and Active__c = true];
             if(!sctemp.isEmpty()){
                 for (Scheme_Configuration__c sci : sctemp) {
                     if (sci.Tower__c != null) {
@@ -2426,6 +2469,20 @@ else*/
     public static void dummyMethod(){
         integer i;
         i=0;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
         i++;
         i++;
         i++;

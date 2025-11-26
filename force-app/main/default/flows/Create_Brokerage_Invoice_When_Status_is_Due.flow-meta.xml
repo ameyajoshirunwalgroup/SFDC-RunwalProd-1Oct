@@ -10,7 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_Due</name>
-            <conditionLogic>(1 AND 3 AND 5) OR ( 2 AND 3 AND 5 ) OR (2 OR 4 )</conditionLogic>
+            <conditionLogic>1 OR ( 2 AND 3)</conditionLogic>
             <conditions>
                 <leftValueReference>Brokerage_Summary_List.Status__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -32,22 +32,8 @@
                     <stringValue>Base Brokerage</stringValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.Brokerage_Type__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Kicker Incentive</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>CheckBrokerageStatus</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
             <connector>
-                <targetReference>Get_Invoice_Approvers_from_Custom_Setting</targetReference>
+                <targetReference>check_type_of_brokerage_summary</targetReference>
             </connector>
             <label>If Due</label>
         </rules>
@@ -65,10 +51,10 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Check_for_null</name>
-        <label>Check  related brokerage invoice is present</label>
+        <name>Check_related_brokerage_invoice_is_present</name>
+        <label>Check related brokerage invoice is present</label>
         <locationX>182</locationX>
-        <locationY>863</locationY>
+        <locationY>755</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Null</name>
@@ -90,7 +76,7 @@
         <name>check_type_of_brokerage_summary</name>
         <label>check type of brokerage summary</label>
         <locationX>512</locationX>
-        <locationY>647</locationY>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_Brokerage_Summary</name>
@@ -124,16 +110,6 @@
         </rules>
     </decisions>
     <environments>Default</environments>
-    <formulas>
-        <name>CheckBrokerageStatus</name>
-        <dataType>Boolean</dataType>
-        <expression>ISPICKVAL({!$Record.Status__c},&apos;Due&apos;) &amp;&amp; PRIORVALUE( {!$Record.Status__c}) != &quot;Due&quot;</expression>
-    </formulas>
-    <formulas>
-        <name>ISNEWInvoice</name>
-        <dataType>Boolean</dataType>
-        <expression>ISNEW()</expression>
-    </formulas>
     <interviewLabel>Create Brokerage Invoice When Status is Due {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Brokerage Invoice When Status is Due</label>
     <processMetadataValues>
@@ -159,7 +135,7 @@
         <name>Copy_1_of_Create_CP_Invoice</name>
         <label>Copy 1 of Create CP Invoice</label>
         <locationX>578</locationX>
-        <locationY>755</locationY>
+        <locationY>647</locationY>
         <inputAssignments>
             <field>Booking__c</field>
             <value>
@@ -193,43 +169,55 @@
         <inputAssignments>
             <field>CP_Invoice_Approver_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_MIS__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L1__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L1__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L2__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L3__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L2__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L3__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L5__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L4__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L5__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L1__c</elementReference>
+                <elementReference>$Record.Booking__r.Project__r.CP_Invoice_Clearing_L1__r.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L2__c</elementReference>
+                <elementReference>$Record.Booking__r.Project__r.CP_Invoice_Clearing_L2__r.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Channel_Partner__c</field>
             <value>
                 <elementReference>Brokerage_Summary_List.Channel_Partner__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Invoice_Amount__c</field>
+            <value>
+                <elementReference>$Record.Total_Brokerage_Amount__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>New_Process__c</field>
+            <value>
+                <elementReference>$Record.New_Process__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -251,7 +239,7 @@
         <name>Create_CP_Invoice</name>
         <label>Create CP Invoice</label>
         <locationX>50</locationX>
-        <locationY>971</locationY>
+        <locationY>863</locationY>
         <inputAssignments>
             <field>Booking__c</field>
             <value>
@@ -285,37 +273,37 @@
         <inputAssignments>
             <field>CP_Invoice_Approver_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_MIS__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L1__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L1__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L2__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L3__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L2__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L3__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L5__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L4__c</elementReference>
+                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.CP_Invoice_Approver_L5__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L1__c</elementReference>
+                <elementReference>$Record.Booking__r.Project__r.CP_Invoice_Clearing_L1__r.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L2__c</elementReference>
+                <elementReference>$Record.Booking__r.Project__r.CP_Invoice_Clearing_L2__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -328,6 +316,12 @@
             <field>Invoice_Amount__c</field>
             <value>
                 <elementReference>$Record.Total_Brokerage_Amount__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>New_Process__c</field>
+            <value>
+                <elementReference>$Record.New_Process__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -370,10 +364,10 @@
         <name>Get_Brokerage_Invoice</name>
         <label>Get Brokerage Invoice</label>
         <locationX>182</locationX>
-        <locationY>755</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_for_null</targetReference>
+            <targetReference>Check_related_brokerage_invoice_is_present</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -385,27 +379,6 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Brokerage_Invoice__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Invoice_Approvers_from_Custom_Setting</name>
-        <label>Get Invoice Approvers from Custom Setting</label>
-        <locationX>512</locationX>
-        <locationY>539</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>check_type_of_brokerage_summary</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Name</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.Name</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>CP_Invoice_Approvers_list_CS__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
@@ -455,15 +428,7 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
-    <variables>
-        <name>Approverslist</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-        <objectType>User</objectType>
-    </variables>
+    <status>Active</status>
     <variables>
         <name>assigndata</name>
         <dataType>SObject</dataType>
@@ -479,21 +444,5 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Brokerage_Invoice__c</objectType>
-    </variables>
-    <variables>
-        <name>User</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-        <objectType>User</objectType>
-    </variables>
-    <variables>
-        <name>UserCollection</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-        <objectType>User</objectType>
     </variables>
 </Flow>
