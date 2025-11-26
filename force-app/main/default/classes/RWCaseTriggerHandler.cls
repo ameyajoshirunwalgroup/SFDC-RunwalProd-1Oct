@@ -166,7 +166,8 @@ public class RWCaseTriggerHandler
             List<Case> caseWithOpportunity = new List<Case>();
             List<Id> caseIds = new list<Id>();
             for(Case cs : lstCase){
-                if(cs.Opportunity__c != null && cs.FM_Team_Assigned__c == false && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
+                //if(cs.Opportunity__c != null && cs.FM_Team_Assigned__c == false && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
+                if(cs.Opportunity__c != null && cs.FM_Team_Assigned__c == false){ 
                     oppIds.add(cs.Opportunity__c);
                     caseWithOpportunity.add(cs);
                     caseIds.add(cs.Id);
@@ -293,7 +294,8 @@ public class RWCaseTriggerHandler
         Database.DMLOptions options = new Database.DMLOptions(); //Added by Vinay 16-04-2025
 		options.assignmentRuleHeader.useDefaultRule = false; //Added by Vinay 16-04-2025
         for(Case cs : emailVsCase.values()){
-            if(postPossCustomers.contains(cs.SuppliedEmail) && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
+            //if(postPossCustomers.contains(cs.SuppliedEmail) && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
+            if(postPossCustomers.contains(cs.SuppliedEmail)){ 
                 cs.Post_Possession_Customer__c = true;
                 cs.OwnerId = System.label.Default_Facility_Management_User;
                 cs.FM_Team_Assigned__c = true;

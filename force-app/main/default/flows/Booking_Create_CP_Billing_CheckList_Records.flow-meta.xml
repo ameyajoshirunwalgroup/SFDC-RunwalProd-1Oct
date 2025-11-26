@@ -231,8 +231,8 @@
     <status>Active</status>
     <textTemplates>
         <name>notificationtmp</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Please verify the checklist associated with the booking &lt;a href=&quot; https://runwal.lightning.force.com/lightning/r/Booking__c/{!$Record.Id}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!$Record.Name}&lt;/a&gt;&lt;/p&gt;</text>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Please verify the checklist associated with the booking {!$Record.Name}</text>
     </textTemplates>
     <variables>
         <name>CheckListCollectionVar</name>
