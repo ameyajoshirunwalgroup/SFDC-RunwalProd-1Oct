@@ -326,34 +326,58 @@ public without sharing class LoanController{
         List<Loan__c> lnsToUpadte = new List<Loan__c>();
         Set<Id> projectId=new Set<Id>();
         Set<String> bankName = new Set<String>();
+        Id globalDefaultRMId = null;
+        List<Home_Loan_RM__c> defaultRMList = [SELECT Id FROM Home_Loan_RM__c WHERE Name = 'Default HL RM' LIMIT 1];
+        if(!defaultRMList.isEmpty()){
+            globalDefaultRMId = defaultRMList[0].Id;
+        }
         for(Loan__c loanObj:newLoan){
-            if((oldMap == Null || (loanObj.RW_Bank_Preference_1__c != oldMap.get(loanObj.Id).RW_Bank_Preference_1__c) || 
+            if((oldMap == Null || (loanObj.RW_Bank_Name__c != oldMap.get(loanObj.Id).RW_Bank_Name__c) || 
                 (loanObj.RW_Project_Name__c != oldMap.get(loanObj.Id).RW_Project_Name__c))){
                     if(loanObj.RW_Project_Name__c!=null){
                         projectId.add(loanObj.RW_Project_Name__c);
                     }
-                    if(loanObj.RW_Bank_Preference_1__c!=null){
-                        bankName.add(loanObj.RW_Bank_Preference_1__c);
+                    if(loanObj.RW_Bank_Name__c!=null){
+                        bankName.add(loanObj.RW_Bank_Name__c);
                     }
            }
         }
-        if(!projectId.isEmpty() && !bankName.isEmpty()){
+        if(!projectId.isEmpty()){
             List<Home_Loan_RM__c> HLRMs = [SELECT Id, Name, Project__c,Bank_Name__c,Disbursement_RM_User__c, Reporting_1_Email__c, Reporting_2_Email__c,TL_Name__c, TL_Email__c, RM_Email__c FROM Home_Loan_RM__c 
-                                          where Project__c IN: projectId and Bank_Name__c IN: bankName];
+                                          where Project__c IN: projectId];
             Map<String, Home_Loan_RM__c> hlrmMap = new Map<String, Home_Loan_RM__c>();
+            Map<Id, Home_Loan_RM__c> fallbackMap = new Map<Id, Home_Loan_RM__c>();
             for(Home_Loan_RM__c HLRMObj: HLRMs){
                 if(HLRMObj.Project__c!=null && HLRMObj.Bank_Name__c!=null){
                     String name = HLRMObj.Bank_Name__c + '-' + HLRMObj.Project__c;
                     hlrmMap.put(name,HLRMObj);
                 }
-            }
-            for(Loan__c loanObj: newLoan){
-                if(loanObj.RW_Project_Name__c!=null && loanObj.RW_Bank_Preference_1__c!=null){
-                    String name = loanObj.RW_Bank_Preference_1__c + '-' + loanObj.RW_Project_Name__c;
-                    if(hlrmMap.containsKey(name)){
-                        loanObj.HL_RM__c = hlrmMap.get(name).Id;
+                if (HLRMObj.Project__c != null) {
+                    if (HLRMObj.Bank_Name__c == null) {
+                        fallbackMap.put(HLRMObj.Project__c, HLRMObj);
+                    } else if (!fallbackMap.containsKey(HLRMObj.Project__c)) {
+                        fallbackMap.put(HLRMObj.Project__c, HLRMObj);
                     }
                 }
+            }
+            for(Loan__c loanObj: newLoan){
+                    String specificKey = '';
+                    if (loanObj.RW_Bank_Name__c != null && loanObj.RW_Project_Name__c!=null) {
+                        specificKey = loanObj.RW_Bank_Name__c + '-' + loanObj.RW_Project_Name__c;
+                    }
+                    if (specificKey != '' && hlrmMap.containsKey(specificKey) && loanObj.RW_Project_Name__c!=null) {
+                        loanObj.HL_RM__c = hlrmMap.get(specificKey).Id;
+                    }
+                    else if (loanObj.RW_Project_Name__c!=null && fallbackMap.containsKey(loanObj.RW_Project_Name__c)) {
+                        loanObj.HL_RM__c = fallbackMap.get(loanObj.RW_Project_Name__c).Id;
+                    }
+                    else if(globalDefaultRMId != null){
+                        loanObj.HL_RM__c = globalDefaultRMId;
+                    }
+                    else {
+                        System.debug('⚠️ No Match Found for Loan ID ' + loanObj.Id + ' → Clearing HL_RM__c');
+                        loanObj.HL_RM__c = null;
+                    }
             }
         }
     }
