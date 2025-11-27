@@ -344,7 +344,7 @@ public without sharing class LoanController{
         }
         if(!projectId.isEmpty()){
             List<Home_Loan_RM__c> HLRMs = [SELECT Id, Name, Project__c,Bank_Name__c,Disbursement_RM_User__c, Reporting_1_Email__c, Reporting_2_Email__c,TL_Name__c, TL_Email__c, RM_Email__c FROM Home_Loan_RM__c 
-                                          where Project__c IN: projectId];
+                                          where Project__c IN: projectId and Active__c = true];
             Map<String, Home_Loan_RM__c> hlrmMap = new Map<String, Home_Loan_RM__c>();
             Map<Id, Home_Loan_RM__c> fallbackMap = new Map<Id, Home_Loan_RM__c>();
             for(Home_Loan_RM__c HLRMObj: HLRMs){
