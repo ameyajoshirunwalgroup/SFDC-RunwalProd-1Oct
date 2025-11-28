@@ -843,7 +843,7 @@ return registration;
                                          Quotation_Validity__c, single_car_park_available__c, tandem_car_park_available__c,Edit_AllotmentCharge__c, 
                                          single_open_available__c, tandem_open_available__c, stack_available__c,Edit_Premium_Rate__c,
                                          Allotment_Charges_1__c, Allotment_Charges_2__c, Allotment_Charges_3__c, Allotment_Charges_4__c,Allotment_Charges_6__c,Allotment_Charges_7__c,
-                                         Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Stack_Available1__c,Basement_Available1__c, Puzzle_Car_Park_Available__c
+                                         Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Stack_Available1__c,Basement_Available1__c, Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c,Stack_Car_Park_Charges__c
                                          from Project__c where Id =: unit[0].RW_Project__r.Id ];
             if(projList.size() ==1) {
                 return projList[0];
@@ -1895,9 +1895,9 @@ from Project_Unit__c where Id = :uId]; */
                 DiscountWrapper dw8 = new DiscountWrapper( pd[0].Discount8_Description__c ,psfVal, 0, true, true, false, pd[0].Discount8_Type__c);
                 dwList.add(dw8);
             } 
-            List<opportunity> OList = [Select id,name,Walkin_Source__c,Referral_Sub_Source__c from opportunity Where id =: o]; 
+            List<opportunity> OList = [Select id,name,Walkin_Source__c,Referral_Sub_Source__c,RW_Walkin_Channel_Partner__c from opportunity Where id =: o]; 
             system.debug('OList ::' +OList);
-            if(pd[0].Discount9_Per_Sq_Ft__c != 0 && pd[0].Discount9_Per_Sq_Ft__c != null && OList[0].Walkin_Source__c == 'Channel Partner' ) {
+            if(pd[0].Discount9_Per_Sq_Ft__c != 0 && pd[0].Discount9_Per_Sq_Ft__c != null && (OList[0].Walkin_Source__c == 'Channel Partner' || OList[0].Walkin_Source__c == 'Temp Channel Partner') && OList[0].RW_Walkin_Channel_Partner__c != null ) {//Added by Prashant to extend the discount view access to the temp cp sms as well. // 17-10-25.
                 Decimal psfVal = pd[0].Discount9_Per_Sq_Ft__c;
                 //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
                 Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);

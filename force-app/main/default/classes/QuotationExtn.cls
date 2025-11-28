@@ -67,6 +67,7 @@ public with sharing class QuotationExtn
     public boolean  canAddCarPark7 {get;set;}
     public boolean  canAddCarPark8 {get;set;}
     public boolean  canAddCarPark9 {get;set;} //Added by Vinay 28-03-2025
+    public boolean  canAddCarPark10 {get;set;} //Added by Vinay 21-11-2025
     public boolean  showAddCarPark {get;set;} 
     public Integer selectedCarPark1 {get;set;}
     public Integer selectedCarPark2 {get;set;}
@@ -77,6 +78,7 @@ public with sharing class QuotationExtn
     public Integer selectedCarPark7 {get;set;}
     public Integer selectedCarPark8 {get;set;}
     public Integer selectedCarPark9 {get;set;} //Added by Vinay 28-03-2025
+    public Integer selectedCarPark10 {get;set;} //Added by Vinay 21-11-2025
 
     public Decimal allotmentCharges {get;set;}
     public Decimal baseRate{get;set;}
@@ -105,6 +107,7 @@ public with sharing class QuotationExtn
         selectedCarPark7 = 0;
         selectedCarPark8 = 0;
         selectedCarPark9 = 0; //Added by Vinay 28-03-2025
+        selectedCarPark10 = 0; //Added by Vinay 21-11-2025
         allotmentCharges = 0;
         baseRate = 0;
         discountVal = 0;
@@ -182,6 +185,7 @@ public with sharing class QuotationExtn
         selectedCarPark7 = 0;
         selectedCarPark8 = 0;
         selectedCarPark9 = 0; //Added by Vinay 28-03-2025
+        selectedCarPark10 = 0; //Added by Vinay 21-11-2025
        if(proj != null) {
             checkCarParkAvailablity();
             quoteValidity = (System.today().addDays(Integer.valueOf(proj.Quotation_Validity__c))).format();
@@ -245,9 +249,14 @@ public with sharing class QuotationExtn
             canAddCarPark9 = true;
         else 
             canAddCarPark9 = false;
+        
+        if(proj.Stack_Car_Park_Available__c != null && proj.Stack_Car_Park_Available__c > 0)  //Added by Vinay 21-11-2025
+            canAddCarPark10 = true;
+        else 
+            canAddCarPark10 = false;
             
             
-        if(canAddCarPark1 || canAddCarPark2 || canAddCarPark3 || canAddCarPark4 || canAddCarPark5 || canAddCarPark6 || canAddCarPark7 || canAddCarPark8 || canAddCarPark9 )
+        if(canAddCarPark1 || canAddCarPark2 || canAddCarPark3 || canAddCarPark4 || canAddCarPark5 || canAddCarPark6 || canAddCarPark7 || canAddCarPark8 || canAddCarPark9  || canAddCarPark10)
             showAddCarPark = true;
         else
             showAddCarPark = false;
@@ -265,6 +274,7 @@ public with sharing class QuotationExtn
         selectedCarPark7 = 0;
         selectedCarPark8 = 0;
         selectedCarPark9 = 0; //Added by Vinay 28-03-2025
+        selectedCarPark10 = 0; //Added by Vinay 21-11-2025
         Decimal carParkAmount1 = 0;
         Decimal carParkAmount2 = 0;
         Decimal carParkAmount3 = 0;
@@ -274,6 +284,7 @@ public with sharing class QuotationExtn
         Decimal carParkAmount7 = 0;
         Decimal carParkAmount8 = 0;
         Decimal carParkAmount9 = 0; //Added by Vinay 28-03-2025
+        Decimal carParkAmount10 = 0; //Added by Vinay 21-11-2025
  
         
         if(q.Single_car_park_additional__c  > proj.Single_car_park_available__c) {
@@ -317,6 +328,10 @@ public with sharing class QuotationExtn
             q.Puzzle_Car_Park__c = 0;
         }
        
+        if(q.Stack_Additional_1__c > proj.Stack_Car_Park_Available__c) { //Added by Vinay 21-11-2025
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.FATAL,'selected quantity of Stack Car Parks not available'));
+            q.Stack_Additional_1__c = 0;
+        }
 
         
         if(q.single_car_park_additional__c > 0) {
@@ -378,8 +393,15 @@ public with sharing class QuotationExtn
             q.Puzzle_Car_Park_Amount__c = carParkAmount9;
             selectedCarPark9 = Integer.valueOf(q.Puzzle_Car_Park__c);
         }
+
+        if(q.Stack_Additional_1__c> 0) { //Added by Vinay 21-11-2025
+            carParkAmount10 = proj.Stack_Car_Park_Charges__c * q.Stack_Additional_1__c;
+            System.debug('carParkAmount10: ' + carParkAmount10);
+            q.Stack_Additional_Amount__c = carParkAmount10;
+            selectedCarPark10 = Integer.valueOf(q.Stack_Additional_1__c);
+        }
         
-        totalAmount = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9;
+        totalAmount = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
         allotmentCharges = totalAmount;
         InventoryCostServices.baseRateVal = baseRate;
         InventoryCostServices.premiumRateVal = premiumRate;
@@ -1032,6 +1054,7 @@ public with sharing class QuotationExtn
         Decimal carParkAmount7;
         Decimal carParkAmount8;
         Decimal carParkAmount9; //Added by Vinay 28-03-2025
+        Decimal carParkAmount10; //Added by Vinay 21-11-2025
         // writing the save method within the controller as this save cant be reused elsewhere.
         // its very much tied to the quote wrapper classes.
         Map<String, Id> quoteApproversMap = QuotationManagementServices.getApprovers(proj.Id);
@@ -1138,6 +1161,12 @@ public with sharing class QuotationExtn
             q.Puzzle_Car_Park_Amount__c = carParkAmount9;
             selectedCarPark9 = Integer.valueOf(q.Puzzle_Car_Park__c);
         }
+        if(q.Stack_Additional_1__c> 0) { //Added by Vinay 21-11-2025
+            carParkAmount10 = proj.Stack_Car_Park_Charges__c* q.Stack_Additional_1__c;
+            System.debug('carParkAmount10: ' + carParkAmount10);
+            q.Stack_Additional_Amount__c = carParkAmount10;
+            selectedCarPark10 = Integer.valueOf(q.Stack_Additional_1__c);
+        }
         if(u.single_car_park_earmarked__c != null) {
             q.single_car_park_earmarked__c = u.single_car_park_earmarked__c;
             carParks += Integer.valueOf(u.single_car_park_earmarked__c);
@@ -1163,7 +1192,7 @@ public with sharing class QuotationExtn
             carParks += Integer.valueOf(u.MLCP_Earmarked__c);
         }
         
-        q.No_of_parking__c = carParks + selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 +selectedCarPark6 +selectedCarPark7+selectedCarPark8+selectedCarPark9;
+        q.No_of_parking__c = carParks + selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 +selectedCarPark6 +selectedCarPark7+selectedCarPark8+selectedCarPark9+selectedCarPark10;
         
         if(quoteApproversMap.size() > 0) {
             q.Level_One_Approver__c = quoteApproversMap.get('First Level');
@@ -1667,6 +1696,7 @@ public with sharing class QuotationExtn
             Decimal carParkAmount7 = 0;
             Decimal carParkAmount8 = 0;
             Decimal carParkAmount9 = 0; //Added by Vinay 28-03-2025
+            Decimal carParkAmount10 = 0; //Added by Vinay 21-11-2025
 
             Decimal car1 = 0;
             Decimal car2 = 0;
@@ -1677,6 +1707,7 @@ public with sharing class QuotationExtn
             Decimal car7 = 0;
             Decimal car8 = 0;
             Decimal car9 = 0; //Added by Vinay 28-03-2025
+            Decimal car10 = 0; //Added by Vinay 21-11-2025
 
            if(q.single_car_park_additional__c > 0) {
                 carParkAmount1 = proj.allotment_charges_1__c * q.single_car_park_additional__c;
@@ -1727,6 +1758,11 @@ public with sharing class QuotationExtn
                 car9 = q.Puzzle_Car_Park__c;
                 //selectedCarPark5 = Integer.valueOf(q.Stack_Additional__c);
             } 
+
+            if(q.Stack_Additional_1__c> 0) { //Added by Vinay 21-11-2025
+                carParkAmount10 = proj.Stack_Car_Park_Charges__c * q.Stack_Additional_1__c;
+                car10 = q.Stack_Additional_1__c;
+            } 
            
            q = new Quotation__c();
            selectedPlan = null;
@@ -1776,7 +1812,8 @@ public with sharing class QuotationExtn
             q.Basement_Additional__c = car7;
             q.Podium__c = car8;
             q.Puzzle_Car_Park__c = car9; //Added by Vinay 28-03-2025
-            Decimal carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9;
+            q.Stack_Additional_1__c = car10; //Added by Vinay 21-11-2025
+            Decimal carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
             
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;

@@ -261,7 +261,7 @@ ln.TL_Email__c = projRMMap.get(bkg.RW_Project_Name__c).TL_Email__c;
                 update bkgToUpdateDevChrg;
             }
         }   
-    }
+    }		
     //Added by coServe 10-10-2022 end
     
     //Added by coServe 15-11-2022 start
@@ -471,7 +471,7 @@ update bkgs;
     //
     
     //Added by Prashant 20-05-2025 Start
-    public static void updateBrokerageonSchemeChange(List<Id> bkgIds){
+    /*public static void updateBrokerageonSchemeChange(List<Id> bkgIds){
         
         List<Booking__c> bklist = [SELECT Id,Booking_Date__c,Quotation__r.walkin_Source__c ,Brokerage_Scheme__r.Type__c,Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c,Brokerage_Scheme__r.Name,Brokerage_Scheme__r.Id,Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c,Passback_Amount__c,
                                    Brokerage_Scheme__c,Quotation__r.Brokerage_Agreement_Value__c,Type_of_Client__c FROM Booking__c WHERE Id IN: bkgIds];
@@ -529,6 +529,84 @@ update bkgs;
                 system.debug('Error while updating Booking list - '+e.getMessage());
             }
         }
+    }*/
+    public static void updateBrokerageonSchemeChange(List<Id> bkgIds){
+        
+        List<Booking__c> bklist = [SELECT Id,Booking_Date__c,Quotation__r.walkin_Source__c ,Brokerage_Scheme__r.Type__c,Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c,Brokerage_Scheme__r.Name,Brokerage_Scheme__r.Id,Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c,Passback_Amount__c,
+                                   Brokerage_Scheme__c,Quotation__r.Brokerage_Agreement_Value__c,Type_of_Client__c,Brokerage_Scheme__r.Base_Brokerage_for_NRI__c FROM Booking__c WHERE Id IN: bkgIds];
+        if(!bklist.isEmpty()){
+            for(booking__c b : bklist){
+                Decimal passbackAmt = 0;
+                if(b.Passback_Amount__c != null){
+                    passbackAmt = b.Passback_Amount__c;
+                }
+                
+                /*
+                if(b.Brokerage_Scheme__r.Type__c == 'Local'){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - ((( passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'NRI' && bookingDate < bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if( b.Brokerage_Scheme__r.Type__c == 'NRI' && bookingDate >= bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'Both' && (b.Type_of_Client__c == 'Local' || b.Type_of_Client__c == 'Corporate' )){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'Both' && (b.Type_of_Client__c == 'NRI' || b.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'Both' && (b.Type_of_Client__c == 'NRI' || b.Type_of_Client__c == 'Outstation') && bookingDate >= bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }
+                */
+                
+                if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'Local') && (b.Type_of_Client__c == 'Local' || b.Type_of_Client__c == 'Corporate' )){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'NRI') && (b.Type_of_Client__c == 'NRI') /*|| b.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2*/){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                } else if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'Outstation') && (b.Type_of_Client__c == 'Outstation') /*&& bookingDate < bookingDate2*/){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }
+            }
+            try{
+                update bklist;
+            }catch(Exception e){
+                system.debug('Error while updating Booking list - '+e.getMessage());
+            }
+        }
     }
     //Added by Prashant 20-05-2025 End
     
@@ -556,7 +634,7 @@ update bkgs;
             Project_Unit__r.TowerName__c, Brokerage_Agreement_Value__c, walkin_Source__c,
             Tandem_car_park_Additional__c, Tandem_Open_Additional__c, Single_Open_Additional__c,
             Single_car_park_Additional__c, Stack_Additional__c, MLCP_Additional__c,
-            Basement_Additional__c, Podium__c, Puzzle_Car_Park__c,Stamp_duty_payable_by_Runwal__c 
+            Basement_Additional__c, Podium__c, Puzzle_Car_Park__c,Stamp_duty_payable_by_Runwal__c,Stack_Additional_1__c
             FROM Quotation__c WHERE Id IN :quoteIds
         ]);
         
@@ -624,7 +702,8 @@ update bkgs;
                     'MLCP' => (q.MLCP_Additional__c == null ? 0 : Integer.valueOf(q.MLCP_Additional__c)),
                     'Basement' => (q.Basement_Additional__c == null ? 0 : Integer.valueOf(q.Basement_Additional__c)),
                     'Podium' => (q.Podium__c == null ? 0 : Integer.valueOf(q.Podium__c)),
-                    'Puzzle Car Park' => (q.Puzzle_Car_Park__c == null ? 0 : Integer.valueOf(q.Puzzle_Car_Park__c))
+                    'Puzzle Car Park' => (q.Puzzle_Car_Park__c == null ? 0 : Integer.valueOf(q.Puzzle_Car_Park__c)),
+                    'Stack Car Park' => (q.Stack_Additional_1__c == null ? 0 : Integer.valueOf(q.Stack_Additional_1__c))
                     };
                         
                         for (String parkingType : parkingCounts.keySet()) {
@@ -714,6 +793,52 @@ update bkgs;
             update blist;
         }
     }		*/
+
+  public static void tagReceiptsFromOpportunity(List<Booking__c> newBookings) {
+        if(newBookings == null || newBookings.isEmpty()) return;
+
+        // Collect Opportunity Ids from new Bookings
+        Set<Id> oppIds = new Set<Id>();
+        //Map<Id, Id> bookingToOppMap = new Map<Id, Id>(); // Booking Id -> Opportunity Id
+        for(Booking__c b : newBookings) {
+            if(b.Opportunity__c != null) {
+                oppIds.add(b.Opportunity__c);
+                //bookingToOppMap.put(b.Id, b.Opportunity__c);
+            }
+        }
+
+        if(oppIds.isEmpty()) return;
+
+        // Query all receipts related to these Opportunities
+        List<RW_Payment_Details__c> relatedReceipts = [
+            SELECT Id, Opportunity__c, RW_Booking__c
+            FROM RW_Payment_Details__c
+            WHERE Opportunity__c IN :oppIds
+        ];
+
+        if(relatedReceipts == null || relatedReceipts.isEmpty()) return;
+
+        List<RW_Payment_Details__c> receiptsToUpdate = new List<RW_Payment_Details__c>();
+
+        // Map Opportunity Id -> Booking Id (for newly inserted Bookings)
+        Map<Id, Id> oppToBookingMap = new Map<Id, Id>();
+        for(Booking__c b : newBookings) {
+            oppToBookingMap.put(b.Opportunity__c, b.Id);
+        }
+
+        // Tag each receipt to its Booking if not already linked
+        for(RW_Payment_Details__c r : relatedReceipts) {
+            Id bookingId = oppToBookingMap.get(r.Opportunity__c);
+            if(bookingId != null && (r.RW_Booking__c == null || r.RW_Booking__c != bookingId)) {
+                r.RW_Booking__c = bookingId;
+                receiptsToUpdate.add(r);
+            }
+        }
+
+        if(!receiptsToUpdate.isEmpty()) {
+            update receiptsToUpdate;
+        }
+    }
     
     public void dummyMethod(){
             

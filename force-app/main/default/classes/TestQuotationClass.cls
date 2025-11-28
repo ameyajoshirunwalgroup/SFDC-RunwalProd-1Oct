@@ -2394,7 +2394,7 @@ private  class TestQuotationClass {
          qExNew.QueryPlanDetails();
          
          qExNew.savePrint();
-         //qExNew.dummyMethod();
+         qExNew.dummyMethod();
         
         qExNew.openDiscountPage(); //Added by Vinay 29-03-2025
         qExNew.cancelEdit(); //Added by Vinay 29-03-2025
