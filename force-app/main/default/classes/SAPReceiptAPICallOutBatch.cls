@@ -147,7 +147,7 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
         
         
         
-        String soqlQuery = 'Select Id, Name,SAP_Customer_Number__c,Booking__c, (Select id,Name FROM EOI__r) from Opportunity where SAP_Customer_Number__c IN:cutomerIds and stagename in (\'Unit Booked\',\'EOI Received\') ';
+        String soqlQuery = 'Select Id, Name,SAP_Customer_Number__c,Booking__c, (Select id,Name FROM EOI__r) from Opportunity where SAP_Customer_Number__c IN:cutomerIds and stagename in (\'Unit Booked\',\'EOI Received\',\'Unit Blocked\') ';//Added Unit Blocked for unidentified Payments
         
         return Database.getQueryLocator(soqlQuery);
         
@@ -161,12 +161,19 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
         
         for(Opportunity oppRecord : scope)
         {
-            //If EOI is present we will tag the Payment Reciept to the Opportunity else it will be in tagged to booking record
-            if(oppRecord.EOI__r.size() >0 && oppRecord.Booking__c ==null)
-            {
-                //   System.debug('*added in map**');
+            //Commented for unidentified payments
+            // //If EOI is present we will tag the Payment Reciept to the Opportunity else it will be in tagged to booking record
+            // if(oppRecord.EOI__r.size() >0 && oppRecord.Booking__c ==null)
+            // {
+            //     //   System.debug('*added in map**');
+            //     customerOppMap.put(oppRecord.SAP_Customer_Number__c, oppRecord);
+            // }
+
+            /*Added for unidentified Payment starts */
+            if(oppRecord.Booking__c ==null){
                 customerOppMap.put(oppRecord.SAP_Customer_Number__c, oppRecord);
             }
+            /*Added for unidentified Payment ends */
             
             else{
                 if(oppRecord.Booking__c != null){
