@@ -21,7 +21,7 @@ public class BrokerageSchemeTemplateController {
             system.debug('SchemeList : '+SchemeList);
             SchemeProjectList = [Select id,name,Project__r.name,Brokerage_Scheme__c from Scheme_Configuration__c Where Brokerage_Scheme__c =: SchemeId ];
             system.debug('SchemeProjectList :'+SchemeProjectList);
-            SlabList = [Select id,name,Brokerage_Scheme__c,From__c,To__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c from Brokerage_Slab__c where Brokerage_Scheme__c =: SchemeId]; 
+            SlabList = [Select id,name,Brokerage_Scheme__c,From__c,To__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c,Base_Brokerage_for_NRI__c,Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c from Brokerage_Slab__c where Brokerage_Scheme__c =: SchemeId]; 
             system.debug('SlabList : '+SlabList);
             
         }
