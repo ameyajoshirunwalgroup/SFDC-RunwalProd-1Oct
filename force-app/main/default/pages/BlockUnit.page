@@ -1,5 +1,5 @@
 <apex:page Controller="BlockUnitController" Doctype="html-5.0" standardStylesheets="true" showHeader="true" sidebar="false">
-    <apex:form >
+    <!--<apex:form >-->
         <html lang="en">
             <head>
                 <meta charset="UTF-8"/>
@@ -191,13 +191,14 @@
             </head>
             
             <body>
+                <div id="spinner" class="Assigned" style="display:none;"></div><!--Added for unidentified payments-->
                 
-                <apex:actionstatus id="spinnerStatus">
+                <!--<apex:actionstatus id="spinnerStatus">
                     <apex:facet name="start">
                         <div class="spinnerBg" />
                         <div class="Assigned" />
                     </apex:facet>
-                </apex:actionstatus>
+                </apex:actionstatus>--><!--Commented for unidentified payments-->
                 <div class="col-sm-12 col-md-10 col-lg-25">
                     <div class="">
                         <center>
@@ -208,7 +209,7 @@
                         <br/>
                         <apex:pageMessages id="pageMsg"></apex:pageMessages><br/>
                         
-                        
+                        <apex:form id="blockUnitForm">
                         <apex:outputPanel rendered="{!hideAll == false}">
                             
                             <table style="width: 100%; border-collapse: collapse;">
@@ -333,13 +334,23 @@
                                                                
                                 
 							</table>
-                                                            
+                            </apex:outputPanel>
+                        </apex:form>
                             <br/><br/>
                             
-                            
+                        <apex:form id="paymentDetailsForm">
+                            <apex:actionFunction name="rerenderMessages" reRender="pageMsg"/><!--Added for unidentified payments-->
+                            <apex:outputPanel rendered="{!hideAll == false}">
                             <script>
                             var visibleRows = 1;
-                            
+                            //Added unidentified payments starts
+                            function showSpinner() {
+                                    document.getElementById('spinner').style.display = 'block';
+                            }
+                            function hideSpinner() {
+                                document.getElementById('spinner').style.display = 'none';
+                            }
+                            //Added for unidentified payments ends
                             function showRow() {
                                 if (visibleRows < 5) {
                                     visibleRows++;
@@ -398,6 +409,7 @@
                                         <th>Date</th>
                                         <th>Cheque / UTR Details</th>
                                         <th>Bank Name</th>
+                                        <th>Upload File</th>
                                     </tr>
                                     
                                     
@@ -408,6 +420,7 @@
                                         <td><apex:input type="date" value="{!payDate1}"  /></td>
                                         <td><apex:input value="{!payDetails1}"    /></td>
                                         <td><apex:selectList value="{!bank1}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                        <td><apex:inputFile value="{!file1}" filename="{!fileName1}" /></td>
                                     </tr>
                                     
                                     
@@ -418,6 +431,7 @@
                                         <td><apex:input type="date" value="{!payDate2}"  /></td>
                                         <td><apex:input value="{!payDetails2}"    /></td>
                                         <td><apex:selectList value="{!bank2}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                        <td><apex:inputFile value="{!file2}" filename="{!fileName2}" /></td>
                                     </tr>
                                     
                                     
@@ -428,6 +442,7 @@
                                         <td><apex:input type="date" value="{!payDate3}" /></td>
                                         <td><apex:input value="{!payDetails3}" /></td>
                                         <td><apex:selectList value="{!bank3}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                        <td><apex:inputFile value="{!file3}" filename="{!fileName3}" /></td>
                                     </tr>
                                     
                                     
@@ -438,6 +453,7 @@
                                         <td><apex:input type="date" value="{!payDate4}" /></td>
                                         <td><apex:input value="{!payDetails4}" /></td>
                                         <td><apex:selectList value="{!bank4}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                        <td><apex:inputFile value="{!file4}" filename="{!fileName4}" /></td>
                                     </tr>
                                     
                                     
@@ -448,6 +464,7 @@
                                         <td><apex:input type="date" value="{!payDate5}" /></td>
                                         <td><apex:input value="{!payDetails5}" /></td>
                                         <td><apex:selectList value="{!bank5}" size="1"><apex:selectOptions value="{!bankList}" /></apex:selectList></td>
+                                        <td><apex:inputFile value="{!file5}" filename="{!fileName5}" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="5" style="text-align: center; padding-top: 10px;">
@@ -462,27 +479,31 @@
                             <!--<apex:commandButton value="Save" action="{!saveDetails}" status="idActionStatus" rendered="{!showContinueButton == false}" disabled="false" rerender="idActionStatus,pageMsg"/>-->
                             <apex:commandButton value="Save" 
                                                 action="{!saveDetails}" 
-                                                status="spinnerStatus" 
-                                                rerender="idActionStatus,pageMsg,flagPanel"
-                                                />
+                                                onclick="showSpinner();"  
+                                                /><!--Added onclick for unidentified payments-->
+                                                
+                                                <!--status="spinnerStatus"-->
+                                                <!--rerender="idActionStatus,pageMsg,flagPanel"-->
                                  <apex:commandButton value="Save and Generate Quotation"
                                                 action="{!saveAndRedirectToQuotePage}"
                                                 style="width: 240px; white-space: normal;" 
                                                 />
                                  <apex:commandButton value="cancel" 
                                                 action="{!cancleButton}" 
-                                                status="spinnerStatus" 
-                                                rerender="idActionStatus,pageMsg,flagPanel"
-                                                />
+                                                onclick="showSpinner();" 
+                                                 /><!--Added onclick for unidentified payments-->
+                                                <!--status="spinnerStatus"-->
+                                                <!--rerender="idActionStatus,pageMsg,flagPanel"-->
                             
                             
                             
                             <!--<apex:commandButton value="Continue" action="{!continueToApproval}" rendered="{!showContinueButton == true}"/>-->
                             </div>
                         </apex:outputPanel>
+                        </apex:form>
                     </div>
                 </div>
             </body>
         </html>
-    </apex:form>
+   <!-- </apex:form>-->
 </apex:page>

@@ -665,7 +665,7 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
     
     public void afterUpdateSAP(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId) {
         set<Id> lstOppBookedIds = new set<Id>();
-        system.debug(lstOpp);
+        set<Id> lstBlockedOppIds = new set<Id>();/*Added for unidentified payments starts */
         system.debug(lstOpp.size() );
         if(lstOpp.size() > 0)
         {
@@ -678,6 +678,13 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
                 {
                     lstOppBookedIds.add(objOpportunity.Id);
                 }
+                /*Added for unidentified payments starts */
+                if(objOpportunity.StageName == 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName != 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName =='Site Visit')
+                {
+                    lstBlockedOppIds.add(objOpportunity.Id);
+                }
+                /*Added for unidentified payments ends */
+           
             }
         }
         
@@ -686,6 +693,12 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
         {   
             //SAPIntegrationServices.createSO(lstOppBookedIds);
         }
+        /*Added for unidentified payments starts */
+        if(lstBlockedOppIds.size() > 0)
+        {       
+            OpportunityCustomerCreation.createOppCustomer(lstBlockedOppIds);
+        }
+        /*Added for unidentified payments ends */
     }
     
     //After stage booked then save applicante in farvision
