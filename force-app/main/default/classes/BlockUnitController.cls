@@ -24,30 +24,50 @@ public class BlockUnitController {
     public Date payDate1 {get;set;}
     public String payDetails1 {get;set;}
     public String bank1 {get;set;}
+    /*Added for unidentified Payments starts*/
+    public Blob  file1 {get;set;}
+    public String fileName1 {get;set;}
+    /*Added for unidentified Payments ends*/
     
     public String payMode2 {get;set;}
     public Decimal amount2 {get;set;}
     public Date payDate2 {get;set;}
     public String payDetails2 {get;set;}
     public String bank2 {get;set;}
+    /*Added for unidentified Payments starts*/
+    public Blob  file2 {get;set;}
+    public String fileName2 {get;set;}
+    /*Added for unidentified Payments ends*/
     
     public String payMode3 {get;set;}
     public Decimal amount3 {get;set;}
     public Date payDate3 {get;set;}
     public String payDetails3 {get;set;}
     public String bank3 {get;set;}
+    /*Added for unidentified Payments starts*/
+    public Blob  file3 {get;set;}
+    public String fileName3 {get;set;}
+    /*Added for unidentified Payments ends*/
     
     public String payMode4 {get;set;}
     public Decimal amount4 {get;set;}
     public Date payDate4 {get;set;}
     public String payDetails4 {get;set;}
     public String bank4 {get;set;}
+    /*Added for unidentified Payments starts*/
+    public Blob  file4 {get;set;}
+    public String fileName4 {get;set;}
+    /*Added for unidentified Payments ends*/
     
     public String payMode5 {get;set;}
     public Decimal amount5 {get;set;}
     public Date payDate5 {get;set;}
     public String payDetails5 {get;set;}
     public String bank5 {get;set;}
+    /*Added for unidentified Payments starts*/
+    public Blob  file5 {get;set;}
+    public String fileName5 {get;set;}
+    /*Added for unidentified Payments ends*/
     
     public List<SelectOption> payModeList {get;set;} 
     public List<SelectOption> bankList {get;set;} //Added by Vinay 21-08-2025
@@ -75,7 +95,7 @@ public class BlockUnitController {
         
         unit = [SELECT Id, Name, RW_Customer__c, RW_Customer__r.Name, RW_Project__c, RW_Project__r.Name, RW_Project__r.Sales_Site_Head__c,
                 Saleable_Area__c, RW_Param4__c, Token_Amount__c, RW_Booking_Date__c,RW_Project__r.Token_Amount__c FROM Project_Unit__c WHERE Id =: unitId];
-        opp = [SELECT Id, Name, StageName, RW_Opportunity_Status__c, Relationship_Manager__c, Blocked_Date__c, RW_Booking_Date_Opp__c, RW_Project__r.Allow_Blocking_on_Non_Active_Opportunity__c FROM Opportunity WHERE Id =: oppId];
+        opp = [SELECT Id, Name, StageName, RW_Opportunity_Status__c, Relationship_Manager__c, Blocked_Date__c, RW_Booking_Date_Opp__c, RW_Project__r.Allow_Blocking_on_Non_Active_Opportunity__c,RW_Project__c,RW_Mobile_No__c FROM Opportunity WHERE Id =: oppId];//Added RW_Project__c,RW_Mobile_No__c for unidentified payments
         CIFObj= [select Id,Opportunity__c,Mode_of_funding__c,Bank_Preference_1__c,Bank_Preference_2__c,Bank_Preference_3__c from CIF__c where Opportunity__c=:oppId];
         // Store original values
         originalModeOfFunding = CIFObj.Mode_of_funding__c;
@@ -340,13 +360,172 @@ bookNowStatus = 'Pending'; */
         blkInfo.Approval_Status__c = 'Approved';
         
         Decimal totalAmount = blkInfo.Total_Amount__c;
-        /*if(totalAmount < requiredTokenAmount){ //Commented by Vinay 02-07-2025
+        // Added For Unidentified Payment Start
+        if(totalAmount < requiredTokenAmount){ //Commented by Vinay 02-07-2025
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Total Amount is less than the Token Amount, you cannot block this unit.  Token Amount is:'+requiredTokenAmount);
             ApexPages.addMessage(myMsg); 
             return null;
-        }else {*/
+        }
+        // Added For Unidentified Payment End
             // Insert the blkInfo record if all validations pass
             insert blkInfo;
+            /*Added for unidentifiend payment starts*/
+            List<Receipt__c> receiptList = new List<Receipt__c>();
+            String mobNumber = opp.RW_Mobile_No__c;
+            if (payMode1 != null && amount1 != null) {
+                receiptList.add(new Receipt__c(
+                    Opportunity__c = oppId,
+                    Mode__c = payMode1,
+                    Active__c = true,
+                    Total_Amount__c = amount1,
+                    Cheque_DD_Date__c = payDate1,
+                    Cheque_DD__c = payDetails1,
+                    DraweeBank__c = bank1,
+                    Project_Unit__c = unitId,
+                    Project__c = opp.RW_Project__c,
+                    Receipt_Unique_Key__c = mobNumber+'_'+payDetails1+'_'+bank1
+                ));
+            }
+            if (payMode2 != null && amount2 != null) {
+                receiptList.add(new Receipt__c(
+                    Opportunity__c = oppId,
+                    Mode__c = payMode2,
+                    Active__c = true,
+                    Total_Amount__c = amount2,
+                    Cheque_DD_Date__c = payDate2,
+                    Cheque_DD__c = payDetails2,
+                    DraweeBank__c = bank2,
+                    Project_Unit__c = unitId,
+                    Project__c = opp.RW_Project__c,
+                    Receipt_Unique_Key__c = mobNumber+'_'+payDetails2+'_'+bank2
+                ));
+            }
+            if (payMode3 != null && amount3 != null) {
+                receiptList.add(new Receipt__c(
+                    Opportunity__c = oppId,
+                    Mode__c = payMode3,
+                    Active__c = true,
+                    Total_Amount__c = amount3,
+                    Cheque_DD_Date__c = payDate3,
+                    Cheque_DD__c = payDetails3,
+                    DraweeBank__c = bank3,
+                    Project_Unit__c = unitId,
+                    Project__c = opp.RW_Project__c,
+                    Receipt_Unique_Key__c = mobNumber+'_'+payDetails3+'_'+bank3
+                ));
+            }
+            if (payMode4 != null && amount4 != null) {
+                receiptList.add(new Receipt__c(
+                    Opportunity__c = oppId,
+                    Mode__c = payMode4,
+                    Active__c = true,
+                    Total_Amount__c = amount4,
+                    Cheque_DD_Date__c = payDate4,
+                    Cheque_DD__c = payDetails4,
+                    DraweeBank__c = bank4,
+                    Project_Unit__c = unitId,
+                    Project__c = opp.RW_Project__c,
+                    Receipt_Unique_Key__c = mobNumber+'_'+payDetails4+'_'+bank4
+                ));
+            }
+            if (payMode5 != null && amount5 != null) {
+                receiptList.add(new Receipt__c(
+                    Opportunity__c = oppId,
+                    Mode__c = payMode5,
+                    Active__c = true,
+                    Total_Amount__c = amount5,
+                    Cheque_DD_Date__c = payDate5,
+                    Cheque_DD__c = payDetails5,
+                    DraweeBank__c = bank5,
+                    Project_Unit__c = unitId,
+                    Project__c = opp.RW_Project__c,
+                    Receipt_Unique_Key__c = mobNumber+'_'+payDetails5+'_'+bank5
+                ));
+            }
+                try{
+                    if (!receiptList.isEmpty()) {
+                    upsert receiptList Receipt_Unique_Key__c ;
+                    }         
+                }
+                catch (DMLException e) {
+                    ApexPages.addMessages(e);
+                    return null;
+                }
+
+            List<ContentVersion> contentList = new List<ContentVersion>();
+            List<ContentDocumentLink> links = new List<ContentDocumentLink>();
+
+            if (file1 != null) contentList.add(createCV(file1, fileName1));
+            if (file2 != null) contentList.add(createCV(file2, fileName2));
+            if (file3 != null) contentList.add(createCV(file3, fileName3));
+            if (file4 != null) contentList.add(createCV(file4, fileName4));
+            if (file5 != null) contentList.add(createCV(file5, fileName5));
+
+            if (!contentList.isEmpty()) {
+                insert contentList;
+            //                 // Fetch inserted ContentVersion records to get ContentDocumentId
+                Map<Id, ContentVersion> cvMap = new Map<Id, ContentVersion>(
+                    [SELECT Id,Title,PathOnClient, VersionData,ContentDocumentId FROM ContentVersion WHERE Id IN :contentList]
+                );
+
+                // Collect receipt IDs to check for existing ContentDocuments
+                Set<Id> receiptIds = new Set<Id>();
+                if (!receiptList.isEmpty()) {
+                for (Receipt__c r : receiptList) {
+                            if (r.Id != null) {
+                                receiptIds.add(r.Id);
+                            }//receiptIds.add(r.Id);
+                    }
+                }
+
+                // Find if any receipts already have linked ContentDocuments
+                Map<Id, Id> receiptToDocMap = new Map<Id, Id>();
+                if(!receiptIds.isEmpty()) {
+                    for (ContentDocumentLink cdl : [
+                        SELECT LinkedEntityId, ContentDocumentId
+                        FROM ContentDocumentLink
+                        WHERE LinkedEntityId IN :receiptIds
+                    ]) {
+                        receiptToDocMap.put(cdl.LinkedEntityId, cdl.ContentDocumentId);
+                    }
+                }
+                List<ContentVersion> newVersionList = new List<ContentVersion>();
+                List<ContentDocumentLink> linkList = new List<ContentDocumentLink>();
+
+                Integer i = 0;
+                for (Receipt__c rec : receiptList) {
+                    if (i >= cvMap.size()) break;
+                    ContentVersion insertedCV = cvMap.get(contentList[i].Id);
+
+                    if (receiptToDocMap.containsKey(rec.Id)) {
+                        // Add new version to existing document
+                        newVersionList.add(new ContentVersion(
+                            Title = insertedCV.Title,
+                            PathOnClient = insertedCV.PathOnClient,
+                            VersionData = insertedCV.VersionData,
+                            ContentDocumentId = receiptToDocMap.get(rec.Id)
+                        ));
+                    } else {
+                        // Link brand new document to receipt
+                        linkList.add(new ContentDocumentLink(
+                            ContentDocumentId = insertedCV.ContentDocumentId,
+                            LinkedEntityId = rec.Id,
+                            ShareType = 'V',
+                            Visibility = 'AllUsers'
+                        ));
+                    }
+                    i++;
+                }
+
+                if (!newVersionList.isEmpty()) {
+                    insert newVersionList;
+                }
+                if (!linkList.isEmpty()) {
+                    insert linkList;
+                }
+            }
+             
+            /*Added for unidentifiend payment ends */
             
             unit.RW_Unit_Status__c = 'Blocked';
             unit.RW_Customer__c = oppId;
@@ -381,6 +560,15 @@ bookNowStatus = 'Pending'; */
             
         //} //Commented by Vinay 02-07-2025
     }
+    /*Added for unidentified Payments starts*/
+     private ContentVersion createCV(Blob body, String fileName) {
+        return new ContentVersion(
+            Title = fileName != null ? fileName : 'UploadedFile',
+            PathOnClient = fileName != null ? fileName : 'UploadedFile.txt',
+            VersionData = body
+        );
+    }
+    /*Added for unidentified Payments ends*/
     
    /* Public PageReference cancleButton(){
       String sfdcURL = URL.getOrgDomainUrl().toExternalForm() + '/';

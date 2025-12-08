@@ -407,13 +407,14 @@ public class GetSAPReceiptsForCustomerTest {
             
             Opportunity objOpportunity = new Opportunity();
             objOpportunity.Name = 'Test';
-            objOpportunity.Sales_Manager__c = 'Deepak Arya';
+            objOpportunity.Sales_Manager__c = UserInfo.getUserId();
             objOpportunity.Sourcing_Manager__c = 'Deepak Arya';
             objOpportunity.CloseDate = System.today();
             objOpportunity.AccountId = Accnt.Id; 
             objOpportunity.Status__c = 'Active'; 
             objOpportunity.StageName = 'Unit Booked'; 
             objOpportunity.SAP_Customer_Number__c ='12345678';
+            objOpportunity.RW_Email__c ='test564@gmail.com';
             
             objOpportunity.RW_Project__c = objpr.id; 
             objOpportunity=RDSCommon.CreateOpportunity(objOpportunity);

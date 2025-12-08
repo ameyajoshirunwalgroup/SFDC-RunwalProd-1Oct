@@ -1557,6 +1557,7 @@ public static void testInventory(){
         objOpportunity.Name = 'Test';
         objOpportunity.Sales_Manager__c = 'Deepak Arya';
         objOpportunity.Sourcing_Manager__c = 'Deepak Arya';
+        objOpportunity.Sales_Manager_User__c =UserInfo.getUserId();
         objOpportunity.CloseDate = System.today();
         objOpportunity.AccountId = Accnt.Id; 
         objOpportunity.Status__c = 'Active'; 

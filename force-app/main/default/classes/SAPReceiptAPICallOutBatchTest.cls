@@ -221,10 +221,14 @@ database.executeBatch(bc1,200);
             
 SAPReceiptAPICallOutBatch cb = new SAPReceiptAPICallOutBatch('20210216101010');
 database.executeBatch(cb,200);
+            List<Booking__c> bList = [SELECT Id FROM Booking__c LIMIT 1];
+            
+            if (!bList.isEmpty()) {
+                Booking__c b = bList[0];
             
             RW_Payment_Details__c pd = new RW_Payment_Details__c();
             pd.RW_Document_Type__c = 'DZ';
-            Booking__c b = [select id from booking__c limit 1];
+            
             pd.RW_Booking__c =b.id;
             pd.RW_Accounting_Document_Number__c = '0010000180';
             pd.RW_Instrument_Number__c= 'asd3232';
@@ -233,6 +237,7 @@ database.executeBatch(cb,200);
             pd.RW_Fiscal_Year__c = '2020';   
             pd.RW_Customer_ID__c = '12345678';
             insert pd;
+            }
             
             TempSAPReceiptAPICallOutBatch cb1 = new TempSAPReceiptAPICallOutBatch('20210216101010','12345678');
 			database.executeBatch(cb1,200);

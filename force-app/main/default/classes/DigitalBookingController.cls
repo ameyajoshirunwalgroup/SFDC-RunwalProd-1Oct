@@ -1976,18 +1976,25 @@ i = 1;
         boolean err = false;
         Decimal totalAmount = 0; //Added by Vinay 13-08-2025
         Decimal requiredTokenAmount = bk.Unit_No__r.Token_Amount__c != null ? bk.Unit_No__r.Token_Amount__c : bk.Unit_No__r.RW_Project__r.Token_Amount__c; //Added by Vinay 13-08-2025
-        for(Receipt__c rec : bk.Receipts__r){
-            if((rec.mode__c == 'Cheque' || rec.Mode__c == 'DD/Pay Order') && !(rec.Physically_Cheque_Received__c)){
-                err=true;
+        
+        
+         /*Added for unidentified Payment starts*/
+        AggregateResult[] results = [SELECT SUM(Total_Amount_Paid__c) total 
+                                             FROM RW_Payment_Details__c 
+                                             WHERE RW_Booking__c = :recId];
+                Decimal totalPaid = 0;
+            if (!results.isEmpty()) {
+                totalPaid = (Decimal)results[0].get('total') == null ? 0 :(Decimal)results[0].get('total') ;
             }
-            totalAmount += rec.Total_Amount__c; //Added by Vinay 13-08-2025
-        }
-        if(totalAmount < requiredTokenAmount){ //Added by Vinay 13-08-2025
+        System.debug('totalPaid**'+totalPaid);
+        System.debug('requiredTokenAmount**'+requiredTokenAmount);
+        if(totalPaid < requiredTokenAmount){
             errorWrapper wrap = new errorWrapper();
             wrap.isError = true;
-            wrap.ErrorMessage = 'Total Receipt Amount is less than the Token Amount. Token Amount is:'+requiredTokenAmount;
+            wrap.ErrorMessage = 'Total SAP Receipt Amount is less than the Token Amount. Token Amount is:'+requiredTokenAmount;
             errors.add(wrap);
         }
+        /*Added for unidentified Payment ends*/
         // Added by ubsdigicloud date 21-07-25
         if (bk.Quotation__c == null) {
             errorWrapper wrap = new errorWrapper();

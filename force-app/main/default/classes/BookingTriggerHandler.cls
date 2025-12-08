@@ -714,6 +714,51 @@ update bkgs;
             update blist;
         }
     }		*/
+  public static void tagReceiptsFromOpportunity(List<Booking__c> newBookings) {
+        if(newBookings == null || newBookings.isEmpty()) return;
+
+        // Collect Opportunity Ids from new Bookings
+        Set<Id> oppIds = new Set<Id>();
+        //Map<Id, Id> bookingToOppMap = new Map<Id, Id>(); // Booking Id -> Opportunity Id
+        for(Booking__c b : newBookings) {
+            if(b.Opportunity__c != null) {
+                oppIds.add(b.Opportunity__c);
+                //bookingToOppMap.put(b.Id, b.Opportunity__c);
+            }
+        }
+
+        if(oppIds.isEmpty()) return;
+
+        // Query all receipts related to these Opportunities
+        List<RW_Payment_Details__c> relatedReceipts = [
+            SELECT Id, Opportunity__c, RW_Booking__c
+            FROM RW_Payment_Details__c
+            WHERE Opportunity__c IN :oppIds
+        ];
+
+        if(relatedReceipts == null || relatedReceipts.isEmpty()) return;
+
+        List<RW_Payment_Details__c> receiptsToUpdate = new List<RW_Payment_Details__c>();
+
+        // Map Opportunity Id -> Booking Id (for newly inserted Bookings)
+        Map<Id, Id> oppToBookingMap = new Map<Id, Id>();
+        for(Booking__c b : newBookings) {
+            oppToBookingMap.put(b.Opportunity__c, b.Id);
+        }
+
+        // Tag each receipt to its Booking if not already linked
+        for(RW_Payment_Details__c r : relatedReceipts) {
+            Id bookingId = oppToBookingMap.get(r.Opportunity__c);
+            if(bookingId != null && (r.RW_Booking__c == null || r.RW_Booking__c != bookingId)) {
+                r.RW_Booking__c = bookingId;
+                receiptsToUpdate.add(r);
+            }
+        }
+
+        if(!receiptsToUpdate.isEmpty()) {
+            update receiptsToUpdate;
+        }
+    }
     
     public void dummyMethod(){
             
