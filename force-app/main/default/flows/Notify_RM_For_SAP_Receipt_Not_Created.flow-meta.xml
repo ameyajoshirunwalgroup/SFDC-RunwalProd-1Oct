@@ -9,10 +9,6 @@
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>recipientAddresses</name>
-            <value/>
-        </inputParameters>
-        <inputParameters>
             <name>senderType</name>
             <value>
                 <stringValue>OrgWideEmailAddress</stringValue>
@@ -56,6 +52,12 @@ Project: {!$Record.Project__r.ProjectName__c}
 Kindly review and take necessary action.
 
 Thank you,</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Customer__r.Sales_Manager_User__r.Email</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
