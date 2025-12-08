@@ -357,8 +357,8 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
-        
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
+        Blocking_Unit_Information__c blk =[Select Id from Blocking_Unit_Information__c LIMIT 1];
           
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
@@ -386,7 +386,7 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
           
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
@@ -455,7 +455,7 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
         Broker__c brk = [SELECT Id FROM Broker__c LIMIT 1];
         
         acc.BillingPostalCode = '521366';
@@ -652,7 +652,7 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
                   
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
@@ -680,7 +680,7 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
         
         objcustomer.Walkin_Source__c = 'Emp / Mgmt Reference';
         update objcustomer;
@@ -738,7 +738,7 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
         
         //q.Project_Unit__c = null;
         //q.Quote_Status__c = 'Expired';
@@ -791,7 +791,7 @@ public class BookingClassTest {
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
         
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
