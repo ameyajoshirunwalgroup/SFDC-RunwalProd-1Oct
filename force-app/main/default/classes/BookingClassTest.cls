@@ -346,6 +346,42 @@ public class BookingClassTest {
         objBroker.SAP_CP_Code__c = 'Test';
         Insert objBroker; 
         
+       Blocking_Unit_Information__c  blk1 = new Blocking_Unit_Information__c();
+        
+        blk1.Pan_Number__c ='NBHGT5432E';
+        blk1.Aadhar_Number__c='897654321234';
+        blk1.Opportunity__c= objcustomer.Id;
+        blk1.Active__c = true;
+        blk1.Amount__c = 50000;
+        blk1.Mode_Of_Payment__c = 'Cheque';
+        blk1.Paid_Date__c = Date.today();
+        blk1.Transaction_Details__c = 'TXN001';
+        blk1.Bank_Name__c = 'SBI';
+        blk1.Amount_2__c = 50000;
+        blk1.Mode_Of_Payment_2__c = 'Cheque';
+        blk1.Paid_Date_2__c	 = Date.today();
+        blk1.Transaction_Details_2__c = 'TXN991';
+        blk1.Bank_Name_2__c	 = 'HDFC';
+        
+        blk1.Amount_3__c = 300;
+           blk1.Mode_Of_Payment_3__c = 'Cheque';
+           blk1.Paid_Date_3__c = Date.today();
+            blk1.Transaction_Details_3__c = 'TXN300';
+           blk1.Bank_Name_3__c = 'SBI';
+
+            blk1.Amount_4__c = 400;
+            blk1.Mode_Of_Payment_4__c = 'Cheque';
+            blk1.Paid_Date_4__c = Date.today();
+            blk1.Transaction_Details_4__c = 'TXN400';
+            blk1.Bank_Name_4__c = 'AXIS';
+
+            blk1.Amount_5__c = 500;
+            blk1.Mode_Of_Payment_5__c = 'Cheque';
+            blk1.Paid_Date_5__c = Date.today();
+            blk1.Transaction_Details_5__c = 'TXN500';
+            blk1.Bank_Name_5__c = 'BOB';
+        
+        insert blk1;
     }
     
     
