@@ -633,34 +633,6 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
         
         
     }
-
-     //Added by Prashant to populate Referral customer details.
-    public static void updateReferralCustDetails(List<Opportunity> refOppList){
-        system.debug('Inside updateReferralCustDetails');
-        Set<String> custRefs = new Set<String>();
-        for(Opportunity opp : refOppList){
-            custRefs.add(opp.RW_Walkin_Customer_Reference__c);
-        }
-        
-        List<Opportunity> lstOpp = [Select Id,StageName,RW_Booking_Date_Opp__c, Name,SAP_Customer_Number__c,AccountId,RW_Project_Unit__c /*Customer_Reference_Opportunity__c*/ From Opportunity Where AccountId=: custRefs AND StageName =:'Unit Booked'  ORDER BY RW_Booking_Date_Opp__c DESC limit 1 ];
-        if(!lstOpp.isEmpty()){
-            Map<String, Opportunity> refOppMap = new Map<String, Opportunity>();
-            if(custRefs.size() > 0){
-                for(Opportunity opp : lstOpp){
-                    refOppMap.put(opp.AccountId, opp);
-                }
-            }
-            
-            for(Opportunity opp : refOppList){
-                if(refOppMap.get(opp.RW_Walkin_Customer_Reference__c) != null){
-                    opp.Customer_reference_SAP_Code__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).SAP_Customer_Number__c;
-                    opp.Customer_reference_Booked_Unit__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).RW_Project_Unit__c;
-                    opp.Customer_Reference_Opportunity__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).Id;
-                }
-            }
-        }
-    }
-    //Added by Prashant to populate Referral customer details.
     
     public void afterUpdateSAP(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId) {
         set<Id> lstOppBookedIds = new set<Id>();
