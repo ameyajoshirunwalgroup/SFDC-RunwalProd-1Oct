@@ -100,7 +100,7 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.RW_Booking__r.Customer__r.Sales_Manager_User__r.Email</leftValueReference>
+                <leftValueReference>$Record.Opportunity__r.Sales_Manager_User__r.Email</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
