@@ -40,20 +40,28 @@
             <name>emailBody</name>
             <value>
                 <stringValue>Hello {!$Record.Sales_Manager__r.FirstName} {!$Record.Sales_Manager__r.LastName}
+
 This is to notify you that SAP Receipt are not created for the following booking:
+
 Customer Number: {!$Record.Customer__r.SAP_Customer_Number__c}
+
 Booking ID: {!recordURL}
+
 Customer Name: {!$Record.Customer__r.Name}
+
 Unit: {!$Record.Unit_No__r.Name}
+
 Project: {!$Record.Project__r.ProjectName__c}
+
 Kindly review and take necessary action.
+
 Thank you,</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>relatedRecordId</name>
             <value>
-                <stringValue></stringValue>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -68,22 +76,6 @@ Thank you,</stringValue>
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <assignments>
-        <name>Get_SAP_record_Count</name>
-        <label>Get SAP record Count</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>recordCount</assignToReference>
-            <operator>AssignCount</operator>
-            <value>
-                <elementReference>Get_SAP_Receipts</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Check_Status</targetReference>
-        </connector>
-    </assignments>
     <decisions>
         <name>Check_Status</name>
         <label>Check Status</label>
@@ -101,10 +93,10 @@ Thank you,</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>recordCount</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>Get_SAP_Receipts</leftValueReference>
+                <operator>IsNull</operator>
                 <rightValue>
-                    <numberValue>0.0</numberValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -147,7 +139,7 @@ Thank you,</stringValue>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_SAP_record_Count</targetReference>
+            <targetReference>Check_Status</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -172,14 +164,6 @@ Thank you,</stringValue>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
-    <variables>
-        <name>recordCount</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>2</scale>
-    </variables>
     <variables>
         <name>varBooking</name>
         <dataType>String</dataType>
