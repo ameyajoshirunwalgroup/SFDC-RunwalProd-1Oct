@@ -48,10 +48,23 @@ public class OppTriggerHandlerTracker
         objPU.Relationship_Manager__c = rm1.Id;
         pulist.add(objPU);
         
+        Project_Unit__c objPU2 = new Project_Unit__c();
+        objPU2.name = 'test2';
+        objPU2.RW_Project__c = objProj.id;
+        objPU2.RW_Param1__c = 'P1';
+        objPU2.RW_Param2__c = 'T1';
+        objPU2.RW_Param3__c = 'F1';
+        objPU2.RW_Param4__c = 'U1';
+        objPU2.RW_Unit_Status__c = 'Available';
+        objPU2.RW_Seventh_Day__c = false;
+        objPU2.Relationship_Manager__c = rm1.Id;
+        objPU2.RW_Booking_Date__c = system.today();
+        pulist.add(objPU2);
+        
         
         Project_Unit__c objPU1 = new Project_Unit__c();
         objPU1.name = 'test3';
-        objPU1.RW_Project__c = objProj1.id;
+        objPU1.RW_Project__c = objProj.id;
         objPU1.RW_Unit_Status__c = 'Available';
         objPU1.RW_Seventh_Day__c = false;
         objPU1.RW_Param1__c = 'P1';
@@ -59,7 +72,7 @@ public class OppTriggerHandlerTracker
         objPU1.RW_Param3__c = 'F1';
         objPU1.RW_Param4__c = 'U1';
         objPU1.Relationship_Manager__c = rm1.Id;
-       pulist.add(objPU1);
+        pulist.add(objPU1);
         
         insert pulist;
         
@@ -100,8 +113,29 @@ public class OppTriggerHandlerTracker
         pl.Category__c = 'P1';
         pl.Channel_Partner__c = b.Id;
         insert pl;
-        
+
         list<Opportunity> opplist = new list<Opportunity>();
+        Opportunity objopp5 = new Opportunity();
+        objopp5.name = 'test2';
+        objopp5.AccountId = objAcc.id;
+        objopp5.CloseDate = system.today();
+        objopp5.StageName = 'Unit Booked';
+        objopp5.RW_Project__c = objProj.id;
+        objopp5.RW_Project_Unit__c = objPU2.id;
+        objopp5.Walkin_Source__c = 'Referral';
+        objopp5.RW_Sales_Associate__c = 'Test22';
+        objopp5.RW_Mobile_No__c = '1233211231122';
+        objopp5.RW_Email__c = 'test1@test2122.com';
+        objopp5.RW_RM_Name__c = 'Aliya Kirkire';
+        objopp5.SAP_Customer_Number__c = '11292888';
+        objopp5.Retention_RM_Name__c = u.Id;
+        objopp5.Retention_Closing_Head_Name__c = u.Id;
+        objopp5.Retention_Presales_User__c = u.Id;
+        objopp5.Retention_Sales_Manager__c = u.Id;
+        objopp5.SalesOrder_Number__c = null;
+        opplist.add(objopp5);
+        
+        //list<Opportunity> opplist = new list<Opportunity>();
         Opportunity objopp = new Opportunity();
         objopp.name = 'test2';
         objopp.AccountId = objAcc.id;
@@ -119,6 +153,7 @@ public class OppTriggerHandlerTracker
         objopp.Retention_Closing_Head_Name__c = u.Id;
         objopp.Retention_Presales_User__c = u.Id;
         objopp.Retention_Sales_Manager__c = u.Id;
+        objopp.Customer_reference_Booked_Unit__c = objPU.id;
         objopp.SalesOrder_Number__c = null;
         objopp.RW_Walkin_Channel_Partner__c = b.id;
         objopp.Walkin_Source__c = 'Channel Partner';
@@ -132,7 +167,7 @@ public class OppTriggerHandlerTracker
         objopp2.RW_Project__c = objProj.id;
         objopp2.RW_Project_Unit__c = objPU.id;
         objopp2.Walkin_Source__c = 'Referral';
-        objopp2.RW_Walkin_Customer_Reference__c = objAcc.Id;
+        objopp2.RW_Walkin_Customer_Reference__c = null;
         objopp2.RW_Agreement_Value__c = 200000;
         objopp2.RW_Sales_Associate__c = 'Test2';
         objopp2.RW_Mobile_No__c = '1233211231';
@@ -143,9 +178,12 @@ public class OppTriggerHandlerTracker
         objopp2.Retention_Closing_Head_Name__c = u.Id;
         objopp2.Retention_Presales_User__c = u.Id;
         objopp2.Retention_Sales_Manager__c = u.Id;
+        objopp2.Customer_reference_Booked_Unit__c = objPU.id;
         objopp2.SalesOrder_Number__c = null;
         objopp2.Referral_Incentive__c = 1.5;
         opplist.add(objopp2);
+        
+        
         
         /*objPU.RW_Unit_Status__c = 'Booked';
         update objPU;
@@ -184,6 +222,9 @@ public class OppTriggerHandlerTracker
         opplist.add(objopp1);
         
         insert opplist;
+        
+        objopp2.RW_Walkin_Customer_Reference__c = objAcc.Id;
+        update objopp2;
         
         
         
@@ -238,7 +279,140 @@ public class OppTriggerHandlerTracker
         
         //SendSalesExperienceWhatsappMsg.sendMsg(new List<Id>{objopp.Id});
         
-        trgOppHandler.updateReferralCustDetails(new List<Opportunity>{objopp});
+       // trgOppHandler.updateReferralCustDetails(new List<Opportunity>{objopp});
+        Map<Id,Id> oppIdVsrefBookedUnitIds = new Map<Id,Id>();
+        Map<Id,Opportunity> oppMap = new Map<Id,Opportunity>();
+        oppIdVsrefBookedUnitIds.put(objopp2.Id,objopp2.Customer_reference_Booked_Unit__c);
+		oppMap.put(objopp2.Id,objopp2);        
+        //trgOppHandler.updateCustRefOpp(oppIdVsrefBookedUnitIds,oppMap);
+        
+Test.stopTest();
+    }
+    
+    static testMethod void myUnitTest2() 
+    {
+        Test.startTest();
+      Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+      User u = new User(Alias = 'standt', Email='standarduserrtt@testorg.com', 
+      EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+      LocaleSidKey='en_US', ProfileId = p.Id, 
+      TimeZoneSidKey='America/Los_Angeles', UserName='standarduserrr@testorg.com');
+      insert u;
+      
+        User u2 = new User(Alias = 'standt', Email='testUser2@t1estorg.com', 
+                                EmailEncodingKey='UTF-8', LastName='Test', LanguageLocaleKey='en_US', 
+                                LocaleSidKey='en_US',Ameyo_Agent_Id__c = 12364790, ProfileId = p.Id, 
+                                TimeZoneSidKey='America/Los_Angeles', UserName='testUser2@t1estorg.com'
+                               );
+        insert u2;
+        List <Opportunity> ld = new List <Opportunity> ();
+        OppTriggerHandler opp = new OppTriggerHandler();
+        opp.BeforeInsert(ld);
+        update ld;
+        
+    
+        Project__c objProj = new Project__c();
+        objProj.name = 'test2';
+        insert objProj;
+        
+        Project__c objProj1 = new Project__c();
+        objProj1.name = 'test3';
+        insert objProj1;
+        
+        Relationship_Manager__c rm1 = new Relationship_Manager__c();
+        rm1.Name = 'test9';
+        insert rm1;
+        
+        list<Project_Unit__c> pulist = new list<Project_Unit__c>();
+        
+        Project_Unit__c objPU2 = new Project_Unit__c();
+        objPU2.name = 'test2';
+        objPU2.RW_Project__c = objProj.id;
+        objPU2.RW_Param1__c = 'P1';
+        objPU2.RW_Param2__c = 'T1';
+        objPU2.RW_Param3__c = 'F1';
+        objPU2.RW_Param4__c = 'U1';
+        objPU2.RW_Unit_Status__c = 'Available';
+        objPU2.RW_Seventh_Day__c = false;
+        objPU2.Relationship_Manager__c = rm1.Id;
+        objPU2.RW_Booking_Date__c = system.today();
+        pulist.add(objPU2);
+        
+        insert pulist;
+        
+        RecordType personAccountRecordType =  [SELECT Id FROM RecordType WHERE Name = 'Person Account' and SObjectType = 'Account'];
+        
+        Account objAcc = new Account();
+        objAcc.lastname = 'test2';
+        objAcc.PersonEmail = 'teststetigin@test.in';
+        objAcc.RecordType = personAccountRecordType;
+        objAcc.MasterRecord__c = true;
+        insert objAcc;
+                
+        Opp_Close_Date__c dt = new Opp_Close_Date__c();
+        dt.Project_Name__c = 'test2';
+        dt.Name = objProj.Id;
+        dt.No_of_Days__c = 45;
+        insert dt;
+        list<Broker__c> brlist = new list<Broker__c>();
+        Broker__c b = new Broker__c();
+        b.Name = 'Test';
+        b.Unregistered_Channel_Partner__c = true;
+        b.AOP_Type__c = 'AOP';
+        b.Broker_Pan_No__c = 'ASFDG4556T';
+        brlist.add(b);        
+        
+        
+        list<Opportunity> opplist = new list<Opportunity>();
+        Opportunity objopp5 = new Opportunity();
+        objopp5.name = 'test2';
+        objopp5.AccountId = objAcc.id;
+        objopp5.CloseDate = system.today();
+        objopp5.StageName = 'Unit Booked';
+        objopp5.RW_Project__c = objProj.id;
+        objopp5.RW_Project_Unit__c = objPU2.id;
+        objopp5.Walkin_Source__c = 'Direct';
+        objopp5.RW_Sales_Associate__c = 'Test22';
+        objopp5.RW_Mobile_No__c = '1233211231122';
+        objopp5.RW_Email__c = 'test1@test2122.com';
+        objopp5.RW_RM_Name__c = 'Aliya Kirkire';
+        objopp5.SAP_Customer_Number__c = '11292888';
+        objopp5.Retention_RM_Name__c = u.Id;
+        objopp5.Retention_Closing_Head_Name__c = u.Id;
+        objopp5.Retention_Presales_User__c = u.Id;
+        objopp5.Retention_Sales_Manager__c = u.Id;
+        objopp5.SalesOrder_Number__c = null;
+        opplist.add(objopp5);
+        
+        Opportunity objopp = new Opportunity();
+        objopp.name = 'test21';
+        objopp.AccountId = objAcc.id;
+        objopp.CloseDate = system.today();
+        objopp.StageName = 'Qualification';
+        objopp.RW_Project__c = objProj.id;
+        objopp.RW_Project_Unit__c = objPU2.id;
+        objopp.Walkin_Source__c = 'Referral';
+        objopp.RW_Sales_Associate__c = 'Test2';
+        objopp.RW_Mobile_No__c = '1233211231';
+        objopp.RW_Email__c = 'test1@test2.com';
+        objopp.RW_RM_Name__c = 'Aliya Kirkire';
+        objopp.LeadSource = 'Retention';
+        objopp.Retention_RM_Name__c = u.Id;
+        objopp.Retention_Closing_Head_Name__c = u.Id;
+        objopp.Retention_Presales_User__c = u.Id;
+        objopp.Retention_Sales_Manager__c = u.Id;
+        objopp.SalesOrder_Number__c = null;
+        opplist.add(objopp);
+        
+        insert opplist;
+        
+        
+        Quotation__c qtn = new Quotation__c();
+        qtn.Opportunity__c = objopp5.Id;
+        insert qtn;
+               
+        //trgOppHandler.updateCustRefOpp(oppIdVsrefBookedUnitIds,oppMap);
+        
 Test.stopTest();
     }
 }

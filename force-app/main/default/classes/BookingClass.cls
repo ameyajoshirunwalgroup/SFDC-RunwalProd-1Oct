@@ -561,7 +561,7 @@ set;
                         Account.BillingCountry, Account.Name,  Account.Country__c, Account.RW_State__c, Account.RW_City__c, Account.Office_Street__c,Account.State__c,
                         Account.Mobile_No__c, Account.Alternate_Mobile_No__c, Walkin_Source__c, Walkin_SubSource__c, RW_Sourcing_Manager__c, RW_Sales_Associate__c,RW_Walkin_Channel_Partner__c,RW_Walkin_Channel_Partner__r.Name,
                         Employee_Reference__c,Employee_Reference__r.Name,RW_Type_of_Client__c, Lead_Sub_Source__c,RW_Project_Unit__r.name,RW_Project_Unit__r.TowerName__c,RW_Previous_Opportunity__c,RW_Previous_Opportunity__r.Booking__c, (Select Id,Name,RW_Status__c from EOI__r),RW_Walkin_Channel_Partner__r.Account__c,
-                        RW_Project__r.CP_Invoice_Clearing_L1__c, RW_Project__r.CP_Invoice_Clearing_L2__c,RW_Walkin_Customer_Reference__c,RW_Walkin_Customer_Reference__r.name,Customer_reference_Booked_Unit__r.name,Referral_Sub_Source__c,
+                        RW_Walkin_Customer_Reference__c,RW_Walkin_Customer_Reference__r.name,Customer_reference_Booked_Unit__r.name,Referral_Sub_Source__c,
                         Account.Salutation, Account.FirstName, Account.LastName, Account.RW_Zip_Code__c, Account.RW_Company_Name__c, Account.RW_Other_Company_Name__c, Account.RW_Designation__c, Account.No_of_family_members__c,Blocked_Date__c
                         from Opportunity where id =: boookingObj.Opportunity__c
                        ]; //Account.BillingAddress,
@@ -612,10 +612,23 @@ set;
                 }else if (optyList[0].RW_Previous_Opportunity__r.Booking__r.Project__c != boookingObj.Project__c && optyList[0].RW_Previous_Opportunity__c != Null){
                     boookingObj.Unit_Trasfer_to_Project__c = 'Different Project';
                 }
-                
+                //Modified by Dolly
                 if(optyList[0].RW_Project__c != NULL){
-                    boookingObj.CP_Invoice_Clearing_L1__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L1__c;
-                    boookingObj.CP_Invoice_Clearing_L2__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L2__c;
+                    Set<Id> projectIds = new Set<Id>{ optyList[0].RW_Project__c };
+                    // Call TeamMemberService method  
+                    Map<Id, Map<String, Team_Members__c>> approvers = TeamMemberService.getProjectTeamMembers(projectIds, 'CP Approvers Team', new List<String>{ 'CP Invoice Clearing L1', 'CP Invoice Clearing L2' });
+
+                    // Get approver map for this project
+                    Map<String, Team_Members__c> approversMap = approvers.get(optyList[0].RW_Project__c);
+
+                    if (approversMap != null) {
+                        boookingObj.CP_Invoice_Clearing_L1__c = (approversMap.get('CP Invoice Clearing L1') != null ? approversMap.get('CP Invoice Clearing L1').User__c : null);
+                        boookingObj.CP_Invoice_Clearing_L2__c = (approversMap.get('CP Invoice Clearing L2') != null ? approversMap.get('CP Invoice Clearing L2').User__c : null);
+                        System.debug('L1 Approver User Id => ' + boookingObj.CP_Invoice_Clearing_L1__c);
+                        System.debug('L2 Approver User Id => ' + boookingObj.CP_Invoice_Clearing_L2__c);
+                    }
+                    // boookingObj.CP_Invoice_Clearing_L1__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L1__c;
+                    // boookingObj.CP_Invoice_Clearing_L2__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L2__c;
                 }
                 /* if(optyList[0].RW_Project_Unit__r.name != Null){
 boookingObj.Tower__c = optyList[0].RW_Project_Unit__r.TowerName__c;

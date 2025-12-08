@@ -634,6 +634,35 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
         
     }
     
+    //Added by Prashant to populate Referral customer details.
+    public static void updateReferralCustDetails(List<Opportunity> refOppList){
+        system.debug('Inside updateReferralCustDetails');
+        Set<String> custRefs = new Set<String>();
+        for(Opportunity opp : refOppList){
+            custRefs.add(opp.RW_Walkin_Customer_Reference__c);
+        }
+        
+        List<Opportunity> lstOpp = [Select Id,StageName,RW_Booking_Date_Opp__c, Name,SAP_Customer_Number__c,AccountId,RW_Project_Unit__c /*Customer_Reference_Opportunity__c*/ From Opportunity Where AccountId=: custRefs AND StageName =:'Unit Booked'  ORDER BY RW_Booking_Date_Opp__c DESC limit 1 ];
+        if(!lstOpp.isEmpty()){
+            Map<String, Opportunity> refOppMap = new Map<String, Opportunity>();
+            if(custRefs.size() > 0){
+                for(Opportunity opp : lstOpp){
+                    refOppMap.put(opp.AccountId, opp);
+                }
+            }
+            
+            for(Opportunity opp : refOppList){
+                if(refOppMap.get(opp.RW_Walkin_Customer_Reference__c) != null){
+                    opp.Customer_reference_SAP_Code__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).SAP_Customer_Number__c;
+                    opp.Customer_reference_Booked_Unit__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).RW_Project_Unit__c;
+                    opp.Customer_Reference_Opportunity__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).Id;
+                }
+            }
+        }
+    }
+    //Added by Prashant to populate Referral customer details.
+    
+    
     public void afterUpdateSAP(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId) {
         set<Id> lstOppBookedIds = new set<Id>();
         system.debug(lstOpp);
@@ -1173,8 +1202,13 @@ update OppMap.values();*/
             for(String oppId : oppMap.keySet()){
                 if(oppVsCifMap.get(oppId) != null && !Test.isRunningTest()){
                     //SendWhatsAppMsg.methodToSendWhatsAppMsg(null, oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
-                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Commented by Vinay 11-09-2025
-                    //SendWhatsAppMsg.methodToSendWhatsAppMsgNew(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Added by Vinay 11-09-2025
+                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Commented by Vinay 13-10-2025
+                    
+                    if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
+                        SendWhatsAppMsg.methodToSendWhatsAppMsgNew(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
+                    }else{
+                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
+                    }
                 }
             }
         }

@@ -334,6 +334,7 @@ bookNowStatus = 'Pending'; */
         blkInfo.Pending_Reason__c = String.join(pendingReason, ';');
         //blkInfo.Book_Now_Status__c = bookNowStatus;
         blkInfo.Remarks__c = remarks;
+        blkInfo.Blocking_Date__c = blockedDate; //Added by Dolly  
         // blkInfo.Booking_Date__c = bookingDate;
         
         blkInfo.Total_Amount__c = (amount1 != null ? amount1 : 0) + (amount2 != null ? amount2 : 0) + (amount3 != null ? amount3 : 0) + (amount4 != null ? amount4 : 0) + (amount5 != null ? amount5 : 0);

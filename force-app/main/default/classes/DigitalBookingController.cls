@@ -6,7 +6,7 @@ public  without sharing class DigitalBookingController{
         String customerEmail='';
         // try{
         //Opportunity opportunityRec = Utility.getOpportunityRecord(opprecordId);
-        List<Opportunity> opportunityRecord = [SELECT Id,Project_Name__c, Name ,RW_Sourcing_Manager__c,Sales_Manager__c, AccountId,RW_Sales_Associate__c,Walk_in_Sub_Source__c,Walk_in_Source__c, RW_Email__c ,Walkin_Source__c, RW_Mobile_No__c, RW_PAN_Card_Number__c , RW_Additional_Email__c,RW_AADHAR_Card_Number__c,RW_Passport_Number__c,RW_Secondary_Email__c,LeadSource,Lead_Sub_Source__c,RW_Project__c,RW_Project__r.Name,RW_Walkin_Channel_Partner__c,RW_Walkin_Channel_Partner__r.Name,RW_Walkin_Channel_Partner__r.SAP_CP_Code__c,RW_Previous_Opportunity__c,RW_Previous_Opportunity__r.Booking__c,RW_Previous_Opportunity__r.Booking__r.Project__c,RW_Type_of_Client__c,RW_Project_Unit__r.TowerName__c,RW_Project__r.CP_Invoice_Clearing_L1__c,RW_Project__r.CP_Invoice_Clearing_L2__c,Account.Country_Code__c,(SELECT id,RW_Status__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c FROM EOI__r),(SELECT id,status__c FROM Booking__r),(Select Id,RecordtypeId,RW_Link_Status__c,RW_Link_Sent_Time__c from Digital_Link_Status__r) FROM Opportunity WHERE Id= :opprecordId ];
+        List<Opportunity> opportunityRecord = [SELECT Id,Project_Name__c, Name ,RW_Sourcing_Manager__c,Sales_Manager__c, AccountId,RW_Sales_Associate__c,Walk_in_Sub_Source__c,Walk_in_Source__c, RW_Email__c ,Walkin_Source__c, RW_Mobile_No__c, RW_PAN_Card_Number__c , RW_Additional_Email__c,RW_AADHAR_Card_Number__c,RW_Passport_Number__c,RW_Secondary_Email__c,LeadSource,Lead_Sub_Source__c,RW_Project__c,RW_Project__r.Name,RW_Walkin_Channel_Partner__c,RW_Walkin_Channel_Partner__r.Name,RW_Walkin_Channel_Partner__r.SAP_CP_Code__c,RW_Previous_Opportunity__c,RW_Previous_Opportunity__r.Booking__c,RW_Previous_Opportunity__r.Booking__r.Project__c,RW_Type_of_Client__c,RW_Project_Unit__r.TowerName__c,Account.Country_Code__c,(SELECT id,RW_Status__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c FROM EOI__r),(SELECT id,status__c FROM Booking__r),(Select Id,RecordtypeId,RW_Link_Status__c,RW_Link_Sent_Time__c from Digital_Link_Status__r) FROM Opportunity WHERE Id= :opprecordId ];
         Opportunity opportunityRec = opportunityRecord[0];
         Id bkRecordTypeId =Schema.SObjectType.RW_Digital_Link_Status__c.getRecordTypeInfosByName().get('Booking').getRecordTypeId();
         
@@ -369,9 +369,29 @@ bkRecord.RW_Gender__c =accRecord.Gender__c;
         bkRecord.Type_of_Client__c = oppRecord.RW_Type_of_Client__c;
         //bkRecord.Tower__c = oppRecord.RW_Project_Unit__r.TowerName__c;
         bkRecord.Old_Booking__c = oppRecord.RW_Previous_Opportunity__r.Booking__c;
+
+        //Modified by Dolly
+        if(oppRecord.RW_Project__c!=null){
+            Set<Id> projectIds = new Set<Id>{ oppRecord.RW_Project__c };
+            // Call TeamMemberService method  
+            Map<Id, Map<String, Team_Members__c>> approvers = TeamMemberService.getProjectTeamMembers(projectIds, 'CP Approvers Team', new List<String>{ 'CP Invoice Clearing L1', 'CP Invoice Clearing L2' });
+
+            // Get approver map for this project
+            Map<String, Team_Members__c> approversMap = approvers.get(oppRecord.RW_Project__c);
+
+            if (approversMap != null) {
+
+                // Direct assignment — NO loops needed
+                bkRecord.CP_Invoice_Clearing_L1__c = (approversMap.get('CP Invoice Clearing L1') != null ? approversMap.get('CP Invoice Clearing L1').User__c : null);
+                bkRecord.CP_Invoice_Clearing_L2__c = (approversMap.get('CP Invoice Clearing L2') != null ? approversMap.get('CP Invoice Clearing L2').User__c : null);
+
+                System.debug('L1 Approver User Id => ' + bkRecord.CP_Invoice_Clearing_L1__c);
+                System.debug('L2 Approver User Id => ' + bkRecord.CP_Invoice_Clearing_L2__c);
+            }
+            // bkRecord.CP_Invoice_Clearing_L1__c = oppRecord.RW_Project__r.CP_Invoice_Clearing_L1__c;
+            // bkRecord.CP_Invoice_Clearing_L2__c = oppRecord.RW_Project__r.CP_Invoice_Clearing_L2__c;           
+        }
         
-        bkRecord.CP_Invoice_Clearing_L1__c = oppRecord.RW_Project__r.CP_Invoice_Clearing_L1__c;
-        bkRecord.CP_Invoice_Clearing_L2__c = oppRecord.RW_Project__r.CP_Invoice_Clearing_L2__c;
         if(QuoteDetails.Discount_9_Type__c == 'CP Passback' && QuoteDetails.Quote_Status__c == 'Valid' && QuoteDetails.Discount_9_L__c != Null){
             bkRecord.Passback_Amount__c = QuoteDetails.Discount_9_L__c;
         }

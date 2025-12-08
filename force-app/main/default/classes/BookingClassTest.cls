@@ -569,6 +569,47 @@ public class BookingClassTest {
         booking.Type_of_Client__c = 'Local';
         booking.Passback_Amount__c = 1000;
         
+        List<Brokerage_Scheme__c> bschemelist = new List<Brokerage_Scheme__c>();
+        Brokerage_Scheme__c bscheme = new Brokerage_Scheme__c();
+        bscheme.Type__c = 'Both';
+        bscheme.Approval_Status__c = 'Approved by Level 2';
+        bscheme.Base_Brokerage_for_Local_Bookings__c = 2;
+        bscheme.Base_Brokerage_for_OS_NRI__c = 2.5;
+        bscheme.Base_Brokerage_for_NRI__c = 2.75;
+        bscheme.Slab_Type__c = 'Count';
+        bscheme.Start_Date__c = system.today();
+        bscheme.End_Date__c = system.today()+2;
+        //bscheme.Project_Location__c = pl.Id;
+        bschemelist.add(bscheme);
+        
+        Brokerage_Scheme__c bs1 = new Brokerage_Scheme__c();
+        bs1.Type__c = 'Outstation';
+        bs1.Approval_Status__c = 'Approved by Level 2';
+        bs1.Base_Brokerage_for_OS_NRI__c = 2.5;
+        bs1.Base_Brokerage_for_NRI__c = 2.75;
+        bs1.Slab_Type__c = 'Count';
+        bs1.Start_Date__c = system.today();
+        bs1.End_Date__c = system.today()+2;
+        //bscheme.Project_Location__c = pl.Id;
+        bschemelist.add(bs1);
+        
+        Brokerage_Scheme__c bs2 = new Brokerage_Scheme__c();
+        bs2.Type__c = 'NRI';
+        bs2.Approval_Status__c = 'Approved by Level 2';
+        bs2.Base_Brokerage_for_OS_NRI__c = 2.5;
+        bs2.Base_Brokerage_for_NRI__c = 2.75;
+        bs2.Slab_Type__c = 'Count';
+        bs2.Start_Date__c = system.today();
+        bs2.End_Date__c = system.today()+2;
+        //bscheme.Project_Location__c = pl.Id;
+        bschemelist.add(bs2);
+        for(Brokerage_Scheme__c b : bschemelist){
+            system.debug('scheme type and brokerage - '+b.Base_Brokerage_for_Local_Bookings__c + ' type - > '+ b.type__c);
+        }
+        insert bschemelist;
+        List<Brokerage_Scheme__c> bs1list = new List<Brokerage_Scheme__c>{bschemelist[1]};
+            List<Brokerage_Scheme__c> bs2list = new List<Brokerage_Scheme__c>{bschemelist[2]};
+        
         Quotation__c quote = [SELECT Id, Brokerage_Agreement_Value__c FROM Quotation__c WHERE Brokerage_Agreement_Value__c != null LIMIT 1];
         List<Quotation__c> quoteList = new List<Quotation__c>{quote};
             
@@ -576,7 +617,7 @@ public class BookingClassTest {
             Date bookingDate = Date.newInstance(2023, 12, 31);
         Date compareDate = Date.newInstance(2024, 1, 1);
         
-        List<Brokerage_Scheme__c> schemeList = [SELECT Id, Name, Type__c, Base_Brokerage_for_OS_NRI__c, Base_Brokerage_for_Local_Bookings__c FROM Brokerage_Scheme__c WHERE Type__c = 'NRI' LIMIT 1];
+        List<Brokerage_Scheme__c> schemeList = [SELECT Id, Name, Type__c, Base_Brokerage_for_OS_NRI__c, Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c FROM Brokerage_Scheme__c WHERE Type__c = 'NRI' LIMIT 1];
         
       //  Booking__c updatedBooking = BookingClass2.updateBrokerageSchemeDetails(booking, quoteList, schemeList, bookingDate, compareDate);
         
@@ -584,16 +625,21 @@ public class BookingClassTest {
         booking1.Type_of_Client__c = 'NRI';
         booking1.Passback_Amount__c = 1000;
         
-        Quotation__c quote1 = [SELECT Id, Brokerage_Agreement_Value__c FROM Quotation__c WHERE Brokerage_Agreement_Value__c != null LIMIT 1];
-        List<Quotation__c> quoteList1 = new List<Quotation__c>{quote1};
+         Booking__c booking2 = new Booking__c();
+        booking2.Type_of_Client__c = 'Outstation';
+        booking2.Passback_Amount__c = 1000;
+        
+        List<Quotation__c> quoteList1 = [SELECT Id, Brokerage_Agreement_Value__c FROM Quotation__c WHERE Brokerage_Agreement_Value__c != null LIMIT 2];
         
             Date bookingDate1 = Date.newInstance(2023, 12, 31);
         Date compareDate1 = Date.newInstance(2024, 1, 1);
-        List<Brokerage_Scheme__c> schemeList1 = [SELECT Id, Name, Type__c, Base_Brokerage_for_OS_NRI__c, Base_Brokerage_for_Local_Bookings__c FROM Brokerage_Scheme__c WHERE Type__c = 'Both' LIMIT 1];
+        List<Brokerage_Scheme__c> schemeList1 = [SELECT Id, Name, Type__c, Base_Brokerage_for_OS_NRI__c, Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c FROM Brokerage_Scheme__c WHERE Type__c = 'Both' LIMIT 1];
         
-       // Booking__c updatedBooking1 = BookingClass2.updateBrokerageSchemeDetails(booking1, quoteList1, schemeList1, bookingDate1, compareDate1);
-       // Booking__c updatedBooking2 = BookingClass2.updateBrokerageSchemeDetails(booking, quoteList1, schemeList1, bookingDate1, compareDate1);
-        
+        Booking__c updatedBooking1 = BookingClass2.updateBrokerageSchemeDetails(booking1, quoteList1, bschemelist);
+        Booking__c updatedBooking2 = BookingClass2.updateBrokerageSchemeDetails(booking, quoteList1, bschemelist);
+        Booking__c updatedBooking3 = BookingClass2.updateBrokerageSchemeDetails(booking2, quoteList1, bschemelist);
+         Booking__c updatedBooking4 = BookingClass2.updateBrokerageSchemeDetails(booking2, quoteList1, bs1list);
+         Booking__c updatedBooking5 = BookingClass2.updateBrokerageSchemeDetails(booking1, quoteList1, bs2list);
         
         Test.stopTest();    
     }
