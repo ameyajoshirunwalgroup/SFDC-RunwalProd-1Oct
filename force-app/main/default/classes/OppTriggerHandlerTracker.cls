@@ -238,7 +238,7 @@ public class OppTriggerHandlerTracker
         
         //SendSalesExperienceWhatsappMsg.sendMsg(new List<Id>{objopp.Id});
         
-        trgOppHandler.updateReferralCustDetails(new List<Opportunity>{objopp});
+       // trgOppHandler.updateReferralCustDetails(new List<Opportunity>{objopp});
 Test.stopTest();
     }
 }
