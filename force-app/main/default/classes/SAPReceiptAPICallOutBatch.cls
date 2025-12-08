@@ -161,12 +161,11 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
         
         for(Opportunity oppRecord : scope)
         {
-            //If EOI is present we will tag the Payment Reciept to the Opportunity else it will be in tagged to booking record
-            if(oppRecord.EOI__r.size() >0 && oppRecord.Booking__c ==null)
-            {
-                //   System.debug('*added in map**');
+            /*Added for unidentified Payment starts */
+            if(oppRecord.Booking__c ==null){
                 customerOppMap.put(oppRecord.SAP_Customer_Number__c, oppRecord);
             }
+            /*Added for unidentified Payment ends */
             
             else{
                 if(oppRecord.Booking__c != null){

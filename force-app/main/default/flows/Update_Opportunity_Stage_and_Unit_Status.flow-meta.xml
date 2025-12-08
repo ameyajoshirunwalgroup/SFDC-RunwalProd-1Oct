@@ -59,6 +59,9 @@
         <label>Update Project Unit Status</label>
         <locationX>176</locationX>
         <locationY>431</locationY>
+        <connector>
+            <targetReference>Update_Receipts</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -77,6 +80,27 @@
             </value>
         </inputAssignments>
         <object>Project_Unit__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Receipts</name>
+        <label>Update Receipts</label>
+        <locationX>176</locationX>
+        <locationY>539</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Opportunity__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Active__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Receipt__c</object>
     </recordUpdates>
     <start>
         <locationX>50</locationX>

@@ -65,6 +65,7 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                     //Added by coServe 10-10-2022 start
                     if(trigger.isInsert){
                         updateCAMandDevChrgDetails.add(bkg.Id);
+                        BookingTriggerHandler.tagReceiptsFromOpportunity(Trigger.New);//Added for unidentified payments
                         //updateDvlpmentCharge.add(bkg.Id);  
                     }
                     //Added by coServe 10-10-2022 end
