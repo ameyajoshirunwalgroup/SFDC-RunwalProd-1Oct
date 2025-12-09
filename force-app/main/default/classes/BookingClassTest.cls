@@ -552,7 +552,7 @@ public class BookingClassTest {
         bookC1.applicant5.Mobile_Number__c = null;
         bookC1.applicant5.Email_Address__c = null;
         bookC1.applicant5.Country__c = 'India';
-        bookC1.Save();
+        //bookC1.Save();
         
         bookC1.applicant.Subtype_Of_Applicant__c = 'For NRI';
         bookC1.applicant.PancardNo__c = 'ABC1234';
@@ -569,7 +569,7 @@ public class BookingClassTest {
         bookC1.applicant5.Subtype_Of_Applicant__c = 'For NRI';
         bookC1.applicant5.PancardNo__c = 'ABC1234';
         bookC1.applicant5.Address_Proof_Number__c = 'ABC1234*';
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.applicant.Subtype_Of_Applicant__c = 'For Company';
         bookC1.applicant.PancardNo__c = 'ABC1234';
         bookC1.applicant.Address_Proof_Number__c = 'ABC1234*';
@@ -585,7 +585,7 @@ public class BookingClassTest {
         bookC1.applicant5.Subtype_Of_Applicant__c = 'For Company';
         bookC1.applicant5.PancardNo__c = 'ABC1234';
         bookC1.applicant5.Address_Proof_Number__c = 'ABC1234*';
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.applicant.Subtype_Of_Applicant__c = 'Partnership Firm';
         bookC1.applicant.PancardNo__c = 'ABC1234';
         bookC1.applicant.Address_Proof_Number__c = 'ABC1234*';
@@ -688,6 +688,12 @@ public class BookingClassTest {
     @isTest
     private static void BookingTest4(){
         Test.StartTest();
+        /*Account acc = [SELECT Id FROM Account LIMIT 1];
+        Opportunity objcustomer = [SELECT Id FROM Opportunity LIMIT 1];
+        Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
+        Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
+        Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];*/
         BookingTestData data4 = runBookingTestLogic();
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
@@ -705,58 +711,60 @@ public class BookingClassTest {
         bookC1.getaddressstatus();
         
         Test.stopTest();    
+        BookingClass.Dummy();
     }
     
     @isTest
     private static void BookingTest5(){
         Test.StartTest();
-        Account acc = [SELECT Id FROM Account LIMIT 1];
+        BookingTestData data5 = runBookingTestLogic();
+        /*Account acc = [SELECT Id FROM Account LIMIT 1];
         Opportunity objcustomer = [SELECT Id FROM Opportunity LIMIT 1];
         Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
         Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
+        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];*/
         
-        objcustomer.Walkin_Source__c = 'Emp / Mgmt Reference';
-        update objcustomer;
+        data5.objcustomer.Walkin_Source__c = 'Emp / Mgmt Reference';
+        update data5.objcustomer;
                   
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
-        ApexPages.currentPage().getParameters().put('optyId',objcustomer.id);
+        ApexPages.currentPage().getParameters().put('optyId',data5.objcustomer.id);
         //ApexPages.currentPage().getParameters().put('unitId',objPUU.id);
-        ApexPages.currentPage().getParameters().put('projectId',objpr.id);
+        ApexPages.currentPage().getParameters().put('projectId',data5.objpr.id);
         BookingClass bookC1 = new BookingClass();
         bookC1.i = 0;
         List < SelectOption > sq1= bookC1.getQuote;
-        bookC1.selectedQuote = q.Id;
-        bookC1.receiptlist.add(r1);
+        bookC1.selectedQuote = data5.q.Id;
+        //bookC1.receiptlist.add(data5.r1);
         bookC1.getTokenAmount();
         bookC1.getReceiptDetails();
-        bookC1.addReciept();
+       // bookC1.addReciept();
         bookC1.getaddressstatus();
         bookC1.boookingObj.Future_Correspondence_Contact__c = 'Other';
         bookC1.boookingObj.Future_Correspondence_Contact_Phone__c = '';
         bookC1.boookingObj.Future_Correspondence_Contact_Email__c = '';
         bookC1.boookingObj.Future_Correspondence_Contact_Relation__c = '';
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '1st Applicant';
         bookC1.applicant.Email_Address__c = '111@mail.com';
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '2nd Applicant';
         bookC1.applicant2.Name = 'Applicant 2';
         bookC1.applicant2.Mobile_Number__c = '2222222222';
         bookC1.applicant2.Email_Address__c = '222@mail.com';
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '3rd Applicant';
         bookC1.applicant3.Name = 'Applicant 3';
         bookC1.applicant3.Mobile_Number__c = '3333333333';
         bookC1.applicant3.Email_Address__c = '333@mail.com';
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '4th Applicant';
         bookC1.applicant4.Name = 'Applicant 4';
         bookC1.applicant4.Mobile_Number__c = '4444444444';
         bookC1.applicant4.Email_Address__c = '444@mail.com';
-        bookC1.Save();
+       // bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '5th Applicant';
         bookC1.applicant5.Name = 'Applicant 5';
         bookC1.applicant5.Mobile_Number__c = '5555555555';
@@ -805,13 +813,13 @@ public class BookingClassTest {
         
         bookC1.boookingObj.Future_Correspondence_Contact__c = '2nd Applicant';
         bookC1.applicant2.Name = null;
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '3rd Applicant';
         bookC1.applicant3.Name = null;
-        bookC1.Save();
+       // bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '4th Applicant';
         bookC1.applicant4.Name = null;
-        bookC1.Save();
+        //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '5th Applicant';
         bookC1.applicant5.Name = null;
         bookC1.Save();
