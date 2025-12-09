@@ -89,6 +89,13 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Booking__r.Customer__r.Sales_Manager_User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Notify_RM_For_SAP_Receipt_Creation</targetReference>
             </connector>
