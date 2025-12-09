@@ -9,6 +9,10 @@
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
             <name>senderType</name>
             <value>
                 <stringValue>OrgWideEmailAddress</stringValue>
@@ -36,33 +40,11 @@
             <name>emailBody</name>
             <value>
                 <stringValue>Hello {!$Record.RW_Booking__r.Sales_Manager__r.FirstName} {!$Record.RW_Booking__r.Sales_Manager__r.LastName} This is to notify you that a new SAP Receipt has been created for the following booking: Customer Number: {!$Record.SAP_Customer_Number__c}
-
-
-
 Booking ID: {!bookingURL}
-
-
-
 Customer Name: {!$Record.RW_Booking__r.Customer__r.Name}
-
-
-
 Unit: {!$Record.RW_Booking__r.Unit_No__r.Name}
-
-
-
 Project: {!$Record.RW_Booking__r.Project__r.ProjectName__c}
-
-
-
 Receipt Name: {!$Record.Name} Receipt Amount: {!$Record.Total_Amount_Paid__c}
-
-
-
-
-
-
-
 Please note that no SAP Receipts existed earlier, and this is the first receipt generated for this booking. Kindly review and take necessary action. Thank you,</stringValue>
             </value>
         </inputParameters>
@@ -71,20 +53,11 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
         </inputParameters>
         <inputParameters>
             <name>recipientId</name>
-            <value>
-                <elementReference>$Record.RW_Booking__r.Customer__r.Sales_Manager_User__r.Email</elementReference>
-            </value>
         </inputParameters>
         <inputParameters>
             <name>relatedRecordId</name>
             <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>logEmailOnSend</name>
-            <value>
-                <booleanValue>true</booleanValue>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -111,7 +84,10 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
             </conditions>
             <conditions>
                 <leftValueReference>$Record.RW_Booking__r.Customer__r.Sales_Manager_User__r.Email</leftValueReference>
-                <operator>EqualTo</operator>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
             </conditions>
             <connector>
                 <targetReference>Notify_RM_For_SAP_Receipt_Creation</targetReference>

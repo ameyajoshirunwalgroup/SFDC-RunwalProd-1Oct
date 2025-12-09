@@ -9,6 +9,10 @@
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
             <name>senderType</name>
             <value>
                 <stringValue>OrgWideEmailAddress</stringValue>
@@ -36,40 +40,23 @@
             <name>emailBody</name>
             <value>
                 <stringValue>Hello {!$Record.Sales_Manager__r.FirstName} {!$Record.Sales_Manager__r.LastName}
-
 This is to notify you that SAP Receipt are not created for the following booking:
-
 Customer Number: {!$Record.Customer__r.SAP_Customer_Number__c}
-
 Booking ID: {!recordURL}
-
 Customer Name: {!$Record.Customer__r.Name}
-
 Unit: {!$Record.Unit_No__r.Name}
-
 Project: {!$Record.Project__r.ProjectName__c}
-
 Kindly review and take necessary action.
-
 Thank you,</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>recipientId</name>
-            <value>
-                <elementReference>$Record.Customer__r.Sales_Manager_User__r.Email</elementReference>
-            </value>
         </inputParameters>
         <inputParameters>
             <name>relatedRecordId</name>
             <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>logEmailOnSend</name>
-            <value>
-                <booleanValue>true</booleanValue>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
