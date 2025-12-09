@@ -384,28 +384,45 @@ public class BookingClassTest {
         insert blk1;
     }
     
+    public class BookingTestData {
+        public Opportunity objcustomer;
+        public Project_Unit__c objPUU;
+        public Project__c objpr;
+        public Quotation__c q;
+        public Receipt__c r1;
+        Blocking_Unit_Information__c blk;
+        Broker__c brk;
+        Account acc;
+        List<Opportunity> objcustomers;
+    }
+       private static BookingTestData runBookingTestLogic() {
+         BookingTestData data = new BookingTestData();
+        data.objcustomer = [SELECT Id FROM Opportunity LIMIT 1];
+        data.objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
+        data.objpr = [SELECT Id FROM Project__c LIMIT 1];
+        data.q = [SELECT Id FROM Quotation__c LIMIT 1];
+        data.r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
+        data.blk =[Select Id from Blocking_Unit_Information__c LIMIT 1];
+        data.brk = [SELECT Id FROM Broker__c LIMIT 1];
+        data.acc = [SELECT Id FROM Account LIMIT 1];
+        data.objcustomers =[SELECT Id FROM Opportunity LIMIT 2];
+          return data;
+    }
     
     @isTest
-    private static void BookingTest1() {
-        
-        Test.StartTest();
-        Opportunity objcustomer = [SELECT Id FROM Opportunity LIMIT 1];
-        Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
-        Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
-        Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
-        Blocking_Unit_Information__c blk =[Select Id from Blocking_Unit_Information__c LIMIT 1];
-          
+    static void BookingTest1() {
+        Test.startTest();
+         BookingTestData data1 = runBookingTestLogic();
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
-        ApexPages.currentPage().getParameters().put('optyId',objcustomer.id);
-        ApexPages.currentPage().getParameters().put('unitId',objPUU.id);
-        ApexPages.currentPage().getParameters().put('projectId',objpr.id);
+        ApexPages.currentPage().getParameters().put('optyId',data1.objcustomer.id);
+        ApexPages.currentPage().getParameters().put('unitId',data1.objPUU.id);
+        ApexPages.currentPage().getParameters().put('projectId',data1.objpr.id);
         BookingClass bookC1 = new BookingClass();
         bookC1.i = 0;
         List < SelectOption > sq1= bookC1.getQuote;
-        bookC1.selectedQuote = q.Id;
-        bookC1.receiptlist.add(r1);
+        bookC1.selectedQuote = data1.q.Id;
+        bookC1.receiptlist.add(data1.r1);
         bookC1.getTokenAmount();
         bookC1.getReceiptDetails();
         bookC1.addReciept();
@@ -416,24 +433,19 @@ public class BookingClassTest {
     }
     
     @isTest
-    private static void BookingTest2(){
-        Test.StartTest();
-        Opportunity objcustomer = [SELECT Id FROM Opportunity LIMIT 1];
-        Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
-        Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
-        Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
-          
+    static void BookingTest2() {
+        Test.startTest();
+        BookingTestData data2 = runBookingTestLogic();
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
-        ApexPages.currentPage().getParameters().put('optyId',objcustomer.id);
-        ApexPages.currentPage().getParameters().put('unitId',objPUU.id);
+        ApexPages.currentPage().getParameters().put('optyId',data2.objcustomer.id);
+        ApexPages.currentPage().getParameters().put('unitId',data2.objPUU.id);
         //ApexPages.currentPage().getParameters().put('projectId',objpr.id);
         BookingClass bookC1 = new BookingClass();
         bookC1.i = 0;
         List < SelectOption > sq1= bookC1.getQuote;
-        bookC1.selectedQuote = q.Id;
-        bookC1.receiptlist.add(r1);
+        bookC1.selectedQuote = data2.q.Id;
+        bookC1.receiptlist.add(data2.r1);
         bookC1.getTokenAmount();
         bookC1.getReceiptDetails();
         bookC1.addReciept();
@@ -484,38 +496,31 @@ public class BookingClassTest {
     }
     
     @isTest
-    private static void BookingTest3(){
-        Test.StartTest();
-        Account acc = [SELECT Id FROM Account LIMIT 1];
-        List<Opportunity> objcustomers = [SELECT Id FROM Opportunity LIMIT 2];
-        Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
-        Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
-        Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
-        Broker__c brk = [SELECT Id FROM Broker__c LIMIT 1];
+    static void BookingTest3() {
+        Test.startTest();
+        BookingTestData data3 = runBookingTestLogic();
         
-        acc.BillingPostalCode = '521366';
-        acc.RW_Zip_Code__c = '521366';
-        update acc;
+        data3.acc.BillingPostalCode = '521366';
+        data3.acc.RW_Zip_Code__c = '521366';
+        update data3.acc;
         
-        objcustomers[0].Walkin_Source__c = 'Channel Partner';
-        objcustomers[0].RW_Sales_Associate__c = 'Test';
-        objcustomers[0].RW_Sourcing_Manager__c = 'Test';
-        objcustomers[0].RW_Previous_Opportunity__c = objcustomers[1].Id;
-        objcustomers[0].RW_Walkin_Channel_Partner__c = brk.Id;
-        objcustomers[0].Walkin_SubSource__c = 'Test';
-        update objcustomers[0];
+        data3.objcustomers[0].Walkin_Source__c = 'Channel Partner';
+        data3.objcustomers[0].RW_Sales_Associate__c = 'Test';
+        data3.objcustomers[0].RW_Sourcing_Manager__c = 'Test';
+        data3.objcustomers[0].Sourcing_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
+        data3.objcustomers[0].RW_Previous_Opportunity__c = data3.objcustomers[1].Id;
+        data3.objcustomers[0].RW_Walkin_Channel_Partner__c = data3.brk.Id;
+        data3.objcustomers[0].Walkin_SubSource__c = 'Test';
+        update data3.objcustomers[0];
           
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
-        ApexPages.currentPage().getParameters().put('optyId',objcustomers[0].id);
-        //ApexPages.currentPage().getParameters().put('unitId',objPUU.id);
-        //ApexPages.currentPage().getParameters().put('projectId',objpr.id);
+        ApexPages.currentPage().getParameters().put('optyId',data3.objcustomers[0].id);
         BookingClass bookC1 = new BookingClass();
         bookC1.i = 0;
         List < SelectOption > sq1= bookC1.getQuote;
-        bookC1.selectedQuote = q.Id;
-        bookC1.receiptlist.add(r1);
+        bookC1.selectedQuote = data3.q.Id;
+        bookC1.receiptlist.add(data3.r1);
         bookC1.getTokenAmount();
         bookC1.getReceiptDetails();
         bookC1.addReciept();
@@ -683,23 +688,17 @@ public class BookingClassTest {
     @isTest
     private static void BookingTest4(){
         Test.StartTest();
-        Account acc = [SELECT Id FROM Account LIMIT 1];
-        Opportunity objcustomer = [SELECT Id FROM Opportunity LIMIT 1];
-        Project_Unit__c objPUU = [SELECT Id FROM Project_Unit__c LIMIT 1];
-        Project__c objpr = [SELECT Id FROM Project__c LIMIT 1];
-        Quotation__c q = [SELECT Id FROM Quotation__c LIMIT 1];
-        Receipt__c r1 = [SELECT Id,Mode__c,Cheque_DD__c,Cheque_DD_Date__c,Total_Amount__c,DraweeBank__c,Token_Amount_ST__c,Receipt_Unique_Key__c FROM Receipt__c LIMIT 1];
-                  
+        BookingTestData data4 = runBookingTestLogic();
         PageReference pRef1 = Page.BookingPageForm2;
         Test.setCurrentPage(pRef1);
-        ApexPages.currentPage().getParameters().put('optyId',objcustomer.id);
+        ApexPages.currentPage().getParameters().put('optyId',data4.objcustomer.id);
         //ApexPages.currentPage().getParameters().put('unitId',objPUU.id);
-        ApexPages.currentPage().getParameters().put('projectId',objpr.id);
+        ApexPages.currentPage().getParameters().put('projectId',data4.objpr.id);
         BookingClass bookC1 = new BookingClass();
         bookC1.i = 0;
         List < SelectOption > sq1= bookC1.getQuote;
-        bookC1.selectedQuote = q.Id;
-        bookC1.receiptlist.add(r1);
+        bookC1.selectedQuote = data4.q.Id;
+        bookC1.receiptlist.add(data4.r1);
         bookC1.getTokenAmount();
         bookC1.getReceiptDetails();
         bookC1.addReciept();
