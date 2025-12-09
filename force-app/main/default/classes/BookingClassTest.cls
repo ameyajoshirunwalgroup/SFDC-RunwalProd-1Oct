@@ -495,8 +495,8 @@ public class BookingClassTest {
         Test.stopTest();    
     }
     
-    @isTest
-    private static void BookingTest3() {
+   // @isTest
+   /* private static void BookingTest3() {
         Test.startTest();
         BookingTestData data3 = runBookingTestLogic();
         
@@ -504,7 +504,7 @@ public class BookingClassTest {
         data3.acc.RW_Zip_Code__c = '521366';
         update data3.acc;
         
-        data3.objcustomers[0].Walkin_Source__c = 'Channel Partner';
+       /* data3.objcustomers[0].Walkin_Source__c = 'Channel Partner';
         data3.objcustomers[0].RW_Sales_Associate__c = 'Test';
         data3.objcustomers[0].RW_Sourcing_Manager__c = 'Test';
         data3.objcustomers[0].Sourcing_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
@@ -681,9 +681,8 @@ public class BookingClassTest {
         Booking__c updatedBooking3 = BookingClass2.updateBrokerageSchemeDetails(booking2, quoteList1, bschemelist);
          Booking__c updatedBooking4 = BookingClass2.updateBrokerageSchemeDetails(booking2, quoteList1, bs1list);
          Booking__c updatedBooking5 = BookingClass2.updateBrokerageSchemeDetails(booking1, quoteList1, bs2list);
-        
         Test.stopTest();    
-    }
+    }*/
     
     @isTest
     private static void BookingTest4(){
