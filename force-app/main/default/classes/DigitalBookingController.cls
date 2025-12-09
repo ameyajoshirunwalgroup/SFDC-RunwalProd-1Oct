@@ -1992,7 +1992,7 @@ i = 1;
                          Signed_Cost_Sheet_Form_Id__c,Signed_Cost_Sheet_Uploaded__c, IOM_Document_Id__c, IOM_Document_Uploaded__c,
                          Deviation_Approval_Doc_Id__c,Deviation_Approval_Doc_Uploaded__c, Token_Payment_Doc_Id__c, Token_Payment_Doc_Uploaded__c,
                          Quotation__r.walkin_Source__c,Type_of_Client__c,Tower__c,Project__c,Quotation__r.Brokerage_Agreement_Value__c,Passback_Amount__c,Unit_No__r.Token_Amount__c,Unit_No__r.RW_Project__r.Token_Amount__c,
-                         (select id,Mode__c,Physically_Cheque_Received__c,Total_Amount__c from Receipts__r) from booking__c where id=:recId];
+                         (select id,Mode__c,Physically_Cheque_Received__c,Total_Amount__c from Receipts__r)/**Added for unidentified payment starts */ ,Customer__r.Blocked_Date__c/**Added for unidentified payment ends */ from booking__c where id=:recId];
         boolean err = false;
         Decimal totalAmount = 0; //Added by Vinay 13-08-2025
         Decimal requiredTokenAmount = bk.Unit_No__r.Token_Amount__c != null ? bk.Unit_No__r.Token_Amount__c : bk.Unit_No__r.RW_Project__r.Token_Amount__c; //Added by Vinay 13-08-2025
@@ -2011,6 +2011,7 @@ i = 1;
         
         
          /*Added for unidentified Payment starts*/
+        Date blockedDateLimit = Date.newInstance(2025, 12, 9); // 12-Sep-2025
         AggregateResult[] results = [SELECT SUM(Total_Amount_Paid__c) total 
                                              FROM RW_Payment_Details__c 
                                              WHERE RW_Booking__c = :recId];
@@ -2020,7 +2021,7 @@ i = 1;
             }
         System.debug('totalPaid**'+totalPaid);
         System.debug('requiredTokenAmount**'+requiredTokenAmount);
-        if(totalPaid < requiredTokenAmount){
+        if(totalPaid < requiredTokenAmount && bk.Customer__r.Blocked_Date__c !=null && bk.Customer__r.Blocked_Date__c>blockedDateLimit){
             errorWrapper wrap = new errorWrapper();
             wrap.isError = true;
             wrap.ErrorMessage = 'Total SAP Receipt Amount is less than the Token Amount. Token Amount is:'+requiredTokenAmount;
