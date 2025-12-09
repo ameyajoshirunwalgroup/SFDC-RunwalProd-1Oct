@@ -496,7 +496,7 @@ public class BookingClassTest {
     }
     
     @isTest
-    static void BookingTest3() {
+    private static void BookingTest3() {
         Test.startTest();
         BookingTestData data3 = runBookingTestLogic();
         
