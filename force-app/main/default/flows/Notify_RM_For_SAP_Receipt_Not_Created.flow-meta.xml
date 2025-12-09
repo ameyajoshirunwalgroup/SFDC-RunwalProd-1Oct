@@ -65,6 +65,22 @@ Thank you,</stringValue>
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Email</name>
+        <label>Assign Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recepientEmail</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Customer__r.Sales_Manager_User__r.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>SAP_Receipts_Not_Created</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Check_Status</name>
         <label>Check Status</label>
@@ -103,7 +119,7 @@ Thank you,</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>SAP_Receipts_Not_Created</targetReference>
+                <targetReference>Assign_Email</targetReference>
             </connector>
             <label>Is Unprocessed?</label>
         </rules>
@@ -167,6 +183,13 @@ Thank you,</stringValue>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>recepientEmail</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>varBooking</name>
         <dataType>String</dataType>

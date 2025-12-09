@@ -39,13 +39,24 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <stringValue>Hello {!$Record.RW_Booking__r.Sales_Manager__r.FirstName} {!$Record.RW_Booking__r.Sales_Manager__r.LastName} This is to notify you that a new SAP Receipt has been created for the following booking: Customer Number: {!$Record.SAP_Customer_Number__c}
+                <stringValue>Hello {!$Record.RW_Booking__r.Sales_Manager__r.FirstName} {!$Record.RW_Booking__r.Sales_Manager__r.LastName}
+ This is to notify you that a new SAP Receipt has been created for the following booking: Customer Number: {!$Record.SAP_Customer_Number__c}
+
 Booking ID: {!bookingURL}
+
 Customer Name: {!$Record.RW_Booking__r.Customer__r.Name}
+
 Unit: {!$Record.RW_Booking__r.Unit_No__r.Name}
+
 Project: {!$Record.RW_Booking__r.Project__r.ProjectName__c}
+
 Receipt Name: {!$Record.Name} Receipt Amount: {!$Record.Total_Amount_Paid__c}
-Please note that no SAP Receipts existed earlier, and this is the first receipt generated for this booking. Kindly review and take necessary action. Thank you,</stringValue>
+
+Please note that no SAP Receipts existed earlier, and this is the first receipt generated for this booking.
+
+ Kindly review and take necessary action. 
+
+Thank you,</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -66,6 +77,22 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Email_Address</name>
+        <label>Assign Email Address</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recepientAddress</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.RW_Booking__r.Customer__r.Sales_Manager_User__r.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Notify_RM_For_SAP_Receipt_Creation</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Check_Booking</name>
         <label>Check Booking</label>
@@ -97,7 +124,7 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Notify_RM_For_SAP_Receipt_Creation</targetReference>
+                <targetReference>Assign_Email_Address</targetReference>
             </connector>
             <label>Booking Tagged</label>
         </rules>
@@ -144,6 +171,13 @@ Please note that no SAP Receipts existed earlier, and this is the first receipt 
         <name>bookingLink</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recepientAddress</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
