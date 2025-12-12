@@ -108,6 +108,9 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
 
 
     public static void sendBlockCustomerReceiptReports() {
+
+        Date yesterday = Date.today().addDays(-1);
+        
         List<Messaging.SingleEmailMessage> emailsTosend = new List<Messaging.SingleEmailMessage>();
         OrgWideEmailAddress fromAddress =[
                 SELECT Id 
@@ -117,12 +120,12 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
             ];
         // Step 1: Query all relevant Opportunities with related Receipts
         List<Opportunity> opps = [
-            SELECT Id, Name, StageName, SAP_Customer_Number__c, RW_Project__c, RW_Project__r.Name,
+            SELECT Id, Name, StageName, SAP_Customer_Number__c, RW_Project__c, RW_Project__r.Name,Blocked_Date__c,
                    (SELECT Id, Name, Mode__c, Cheque_DD__c, Total_Amount__c, DraweeBank__c, Account_Recon__c, Project_Unit__c, Project_Unit__r.Name
                     FROM Receipts__r)
             FROM Opportunity
             WHERE StageName = 'Unit Blocked'
-            AND CreatedDate =: Date.today()
+            AND Blocked_Date__c =: yesterday
             AND SAP_Customer_Number__c != null
         ];
         System.debug('opps**'+opps);
