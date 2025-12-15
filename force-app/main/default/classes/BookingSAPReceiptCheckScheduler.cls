@@ -110,7 +110,7 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
     public static void sendBlockCustomerReceiptReports() {
 
         Date yesterday = Date.today().addDays(-1);
-        
+
         List<Messaging.SingleEmailMessage> emailsTosend = new List<Messaging.SingleEmailMessage>();
         OrgWideEmailAddress fromAddress =[
                 SELECT Id 
@@ -159,7 +159,7 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
             if(String.isBlank(emails)) continue;
 
             // Build CSV
-            String csvContent = 'Project,Project Unit,Opportunity,SAP Customer Number,Receipt Name,Instrument,Cheque/DD No,Total Amount,Drawee Bank,Account Recon\n';
+            String csvContent = 'Project,Project Unit,Opportunity,SAP Customer Number,Receipt Name,Instrument,Cheque/DD No,Total Amount,Drawee Bank,Account Recon,Agreement Value\n';
 
             for(Opportunity o : oppList){
                 for(Receipt__c r : o.Receipts__r){
@@ -172,7 +172,8 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
                                   r.Cheque_DD__c + '","' +
                                   r.Total_Amount__c + '","' +
                                   r.DraweeBank__c + '","' +
-                                  r.Account_Recon__c + '"\n';
+                                  r.Account_Recon__c + '","' +
+                                  o.RW_Agreement_Value__c + '"\n';
                 }
             }
             System.debug('csvContent**'+csvContent);
