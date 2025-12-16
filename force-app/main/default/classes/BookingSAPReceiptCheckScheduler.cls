@@ -120,7 +120,7 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
             ];
         // Step 1: Query all relevant Opportunities with related Receipts
         List<Opportunity> opps = [
-            SELECT Id, Name, StageName, SAP_Customer_Number__c, RW_Project__c, RW_Project__r.Name,Blocked_Date__c,
+            SELECT Id, Name, StageName, SAP_Customer_Number__c, RW_Project__c, RW_Project__r.Name,Blocked_Date__c,RW_Agreement_Value__c,
                    (SELECT Id, Name, Mode__c, Cheque_DD__c, Total_Amount__c, DraweeBank__c, Account_Recon__c, Project_Unit__c, Project_Unit__r.Name
                     FROM Receipts__r)
             FROM Opportunity
