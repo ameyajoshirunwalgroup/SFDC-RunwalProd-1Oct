@@ -124,8 +124,8 @@ public class BookingSAPReceiptCheckScheduler implements Schedulable {
                    (SELECT Id, Name, Mode__c, Cheque_DD__c, Total_Amount__c, DraweeBank__c, Account_Recon__c, Project_Unit__c, Project_Unit__r.Name
                     FROM Receipts__r)
             FROM Opportunity
-            WHERE StageName = 'Unit Blocked'
-            AND Blocked_Date__c =: yesterday
+            WHERE /*StageName = 'Unit Blocked'
+            AND */Blocked_Date__c =: yesterday
             AND SAP_Customer_Number__c != null
         ];
         System.debug('opps**'+opps);
