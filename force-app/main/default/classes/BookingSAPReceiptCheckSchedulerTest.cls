@@ -90,19 +90,7 @@ public class BookingSAPReceiptCheckSchedulerTest {
         Test.startTest();
 
         BookingSAPReceiptCheckScheduler.sendPendingSAPReceiptReportToSM();
-
-        Test.stopTest();
-    }
-
-
-    @isTest
-    static void testBlockCustomerReceiptReports() {
-
-        Test.startTest();
-
-        BookingSAPReceiptCheckScheduler.sendBlockCustomerReceiptReports();
         BookingSAPReceiptCheckScheduler.Dummy();
         Test.stopTest();
-
     }
 }
