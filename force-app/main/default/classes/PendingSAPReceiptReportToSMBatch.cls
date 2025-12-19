@@ -1,8 +1,11 @@
-global class BlockCustomerReportForCRMBatch implements Database.Batchable<sObject>,Schedulable {
+global class PendingSAPReceiptReportToSMBatch implements Database.Batchable<sObject>,Schedulable {
 
-    private OrgWideEmailAddress fromAddress;
+    private Date targetDate;
+    private OrgWideEmailAddress senderEmail;
 
-    global BlockCustomerReportForCRMBatch() {
+    // Constructor
+    global PendingSAPReceiptReportToSMBatch() {
+        targetDate = Date.today().addDays(-1);
 
         List<OrgWideEmailAddress> owe = [
             SELECT Id
@@ -11,103 +14,118 @@ global class BlockCustomerReportForCRMBatch implements Database.Batchable<sObjec
             LIMIT 1
         ];
         if (!owe.isEmpty()) {
-            fromAddress = owe[0];
+            senderEmail = owe[0];
         }
     }
 
     global Database.QueryLocator start(Database.BatchableContext bc) {
-
-        return Database.getQueryLocator([
-            SELECT Id,Project_Account_Team_Email__c from Project__c where Project_Account_Team_Email__c!=null
-        ]);
+        return Database.getQueryLocator([SELECT Id, Name, CreatedDate, Booking_Date__c,
+                   Customer__r.Name,
+                   Customer__r.Sales_Manager_User__r.Email,
+                   Customer__r.Sales_Manager_User__r.Name,
+                   Customer__r.SAP_Customer_Number__c,
+                   Project__r.Name,
+                   Unit_No__c,
+                   Status__c,
+                   RW_Total_Receipt_Amount_Received__c,
+                   X5_Received__c,
+                   SO_Release_Date_in_SAP__c
+            FROM Booking__c
+            WHERE /*DAY_ONLY(CreatedDate) = :targetDate
+            AND*/ Customer__r.Sales_Manager_User__r.Email != NULL AND Customer__r.Sales_Manager_User__r.Name='Amitabh Saasworx']);
+            
     }
 
-    
-    global void execute(Database.BatchableContext bc, List<Project__c> scope){
+    global void execute(Database.BatchableContext bc, List<Booking__c> scope) {
+
+        Map<String, List<Booking__c>> smEmailVsBookings = new Map<String, List<Booking__c>>();
+        Map<Id, List<RW_Payment_Details__c>> bookingVsReceipts = new Map<Id, List<RW_Payment_Details__c>>();
+        Set<Id> bookingIds = new Set<Id>();
         
         if(!scope.isEmpty()){
-            Set<Id> projId = new Set<Id>();
-            for(Project__c proj: scope){
-                projId.add(proj.id);
+            for (Booking__c b : scope) {
+                String email = b.Customer__r.Sales_Manager_User__r.Email;
+                bookingIds.add(b.Id);
+                if (!smEmailVsBookings.containsKey(email)) {
+                    smEmailVsBookings.put(email, new List<Booking__c>());
+                }
+                smEmailVsBookings.get(email).add(b);
             }
-            Map<Id, Project__c> mapOfIdProject = new Map<Id,Project__c>(scope);
-            List<Opportunity> oppList = [Select id from Opportunity where RW_Project__c IN: projId AND (StageName ='Unit Blocked' OR StageName='Negotiation') AND SAP_Customer_Number__c != NULL AND Id NOT IN (
-                    SELECT Opportunity__c
-                    FROM RW_Payment_Details__c) ];
-        
-            Set<Id> oppIds = new Set<Id>();
-            for (Opportunity opp : oppList) {
-                 oppIds.add(opp.Id);
+        }
+
+        List<RW_Payment_Details__c> lstReceipt = new List<RW_Payment_Details__c>();
+        if(!bookingIds.isEmpty()){
+            lstReceipt = [Select Id,Name,RW_Booking__c from RW_Payment_Details__c where RW_Booking__c=:bookingIds];
+        }
+         if(!lstReceipt.isEmpty() && lstReceipt.size()>0){
+            for (RW_Payment_Details__c r : lstReceipt) {
+                if (!bookingVsReceipts.containsKey(r.RW_Booking__c)) {
+                    bookingVsReceipts.put(r.RW_Booking__c, new List<RW_Payment_Details__c>());
+                }
+                bookingVsReceipts.get(r.RW_Booking__c).add(r);
             }
+        }
+
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+
+        for (String smEmail : smEmailVsBookings.keySet()) {
+
+            List<Booking__c> bkgList = smEmailVsBookings.get(smEmail);
+            String smName = bkgList[0].Customer__r.Sales_Manager_User__r.Name;
             
-            List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
-            List<Receipt__c> receiptLst = [Select Id,Name,Mode__c,Cheque_DD__c,Total_Amount__c,Account_Recon__c,DraweeBank__c,Opportunity__r.RW_Agreement_Value__c,Opportunity__c,Opportunity__r.Name,Opportunity__r.RW_Project__r.Name,Project_Unit__r.Name,SAP_Customer_Number__c,Cheque_DD_Date__c,Drawn_in_favour_of__c from Receipt__c where Opportunity__c=:oppIds limit 50000];
-            Map<String, String> projectToEmailMap = new Map<STring, String>();
-            Map<String, List<Receipt__c>> projectReceiptMap = new Map<String, List<Receipt__c>>();
-    
-    
-            for(Receipt__c receipt : receiptLst){
-                String projectId = receipt.Opportunity__r.RW_Project__r.Id;
-    
-                if (projectId != null) {
-                    if (!projectReceiptMap.containsKey(projectId)) {
-                        projectReceiptMap.put(projectId, new List<Receipt__c>());
-                    }
-                    projectReceiptMap.get(projectId).add(receipt);
+
+            String csvData =
+                'Booking Id,Booking Name,Customer Name,SAP Customer Number,Project,Unit,Status\n';
+
+            for (Booking__c bkg : bkgList) {
+                //List<Receipt__c> receiptList = bookingVsReceipts.get(bkg.Id);
+                //for (Receipt__c receipt : receiptList) {
+                if(!bookingVsReceipts.containsKey(bkg.Id)){
+                    csvData +=
+                    bkg.Id + ',' +
+                    bkg.Name + ',' +
+                    bkg.Customer__r.Name + ',' +
+                    bkg.Customer__r.SAP_Customer_Number__c + ',' +
+                    bkg.Project__r.Name + ',' +
+                    bkg.Unit_No__c + ',' +
+                    bkg.Status__c + '\n';
                 }
             }
-    
-            System.debug('projectReceiptMap**'+projectReceiptMap);
-            for (String projectId : projectReceiptMap.keySet()) {
-                List<Receipt__c> receipts = projectReceiptMap.get(projectId);
-                String projectName = receipts[0].Opportunity__r.RW_Project__r.Name;
-                String emails = mapOfIdProject.get(projectId).Project_Account_Team_Email__c;
-                
-                String csvContent = 'Project,Project Unit,Opportunity,SAP Customer Number,Receipt Name,Instrument,Cheque/DD No,Total Amount,Drawee Bank,Account Recon,Drawn in favour of,Date,Agreement Value\n';
-                for (Receipt__c r : receipts) {
-                     csvContent += '"' + r.Opportunity__r.RW_Project__r.Name + '","' +
-                                      (r.Project_Unit__r != null ? r.Project_Unit__r.Name : '') + '","' +
-                                      r.Opportunity__r.Name + '","' +
-                                      r.SAP_Customer_Number__c + '","' +
-                                      r.Name + '","' +
-                                      r.Mode__c + '","' +
-                                      r.Cheque_DD__c + '","' +
-                                      r.Total_Amount__c + '","' +
-                                      r.DraweeBank__c + '","' +
-                                      r.Account_Recon__c + '","' +
-                                      r.Drawn_in_favour_of__c + '","' +
-                                      r.Cheque_DD_Date__c + '","' +
-                                      r.Opportunity__r.RW_Agreement_Value__c + '"\n';
-                }
-    
-                Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
-                attachment.setFileName(projectName + '_Receipt_Report.csv');
-                attachment.setBody(Blob.valueOf(csvContent));
-                attachment.setContentType('text/csv');
-    
-                // Create Email
-                Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-                if(fromAddress!=null){
-                    mail.setOrgWideEmailAddressId(fromAddress.Id);
-                }
-                mail.setToAddresses(emails.split(','));
-                mail.setSubject('Project Receipt Report - ' + projectName);
-                mail.setPlainTextBody('Please find attached the latest receipt report for project: ' + projectName);
-                mail.setFileAttachments(new Messaging.EmailFileAttachment[] { attachment });
-                emailsTosend.add(mail);
+            csvData = csvData.replace('null', '');
+
+            Messaging.EmailFileAttachment attach = new Messaging.EmailFileAttachment();
+            attach.setFileName('Pending_SAP_Receipt_Report.csv');
+            attach.setBody(Blob.valueOf(csvData));
+            attach.setContentType('text/csv');
+
+            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+            if (senderEmail != null) {
+                mail.setOrgWideEmailAddressId(senderEmail.Id);
             }
-            if (!emailsTosend.isEmpty()) {
-                Messaging.sendEmail(emailsTosend);
-            }
+
+            mail.setToAddresses(new List<String>{ smEmail });
+            mail.setSubject('Pending SAP Receipt Creation - Daily Report');
+            mail.setPlainTextBody(
+                'Hello ' + smName + ',\n\n' +
+                'Please find attached the list of bookings (created yesterday) for which SAP receipts are not yet created.\n\n' +
+                'Regards,\nSystem'
+            );
+            mail.setFileAttachments(new Messaging.EmailFileAttachment[] { attach });
+
+            emails.add(mail);
+        }
+
+        if (!emails.isEmpty()) {
+            Messaging.sendEmail(emails);
         }
     }
 
     global void finish(Database.BatchableContext bc) {
-        System.debug('Block Customer Receipt Report Batch completed.');
+        System.debug('Pending SAP Receipt Report Batch completed.');
     }
 
     global void execute(SchedulableContext sc) {
-        Database.executeBatch(new BlockCustomerReportForCRMBatch(), 1);
+        Database.executeBatch(new PendingSAPReceiptReportToSMBatch(), 1);
     }
     Public static void Dummy(){
         integer i=0;

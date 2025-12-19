@@ -65,6 +65,10 @@ public class BlockCustomerReportForCRMBatchTest {
         Database.executeBatch(batch, 200);
         BlockCustomerReportForCRMBatch.Dummy();
         
+        PendingSAPReceiptReportToSMBatch batch2 =new PendingSAPReceiptReportToSMBatch();
+        Database.executeBatch(batch2, 200);
+        PendingSAPReceiptReportToSMBatch.Dummy();
+        
         System.assert(true, 'Batch executed successfully');
     }
 
@@ -77,6 +81,11 @@ public class BlockCustomerReportForCRMBatchTest {
             'BlockCustomerReportForCRMBatchScheduler',
             cronExp,
             new BlockCustomerReportForCRMBatch()
+        );
+        System.schedule(
+            'PendingSAPReceiptReportToSMBatchScheduler',
+            cronExp,
+            new PendingSAPReceiptReportToSMBatch()
         );
         Test.stopTest();
 
