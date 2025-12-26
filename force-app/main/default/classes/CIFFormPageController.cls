@@ -368,8 +368,8 @@ LIMIT 1
             //CIFObj.CorporateCompany__c = objLead.Corporate_Company__c;
             CIFObj.Broker_Type__c = objLead.Broker_Type__c;
             CIFObj.Unregistered_broker_type__c = objLead.Unregistered_broker_type__c;
-            //CIFObj.Pre_Sales_User__c = objLead.Pre_Sales_User__c;  // Commented by Vinay 25-11-2025
-            CIFObj.Pre_Sales_User_LU__c = objLead.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
+            CIFObj.Pre_Sales_User__c = objLead.Pre_Sales_User__c;  // Commented by Vinay 25-11-2025
+            //CIFObj.Pre_Sales_User_LU__c = objLead.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
             
             //CIFObj.Sales_manager__c = objLead.RW_Sourcing_Manager__c; //** taking this from OTP now  //commented by Sheetal on 07/07/2022 to solve issue (I02006) taking sourcing manager from OTP
             
@@ -668,10 +668,10 @@ lstLeadSource.add(objWrap);
             if (otpobj.Channel_Partner_Lookup__c != null)
                 CIFObj.Broker__c = otpobj.Channel_Partner_Lookup__c;
             system.debug('Broker================'+CIFObj.Broker__c);
-            /*if (otpobj.Sourcing_Manager__c != null)
-                CIFObj.Sales_manager__c = otpobj.Sourcing_Manager__c;*/ //Commented by Vinay 25-11-2025
-            if (otpobj.Sourcing_Manager_LU__c != null)  //Added by Vinay 25-11-2025
-                CIFObj.Sales_manager_LU__c = otpobj.Sourcing_Manager_LU__c;
+            if (otpobj.Sourcing_Manager__c != null)
+                CIFObj.Sales_manager__c = otpobj.Sourcing_Manager__c;//Commented by Vinay 25-11-2025
+            // if (otpobj.Sourcing_Manager_LU__c != null)  //Added by Vinay 25-11-2025
+            //     CIFObj.Sales_manager_LU__c = otpobj.Sourcing_Manager_LU__c;
             
             // Referral info
             if (
@@ -995,10 +995,10 @@ return null;
                 //objLead.Corporate_Company__c = CIFObj.CorporateCompany__c;
                 objLead.Broker_Type__c = CIFObj.Broker_Type__c;
                 objLead.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
-                //objLead.Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; //Commented by Vinay 25-11-2025
-                objLead.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; //Added by Vinay 25-11-2025
-                //objLead.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; //Commented by Vinay 25-11-2025
-                objLead.Lead_Sourcing_Manager__c = CIFObj.Sales_manager_LU__c; //Added by Vinay 25-11-2025
+                objLead.Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; //Commented by Vinay 25-11-2025
+                //objLead.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; //Added by Vinay 25-11-2025
+                objLead.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; //Commented by Vinay 25-11-2025
+                //objLead.Lead_Sourcing_Manager__c = CIFObj.Sales_manager_LU__c; //Added by Vinay 25-11-2025
                 objLead.Event_Description__C = CIFObj.Event_Description__C;
                 objLead.Education__c = CIFObj.Education__c;
                 objLead.Client_Type__c = CIFObj.Client_Type__c;
@@ -1347,10 +1347,10 @@ insert p;
                 objOptyToInsert.AccountId = objAcc.Id;
                 objOptyToInsert.Broker_Type__c = CIFObj.Broker_Type__c;
                 objOptyToInsert.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
-                //objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; // Commented by Vinay 25-11-2025
-                objOptyToInsert.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
-                //objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; // Commented by Vinay 25-11-2025
-                objOptyToInsert.Sourcing_Manager_User__c = leadSourcingManager; //Added by Vinay 04-08-2025
+                objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; // Commented by Vinay 25-11-2025
+                //objOptyToInsert.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
+                objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; // Commented by Vinay 25-11-2025
+                //objOptyToInsert.Sourcing_Manager_User__c = leadSourcingManager; //Added by Vinay 04-08-2025
                 objOptyToInsert.Event_Description__C = CIFObj.Event_Description__C;
                 //objOptyToInsert.Lead_Sub_Sub_Source__c = CIFObj.Lead_Sub_Sub_Source__c;
                 objOptyToInsert.OwnerId = objAcc.ownerId;
