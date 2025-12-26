@@ -2232,8 +2232,7 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Pre-Sales Manager Name :</label>
                                             <div class="frmElem addressBlk">
-                                                <!--<apex:inputfield value="{!CIFObj.Pre_Sales_User__c}" styleclass="form-control" /> --> <!-- Commneted by Vinay 25-11-2025 -->
-                                                <apex:inputfield value="{!CIFObj.Pre_Sales_User_LU__r.Name}" styleclass="form-control" /> <!-- Added by Vinay 25-11-2025 -->
+                                                <apex:inputfield value="{!CIFObj.Pre_Sales_User__c}" styleclass="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -2244,8 +2243,7 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Sales Manager Name :</label>
                                             <div class="frmElem addressBlk">
-                                                 <!--<apex:inputfield value="{!CIFObj.Sales_manager__c}" styleclass="form-control" />-->  <!-- Commneted by Vinay 25-11-2025 -->
-                                                <apex:inputfield value="{!CIFObj.Sales_manager_LU__r.Name}" styleclass="form-control" /> <!-- Added by Vinay 25-11-2025 -->
+                                                 <apex:inputfield value="{!CIFObj.Sales_manager__c}" styleclass="form-control" />
                                             </div>
                                         </div>
                                     </div>
