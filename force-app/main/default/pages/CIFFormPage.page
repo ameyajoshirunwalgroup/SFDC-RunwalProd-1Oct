@@ -1674,143 +1674,57 @@ function updateResStat(cntry)
                                         </label>
                                         <div class="frmElem">
                                             <div class="row">
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="readyPoss" onchange="updateTimeline(this.id)" /> Ready Possession
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="NearPos" onchange="updateTimeline(this.id)" /> Near to Possession
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="oneTotwoYr" onchange="updateTimeline(this.id)" /> 1 to 2 year
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="twoTothreeYr" onchange="updateTimeline(this.id)" /> 2 to 3 years
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="moreThanthre" onchange="updateTimeline(this.id)" /> More than 3 years
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="tlni" onchange="updateTimeline(this.id)" /> Not Important
-                                                    </label>
-                                                </div>
+                                                <div id="timelineContainer">
+                                                <!-- DYNAMIC TIMELINE CHECKBOX LIST -->
+                                               <apex:repeat value="{!timelinePicklist}" var="opt">
+                                                
+                                                    <div class="col-xs-6 col-sm-3">
+                                                        <label class="topPos_5">
+                                                
+                                                            <input type="checkbox"
+                                                                   class="customechkBox timelineChkBox"
+                                                                   id="tl_{!SUBSTITUTE(opt,' ','_')}"
+                                                                   value="{!opt}"
+                                                                   onchange="updateTimeline(this)"
+                                                                   data-selected="{!IF(CIFObj.TimeLine__c = opt, 'true', 'false')}"
+                                                            />
+                                                
+                                                            {!opt}
+                                                
+                                                        </label>
+                                                    </div>
+                                                
+                                                </apex:repeat>
+                                                    </div>
                                                 <apex:inputtext value="{!CIFObj.TimeLine__c}" style="display:none" id="timelineVal" />
-                                                <script>
-                                                function updateTimeline(timval)
-                                                {
-                                                    if(timval.indexOf('readyPoss') >= 0)
-                                                    {
-                                                        if($("[Id$='readyPoss']").is(':checked'))
-                                                        {
-                                                            $("[Id$='NearPos']").attr('checked', false);
-                                                            $("[Id$='oneTotwoYr']").attr('checked', false);
-                                                            $("[Id$='twoTothreeYr']").attr('checked', false);
-                                                            $("[Id$='moreThanthre']").attr('checked', false);
-                                                            $("[Id$='tlni']").attr('checked', false);
-                                                            $("[Id$='timelineVal']").val('Ready Possession');
+                                               
+                                               <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                    // Auto check based on lead value
+                                                    document.querySelectorAll('.customechkBox').forEach(function (cb) {
+                                                        if (cb.dataset.selected === 'true') {
+                                                            cb.checked = true;
                                                         }
-                                                        else
-                                                        {
-                                                            $("[Id$='timelineVal']").val('');
-                                                        }
-                                                    }
-                                                    
-                                                    if(timval.indexOf('NearPos') >= 0)
-                                                    {
-                                                        if($("[Id$='NearPos']").is(':checked'))
-                                                        {
-                                                            $("[Id$='readyPoss']").attr('checked', false);
-                                                            $("[Id$='oneTotwoYr']").attr('checked', false);
-                                                            $("[Id$='twoTothreeYr']").attr('checked', false);
-                                                            $("[Id$='moreThanthre']").attr('checked', false);
-                                                            $("[Id$='tlni']").attr('checked', false);
-                                                            $("[Id$='timelineVal']").val('Near to Possession');
-                                                        }
-                                                        else
-                                                        {
-                                                            $("[Id$='timelineVal']").val('');
-                                                        }
-                                                    }
-                                                    
-                                                    if(timval.indexOf('oneTotwoYr') >= 0)
-                                                    {
-                                                        if($("[Id$='oneTotwoYr']").is(':checked'))
-                                                        {
-                                                            $("[Id$='readyPoss']").attr('checked', false);
-                                                            $("[Id$='NearPos']").attr('checked', false);
-                                                            $("[Id$='twoTothreeYr']").attr('checked', false);
-                                                            $("[Id$='moreThanthre']").attr('checked', false);
-                                                            $("[Id$='tlni']").attr('checked', false);
-                                                            $("[Id$='timelineVal']").val('1 to 2 year');
-                                                        }
-                                                        else
-                                                        {
-                                                            $("[Id$='timelineVal']").val('');
-                                                        }
-                                                    }
-                                                    
-                                                    if(timval.indexOf('twoTothreeYr') >= 0)
-                                                    {
-                                                        if($("[Id$='twoTothreeYr']").is(':checked'))
-                                                        {
-                                                            $("[Id$='readyPoss']").attr('checked', false);
-                                                            $("[Id$='NearPos']").attr('checked', false);
-                                                            $("[Id$='oneTotwoYr']").attr('checked', false);
-                                                            $("[Id$='moreThanthre']").attr('checked', false);
-                                                            $("[Id$='tlni']").attr('checked', false);
-                                                            $("[Id$='timelineVal']").val('2 to 3 years');
-                                                        }
-                                                        else
-                                                        {
-                                                            $("[Id$='timelineVal']").val('');
-                                                        }
-                                                    }
-                                                    
-                                                    if(timval.indexOf('moreThanthre') >= 0)
-                                                    {
-                                                        if($("[Id$='moreThanthre']").is(':checked'))
-                                                        {
-                                                            $("[Id$='readyPoss']").attr('checked', false);
-                                                            $("[Id$='NearPos']").attr('checked', false);
-                                                            $("[Id$='oneTotwoYr']").attr('checked', false);
-                                                            $("[Id$='twoTothreeYr']").attr('checked', false);
-                                                            $("[Id$='tlni']").attr('checked', false);
-                                                            $("[Id$='timelineVal']").val('More than 3 years');
-                                                        }
-                                                        else
-                                                        {
-                                                            $("[Id$='timelineVal']").val('');
-                                                        }
-                                                    }
-                                                    
-                                                    if(timval.indexOf('tlni') >= 0)
-                                                    {
-                                                        if($("[Id$='tlni']").is(':checked'))
-                                                        {
-                                                            $("[Id$='readyPoss']").attr('checked', false);
-                                                            $("[Id$='NearPos']").attr('checked', false);
-                                                            $("[Id$='oneTotwoYr']").attr('checked', false);
-                                                            $("[Id$='twoTothreeYr']").attr('checked', false);
-                                                            $("[Id$='moreThanthre']").attr('checked', false);
-                                                            $("[Id$='timelineVal']").val('Not Important');
-                                                        }
-                                                        else
-                                                        {
-                                                            $("[Id$='timelineVal']").val('');
-                                                        }
+                                                    });
+                                                });
+                                                
+                                                // Handle selection
+                                                function updateTimeline(checkbox) {
+                                                    // Uncheck others
+                                                    document.querySelectorAll('#timelineContainer .customechkBox').forEach(cb => {
+                                                        if (cb !== checkbox) cb.checked = false;
+                                                    });
+                                                
+                                                    // Update VF field
+                                                    if (checkbox.checked) {
+                                                        $("[id$='timelineVal']").val(checkbox.value);
+                                                    } else {
+                                                        $("[id$='timelineVal']").val('');
                                                     }
                                                 }
                                                 </script>
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -2329,7 +2243,7 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Sales Manager Name :</label>
                                             <div class="frmElem addressBlk">
-                                                <apex:inputfield value="{!CIFObj.Sales_manager__c}" styleclass="form-control" />
+                                                 <apex:inputfield value="{!CIFObj.Sales_manager__c}" styleclass="form-control" />
                                             </div>
                                         </div>
                                     </div>
