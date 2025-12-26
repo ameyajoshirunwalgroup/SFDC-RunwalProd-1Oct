@@ -1344,6 +1344,7 @@ insert p;
                 objOptyToInsert.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
                 objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; 
                 objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; 
+                 objOptyToInsert.Sourcing_Manager_User__c = leadSourcingManager; //Added by Vinay 04-08-2025
                 objOptyToInsert.Event_Description__C = CIFObj.Event_Description__C;
                 //objOptyToInsert.Lead_Sub_Sub_Source__c = CIFObj.Lead_Sub_Sub_Source__c;
                 objOptyToInsert.OwnerId = objAcc.ownerId;
