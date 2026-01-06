@@ -279,13 +279,23 @@
                      </center>     
                 </apex:outputPanel><br></br><br></br>
                 
-<!---------------------------------------  Vikas Added end here  ------------------------------------------------->
+               <!--Vikas Added end here-->
                 
                 <apex:outputPanel id="printArea" rendered="{!(oppId != null && unitId !=null)}">
                     <table id="quoteDetails" width='100%'>
                        <tr>
                            <td class="projectStyle">
-                                Prepared For : <a href="/{!oppId}">{!quoteFor}</a>
+                                Prepared For : <a href="/{!oppId}">{!quoteFor}</a><br></br>
+                                <!--Added for SDR/ROC Management starts-->
+                                <label>SD Paid By Runwal</label>&nbsp;&nbsp;
+                                <apex:inputCheckbox id="sdByRunwal" value="{!sdPaidByRunwal}">
+                                    <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="costPanel"/>
+                                </apex:inputCheckbox><br/>
+                                <label>Registration Charges Paid by Runwal</label>&nbsp;&nbsp;
+                                   <apex:inputCheckbox id="regChargesByRunwal" value="{!regChargesByRunwal}">
+                                    <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="costPanel"/>
+                                </apex:inputCheckbox>
+                                 <!--Added for SDR/ROC Management endds-->
                             </td>
                            <td class="projectStyle">
                                 Quotation Prepared Date:{!quoteDate} 
@@ -428,10 +438,12 @@
                                 </table> 
                             </td>
                             <td width="50%">
+                                <apex:outputPanel id="costPanel"><!--Added for SDR/ROC-->
                                 <apex:dataTable value="{!quoteUIMap['RIGHTTOP']}" var="rows"  id="right1" width="100%">
                                     <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
                                     <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
                                 </apex:dataTable>
+                                </apex:outputPanel><!--Added for SDR/ROC-->
                             </td>
                             <td width="30%">
                                 <apex:dataTable value="{!quoteUIMapDisc['RIGHTTOP']}" var="rows"  id="right1Disc" width="100%" rendered="{!quoteUIMapDisc != null}">
@@ -980,6 +992,8 @@
                 bindEvents2();
           }
         }
+        
+
       </script>
      <!-- / JAVASCRIPT -->
     </body>

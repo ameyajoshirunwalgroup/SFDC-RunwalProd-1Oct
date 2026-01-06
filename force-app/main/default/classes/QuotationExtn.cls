@@ -20,6 +20,9 @@ public with sharing class QuotationExtn
     public Decimal discountPSF {get;set;}
     public Decimal discountLumpsum {get;set;}
     public Decimal agreementValue {get;set;}
+    public Integer addCarParks {get;set;}//Added for SDR ROC Management
+    public Boolean sdPaidByRunwal {get;set;}//Added for SDR ROC Management
+    public Boolean regChargesByRunwal {get;set;}//Added for SDR ROC Management
     public List<InventoryCostServices.PlanDetailWrapper> payplanDetails;
     public List<InventoryCostServices.PlanDetailWrapper> subventionPayplanDetails;
     public List<QPlanDetailWrapper> qplanWrapperList = new List<QPlanDetailWrapper>();
@@ -1213,7 +1216,7 @@ public with sharing class QuotationExtn
                 allowForSD = true;
             }
         }
-        if(!allowForSD && (allChargesMap.get('Stamp Duty') == null || allChargesMap.get('Stamp Duty') == 0) && (allChargesMap.get('Add SD in AV') == null || allChargesMap.get('Add SD in AV') == 0) && !Test.isRunningTest()){
+        if(!allowForSD && allChargesMap.get('Stamp Duty') == null /**|| allChargesMap.get('Stamp Duty') == 0)**commented for SDR/ROC**/ && (allChargesMap.get('Add SD in AV') == null || allChargesMap.get('Add SD in AV') == 0) && !Test.isRunningTest()){
             ApexPages.addMessage((new ApexPages.message(ApexPages.severity.FATAL,'Stamp duty value is missing, please contact Sales Strategy.')));
             return null;
         }
@@ -1552,6 +1555,11 @@ public with sharing class QuotationExtn
         if(qId != null) {
             Quotation__c qNew = [Select Id, Name from Quotation__c where Id = : qId];
             System.debug('q.Single_Covered_Additional_Amount__c: ' + q.Single_Covered_Additional_Amount__c);
+            System.debug('qNew**'+qNew);
+            System.debug('sdPaidByRunwal**'+sdPaidByRunwal);
+            u.SD_Paid_By_Runwal__c = sdPaidByRunwal;//Added for SDR ROC Management
+            u.Registration_Charges_Paid_By_Runwal__c = regChargesByRunwal;//Added for SDR ROC Management
+            update u;
             // call the save method of inventory cost services here
             List<InventoryCostServices.PlanDetailWrapper> pdList  = new List<InventoryCostServices.PlanDetailWrapper>();
             for(QPlanDetailWrapper q : qPlanWrapperC) {
@@ -1908,6 +1916,32 @@ public with sharing class QuotationExtn
          pageRef.setRedirect(true);
          return pageRef;
 
+    }
+    //Added for SDR/ROC Management
+    public PageReference updateCalculations(){
+    System.debug('sdPaidByRunwal**'+sdPaidByRunwal);
+    System.debug('allCharges MAp update**'+allChargesMap);
+    System.debug('allCharges AV**'+allChargesMap.get('AGREEMENTVALUE'));
+    System.debug('allCharges SD**'+allChargesMap.get('Stamp Duty'));
+    
+        // if(sdPaidByRunwal == true && SDAgreementValue != null){
+        //     allChargesMap.put('AGREEMENTVALUE',SDAgreementValue+stampDutyValue);
+            
+        //     stampDutyValue = 0.0;
+        //     allChargesMap.put('Stamp Duty',stampDutyValue);
+        // }
+        // if(regChargesByRunwal == true){
+        //     registrationCharges = 0.0;
+        //     allChargesMap.put('Registration Charges',registrationCharges);
+        // }
+        System.debug('allCharges after AV**'+allChargesMap.get('AGREEMENTVALUE'));
+         System.debug('allCharges after SD**'+allChargesMap.get('Stamp Duty'));
+         addCarParks = selectedCarPark1 + selectedCarPark2 +selectedCarPark3 + selectedCarPark4 +selectedCarPark5 + selectedCarPark6 +selectedCarPark7 + selectedCarPark8 +selectedCarPark9;
+         InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
+         InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
+         quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId);
+        allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum,subPlanId);
+        return null;
     }
      public void dummyMethod(){
         
