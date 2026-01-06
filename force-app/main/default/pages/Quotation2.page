@@ -291,12 +291,10 @@
                                 <apex:inputCheckbox id="sdByRunwal" value="{!sdPaidByRunwal}">
                                     <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="costPanel"/>
                                 </apex:inputCheckbox><br/>
-                                    <!--<apex:param name="cbVal" assignTo="{!cbValue}" value="" />-->
                                 <label>Registration Charges Paid by Runwal</label>&nbsp;&nbsp;
                                    <apex:inputCheckbox id="regChargesByRunwal" value="{!regChargesByRunwal}">
                                     <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="costPanel"/>
                                 </apex:inputCheckbox>
-                                <!--<apex:inputField value="{!u.Registration_Charges_Paid_By_Runwal__c}" />-->
                                  <!--Added for SDR/ROC Management endds-->
                             </td>
                            <td class="projectStyle">
@@ -440,12 +438,12 @@
                                 </table> 
                             </td>
                             <td width="50%">
-                                <apex:outputPanel id="costPanel">
+                                <apex:outputPanel id="costPanel"><!--Added for SDR/ROC-->
                                 <apex:dataTable value="{!quoteUIMap['RIGHTTOP']}" var="rows"  id="right1" width="100%">
                                     <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
                                     <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
                                 </apex:dataTable>
-                               </apex:outputPanel>
+                                </apex:outputPanel><!--Added for SDR/ROC-->
                             </td>
                             <td width="30%">
                                 <apex:dataTable value="{!quoteUIMapDisc['RIGHTTOP']}" var="rows"  id="right1Disc" width="100%" rendered="{!quoteUIMapDisc != null}">
@@ -994,12 +992,7 @@
                 bindEvents2();
           }
         }
-        /**Added for SDR ROC Management starts*/
-            function sendCheckboxValue() {
-                var cb = document.getElementById('{!$Component.sdCheckbox}');
-                sendCheckboxValueAF(cb.checked);
-            }
-            /**Added for SDR ROC Management ends*/
+        
 
       </script>
      <!-- / JAVASCRIPT -->

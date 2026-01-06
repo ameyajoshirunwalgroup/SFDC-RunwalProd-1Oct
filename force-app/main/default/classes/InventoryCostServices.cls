@@ -11,7 +11,7 @@ public with sharing class InventoryCostServices {
         List<Project_Unit__c> unit = [Select Id, RW_Project__c,RW_Project__r.Id, S_View1__c, S_View_2__c, S_View_3__c,
                                       PLC_Total__c,Legal_Entity__c,MLCP_Earmarked__c,Chargeable_Area__c,
                                       /* Property_Type__c,*/New_Floor__c,TowerName__c,RW_Unit_Status__c, // Old field -- RW_Floor__c
-                                      Carpet_Area__c,Actual_Area_value__c,S_Charge_Percentage__c//,RW_Project__r.S_Ready_Reckoner_Rate__c//Added for SDR/ROC CHanges
+                                      Carpet_Area__c,Actual_Area_value__c,S_Charge_Percentage__c
                                       from Project_Unit__c where Id = :unitId];
         //  System.debug('Unit details: ' + unit);
         if(unit.size() == 1) {

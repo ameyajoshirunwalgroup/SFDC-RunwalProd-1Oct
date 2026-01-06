@@ -239,7 +239,7 @@ public class trgToUpdateOppStageHandler
         
         System.debug('floorRiseLst**'+floorRiseLst);
 
-        quoteLst = [Select Id,No_of_parking__c,Total_MV__c,Project_Unit__r.New_Floor__c,Project__r.Name,Project_Unit__r.Carpet_Area__c,Project_Unit__r.Total_RERA_Carpet_Area__c,Agreement_Value__c,Project_Unit__r.Deck_Area__c,Project_Unit__r.Service_Room_Carpet_Area__c,Project_Unit__r.Utility_Area__c,Project__r.S_Ready_Reckoner_Rate__c,Project_Unit__r.S_Charge_Percentage__c from Quotation__c where Project_Unit__c=:unitIdsSet AND Quote_Status__c='Valid' AND Opportunity__c =:oppIds];
+        quoteLst = [Select Id,No_of_parking__c,Total_MV__c,Project_Unit__r.New_Floor__c,Project__r.Name,Project_Unit__r.Carpet_Area__c,Project_Unit__r.Total_RERA_Carpet_Area__c,Agreement_Value__c,Project_Unit__r.Deck_Area__c,Project_Unit__r.Service_Room_Carpet_Area__c,Project_Unit__r.Utility_Area__c,Project__r.S_Ready_Reckoner_Rate__c,Project_Unit__r.S_Charge_Percentage__c,Opportunity__r.Walkin_Source__c from Quotation__c where Project_Unit__c=:unitIdsSet AND Quote_Status__c='Valid' AND Opportunity__c =:oppIds];
          System.debug('quoteLst**'+quoteLst);
 
         for(Quotation__c quote : quoteLst){
@@ -270,7 +270,7 @@ public class trgToUpdateOppStageHandler
             
             //totalArea = sqrMtrBuiltUp + parkingMtrs;
 
-            marketValue = quote.Project__r.S_Ready_Reckoner_Rate__c;
+            marketValue = quote.Project__r.S_Ready_Reckoner_Rate__c!=null ? quote.Project__r.S_Ready_Reckoner_Rate__c :marketValue;
             System.debug('marketValue**'+marketValue);
 
            // finalArea = totalArea*additionalMultiplication;
@@ -321,7 +321,7 @@ public class trgToUpdateOppStageHandler
 
             if(totalMV!=null){
             quote.Total_MV__c = totalMV;
-                if(totalMV > quote.Agreement_Value__c){
+                if(totalMV > quote.Agreement_Value__c && quote.Opportunity__r.Walkin_Source__c == 'Channel Partner'){
                     SDForBrokerage = (quote.Project_Unit__r.S_Charge_Percentage__c*totalMV)/100;
                     quote.Agreement_Value_for_brokers__c = quote.Agreement_Value__c	- SDForBrokerage;
                 }

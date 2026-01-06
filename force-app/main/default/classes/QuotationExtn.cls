@@ -21,10 +21,6 @@ public with sharing class QuotationExtn
     public Decimal discountLumpsum {get;set;}
     public Decimal agreementValue {get;set;}
     public Integer addCarParks {get;set;}//Added for SDR ROC Management
-    public Decimal SDAgreementValue {get;set;}//Added for SDR ROC Management
-    public Decimal stampDutyValue {get;set;}//Added for SDR ROC Management
-    public Decimal registrationCharges {get;set;}//Added for SDR ROC Management
-    public Boolean cbValue {get;set;}//Added for SDR ROC Management
     public Boolean sdPaidByRunwal {get;set;}//Added for SDR ROC Management
     public Boolean regChargesByRunwal {get;set;}//Added for SDR ROC Management
     public List<InventoryCostServices.PlanDetailWrapper> payplanDetails;
@@ -1220,7 +1216,7 @@ public with sharing class QuotationExtn
                 allowForSD = true;
             }
         }
-        if(!allowForSD && (allChargesMap.get('Stamp Duty') == null || allChargesMap.get('Stamp Duty') == 0) && (allChargesMap.get('Add SD in AV') == null || allChargesMap.get('Add SD in AV') == 0) && !Test.isRunningTest()){
+        if(!allowForSD && allChargesMap.get('Stamp Duty') == null /**|| allChargesMap.get('Stamp Duty') == 0)**commented for SDR/ROC**/ && (allChargesMap.get('Add SD in AV') == null || allChargesMap.get('Add SD in AV') == 0) && !Test.isRunningTest()){
             ApexPages.addMessage((new ApexPages.message(ApexPages.severity.FATAL,'Stamp duty value is missing, please contact Sales Strategy.')));
             return null;
         }
@@ -1927,9 +1923,7 @@ public with sharing class QuotationExtn
     System.debug('allCharges MAp update**'+allChargesMap);
     System.debug('allCharges AV**'+allChargesMap.get('AGREEMENTVALUE'));
     System.debug('allCharges SD**'+allChargesMap.get('Stamp Duty'));
-    SDAgreementValue = allChargesMap.get('AGREEMENTVALUE');
-    stampDutyValue = allChargesMap.get('Stamp Duty');
-    registrationCharges = allChargesMap.get('Stamp Duty');
+    
         // if(sdPaidByRunwal == true && SDAgreementValue != null){
         //     allChargesMap.put('AGREEMENTVALUE',SDAgreementValue+stampDutyValue);
             
@@ -1946,6 +1940,7 @@ public with sharing class QuotationExtn
          InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
          InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
          quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId);
+        allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum,subPlanId);
         return null;
     }
      public void dummyMethod(){
