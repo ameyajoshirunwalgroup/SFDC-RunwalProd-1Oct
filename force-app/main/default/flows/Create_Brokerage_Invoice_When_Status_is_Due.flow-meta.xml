@@ -2,6 +2,118 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>55.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_CP_Invoice_Approver_L1</name>
+        <label>Assign CP Invoice Approver L1</label>
+        <locationX>864</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPInvoiceApproverL1</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Approver_L2</name>
+        <label>Assign CP Invoice Approver L2</label>
+        <locationX>1128</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPInvoiceApproverL2</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Approver_L3</name>
+        <label>Assign CP Invoice Approver L3</label>
+        <locationX>1392</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPInvoiceApproverL3</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Approver_L4</name>
+        <label>Assign CP Invoice Approver L4</label>
+        <locationX>1656</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPInvoiceApproverL4</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Clearing_Approver_L1</name>
+        <label>Assign CP Invoice Clearing Approver L1</label>
+        <locationX>1920</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPInvoiceClearingL1</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Clearing_Approver_L2</name>
+        <label>Assign CP Invoice Clearing  Approver L2</label>
+        <locationX>2184</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPInvoiceClearingL2</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_MIS_Approver</name>
+        <label>Assign CP MIS Approver</label>
+        <locationX>600</locationX>
+        <locationY>971</locationY>
+        <assignmentItems>
+            <assignToReference>CPMIS</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_CP_Invoice_Team_Mmbers.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Check_BS_List</name>
         <label>Check BS List</label>
@@ -47,7 +159,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Invoice_Approvers_from_Custom_Setting</targetReference>
+                <targetReference>get_CP_Invoice_Team</targetReference>
             </connector>
             <label>If Due</label>
         </rules>
@@ -65,10 +177,223 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_for_CP_Approvers</name>
+        <label>Check for CP Approvers</label>
+        <locationX>1524</locationX>
+        <locationY>863</locationY>
+        <defaultConnector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_CP_MIS_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP MIS</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_MIS_Approver</targetReference>
+            </connector>
+            <label>is CP MIS Exists</label>
+        </rules>
+        <rules>
+            <name>Is_CP_L1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Approver L1</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Approver_L1</targetReference>
+            </connector>
+            <label>Is CP L1</label>
+        </rules>
+        <rules>
+            <name>Is_CP_L2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Approver L2</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Approver_L2</targetReference>
+            </connector>
+            <label>Is CP L2</label>
+        </rules>
+        <rules>
+            <name>Is_CP_L3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Approver L3</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Approver_L3</targetReference>
+            </connector>
+            <label>Is CP L3</label>
+        </rules>
+        <rules>
+            <name>Is_CP_L4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Approver L4</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Approver_L4</targetReference>
+            </connector>
+            <label>Is CP L4</label>
+        </rules>
+        <rules>
+            <name>is_CP_Clearing_L1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Clearing L1</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Clearing_Approver_L1</targetReference>
+            </connector>
+            <label>is CP Clearing L1</label>
+        </rules>
+        <rules>
+            <name>is_CP_Clearing_L2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Clearing L2</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.IsActive__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>loop_on_CP_Invoice_Team_Mmbers.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Clearing_Approver_L2</targetReference>
+            </connector>
+            <label>is CP Clearing L2</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_for_null</name>
         <label>Check  related brokerage invoice is present</label>
         <locationX>182</locationX>
-        <locationY>863</locationY>
+        <locationY>1463</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Null</name>
@@ -90,7 +415,7 @@
         <name>check_type_of_brokerage_summary</name>
         <label>check type of brokerage summary</label>
         <locationX>512</locationX>
-        <locationY>647</locationY>
+        <locationY>1247</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_Brokerage_Summary</name>
@@ -136,6 +461,20 @@
     </formulas>
     <interviewLabel>Create Brokerage Invoice When Status is Due {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Brokerage Invoice When Status is Due</label>
+    <loops>
+        <name>loop_on_CP_Invoice_Team_Mmbers</name>
+        <label>loop on CP Invoice Team Mmbers</label>
+        <locationX>512</locationX>
+        <locationY>755</locationY>
+        <collectionReference>get_CP_Invoice_Team_Members</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_for_CP_Approvers</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>check_type_of_brokerage_summary</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -159,7 +498,7 @@
         <name>Copy_1_of_Create_CP_Invoice</name>
         <label>Copy 1 of Create CP Invoice</label>
         <locationX>578</locationX>
-        <locationY>755</locationY>
+        <locationY>1355</locationY>
         <inputAssignments>
             <field>Booking__c</field>
             <value>
@@ -193,37 +532,37 @@
         <inputAssignments>
             <field>CP_Invoice_Approver_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_MIS__c</elementReference>
+                <elementReference>CPMIS</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L1__c</elementReference>
+                <elementReference>CPInvoiceApproverL1</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L3__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L2__c</elementReference>
+                <elementReference>CPInvoiceApproverL2</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L5__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L4__c</elementReference>
+                <elementReference>CPInvoiceApproverL4</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L1__c</elementReference>
+                <elementReference>CPInvoiceClearingL1</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L2__c</elementReference>
+                <elementReference>CPInvoiceClearingL2</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -251,7 +590,7 @@
         <name>Create_CP_Invoice</name>
         <label>Create CP Invoice</label>
         <locationX>50</locationX>
-        <locationY>971</locationY>
+        <locationY>1571</locationY>
         <inputAssignments>
             <field>Booking__c</field>
             <value>
@@ -285,37 +624,37 @@
         <inputAssignments>
             <field>CP_Invoice_Approver_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_MIS__c</elementReference>
+                <elementReference>CPMIS</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L1__c</elementReference>
+                <elementReference>CPInvoiceApproverL1</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L3__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L2__c</elementReference>
+                <elementReference>CPInvoiceApproverL2</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Approver_L5__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Approver_L4__c</elementReference>
+                <elementReference>CPInvoiceApproverL4</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L1__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L1__c</elementReference>
+                <elementReference>CPInvoiceClearingL1</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>CP_Invoice_Clearing_L2__c</field>
             <value>
-                <elementReference>Get_Invoice_Approvers_from_Custom_Setting.CP_Invoice_Clearing_L2__c</elementReference>
+                <elementReference>CPInvoiceClearingL2</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -339,7 +678,7 @@
         <inputAssignments>
             <field>Total_Agreement_Value__c</field>
             <value>
-                <elementReference>$Record.Opportunity_AV__c</elementReference>
+                <elementReference>$Record.Brokerage_Summary__r.Total_Agreement_Value__c</elementReference>
             </value>
         </inputAssignments>
         <object>Brokerage_Invoice__c</object>
@@ -370,7 +709,7 @@
         <name>Get_Brokerage_Invoice</name>
         <label>Get Brokerage Invoice</label>
         <locationX>182</locationX>
-        <locationY>755</locationY>
+        <locationY>1355</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_for_null</targetReference>
@@ -388,24 +727,59 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Invoice_Approvers_from_Custom_Setting</name>
-        <label>Get Invoice Approvers from Custom Setting</label>
+        <name>get_CP_Invoice_Team</name>
+        <label>get CP Invoice Team</label>
         <locationX>512</locationX>
         <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>check_type_of_brokerage_summary</targetReference>
+            <targetReference>get_CP_Invoice_Team_Members</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
+        <filters>
+            <field>Project__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Booking__r.Project__c</elementReference>
+            </value>
+        </filters>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Brokerage_Summary_List.Booking__r.Project__r.Name</elementReference>
+                <stringValue>CP Approvers Team</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Team_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>CP Invoice Approver Team</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>CP_Invoice_Approvers_list_CS__c</object>
+        <object>Team__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_CP_Invoice_Team_Members</name>
+        <label>get CP Invoice Team Members</label>
+        <locationX>512</locationX>
+        <locationY>647</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loop_on_CP_Invoice_Team_Mmbers</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Team__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>get_CP_Invoice_Team.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Team_Members__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
@@ -455,7 +829,7 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>Approverslist</name>
         <dataType>SObject</dataType>
@@ -479,6 +853,55 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Brokerage_Invoice__c</objectType>
+    </variables>
+    <variables>
+        <name>CPInvoiceApproverL1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceApproverL2</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceApproverL3</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceApproverL4</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceClearingL1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceClearingL2</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPMIS</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>User</name>

@@ -4,7 +4,7 @@
         <name>Second_Escalation_email_alert</name>
         <label>Second Escalation email alert</label>
         <locationX>50</locationX>
-        <locationY>1271</locationY>
+        <locationY>1979</locationY>
         <actionName>Case.Second_Escalation_email_alert_new</actionName>
         <actionType>emailAlert</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -15,9 +15,157 @@
             </value>
         </inputParameters>
         <nameSegment>Case.Second_Escalation_email_alert_new</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Approver_Types</name>
+        <label>Assign Approver Types</label>
+        <locationX>710</locationX>
+        <locationY>1055</locationY>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Case L1 Escalation</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Case L2 Escalation</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Case L3 Escalation</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Case L4 Escalation</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Case L5 Escalation</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Case L6 Escalation</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>get_CP_Invoice_Team_Approvers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_L1_case_Approver</name>
+        <label>Assign L1 case Approver</label>
+        <locationX>798</locationX>
+        <locationY>1487</locationY>
+        <assignmentItems>
+            <assignToReference>CPCaseL1Escalation</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_L2_case_Approver</name>
+        <label>Assign L2 case Approver</label>
+        <locationX>1062</locationX>
+        <locationY>1487</locationY>
+        <assignmentItems>
+            <assignToReference>CPCaseL2Escalation</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_L3_case_Approver</name>
+        <label>Assign L3 case Approver</label>
+        <locationX>1326</locationX>
+        <locationY>1487</locationY>
+        <assignmentItems>
+            <assignToReference>CPCaseL3Escalation</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_L4_case_Approver</name>
+        <label>Assign L4 case Approver</label>
+        <locationX>1590</locationX>
+        <locationY>1487</locationY>
+        <assignmentItems>
+            <assignToReference>CPCaseL4Escalation</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_L5_case_Approver</name>
+        <label>Assign L5 case Approver</label>
+        <locationX>1854</locationX>
+        <locationY>1487</locationY>
+        <assignmentItems>
+            <assignToReference>CPCaseL5Escalation</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_L6_case_Approver</name>
+        <label>Assign L6 case Approver</label>
+        <locationX>2118</locationX>
+        <locationY>1487</locationY>
+        <assignmentItems>
+            <assignToReference>CPCaseL6Escalation</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Case_Status</name>
         <label>Case Status</label>
@@ -44,12 +192,112 @@
         </rules>
     </decisions>
     <decisions>
+        <name>check_Approver_Types</name>
+        <label>check Approver Types</label>
+        <locationX>1590</locationX>
+        <locationY>1379</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_CP_Case_L1_Escalation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Case L1 Escalation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_L1_case_Approver</targetReference>
+            </connector>
+            <label>is CP Case L1 Escalation</label>
+        </rules>
+        <rules>
+            <name>is_CP_Case_L2_Escalation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Case L2 Escalation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_L2_case_Approver</targetReference>
+            </connector>
+            <label>is CP Case L2 Escalation</label>
+        </rules>
+        <rules>
+            <name>is_CP_Case_L3_Escalation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Case L3 Escalation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_L3_case_Approver</targetReference>
+            </connector>
+            <label>is CP Case L3 Escalation</label>
+        </rules>
+        <rules>
+            <name>is_CP_Case_L4_Escalation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Case L4 Escalation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_L4_case_Approver</targetReference>
+            </connector>
+            <label>is CP Case L4 Escalation</label>
+        </rules>
+        <rules>
+            <name>is_CP_Case_L5_Escalation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Case L5 Escalation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_L5_case_Approver</targetReference>
+            </connector>
+            <label>is CP Case L5 Escalation</label>
+        </rules>
+        <rules>
+            <name>is_CP_Case_L6_Escalation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Case L6 Escalation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_L6_case_Approver</targetReference>
+            </connector>
+            <label>is CP Case L6 Escalation</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_if_Current_Stage_is_Assigned</name>
         <label>Check if Current Stage is Assigned</label>
         <locationX>710</locationX>
         <locationY>755</locationY>
         <defaultConnector>
-            <targetReference>Decision_based_on_the_Current_Escalation_Stage</targetReference>
+            <targetReference>Assign_Approver_Types</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -88,11 +336,11 @@
         <name>Decision_based_on_the_Current_Escalation_Stage</name>
         <label>Decision based on the Current Escalation Stage</label>
         <locationX>710</locationX>
-        <locationY>1055</locationY>
+        <locationY>1763</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Escalation_Stage_L1_to_L2</name>
-            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3) AND 4 AND 5</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Current_Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -110,6 +358,20 @@
             <conditions>
                 <leftValueReference>$Record.RW_Project__c</leftValueReference>
                 <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL2Escalation</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL2Escalation</leftValueReference>
+                <operator>IsBlank</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
@@ -136,6 +398,20 @@
                     <stringValue>CP-L3</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL3Escalation</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL3Escalation</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_Owner_2</targetReference>
             </connector>
@@ -156,6 +432,20 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>CP-L5</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL4Escalation</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL4Escalation</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -180,6 +470,20 @@
                     <stringValue>CP-L7</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL5Escalation</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL5Escalation</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_Owner_4</targetReference>
             </connector>
@@ -202,6 +506,20 @@
                     <stringValue>CP-L8</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL6Escalation</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CPCaseL6Escalation</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_Owner_5</targetReference>
             </connector>
@@ -211,7 +529,7 @@
     <decisions>
         <name>Run_flow_based_on_recordtype_id</name>
         <label>Run flow based on recordtype id</label>
-        <locationX>1656</locationX>
+        <locationX>1700</locationX>
         <locationY>431</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -233,6 +551,20 @@
     <environments>Default</environments>
     <interviewLabel>Update Owner on Channel Partner Portal Cases {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Owner of Channel Partner Portal Cases</label>
+    <loops>
+        <name>Loop_Team_Members</name>
+        <label>Loop Team Members</label>
+        <locationX>710</locationX>
+        <locationY>1271</locationY>
+        <collectionReference>Var_TM_Records</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>check_Approver_Types</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Decision_based_on_the_Current_Escalation_Stage</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -255,7 +587,7 @@
     <recordLookups>
         <name>getrecordtype</name>
         <label>getrecordtype</label>
-        <locationX>1656</locationX>
+        <locationX>1700</locationX>
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -286,7 +618,7 @@
         <locationX>578</locationX>
         <locationY>863</locationY>
         <connector>
-            <targetReference>Decision_based_on_the_Current_Escalation_Stage</targetReference>
+            <targetReference>Assign_Approver_Types</targetReference>
         </connector>
         <inputAssignments>
             <field>Current_Stage__c</field>
@@ -313,7 +645,7 @@
         <name>Update_Owner_1</name>
         <label>Update Owner 1</label>
         <locationX>50</locationX>
-        <locationY>1163</locationY>
+        <locationY>1871</locationY>
         <connector>
             <targetReference>Second_Escalation_email_alert</targetReference>
         </connector>
@@ -326,7 +658,7 @@
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <elementReference>$Record.RW_Project__r.CP_Case_L2_Escalation__r.Id</elementReference>
+                <elementReference>CPCaseL2Escalation</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -335,11 +667,11 @@
         <name>Update_Owner_2</name>
         <label>Update Owner 2</label>
         <locationX>314</locationX>
-        <locationY>1163</locationY>
+        <locationY>1871</locationY>
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <elementReference>$Record.RW_Project__r.CP_Case_L3_Escalation__r.Id</elementReference>
+                <elementReference>CPCaseL3Escalation</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -348,11 +680,11 @@
         <name>Update_Owner_3</name>
         <label>Update Owner 3</label>
         <locationX>578</locationX>
-        <locationY>1163</locationY>
+        <locationY>1871</locationY>
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <elementReference>$Record.RW_Project__r.CP_Case_L4_Escalation__r.Id</elementReference>
+                <elementReference>CPCaseL4Escalation</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -361,11 +693,11 @@
         <name>Update_Owner_4</name>
         <label>Update Owner 4</label>
         <locationX>842</locationX>
-        <locationY>1163</locationY>
+        <locationY>1871</locationY>
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <elementReference>$Record.RW_Project__r.CP_Case_L5_Escalation__r.Id</elementReference>
+                <elementReference>CPCaseL5Escalation</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -374,11 +706,11 @@
         <name>Update_Owner_5</name>
         <label>Update Owner 5</label>
         <locationX>1106</locationX>
-        <locationY>1163</locationY>
+        <locationY>1871</locationY>
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <elementReference>$Record.RW_Project__r.CP_Case_L6_Escalation__r.Id</elementReference>
+                <elementReference>CPCaseL6Escalation</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -400,7 +732,7 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>1530</locationX>
+        <locationX>1574</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>getrecordtype</targetReference>
@@ -425,11 +757,106 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>get_CP_Invoice_Team_Approvers</name>
+        <label>get CP Invoice Team Approvers</label>
+        <locationX>710</locationX>
+        <locationY>1163</locationY>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+        <flowName>Fetch_Project_Team_Members</flowName>
+        <inputAssignments>
+            <name>ApproverTypes</name>
+            <value>
+                <elementReference>ApproverTypes</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>ProjectId</name>
+            <value>
+                <elementReference>$Record.RW_Project__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TeamName</name>
+            <value>
+                <stringValue>CP Case Escalation Team</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TeamType</name>
+            <value>
+                <stringValue>CP Case Escalation Approver Team</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>Var_TM_Records</assignToReference>
+            <name>TM_Records</name>
+        </outputAssignments>
+    </subflows>
+    <variables>
+        <name>ApproverTypes</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>CPCaseL1Escalation</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPCaseL2Escalation</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPCaseL3Escalation</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPCaseL4Escalation</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPCaseL5Escalation</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPCaseL6Escalation</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>CurrentDateTime</name>
         <dataType>DateTime</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Var_TM_Records</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Team_Members__c</objectType>
     </variables>
 </Flow>
