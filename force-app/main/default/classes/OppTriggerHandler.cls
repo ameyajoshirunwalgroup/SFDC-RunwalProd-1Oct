@@ -679,7 +679,9 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
                     lstOppBookedIds.add(objOpportunity.Id);
                 }
                 /*Added for unidentified payments starts */
-                if(objOpportunity.StageName == 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName != 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName =='Site Visit')
+                if(objOpportunity.StageName == 'Unit Blocked' && 
+                   (mapOldOppId.get(objOpportunity.id).StageName != 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName =='Site Visit' 
+                   || (objOpportunity.Data_Error_Fixed__c == true && mapOldOppId.get(objOpportunity.id).Data_Error_Fixed__c != true) ))
                 {
                     lstBlockedOppIds.add(objOpportunity.Id);
                 }
