@@ -84,8 +84,7 @@ public class BatchforAOPSchemeTaggingTest {
         objpr.Start_Date__c = System.today().addDays(-5);
         objpr.RDS_Interest_Rate__c = 12;
         objpr.Project_Location__c = pl.id;
-        objpr.CP_Invoice_Approver_L1__c = userinfo.getUserId();
-        objpr.CP_Invoice_Approver_L2__c = userinfo.getUserId();
+        
         insert objpr;
         
         Opp_Close_Date__c cls = new Opp_Close_Date__c();
@@ -123,6 +122,11 @@ public class BatchforAOPSchemeTaggingTest {
         prc.Name = 'Basic';
         prc.Project__c = objpr.Id;
         insert prc;
+        
+        Account acc= new Account();
+        acc.Name='test Account';
+        acc.Channel_Partner__c=cp.id;
+        insert acc;
         
         Account cpaccount = [Select Id,Name,Channel_Partner__c,PersonEmail,Mobile_No__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
@@ -370,6 +374,24 @@ public class BatchforAOPSchemeTaggingTest {
         b2.RW_Registration_Done__c = 'No';
         insert b2;
        
+        Team__c team= new Team__c();
+        team.Name='CP Approvers Team';
+        team.Project__c=objpr.id;
+        team.Team_Type__c='CP Invoice Approver Team';
+        insert team;
+        
+        Team_Members__c teamMember = new Team_Members__c();
+        teamMember.Approver_Type__c='CP Invoice Approver L1';
+        teamMember.Team__c=team.id;
+        teamMember.User__c=lstUser[0].id;
+        insert teamMember;  
+        
+        Team_Members__c teamMember1 = new Team_Members__c();
+        teamMember1.Approver_Type__c='CP MIS';
+        teamMember1.Team__c=team.id;
+        teamMember1.User__c=lstUser[0].id;
+        insert teamMember1;  
+        
         Test.startTest();
         BatchforAOPSchemeTagging  bb = new BatchforAOPSchemeTagging();
         Database.executeBatch(bb,50);

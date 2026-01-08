@@ -19,12 +19,6 @@ public class BrokerageInvoiceReportControllerTest {
         objpr.RW_Project_Location_Videos_Link__c='test';
         objpr.RW_Project_Brochure_PublicUrl__c='test1';
 		objpr.RW_SAP_Company_Code__c='5245';
-        objpr.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L1__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L2__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L3__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L4__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Clearing_L2__c = UserInfo.getUserId();
         insert objpr;
         
         Brokerage_Scheme__c bscheme = new Brokerage_Scheme__c();
@@ -59,7 +53,6 @@ public class BrokerageInvoiceReportControllerTest {
         b.Brokerage_Scheme__c = null;
         b.Allotment_Premium__c = 10000000;
         b.Brokerage_Scheme__c = bscheme.Id;
-        b.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
         b.Base_Brokerage__c = 2;
         b.Project__c = objpr.Id;
         b.Is_AOP_CP_Applicable__c = true;
@@ -112,10 +105,7 @@ public class BrokerageInvoiceReportControllerTest {
         bi.Opportunity__c = objcustomer.Id;
         bi.Invoice_Date__c = system.today();
         bi.Brokerage_In_Rs__c = 53633;
-        bi.CP_Invoice_Approver_L1__c = userinfo.getUserId();
-        bi.CP_Invoice_Approver_L2__c = userinfo.getUserId();
-        bi.CP_Invoice_Approver_L4__c = userinfo.getUserId();
-        bi.CP_Invoice_Approver_L5__c = userinfo.getUserId();
+        
         insert bi;
                 
         Test.startTest();
@@ -150,12 +140,7 @@ public class BrokerageInvoiceReportControllerTest {
         objpr.RW_Project_Location_Videos_Link__c='test';
         objpr.RW_Project_Brochure_PublicUrl__c='test1';
 		objpr.RW_SAP_Company_Code__c='5245';
-        objpr.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L1__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L2__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L3__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Approver_L4__c = UserInfo.getUserId();
-        objpr.CP_Invoice_Clearing_L2__c = UserInfo.getUserId();
+        
         insert objpr;
         
         Brokerage_Scheme__c bscheme = new Brokerage_Scheme__c();
@@ -190,7 +175,6 @@ public class BrokerageInvoiceReportControllerTest {
         b.Brokerage_Scheme__c = null;
         b.Allotment_Premium__c = 10000000;
         b.Brokerage_Scheme__c = bscheme.Id;
-        b.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
         b.Base_Brokerage__c = 2;
         b.Project__c = objpr.Id;
         b.Is_AOP_CP_Applicable__c = false;
@@ -243,10 +227,7 @@ public class BrokerageInvoiceReportControllerTest {
         bi.Opportunity__c = objcustomer.Id;
         bi.Invoice_Date__c = system.today();
         bi.Brokerage_In_Rs__c = 53633;
-        bi.CP_Invoice_Approver_L1__c = userinfo.getUserId();
-        bi.CP_Invoice_Approver_L2__c = userinfo.getUserId();
-        bi.CP_Invoice_Approver_L4__c = userinfo.getUserId();
-        bi.CP_Invoice_Approver_L5__c = userinfo.getUserId();
+        
         insert bi;
                 
         Test.startTest();

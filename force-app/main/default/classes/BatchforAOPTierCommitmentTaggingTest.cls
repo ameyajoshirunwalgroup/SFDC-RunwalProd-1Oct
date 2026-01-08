@@ -84,8 +84,7 @@ public class BatchforAOPTierCommitmentTaggingTest {
         objpr.Start_Date__c = System.today().addDays(-5);
         objpr.RDS_Interest_Rate__c = 12;
         objpr.Project_Location__c = pl.id;
-        objpr.CP_Invoice_Approver_L1__c = userinfo.getUserId();
-        objpr.CP_Invoice_Approver_L2__c = userinfo.getUserId();
+        
         insert objpr;
         
         Opp_Close_Date__c cls = new Opp_Close_Date__c();
