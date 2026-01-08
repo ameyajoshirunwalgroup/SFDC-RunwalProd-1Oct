@@ -84,8 +84,6 @@ public class BatchforAOPTierCommitmentTaggingTest {
         objpr.Start_Date__c = System.today().addDays(-5);
         objpr.RDS_Interest_Rate__c = 12;
         objpr.Project_Location__c = pl.id;
-        objpr.CP_Invoice_Approver_L1__c = userinfo.getUserId();
-        objpr.CP_Invoice_Approver_L2__c = userinfo.getUserId();
         insert objpr;
         
         Opp_Close_Date__c cls = new Opp_Close_Date__c();
@@ -123,6 +121,9 @@ public class BatchforAOPTierCommitmentTaggingTest {
         prc.Name = 'Basic';
         prc.Project__c = objpr.Id;
         insert prc;
+        
+        Account acc = new Account(Name='test',Channel_Partner__c= cp.id);
+        insert acc; 
         
         Account cpaccount = [Select Id,Name,Channel_Partner__c,PersonEmail,Mobile_No__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);

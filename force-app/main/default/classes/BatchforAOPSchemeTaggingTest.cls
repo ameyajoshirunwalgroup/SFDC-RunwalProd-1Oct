@@ -84,8 +84,7 @@ public class BatchforAOPSchemeTaggingTest {
         objpr.Start_Date__c = System.today().addDays(-5);
         objpr.RDS_Interest_Rate__c = 12;
         objpr.Project_Location__c = pl.id;
-        objpr.CP_Invoice_Approver_L1__c = userinfo.getUserId();
-        objpr.CP_Invoice_Approver_L2__c = userinfo.getUserId();
+        
         insert objpr;
         
         Opp_Close_Date__c cls = new Opp_Close_Date__c();
@@ -123,6 +122,9 @@ public class BatchforAOPSchemeTaggingTest {
         prc.Name = 'Basic';
         prc.Project__c = objpr.Id;
         insert prc;
+        
+        Account acc = new Account(Name='test',Channel_Partner__c= cp.id);
+        insert acc;
         
         Account cpaccount = [Select Id,Name,Channel_Partner__c,PersonEmail,Mobile_No__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
@@ -342,33 +344,7 @@ public class BatchforAOPSchemeTaggingTest {
         b1.RW_Registration_Done__c = 'No';
         insert b1;
         
-        Booking__c b2 = new Booking__c();
-        b2.Customer__c = objcustomer.Id;
-        b2.Project__c = objpr.Id;
-        b2.Opportunity__c = objcustomer.Id;
-        b2.Unit_No__c = objPUU.id;
-        b2.Quotation__c = q.Id;
-        b2.Booking_Date__c = Date.today();
-        b2.Account__c = cpaccount.Id;
-        b2.Type_of_Client__c = 'Local';
-        b2.Status__c = 'Booking Confirmed';
-        b2.RW_Registration_Done__c = 'No';
-        b2.BrokerIId__c = objBroker.Id;
-        b2.Exclude_From_Brokerage_Batch__c = false;
-        b2.Source_of_Booking__c = 'Channel Partner';
-        b2.Allotment_Premium__c = 10000000;
-         b2.CreatedDate=Date.today().addDays(-5);
-       // b.Brokerage_Scheme__c = bscheme.Id;
-       // b.Base_Brokerage__c = 2;
-      //  b.Kicker_Incentive_lookup__c = ki.id;
-        b2.RW_BRL_Number__c = '35363';
-        b2.RW_Registration_Status__c = 'Registration Completed';
-        b2.RW_Registration_Type__c = 'Offline Registration';
-        b2.RW_Expected_Registration_Date__c = system.today();
-        b2.RW_Registration_Date__c = system.today();
-        b2.RW_Total_Receipt_Amount_Received__c = 2000000;
-        b2.RW_Registration_Done__c = 'No';
-        insert b2;
+        
        
         Test.startTest();
         BatchforAOPSchemeTagging  bb = new BatchforAOPSchemeTagging();
