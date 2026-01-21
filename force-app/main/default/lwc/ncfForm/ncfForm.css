@@ -1,0 +1,69 @@
+.page-wrapper {
+    padding: 20px 40px;
+}
+
+.title {
+    font-size: 28px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+/* FORM BOX */
+.form-box {
+    background: white;
+    border-radius: 6px;
+    padding: 30px;
+    border: 1px solid #dadada;
+}
+
+.field-top {
+    margin-top: 20px;
+}
+
+/* BUTTON AREA */
+.approve-btn-wrapper {
+    text-align: right;
+    padding: 10px 40px;
+}
+
+.approve-btn > button,
+.raise-case-btn > button {
+    background: #b8860b !important; /* Gold */
+    color: white !important;
+    border: none;
+    padding: 10px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    margin-left: 10px;
+}
+
+/* MODAL TITLE BOX */
+.textInput {
+    background: #f3f2f2;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.field-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Modal Body Padding */
+.modal-body {
+    padding-bottom: 20px;
+}
+/* GLOBAL SPINNER */
+.modal-spinner-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent; /* stops white background issue */
+    z-index: 100000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: all; /* block clicks beneath */
+}
