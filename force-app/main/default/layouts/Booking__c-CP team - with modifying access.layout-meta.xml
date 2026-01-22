@@ -226,6 +226,10 @@
                 <behavior>Readonly</behavior>
                 <field>Customer_Reference_Amount_Received__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>SO_Release_Date_in_SAP__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -1351,6 +1355,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Possession_Reconciliation_Log__c.Booking__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Booking__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

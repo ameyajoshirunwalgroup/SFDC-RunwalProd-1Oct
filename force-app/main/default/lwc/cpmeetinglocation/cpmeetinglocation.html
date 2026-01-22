@@ -1,18 +1,31 @@
 <template>
-    <div class="container">
-        <button class="primary-button" onclick={handleButtonClick} disabled={isTaskCompleted}>
-            Capture Location
-        </button>
-        <div class="location-info">
-            <label class="location-label">CP Meeting Location:</label>
-            <p class="location-value">{currentaddress}</p>
-        </div>
-    </div>
-    
-    <!-- Spinner shown only when showSpinner is true -->
-    <template if:true={showSpinner}>
-        <div class="spinner-container">
-            <lightning-spinner class="spinner" alternative-text="Loading"></lightning-spinner>
-        </div>
+    <template if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <template if:true={isDesktop}>
+        <lightning-card>
+            <div class="slds-box slds-theme_warning slds-text-align_center slds-text-color_inverse slds-m-around_small">
+                ⚠️ Make Sure To Capture Location At Channel Partner Meeting Address
+            </div>
+            <div class="slds-p-around_small">
+                <lightning-map map-markers={lstMarkers} zoom-level={zoomlevel}></lightning-map>
+            </div>
+            <button class="primary-button" onclick={handleButtonClick} disabled={isTaskCompleted}>
+                Capture Location
+            </button>
+        </lightning-card>
+    </template>
+    <template if:true={isMobile}>
+        <lightning-card>
+            <div class="slds-box slds-theme_warning slds-text-align_center slds-text-color_inverse slds-m-around_small">
+                ⚠️ Make Sure To Capture Location At Channel Partner Meeting Address
+            </div>
+            <div class="slds-p-around_small">
+                <lightning-map map-markers={lstMarkers} zoom-level={zoomlevel} style="display: table;"></lightning-map>
+            </div>
+            <button class="primary-button" onclick={handleButtonClick} disabled={isTaskCompleted}>
+                Capture Location
+            </button>
+        </lightning-card>
     </template>
 </template>

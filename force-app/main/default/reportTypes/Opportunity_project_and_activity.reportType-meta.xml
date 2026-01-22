@@ -314,6 +314,36 @@
             <field>Accounts_Team_Email__c</field>
             <table>Project__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Assigned__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Booked__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Sold__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Total__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Charges__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Available__c</field>
+            <table>Project__c</table>
+        </columns>
         <masterLabel>Projects</masterLabel>
     </sections>
     <sections>
@@ -1197,6 +1227,26 @@
             <field>Cancellation_approved_date__c</field>
             <table>Project__c.Opportunities__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Customer_Reference_Opportunity__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
         <masterLabel>Opportunities</masterLabel>
     </sections>
     <sections>
@@ -1428,6 +1478,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Preferred_Location__c</field>
+            <table>Project__c.Opportunities__r.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_from_CP__c</field>
+            <table>Project__c.Opportunities__r.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Inbound_Desk_Agent__c</field>
             <table>Project__c.Opportunities__r.Activities</table>
         </columns>
         <masterLabel>Activities</masterLabel>

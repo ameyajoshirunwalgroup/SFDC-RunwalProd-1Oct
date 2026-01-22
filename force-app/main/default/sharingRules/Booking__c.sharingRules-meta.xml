@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>Bliss_RM_Access</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Bliss RM Access</label>
-        <sharedTo>
-            <role>Bliss_Relationship_Manager</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>Booking_Approval_RCC</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Booking Approval RCC</label>
@@ -24,7 +10,21 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>contains</operation>
-            <value>Runwal Avenue,Runwal Bliss,5th Avenue - Runwal Avenue,5th Avenue - Runwal Bliss,Runwal Commerz</value>
+            <value>Runwal Avenue,Runwal Bliss,5th Avenue - Runwal Avenue,5th Avenue - Runwal Bliss,Runwal Commerz,Codename Forevergreen</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Booking_Status</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Booking Status</label>
+        <sharedTo>
+            <group>Booking_Group</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -48,39 +48,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Director_Sharing</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Director Sharing</label>
-        <sharedTo>
-            <role>Director</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Facility_Management</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>Facility Management</label>
-        <sharedTo>
-            <group>Facility_Management</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RW_Key_handover_date__c</field>
-            <operation>notEqual</operation>
-            <value></value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>Booking Confirmed</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>Forest_Booking</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Forest Booking</label>
@@ -92,35 +59,12 @@
             <operation>equals</operation>
             <value>Runwal Forests</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>Flat_No__c</field>
+            <operation>contains</operation>
+            <value>Runwal Forests</value>
+        </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Forest_RM</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Forest RM</label>
-        <sharedTo>
-            <role>Forests_Relationship_Manager</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Gardens_RM_Access</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Gardens RM Access</label>
-        <sharedTo>
-            <role>Gardens_Relationship_Manager</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>Home_Loan_RM_Garden_Dombivali</fullName>
@@ -165,20 +109,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>MIS_Team_Sharing</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>MIS Team Sharing</label>
-        <sharedTo>
-            <role>Sales_Strategy</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>Mahalaxmi_Booking</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Mahalaxmi Booking</label>
@@ -190,19 +120,10 @@
             <operation>equals</operation>
             <value>7 Mahalaxmi</value>
         </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Mahalaxmi_RM</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Mahalaxmi RM</label>
-        <sharedTo>
-            <role>Mahalaxmi_Relationship_Manager</role>
-        </sharedTo>
         <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
+            <field>Flat_No__c</field>
+            <operation>contains</operation>
+            <value>7 Mahalaxmi</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -227,20 +148,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Pinnacle_Team_Lead</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Pinnacle Team Lead</label>
-        <sharedTo>
-            <role>Pinnacle_Team_Lead</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>RGE2_access</fullName>
         <accessLevel>Edit</accessLevel>
         <label>RGE2 access</label>
@@ -255,20 +162,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>RM_Access</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>RM Access</label>
-        <sharedTo>
-            <role>Relationship_Manager_Tower_Executive</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>R_Bliss_Avenue</fullName>
         <accessLevel>Edit</accessLevel>
         <label>R Bliss &amp; Avenue</label>
@@ -279,7 +172,7 @@
         <criteriaItems>
             <field>Flat_No__c</field>
             <operation>contains</operation>
-            <value>Runwal Bliss,Runwal Pinnacle,5th Avenue - Runwal Avenue,Runwal Greens,Runwal Avenue,Runwal Forests,Runwal Fifth Avenue</value>
+            <value>Runwal Bliss,Runwal Pinnacle,5th Avenue - Runwal Avenue,Runwal Greens,Runwal Avenue,Runwal Forests,Runwal Fifth Avenue,Codename Forevergreen</value>
         </criteriaItems>
         <criteriaItems>
             <field>Flat_No__c</field>
@@ -304,21 +197,7 @@
         <criteriaItems>
             <field>Flat_No__c</field>
             <operation>contains</operation>
-            <value>Runwal Bliss,RUNWAL BLISS,5th Avenue - Runwal Avenue,Runwal Avenue</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>R_Forest</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>R Forest</label>
-        <sharedTo>
-            <group>R_Forest</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Flat_No__c</field>
-            <operation>contains</operation>
-            <value>Runwal Forests</value>
+            <value>Runwal Bliss,RUNWAL BLISS,5th Avenue - Runwal Avenue,Runwal Avenue,Codename Forevergreen</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -371,20 +250,6 @@
             <field>Flat_No__c</field>
             <operation>contains</operation>
             <value>Runwal Gardens</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>R_Mahalaxmi</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>R Mahalaxmi</label>
-        <sharedTo>
-            <group>R_Mahalakshmi</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Flat_No__c</field>
-            <operation>contains</operation>
-            <value>7 Mahalaxmi</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -479,20 +344,6 @@
             <value>Runwal Edge Dombivli</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Runwal_Green</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Runwal Green</label>
-        <sharedTo>
-            <role>Greens_Relationship_Manager</role>
-        </sharedTo>
-        <criteriaItems>
-            <field>Status__c</field>
-            <operation>equals</operation>
-            <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>Sorcing_Booking_Garden_Sourcing</fullName>

@@ -68,6 +68,9 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
+                            <value>Booking__c.Create_Lead</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>CustomButton.Booking__c.CP_ACKNOWLEDGEMENT</value>
                         </valueListItems>
                         <valueListItems>
@@ -75,6 +78,9 @@
                         </valueListItems>
                         <valueListItems>
                             <value>Booking__c.Welcome_Call</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.Generate_AFS</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Booking__c.SDR_Letter</value>
@@ -107,9 +113,6 @@
                             <value>CustomButton.Booking__c.Send_Cancellation_Survey</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Booking__c.AFS</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Booking__c.DMS_Documents</value>
                         </valueListItems>
                         <valueListItems>
@@ -138,7 +141,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>numVisibleActions</name>
-                    <value>3</value>
+                    <value>8</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
                 <identifier>force_highlightsPanel</identifier>
@@ -314,104 +317,208 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.X20_Received__c</fieldItem>
                 <identifier>RecordX20_Received__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.X20_Received_Date__c</fieldItem>
                 <identifier>RecordX20_Received_Date__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Customer_Reference_Opportunity__c</fieldItem>
                 <identifier>RecordCustomer_Reference_Opportunity__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Reference_Booking_X20_Received__c</fieldItem>
                 <identifier>RecordReference_Booking_20_Received__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Reference_Booking_Registration_Date__c</fieldItem>
                 <identifier>RecordReference_Booking_Registration_Date__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Registration_Status__c</fieldItem>
                 <identifier>RecordRegistration_Status__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Customer_Reference_Flat_No__c</fieldItem>
                 <identifier>RecordCustomer_Reference_Flat_No__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Customer_Reference_Primary_Applicant_Nam__c</fieldItem>
                 <identifier>RecordCustomer_Reference_Primary_Applicant_Nam__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.X1_of_Agreement_Value__c</fieldItem>
                 <identifier>RecordX1_of_Agreement_Value__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.TDS_5_to_be_deducted__c</fieldItem>
                 <identifier>RecordTDS_5_to_be_deducted__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Referral_Amount_to_be_Adjusted__c</fieldItem>
                 <identifier>RecordReferral_Amount_to_be_Adjusted__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Reference_Registration_date_status__c</fieldItem>
                 <identifier>RecordReference_Registration_date_status__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Registration_Due_Status__c</fieldItem>
                 <identifier>RecordRegistration_Due_Status__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Registration_date_status__c</fieldItem>
                 <identifier>RecordRegistration_date_status__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Referral_IOM_Comments__c</fieldItem>
                 <identifier>RecordReferral_IOM_Comments__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Referral_IOM_Created_checkbox__c</fieldItem>
                 <identifier>RecordReferral_IOM_Created_checkbox__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Customer_Reference_Amount_Received__c</fieldItem>
                 <identifier>RecordCustomer_Reference_Amount_Received__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Interest_Waiver_Approval_Status__c</fieldItem>
+                <identifier>RecordInterest_Waiver_Approval_Status__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Total_Waiver_Amount_to_be_Approved__c</fieldItem>
+                <identifier>RecordTotal_Waiver_Amount_to_be_Approved__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Total_Waiver_Amount_Approved_till_now__c</fieldItem>
+                <identifier>RecordTotal_Waiver_Amount_Approved_till_now__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Waiver_Approver_Level__c</fieldItem>
+                <identifier>RecordWaiver_Approver_Level__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Project_Lead__c</fieldItem>
+                <identifier>RecordProject_Lead__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Booking_to_TAT__c</fieldItem>
+                <identifier>RecordBooking_to_TAT__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-627dbfa7-7294-4a30-a98b-805df6640dcd</name>
@@ -496,6 +603,16 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>cpBillingChecklist</componentName>
+                <identifier>c_cpBillingChecklist</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-735f478e-c5f7-4b80-9043-c787b0c93e80</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
                     <value>relatedTabContent</value>
@@ -557,6 +674,38 @@
                         <leftValue>{!Record.ADF_Opted__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-735f478e-c5f7-4b80-9043-c787b0c93e80</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Check List</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>CP Access</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>CP Billing Access</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>

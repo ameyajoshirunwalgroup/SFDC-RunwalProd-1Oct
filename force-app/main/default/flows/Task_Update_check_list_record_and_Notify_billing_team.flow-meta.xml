@@ -331,28 +331,91 @@
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Assign_Recipient</name>
-        <label>Assign Recipient</label>
+        <name>Assign_Approver_Types</name>
+        <label>Assign Approver Types</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Invoice Clearing L1</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>get_CP_Invoice_Team_Approvers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Clearing_Team_Approver_L1</name>
+        <label>Assign CP Invoice Clearing Team Approver L1</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
             <assignToReference>RecipientIDs</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>get_project.CP_Invoice_Clearing_L1__r.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>RecipientIDs</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>get_project.CP_Invoice_Clearing_L2__r.Id</elementReference>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Check_record</targetReference>
+            <targetReference>Loop_Team_Members</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>check_Approver_Types</name>
+        <label>check Approver Types</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_CP_Invoice_Clearing_Approver_L1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Clearing L1</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Clearing_Team_Approver_L1</targetReference>
+            </connector>
+            <label>is CP Invoice Clearing Approver L1</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_Recipient_ID</name>
+        <label>check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Custom_Notification_for_AV</targetReference>
+            </connector>
+            <label>is Not Null</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Check_record</name>
         <label>Check record</label>
@@ -487,9 +550,227 @@
             <label>SDR Paid By Runwal</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Copy_1_of_check_Recipient_ID</name>
+        <label>Copy 1 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Custom_Notification_For_Rera_competency</targetReference>
+            </connector>
+            <label>Copy 1 of is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_2_of_check_Recipient_ID</name>
+        <label>Copy 2 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_2_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Custom_Notification_for_booking_Date</targetReference>
+            </connector>
+            <label>Copy 2 of is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_3_of_check_Recipient_ID</name>
+        <label>Copy 3 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_3_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Custom_Notification_for_Cp_Tagging</targetReference>
+            </connector>
+            <label>Copy 3 of is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_4_of_check_Recipient_ID</name>
+        <label>Copy 4 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_4_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Custom_Notification_for_Ladder</targetReference>
+            </connector>
+            <label>Copy 4 of is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_5_of_check_Recipient_ID</name>
+        <label>Copy 5 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_5_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_2_of_Send_Custom_Notification_for_Ladder</targetReference>
+            </connector>
+            <label>Copy 5 of is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_6_of_check_Recipient_ID</name>
+        <label>Copy 6 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_6_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_Send_Custom_Notification_for_Ladder</targetReference>
+            </connector>
+            <label>Copy 6 of is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_7_of_check_Recipient_ID</name>
+        <label>Copy 7 of check Recipient ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_7_of_is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientIDs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_3_of_Send_Custom_Notification_for_Ladder</targetReference>
+            </connector>
+            <label>Copy 7 of is Not Null</label>
+        </rules>
+    </decisions>
+    <description>Removed CP Invoice Clearing L2</description>
     <environments>Default</environments>
     <interviewLabel>Task | Update check-list record and Notify billing team {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Task | Update check-list record and Notify billing team</label>
+    <loops>
+        <name>Loop_Team_Members</name>
+        <label>Loop Team Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Var_TM_Records</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>check_Approver_Types</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Check_record</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -558,7 +839,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Recipient</targetReference>
+            <targetReference>Assign_Approver_Types</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -578,7 +859,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Copy_2_of_Send_Custom_Notification_for_Ladder</targetReference>
+            <targetReference>Copy_5_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -600,7 +881,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Copy_1_of_Send_Custom_Notification_for_Ladder</targetReference>
+            <targetReference>Copy_6_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -622,7 +903,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Copy_3_of_Send_Custom_Notification_for_Ladder</targetReference>
+            <targetReference>Copy_7_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -644,7 +925,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Custom_Notification_for_AV</targetReference>
+            <targetReference>check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -666,7 +947,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Custom_Notification_for_booking_Date</targetReference>
+            <targetReference>Copy_2_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -688,7 +969,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Custom_Notification_for_Cp_Tagging</targetReference>
+            <targetReference>Copy_3_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -710,7 +991,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Custom_Notification_for_Ladder</targetReference>
+            <targetReference>Copy_4_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -732,7 +1013,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Custom_Notification_For_Rera_competency</targetReference>
+            <targetReference>Copy_1_of_check_Recipient_ID</targetReference>
         </connector>
         <inputAssignments>
             <field>Remark__c</field>
@@ -773,12 +1054,79 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
+    <subflows>
+        <name>get_CP_Invoice_Team_Approvers</name>
+        <label>get CP Invoice Team Approvers</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+        <flowName>Fetch_Project_Team_Members</flowName>
+        <inputAssignments>
+            <name>ApproverTypes</name>
+            <value>
+                <elementReference>ApproverTypes</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>ProjectId</name>
+            <value>
+                <elementReference>get_project.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TeamName</name>
+            <value>
+                <stringValue>CP Approvers Team</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TeamType</name>
+            <value>
+                <stringValue>CP Invoice Approver Team</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>Var_TM_Records</assignToReference>
+            <name>TM_Records</name>
+        </outputAssignments>
+    </subflows>
+    <variables>
+        <name>ApproverTypes</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceClearingL1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CPInvoiceClearingL2</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>RecipientIDs</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Var_TM_Records</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Team_Members__c</objectType>
     </variables>
 </Flow>

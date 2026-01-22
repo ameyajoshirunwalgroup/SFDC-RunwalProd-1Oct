@@ -171,6 +171,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Enable_E_Sign__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>BrokerIId__c</field>
             <table>Booking__c</table>
         </columns>
@@ -1742,6 +1747,51 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Customer_Reference_Amount_Received__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_For_10_Delay__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_Target__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approver_Level__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Lead__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Booking_to_TAT__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Benefit_Eligible__c</field>
             <table>Booking__c</table>
         </columns>
         <masterLabel>Booking</masterLabel>
@@ -3657,6 +3707,26 @@
             <field>Cancellation_approved_date__c</field>
             <table>Booking__c.Opportunities__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Customer_Reference_Opportunity__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
         <masterLabel>Opportunities</masterLabel>
     </sections>
     <sections>
@@ -3673,6 +3743,11 @@
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Name</field>
+            <table>Booking__c.Opportunities__r.ApplicantDetails__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>isSigned__c</field>
             <table>Booking__c.Opportunities__r.ApplicantDetails__r</table>
         </columns>
         <columns>

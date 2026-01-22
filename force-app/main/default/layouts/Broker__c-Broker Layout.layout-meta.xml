@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
@@ -460,9 +461,18 @@
             <actionType>StandardButton</actionType>
             <sortOrder>2</sortOrder>
         </platformActionListItems>
+        <platformActionListItems>
+            <actionName>Broker__c.Generate_Update_Link</actionName>
+            <actionType>QuickAction</actionType>
+            <sortOrder>3</sortOrder>
+        </platformActionListItems>
     </platformActionList>
     <relatedLists>
         <relatedList>RelatedFileList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Prospect__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
@@ -487,7 +497,7 @@
         <relatedList>AOP__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <excludeButtons>NewEvent</excludeButtons>
+        <excludeButtons>NewTask</excludeButtons>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
         <fields>ACTIVITY.TASK</fields>
@@ -540,10 +550,6 @@
         <relatedList>Opportunity.RW_Walkin_Channel_Partner__c</relatedList>
         <sortField>First_Site_Visit_Date__c</sortField>
         <sortOrder>Desc</sortOrder>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Prospect__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

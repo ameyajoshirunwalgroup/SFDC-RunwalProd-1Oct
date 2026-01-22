@@ -233,6 +233,22 @@ Runwal Group</stringValue>
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_All_Sanction_Amount</name>
+        <label>Assign All Sanction Amount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TotalSanctionAmount</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>loop_on_All_Loans.RW_Sanction_Amount__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_on_All_Loans</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Customer_Email</name>
         <label>Assign Customer Email</label>
         <locationX>0</locationX>
@@ -369,7 +385,7 @@ Runwal Group</stringValue>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Is_Not_Null_onLoan</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>(1 AND 2) OR (3 AND 4)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HL_RM__c</leftValueReference>
                 <operator>IsNull</operator>
@@ -380,6 +396,20 @@ Runwal Group</stringValue>
             <conditions>
                 <leftValueReference>ISNEW</leftValueReference>
                 <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.HL_RM__c</leftValueReference>
+                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -407,6 +437,13 @@ Runwal Group</stringValue>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.HL_RM__r.User__r.IsActive</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -523,6 +560,9 @@ Runwal Group</stringValue>
         <label>check Mode of Funding</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>check_Target</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>is_Updated_Inserted</name>
@@ -598,6 +638,31 @@ Runwal Group</stringValue>
         </rules>
     </decisions>
     <decisions>
+        <name>check_Sanction_Amount</name>
+        <label>check Sanction Amount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>loop_on_All_Loans</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Present1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>loop_on_All_Loans.RW_Sanction_Amount__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_All_Sanction_Amount</targetReference>
+            </connector>
+            <label>is Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>check_status</name>
         <label>check status</label>
         <locationX>0</locationX>
@@ -657,7 +722,91 @@ Runwal Group</stringValue>
             <label>is Loan Santioned</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>check_Target</name>
+        <label>check Target</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Present</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4 OR 7 OR  (8 AND 9)) AND 5 AND 6</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Targets_Sanction__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Sanction_Amount__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Sanction_Amount__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Targets_Sanction__r.Sanction_Amount__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Targets_Sanction__r.Sanction_Amount__c</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Targets_Sanction__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Update_Record__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Update_Record__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_All_Loans</targetReference>
+            </connector>
+            <label>is Present</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>AchievedPercentage</name>
+        <dataType>Number</dataType>
+        <expression>({!$Record.RW_Sanction_Amount__c}/{!$Record.Targets_Sanction__r.Sanction_Amount__c})*100</expression>
+        <scale>2</scale>
+    </formulas>
     <formulas>
         <name>ISNEW</name>
         <dataType>Boolean</dataType>
@@ -665,6 +814,20 @@ Runwal Group</stringValue>
     </formulas>
     <interviewLabel>Loan(After Flow) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Loan(After Flow)</label>
+    <loops>
+        <name>loop_on_All_Loans</name>
+        <label>loop on All Loans</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>get_All_Loans</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>check_Sanction_Amount</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>update_Target</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -720,6 +883,34 @@ Runwal Group</stringValue>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <name>get_All_Loans</name>
+        <label>get All Loans</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loop_on_All_Loans</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Targets_Sanction__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Targets_Sanction__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Targets_Sanction__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Loan__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>get_Custom_Notification</name>
         <label>get Custom Notification</label>
         <locationX>0</locationX>
@@ -773,6 +964,9 @@ Runwal Group</stringValue>
         <label>Copy 1 of update Funding Status and Bank Prefrence</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>check_Target</targetReference>
+        </connector>
         <inputAssignments>
             <field>Funding_Status__c</field>
             <value>
@@ -786,6 +980,9 @@ Runwal Group</stringValue>
         <label>update Funding Status and Bank Prefrence</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>check_Target</targetReference>
+        </connector>
         <inputAssignments>
             <field>Funding_Status__c</field>
             <value>
@@ -799,6 +996,19 @@ Runwal Group</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record.RW_Booking__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>update_Target</name>
+        <label>update Target</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Total_Achieved_Sanction_Amount__c</field>
+            <value>
+                <elementReference>TotalSanctionAmount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Targets_Sanction__r</inputReference>
     </recordUpdates>
     <recordUpdates>
         <name>Update_the_Record</name>
@@ -868,5 +1078,16 @@ Runwal Group</stringValue>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TotalSanctionAmount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>2</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
     </variables>
 </Flow>

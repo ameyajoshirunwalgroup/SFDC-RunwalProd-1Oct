@@ -226,6 +226,14 @@
                 <behavior>Edit</behavior>
                 <field>Cancellation_approved_date__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Customer_Reference_Opportunity__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Opt_for_Referral__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -1126,6 +1134,21 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Booking__c.Customer_Reference_Opportunity__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>OPPORTUNITY.NAME</fields>
+        <fields>ACCOUNT.NAME</fields>
+        <fields>OPPORTUNITY.CLOSE_DATE</fields>
+        <fields>OPPORTUNITY.STAGE_NAME</fields>
+        <fields>RW_Project__c</fields>
+        <fields>Project_Name__c</fields>
+        <fields>RW_Project_Unit__c</fields>
+        <fields>Status__c</fields>
+        <relatedList>Opportunity.Customer_Reference_Opportunity__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

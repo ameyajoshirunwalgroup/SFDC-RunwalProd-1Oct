@@ -35,16 +35,6 @@
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
-        <fullName>Send notification to SM when prospect assign</fullName>
-        <actions>
-            <name>Send_notification_to_SM_assign_prospect</name>
-            <type>Alert</type>
-        </actions>
-        <active>false</active>
-        <formula>AND( ISPICKVAL(Call_Attempt_Status__c , &apos;Follow up by SM&apos;), Prospect__c != null)</formula>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
         <fullName>Update SM email</fullName>
         <active>true</active>
         <formula>1=1</formula>

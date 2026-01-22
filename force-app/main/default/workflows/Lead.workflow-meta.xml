@@ -197,17 +197,6 @@
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
-        <fullName>Lead_Source_Loyalty</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Lead.LeadSource</field>
-            <operation>equals</operation>
-            <value>Loyalty</value>
-        </criteriaItems>
-        <description>If Loyalty is selected as lead source, Referral details are mandatory</description>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
         <fullName>New Lead Record Type Change</fullName>
         <actions>
             <name>Lead_Record_Type_Change</name>
@@ -216,34 +205,6 @@
         <active>true</active>
         <formula>true</formula>
         <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
-        <fullName>Populate Budget for Website enquiries</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Lead.LeadSource</field>
-            <operation>equals</operation>
-            <value>Digital</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Lead.RW_Lead_Sub_Source__c</field>
-            <operation>equals</operation>
-            <value>Website enquiry</value>
-        </criteriaItems>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
-        <fullName>Unique Lead</fullName>
-        <actions>
-            <name>Unique_Lead</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>false</active>
-        <criteriaItems>
-            <field>Lead.CreatedDate</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
         <fullName>Update email to opp</fullName>

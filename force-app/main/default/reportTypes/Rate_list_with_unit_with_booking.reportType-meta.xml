@@ -1974,6 +1974,91 @@
             <field>Customer_Reference_Amount_Received__c</field>
             <table>Booking__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opportunity__c.RW_RM_Name__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opportunity__c.Account</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opportunity__c.Account.RM_Name__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opportunity__c.Id</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opportunity__c.Account.Id</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Enable_E_Sign__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>UUID__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>UUID_Seq__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_For_10_Delay__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_Target__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approver_Level__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Lead__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Booking_to_TAT__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Benefit_Eligible__c</field>
+            <table>Booking__c</table>
+        </columns>
         <masterLabel>Booking</masterLabel>
     </sections>
     <sections>
@@ -2618,6 +2703,21 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Version_Number__c</field>
+            <table>Booking__c.Project_Units__r.Rate_Lists__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>BCAM_Rate__c</field>
+            <table>Booking__c.Project_Units__r.Rate_Lists__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>FCAM_Rate__c</field>
+            <table>Booking__c.Project_Units__r.Rate_Lists__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Corpus_Funds__c</field>
             <table>Booking__c.Project_Units__r.Rate_Lists__r</table>
         </columns>
         <masterLabel>Rate Lists</masterLabel>

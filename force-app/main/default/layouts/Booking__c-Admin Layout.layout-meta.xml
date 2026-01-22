@@ -201,6 +201,30 @@
                 <behavior>Edit</behavior>
                 <field>CEO__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Interest_Waiver_Approval_Status__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Waiver_Approver_Level__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Project_Lead__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Booking_to_TAT__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -312,6 +336,10 @@
                 <field>RW_X9_99_Received__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Checklist_Approved__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Customer_Payment_Received1__c</field>
             </layoutItems>
@@ -354,6 +382,18 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Possession_Guidelines_Sent_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Bare_Shell__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RW_Unit_Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>NCF_Status__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -1489,31 +1529,37 @@
             <sortOrder>17</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.AFS</actionName>
+            <actionName>Booking__c.DMS_Documents</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>18</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.DMS_Documents</actionName>
+            <actionName>Booking__c.Trigger_SAP_Receipts</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>19</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.Trigger_SAP_Receipts</actionName>
+            <actionName>Booking__c.Schedule_Registration</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>20</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.Schedule_Registration</actionName>
-            <actionType>QuickAction</actionType>
-            <sortOrder>21</sortOrder>
-        </platformActionListItems>
-        <platformActionListItems>
             <actionName>Referral_IOM</actionName>
             <actionType>CustomButton</actionType>
-            <sortOrder>22</sortOrder>
+            <sortOrder>21</sortOrder>
         </platformActionListItems>
     </platformActionList>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>ADF_Balance__c</fields>
+        <fields>ADF_Final_Approval_Date__c</fields>
+        <fields>Interest_Amounts_Payable__c</fields>
+        <relatedList>Credit_Note__c.Booking__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Referral_Credits__c.Booking__c</relatedList>
+    </relatedLists>
     <relatedLists>
         <relatedList>RelatedNoteList</relatedList>
     </relatedLists>
@@ -1550,6 +1596,10 @@
         <fields>Total_Amount__c</fields>
         <fields>Physically_Cheque_Received__c</fields>
         <relatedList>Receipt__c.Booking__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Registration_Schedule__c.Booking__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
@@ -1661,7 +1711,17 @@
         <relatedList>Possession_Reconciliation_Log__c.Booking__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
+        <fields>Amount_Demanded_Till_Date__c</fields>
+        <fields>Amount_Recd_Till_Date__c</fields>
+        <fields>Effect_From_Date__c</fields>
+        <fields>Effect_To_Date__c</fields>
+        <fields>Global_Charge_Name__c</fields>
+        <fields>Percent_Demanded__c</fields>
+        <fields>Percent_Paid__c</fields>
+        <fields>PlanDt__c</fields>
+        <fields>Rate__c</fields>
         <relatedList>Customer_Pay_Plan_Header__c.Booking__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -1670,6 +1730,10 @@
         <fields>CREATED_DATE</fields>
         <fields>Status__c</fields>
         <relatedList>ERP_Integration_Log__c.Booking__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Booking__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

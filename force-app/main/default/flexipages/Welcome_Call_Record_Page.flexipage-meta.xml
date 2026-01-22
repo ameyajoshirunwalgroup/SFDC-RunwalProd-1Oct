@@ -131,6 +131,29 @@
                 <identifier>RecordDhamaka_Offer_to_be_Sent_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Reason_for_Hold_Reject__c</fieldItem>
+                <identifier>RecordReason_for_Hold_Reject_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.RW_Welcome_Call_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Hold</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.RW_Welcome_Call_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Reject</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-82128c6a-ab9c-4ac0-bd39-d6c79034c9fe</name>
         <type>Facet</type>
     </flexiPageRegions>

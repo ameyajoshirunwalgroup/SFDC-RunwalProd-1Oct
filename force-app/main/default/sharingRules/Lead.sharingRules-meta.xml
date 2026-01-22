@@ -190,7 +190,7 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>equals</operation>
-            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg</value>
+            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,Codename Forevergreen</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -265,6 +265,20 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
+        <fullName>Retention_Lead_sharing_for_RWoods</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Retention Lead sharing for RWoods</label>
+        <sharedTo>
+            <group>R_Woods</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Woods</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>Sharing_rule_for_Lead_Bliss</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Sharing rule for Lead Bliss</label>
@@ -274,7 +288,7 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>equals</operation>
-            <value>Runwal Bliss,Runwal Avenue,Garden Heights</value>
+            <value>Runwal Bliss,Runwal Avenue,Garden Heights,Codename Forevergreen</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -383,25 +397,6 @@
             <value></value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>cp_group_Avenue_Bliss</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>cp - group Avenue &amp; Bliss</label>
-        <sharedTo>
-            <group>CP_Sourcing_group_Bliss_Avenue</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>LeadSource</field>
-            <operation>equals</operation>
-            <value>Channel Partner</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Bliss,Runwal Avenue</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>cp_group_gardens</fullName>

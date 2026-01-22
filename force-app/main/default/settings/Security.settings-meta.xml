@@ -591,6 +591,7 @@
     <sessionSettings>
         <allowUserAuthenticationByCertificate>false</allowUserAuthenticationByCertificate>
         <allowUserCertBasedAuthenticationWithOcspValidation>false</allowUserCertBasedAuthenticationWithOcspValidation>
+        <auraBoxcarReductionPref>false</auraBoxcarReductionPref>
         <canConfirmEmailChangeInLightningCommunities>true</canConfirmEmailChangeInLightningCommunities>
         <canConfirmIdentityBySmsOnly>true</canConfirmIdentityBySmsOnly>
         <disableTimeoutWarning>false</disableTimeoutWarning>
@@ -629,10 +630,11 @@
         <lockerServiceCSP>false</lockerServiceCSP>
         <lockerServiceNext>false</lockerServiceNext>
         <lockerServiceNextControl>false</lockerServiceNextControl>
+        <lockerTrustedMode>false</lockerTrustedMode>
         <redirectBlockModeEnabled>false</redirectBlockModeEnabled>
         <redirectionWarning>false</redirectionWarning>
         <referrerPolicy>true</referrerPolicy>
-        <referrerPolicyDirective>origin-when-cross-origin</referrerPolicyDirective>
+        <referrerPolicyDirective>strict-origin-when-cross-origin</referrerPolicyDirective>
         <requireHttpOnly>false</requireHttpOnly>
         <sendCspForUncommonClients>false</sendCspForUncommonClients>
         <sessionTimeout>TwoHours</sessionTimeout>

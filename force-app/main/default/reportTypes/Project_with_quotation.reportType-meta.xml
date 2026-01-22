@@ -1484,6 +1484,36 @@
             <field>Accounts_Team_Email__c</field>
             <table>Project__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Assigned__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Booked__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Sold__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Total__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Charges__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Car_Park_Available__c</field>
+            <table>Project__c</table>
+        </columns>
         <masterLabel>Projects</masterLabel>
     </sections>
     <sections>
@@ -3268,6 +3298,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Puzzle_Car_Park_Amount__c</field>
+            <table>Project__c.Project_Units__r.Quotations__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Additional_Amount__c</field>
+            <table>Project__c.Project_Units__r.Quotations__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Additional_1__c</field>
             <table>Project__c.Project_Units__r.Quotations__r</table>
         </columns>
         <masterLabel>Quotations</masterLabel>

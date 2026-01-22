@@ -85,6 +85,34 @@
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
+        <fullName>Codename_Forevergreen</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Codename Forevergreen</label>
+        <sharedTo>
+            <role>Receptionist_Avenue_Bliss</role>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Codename Forevergreen</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Eden_Mhada</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Eden Mhada</label>
+        <sharedTo>
+            <group>Eden_Mhada</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Eden MHADA</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>Home_Loan_RM_Garden_Dombivali</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Home Loan RM - Garden/Dombivali</label>
@@ -203,36 +231,6 @@
             <field>Project_Name__c</field>
             <operation>equals</operation>
             <value>Runwal Gardens,Runwal Edge Dombivli,R Galleria 2 and Edge 2</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Loyalty_Caller_Mumbai</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>Loyalty_Caller_Mumbai</label>
-        <sharedTo>
-            <group>Loyalty_Caller_Mumbai</group>
-        </sharedTo>
-        <booleanFilter>(1 OR 2 OR 3) AND 4</booleanFilter>
-        <criteriaItems>
-            <field>Walkin_Source__c</field>
-            <operation>equals</operation>
-            <value>Employee / Managemen,Loyalty,R Circle Caller,Referral</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Opportunity_Status__c</field>
-            <operation>equals</operation>
-            <value>Booked</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>StageName</field>
-            <operation>equals</operation>
-            <value>Unit Booked</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Bliss,Runwal Central Park,Runwal Forests,Runwal Greens,Runwal Pinnacle,Runwal Commerz,Kanjurmarg,Runwal Edge,Dombivli,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss,7 Mahalaxmi</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -417,21 +415,6 @@
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Project_Runwal_Pinnacle</fullName>
-        <accessLevel>Edit</accessLevel>
-        <description>Runwal Pinnacle opportunities</description>
-        <label>Project Runwal Pinnacle</label>
-        <sharedTo>
-            <group>Project_Pinnacle</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Pinnacle</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>R_Bliss_Avenue</fullName>
         <accessLevel>Edit</accessLevel>
         <label>R Bliss &amp; Avenue</label>
@@ -441,7 +424,7 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>equals</operation>
-            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss,Garden Heights</value>
+            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss,Garden Heights,Codename Forevergreen</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -460,7 +443,7 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>equals</operation>
-            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss,Garden Heights</value>
+            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss,Garden Heights,Codename Forevergreen</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -622,6 +605,20 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
+        <fullName>R_Woods</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>R Woods</label>
+        <sharedTo>
+            <group>R_Woods</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Woods</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>Runwal_All_Project_Group</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Runwal_All_Project_Group</label>
@@ -648,68 +645,6 @@
             <value>Runwal Greens</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Sharing_rules_opportunity_Bliss</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Sharing_rules_opportunity-Bliss</label>
-        <sharedTo>
-            <group>Project_Bliss_Avenue</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Bliss,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss,Garden Heights</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Site_Head_Sharing_Rule_Opportunity_Forests</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Site Head Sharing Rule Opportunity-Forests</label>
-        <sharedTo>
-            <group>Project_Forests</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Forests</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Site_Head_Sharing_Rule_Opportunity_Mahalaxmi</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Site Head Sharing Rule Opportunity-Mahalaxmi</label>
-        <sharedTo>
-            <group>Project_Mahalaxmi</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>7 Mahalaxmi</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>cp_group_Avenue_Bliss</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>cp - group Avenue &amp; Bliss</label>
-        <sharedTo>
-            <group>CP_Sourcing_group_Bliss_Avenue</group>
-        </sharedTo>
-        <booleanFilter>1 AND 2</booleanFilter>
-        <criteriaItems>
-            <field>Walkin_Source__c</field>
-            <operation>equals</operation>
-            <value>Channel Partner,Temp Channel Partner</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Bliss,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,5th Avenue - Runwal Bliss</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>cp_group_RGE2</fullName>

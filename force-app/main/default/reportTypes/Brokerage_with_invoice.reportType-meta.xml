@@ -160,6 +160,11 @@
             <field>AOP_CP__c</field>
             <table>Brokerage__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>New_Process__c</field>
+            <table>Brokerage__c</table>
+        </columns>
         <masterLabel>Brokerages</masterLabel>
     </sections>
     <sections>
@@ -501,6 +506,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>CP_Mandate_Receipt__c</field>
+            <table>Brokerage__c.Brokerage_Invoices__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Created_Date_Formula__c</field>
+            <table>Brokerage__c.Brokerage_Invoices__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>New_Process__c</field>
             <table>Brokerage__c.Brokerage_Invoices__r</table>
         </columns>
         <masterLabel>Brokerage Invoices</masterLabel>

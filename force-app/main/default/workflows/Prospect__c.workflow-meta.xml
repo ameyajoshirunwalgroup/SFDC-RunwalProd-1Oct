@@ -32,15 +32,4 @@
             <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
         </workflowTimeTriggers>
     </rules>
-    <rules>
-        <fullName>Send escalation mail for SM Call on Prospect if sales call is not empty</fullName>
-        <active>false</active>
-        <formula>NOT(ISBLANK(Sales_Call_Attempt_Date__c ))  &amp;&amp;  ((Last_Call_Attempt_Date__c - Sales_Call_Attempt_Date__c )*24*60 &gt; 1)</formula>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-        <workflowTimeTriggers>
-            <offsetFromField>Prospect__c.Last_Call_Attempt_Date__c</offsetFromField>
-            <timeLength>2</timeLength>
-            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
-        </workflowTimeTriggers>
-    </rules>
 </Workflow>

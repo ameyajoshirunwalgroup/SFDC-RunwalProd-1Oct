@@ -1,6 +1,2180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
     <custom>true</custom>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>AOP_After_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>AOP_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>AOP_Slab_After_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Account_Record_Type_Change</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Activate_Channel_Partner_Portal</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Alert_for_Error_on_FB_Leads</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Anarock_field_rollup</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Applicant_Details_Update_After_Registration</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Approved_Credit_Note_Send</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Approved_Interest_Waiver_Send_to_SAP</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Assign_Entitlement_on_case</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Assign_Record_Type_on_Brokerage_Type_Change_on_CP_Brokerage</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Auto_Complete_CRM_Inbound_service_call_task</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Batch_to_Notify_Presales_Sales_Task_Owner_for_Follow_Up</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Blocked_Unit_Release</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Booking_Action_for_ADF_Opted</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Booking_After_Operation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Booking_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Booking_Cancelled</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Booking_Create_CP_Billing_CheckList_Records</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Booking_confirmed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Brokerage_Calculation_Schedule_Batch</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Brokerage_Cancellation_Batch</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Brokerage_Invoice_Create_Cp_Brokerage_for_AOP</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Brokerage_Invoice_Legal_entity_wise_Brokerage_invoice</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Brokerage_Summary_Notification</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>CP_Billing_Check_List_Notification_to_Sale_and_Closing_Manager</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>CP_Brokerage_Invoice_Submit_For_Approval</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>CP_Invoice_Clearing_Approval_Process</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Campaign_Active_Campaign_on_start_date</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Campaign_Send_Notification_to_Owner_Before_1_Day_Ego_of_End_Date</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Campaign_set_Marketing_Executive_from_Project</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Case_Assignment_Email_Notification</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Case_Owner_for_Portal_User</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Case_Reopen</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Case_type_email</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Change_Case_default_Owner_Assignment</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Clone_task_for_follow_up</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Brokerage_Invoice_When_Status_is_Due</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_CP_Portal_automated_trigger</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Credit_Note_For_ADF</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Interest_Waiver_On_Demand</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Lead_Manually_using_SML</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Lead_Manually_using_SML_by_Checkbox</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Manual_Override_Brokerage_Entry</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Partner_Portal_User</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_Scheme_Config_for_all_towers</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Customer_Interaction</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Customer_details_update_when_Customer_category_changed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Delete_Undeliverable_Cases</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Demand_Update_Payment_Date</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Digital_Form_OTP</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Digital_Lead_Assignment</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>E_Signed_Set_the_enable_E_signed_True</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Feedback_Creation_on_possession</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Fetch_Project_Team_Members</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Follow_up_notification_on_Loan</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Generate_AFS_Screen_Trigger</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Get_CP_Receipts_Scheduled_Batch</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>HomeLoanRM_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Interest_Waiver_POST_API_CallOut_Button</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Interest_Waiver_Set_Approvers_From_Project</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Last_modified_fields_in_issue_tracker</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Lead_Assignment_to_Presales</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Lead_Auto_Update_Lead_Status</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Lead_Converted</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Lead_Create_Lead_for_RM</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Lead_Create_Visit_Task</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Lead_Lead_qualification_on_the_basic_of_BPCL</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Loan_After_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Loan_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Loan_Disbursement_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Loan_Disbursement_Datails_After_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Loan_Status_Update</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>New_Issue</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>News_Letter_Email_Alert</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Notify_Project_Lead_on_Waiver_Limit_Exceed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Notify_RM_For_SAP_Receipt_Not_Created</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Notify_RM_To_check_ADF_Opted_On_Booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Notify_RM_for_Receipt_Creation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_Create_Visit_record_when_opportunity_is_created</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_Field_Roll_up_on_Account</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_Mark_opportunity_as_Inactive_after_Reassignment</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_Notify_Sales_Manager_on_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_Reallocate_opportunity_to_secondary_user</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_SalesOrder</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_SalesOrder_1</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_Update_Custom_Primary_Campaign_Field</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_send_notification_to_secondary_sales_manager</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Opportunity_set_Agreement_Value_in_Amount</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>PDC_Set_Booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>PolicyCondition_FdtempjlwJNJeLCuEBll</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>PolicyCondition_OOCHiNnRlTLgJgCMQeLk</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>PolicyCondition_ZnAsAFIzkVBUfyqzPBSY</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Portal_Users</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Presales_Communication_SMS</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Primary_Applicant_Check</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Queue1</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Quotaion_Approval_for_CP_Passback_and_other_Discounts</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Quotation_Add_Quotation_to_booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Quotation_Creation_Approvals</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Quotation_Referral_Discount</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Quotation_Referral_Discount_Submit_for_Approval</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Quote_Opportunity_Stage_To_Negotiation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>RW_Payment_Milestone_Email_Notifications</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Re_trigger_failed_Sales_orders</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Referral_Lead_Creation_Batch</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Referral_Unit_Tag</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Referral_Update_When_Lead_Created</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Referral_and_Loyalty</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Referral_and_Loyalty_Email_Alert</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Registration_Confirmation_Email</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Registration_Done_Yes_if_Status_is_Registration_Completed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Registration_Schedule_Email_Alert_for_3_days_and_2_days</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Registration_Schedule_Trigger</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Relationship_Manager_Name_update</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Run_CP_Mandate_Batch</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>SMS_for_Sitevisit_on_CIF</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Schedule_Batch_for_Notification_to_SM_for_Visit_Follow_Up</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Schedule_Registration</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Scheduled_Notification_To_Customer_On_Visit_Day</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>SendSMSWhatsAppOnVisitConfirmed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>SendWhatsAppNewLeadCreated</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Assignment_email_to_SM_when_propsect_assigned</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_CP_Invoice_Email_To_MIS</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_CP_Invoice_For_Approval</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_CP_Record_For_Approval</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Cancellation_Survey</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Case_Email_to_CPs_on_Creation_Closed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Email_When_Case_is_closed_CP_Portal</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Email_to_Unregistered_User</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Notification_When_Brokerage_Summary_is_Created</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Notification_When_CP_Receipt_is_Created</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_SMS_4hrs_after_Opportunity_created</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Sales_Experience_Whatsapp_Message</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Welcome_Call_Email_with_Feedback_Form</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Send_Welcome_Letter_to_RM</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Survey_Feedback_EmailSMS_After_Site_Visit</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_1st_and_2nd_follow_up_date_time</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Count_Total_No_of_Followups</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Create_Follow_Up_Sales_Task</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Map_Fields_From_visit_task_to_opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Send_Email_Alerts</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Update_Collection_Related_Fields_on_Demand</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Update_Total_Number_of_Site_Visit_on_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_Update_check_list_record_and_Notify_billing_team</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_field_rollup_on_Lead</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_field_rollup_on_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Task_to_Calculate_Time_Between_1st_2nd_Connected_Calls</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Tasks_Scheduled_Notifications</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Agreement_Value_for_Brokers</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Auto_Call_Completed_checkbox_on_Lead</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Base_Brokerage_Status</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Billing_and_Shipping_address_on_Account</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Blocked_status_on_Opp_Unit</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Booking_CEO_when_Project_CEO_is_changed</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Brokerage_Summary_Status</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Budget_for_Digiatal_leads</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_CIF_number_on_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_CP_Account_on_Booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_CP_Account_on_Brokerage_Summary</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Cluster_Unit_Type_on_Booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_DND_on_Account_From_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_DND_on_Opportunity_From_Account</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Is_service_checkbox_on_leads_and_accounts</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Last_CRM_Call_Subject</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Mobile_Number_on_Opportunity_on_creation_from_Account</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Opportunity_Stage_and_Unit_Status</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Opportunity_Stage_as_Lost</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Owner_on_Channel_Partner_Portal_Cases</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Project_Name_on_WhatsApp_Feedback</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Project_on_Lead_Creation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Project_on_Prospect_Creation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Prospect_Name_as_Lead_Account_Name</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_RM_Name_on_cases_From_Account</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Referral_Sub_source_on_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Referral_Sub_source_on_Opportunity_1</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Registration_Due_Status</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Retention_fields_on_Booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_SDR_updated_in_Booking</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Sourcing_Manager_in_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Status_Changed_Date_Time</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Task_Recordtype_basis_on_task_type</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Unit_and_tower_on_case</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_pan_card_number_on_Opportunity</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_whenever_CP_invoice_is_submitted</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Welcome_Call_After_Operation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>registration_dellay_intimation_mail</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>send_SMS_to_customer</flow>
+    </flowAccesses>
+    <layoutAssignments>
+        <layout>AOP_Schemes_Slabs__c-AOP Schemes Slabs Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AOP_Schemes__c-AOP Schemes Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AOP_Slab__c-AOP Slab Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AOP__c-AOP Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>APF__c-APF Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Account-Account Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AccountBrand-Account Brand Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlan-Action Plan Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlanItemDependency-Action Plan Item Dependency Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlanTemplate-Action Plan Template Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlanTemplateItem-Action Plan Template Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlanTemplateItemValue-Action Plan Template Item Value Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlanTemplateVersion-Action Plan Template Version Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlnTmplItmDependency-Action Plan Template Item Dependency Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Address-Address Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Anarock_Credential__mdt-Anarock Credential Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Anarock_Integration_Log__c-Anarock Integration Log Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ApiAnomalyEventStore-API Anomaly Event Store Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Applicable_Offer__c-Applicable Offer Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Applicant_Details__c-Applicant Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Area_Type__c-Area Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Asset-Asset Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AssociatedLocation-Associated Location Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AuthorizationForm-Authorization Form Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AuthorizationFormConsent-Authorization Form Consent Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Bank__c-Bank Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Batch_Query_Config__mdt-Batch Query Config Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Birthday_Wishes__c-Birthday Wishes Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Blocking_Unit_Information__c-Blocking Unit Information Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Booked_Car_Parking__c-Booked Car Parking Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Booking_Cancel__c-Booking Cancellation Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Booking_Details__c-Booking Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Booking_Feedback__c-Booking Feedback Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Booking__c-Booking Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Broker__c-Broker Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Brokerage_Invoice__c-Brokerage Invoice Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Brokerage_Receipt__c-Brokerage Receipt Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Brokerage_Scheme__c-Brokerage Scheme Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Brokerage_Slab__c-Brokerage Slab Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Brokerage_Summary__c-Brokerage Summary Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Brokerage__c-Brokerage Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Budget_vs_Expenses__c-Budget Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>BusinessBrand-Business Brand Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ByPassTriggers__mdt-ByPassTriggers Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CIF__c-CIF Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Billing_Checklist__c-CP Billing Checklist Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Brokerage__c-CP Brokerage Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Category__c-CP Category Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Meeting_Targets__c-CP Meeting Targets Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Profile_Update__c-CP Profile Update Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Sourcing_dashboard__c-CP Sourcing dashboard Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CRM_Team_Project_Wise_Email__mdt-CRM Team Project Wise Email Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CSAT__c-CSAT Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalcMatrixColumnRange-Decision Matrix Column Range Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalcProcStepRelationship-Expression Set Step Relationship Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationMatrix-Decision Matrix Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationMatrixColumn-Decision Matrix Column Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationMatrixRow-Decision Matrix Row Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationMatrixVersion-Decision Matrix Version Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationProcedure-Calculation Procedure Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationProcedureStep-Calculation Procedure Step Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationProcedureVariable-Calculation Procedure Variable Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CalculationProcedureVersion-Calculation Procedure Version Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CallDetails__c-CallDetail Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Call_Summary__c-Call Summary Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Campaign-Campaign Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CampaignMember-Campaign Member Page Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Cancellation_Survey__c-Cancellation Survey Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Canvellation_Vertical__mdt-Cancellation Vertical Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Car_Parking_Allotment__c-Car Parking Allotment Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Car_Parking_Charge__c-Car Parking Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Case-Case Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CaseClose-Close Case Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CaseInteraction-Case Feed Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CaseMilestone-Case Milestone Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ChannelProgram-Channel Program Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ChannelProgramLevel-Channel Program Level Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Channel_Partner__c-Channel Partner Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Client__c-Client Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Cluster__c-Cluster Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CollaborationGroup-Group Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Collateral__c-Collateral Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Collection_WhatsApp__mdt-Collection WhatsApp Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Communication__c-Communication Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CommunityMemberLayout-Community Member Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Company_Target__c-AOP Target Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Contact-Contact Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ContactPointAddress-Contact Point Address Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ContactPointEmail-Contact Point Email Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ContactPointPhone-Contact Point Phone Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ContentVersion-Content Version Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Contract-Contract Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ContractLineItem-Contract Line Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Corporates__c-Corporate Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CountryCodeMap__c-CountryCodeMap Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CredentialStuffingEventStore-Credential Stuffing Event Store Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Credit_Note__c-Credit Note Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CspTrustedSite-Content Security Policy Trusted Site Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Customer-Customer Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Customer_Feedback__c-Customer Feedback Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Customer_Pay_Plan_Header__c-Customer Pay Plan Header Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Customer_Portal_Videos__c-Customer Portal Videos Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Customer_Visit_Details__c-Customer Visit Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>DelegatedAccount-External Managed Account Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Demand_Invoice__c-Demand Invoice Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Demand_Milestone_Mapping__mdt-Demand Milestone Mapping Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Development_tracker__c-Development tracker Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Document_Checklist_Header__c-Document Checklist Header Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Document_Checklist__c-Document Checklist Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Document_Details__c-Document Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>DuplicateRecordSet-Duplicate Record Set Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>EOI_Amount__mdt-EOI Amount Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ERP_Integration_Log__c-ERP Integration Log Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>EmailMessage-Email Message Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>EmpUserProvisionProcessErr-Employee User Provisioning Process Error Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>EmpUserProvisioningProcess-Employee User Provisioning Process Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Employee-Employee Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>EngagementInteraction-Engagement Interaction Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>EngagementTopic-Engagement Topic Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Entitlement-Entitlement Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Event-Event Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ExpressionSet-Expression Set Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ExpressionSetVersion-Expression Set Version Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FAQ_360__c-FAQ%3A360 Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FAQ_CRM__c-FAQ Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Facebook_Leadobj__c-Facebook Lead Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FeedItem-Feed Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FlowInterview-Flow Interview Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FlowOrchestrationInstance-Orchestration Run Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FlowOrchestrationWorkItem-Orchestration Work Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FlowRecord-Flow Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Global-Global Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Global_Charges_SAP_Condition__mdt-Global Charges SAP Condition Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Global_Charges__c-Global Charges Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Global_Unit_Of_Measurement__c-Global Unit of Measurement Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Home_Loan_Ladder__c-Home Loan Ladder Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Home_Loan_RM__c-Home Loan RM Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>IOM_Item__c-IOM Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>IOM__c-IOM Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Idea-Idea Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Individual-Individual Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>InspectionAndPossession__c-InspectionAndPossession Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Interest_Waiver__c-Interest Waiver Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>InternalOrganizationUnit-Internal Organization Unit Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Inventory_Configuration__c-Inventory Configuration Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Issue_Comment__c-Issue Comment Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Issue__c-Issue Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>KL_Whats_New__c-Whats New Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Kicker_Incentive_Configuration__c-Kicker Incentive Configuration Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Kicker_Incentive_Slab__c-Kicker Incentive Slab Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Kicker_Incentive__c-Kicker Incentive Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Kicker_Typology__c-Kicker Typology Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Knowledge__kav-Knowledge Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Lead-Lead Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Legal_Entity__c-Legal Entity Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ListEmail-List Email Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Loan_Disbursement_Details__c-Loan Disbursement Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Loan__c-Loan Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Location-Location Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>LocationTrustMeasure-Location Trust Measure Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Macro-Macro Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Master__c-Master Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>NRR__c-NRR Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Name_Confirmation_Form__c-Name Confirmation Form Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OLA_Billing__c-OLA Billing Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OLA_Ride__c-OLA Ride Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OTP__c-OTP Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Object_Record_Count__c-Object Record Count Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Offer__c-Offer Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Opportunity-Opportunity Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OpportunityLineItem-Opportunity Product Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OpportunityTeamMember-Opportunity Team Member Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Opportunity_Comment__c-CP Comment Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Order-Order Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OrderItem-Order Product Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Parking__c-Parking Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PartnerFundAllocation-Partner Fund Allocation Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Payment_Gateway__mdt-Payment Gateway Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Payment_Milestone__c-Payment Milestone Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Payment_Plan__c-Payment Plan Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PersonAccount-Admin Layout</layout>
+        <recordType>PersonAccount.New_Person_Account</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PersonAccount-Person Account Layout</layout>
+        <recordType>PersonAccount.PersonAccount</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Place_of_Supply__c-Place of Supply Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Popup_Questions__mdt-Popup Questions Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Possession_Reconciliation_Log__c-Possession Reconciliation Log Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Possession_Reconciliation__c-Possession Reconciliation Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Post_Dated_Cheque__c-Post-Dated Cheque Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Predefine_ADF_Thresholds__mdt-Pre-define ADF Thresholds Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Preferred_Budget__mdt-Preferred Budget Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Preferred_Floors__mdt-Preferred Floors Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Preferred_Size__mdt-Preferred Size Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Preferred_Unit_Type__mdt-Preferred Unit Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Pricebook2-Price Book Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PricebookEntry-Price Book Entry Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ProcessException-Process Exception Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Product2-Product Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ProfileSkill-Skill Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ProfileSkillEndorsement-Endorsement Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ProfileSkillUser-Skill User Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ProfileToFeatureAccess__c-ProfileToFeatureAccess Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Area_Type__c-Project Area Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Charges__c-Project Charges Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Construction_Stages__c-Project Construction Stages Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Location__c-Project Location Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Towers__mdt-Project Towers Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Unit_Type__c-Project Unit Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project_Unit__c-Project Unit Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Project__c-Project Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Projects__mdt-Projects Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Prospect__c-Prospect Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Qualification_Criteria__c-Qualification Criteria Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>QuickText-Quick Text Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Quotation__c-Quotation Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Quote-Quote Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>QuoteLineItem-Quote Line Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Bank_Details__c-Bank Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Construction_Stage__c-Construction Stage Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Demand_Item__c-Demand Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Demand_Reciept__c-Demand Reciept Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Demand__c-Demand Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Digital_Link_Status__c-Digital Link Status Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_EOI__c-EOI Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Email_To_Lead_Activity__c-Email To Lead Activity Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Employee__c-Employee Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Exhibition_Access__c-Exhibition Access Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Exhibition_Master__c-Exhibition Master Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Exhibition__c-Exhibition Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_FAQ__c-RW_Faq Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Feedback__c-Feedback Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Juvlon_Campaign__c-Juvlon Campaign Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_MS_Teams__c-MS Teams Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_NOC_Template__c-NOC Template Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Payment_Detail_Item__c-Payment Detail Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Payment_Details__c-Payment Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Presales_Communication__c-Presales Communication Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Presales_WhatsApp__mdt-Presales WhatsApp Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Referral__c-Referral Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Registration_Challan__c-SDR Payment Detail Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Report_Field_Mapping__mdt-Report Field Mapping Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Report_Object__mdt-Report Object Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Runwal_Event__c-Runwal Event Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Sub_Offer__c-Sub Offer Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Tower_Construction_Update__c-Tower Construction Update Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_WC_Critical_Non_Critical_Line_Items__mdt-RW WC Critical%2FNon-Critical Line Items Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Welcome_Call_Remarks__c-Welcome Call Remarks Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RW_Welcome_Call__c-RM Welcome Call Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Rate_List_Detail__c-Rate List Detail Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Rate_List_Header__c-Rate List Header Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Rate_List__c-Rate List Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Receipt_Details__c-Receipt Details Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Receipt__c-Receipt Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ReceivedDocument-Received Document Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ReceivedDocumentType-Received Document Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Referral_Credits__c-Referral Credit Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Registration_Schedule__c-Registration Schedule Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Registration_consultant__c-Registration consultant Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Relationship_Manager__c-Relationship Manager Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Release_Of_Charge__c-Release Of Charge Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ReportAnomalyEventStore-Report Anomaly Event Store Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SAP_Integration__mdt-SAP Integration Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SMS_Schedule_SMS_c__c-SMS Schedule SMS Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SMS_Template__c-SMS Template Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SalesRefundHeader__c-SalesRefundHeader Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Scheduled_Call__c-Scheduled Call Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Scheme_Configuration__c-Scheme Configuration Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Scheme_of_Customer__c-Scheme of Customer Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Scorecard-Scorecard Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ScorecardAssociation-Scorecard Association Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ScorecardMetric-Scorecard Metric Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Segment__c-Segment Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Seller-Seller Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ServiceContract-Service Contract Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SessionHijackingEventStore-Session Hijacking Event Store Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SiteIframeWhiteListUrl-Trusted Domains for Inline Frames Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SocialPersona-Social Persona Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SocialPost-Social Post Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Social_Media_Lead__c-Social Media Lead Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Society_Id__mdt-Society Id Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Solution-Solution Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Standard_Customer_Pay_Plan_Detail__c-Standard Customer Pay Plan Detail Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Standard_Pay_Plan_Header__c-Standard Pay Plan Header Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Survey_Questions_Template__c-Survey Questions Template Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Survey_Questions__c-Survey Questions Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Survey_Template__c-Survey Template Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Survey__c-Survey Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>TDS__c-TDS Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Target__c-Target Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Task-Task Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Tax_Breakup__c-Tax Breakup Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Tax_Slab__c-Tax Slab Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Team_Members__c-Team Members Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Team__c-Team Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Temp_Channel_Partner__c-Temp Channel Partner Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ThreatDetectionFeedback-Threat Detection Feedback Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Tower__c-Tower Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>True_Signed__mdt-True Signed Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Unit_Event_History__c-Unit Event History Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Unit_Number_Structure__c-Unit Number Structure Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>User-User Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>UserAlt-User Profile Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>UserProvAccount-User Provisioning Account Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>UserProvisioningLog-User Provisioning Log Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>UserProvisioningRequest-User Provisioning Request Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Vendor__c-Vendor Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WhatsApp_Campaign_Member__c-WhatsApp Campaign Member Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WhatsApp_Campaign__c-Customized Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WhatsApp_Feedback_Campaign__mdt-WhatsApp Feedback Campaign Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WhatsApp_Feedback_Q_A__mdt-WhatsApp Feedback Q%26A Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WhatsApp_Feedback__c-WhatsApp Feedback Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WhatsApp_Message_Status__c-WhatsApp Message Status Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WorkAccess-Access Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WorkBadge-Badge Received Layout 192</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WorkBadgeDefinition-Badge Layout 192</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WorkThanks-Thanks Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>cloudx_cms__SS_Carousel_Slide__c-cloudx_cms__Image Slide Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>cloudx_cms__SS_Carousel__c-cloudx_cms__Banner Layout</layout>
+    </layoutAssignments>
+    <tabVisibilities>
+        <tab>AOP__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>APF__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Anarock_Integration_Log__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Applicant_Details__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Attendance</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Birthday_Wishes__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Booking_Feedback__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Booking__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Broker__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Brokerage_Invoice__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Brokerage_Receipt__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Brokerage_Scheme_Approval</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Brokerage_Scheme__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Brokerage_Summary__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Brokerage__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Budget_vs_Expenses__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CBSL</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CIF__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Billing_Invoice_Approval</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Brokerage__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Category__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Creation_Form_for_Sourcing_Team</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Invoice_Approval_Req</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Meeting_Targets__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Profile_Update__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CP_Sourcing_dashboard__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CSAT__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CallDetails__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Call_Summary__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Cancellation_Survey__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Car_Parking_Allotment__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Car_Parking_Inventory_Matrix</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Channel_Partner_Invoice_Approval</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Check_Channel_Partner</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Check_Lead</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Check_Opportunity</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Check_Prospect</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Collateral__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Communication__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Company_Target__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Corporates__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>CountryCodeMap__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Customer_Feedback_Form</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Customer_Feedback__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Customer_Information_Form</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Customer_Interaction_Form_New</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Customer_Portal_Banners</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Customer_Portal_Videos__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Development_tracker__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>ERP_Integration_Log__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>FAQ_CRM__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Facebook_Leadobj__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Getting_Started_reg</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Global_Charges__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Home_Loan_RM__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>IOM__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Inventory_Configuration__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Inventory_Matrix</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Inventory_Matrix_New</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Issue__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>KL_Whats_New__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Kicker_Incentive_Slab__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Kicker_Incentive__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Knowledge__kav</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Legal_Entity__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Loan__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Master__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>OLA_Billing__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>OLA_Ride__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>OTP__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Offer__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Opportunity_Comment__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Payment_Milestone__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Place_of_Supply__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Possession_Reconciliation__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>ProfileToFeatureAccess__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Project_Location__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Project_Unit__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Project__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Prospect__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Qualification_Criteria__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Quotation_Approval_Submit_Page</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Quotation__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_Bank_Details__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_Demand__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_EOI__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_Employee__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_Exhibition_Master__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_FAQ__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_Juvlon_Campaign__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_NOC_Template__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>RW_Referral__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Receipt__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Referral_Credits__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Referral_credit_Approval</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Registration_Schedule__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Registration_consultant__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Rejected_CP_Invoice_Approval</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Relationship_Manager__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>SMS_Schedule_SMS_c__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>SMS_Template__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Scheme_of_Customer__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Segment__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Social_Media_Lead__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Survey_Template__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Target__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Tax_Breakup__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Tax_Slab__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Temp_Channel_Partner__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Tower__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Vendor__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>WhatsApp_Campaign__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>WhatsApp_Feedback__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>WhatsApp_Message_Status__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>cloudx_cms__SS_Carousel__c</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>cpUpdateLink</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>customer360</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
     <userLicense>Guest User License</userLicense>
     <userPermissions>
         <enabled>true</enabled>

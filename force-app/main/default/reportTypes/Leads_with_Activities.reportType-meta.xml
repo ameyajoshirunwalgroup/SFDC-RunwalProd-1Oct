@@ -765,6 +765,21 @@
             <field>Lead_Sourcing_Manager__c</field>
             <table>Lead</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Auto_Call_Completed__c</field>
+            <table>Lead</table>
+        </columns>
         <masterLabel>Leads</masterLabel>
     </sections>
     <sections>
@@ -1016,6 +1031,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Preferred_Location__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_from_CP__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Inbound_Desk_Agent__c</field>
             <table>Lead.Activities</table>
         </columns>
         <masterLabel>Activities</masterLabel>

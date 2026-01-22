@@ -219,6 +219,22 @@
                 <behavior>Edit</behavior>
                 <field>Cancellation_approved_date__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Customer_Reference_Opportunity__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RW_Sourcing_Manager__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Sourcing_Manager__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Opt_for_Referral__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -579,63 +595,16 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Rating Section</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Location_Rating__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Price_Rating__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Product_Flat_Size_Rating__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Product_Flat_Configuration_Rating__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>RW_Rating_Value__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Project_Amenities_Rating__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Project_Theme_Layout_Rating__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Possession_Timelines_Rating__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>RW_Runwal_Brand_Rating__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
         <label>Existing Client Reference Details</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Customer_reference_SAP_Code__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Customer_reference_Booked_Unit__c</field>
             </layoutItems>
         </layoutColumns>
@@ -1100,6 +1069,13 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Mode__c</fields>
+        <fields>Bank__c</fields>
+        <fields>Cheque_DD__c</fields>
+        <relatedList>Receipt__c.Opportunity__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
         <fields>RW_Instrument_Number__c</fields>
         <fields>RW_Payment_Amount__c</fields>
         <fields>RW_Payment_Type__c</fields>
@@ -1145,6 +1121,21 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Booking__c.Customer_Reference_Opportunity__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>OPPORTUNITY.NAME</fields>
+        <fields>ACCOUNT.NAME</fields>
+        <fields>OPPORTUNITY.CLOSE_DATE</fields>
+        <fields>OPPORTUNITY.STAGE_NAME</fields>
+        <fields>RW_Project__c</fields>
+        <fields>Project_Name__c</fields>
+        <fields>RW_Project_Unit__c</fields>
+        <fields>Status__c</fields>
+        <relatedList>Opportunity.Customer_Reference_Opportunity__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

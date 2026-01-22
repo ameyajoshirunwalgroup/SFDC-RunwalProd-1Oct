@@ -15,6 +15,7 @@ export default class Aadhar_Verification_TrueSigned_LWC extends LightningElement
     @wire(verifyApplicantDetails, {sRecordIds: '$recordId' })
     wiredApplicants({ error, data }) {
         if (data) {
+            console.log('Data -> '+data);
             this.applicantData = data;
             this.showError = data && data.length > 0;
             if (this.showError) {

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Copy_1_of_Registration_Schedule_Email_Action_1</name>
+        <label>Copy 1 of Registration Schedule Email Action 1</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <actionName>Registration_Schedule__c.Registration_Schedule_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Registration_Schedule__c.Registration_Schedule_Email</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Registration_Schedule_Email_Action_1</name>
         <label>Registration Schedule Email Action 1</label>
         <locationX>50</locationX>
@@ -39,7 +56,7 @@
     <decisions>
         <name>Check_Date</name>
         <label>Check Date</label>
-        <locationX>314</locationX>
+        <locationX>446</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -78,6 +95,21 @@
                 <targetReference>Schedule_email</targetReference>
             </connector>
             <label>On the day</label>
+        </rules>
+        <rules>
+            <name>New_Record</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.CreatedDate</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_Registration_Schedule_Email_Action_1</targetReference>
+            </connector>
+            <label>New Record</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -118,7 +150,7 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>188</locationX>
+        <locationX>320</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_Date</targetReference>

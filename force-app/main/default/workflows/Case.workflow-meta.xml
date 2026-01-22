@@ -693,27 +693,6 @@
         <useDeadLetterQueue>false</useDeadLetterQueue>
     </outboundMessages>
     <rules>
-        <fullName>Case Closure Feedback Notification</fullName>
-        <actions>
-            <name>Case_Closure_Feedback_Email_Notification</name>
-            <type>Alert</type>
-        </actions>
-        <active>false</active>
-        <booleanFilter>1 AND 2</booleanFilter>
-        <criteriaItems>
-            <field>Case.Status</field>
-            <operation>equals</operation>
-            <value>Case Closed</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Case.Remarks_by_RM__c</field>
-            <operation>equals</operation>
-            <value>Closed Satisfactory,Closed Un-satisfactory</value>
-        </criteriaItems>
-        <description>send feedback email when case status is closed.</description>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
         <fullName>Case Closure Notification</fullName>
         <actions>
             <name>Case_Closure_Email_Notification</name>
@@ -757,20 +736,6 @@
             <field>Case.Status</field>
             <operation>equals</operation>
             <value>Reopened</value>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
-        <fullName>Case Resolved notification</fullName>
-        <actions>
-            <name>Case_Resolved_Email_Notification</name>
-            <type>Alert</type>
-        </actions>
-        <active>false</active>
-        <criteriaItems>
-            <field>Case.Status</field>
-            <operation>equals</operation>
-            <value>Resolved</value>
         </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>

@@ -1854,6 +1854,26 @@
             <field>Cancellation_approved_date__c</field>
             <table>Opportunity</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Customer_Reference_Opportunity__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>Opportunity</table>
+        </columns>
         <masterLabel>Opportunities</masterLabel>
     </sections>
     <sections>
@@ -4470,6 +4490,16 @@
             <field>Puzzle_Car_Park_Amount__c</field>
             <table>Opportunity.Booking1__r.Quotations__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Additional_Amount__c</field>
+            <table>Opportunity.Booking1__r.Quotations__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Stack_Additional_1__c</field>
+            <table>Opportunity.Booking1__r.Quotations__r</table>
+        </columns>
         <masterLabel>Quotations</masterLabel>
     </sections>
     <sections>
@@ -4891,6 +4921,51 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Customer_Reference_Amount_Received__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_For_10_Delay__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_Target__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approver_Level__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Lead__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Booking_to_TAT__c</field>
+            <table>Opportunity.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Benefit_Eligible__c</field>
             <table>Opportunity.Booking1__r</table>
         </columns>
         <masterLabel>Booking</masterLabel>

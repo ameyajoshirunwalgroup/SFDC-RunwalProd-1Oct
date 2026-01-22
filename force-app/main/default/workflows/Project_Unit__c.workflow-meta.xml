@@ -209,15 +209,6 @@ IF(RW_Customer__r.Owner.IsActive, RW_Customer__r.Owner.Email, &apos;shraddha.sha
         </workflowTimeTriggers>
     </rules>
     <rules>
-        <fullName>Booking Source</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Project_Unit__c.CreatedDate</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
         <fullName>Inactive Checkbox to false</fullName>
         <actions>
             <name>Inactive_Checkbox_to_false</name>
@@ -296,16 +287,6 @@ IF(RW_Customer__r.Owner.IsActive, RW_Customer__r.Owner.Email, &apos;shraddha.sha
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
-        <fullName>Test WF</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Project_Unit__c.RW_Unit_Status__c</field>
-            <operation>notEqual</operation>
-            <value>Available</value>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
         <fullName>Update customer email</fullName>
         <actions>
             <name>Update_current_customer_email</name>
@@ -313,15 +294,6 @@ IF(RW_Customer__r.Owner.IsActive, RW_Customer__r.Owner.Email, &apos;shraddha.sha
         </actions>
         <active>true</active>
         <formula>!ISBLANK(RW_Customer__c)</formula>
-        <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
-        <fullName>bookin source</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Project_Unit__c.CreatedDate</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
         <triggerType>onAllChanges</triggerType>
     </rules>
 </Workflow>

@@ -8,4 +8,12 @@
 		<target>lightning__RecordPage</target>
 		<target>lightning__Tab</target>
 	</targets>
+	<targetConfigs>
+		<targetConfig targets="lightning__RecordPage">
+            <supportedFormFactors>
+			    <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+	</targetConfigs>
 </LightningComponentBundle>

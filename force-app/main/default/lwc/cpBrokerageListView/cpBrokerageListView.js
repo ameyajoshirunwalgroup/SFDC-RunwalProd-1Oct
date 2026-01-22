@@ -6,14 +6,26 @@ import getCpBrokerages from '@salesforce/apex/CPBrokerageInvoiceController.getCp
 import CheckGst from '@salesforce/apex/CPBrokerageInvoiceController.CheckForGSTNo'; // Missing import
 
 const columns = [
-    { label: 'Invoice Number', fieldName: 'Invoice_Number__c', sortable: true },
-    { label: 'Approval Status', fieldName: 'Approval_Status__c', sortable: true },
-    { label: 'Approval Status (Clearing)', fieldName: 'Approval_Status_clearing__c', sortable: true },
-    { label: 'Brokerage Type', fieldName: 'Brokerage_Type__c', sortable: true },
-    { label: 'Legal Entity', fieldName: 'Legal_Entity_Name', sortable: true },
+    //For every type
+    {label: 'Customer Name',fieldName: 'Customer_Name__c', type: 'text',sortable: true},
+    {label: 'Brokerage Scheme',fieldName: 'Brokerage_Scheme_Name__c',sortable: true},
+    /*{label: 'Name',fieldName: 'Name',sortable: true},*/
+    {label: 'Project',fieldName: 'Project__c', sortable: true},
+    {label: 'Tower - Unit',fieldName: 'Tower_Unit__c',sortable: true},
+    {label: 'Invoice Number',fieldName: 'Invoice_Number__c',sortable: true},
+    {label: 'Invoice Status',fieldName: 'Invoice_Status_CP_Portal__c',sortable: true},
+    {label: 'Payment Status',fieldName: 'Status__c',sortable: true},    
+    // {label: 'Eligible Slab', fieldName: 'RW_Eligible_Slab__c', sortable: true },
+
+    // { label: 'Invoice Number', fieldName: 'Invoice_Number__c', sortable: true },
+    // { label: 'Approval Status', fieldName: 'Approval_Status__c', sortable: true },
+    // { label: 'Approval Status (Clearing)', fieldName: 'Approval_Status_clearing__c', sortable: true },
+    { label: 'Eligible Slab', fieldName: 'Brokerage_Type__c', sortable: true },
     { label: 'Total Brokerage', fieldName: 'Total_Brokerage__c', type: 'currency', sortable: true },
-    { label: 'Created Date', fieldName: 'CreatedDate', type: 'date', sortable: true },
-    { label: 'Last Modified Date', fieldName: 'LastModifiedDate', type: 'date', sortable: true },
+    { label: 'Company Name', fieldName: 'Company_Name__c', sortable: true },
+    //For every type
+    // { label: 'Created Date', fieldName: 'CreatedDate', type: 'date', sortable: true },//Commented by Prashant business requirement. 14-01-2026
+    // { label: 'Last Modified Date', fieldName: 'LastModifiedDate', type: 'date', sortable: true },//Commented by Prashant business requirement. 14-01-2026
     {
         type: "button", 
         label: 'Preview Invoice', 

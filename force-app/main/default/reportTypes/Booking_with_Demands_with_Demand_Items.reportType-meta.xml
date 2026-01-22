@@ -230,6 +230,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Is_AOP_CP_Applicable__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Contact_No_of_Referer_Customer_Custome__c</field>
             <table>Booking__c</table>
         </columns>
@@ -1723,6 +1728,51 @@
             <field>Customer_Reference_Amount_Received__c</field>
             <table>Booking__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_For_10_Delay__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_Target__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approver_Level__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Lead__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Booking_to_TAT__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Benefit_Eligible__c</field>
+            <table>Booking__c</table>
+        </columns>
         <masterLabel>Booking</masterLabel>
     </sections>
     <sections>
@@ -1824,6 +1874,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Total_Demand_Paid__c</field>
+            <table>Booking__c.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Requested__c</field>
+            <table>Booking__c.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>O_S_in_Crs__c</field>
             <table>Booking__c.Demands__r</table>
         </columns>
         <masterLabel>Demands</masterLabel>

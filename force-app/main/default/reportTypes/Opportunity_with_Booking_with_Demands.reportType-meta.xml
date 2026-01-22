@@ -6,6 +6,10 @@
     <description>Opportunity with Booking with Demands</description>
     <join>
         <join>
+            <join>
+                <outerJoin>true</outerJoin>
+                <relationship>Activities__r</relationship>
+            </join>
             <outerJoin>false</outerJoin>
             <relationship>Demands__r</relationship>
         </join>
@@ -1844,6 +1848,26 @@
             <field>Cancellation_approved_date__c</field>
             <table>Opportunity</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Customer_Reference_Opportunity__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>Opportunity</table>
+        </columns>
         <masterLabel>Opportunities</masterLabel>
     </sections>
     <sections>
@@ -3557,6 +3581,51 @@
             <field>Customer_Reference_Amount_Received__c</field>
             <table>Opportunity.Booking__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_For_10_Delay__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_Target__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approver_Level__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Lead__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Booking_to_TAT__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Benefit_Eligible__c</field>
+            <table>Opportunity.Booking__r</table>
+        </columns>
         <masterLabel>Booking</masterLabel>
     </sections>
     <sections>
@@ -3660,6 +3729,69 @@
             <field>Total_Demand_Paid__c</field>
             <table>Opportunity.Booking__r.Demands__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Requested__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>O_S_in_Crs__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>PTP_Date__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reminder_Date__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reminder_Type__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>PTP_Ageing__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Non_collectible__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Count_of_Attempt__c</field>
+            <table>Opportunity.Booking__r.Demands__r</table>
+        </columns>
         <masterLabel>Demands</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>PTP_Amount__c</field>
+            <table>Opportunity.Booking__r.Demands__r.Activities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>ActivityDate__c</field>
+            <table>Opportunity.Booking__r.Demands__r.Activities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Next_Action_Date__c</field>
+            <table>Opportunity.Booking__r.Demands__r.Activities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Remarks__c</field>
+            <table>Opportunity.Booking__r.Demands__r.Activities__r</table>
+        </columns>
+        <masterLabel>Activities</masterLabel>
     </sections>
 </ReportType>

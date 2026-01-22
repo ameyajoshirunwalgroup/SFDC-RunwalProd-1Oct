@@ -7,6 +7,7 @@
     <excludeButtons>Decline</excludeButtons>
     <excludeButtons>Delete</excludeButtons>
     <excludeButtons>DeleteSeries</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>true</detailHeading>
@@ -134,6 +135,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Remarks__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RecordTypeId</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

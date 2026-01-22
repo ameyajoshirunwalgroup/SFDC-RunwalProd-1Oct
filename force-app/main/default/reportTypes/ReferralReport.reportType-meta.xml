@@ -140,6 +140,11 @@
             <field>Duplicate_Lead_Mobile__c</field>
             <table>RW_Referral__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>RW_Referral__c</table>
+        </columns>
         <masterLabel>Referral</masterLabel>
     </sections>
     <sections>
@@ -2216,6 +2221,26 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Cancellation_approved_date__c</field>
+            <table>RW_Referral__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Customer_Reference_Opportunity__c</field>
+            <table>RW_Referral__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>RW_Referral__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>RW_Referral__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
             <table>RW_Referral__c.Opportunities__r</table>
         </columns>
         <masterLabel>Opportunities</masterLabel>

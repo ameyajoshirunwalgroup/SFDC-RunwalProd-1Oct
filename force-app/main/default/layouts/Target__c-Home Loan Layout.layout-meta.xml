@@ -22,6 +22,14 @@
                 <behavior>Edit</behavior>
                 <field>Disbursement_Amount__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Total_Achieved_Disbursemment_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Achieve_Disbursement_Percentage__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -38,6 +46,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Sanction_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Total_Achieved_Sanction_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Achieve_Sanction_Percentage__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -73,10 +89,16 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>HL_RM_Name__c</fields>
+        <fields>RW_Sanction_Date__c</fields>
+        <fields>RW_Sanction_Amount__c</fields>
         <relatedList>Loan__c.Targets_Sanction__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Loan__c</fields>
+        <fields>Disbursement_Date__c</fields>
+        <fields>Disbursement_Amount__c</fields>
         <relatedList>Loan_Disbursement_Details__c.Targets_Disbursement__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

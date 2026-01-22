@@ -2,19 +2,31 @@
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
     <alerts>
         <fullName>Registration_Confirmation</fullName>
-        <ccEmails>garima.singh@runwalgroup.in</ccEmails>
         <description>Registration Confirmation</description>
         <protected>false</protected>
-        <senderAddress>crm7mahalaxmi@runwalgroup.in</senderAddress>
+        <recipients>
+            <type>creator</type>
+        </recipients>
+        <recipients>
+            <field>Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Registration_Confirmation</template>
     </alerts>
     <alerts>
         <fullName>Registration_Schedule_Email</fullName>
-        <ccEmails>garima.singh@runwalgroup.in</ccEmails>
         <description>Registration Schedule Email</description>
         <protected>false</protected>
-        <senderAddress>crm7mahalaxmi@runwalgroup.in</senderAddress>
+        <recipients>
+            <type>creator</type>
+        </recipients>
+        <recipients>
+            <field>Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Registration_Schedule_Email</template>
     </alerts>

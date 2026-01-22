@@ -43,6 +43,12 @@
         <expression>{!Get_Booking.Allotment_Premium__c}</expression>
         <scale>2</scale>
     </formulas>
+    <formulas>
+        <name>TotalAdfReceived</name>
+        <dataType>Currency</dataType>
+        <expression>{!Get_Booking.Total_ADF_Amount__c}</expression>
+        <scale>2</scale>
+    </formulas>
     <interviewLabel>Create Credit Note For ADF {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Credit Note For ADF</label>
     <processMetadataValues>
@@ -97,6 +103,12 @@
             <field>Reason_For_Settlement__c</field>
             <value>
                 <elementReference>Reason_For_Settlement</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TL__c</field>
+            <value>
+                <elementReference>Get_Booking.Unit_No__r.Relationship_Manager__r.User__r.ManagerId</elementReference>
             </value>
         </inputAssignments>
         <object>Credit_Note__c</object>
@@ -234,50 +246,6 @@
             </styleProperties>
         </fields>
         <fields>
-            <name>Payment_Done_Per</name>
-            <dataType>String</dataType>
-            <defaultValue>
-                <elementReference>PaymentDone</elementReference>
-            </defaultValue>
-            <fieldText>% Payment Done</fieldText>
-            <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isReadOnly>
-                <booleanValue>true</booleanValue>
-            </isReadOnly>
-            <isRequired>false</isRequired>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>6</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
-            <name>Payment_Due_per</name>
-            <dataType>String</dataType>
-            <defaultValue>
-                <elementReference>PaymentDue</elementReference>
-            </defaultValue>
-            <fieldText>% Payment Due</fieldText>
-            <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isReadOnly>
-                <booleanValue>true</booleanValue>
-            </isReadOnly>
-            <isRequired>false</isRequired>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>6</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
             <name>Interest_Amount_Payble</name>
             <dataType>String</dataType>
             <defaultValue>
@@ -306,6 +274,28 @@
                 <elementReference>ADF_Balance</elementReference>
             </defaultValue>
             <fieldText>ADF Balance</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isReadOnly>
+                <booleanValue>true</booleanValue>
+            </isReadOnly>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>6</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Total_ADF_Amount_Received</name>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>TotalAdfReceived</elementReference>
+            </defaultValue>
+            <fieldText>Total ADF Amount Received</fieldText>
             <fieldType>InputField</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isReadOnly>
@@ -395,7 +385,7 @@
             <targetReference>Get_Booking</targetReference>
         </connector>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

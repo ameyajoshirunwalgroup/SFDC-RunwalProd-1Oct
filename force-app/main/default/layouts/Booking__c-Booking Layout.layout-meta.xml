@@ -248,6 +248,10 @@
                 <behavior>Readonly</behavior>
                 <field>Customer_Reference_Amount_Received__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Booking_to_TAT__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -378,8 +382,35 @@
                 <behavior>Readonly</behavior>
                 <field>RW_X9_99_Received__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Bare_Shell__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RW_Unit_Type__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>E-Signing Details</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>UUID__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Enable_E_Sign__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -1179,54 +1210,64 @@
             <sortOrder>9</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.Welcome_Call</actionName>
-            <actionType>QuickAction</actionType>
+            <actionName>Generate_Booking_Application_Form</actionName>
+            <actionType>CustomButton</actionType>
             <sortOrder>10</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.SDR_Letter</actionName>
+            <actionName>Booking__c.Welcome_Call</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>11</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Allot_Car_Parking</actionName>
+            <actionName>Booking__c.SDR_Letter</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>12</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Unit_Transfer_and_Cancellation</actionName>
+            <actionName>Allot_Car_Parking</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>13</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.Submit_for_Approval</actionName>
+            <actionName>Unit_Transfer_and_Cancellation</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>14</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Send_Cancellation_for_Approval</actionName>
+            <actionName>Booking__c.Submit_for_Approval</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>15</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Upload_handover_document</actionName>
+            <actionName>Send_Cancellation_for_Approval</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>16</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.Interest_Ledger_Pdf</actionName>
+            <actionName>Upload_handover_document</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>17</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.Customer_Ledger_Pdf</actionName>
+            <actionName>Booking__c.Interest_Ledger_Pdf</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>18</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Booking__c.DMS_Documents</actionName>
+            <actionName>Booking__c.Customer_Ledger_Pdf</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>19</sortOrder>
+        </platformActionListItems>
+        <platformActionListItems>
+            <actionName>Booking__c.DMS_Documents</actionName>
+            <actionType>QuickAction</actionType>
+            <sortOrder>20</sortOrder>
+        </platformActionListItems>
+        <platformActionListItems>
+            <actionName>Booking__c.Bulk_Aadhar_Verification</actionName>
+            <actionType>QuickAction</actionType>
+            <sortOrder>21</sortOrder>
         </platformActionListItems>
     </platformActionList>
     <relatedLists>
@@ -1382,6 +1423,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Possession_Reconciliation_Log__c.Booking__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Booking__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

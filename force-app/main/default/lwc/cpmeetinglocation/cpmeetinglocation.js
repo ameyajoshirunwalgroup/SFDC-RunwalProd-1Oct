@@ -3,6 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import updateTaskLocation from '@salesforce/apex/CPTasklocationController.updateTaskLocation';
 import getTaskById from '@salesforce/apex/CPTasklocationController.getTaskById';
+import FORM_FACTOR from "@salesforce/client/formFactor"
 
 export default class CpMeetingLocation extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -14,47 +15,77 @@ export default class CpMeetingLocation extends NavigationMixin(LightningElement)
     @track status;  // Track task status
     wiredTaskResult;
 
+    lstMarkers = [];
+    zoomlevel = "1";
+    @track latitudes;
+    @track longitudes;
+    @track isLoaded = false;
+    latestLong;
+    latestLatitude;
+    isMobile = false;
+    isDesktop = false;
+
+    
+    handleFormFactor() {
+        if (FORM_FACTOR === "Large") {
+            this.isDesktop = true;
+        } else if (FORM_FACTOR === "Medium") {
+            this.isMobile = true;
+        } else if (FORM_FACTOR === "Small") {
+            this.isMobile = true;
+        }
+    }
+
     // Getter to check if the task is completed
     get isTaskCompleted() {
         return this.status === 'Completed';
     }
 
-    @wire(getTaskById, { taskId: '$recordId' })
-    wiredTask({ error, data }) {
-        if (data) {
-            this.handleData(data);
-        } else if (error) {
-            this.handleError(error);
-        }
+    // @wire(getTaskById, { taskId: '$recordId' })
+    // wiredTask({ error, data }) {
+    //     if (data) {
+    //         this.handleData(data);
+    //     } else if (error) {
+    //         this.handleError(error);
+    //     }
+    // }
+    connectedCallback() {
+        debugger;
+        this.isLoaded = true;
+        this.handleFormFactor();
+        getTaskById({ taskId: this.recordId }).then(result => {
+            console.log('Check result--->',result);
+            this.handleData(result);
+        })
     }
 
     handleData(task) {
         console.log('Task object:', JSON.stringify(task));
         
         // Extract latitude, longitude, and status
-        this.latitude = task.CP_Meeting_Address__Latitude__s || null;
-        this.longitude = task.CP_Meeting_Address__Longitude__s || null;
-        this.status = task.Status || null;
-
-        console.log('Extracted Latitude:', this.latitude);
-        console.log('Extracted Longitude:', this.longitude);
-        console.log('Task Status:', this.status);
-
-        if (this.latitude && this.longitude) {
-            this.currentaddress = `${this.latitude},${this.longitude}`;
-        } else {
-            this.currentaddress = 'Location is not updated';
+        this.latestLatitude = task.CP_Meeting_Address__Latitude__s || null;
+        this.latestLong = task.CP_Meeting_Address__Longitude__s || null;
+        this.status = task.Event_Status__c || null;
+        this.lstMarkers = [{
+            location: {
+                Latitude: task.CP_Meeting_Address__Latitude__s,
+                Longitude: task.CP_Meeting_Address__Longitude__s
+            },
+            title: 'Check In Location'
         }
+        ];
+        this.zoomlevel = "15";
+        this.isLoaded = false;
     }
 
     handleError(error) {
         console.error('Error received:', error);
-        this.showToast('Error', 'Failed to retrieve task location data.', 'error');
+        this.showToast('Error', 'Failed to retrieve Event location data.', 'error');
         this.currentaddress = 'Location is not available';
     }
 
     handleButtonClick(event) {
-        this.showSpinner = true;
+        this.isLoaded = true;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 this.storePosition.bind(this),
@@ -63,7 +94,7 @@ export default class CpMeetingLocation extends NavigationMixin(LightningElement)
             );
         } else {
             this.showToast('Error', 'Geolocation is not supported by this browser.', 'error');
-            this.showSpinner = false;
+            this.isLoaded = false;
         }
     }
 
@@ -81,15 +112,15 @@ export default class CpMeetingLocation extends NavigationMixin(LightningElement)
                 latitude: this.currentLocation.latitude,
                 longitude: this.currentLocation.longitude
             });
-            this.showSpinner = false;
-            this.showToast('Success', 'Location updated on Task successfully!', 'success');
+            this.isLoaded = false;
+            this.showToast('Success', 'Location updated on Event successfully!', 'success');
             setTimeout(() => {
-                eval("$A.get('e.force:refreshView').fire();");
-            }, 3000);
+                window.location.reload();
+            }, 1000);
 
         } catch (error) {
-            this.showSpinner = false;
-            this.showToast('Error', 'Failed to update Task with location', 'error');
+            this.isLoaded = false;
+            this.showToast('Error', 'Failed to update Event with location', 'error');
             console.error(error);
         }
     }
