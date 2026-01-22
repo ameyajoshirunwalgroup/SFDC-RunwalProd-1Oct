@@ -335,7 +335,9 @@ Runwal</stringValue>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <elementReference>{!$Record.Name_Confirmation_Form__r.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email}</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
