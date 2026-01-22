@@ -37,13 +37,15 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
 <aura:attribute  name="BankPreferenceforLoan1" type="String"  />
 <aura:attribute  name="BankPreferenceforLoan2" type="String"  />
 <aura:attribute  name="BankPreferenceforLoan3" type="String"  />
+<aura:attribute  name="ReasonsForHoldReject" type="String"  />
 <aura:attribute  name="additionalRemarks" type="String" />
 <aura:attribute name="regPhone" type="String" description="Stores the phone number" />
  <!--aura handler with waiting and donewaiting events-->
  <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
  <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
  <aura:attribute name="BankNamePicklistOptions" type="String[]" />
-    
+    <aura:attribute name="ReasonsForHoldRejectPicklistOptions" type="String[]" />  <!-- Added By Dolly -->
+ <aura:attribute name="showReasonsRow" type="boolean" default="false" />    <!-- Added By Dolly -->
  <aura:attribute name="RegConsltNameListOptions" type="String[]" /> 
  <aura:attribute  name="regName" type="String"  />
  <aura:attribute  name="charge" type="String"  />
@@ -1276,6 +1278,18 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
                         </aura:iteration>
                     </lightning:select>
                 </td>
+                <td>
+                <lightning:select name="ModeOfFunding" variant="label-hidden" class="label-hidden" label="{!v.selectedValue}"
+             value="{!v.preMapYesNo.ModeOfFunding}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+              <aura:iteration items="{!v.dropDownOpts}" var="item">
+                 <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+              </aura:iteration>
+              </lightning:select>
+          </td>
+           <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="ModeOfFunding" class="{!v.CriticalMap.ModeOfFunding  ? 'changeMe' : ''}" value="{!v.inputValueList.ModeOfFunding}" /></td> 
+                <aura:if isTrue="{!v.predatabln}">
+           <td> {!v.preMap.ModeOfFunding}</td></aura:if>
         </tr>
 
         <aura:if isTrue="{!v.selectedValue == 'Bank Loan'}">
@@ -1295,6 +1309,9 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
                         </aura:iteration>
                     </lightning:select>
                 </td>
+                <td></td>	
+                <td></td>	
+                <td></td>
             </tr>
         
             <aura:if isTrue="{! !empty(v.BankPreferenceforLoan1)}">
@@ -1313,6 +1330,9 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
                             </aura:iteration>
                         </lightning:select>
                     </td>
+                    <td></td>	
+                   <td></td>	
+                   <td></td>
                 </tr>
             </aura:if>
         
@@ -1332,6 +1352,9 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
                             </aura:iteration>
                         </lightning:select>
                     </td>
+                    <td></td>	
+                   <td></td>	
+                   <td></td>
                 </tr>
             </aura:if>
         </aura:if>
@@ -1439,7 +1462,26 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
             <td> {!v.preMap.Remarks}</td>
             </aura:if>
         </tr>
-        
+         <!-- Added By Dolly -->
+        <tr>
+            <td>Reasons For Hold/Reject</td>
+            <td>
+                <lightning:select value="{!v.ReasonsForHoldReject}"
+                                  onchange="{!c.handleReasonsForHoldReject}"
+                                  aura:id="ReasonsForHoldReject"
+                                  label="ReasonsForHoldReject"
+                                  variant="label-hidden"
+                                  class="label-hidden"
+                                  messageWhenValueMissing="Please select the Reason">
+                    <aura:iteration items="{!v.ReasonsForHoldRejectPicklistOptions}" var="item">
+                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </td>
+            <td></td>	
+            <td></td>	
+            <td></td>
+        </tr>
        </tbody>
       
        </table>

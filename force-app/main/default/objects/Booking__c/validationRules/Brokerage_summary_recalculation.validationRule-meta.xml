@@ -7,12 +7,16 @@
 		ISCHANGED(Calculate_Brokerage__c),
 		Not(ISBLANK(Brokerage_Summary__c)),
 		Calculate_Brokerage__c,
-		$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+		$Profile.Name &lt;&gt; &apos;CP Billing Access&apos;,
+		$Profile.Name &lt;&gt; &apos;CP Access&apos;
 	),
 	And(
 		ISCHANGED(Calculate_Brokerage__c),
 		not(Calculate_Brokerage__c),
-		$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+		$Profile.Name &lt;&gt; &apos;CP Billing Access&apos;,
+		$Profile.Name &lt;&gt; &apos;CP Access&apos;
 	),
 	And(
 		Calculate_Brokerage__c,

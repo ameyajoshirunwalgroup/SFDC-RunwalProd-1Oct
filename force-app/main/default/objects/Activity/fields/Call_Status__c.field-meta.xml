@@ -7,7 +7,7 @@
     <valueSet>
         <controllingField>Task_Type__c</controllingField>
         <valueSetDefinition>
-            <sorted>false</sorted>
+            <sorted>true</sorted>
             <value>
                 <fullName>Booked</fullName>
                 <default>false</default>
@@ -42,6 +42,11 @@
                 <fullName>Collection Follow up</fullName>
                 <default>false</default>
                 <label>Collection Follow up</label>
+            </value>
+            <value>
+                <fullName>Connected</fullName>
+                <default>false</default>
+                <label>Connected</label>
             </value>
             <value>
                 <fullName>Customer Disconnected(DNC)</fullName>
@@ -154,6 +159,11 @@
                 <label>Legal complaints / queries</label>
             </value>
             <value>
+                <fullName>LNR Meeting Done</fullName>
+                <default>false</default>
+                <label>LNR Meeting Done</label>
+            </value>
+            <value>
                 <fullName>Loan &amp; Sanction related</fullName>
                 <default>false</default>
                 <label>Loan &amp; Sanction related</label>
@@ -177,6 +187,11 @@
                 <fullName>No Show</fullName>
                 <default>false</default>
                 <label>No Show</label>
+            </value>
+            <value>
+                <fullName>Not Connected</fullName>
+                <default>false</default>
+                <label>Not Connected</label>
             </value>
             <value>
                 <fullName>Not Contactable</fullName>
@@ -284,6 +299,31 @@
                 <label>Request for Registering</label>
             </value>
             <value>
+                <fullName>Retention - Already retained</fullName>
+                <default>false</default>
+                <label>Retention - Already retained</label>
+            </value>
+            <value>
+                <fullName>Retention - Follow up</fullName>
+                <default>false</default>
+                <label>Retention - Follow up</label>
+            </value>
+            <value>
+                <fullName>Retention - Interested</fullName>
+                <default>false</default>
+                <label>Retention - Interested</label>
+            </value>
+            <value>
+                <fullName>Retention - Not Connected</fullName>
+                <default>false</default>
+                <label>Retention - Not Connected</label>
+            </value>
+            <value>
+                <fullName>Retention - Not interested</fullName>
+                <default>false</default>
+                <label>Retention - Not interested</label>
+            </value>
+            <value>
                 <fullName>Ringing</fullName>
                 <default>false</default>
                 <label>Ringing</label>
@@ -357,46 +397,6 @@
                 <fullName>Wrong Number</fullName>
                 <default>false</default>
                 <label>Wrong Number</label>
-            </value>
-            <value>
-                <fullName>Retention - Already retained</fullName>
-                <default>false</default>
-                <label>Retention - Already retained</label>
-            </value>
-            <value>
-                <fullName>Retention - Interested</fullName>
-                <default>false</default>
-                <label>Retention - Interested</label>
-            </value>
-            <value>
-                <fullName>Retention - Not interested</fullName>
-                <default>false</default>
-                <label>Retention - Not interested</label>
-            </value>
-            <value>
-                <fullName>Retention - Follow up</fullName>
-                <default>false</default>
-                <label>Retention - Follow up</label>
-            </value>
-            <value>
-                <fullName>Retention - Not Connected</fullName>
-                <default>false</default>
-                <label>Retention - Not Connected</label>
-            </value>
-            <value>
-                <fullName>LNR Meeting Done</fullName>
-                <default>false</default>
-                <label>LNR Meeting Done</label>
-            </value>
-            <value>
-                <fullName>Connected</fullName>
-                <default>false</default>
-                <label>Connected</label>
-            </value>
-            <value>
-                <fullName>Not Connected</fullName>
-                <default>false</default>
-                <label>Not Connected</label>
             </value>
         </valueSetDefinition>
         <valueSettings>
@@ -585,26 +585,8 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Sales Call</controllingFieldValue>
-            <valueName>Tele-Meeting Done</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Sales Call</controllingFieldValue>
-            <valueName>Will Refer later</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Sales Call</controllingFieldValue>
             <controllingFieldValue>CRM Call</controllingFieldValue>
             <valueName>Retention - Already retained</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Sales Call</controllingFieldValue>
-            <controllingFieldValue>CRM Call</controllingFieldValue>
-            <valueName>Retention - Interested</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Sales Call</controllingFieldValue>
-            <controllingFieldValue>CRM Call</controllingFieldValue>
-            <valueName>Retention - Not interested</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Sales Call</controllingFieldValue>
@@ -614,7 +596,25 @@
         <valueSettings>
             <controllingFieldValue>Sales Call</controllingFieldValue>
             <controllingFieldValue>CRM Call</controllingFieldValue>
+            <valueName>Retention - Interested</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales Call</controllingFieldValue>
+            <controllingFieldValue>CRM Call</controllingFieldValue>
             <valueName>Retention - Not Connected</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales Call</controllingFieldValue>
+            <controllingFieldValue>CRM Call</controllingFieldValue>
+            <valueName>Retention - Not interested</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales Call</controllingFieldValue>
+            <valueName>Tele-Meeting Done</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sales Call</controllingFieldValue>
+            <valueName>Will Refer later</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>CRM Call</controllingFieldValue>

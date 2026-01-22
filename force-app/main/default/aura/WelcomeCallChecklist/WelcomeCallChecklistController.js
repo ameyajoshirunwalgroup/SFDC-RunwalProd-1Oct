@@ -12,6 +12,7 @@
                 helper.loadPerviousCallRemarksHelper(component,event,helper);
                 helper.loadYesNoDropDownHelper(component,event,helper);
                 helper.loadModeOfFundingHelper(component,event,helper);
+                 helper.loadReasonsForHoldRejectPicklist(component,event,helper); 
                 
                 helper.handleCheckboxHelper(component,event,helper); // Added by Vinay 21-02-2025
                 
@@ -74,7 +75,11 @@
     },
     updateConsChrag : function(component, event, helper) {
         helper.updateConsChrg(component, event);
-    }
+    },
+     handleReasonsForHoldReject: function(component, event, helper) {
+        var selectedReason = component.get("v.ReasonsForHoldReject");
+    	//console.log('User selected reason:', selectedReason);
+    },
 	
      
     

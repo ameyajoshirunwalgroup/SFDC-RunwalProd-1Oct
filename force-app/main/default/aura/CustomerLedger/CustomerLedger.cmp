@@ -3,6 +3,7 @@
      />
     <aura:attribute name="BookingData" type="Object" />
      <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
     <aura:attribute name="RunwalHomeWrapList" type="List" />
     <aura:attribute name="isOpen" type="boolean" default="false"/>
      <aura:attribute name="hasreadTC" type="boolean" default="false"/>
@@ -12,6 +13,10 @@
     <!--  <aura:attribute name="loaded" type="Boolean" default="false" />-->
      <aura:attribute name="condition" type="Boolean"  />
     <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="htmlCode" type="String" default=""/>
+    <aura:attribute name="mahalaxmiPaymentMessage" type="String"/>
+    <aura:attribute name="mahalaxmiPaymentStatus" type="String"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.doInit}"/>
      <aura:if isTrue="{!v.Spinner}">
                     <div class="slds-spinner_container">
                         <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
@@ -20,7 +25,13 @@
                         </div>
                     </div>
                 </aura:if>
-
+	<aura:if isTrue="{!v.htmlCode}">
+    <div style="text-align:center;">
+        <lightning:card>
+            <aura:unescapedHtml value="{!v.htmlCode}"/>
+        </lightning:card>
+    </div>
+    </aura:if>
        
     <div style="padding-left:5px;" class="slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--12-of-12 slds-text-heading_medium">
                 <label><b>Customer Ledger</b></label>

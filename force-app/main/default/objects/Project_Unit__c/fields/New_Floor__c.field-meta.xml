@@ -9,22 +9,7 @@
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
-            <sorted>false</sorted>
-            <value>
-                <fullName>-1</fullName>
-                <default>false</default>
-                <label>Basement 1</label>
-            </value>
-            <value>
-                <fullName>-2</fullName>
-                <default>false</default>
-                <label>Basement 2</label>
-            </value>
-            <value>
-                <fullName>-3</fullName>
-                <default>false</default>
-                <label>Basement 3</label>
-            </value>
+            <sorted>true</sorted>
             <value>
                 <fullName>1</fullName>
                 <default>false</default>
@@ -776,14 +761,24 @@
                 <label>99</label>
             </value>
             <value>
+                <fullName>-1</fullName>
+                <default>false</default>
+                <label>Basement 1</label>
+            </value>
+            <value>
+                <fullName>-2</fullName>
+                <default>false</default>
+                <label>Basement 2</label>
+            </value>
+            <value>
+                <fullName>-3</fullName>
+                <default>false</default>
+                <label>Basement 3</label>
+            </value>
+            <value>
                 <fullName>BCT</fullName>
                 <default>false</default>
                 <label>Bridge connecting two Towers</label>
-            </value>
-            <value>
-                <fullName>BTB</fullName>
-                <default>false</default>
-                <label>Parallel (back to back)</label>
             </value>
             <value>
                 <fullName>GRD</fullName>
@@ -796,9 +791,29 @@
                 <label>Lower Ground</label>
             </value>
             <value>
+                <fullName>BTB</fullName>
+                <default>false</default>
+                <label>Parallel (back to back)</label>
+            </value>
+            <value>
+                <fullName>P00</fullName>
+                <default>false</default>
+                <label>Podium</label>
+            </value>
+            <value>
                 <fullName>P01</fullName>
                 <default>false</default>
                 <label>Podium 1</label>
+            </value>
+            <value>
+                <fullName>P10</fullName>
+                <default>false</default>
+                <label>Podium 10</label>
+            </value>
+            <value>
+                <fullName>P11</fullName>
+                <default>false</default>
+                <label>Podium 11</label>
             </value>
             <value>
                 <fullName>P02</fullName>
@@ -841,11 +856,6 @@
                 <label>Podium 9</label>
             </value>
             <value>
-                <fullName>P10</fullName>
-                <default>false</default>
-                <label>Podium 10</label>
-            </value>
-            <value>
                 <fullName>ST1</fullName>
                 <default>false</default>
                 <label>Stilt Floor1</label>
@@ -864,11 +874,6 @@
                 <fullName>TRF</fullName>
                 <default>false</default>
                 <label>Terrace Floor</label>
-            </value>
-            <value>
-                <fullName>P00</fullName>
-                <default>false</default>
-                <label>Podium</label>
             </value>
         </valueSetDefinition>
     </valueSet>

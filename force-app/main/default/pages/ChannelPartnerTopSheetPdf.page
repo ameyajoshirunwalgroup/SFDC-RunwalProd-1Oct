@@ -273,10 +273,10 @@
                              <tr style='font-size:14px;'>
                                 <td>Prepared by,</td>
                                 <td>Verified by,</td>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L2__r.name))}">
                                     <td>Approved by,</td>
                                 </apex:outputText>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L4__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
                                     <td>Approved by,</td>
                                 </apex:outputText>
                                 <td>Approved(for Payment) by,</td>
@@ -285,32 +285,34 @@
                             <tr>
                                 <td>______________</td>
                                 <td>______________</td>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L2__r.name))}">
                                     <td>______________</td>
                                 </apex:outputText>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L4__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
                                     <td>______________</td>
                                 </apex:outputText>
                                 <td>______________</td>
                             </tr>
                             <tr style='font-size:13px;'>
+                                <td>{!channelPartner.CP_MIS__r.name}</td>
                                 <td>{!channelPartner.CP_Invoice_Approver_L1__r.name}</td>
-                                <td>{!channelPartner.CP_Invoice_Approver_L2__r.name}</td>
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L2__r.name))}">
+                                    <td>{!channelPartner.CP_Invoice_Approver_L2__r.name}</td>
+                                </apex:outputText>
                                 <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
                                     <td>{!channelPartner.CP_Invoice_Approver_L3__r.name}</td>
                                 </apex:outputText>
                                 <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L4__r.name))}">
                                     <td>{!channelPartner.CP_Invoice_Approver_L4__r.name}</td>
                                 </apex:outputText>
-                                <td>{!channelPartner.CP_Invoice_Approver_L4__r.name}</td>
                             </tr>
                             <tr style='font-size:12px;'>
                                 <th>CP-MIS</th>
                                 <th>CP-Bill Team</th>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L2__r.name))}">
                                     <th>MIS Team</th>
                                 </apex:outputText>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L4__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
                                     <th>Audit Team</th>
                                 </apex:outputText>
                                 <th>Account Team</th>
@@ -319,10 +321,10 @@
                             <tr style='font-size:13px;'>
                                 <td>Date:</td>
                                 <td>Date:</td>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L2__r.name))}">
                                     <td>Date:</td>
                                 </apex:outputText>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L4__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
                                     <td>Date:</td>
                                 </apex:outputText>
                                 <td>Date:</td>
@@ -330,10 +332,10 @@
                             <tr style='font-size:13px;'>
                                 <td>{!channelPartner.Date_Approved_By_Submitter_Formula__c}</td>
                                 <td>{!channelPartner.Date_Approved_ByL1_formula__c}</td>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L2__r.name))}">
                                     <td>{!channelPartner.Date_Approved_ByL2_formula__c}</td>
                                 </apex:outputText>
-                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L4__r.name))}">
+                                <apex:outputText rendered="{!NOT(ISBLANK(channelPartner.CP_Invoice_Approver_L3__r.name))}">
                                     <td>{!channelPartner.Date_Approved_ByL3_formula__c}</td>
                                 </apex:outputText>
                                 <td>{!channelPartner.Date_Approved_ByL4_formula__c}</td>

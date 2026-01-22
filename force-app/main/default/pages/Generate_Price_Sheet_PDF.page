@@ -19,92 +19,110 @@
                      <td colspan="8" style="border: 2px solid; font-size: 14px; text-align: center;"><b>Payment Schedule - {!paymentPlan}</b></td>
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;"></td>
-                     <td colspan="2" Style="font-size:10px; border: 1px solid; text-align:center">{!rwParam4}</td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:Right">
-                         <apex:outputText value="{0, date, dd/MM/yyyy}">
-                             <apex:param value="{!dDate}" />
-                         </apex:outputText>
-                     </td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
+                     <td colspan="5" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Flat No.</td>
+                     <td colspan="3" Style="font-size:12px; border: 1px solid; text-align:center">{!rwParam4}</td>
+                     <!--td Style="font-size:12px; border: 1px solid; text-align:center;">Unit Status</td>
+                     <td colspan="2" Style="font-size:12px; border: 1px solid; text-align:center">
+                         {!unitStatus}
+                     </td-->
+                     
                      
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Configuration</td>
-                     <td colspan="2" Style="font-size:10px; border: 1px solid; text-align:center">{!newType}</td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
+                     <td colspan="5" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Configuration</td>
+                     <td colspan="3" Style="font-size:12px; border: 1px solid; text-align:center">{!newType}</td>
+                     
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Rera Carpet Area In Sq Ft</td>
-                     <td colspan="2" Style="font-size:10px; border: 1px solid; text-align:center">{!totalReraCarpetArea}</td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:center">Deck</td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:center">{!deck}</td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
+                     <td colspan="5" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Carpet Area In Sq Ft</td>
+                     <td colspan="3" Style="font-size:12px; border: 1px solid; text-align:center">{!totalReraCarpetArea}</td>
+                     <!--td Style="font-size:10px; border: 1px solid; text-align:center">Deck</td>
+                     <td Style="font-size:10px; border: 1px solid; text-align:center">{!deck}</td-->
+                    
                  </tr>
                  <tr>
-                     <td colspan="3" style=" width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Deck Area In Sq Ft</td>
-                     <td colspan="2" Style="font-size:10px; border: 1px solid; text-align:center">{!deckArea}</td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:center">Utility</td>
+                     <td colspan="5" style=" width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Deck area in Sq ft</td>
+                     <td colspan="3" Style="font-size:12px; border: 1px solid; text-align:center">{!deckArea}</td>
+                     <!--td Style="font-size:10px; border: 1px solid; text-align:center">Utility</td>
                      <td Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
+                     <td Style="font-size:10px; border: 1px solid;"></td-->
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Utility Area In Sq Ft</td>
-                     <td colspan="2" Style="font-size:10px; border: 1px solid; text-align:center">{!utilityArea}</td>
+                     <td colspan="5" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Utility area in Sq ft</td>
+                     <td colspan="3" Style="font-size:12px; border: 1px solid; text-align:center">{!utilityArea}</td>
+                     <!--td Style="font-size:10px; border: 1px solid;"></td>
                      <td Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
+                     <td Style="font-size:10px; border: 1px solid;"></td-->
+                 </tr>
+                 <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(serviceRoomcarpate))}">
+                     <tr>
+                         <td colspan="5" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">
+                             Service area in Sq ft
+                         </td>
+                         <td colspan="3" style="font-size:12px; border: 1px solid; text-align:center">
+                             {!serviceRoomcarpate}
+                         </td>
+                     </tr>
+                 </apex:outputPanel>
+                 <tr>
+                     <!--td colspan="3" Style="font-size:10px; border: 1px solid;"></td>
+                     <td colspan="2" Style="font-size:10px; border: 1px solid;"></td-->
+                     <td colspan="5" Style="font-size:12px; border: 1px solid; text-align:left">Total RERA Carpet Area in Sq ft</td>
+                     <td colspan="3" Style="font-size:12px; border: 1px solid; text-align:center">{!carpetArea}</td>
+                     <!--td Style="font-size:10px; border: 1px solid; text-align:center"> sqft</td-->
                  </tr>
                  <tr>
-                     <td colspan="3" Style="font-size:10px; border: 1px solid;"></td>
-                     <td colspan="2" Style="font-size:10px; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:center">Total Carpet Area</td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:center">{!carpetArea}</td>
-                     <td Style="font-size:10px; border: 1px solid; text-align:center"> sqft</td>
-                 </tr>
-                 <tr>
-                     <td colspan="3" style="border: 1px solid; font-size: 10px; text-align: left;"><b>Agreement Value</b></td>
-                     <td colspan="2" style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">{!agreementValue} /-</td>
-                     <td style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">GST on AV</td>
-                     <td style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center"><apex:outputText value="{!IF(agreementValueSTDC != 0, agreementValueSTDC, agreementValueSTC)} /-" /></td>
-                     <td colspan="2" style="font-size:10px; font-weight:bold; border: 1px solid;"></td>
+                     <td colspan="3" style="border: 1px solid; font-size: 12px; text-align: left;"><b>Agreement Value</b></td>
+                     <td colspan="2" style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">{!formatedagreementValue}
+                         </td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">GST on AV</td>
+                     <td colspan="2" style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">{!finalGstOnAv}</td>
+                     
                  </tr>
                  
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;"></td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">Milestone %</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">Flat Cost</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">CGST+SGST</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">TDS</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">Final Cheque</th>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;"></td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">Milestone %</th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">Flat Cost</th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">CGST+SGST</th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">TDS</th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">Final Cheque</th>
                  </tr>
                  
                  <apex:repeat value="{!wrapperList}" var="x">
                      <tr>
-                         <td colspan="3" style="font-size:10px; border: 1px solid; text-align: left;">{!x.isToBePaid1}</td>
-                         <td style="font-size:10px; border: 1px solid; text-align: center;">{!x.percentageval}%</td>
-                         <td style="font-size:10px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0} /-"><apex:param value="{!x.installment1}"/></apex:outputText></td>
-                         <td style="font-size:10px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0} /-"><apex:param value="{!x.gst}" /></apex:outputText></td>
-                         <td style="font-size:10px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0} /-"><apex:param value="{!x.tds}" /></apex:outputText></td>
-                         <td style="font-size:10px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0} /-"><apex:param value="{!x.finalcheque}" /></apex:outputText></td>
+                         <td colspan="3" style="font-size:12px; border: 1px solid; text-align: left;">{!x.isToBePaid1}</td>
+                         <td style="font-size:12px; border: 1px solid; text-align: center;">{!x.percentageval}%</td>
+                         <!--td style="font-size:12px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0}"><apex:param value="{!x.installment1}"/></apex:outputText></td-->
+                         <!--td style="font-size:12px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0}"><apex:param value="{!x.gst}" /></apex:outputText></td--> 
+                         <!--td style="font-size:12px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0}"><apex:param value="{!x.tds}" /></apex:outputText></td-->
+                         <!--td style="font-size:12px; border: 1px solid; text-align: center;"><apex:outputText value="{0,number,###,##0}"><apex:param value="{!x.finalcheque}" /></apex:outputText></td-->
+                         <td style="font-size:12px; border: 1px solid; text-align: center;">{!x.formatedinstallment1}</td>
+                         <td style="font-size:12px; border: 1px solid; text-align: center;">{!x.formatedgst}</td>
+                         <td style="font-size:12px; border: 1px solid; text-align: center;">{!x.formatedtds}</td>
+                         <td style="font-size:12px; border: 1px solid; text-align: center;">{!x.formatedfinalcheque}</td>
                      </tr>
                  </apex:repeat>
                  
                  
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;"><b>Total</b></td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">100%</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">
-                         <apex:outputText value="{0,number,###,###,###,###} /-"> <apex:param value="{!agreementValuewithDiscount}"/></apex:outputText></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">
-                         <apex:outputText value="{0,number,###,###,###,###} /-"> <apex:param value="{!scGST}"/></apex:outputText></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">
-                         <apex:outputText value="{0,number,###,###,###,###} /-"> <apex:param value="{!totalTDS}"/></apex:outputText></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">
-                         <apex:outputText value="{0,number,###,###,###,###} /-"> <apex:param value="{!totalFinalCheque}"/></apex:outputText></th>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;"><b>Total</b></td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">100%</th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         {!formatedagreementValuewithDiscount}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!agreementValuewithDiscount}"/></apex:outputText--></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         {!formatedscGST}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!scGST}"/></apex:outputText-->
+                     </th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         {!formatedtotalTDS}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!totalTDS}"/></apex:outputText-->
+                     </th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         {!formatedtotaltotalFinalCheque}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!totalFinalCheque}"/></apex:outputText-->
+                     </th>
                      
                  </tr>
                  
@@ -114,64 +132,83 @@
                     style="font-family:Arial MT; border-collapse:collapse; border: 2px solid; width: 100%"-->
                   
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Stamp Duty (Approx)</td>
-                     <th style="width: 10%; font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">{!stampDuty} /-</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="width: 10%; font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                 </tr>
-                 <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Reg. and Scanning(Approx)</td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">{!registrationCharges} /-</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                 </tr>
-                 <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">Other Charges</td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">
-                         <apex:outputText value="{0,number,###,###,###,###} /-">
-                             <apex:param value="{!othercharges}"/> 
-                         </apex:outputText>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Stamp Duty</td>
+                     <th style="width: 10%; font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;" >
+                         {!formatedstampDuty}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"><apex:param value="{!stampDuty}"/></apex:outputText-->
                      </th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="width: 10%; font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">BCAM Charges</td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">{!pmcAmount1} /-</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Reg. and Scanning</td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         {!formatedregistrationCharges}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"><apex:param value="{!registrationCharges}"/></apex:outputText-->
+                     </th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">GST On Agreement Value</td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center"><apex:outputText value="{!IF(agreementValueSTDC != 0, agreementValueSTDC, agreementValueSTC)} /-" /></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Other Charges</td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         <!--apex:outputText value="{0,number,###,###,###,###}">
+                             <apex:param value="{!othercharges}"/> 
+                         </apex:outputText-->
+                         {!formatedothercharges}
+                     </th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                 </tr>
+                 <apex:outputPanel layout="none" rendered="{!AND(NOT(ISBLANK(pmcAmount1)), pmcAmount1 > 0)}">
+                 <tr>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">Maintainance Charges</td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">
+                         <apex:outputText value="{0,number,###,###,###,###}"><apex:param value="{!pmcAmount1}"/></apex:outputText></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;"></th>
+                 </tr>
+                 </apex:outputPanel>
+                 <tr>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">GST On Agreement Value</td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">
+                         <!--apex:outputText value="{0,number,###,###,###}">
+                             <apex:param value="{!IF(agreementValueSTDC != 0, agreementValueSTDC, agreementValueSTC)}"/>
+                         </apex:outputText-->
+                         {!finalGstOnAv}
+                     </th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;">GST On Other Charges</td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;text-align:center">{!otherchargestax} /-</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;">GST On Other Charges</td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;text-align:center">
+                         {!formatedotherchargesTax}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"><apex:param value="{!otherchargestax}"/></apex:outputText--></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
                  </tr>
                  <tr>
-                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 10px; text-align: left;"><b>Grand Total</b></td>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid; text-align:center">{!quotationGrandTotal} /-</th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
-                     <th style="font-size:10px; font-weight:bold; border: 1px solid;"></th>
+                     <td colspan="3" style="width: 40%; border: 1px solid; font-size: 12px; text-align: left;"><b>Grand Total</b></td>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid; text-align:center">
+                         {!formatedquotationGrandTotal}
+                         <!--apex:outputText value="{0,number,###,###,###,###}"><apex:param value="{!quotationGrandTotal}"/></apex:outputText--></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
+                     <th style="font-size:12px; font-weight:bold; border: 1px solid;"></th>
                  </tr>
                  </table>
                  
@@ -203,39 +240,48 @@
                  <table border="1" cellspacing="0" cellpadding="4"
                     style="margin-top: 30px; font-family:Arial MT; border-collapse:collapse; border: 2px solid; width: 100%">
                  <tr>
-                     <td colspan="3" style="border: 1px solid; font-size: 10px; text-align: left; background: yellow;">Cheque Favouring</td>
-                     <td colspan="5" style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">SIPL Wing M Master Collection Escrow Account 100</td>
+                     <td colspan="3" style="border: 1px solid; font-size: 12px; text-align: left; background: yellow;">Cheque Favouring</td>
+                     <td colspan="5" style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!cheqFav}</td>
                  </tr>
                  <tr>
-                     <td colspan="3" style="border: 1px solid #000; font-size: 10px; text-align: left; background: yellow;">A/C No.</td>
-                     <td colspan="5" style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">57500000861248</td>
+                     <td colspan="3" style="border: 1px solid #000; font-size: 12px; text-align: left; background: yellow;">A/C No.</td>
+                     <td colspan="5" style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!acNo}</td>
                  </tr>
                  <tr>
-                     <td colspan="3" style="border: 1px solid; font-size: 10px; text-align: left; background: yellow;">GST Favouring</td>
-                     <td colspan="5" style="font-size:10px; font-weight:bold; border: 1px solid; text-align: Center">Susneh Infrapark Private Limited</td>
+                     <td colspan="3" style="border: 1px solid; font-size: 12px; text-align: left; background: yellow;">GST Favouring</td>
+                     <td colspan="5" style="font-size:12px; font-weight:bold; border: 1px solid; text-align: Center">{!gstFavoring}</td>
                  </tr>
                  <tr>
-                     <td colspan="3" style="border: 1px solid; font-size: 10px; text-align: left; background: yellow;">GST A/C No.</td>
-                     <td colspan="5" style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">57500000426322</td>
+                     <td colspan="3" style="border: 1px solid; font-size: 12px; text-align: left; background: yellow;">GST A/C No.</td>
+                     <td colspan="5" style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!gstAcNo}</td>
                  </tr>
                  <tr>
-                     <td colspan="8" style="border: 1px solid; font-size: 10px; text-align: center; background: yellow;"><b>
-                         Bank- HDFC BANK LTD., Rupam Centre, Cine Planet ,Sion Circle, Sion East Branch, Mumbai-400022,IFSC Code-HDFC0000163</b>
+                     <td colspan="8" style="border: 1px solid; font-size: 12px; text-align: center; background: yellow;"><b>
+                        {!bankName}</b>
                      </td>
                  </tr>
                  <tr>
-                     <td colspan="5" style="border: 1px solid; font-size: 10px; text-align: left;"></td>
-                     <td style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">Car Park 1</td>
-                     <td style="font-size:10px; font-weight:bold; border: 1px solid; text-align: center;">Car Park 2</td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
+                     <td colspan="4" Style="font-size:12px; border: 1px solid; text-align: center;">Type of Car Park</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">Car Park 1</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">Car Park 2</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">Car Park 3</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">Car Park 4</td>
+                     
                  </tr>
                  <tr>
-                     <td colspan="4" style="border: 1px solid; font-size: 10px; text-align: left;">**Includes 1 Car-Park</td>
-                     <td Style="font-size:10px; border: 1px solid; text-align: center;">Type of Car Park</td>
-                     <td style="font-size:10px; font-weight:bold; border: 1px solid;"></td>
-                     <td style="font-size:10px; font-weight:bold; border: 1px solid;"></td>
-                     <td Style="font-size:10px; border: 1px solid;"></td>
-                 </tr>
+                     <td colspan="4" style="border: 1px solid; font-size: 12px; text-align: left;">**Includes {!totalCarParkCount} Car-Park</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!carPark1}</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!carPark2}</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!carPark3}</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!carPark4}</td>
+                 </tr>    
+                 <!--tr>
+                     <td colspan="4" style="border: 1px solid; font-size: 12px; text-align: left;">**Includes 1 Car-Park</td>
+                     <td Style="font-size:12px; border: 1px solid; text-align: center;">Type of Car Park</td>
+                     <td style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!carPark1}</td>
+                     <td colspan="2" style="font-size:12px; font-weight:bold; border: 1px solid; text-align: center;">{!carPark2}</td>
+                     
+                 </tr-->
                  <tr>
                      <td colspan="8" style="border: 1px solid;">
                          <div style="font-size:10px;">

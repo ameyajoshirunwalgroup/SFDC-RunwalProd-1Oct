@@ -14,5 +14,10 @@
     <columns>UPDATEDBY_USER</columns>
     <columns>Channel_Partner_From_CP_Portal__c</columns>
     <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Broker__c.Temp_Channel_Partner</value>
+    </filters>
     <label>All</label>
 </ListView>

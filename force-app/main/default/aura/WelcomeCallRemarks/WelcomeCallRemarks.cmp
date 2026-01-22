@@ -332,10 +332,10 @@
   <td>{!rem.remarks.remarkInstrumentName}</td>
   </tr>
   </aura:if>-->
-                        <aura:if isTrue="{!and(rem.remarks.Modeoffunding != null,rem.remarks.Modeoffunding != undefined)}">
+                        <aura:if isTrue="{!and(rem.remarks.ModeOfFunding != null,rem.remarks.ModeOfFunding != undefined)}">
                             <tr>
                                 <td>Mode of funding:</td>
-                                <td>{!rem.remarks.Modeoffunding}</td>
+                                <td>{!rem.remarks.ModeOfFunding}</td>
                                 <td>{!rem.remarks.remarkModeoffunding}</td>
                             </tr>
                         </aura:if>

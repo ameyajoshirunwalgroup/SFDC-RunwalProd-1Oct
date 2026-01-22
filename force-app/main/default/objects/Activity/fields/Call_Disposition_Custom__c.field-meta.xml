@@ -7,7 +7,7 @@
     <valueSet>
         <controllingField>Call_Status__c</controllingField>
         <valueSetDefinition>
-            <sorted>false</sorted>
+            <sorted>true</sorted>
             <value>
                 <fullName>Account/ADF/Tax Statement</fullName>
                 <default>false</default>
@@ -39,9 +39,19 @@
                 <label>Bank Account details for making payment</label>
             </value>
             <value>
+                <fullName>BCAM / FCAM / society charges</fullName>
+                <default>false</default>
+                <label>BCAM / FCAM / society charges</label>
+            </value>
+            <value>
                 <fullName>Book another unit/upgrade to new unit</fullName>
                 <default>false</default>
                 <label>Book another unit/upgrade to new unit</label>
+            </value>
+            <value>
+                <fullName>Call Back Later</fullName>
+                <default>false</default>
+                <label>Call Back Later</label>
             </value>
             <value>
                 <fullName>Call disconnected</fullName>
@@ -94,6 +104,16 @@
                 <label>Compensation for delay in possession</label>
             </value>
             <value>
+                <fullName>Customer informed</fullName>
+                <default>false</default>
+                <label>Customer informed</label>
+            </value>
+            <value>
+                <fullName>customer not contactable</fullName>
+                <default>false</default>
+                <label>customer not contactable</label>
+            </value>
+            <value>
                 <fullName>Demand due date and outstanding amount</fullName>
                 <default>false</default>
                 <label>Demand due date and outstanding amount</label>
@@ -102,6 +122,11 @@
                 <fullName>Demand Letter</fullName>
                 <default>false</default>
                 <label>Demand Letter</label>
+            </value>
+            <value>
+                <fullName>Disconnected while Ringing</fullName>
+                <default>false</default>
+                <label>Disconnected while Ringing</label>
             </value>
             <value>
                 <fullName>DND active but promotion received</fullName>
@@ -144,6 +169,11 @@
                 <label>Flat readiness for possession post PDL + 60 days (High End)</label>
             </value>
             <value>
+                <fullName>Follow Up</fullName>
+                <default>false</default>
+                <label>Follow Up</label>
+            </value>
+            <value>
                 <fullName>Getting the registered agreement</fullName>
                 <default>false</default>
                 <label>Getting the registered agreement</label>
@@ -154,9 +184,19 @@
                 <label>GST charged on my account</label>
             </value>
             <value>
+                <fullName>home loan  Email</fullName>
+                <default>false</default>
+                <label>home loan  Email</label>
+            </value>
+            <value>
                 <fullName>Home loan services provided by Runwal</fullName>
                 <default>false</default>
                 <label>Home loan services provided by Runwal</label>
+            </value>
+            <value>
+                <fullName>Hung up</fullName>
+                <default>false</default>
+                <label>Hung up</label>
             </value>
             <value>
                 <fullName>I can&apos;t be present for possession (POA)</fullName>
@@ -179,9 +219,29 @@
                 <label>Income tax notice received</label>
             </value>
             <value>
+                <fullName>Incoming Calls Barred</fullName>
+                <default>false</default>
+                <label>Incoming Calls Barred</label>
+            </value>
+            <value>
+                <fullName>Interested</fullName>
+                <default>false</default>
+                <label>Interested</label>
+            </value>
+            <value>
                 <fullName>Interest waiver receipt</fullName>
                 <default>false</default>
                 <label>Interest waiver receipt</label>
+            </value>
+            <value>
+                <fullName>IVR_Invalid Number</fullName>
+                <default>false</default>
+                <label>IVR_Invalid Number</label>
+            </value>
+            <value>
+                <fullName>Junk</fullName>
+                <default>false</default>
+                <label>Junk</label>
             </value>
             <value>
                 <fullName>Knowing demand letter/society charges</fullName>
@@ -214,9 +274,29 @@
                 <label>Loan status update</label>
             </value>
             <value>
+                <fullName>Lost</fullName>
+                <default>false</default>
+                <label>Lost</label>
+            </value>
+            <value>
                 <fullName>News related to Runwal</fullName>
                 <default>false</default>
                 <label>News related to Runwal</label>
+            </value>
+            <value>
+                <fullName>Not Answering</fullName>
+                <default>false</default>
+                <label>Not Answering</label>
+            </value>
+            <value>
+                <fullName>Not Reachable</fullName>
+                <default>false</default>
+                <label>Not Reachable</label>
+            </value>
+            <value>
+                <fullName>Number Busy</fullName>
+                <default>false</default>
+                <label>Number Busy</label>
             </value>
             <value>
                 <fullName>Offers given at the time of booking</fullName>
@@ -314,6 +394,11 @@
                 <label>Registration Email</label>
             </value>
             <value>
+                <fullName>Registration Vendor Related</fullName>
+                <default>false</default>
+                <label>Registration Vendor Related</label>
+            </value>
+            <value>
                 <fullName>Remove DND on my account</fullName>
                 <default>false</default>
                 <label>Remove DND on my account</label>
@@ -339,6 +424,11 @@
                 <label>ROC request</label>
             </value>
             <value>
+                <fullName>Sanction letter</fullName>
+                <default>false</default>
+                <label>Sanction letter</label>
+            </value>
+            <value>
                 <fullName>Scheduling key handover</fullName>
                 <default>false</default>
                 <label>Scheduling key handover</label>
@@ -347,6 +437,16 @@
                 <fullName>Scheduling my registration</fullName>
                 <default>false</default>
                 <label>Scheduling my registration</label>
+            </value>
+            <value>
+                <fullName>SDR related customer paid</fullName>
+                <default>false</default>
+                <label>SDR related customer paid</label>
+            </value>
+            <value>
+                <fullName>SDR related Runwal paid</fullName>
+                <default>false</default>
+                <label>SDR related Runwal paid</label>
             </value>
             <value>
                 <fullName>Share details of payments made</fullName>
@@ -362,6 +462,11 @@
                 <fullName>Spoke to customer</fullName>
                 <default>false</default>
                 <label>Spoke to customer</label>
+            </value>
+            <value>
+                <fullName>Switched Off</fullName>
+                <default>false</default>
+                <label>Switched Off</label>
             </value>
             <value>
                 <fullName>TDS applicability on my booking</fullName>
@@ -382,6 +487,11 @@
                 <fullName>TDS payment - Self or through Runwal</fullName>
                 <default>false</default>
                 <label>TDS payment - Self or through Runwal</label>
+            </value>
+            <value>
+                <fullName>Temporarily Disconnected</fullName>
+                <default>false</default>
+                <label>Temporarily Disconnected</label>
             </value>
             <value>
                 <fullName>Transfer/Upgrade to another unit</fullName>
@@ -419,6 +529,11 @@
                 <label>View draft agreement</label>
             </value>
             <value>
+                <fullName>Visit Scheduled</fullName>
+                <default>false</default>
+                <label>Visit Scheduled</label>
+            </value>
+            <value>
                 <fullName>Waiver Request</fullName>
                 <default>false</default>
                 <label>Waiver Request</label>
@@ -437,116 +552,6 @@
                 <fullName>What is expected on day of key handover?</fullName>
                 <default>false</default>
                 <label>What is expected on day of key handover?</label>
-            </value>
-            <value>
-                <fullName>BCAM / FCAM / society charges</fullName>
-                <default>false</default>
-                <label>BCAM / FCAM / society charges</label>
-            </value>
-            <value>
-                <fullName>SDR related customer paid</fullName>
-                <default>false</default>
-                <label>SDR related customer paid</label>
-            </value>
-            <value>
-                <fullName>SDR related Runwal paid</fullName>
-                <default>false</default>
-                <label>SDR related Runwal paid</label>
-            </value>
-            <value>
-                <fullName>Registration Vendor Related</fullName>
-                <default>false</default>
-                <label>Registration Vendor Related</label>
-            </value>
-            <value>
-                <fullName>Sanction letter</fullName>
-                <default>false</default>
-                <label>Sanction letter</label>
-            </value>
-            <value>
-                <fullName>home loan  Email</fullName>
-                <default>false</default>
-                <label>home loan  Email</label>
-            </value>
-            <value>
-                <fullName>Customer informed</fullName>
-                <default>false</default>
-                <label>Customer informed</label>
-            </value>
-            <value>
-                <fullName>customer not contactable</fullName>
-                <default>false</default>
-                <label>customer not contactable</label>
-            </value>
-            <value>
-                <fullName>Call Back Later</fullName>
-                <default>false</default>
-                <label>Call Back Later</label>
-            </value>
-            <value>
-                <fullName>Interested</fullName>
-                <default>false</default>
-                <label>Interested</label>
-            </value>
-            <value>
-                <fullName>Visit Scheduled</fullName>
-                <default>false</default>
-                <label>Visit Scheduled</label>
-            </value>
-            <value>
-                <fullName>Lost</fullName>
-                <default>false</default>
-                <label>Lost</label>
-            </value>
-            <value>
-                <fullName>Junk</fullName>
-                <default>false</default>
-                <label>Junk</label>
-            </value>
-            <value>
-                <fullName>Not Answering</fullName>
-                <default>false</default>
-                <label>Not Answering</label>
-            </value>
-            <value>
-                <fullName>Disconnected while Ringing</fullName>
-                <default>false</default>
-                <label>Disconnected while Ringing</label>
-            </value>
-            <value>
-                <fullName>Number Busy</fullName>
-                <default>false</default>
-                <label>Number Busy</label>
-            </value>
-            <value>
-                <fullName>Switched Off</fullName>
-                <default>false</default>
-                <label>Switched Off</label>
-            </value>
-            <value>
-                <fullName>Not Reachable</fullName>
-                <default>false</default>
-                <label>Not Reachable</label>
-            </value>
-            <value>
-                <fullName>IVR_Invalid Number</fullName>
-                <default>false</default>
-                <label>IVR_Invalid Number</label>
-            </value>
-            <value>
-                <fullName>Temporarily Disconnected</fullName>
-                <default>false</default>
-                <label>Temporarily Disconnected</label>
-            </value>
-            <value>
-                <fullName>Incoming Calls Barred</fullName>
-                <default>false</default>
-                <label>Incoming Calls Barred</label>
-            </value>
-            <value>
-                <fullName>Hung up</fullName>
-                <default>false</default>
-                <label>Hung up</label>
             </value>
         </valueSetDefinition>
         <valueSettings>
@@ -592,8 +597,19 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Not Connected</controllingFieldValue>
-            <controllingFieldValue>Connected</controllingFieldValue>
-            <valueName>Lost</valueName>
+            <valueName>Disconnected while Ringing</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Connected</controllingFieldValue>
+            <valueName>Hung up</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Connected</controllingFieldValue>
+            <valueName>Incoming Calls Barred</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Connected</controllingFieldValue>
+            <valueName>IVR_Invalid Number</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Not Connected</controllingFieldValue>
@@ -602,11 +618,16 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Not Connected</controllingFieldValue>
+            <controllingFieldValue>Connected</controllingFieldValue>
+            <valueName>Lost</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Connected</controllingFieldValue>
             <valueName>Not Answering</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Not Connected</controllingFieldValue>
-            <valueName>Disconnected while Ringing</valueName>
+            <valueName>Not Reachable</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Not Connected</controllingFieldValue>
@@ -618,23 +639,7 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Not Connected</controllingFieldValue>
-            <valueName>Not Reachable</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Not Connected</controllingFieldValue>
-            <valueName>IVR_Invalid Number</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Not Connected</controllingFieldValue>
             <valueName>Temporarily Disconnected</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Not Connected</controllingFieldValue>
-            <valueName>Incoming Calls Barred</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Not Connected</controllingFieldValue>
-            <valueName>Hung up</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Payments and Receipts</controllingFieldValue>
@@ -698,6 +703,10 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Possession of my unit</controllingFieldValue>
+            <valueName>BCAM / FCAM / society charges</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Possession of my unit</controllingFieldValue>
             <valueName>Compensation for delay in possession</valueName>
         </valueSettings>
         <valueSettings>
@@ -754,10 +763,6 @@
             <valueName>What is expected on day of key handover?</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Possession of my unit</controllingFieldValue>
-            <valueName>BCAM / FCAM / society charges</valueName>
-        </valueSettings>
-        <valueSettings>
             <controllingFieldValue>Transfer/Upgrade</controllingFieldValue>
             <valueName>Transfer/Upgrade to another unit</valueName>
         </valueSettings>
@@ -803,11 +808,11 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Registration related</controllingFieldValue>
-            <valueName>Scheduling my registration</valueName>
+            <valueName>Registration Vendor Related</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Registration related</controllingFieldValue>
-            <valueName>View draft agreement</valueName>
+            <valueName>Scheduling my registration</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Registration related</controllingFieldValue>
@@ -819,7 +824,7 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Registration related</controllingFieldValue>
-            <valueName>Registration Vendor Related</valueName>
+            <valueName>View draft agreement</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Loan &amp; Sanction related</controllingFieldValue>
@@ -872,6 +877,10 @@
         <valueSettings>
             <controllingFieldValue>Connected</controllingFieldValue>
             <valueName>Call Back Later</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Connected</controllingFieldValue>
+            <valueName>Follow Up</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Connected</controllingFieldValue>
@@ -955,6 +964,10 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Operations</controllingFieldValue>
+            <valueName>home loan  Email</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Operations</controllingFieldValue>
             <valueName>Possession Email</valueName>
         </valueSettings>
         <valueSettings>
@@ -964,10 +977,6 @@
         <valueSettings>
             <controllingFieldValue>Operations</controllingFieldValue>
             <valueName>Welcome Email</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Operations</controllingFieldValue>
-            <valueName>home loan  Email</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Welcome call</controllingFieldValue>

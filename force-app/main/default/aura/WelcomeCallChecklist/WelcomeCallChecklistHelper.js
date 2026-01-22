@@ -136,6 +136,38 @@
         
         $A.enqueueAction(action); 
     },
+    
+       loadReasonsForHoldRejectPicklist: function(component, event, helper) {
+        var action = component.get("c.getHoldRejectData");
+        action.setParams({
+            strBookingId: component.get("v.recordId")
+        });
+    
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                var result = response.getReturnValue();
+                console.log('✅ Hold/Reject data:', result);
+    
+                // Build picklist options
+                var picklistValues = result.picklistValues || [];
+                var options = [{ value: "", label: "--None--" }];
+                picklistValues.forEach(function(value) {
+                    options.push({ value: value, label: value });
+                });
+    
+                component.set("v.ReasonsForHoldRejectPicklistOptions", options);
+    
+                // Prepopulate with stored reason if found
+                if (result.reason) {
+                    component.set("v.ReasonsForHoldReject", result.reason);
+                }
+            } else {
+                console.error('⚠️ Error loading hold/reject data:', response.getError());
+            }
+        });
+        $A.enqueueAction(action);
+    },
 
     loadCriticalListHelper : function(component, event) {
         
@@ -147,7 +179,7 @@
                               'Project', 'FlatTypology', 'Wing', 'Floor', 'FlatNo', 'CarpetArea', 'CarParkings',
                               'AgreementValue','SourceOfBooking','BankingPreferenceforLoan', 'PaymentPlanType',
                               'PaymentPlanMilestonesDetails','ViewCostSheet','ReceiptListRemarks',
-                              'Modeoffunding','RMName','RMcontactNumber','RMworkhours','RMemail', 'Remarks', 'PrimaryPANDetails',
+                              'ModeOfFunding','RMName','RMcontactNumber','RMworkhours','RMemail', 'Remarks', 'PrimaryPANDetails',
                              'Applicant2PAN', 'BookingDate','RegistrationConsultant','FamilyCount','ResidencePincode','Profession','OfficecDistance','CompanyName','Industry','Designation','FamilyIncome','PurchaseReason','VehiclesCount','FourWheeler'];
         component.set("v.inputValueList",inputValueList);
         
@@ -166,17 +198,17 @@
                         component.set("v.CriticalNonCriticalMetaList", CriticalNonCriticalMetaList);
                         for(var i=0; i<CriticalNonCriticalMetaList.length; i++ ){
                             if(CriticalNonCriticalMetaList[i].Type__c == "Critical"){
-                                //console.log('MasterLabel!!!',CriticalNonCriticalMetaList[i].MasterLabel);
+                                console.log('MasterLabel!!!',CriticalNonCriticalMetaList[i].MasterLabel);
                                 var CriticalMap = component.get("v.CriticalMap");
                                 var CriticalList = component.get("v.CriticalList");
                                 for(let j = 0; j < inputValueList.length; j++) { 
                                     if(CriticalNonCriticalMetaList[i].MasterLabel === inputValueList[j]){
-                                        // console.log('inputValueList!!!',inputValueList[j]);
+                                        console.log('inputValueList!!!',inputValueList[j]);
                                         
                                         CriticalMap[inputValueList[j]] = inputValueList[j];
                                         CriticalList.push(CriticalNonCriticalMetaList[i].MasterLabel);
                                         
-                                        //  console.log('CriticalMap!!! ' ,CriticalMap);
+                                          console.log('CriticalMap!!! ' ,CriticalMap);
                                     }
                                 }
                                 component.set("v.CriticalList", CriticalList);
@@ -256,6 +288,7 @@
         });  
         $A.enqueueAction(action); 
     },
+    
     //Modified by Dolly
     handleModeOfFundingChange: function(component, event, helper) {
         var selectedValue = event.getSource().get("v.value"); // <-- get value from the event
@@ -269,6 +302,7 @@
             component.set("v.BankPreferenceforLoan3", null);
             component.set("v.BankPreferenceforLoan", []);
         }
+        
     },
 
     loadModeOfFundingHelper: function(component, event) {
@@ -276,51 +310,50 @@
     console.log(">> recordId:", component.get("v.recordId"));
 
     var action = component.get("c.loadModeOfFunding");
-    action.setParams({
-        "strBookingId": component.get("v.recordId")
-    });
-
-    action.setCallback(this, function(response) {  
-        console.log(">> Callback reached, state=", response.getState());
-
-        var state = response.getState();
-        if (state === "SUCCESS") {
-            var result = response.getReturnValue();
-
-            // Debug the options vs returned values
-            console.log("Funding Options => ", component.get("v.options"));
-            console.log("BankNamePicklistOptions => ", component.get("v.BankNamePicklistOptions"));
-            console.log("Funding Map (from Apex):", JSON.stringify(result));
-
-            // Set values
-            component.set("v.selectedValue", result.ModeOfFunding);
-            component.set("v.BankPreferenceforLoan1", result.BankPref1);
-            component.set("v.BankPreferenceforLoan2", result.BankPref2);
-            component.set("v.BankPreferenceforLoan3", result.BankPref3);
-
-            // Verify what actually got set
-            console.log("Mode of Funding => " + component.get("v.selectedValue"));
-            console.log("BankPref1 => " + component.get("v.BankPreferenceforLoan1"));
-            console.log("BankPref2 => " + component.get("v.BankPreferenceforLoan2"));
-            console.log("BankPref3 => " + component.get("v.BankPreferenceforLoan3"));
-        } 
-        else if (state === "ERROR") {
-            var errors = response.getError();
-            if (errors && errors[0] && errors[0].message) {
-                console.error("❌ Apex Error: " + errors[0].message);
-            } else {
-                console.error("❌ Unknown Error", errors);
-            }
-        }
-        else {
-            console.warn("⚠ Unexpected state: " + state);
-        }
-    });  
-
-    $A.enqueueAction(action); 
-},
-
+        action.setParams({
+            "strBookingId": component.get("v.recordId")
+        });
     
+        action.setCallback(this, function(response) {  
+            console.log(">> Callback reached, state=", response.getState());
+    
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                var result = response.getReturnValue();
+    
+                // Debug the options vs returned values
+                console.log("Funding Options => ", component.get("v.options"));
+                console.log("BankNamePicklistOptions => ", component.get("v.BankNamePicklistOptions"));
+                console.log("Funding Map (from Apex):", JSON.stringify(result));
+    
+                // Set values
+                component.set("v.selectedValue", result.ModeOfFunding);
+                component.set("v.BankPreferenceforLoan1", result.BankPref1);
+                component.set("v.BankPreferenceforLoan2", result.BankPref2);
+                component.set("v.BankPreferenceforLoan3", result.BankPref3);
+    
+                // Verify what actually got set
+                console.log("Mode of Funding => " + component.get("v.selectedValue"));
+                console.log("BankPref1 => " + component.get("v.BankPreferenceforLoan1"));
+                console.log("BankPref2 => " + component.get("v.BankPreferenceforLoan2"));
+                console.log("BankPref3 => " + component.get("v.BankPreferenceforLoan3"));
+            } 
+            else if (state === "ERROR") {
+                var errors = response.getError();
+                if (errors && errors[0] && errors[0].message) {
+                    console.error("❌ Apex Error: " + errors[0].message);
+                } else {
+                    console.error("❌ Unknown Error", errors);
+                }
+            }
+            else {
+                console.warn("⚠ Unexpected state: " + state);
+            }
+        });  
+    
+        $A.enqueueAction(action); 
+    },
+
      loadYesNoDropDownHelper: function(component, event) {
         
         //To get values from Custommeta data onload 
@@ -398,55 +431,55 @@
         });  
         $A.enqueueAction(action); 
     }, 
- //Modified by Dolly
- handlebankLoanHelper : function(component, event) {
-    var selectedCheckboxValue = event.getSource().get("v.value");
-    var selectedCheckboxLabel = event.getSource().get("v.label");
+     //Modified by Dolly
+     handlebankLoanHelper : function(component, event) {
+        var selectedCheckboxValue = event.getSource().get("v.value");
+        var selectedCheckboxLabel = event.getSource().get("v.label");
+        
+        var BankPreferenceforLoan = component.get("v.BankPreferenceforLoan") || [];
     
-    var BankPreferenceforLoan = component.get("v.BankPreferenceforLoan") || [];
-
-    // Update only the bank that changed
-    if(selectedCheckboxLabel == 'BankName1') BankPreferenceforLoan[0] = selectedCheckboxValue;
-    if(selectedCheckboxLabel == 'BankName2') BankPreferenceforLoan[1] = selectedCheckboxValue;
-    if(selectedCheckboxLabel == 'BankName3') BankPreferenceforLoan[2] = selectedCheckboxValue;
-
-    // Check for duplicates
-    var duplicatesExist = 
-        (BankPreferenceforLoan[0] && BankPreferenceforLoan[1] && BankPreferenceforLoan[0] === BankPreferenceforLoan[1]) ||
-        (BankPreferenceforLoan[1] && BankPreferenceforLoan[2] && BankPreferenceforLoan[1] === BankPreferenceforLoan[2]) ||
-        (BankPreferenceforLoan[2] && BankPreferenceforLoan[0] && BankPreferenceforLoan[2] === BankPreferenceforLoan[0]);
-
-    if(duplicatesExist){
-        // Show toast
-        var toastEvent = $A.get("e.force:showToast");
-        toastEvent.setParams({
-            title : 'Error',
-            message: 'Banks should not be same',
-            duration: '5000',
-            key: 'info_alt',
-            type: 'error',
-            mode: 'dismissible'
-        });
-        toastEvent.fire();
-
-        // Reset only the bank that caused the conflict
-        if(selectedCheckboxLabel == 'BankName1') {
-            BankPreferenceforLoan[0] = null;
-            component.set("v.BankPreferenceforLoan1", null);
+        // Update only the bank that changed
+        if(selectedCheckboxLabel == 'BankName1') BankPreferenceforLoan[0] = selectedCheckboxValue;
+        if(selectedCheckboxLabel == 'BankName2') BankPreferenceforLoan[1] = selectedCheckboxValue;
+        if(selectedCheckboxLabel == 'BankName3') BankPreferenceforLoan[2] = selectedCheckboxValue;
+    
+        // Check for duplicates
+        var duplicatesExist = 
+            (BankPreferenceforLoan[0] && BankPreferenceforLoan[1] && BankPreferenceforLoan[0] === BankPreferenceforLoan[1]) ||
+            (BankPreferenceforLoan[1] && BankPreferenceforLoan[2] && BankPreferenceforLoan[1] === BankPreferenceforLoan[2]) ||
+            (BankPreferenceforLoan[2] && BankPreferenceforLoan[0] && BankPreferenceforLoan[2] === BankPreferenceforLoan[0]);
+    
+        if(duplicatesExist){
+            // Show toast
+            var toastEvent = $A.get("e.force:showToast");
+            toastEvent.setParams({
+                title : 'Error',
+                message: 'Banks should not be same',
+                duration: '5000',
+                key: 'info_alt',
+                type: 'error',
+                mode: 'dismissible'
+            });
+            toastEvent.fire();
+    
+            // Reset only the bank that caused the conflict
+            if(selectedCheckboxLabel == 'BankName1') {
+                BankPreferenceforLoan[0] = null;
+                component.set("v.BankPreferenceforLoan1", null);
+            }
+            if(selectedCheckboxLabel == 'BankName2') {
+                BankPreferenceforLoan[1] = null;
+                component.set("v.BankPreferenceforLoan2", null);
+            }
+            if(selectedCheckboxLabel == 'BankName3') {
+                BankPreferenceforLoan[2] = null;
+                component.set("v.BankPreferenceforLoan3", null);
+            }
         }
-        if(selectedCheckboxLabel == 'BankName2') {
-            BankPreferenceforLoan[1] = null;
-            component.set("v.BankPreferenceforLoan2", null);
-        }
-        if(selectedCheckboxLabel == 'BankName3') {
-            BankPreferenceforLoan[2] = null;
-            component.set("v.BankPreferenceforLoan3", null);
-        }
-    }
-
-    // Update the array for internal tracking
-    component.set("v.BankPreferenceforLoan", BankPreferenceforLoan);
-},
+    
+        // Update the array for internal tracking
+        component.set("v.BankPreferenceforLoan", BankPreferenceforLoan);
+    },
 
     handleCheckboxHelper : function(component, event) {
         
@@ -456,10 +489,26 @@
         console.log('selectedCheckboxName___',selectedCheckboxName);
         var selectedCheckboxLabel = event.getSource().get("v.label");
         console.log('selectedCheckboxLabel___',selectedCheckboxLabel);
-       // if(selectedCheckboxName === 'Modeoffunding'){
-         // selectedCheckboxLabel = component.get("v.BankPreferenceforLoan");
-       // }
-                   
+        if(selectedCheckboxName === 'ModeOfFunding'){
+        // Get the current ModeOfFunding value
+        var modeOfFunding = component.get("v.selectedValue");
+        var bank1 = component.get("v.BankPreferenceforLoan1") || '';
+        var bank2 = component.get("v.BankPreferenceforLoan2") || '';
+        var bank3 = component.get("v.BankPreferenceforLoan3") || '';
+        
+        // If you need to store both values, you might want to create a combined string
+        selectedCheckboxLabel = modeOfFunding;
+        if (modeOfFunding === 'Bank Loan' && bank1) {
+            selectedCheckboxLabel += ' - ' + bank1;
+            if (bank2) {
+            	selectedCheckboxLabel += ' - ' + bank2;
+            }
+            if (bank3) {
+                selectedCheckboxLabel += ' - ' + bank3;
+            }
+        }
+    	}
+        
         var selectedCheckBoxes =  component.get("v.selectedCheckBoxes");
         var mapOfKeyValueGet =  component.get("v.mapOfKeyValue");
         var mapOfKeyValueNew =  component.get("v.mapOfKeyValueNew");
@@ -472,6 +521,8 @@
         
         console.log('___selectedCheckBoxes___'+selectedCheckBoxes);
 
+     
+        
         if(selectedCheckboxValue === ''){ 
           
             selectedCheckBoxes.splice(selectedCheckBoxes.indexOf(selectedCheckboxValue), 1);
@@ -542,7 +593,7 @@
         console.log('finalCount___'+finalCount);
         //console.log('selectedCheckBoxes___'+selectedCheckBoxes.length);
         component.set("v.counter" , finalCount);  
-		console.log('CriticalList.length - > ',CriticalList.length);
+
         if(finalCount === CriticalList.length){
             component.set("v.btnAcc",false);
             //component.set("v.btnRej",true);
@@ -559,23 +610,24 @@
          
       },
                        
-                       handleCheckboxChangeHelper : function(component, event) {
-                           var isChecked = event.getSource().get("v.checked"); 
-                           console.log('Dhamaka selectedCheckboxValue___', isChecked); 
-                           component.set("v.isDhamaka", isChecked);
-                           console.log('v.isDhamaka', component.get("v.isDhamaka")); 
-                           var selectedCheckboxName = event.getSource().get("v.name");
-                           console.log('Dhamaka selectedCheckboxName___',selectedCheckboxName);
-                           var selectedCheckboxLabel = event.getSource().get("v.label");
-                           console.log('Dhamaka selectedCheckboxLabel___',selectedCheckboxLabel);
-                       },    
+      handleCheckboxChangeHelper : function(component, event) {
+			var isChecked = event.getSource().get("v.checked"); 
+			console.log('Dhamaka selectedCheckboxValue___', isChecked); 
+			component.set("v.isDhamaka", isChecked);
+			console.log('v.isDhamaka', component.get("v.isDhamaka")); 
+			var selectedCheckboxName = event.getSource().get("v.name");
+			console.log('Dhamaka selectedCheckboxName___',selectedCheckboxName);
+			var selectedCheckboxLabel = event.getSource().get("v.label");
+			console.log('Dhamaka selectedCheckboxLabel___',selectedCheckboxLabel);
+		},    
     
      handleAcceptHelper : function (component, event) {
             var modeOfFunding = component.get("v.selectedValue");
             var bank1 = component.get("v.BankPreferenceforLoan1") || '';
             var bank2 = component.get("v.BankPreferenceforLoan2") || '';
             var bank3 = component.get("v.BankPreferenceforLoan3") || '';
-         
+         	var reasonsForHoldReject = component.get("v.ReasonsForHoldReject") || '';
+         	console.log('reasonsForHoldReject------->',reasonsForHoldReject);
          
 
     // Mode of Funding is required
@@ -608,36 +660,35 @@
             toastEvent.fire();
             return; 
         }
-        /*if(!bank2 || bank2 === ''){
-            var toastEvent = $A.get("e.force:showToast");
-            toastEvent.setParams({
-                title : 'Error',
-                message: 'Please select Bank Prefrence 2',
-                duration:'5000',
-                key: 'info_alt',
-                type: 'error',
-                mode: 'pester'
-            });
-            toastEvent.fire();
-            return; 
-        }
-        if(!bank3 || bank3 === ''){
-            var toastEvent = $A.get("e.force:showToast");
-            toastEvent.setParams({
-                title : 'Error',
-                message: 'Please select Bank Prefrence 3',
-                duration:'5000',
-                key: 'info_alt',
-                type: 'error',
-                mode: 'pester'
-            });
-            toastEvent.fire();
-            return; 
-        }*/
     }
-         
          var label = event.getSource().get("v.label");
          console.log('label___',label);
+          var reasonsForHoldReject = component.get("v.ReasonsForHoldReject");
+    
+        console.log('Button clicked: ', label);
+        console.log('Selected reason: ', reasonsForHoldReject);
+             // Validate Reasons field for Hold/Reject actions
+    if ((label === 'Hold' || label === 'Reject') && (!reasonsForHoldReject || reasonsForHoldReject === '')) {
+        component.set("v.showReasonsRow", true);
+        var toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            title : 'Error',
+            message: 'Please select a Reason for Hold/Reject before proceeding',
+            duration:'5000',
+            key: 'info_alt',
+            type: 'error',
+            mode: 'pester'
+        });
+        toastEvent.fire();
+        return; // Stop execution
+    }else if (label === 'Accept') {
+        // Clear the reasons field when Accept is clicked
+        component.set("v.ReasonsForHoldReject", '');
+        component.set("v.showReasonsRow", false);
+        // Proceed with Accept logic directly
+    }
+    
+         
          var mapOfKeyBoolean =  component.get("v.mapOfKeyBoolean");
          console.log('mapOfKeyBoolean___',mapOfKeyBoolean);
          var finalList = component.get("v.finalListOfValue");
@@ -650,6 +701,10 @@
          var count = 0;
          var yescheck = '';
          for (var key in mapOfKeyBoolean) { 
+             //Added By Dolly 
+              if (key === 'mySelect') {
+                    continue;
+                }
              count++;
              console.log('___key ','Key____ ',key,' ',mapOfKeyBoolean[key]);
              var str = mapOfKeyBoolean[key].split('~');
@@ -749,6 +804,7 @@
                  "bankPrefrence2": bank2,
                  "bankPrefrence3": bank3,
                  "BankPreferenceforLoan": BankPrefLoan,
+                 "reasonsForHoldReject":reasonsForHoldReject,
                  "receiptList": receiptList,
                  "isDhamaka": component.get("v.isDhamaka")
              });

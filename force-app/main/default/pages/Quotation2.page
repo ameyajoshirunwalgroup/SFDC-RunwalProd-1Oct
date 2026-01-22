@@ -419,7 +419,18 @@
                                         </td>
                                     </tr>  
                                     <!-- Added by Vinay 28-03-2025 End--> 
-                                            
+                                    <!-- Added by Vinay 21-11-2025 Start-->        
+                                    <tr>
+                                        <th width="50%">
+                                            <apex:outputText value="Stack Car Park" />
+                                        </th>
+                                        <td width="50%">
+                                           
+                                            <apex:inputField style="background-color:#FADADD" value="{!q.Stack_Additional_1__c}" rendered="{!canAddCarPark10}"/>
+                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark10)}"/>
+                                        </td>
+                                    </tr>  
+                                    <!-- Added by Vinay 21-11-2025 End-->
                                     <tr> 
                                         <th colspan="2">
                                             <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small"  value="Apply Selection" action="{!addCarPark}" disabled="{!NOT(showAddCarPark)}"/>
