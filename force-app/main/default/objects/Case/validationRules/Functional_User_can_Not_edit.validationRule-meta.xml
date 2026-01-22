@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Functional_User_can_Not_edit</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status, &quot;Case Closed&quot;),
+    $User.Id = Functional_User__c,
+    NOT(ISNEW())
+)</errorConditionFormula>
+    <errorMessage>You are not authorized to edit this Case once it has been closed.</errorMessage>
+</ValidationRule>
