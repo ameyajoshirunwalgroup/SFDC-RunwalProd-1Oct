@@ -382,7 +382,7 @@ public class SAPCPBrokerageCreation {
                           Approval_Status__c, Invoice_Status__c, Place_of_Supply__c, Type_of_Client__c, 
                           Invoice_Date__c, SAP_Broker_code__c, IGST__c, CGST__c, SGST__c, SAP_Document_No__c,
                           SAP_Document_Date__c, SAP_Posting_Date__c, SAP_Clearing_Date__c, SAP_TDS__c, 
-                          Channel_Partner__c, Legal_Entity__c, Brokerage_Type__c, AOP__c, Month__c
+                          Channel_Partner__c, Legal_Entity__c, Brokerage_Type__c, AOP__c, Month__c,Total_Invoice_Amount__c
                           FROM CP_Brokerage__c 
                           WHERE Id IN: CPBrokerageId];
         
@@ -468,8 +468,13 @@ public class SAPCPBrokerageCreation {
                     Decimal totalInvoiceAmt = 0;
                     if(relatedInvoices != null && !relatedInvoices.isEmpty()){
                         for(Brokerage_Invoice__c invoice : relatedInvoices){
-                            if(invoice.Invoice_Amount__c != null){
-                                totalInvoiceAmt += invoice.Invoice_Amount__c;
+                            /*if(invoice.Invoice_Amount__c != null){
+                                //totalInvoiceAmt += invoice.Invoice_Amount__c;
+                                totalInvoiceAmt += invoice.Brokerage_In_Rs__c;//Changed the mapping 
+                            }*///Commented by Prashant to remove invoice amt and map brokerage amt - 5-1-26
+                            if(invoice.Brokerage_In_Rs__c != null){
+                                //totalInvoiceAmt += invoice.Invoice_Amount__c;
+                                totalInvoiceAmt += invoice.Brokerage_In_Rs__c;//Changed the mapping by Prashant.. 5-1-26
                             }
                         }
                     }
@@ -511,9 +516,13 @@ public class SAPCPBrokerageCreation {
                             }
                             gen.writeStringField('itm_text', itemText);
                             
-                            if(invoice.Invoice_Amount__c != null){
+                            /*if(invoice.Invoice_Amount__c != null){
                                 gen.writeNumberField('inv_amt', invoice.Invoice_Amount__c);
-                            } else {
+                                gen.writeNumberField('inv_amt', invoice.Brokerage_In_Rs__c);//Changed the mapping...5-1-25
+                            }*///Commented by Prashant to remove invoice amt and map brokerage amt - 5-1-25
+                            if(invoice.Brokerage_In_Rs__c != null){
+                                gen.writeNumberField('inv_amt', invoice.Brokerage_In_Rs__c);//Changed the mapping...5-1-25
+                            }else {
                                 gen.writeNumberField('inv_amt', 0);
                             }
                             
@@ -552,7 +561,6 @@ public class SAPCPBrokerageCreation {
             } catch(Exception e) {
                 system.debug('JSON Validation Failed: ' + e.getMessage());
             }
-            
             // Now send the request ONCE with all invoices
             try{
                 SAPCPBrokerageCreationParser jsonResponse = new SAPCPBrokerageCreationParser();
@@ -561,8 +569,9 @@ public class SAPCPBrokerageCreation {
                 // Authentication details
                 String username = Label.SAP_Username;
                 System.debug('username:: ' + username);
-                String password = Label.SAP_Password;
-                String endPointURL = 'http://123.108.44.40:8002/zcp_ladder/cp_ladder_inv?sap-client=300'; 
+                String password = Label.SAP_Password;                
+                //String endPointURL = 'http://123.108.44.40:8002/zcp_ladder/cp_ladder_inv?sap-client=300'; 
+                String endPointURL = label.SAP_cp_ladder_inv;//Added dynamic endpoint.
                 System.debug('endPointURL:: ' + endPointURL);
                 Blob headerValue = Blob.valueOf(username + ':' + password);
                 String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
@@ -616,6 +625,7 @@ public class SAPCPBrokerageCreation {
                         
                         // Process each response and update corresponding CP_Brokerage record
                         Integer responseIndex = 0;
+                        
                         for(CP_Brokerage__c cpBrokerage : CPBrokerageList){
                             if(responseIndex < responseList.size()){
                                 SAPCPBrokerageCreationParser resp = responseList[responseIndex];
@@ -647,6 +657,7 @@ public class SAPCPBrokerageCreation {
                                     
                                     if(resp.TDS_AMT != null){
                                         updateCPBrokerage.SAP_TDS__c = resp.TDS_AMT;
+                                        system.debug('resp.TDS_AMT -> '+resp.TDS_AMT);
                                     }
                                     
                                     individualLog.Response__c = 'Success - SAP Doc No: ' + resp.DOC_NO;
@@ -658,7 +669,7 @@ public class SAPCPBrokerageCreation {
                                 }
                                 
                                 UpdateCPBrokerageList.add(updateCPBrokerage);
-                                APIlogsToInsertList.add(individualLog);
+                                //APIlogsToInsertList.add(individualLog);
                                 responseIndex++;
                             }
                         }
@@ -732,6 +743,7 @@ public class SAPCPBrokerageCreation {
             } catch(Exception e){
                 system.debug('API Log Insert Error: ' + e.getMessage());
             }
+            
         }
     }
     

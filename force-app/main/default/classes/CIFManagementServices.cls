@@ -26,6 +26,7 @@ public class CIFManagementServices {
         system.debug('Inside createcase');
         Map < Id, Task > opptyTaskMap = new Map < Id, Task > ();  
         Id feedbackId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Customer Feedback').getRecordTypeId();
+        Set<String> inboundDeskAgents = new Set<String>(); //Added by Vinay 19-01-2026
         for (Task t: TaskList) {
             if (t.WhatId != null && t.WhatId.getSObjectType().getDescribe().getName() == 'Opportunity') {
                 if (opptyTaskMap.containsKey(t.whatId)) {
@@ -37,8 +38,16 @@ public class CIFManagementServices {
                 } else {
                     opptyTaskMap.put(t.whatId, t);
                 }
+                inboundDeskAgents.add(t.Inbound_Desk_Agent__c); //Added by Vinay 19-01-2026
             }
             
+        }
+
+        Map<String, String> agentIdVsName = new Map<String, String>();//Added by Vinay 19-01-2026
+        if(inboundDeskAgents.size() > 0){ //Added by Vinay 19-01-2026
+            for(User usr : [SELECT Id, Name, CTI_Agent_ID__c FROM User WHERE CTI_Agent_ID__c =: inboundDeskAgents]){
+                agentIdVsName.put(usr.CTI_Agent_ID__c, usr.Name);
+            }
         }
         
             List<Case_Platform_Event__e> eventsToPublish = new List<Case_Platform_Event__e>();
@@ -119,7 +128,9 @@ system.debug('recentCases'+recentCases);
             c.Remarks_by_RM__c='Closed Satisfactory';
             c.Unit_Name__c=opp.RW_Project_Unit__r.Name;
             c.Tower__c=opp.RW_Project_Unit__r.RW_Param2__c;
-            
+            if(opptyTaskMap.get(opp.id).Inbound_Desk_Agent__c != null){ // Added by Vinay 19-01-2026
+                c.RW_RM_Name__c = agentIdVsName.get(opptyTaskMap.get(opp.id).Inbound_Desk_Agent__c);
+            }
             
               insert c;  
                 

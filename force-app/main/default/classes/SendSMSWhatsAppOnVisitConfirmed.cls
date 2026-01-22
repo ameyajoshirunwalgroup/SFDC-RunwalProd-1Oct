@@ -32,20 +32,23 @@ public class SendSMSWhatsAppOnVisitConfirmed {
         String smsSignature;
         String ledOppMbl;
         String ledOppSource;
+        String ledOppCountryCode; //Added by Vinay 13-10-2025
         Lead led;
         Opportunity opp;
         RW_Presales_Communication__c preComm = New RW_Presales_Communication__c();
         
         if(tsk.WhoId != null && tsk.WhoId.getSObjectType()==Lead.sObjectType){
-            led = [select Id,Name,RW_Mobile_No__c,LeadSource From Lead WHERE Id=: setOfLedOppId];
+            led = [select Id,Name,RW_Mobile_No__c,LeadSource,RDS_Country_Code__c From Lead WHERE Id=: setOfLedOppId];
             preComm.RW_Lead__c = led.Id;
             ledOppMbl = led.RW_Mobile_No__c;
             ledOppSource = led.LeadSource;
+            ledOppCountryCode = led.RDS_Country_Code__c; //Added by Vinay 13-10-2025
         }else if(tsk.WhatId != null && tsk.WhatId.getSObjectType()==Opportunity.sObjectType){
-            opp = [select Id,Name,RW_Mobile_No__c,LeadSource From Opportunity WHERE Id=: setOfLedOppId];
+            opp = [select Id,Name,RW_Mobile_No__c,LeadSource,Account.Country_Code__c From Opportunity WHERE Id=: setOfLedOppId];
             preComm.RW_Opportunity__c = opp.Id;
             ledOppMbl = opp.RW_Mobile_No__c;
             ledOppSource = opp.LeadSource;
+            ledOppCountryCode = opp.Account.Country_Code__c; //Added by Vinay 13-10-2025
         }
         
         System.debug('led: ' + led);
@@ -93,8 +96,14 @@ public class SendSMSWhatsAppOnVisitConfirmed {
                if((opp != null && opp.LeadSource != 'Channel Partner') || (led != null && led.LeadSource != 'Channel Partner')){
                     /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(tsk.Project__r.Name, mydateStr, myTimeStr,whatsAppSignature,
                                                               null,null,null,null,null,ledOppMbl,System.Label.Lead_Visit_Confirmed2_HSM);*/
-                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(tsk.Project__r.Name, mydateStr, myTimeStr,whatsAppSignature,
+                    /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(tsk.Project__r.Name, mydateStr, myTimeStr,whatsAppSignature,
+                                                              null,null,null,null,null,ledOppMbl,'Lead Visit Confirmed2');*/ //Commented by Vinay 13-10-2025
+                    if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
+                        SendWhatsAppMsg.methodToSendWhatsAppMsgNew(tsk.Project__r.Name, mydateStr, myTimeStr,whatsAppSignature,null,null,null,null,null,ledOppCountryCode,ledOppMbl,'Lead Visit Confirmed2');
+                    }else{
+                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(tsk.Project__r.Name, mydateStr, myTimeStr,whatsAppSignature,
                                                               null,null,null,null,null,ledOppMbl,'Lead Visit Confirmed2');
+                    }
                		preComm.RW_Visit_Confirmed_Mode_of_Communication__c += ',WhatsApp';
                }
                //Commented by Vinay 29-10-2021

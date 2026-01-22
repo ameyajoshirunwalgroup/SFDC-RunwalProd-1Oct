@@ -93,8 +93,10 @@ mobileNums.add(updatedMobile.subString(2,12));
                     leadAccountName = leadList[0].Name;
                 }
             }else{
+                List<String> projects = System.label.TATA_CTI_Projects.split(','); //Added by Vinay 02-12-2025
                 //List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name = '7 Mahalaxmi' AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile )]; //Commented by Vinay 06-05-2025
-                List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name = '7 Mahalaxmi' AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile )]; //Added by Vinay 06-05-2025
+                //List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name = '7 Mahalaxmi' AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile )]; //Added by Vinay 06-05-2025 //Commented by Vinay 02-12-2025
+                List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name =: projects AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile )]; //Added by Vinay 02-12-2025
                 List<Opportunity> bookedOppList = new List<Opportunity>();
                 if(oppList.size() > 1){
                     for(Opportunity opp : oppList){

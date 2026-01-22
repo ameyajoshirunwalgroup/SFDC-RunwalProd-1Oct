@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stack_Car_Park_Booked__c</fullName>
+    <label>Stack Car Park (Booked)</label>
+    <summaryFilterItems>
+        <field>Car_Parking_Charge__c.Category__c</field>
+        <operation>equals</operation>
+        <value>Additional</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>Car_Parking_Charge__c.Parking__c</field>
+        <operation>equals</operation>
+        <value>Stack</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>Car_Parking_Charge__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Booked</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Car_Parking_Charge__c.Project__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

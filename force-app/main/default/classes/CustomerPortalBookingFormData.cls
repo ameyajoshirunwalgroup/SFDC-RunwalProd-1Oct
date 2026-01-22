@@ -208,7 +208,8 @@ TDS_Amount_In_Rs__c, Receipt_Date__c From Receipt__c Where Booking__c =:BookingI
             if(r.Token_Amount_ST__c == false) {
                 //ShowpageBlockFlag = true;
                 dvar += r.Total_Amount__c ;
-                datevar += r.Cheque_DD_Date__c.format()  +' / ' ;
+                //datevar += r.Cheque_DD_Date__c.format()  +' / ' ; //Commented by Vinay 03-11-2025
+                datevar += (r.Cheque_DD_Date__c != null)? r.Cheque_DD_Date__c.format() : ''  +' / ' ; // Added by Vinay 03-11-2025
                 checkvar +=  + r.Cheque_DD__c + ' / '; 
                 bankname +=  r.DraweeBank__c + ' / '  ;
                 favourvar +=  r.Drawn_in_favour_of__c + ' / ' ;

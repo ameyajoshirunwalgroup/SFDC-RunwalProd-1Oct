@@ -57,7 +57,7 @@ public class ChannelPartnerTopSheetController {
             // 1. Get the parent Channel Partner record
             channelPartner = [SELECT Id , Channel_Partner__r.Company_Name_As_per_RERA__c, Channel_Partner__r.Representative_Name__c,Company_Name__c,
                               Channel_Partner__r.Name, Legal_Entity__r.Name, Brokerage_Type__c, SAP_Document_No__c, Legal_Entity__r.RDS_Company_Name__c,Legal_Entity__r.Account_Name_Service_Tax__c,
-                              CP_Invoice_Approver_L3__r.name, CP_Invoice_Approver_L4__r.name, CP_Invoice_Approver_L1__r.name, CP_Invoice_Approver_L2__r.name,
+                              CP_Invoice_Approver_L3__r.name, CP_Invoice_Approver_L4__r.name, CP_Invoice_Approver_L1__r.name, CP_Invoice_Approver_L2__r.name,CP_MIS__r.Name,
                               Date_Approved_By_Submitter_Formula__c, Date_Approved_ByL1_formula__c, Date_Approved_ByL2_formula__c, Date_Approved_ByL3_formula__c,
                               Date_Approved_ByL4_formula__c
                               FROM CP_Brokerage__c WHERE Id = :channelPartnerId];
@@ -144,9 +144,10 @@ public class ChannelPartnerTopSheetController {
                     SumBrokerageWrapperObj.BrokerageTotalAmount + inv.Invoice_Amount__c:SumBrokerageWrapperObj.BrokerageTotalAmount;
                 SumBrokerageWrapperObj.CurrencyTDSTotal = inv.SAP_TDS__c != null?
                     SumBrokerageWrapperObj.CurrencyTDSTotal + inv.SAP_TDS__c:SumBrokerageWrapperObj.CurrencyTDSTotal;
+                SumBrokerageWrapperObj.CurrencyTDSTotal = SumBrokerageWrapperObj.CurrencyTDSTotal.setScale(2);
                 SumBrokerageWrapperObj.CurrencyBrAmtPostTDS = postTDSAmount !=null?
                     SumBrokerageWrapperObj.CurrencyBrAmtPostTDS + postTDSAmount:SumBrokerageWrapperObj.CurrencyBrAmtPostTDS;
-                
+                SumBrokerageWrapperObj.CurrencyBrAmtPostTDS = SumBrokerageWrapperObj.CurrencyBrAmtPostTDS.setScale(2);
                 // Populate the brokerage lines
                 /*if(summaryToInvoicesMap.containsKey(inv.Brokerage_Summary__c)){
                     for(Brokerage_Invoice__c lineItem : summaryToInvoicesMap.get(inv.Brokerage_Summary__c)){
@@ -161,6 +162,10 @@ public class ChannelPartnerTopSheetController {
                 }*/
                 
                 invoiceDetails.add(wrapper);
+                system.debug('Invoice -> '+invoiceDetails);
+                for(InvoiceWrapper i:invoiceDetails){
+                    system.debug('i -> '+i.invoice);
+                }
             }
         } catch (Exception ex) {
             System.debug('Exception in TopSheetPdfController: ' + ex.getMessage() + ' at line ' + ex.getLineNumber());

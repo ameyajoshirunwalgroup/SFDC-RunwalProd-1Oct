@@ -187,7 +187,7 @@ public class SalesOrderSAPAPIMCS {
         public String Nomini1;
         public String Nomini2;
         public String IntCalcFlag;
-        public String ADF_OPTION; //added by digicloud team
+        public String AdfOption; //added by digicloud team
         private String[] DocType_type_info = new String[]{'DocType','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] Plant_type_info = new String[]{'Plant','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] DistrChan_type_info = new String[]{'DistrChan','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
@@ -232,9 +232,9 @@ public class SalesOrderSAPAPIMCS {
         private String[] Nomini2_type_info = new String[]{'Nomini2','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] IntCalcFlag_type_info = new String[]{'IntCalcFlag','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
             // added by Digicloud team     
-        private String[] ADF_OPTION_type_info = new String[]{'ADF_OPTION','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] AdfOption_type_info = new String[]{'AdfOption','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] apex_schema_type_info = new String[]{'urn:sap-com:document:sap:soap:functions:mc-style','false','true'};
-        private String[] field_order_type_info = new String[]{'DocType','Plant','DistrChan','Division','SalesGrp','SalesOff','PurchNoC','PoDatS','DocDate','SalesOrdNo','RejReason','ZzbookDt','ZzstmRegPd','ZzregDt','ZzregSrNo','ZzregRecpNo','ZzrocSt','ZzrrocDt','ZzagrmtDt','ZzmktVal','ZzalotLtrDt','ZzagrPossDt','ZzpossStrDt','ZzpossEndDt','ZzkeyHdovrDt','ZzoccpCertDt','ZzpayMode','ZzloanBd','ZzloanAmt','ZzloanFileNo','ZzloanPerAgrm','ZzsanctionDt','ZznocIssDt','ZzcanlDt','ZzcanlInitBy','ZzdeedCanlReg','ZzcarparkAlt','ZzcarpartSlot','ZzcarparkTp','PaymentPlanType','Nomini1','Nomini2','IntCalcFlag', 'ADF_OPTION'};
+        private String[] field_order_type_info = new String[]{'DocType','Plant','DistrChan','Division','SalesGrp','SalesOff','PurchNoC','PoDatS','DocDate','SalesOrdNo','RejReason','ZzbookDt','ZzstmRegPd','ZzregDt','ZzregSrNo','ZzregRecpNo','ZzrocSt','ZzrrocDt','ZzagrmtDt','ZzmktVal','ZzalotLtrDt','ZzagrPossDt','ZzpossStrDt','ZzpossEndDt','ZzkeyHdovrDt','ZzoccpCertDt','ZzpayMode','ZzloanBd','ZzloanAmt','ZzloanFileNo','ZzloanPerAgrm','ZzsanctionDt','ZznocIssDt','ZzcanlDt','ZzcanlInitBy','ZzdeedCanlReg','ZzcarparkAlt','ZzcarpartSlot','ZzcarparkTp','PaymentPlanType','Nomini1','Nomini2','IntCalcFlag', 'AdfOption'};
     }
     public class TableOfZsdstPartnerFunction {
         public SalesOrderSAPAPIMCS.ZsdstPartnerFunction[] item;

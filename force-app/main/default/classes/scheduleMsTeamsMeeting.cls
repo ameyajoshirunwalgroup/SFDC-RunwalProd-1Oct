@@ -184,8 +184,13 @@ public with sharing class scheduleMsTeamsMeeting {
                     //Added by Vinay 29-10-2021
                     if(objLead.LeadSource != 'Channel Partner'){
                         //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name,objLead.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objLead.RW_Mobile_No__c,System.Label.Lead_Ms_Team_Confirm_HSM);
-                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name,objLead.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objLead.RW_Mobile_No__c,'Lead Ms Team Confirm'); // Commented by Vinay 10-09-2025
-                        //SendWhatsAppMsg.methodToSendWhatsAppMsg(null,objLead.Name,objLead.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,objLead.RDS_Country_Code__c,objLead.RW_Mobile_No__c,'Lead Ms Team Confirm');  // Added by Vinay 10-09-2025
+                        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name,objLead.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objLead.RW_Mobile_No__c,'Lead Ms Team Confirm'); // Commented by Vinay 10-09-2025
+                        
+                        if(System.label.Haptik_API_Version == 'New'){   // Added by Vinay 10-10-2025
+                            SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objLead.Name,objLead.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objLead.RDS_Country_Code__c,objLead.RW_Mobile_No__c,'Lead Ms Team Confirm');
+                        }else{
+                            SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name,objLead.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objLead.RW_Mobile_No__c,'Lead Ms Team Confirm');
+                        }
          	    		preComm.RW_Meeting_Mode_of_Communication__c += ',WhatsApp';
                     }
                  //Commented by Vinay 29-10-2021
@@ -202,8 +207,12 @@ public with sharing class scheduleMsTeamsMeeting {
                     //Added by Vinay 29-10-2021
                     if(objOpp.LeadSource != 'Channel Partner'){
                         //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name,objOpp.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objOpp.RW_Mobile_No__c,System.Label.Lead_Ms_Team_Confirm_HSM);
-                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name,objOpp.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objOpp.RW_Mobile_No__c,'Lead Ms Team Confirm'); // Commented by Vinay 10-09-2025
-                        //SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objOpp.Name,objOpp.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objOpp.Account.Country_Code__c,objOpp.RW_Mobile_No__c,'Lead Ms Team Confirm'); // Added by Vinay 10-09-2025
+                        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name,objOpp.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objOpp.RW_Mobile_No__c,'Lead Ms Team Confirm'); // Commented by Vinay 10-09-2025
+                        if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                          SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objOpp.Name,objOpp.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objOpp.Account.Country_Code__c,objOpp.RW_Mobile_No__c,'Lead Ms Team Confirm');
+                        }else{
+                          SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name,objOpp.Project_Name__c,strtTime,strtDate,msTem.RW_OnlineMeeting_JoinUrl__c,null,null,null,null,objOpp.RW_Mobile_No__c,'Lead Ms Team Confirm');
+                        }
                 		preComm.RW_Meeting_Mode_of_Communication__c += ',WhatsApp';
                     }
                  //Commented by Vinay 29-10-2021

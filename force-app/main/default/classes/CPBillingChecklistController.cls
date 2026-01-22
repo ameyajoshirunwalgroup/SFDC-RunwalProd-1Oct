@@ -19,7 +19,7 @@ public with sharing class CPBillingChecklistController {
             Booking__r.Original_Agreement_Value__c,
                Booking__r.Booking_Date__c,
                Booking__r.BrokerIId__r.Name,
-               Booking__r.BrokerIId__r.Valid_competency_certificate__c,
+               //Booking__r.BrokerIId__r.Valid_competency_certificate__c,//Commented by Prashant as discussed with team to discard use of CC. 12/12/25.
                Booking__r.BrokerIId__r.Valid_RERA_certificate__c,
                Booking__r.Brokerage_Scheme__r.Name,
                Booking__r.Quotation__r.Discount_9_L__c,

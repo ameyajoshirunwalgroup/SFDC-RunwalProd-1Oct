@@ -20,7 +20,7 @@ public class NonReleasedSalesordersReport  implements Schedulable{
             List<String> toAddresses = System.label.Non_Released_SO_Report_Email_Ids.split(',');
             if(toAddresses.size() > 0){
                 List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
-                String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Allotment Premium,Receipt \n';
+                String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Agreement Value,Receipt \n';//Changed the Allotment Premium label to Agreement Value as per Shraddha's requirement. Mail subject - Change field lable  in Booking. 13/10/25.
                 
                 String data = header;
                 for(Booking__c bkg : bookings){
@@ -73,7 +73,7 @@ public class NonReleasedSalesordersReport  implements Schedulable{
                 userNameVsEmail.put(usr.Name, usr.Email);
             }
             List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
-            String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Allotment Premium,Receipt \n';
+            String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Agreement Value,Receipt \n';//Changed the Allotment Premium label to Agreement Value as per Shraddha's requirement. Mail subject - Change field lable  in Booking. 13/10/25.
             for(String sm : userNameVsEmail.keySet()){
                 if(smVsBkgMap.get(sm) != null && smVsBkgMap.get(sm).size() > 0){
                     String data = header;

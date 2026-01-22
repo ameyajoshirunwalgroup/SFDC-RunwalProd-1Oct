@@ -44,7 +44,7 @@ private class CPBrokerageSAPTest {
 
         // 1. Valid, approved, not Base (for general success)
         brokerages.add(new CP_Brokerage__c(
-            Approval_Status__c = 'Approved By L4 - Accounts',
+            Approval_Status__c = 'Approved By L3 - Accounts',
             Brokerage_Type__c = 'AOP Brokerage',
             AOP__c = aop.id,
             Total_Brokerage__c = 1000
@@ -52,7 +52,7 @@ private class CPBrokerageSAPTest {
 
         // 2. Approved, Base Brokerage, no AOP (for validation failure)
         brokerages.add(new CP_Brokerage__c(
-            Approval_Status__c = 'Approved By L4 - Accounts',
+            Approval_Status__c = 'Approved By L3 - Accounts',
             Brokerage_Type__c = 'Base Brokerage',
             AOP__c = null,
             Total_Brokerage__c = 2000
@@ -60,14 +60,14 @@ private class CPBrokerageSAPTest {
 
         // 3. Approved, Base Brokerage, with AOP (for validation success)
         brokerages.add(new CP_Brokerage__c(
-            Approval_Status__c = 'Approved By L4 - Accounts',
+            Approval_Status__c = 'Approved By L3 - Accounts',
             Brokerage_Type__c = 'Base Brokerage',
             AOP__c = aop.id,
             Total_Brokerage__c = 3000
         ));
         
         brokerages.add(new CP_Brokerage__c(
-            Approval_Status__c = 'Approved By L4 - Accounts',
+            Approval_Status__c = 'Approved By L3 - Accounts',
             Brokerage_Type__c = 'Base Brokerage',
             AOP__c = aop.id,
             Total_Brokerage__c = 3000,
@@ -85,7 +85,7 @@ private class CPBrokerageSAPTest {
 
         // 5. Already processed (for warning message)
         brokerages.add(new CP_Brokerage__c(
-            Approval_Status__c = 'Approved By L4 - Accounts',
+            Approval_Status__c = 'Approved By L3 - Accounts',
             Brokerage_Type__c = 'AOP Brokerage',
             SAP_Document_No__c = 'SAP-12345',
             Total_Brokerage__c = 5000
@@ -204,7 +204,7 @@ private class CPBrokerageSAPTest {
      @isTest
     static void testValidateBrokerageRecord_NotFound() {
         // Create and delete a record to get a guaranteed non-existent Id
-        CP_Brokerage__c temp = new CP_Brokerage__c(Approval_Status__c = 'Approved By L4 - Accounts');
+        CP_Brokerage__c temp = new CP_Brokerage__c(Approval_Status__c = 'Approved By L3 - Accounts');
         insert temp;
         Id nonExistentId = temp.Id;
         delete temp;
@@ -240,7 +240,7 @@ private class CPBrokerageSAPTest {
         CP_Brokerage__c CPBrokerageList = [SELECT Id, Name, Approval_Status__c, SAP_Document_No__c, Brokerage_Type__c, 
                           AOP__c, Total_Brokerage__c, Invoice_Status__c
                           FROM CP_Brokerage__c
-                          WHERE Approval_Status__c = 'Approved By L4 - Accounts' limit 1];
+                          WHERE Approval_Status__c = 'Approved By L3 - Accounts' limit 1];
         setupPageParams(CPBrokerageList.id, true); // EnterCondTypeforSAPDocNo = true
         CPBrokerageSAP controller = new CPBrokerageSAP();
         controller.selectedPicklistValue = 'ZFXB';
@@ -270,7 +270,7 @@ private class CPBrokerageSAPTest {
 
     @isTest
     static void testProcessCPBrokerage_WrongStatusError() {
-        // Try to process a record that isn't 'Approved By L4 - Accounts'
+        // Try to process a record that isn't 'Approved By L3 - Accounts'
         setupPageParams(pendingBrokerageId, false);
         CPBrokerageSAP controller = new CPBrokerageSAP();
         ApexPages.getMessages().clear();
@@ -319,7 +319,7 @@ private class CPBrokerageSAPTest {
             CP_Brokerage__c CPBrokerageList = [SELECT Id, Name, Approval_Status__c, SAP_Document_No__c, Brokerage_Type__c, 
                               AOP__c, Total_Brokerage__c, Invoice_Status__c
                               FROM CP_Brokerage__c
-                              WHERE Approval_Status__c = 'Approved By L4 - Accounts' and Invoice_Date__c != null limit 1];
+                              WHERE Approval_Status__c = 'Approved By L3 - Accounts' and Invoice_Date__c != null limit 1];
             setupPageParams(CPBrokerageList.id, true); // EnterCondTypeforSAPDocNo = true
             CPBrokerageSAP controller = new CPBrokerageSAP();
             controller.selectedPicklistValue = 'ZFXB';

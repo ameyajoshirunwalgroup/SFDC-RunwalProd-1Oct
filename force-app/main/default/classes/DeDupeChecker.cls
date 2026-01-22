@@ -57,8 +57,8 @@ leadDuplicateMap.putAll(leadEmailDupMap);
             FROM Project__c
             WHERE Id IN :projectIds
         ]) {
-            if (proj.Segment_Lookup__r != null)
-                projectIdToDev.put(proj.Id, proj.Segment_Lookup__r.Name);
+            /*if (proj.Segment_Lookup__r != null) //Commented by Vinay 15-01-2026
+                projectIdToDev.put(proj.Id, proj.Segment_Lookup__r.Name);*/
         }
         
         // Step 3: Build composite keys for incoming leads

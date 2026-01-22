@@ -118,8 +118,10 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
         
@@ -487,9 +489,11 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
-        
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
+            
         
         
         objcustomer= new Opportunity();
@@ -742,8 +746,10 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
         
@@ -1055,8 +1061,10 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
         
@@ -1370,8 +1378,10 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
         
@@ -1667,8 +1677,10 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
         
@@ -1982,8 +1994,10 @@ public class TestSAPCP {
         prc.Project__c = objpr.Id;
         insert prc;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
+        a.Channel_Partner__c = cp.id;
+        update a;
+        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
         
@@ -2212,7 +2226,10 @@ public class TestSAPCP {
         insert br;
 		GetCPReceipts.callgetreceipt();
         SAPCPReceiptAPICallOut.getCPReceipts(null);
-        SAPCPPaymentInterface.dummy();
+        getCPBrkReceipts.callgetreceipt();
+        SAPCPReceiptAPICallOut.dummy();
+        SAPCPBrkReceiptAPICallOut.dummy();
+        //SAPCPPaymentInterface.dummy();
         
         bi2.Invoice_Number__c = '6327472482';
         bi3.Invoice_Number__c = '77385853';

@@ -260,9 +260,9 @@ public with sharing class SAPIntegrationServices {
             //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
              // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
-                orderHeader.ADF_OPTION = 'Y';
+                orderHeader.AdfOption = 'Y';
             }else{
-                orderHeader.ADF_OPTION = 'N';
+                orderHeader.AdfOption = 'N';
             }
             orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
             orderHeader.ZZREGDT = String.valueOf(bList[0].RW_Registration_Date__c);

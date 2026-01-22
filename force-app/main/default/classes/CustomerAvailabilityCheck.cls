@@ -70,7 +70,8 @@ global class CustomerAvailabilityCheck {
                     SendWhatsAppMsg.methodToSendWhatsAppMsg(null, OTPNumber, null, null, null, null, null, null, null, opps[0].Account.Country_Code__c, opps[0].Account.Mobile_No__c, 'lockated_otp');
                 }
                 
-                OrgWideEmailAddress[] owea = [select Id,DisplayName from OrgWideEmailAddress where DisplayName = 'customercare@runwalgroup.in'];
+                //OrgWideEmailAddress[] owea = [select Id,DisplayName from OrgWideEmailAddress where DisplayName = 'customercare@runwalgroup.in']; // Commented by Vinay 28-11-2025
+                OrgWideEmailAddress[] owea = [select Id,DisplayName from OrgWideEmailAddress where DisplayName = 'Customer Care']; // Added by Vinay 28-11-2025
                 Messaging.SingleEmailMessage message =new Messaging.SingleEmailMessage();
                 String htmlBody = 'Dear Customer,<br/><br/>'; 
                 htmlBody += 'Please use code ' + OTPNumber + ' to login in Runwal Connect app. <br/><br/>';

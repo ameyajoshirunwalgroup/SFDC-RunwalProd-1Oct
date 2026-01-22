@@ -187,9 +187,9 @@ public class SalesOrderUpdateCallout {
             orderHeader.SalesOrdNo=oList[0].SalesOrder_Number__c;
             // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
-                orderHeader.ADF_OPTION = 'Y';
+                orderHeader.AdfOption = 'Y';
             }else{
-                orderHeader.ADF_OPTION = 'N';
+                orderHeader.AdfOption = 'N';
             }
             //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
             orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
@@ -563,9 +563,9 @@ billPlanList.item.add(billPlan);
             
               // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
-                orderHeader.ADF_OPTION = 'Y';
+                orderHeader.AdfOption = 'Y';
             }else{
-                orderHeader.ADF_OPTION = 'N';
+                orderHeader.AdfOption = 'N';
             }
             orderHeader.ZzbookDt=String.ValueOf( bList[0].Booking_Date__c.date() );
             orderHeader.ZZREGSRNO=bList[0].RW_BRL_Number__c;

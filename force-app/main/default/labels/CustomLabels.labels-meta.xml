@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>AOP_Slab_Downgrade</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>AOP Slab Downgrade</shortDescription>
+        <value>1</value>
+    </labels>
+    <labels>
+        <fullName>AOP_Slab_Upgrade</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>AOP Slab Upgrade</shortDescription>
+        <value>ALL</value>
+    </labels>
+    <labels>
         <fullName>About_Us</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -51,7 +65,42 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Auto Callback Projects</shortDescription>
-        <value>a000I00002Cq8cW</value>
+        <value>a000I00002Cq8cW,a000I00001pYxT9,a000I00002LE9qm,a000I00001xus6C,a002800000LxnIh,a002800000LxnsG,a005j00000E0S2Q,a005j00000E1098,a005j00000NXbv5,a005j00000WMKqS,a00J40000048nGR,a00J4000004BRCF,a00J4000004CbWG,a00fu00000DFKmw</value>
+    </labels>
+    <labels>
+        <fullName>Billdesk_Client_Id</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Billdesk Client Id</shortDescription>
+        <value>rrepl7mt1</value>
+    </labels>
+    <labels>
+        <fullName>Billdesk_Merchint_Id</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Billdesk Merchint Id</shortDescription>
+        <value>RREPL7MT1</value>
+    </labels>
+    <labels>
+        <fullName>Billdesk_Payment_API</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Billdesk Payment API</shortDescription>
+        <value>https://api.billdesk.com/payments/ve1_2/orders/create</value>
+    </labels>
+    <labels>
+        <fullName>Billdesk_Secret_Key</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Billdesk Secret Key</shortDescription>
+        <value>iXTr9r9iZaRKdzHTllNVvUqmEpg8PvUY</value>
+    </labels>
+    <labels>
+        <fullName>Billdesk_Site_URL</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Billdesk Site URL</shortDescription>
+        <value>https://runwal.my.salesforce-sites.com/BillDesk</value>
     </labels>
     <labels>
         <fullName>Birthday_Wish_Image_Link</fullName>
@@ -144,6 +193,13 @@
         <protected>false</protected>
         <shortDescription>COLD_MATCH_COUNT</shortDescription>
         <value>0,1</value>
+    </labels>
+    <labels>
+        <fullName>CPMeetsCampaign</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CP Meets Campaign</shortDescription>
+        <value>CP Meets</value>
     </labels>
     <labels>
         <fullName>CP_Gardens</fullName>
@@ -401,8 +457,15 @@
         <fullName>Editable_walkin_Sources_for_CIF</fullName>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Editable walkin Sources for CIF</shortDescription>
-        <value>Corporate,Digital,Direct,Events,Exhibitions,Hoarding,Individual calling,Magazines,Newspapers,NRI,Outstation,Paper Inserts,Property Portals,Radio,Retention,Surround Marketing,Zee Marathi TVC,TV</value>
+        <shortDescription>Non Editable walkin Sources for CIF(Direct)</shortDescription>
+        <value>Channel Partner,Loyalty,Referral,R Circle Caller,Temp Channel Partner</value>
+    </labels>
+    <labels>
+        <fullName>EmailForChannelPartner</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>EmailForChannelPartner</shortDescription>
+        <value>cpcare@runwalgroup.in</value>
     </labels>
     <labels>
         <fullName>EmailToLeadUser</fullName>
@@ -499,7 +562,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Facebook Token</shortDescription>
-        <value>EAAZAaZA6wLEDIBPFvROQBPoCofCSGfUE3ZBaadw7ylib9NUCp7g87lu2Q6nq6bJq4NZBOkwQauxZAqcN3u79spa8q6QjG9Mq05mBkPaUoH2JZCxfTdFxxo64xidH8kOr7EyYzJKvGrYc5EKp1eIO7UK0QRTZATnFQlU74WqN414ZBfGil7HsKexFvmdiSRGp</value>
+        <value>EAAZAaZA6wLEDIBPry9ISceciEFsF5t85lGVro3YUzpC4u43SYZAhlZCDHnJxZC0XnZAbagRNKkFQWK7qzTAkZAz9QpeUTOHH3e2SKlk33id1mAquruz7CcB4L569TZAHXjwZBi8ZAquAmDeogvqOv6YMmExgMtGXgRIZAR929llBcBaba5cv22S6e6Ym0Pg8Af6</value>
     </labels>
     <labels>
         <fullName>Form_Expiry_Day</fullName>
@@ -561,6 +624,14 @@
         <value>3,4</value>
     </labels>
     <labels>
+        <fullName>Haptik_API_Version</fullName>
+        <categories>Value should be either Old or New</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Haptik API Version</shortDescription>
+        <value>Old</value>
+    </labels>
+    <labels>
         <fullName>Hoarding</fullName>
         <categories>walkin source - IT</categories>
         <language>en_US</language>
@@ -574,6 +645,13 @@
         <protected>false</protected>
         <shortDescription>Hoarding_Gardens</shortDescription>
         <value>45</value>
+    </labels>
+    <labels>
+        <fullName>Home_Loan_Brochure_for_Post_Sales_App</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Home Loan Brochure for Post Sales App</shortDescription>
+        <value>https://runwal--fullcopy.sandbox.my.salesforce.com/sfc/p/9I000001tHAv/a/9I000000e8wX/n.gG1k40G2A6dlhBgJfMeLFSeUB5z978flTXD5veOaY</value>
     </labels>
     <labels>
         <fullName>Home_Loan_Call_Task_Record_Type_Id</fullName>
@@ -609,6 +687,13 @@
         <protected>false</protected>
         <shortDescription>Home loan brochure Link</shortDescription>
         <value>https://youtu.be/xk_ZkB5CX_8</value>
+    </labels>
+    <labels>
+        <fullName>Inbound_Call_Center_Campaign</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Inbound Call Center Campaign</shortDescription>
+        <value>CommonServiceDesk</value>
     </labels>
     <labels>
         <fullName>Individual_Calling</fullName>
@@ -695,6 +780,13 @@
         <shortDescription>Line Break</shortDescription>
         <value>-
 -</value>
+    </labels>
+    <labels>
+        <fullName>Loan_Sanction_statuses_for_Post_Sales_App</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Loan Sanction statuses for Post Sales App</shortDescription>
+        <value>Loan Sanctioned,First Disbursement Received,Balance Transfer,Loan Closed</value>
     </labels>
     <labels>
         <fullName>Loyalty</fullName>
@@ -875,6 +967,13 @@
         <value>KK37f7a89c616b3150169a5542ac1d97df</value>
     </labels>
     <labels>
+        <fullName>Ozonetel_End_Point</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Ozonetel End Point</shortDescription>
+        <value>https://agent.cloudagent.ozonetel.com</value>
+    </labels>
+    <labels>
         <fullName>Ozonetel_User_Name</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -916,6 +1015,13 @@
         <protected>false</protected>
         <shortDescription>Payment Due Alert WhatsApp</shortDescription>
         <value>payment_outstanding_alert_7g</value>
+    </labels>
+    <labels>
+        <fullName>Possession_Guidelines_Doc_Id</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Possession Guidelines Doc Id</shortDescription>
+        <value>069fu00000J053KAAR</value>
     </labels>
     <labels>
         <fullName>Possession_Guidelines_Email</fullName>
@@ -1441,6 +1547,13 @@
         <value>COMMUSER</value>
     </labels>
     <labels>
+        <fullName>SAP_cp_ladder_inv</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SAP CP ladder Inv</shortDescription>
+        <value>http://123.108.44.39:8000/zcp_ladder/cp_ladder_inv?sap-client=300</value>
+    </labels>
+    <labels>
         <fullName>SAP_pricelistpoint</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -1599,6 +1712,13 @@
         <value>00528000001G0TPAA0</value>
     </labels>
     <labels>
+        <fullName>TATA_CTI_Projects</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TATA CTI Projects</shortDescription>
+        <value>7 Mahalaxmi,Runwal Woods</value>
+    </labels>
+    <labels>
         <fullName>TDS_Tutorial_Link</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -1625,7 +1745,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Task Assignment Users</shortDescription>
-        <value>0050I000009Ur8jQAC,0055j000006OdqKAAS,0055j000007KUP1AAO,0055j000007AhVtAAK,0050I00000AbqkvQAB,0050I00000AC47BQAT,0050I000008w6j6QAA,0055j000005YRv9AAG,0055j000007KUPfAAO,0055j000005YdwEAAS,0050I000009Ut8RQAS,005J4000000STywIAG</value>
+        <value>0050I000009Ur8jQAC,0055j000006OdqKAAS,0055j000007KUP1AAO,0050I00000AC47BQAT,0050I000008w6j6QAA,0055j000005YRv9AAG,0055j000005YdwEAAS,0050I000009Ut8RQAS,005J4000000STywIAG</value>
     </labels>
     <labels>
         <fullName>Task_DueDate</fullName>

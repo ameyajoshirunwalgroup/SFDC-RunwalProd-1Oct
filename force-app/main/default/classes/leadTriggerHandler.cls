@@ -656,7 +656,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
         }
         
         List<Lead> lstAllLead = [
-            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, Vertical__c, LeadSource, RW_Broker__c,name
+            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, Vertical__c, LeadSource, RW_Broker__c,name,RW_Project__c
             FROM Lead
             WHERE (Primary_Mobile_No_with_code__c IN :setOfMobileNumbers OR Secondary_Mobile_No_with_code__c IN :setOfMobileNumbers)
             AND Development__c IN :setOfDevelopmentNames
@@ -674,7 +674,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
         ];
         
         List<Lead> nriDupLeads = [
-            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, NRI_OS_Sourcing_Manager__c
+            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, NRI_OS_Sourcing_Manager__c,RW_Project__c
             FROM Lead
             WHERE (Primary_Mobile_No_with_code__c IN :setOfMobileNumbers OR Secondary_Mobile_No_with_code__c IN :setOfMobileNumbers)
             AND Development__c IN :setOfDevelopmentNames
@@ -698,7 +698,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                 key = mobile + '@@' + dupLead.Development__c + '@@' + dupLead.Vertical__c + '@@' + brokerKey;
                             } else if (dupLead.Vertical__c == 'Channel Partner' && dupLead.LeadSource == 'Temp Channel Partner') {
                                 // New condition for Channel Partner with Temp Channel Partner lead source
-                                String tempChannelPartnerKey = dupLead.RW_Broker__c != null ? dupLead.RW_Broker__c : 'NoTempChannelPartner';
+                                String tempChannelPartnerKey = dupLead.RW_Broker__c != null ? String.valueOf(dupLead.RW_Broker__c) : 'NoTempChannelPartner';  // Added String.valueOf by Vinay 20-01-2026
                                 key = mobile + '@@' + dupLead.Development__c + '@@' + dupLead.Vertical__c + '@@' + dupLead.LeadSource + '@@' + tempChannelPartnerKey;
                             } else if (dupLead.Vertical__c == 'Site Team' && dupLead.LeadSource == 'Channel Partner') {
                                 // Site Team with Channel Partner lead source
@@ -780,7 +780,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                             }
                                             if (mapOfDuplicateLead.containsKey(key)) {
                                                 for (Lead dupLead : mapOfDuplicateLead.get(key)) {
-                                                    if (dupLead.Id != EachLead.Id) {                                                        
+                                                    if (dupLead.Id != EachLead.Id && dupLead.RW_Project__c == EachLead.RW_Project__c){   // Added dupLead.RW_Project__c == EachLead.RW_Project__c by Vinay 15-01-2026                                                      
                                                         // Check mobile number match
                                                         if ((EachLead.Primary_Mobile_No_with_code__c != null &&
                                                              (EachLead.Primary_Mobile_No_with_code__c == dupLead.Primary_Mobile_No_with_code__c ||

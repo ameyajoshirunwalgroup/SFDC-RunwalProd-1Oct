@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cluster__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>To define campaign is for which cluster</description>
+    <label>Cluster</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Primary_Project__c</field>
+            <operation>equals</operation>
+            <valueField>Cluster__c.Project__c</valueField>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Cluster__c</referenceTo>
+    <relationshipLabel>Campaigns</relationshipLabel>
+    <relationshipName>Campaigns</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Lookup</type>
+</CustomField>

@@ -13,11 +13,11 @@ public without sharing class PresalesProjectDetailsController {
         
         If(strSObjectType == 'Lead'){   
             objLead = [SELECT Id,Email,LeadSource,Name,Project_Name__c,RW_Project__r.Id,RW_Project__r.RW_Project_Brochure_ID__c,RW_Project__r.RW_LocalityName__c, RW_Project__r.RW_Project_Brochure_PublicUrl__c,RW_Project__r.RW_Project_Location_Videos_Link__c,  
-                       RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c FROM Lead WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
+                       RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c,RDS_Country_Code__c FROM Lead WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
         }
         If(strSObjectType == 'Opportunity'){  
             objOpp = [SELECT Id,RW_Email__c,LeadSource,Name,Project_Name__c,RW_Project__r.Id,RW_Project__r.RW_Project_Brochure_ID__c,RW_Project__r.RW_LocalityName__c,  RW_Project__r.RW_Project_Brochure_PublicUrl__c,RW_Project__r.RW_Project_Location_Videos_Link__c,  
-                      RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c FROM Opportunity WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
+                      RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c,Account.Country_Code__c FROM Opportunity WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
         }
         If(strSObjectType == 'Prospect__c'){  
             System.debug('strSObjectType____'+strSObjectType); 
@@ -25,7 +25,7 @@ public without sharing class PresalesProjectDetailsController {
             objPrspct = [SELECT Id,Project__r.Name,Lead__r.Email,Lead__r.RW_Mobile_No__c,Lead__r.LeadSource,Opportunity__r.LeadSource,Opportunity__r.RW_Email__c, Opportunity__r.RW_Mobile_No__c,Lead__r.IsConverted,Lead__r.ConvertedOpportunityId,
                          Project__c,Name,Project__r.RW_Project_Brochure_ID__c,Project__r.RW_LocalityName__c,  
                          Project__r.RW_Project_Brochure_PublicUrl__c,Project__r.RW_Project_Location_Videos_Link__c,  
-                         Project__r.Site_Address_Map_Link__c,Lead_Source__c FROM Prospect__c WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
+                         Project__r.Site_Address_Map_Link__c,Lead_Source__c,Lead__r.RDS_Country_Code__c,Opportunity__r.Account.Country_Code__c FROM Prospect__c WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
             System.debug('objPrspct____'+objPrspct);    
         }
         
@@ -307,10 +307,15 @@ public without sharing class PresalesProjectDetailsController {
                             String mobileNumber = String.isNotBlank(objLead.RW_Mobile_No__c) ? objLead.RW_Mobile_No__c : null;
                             
                             if(objLead.RW_Project__r.Site_Address_Map_Link__c != null && objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c != null && objLead.RW_Project__r.RW_Project_Location_Videos_Link__c != null ){
-                                SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(leadName, projectName, localityName,
+                                /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(leadName, projectName, localityName,
                                                                                objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c, 
                                                                                objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,
-                                                                               objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                                                               objLead.RW_Mobile_No__c,'Lead Project Content 2');*/ //Commented by Vinay 10-10-2025
+                                if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                                    SendWhatsAppMsg.methodToSendWhatsAppMsgNew(leadName, projectName, localityName,objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RDS_Country_Code__c,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                }else{
+                                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(leadName, projectName, localityName,objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                }
                                 system.debug('Send Whatsapp Method for single projects called__');
                             }
                             
@@ -336,10 +341,16 @@ public without sharing class PresalesProjectDetailsController {
                             for(Project__c objProject : lstProject){
                                 
                                 if(objProject.Site_Address_Map_Link__c != null && objProject.RW_Project_Brochure_PublicUrl__c != null && objProject.RW_Project_Location_Videos_Link__c != null ){
-                                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,
+                                    /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,
                                                                                    objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c, 
                                                                                    objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,
-                                                                                   objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                                                                   objLead.RW_Mobile_No__c,'Lead Project Content 2');*/ //Commented by Vinay 10-10-2025
+                                    
+                                    if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                                        SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c,objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RDS_Country_Code__c,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                    }else{
+                                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c,objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                    }
                                     
                                     system.debug('Send Whatsapp Method for multiple projects called__');
                                     preComm.RW_ProjectDetails_WhatsApp_Sent_Date__c  = system.now();
@@ -365,10 +376,15 @@ public without sharing class PresalesProjectDetailsController {
                         Signature = System.Label.RW_NotCPSignature;
                         ContactNumber = System.Label.RW_NotCPContactNumber;
                         
-                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,
+                        /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,
                                                                        objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,
                                                                        objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature, 
-                                                                       objOpp.RW_Mobile_No__c,'Lead Project Content 2');  
+                                                                       objOpp.RW_Mobile_No__c,'Lead Project Content 2'); */ //Commented by Vinay 10-10-2025
+                        if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                            SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objOpp.Account.Country_Code__c,objOpp.RW_Mobile_No__c,'Lead Project Content 2');
+                        }else{
+                            SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objOpp.RW_Mobile_No__c,'Lead Project Content 2');
+                        }
                         preComm.RW_ProjectDetails_WhatsApp_Sent_Date__c  = system.now();  
                         preComm.RW_Project_Details_Mode_of_Communication__c += ',WhatsApp';
                     }
@@ -389,10 +405,15 @@ public without sharing class PresalesProjectDetailsController {
                            ProsLeadSignature = System.Label.RW_NotCPSignature;
                            ProsLeadContactNumber = System.Label.RW_NotCPContactNumber;
                            
-                           SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,
+                           /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,
                                                                           objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,
                                                                           objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,
-                                                                          ProsLeadSignature,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');
+                                                                          ProsLeadSignature,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');*/ //Commented by Vinay 10-10-2025
+                            if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                                SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,ProsLeadSignature,objPrspct.Lead__r.RDS_Country_Code__c,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');
+                            }else{
+                                SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,ProsLeadSignature,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');
+                            }
                        }
                        
                    }else if(String.isNotBlank(objPrspct.Opportunity__r.RW_Mobile_No__c) && String.isNotBlank(objPrspct.Opportunity__r.LeadSource) ){
@@ -406,10 +427,16 @@ public without sharing class PresalesProjectDetailsController {
                            ProsOppSignature = System.Label.RW_NotCPSignature;
                            ProsOppContactNumber = System.Label.RW_NotCPContactNumber;
                            
-                           SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,
+                           /*SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,
                                                                           objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,
                                                                           objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature, 
-                                                                          objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');
+                                                                          objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');*/ //Commented by Vinay 10-10-2025
+
+                            if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                                SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature,objPrspct.Opportunity__r.Account.Country_Code__c,objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');
+                            }else{
+                                SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature,objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');
+                            }
                        }
                    }
                 

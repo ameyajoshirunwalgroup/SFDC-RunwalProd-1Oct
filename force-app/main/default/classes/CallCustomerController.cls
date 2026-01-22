@@ -173,7 +173,7 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
             System.debug('agentId: ' + agentId);
             apiKey = System.label.Ozonetel_API_Key;
             HttpRequest req = new HttpRequest();
-            req.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/AgentManualDial');//(.invalid) Added by Prashant
+            req.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/AgentManualDial');//(.invalid) Added by Prashant // Commented by Vinay 21-11-2025
             req.setMethod('POST');
             req.setHeader('Content-Type', 'application/json');
             req.setHeader('apiKey', apiKey);

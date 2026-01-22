@@ -417,7 +417,7 @@ public static void testprevCallRemarks() {
             WelcomeCallChecklist.saveCheckList(
                 finalRemarksList, wrpObj, status, addRrmks, modeOfFunding,
                 'Axis Bank', 'Axis Bank', 'Axis Bank',
-                bankPreferenceForLoan, new List<Receipt__c>{r1}, isDhamaka
+                bankPreferenceForLoan,'Hold', new List<Receipt__c>{r1}, isDhamaka
             );
             
             Test.stopTest();

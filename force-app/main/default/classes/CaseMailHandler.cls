@@ -53,7 +53,7 @@ public class CaseMailHandler {
        }
      }
     public static void CaseClosureEmailCustomer(Set<Id> CaseId) {
-        List<Case> CaseList = [SELECT Id,AccountId,Account.PersonEmail,CaseNumber,ContactEmail,RecordTypeId,RW_Reporting_2_Email__c,Description ,SuppliedEmail,Subject,Status,RW_Complaint_Type__c,RW_Complaint_SubType__c,RW_Complaint_Sub_Subtype__c,Account.Name,owner.name,ClosedDate,CSAT_Feedback_Remark__c,CSAT_Feedback_Rating__c,Owner.Email  FROM Case WHERE Id IN :CaseId AND Account.Stop_Case_Emails__c = false]; //Added Account.Stop_Case_Emails__c = false by Vinay 17-07-2025 
+        List<Case> CaseList = [SELECT Id,AccountId,Account.PersonEmail,CaseNumber,ContactEmail,RecordTypeId,RW_Reporting_2_Email__c,Description ,SuppliedEmail,Subject,Status,RW_Complaint_Type__c,RW_Complaint_SubType__c,RW_Complaint_Sub_Subtype__c,Account.Name,owner.name,ClosedDate,CSAT_Feedback_Remark__c,CSAT_Feedback_Rating__c,Owner.Email  FROM Case WHERE Id IN :CaseId AND Account.Stop_Case_Emails__c = false AND Opportunity__r.Booking__r.Status__c = 'Booking Confirmed']; //Added Account.Stop_Case_Emails__c = false by Vinay 17-07-2025 //Added Opportunity__r.Booking__r.Status__c = 'Booking Confirmed' by Vinay 27-11-2025
         String body = '';
         String bodynew = '';
         Boolean CheckAccount=false;

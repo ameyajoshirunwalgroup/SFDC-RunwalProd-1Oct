@@ -149,7 +149,7 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
             String queryString = 'apiKey='+apiKey+'&userName='+username+'&custNumber='+customerPh+'&phoneName='+PhoneName+'&did='+DID+'&uui='+RecordId;
             
             //String endpoint = 'https://api1.cloudagent.in/CAServices/PhoneManualDial.php?'+queryString;
-            String endpoint = 'https://in1-ccaas-api.ozonetel.com/CAServices/PhoneManualDial.php?'+queryString;//(.invalid) Added by Prashant
+            String endpoint = 'https://in1-ccaas-api.ozonetel.com/CAServices/PhoneManualDial.php?'+queryString;//(.invalid) Added by Prashant 
             System.debug('click2call URL:' + endpoint);
             Http httpProtocol = new Http();
             

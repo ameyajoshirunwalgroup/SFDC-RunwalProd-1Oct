@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Active_Home_Loan_RMS</fullName>
+    <columns>NAME</columns>
+    <columns>Project__c</columns>
+    <columns>Bank_Name__c</columns>
+    <columns>RM_Name__c</columns>
+    <columns>RM_Email__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Active__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Active Home Loan RMS</label>
+</ListView>

@@ -50,7 +50,7 @@ public class RWCaseTriggerHandler
         updateEscalationTAT(lstTriggerNew, null); // Added by coServe 13-11-2024
         updateRMNameasOwnerforWalkinCases(lstTriggerNew);
         //LocobuzzCaseAssignment.assignToProjectSpoc(lstTriggerNew); // Added by Vinay 16-01-2025
-        assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 07-03-2025
+        //assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 07-03-2025 //Commented by Vinay 09-01-2026
         checkForCancelledCustomer(lstTriggerNew); //Added by Vinay 10-06-2025
         //changeOwnerFromSysAdminToRM(lstTriggerNew); //Added by Vinay 18-04-2025 to reassign the owner from System Admin to RM
     }
@@ -219,11 +219,13 @@ public class RWCaseTriggerHandler
         list<Account> lstAccount = [SELECT Id, RW_Email__c, IsPersonAccount, PersonEmail, PersonContactId, Stop_Case_Emails__c, (SELECT Id, AccountId, StageName, Booking__r.Booking_Date__c, CreatedDate, Booking__r.RW_Key_handover_date__c FROM Opportunities WHERE StageName = 'Unit Booked' ORDER BY Booking__r.Booking_Date__c DESC) FROM Account WHERE PersonEmail =: emailVsCase.keySet() AND IsPersonAccount = true];
         //Added by Prashant to tag Opportunity on case for CRN. 11-2-25 //START
         String OppId;
+        Opportunity firstOpp; // Added by Vinay 09-01-2026
         if (!lstAccount.isEmpty()) {
     		Account acc = lstAccount[0];
     
     		if (!acc.Opportunities.isEmpty()) {
-                Opportunity firstOpp = acc.Opportunities[0];
+                //Opportunity firstOpp = acc.Opportunities[0]; // Commented by Vinay 09-01-2026
+                firstOpp = acc.Opportunities[0]; // Added by Vinay 09-01-2026
         		System.debug('First Opportunity ID: ' + firstOpp.Id);
                 OppId = firstOpp.Id;
             }
@@ -277,10 +279,15 @@ public class RWCaseTriggerHandler
                 emailVsCase.get(email).Opportunity__c = OppId;//Added by Prashant - 11-2-25.
                 emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(emailVsAccounts.get(email)[0].Id); //Added by Vinay 10-06-2025
             }
+            if(firstOpp != null && firstOpp.Booking__c != null && firstOpp.Booking__r.RW_Key_handover_date__c != null){  // Added by Vinay 09-01-2026
+                emailVsCase.get(email).Post_Possession_Customer__c = true;
+                emailVsCase.get(email).OwnerId = System.label.Default_Facility_Management_User;
+                emailVsCase.get(email).FM_Team_Assigned__c = true;
+            }
         }
         
-        //Added by Vinay 15-01-2025 Start
-        List<Opportunity> opps = [SELECT Id, Name, AccountId, Account.PersonEmail, Booking__r.RW_Key_handover_date__c, RW_RM_Name__c FROM Opportunity WHERE Account.PersonEmail =: emailVsCase.keySet()];
+        //Added by Vinay 15-01-2025 Start //Commented by Vinay 09-01-2026
+        /*List<Opportunity> opps = [SELECT Id, Name, AccountId, Account.PersonEmail, Booking__r.RW_Key_handover_date__c, RW_RM_Name__c FROM Opportunity WHERE Account.PersonEmail =: emailVsCase.keySet()];
         Set<String> postPossCustomers = new Set<String>();
         Map<String, String> rmsMap = new Map<String, String>();
         for(Opportunity opp : opps){
@@ -301,7 +308,7 @@ public class RWCaseTriggerHandler
                 cs.FM_Team_Assigned__c = true;
                 //cs.RW_RM_Name__c = null; //Commented to fix the RM Name null issue 17-04-2025 by Vinay
             }
-        }
+        }*/
         //Added by Vinay 15-01-2025 End
     }
     
@@ -317,7 +324,7 @@ public class RWCaseTriggerHandler
         }
         if(accIds.size() > 0){
             Map<String, List<Opportunity>> accVsOppMap = new Map<String, List<Opportunity>>();
-            List<Opportunity> bookedOppList = [SELECT Id, AccountId, RW_Project_Unit__c, RW_Project__c, RW_RM_Name__c, Booking__r.RW_Key_handover_date__c FROM Opportunity WHERE AccountId =: accIds AND StageName = 'Unit Booked' AND RW_Project_Unit__c != null ORDER BY Booking__r.Booking_Date__c DESC];
+            List<Opportunity> bookedOppList = [SELECT Id, AccountId, RW_Project_Unit__c, RW_Project__c, RW_RM_Name__c, Booking__r.RW_Key_handover_date__c,RW_Project_Unit__r.Relationship_Manager__r.user__c FROM Opportunity WHERE AccountId =: accIds AND StageName = 'Unit Booked' AND RW_Project_Unit__c != null ORDER BY Booking__r.Booking_Date__c DESC];
             for(Opportunity opp : bookedOppList){
                 if(accVsOppMap.get(opp.AccountId) != null){
                     accVsOppMap.get(opp.AccountId).add(opp);
@@ -327,13 +334,18 @@ public class RWCaseTriggerHandler
             }
             
             List<Case> caseList = new List<Case>();
-            for(Case c : [SELECT Id, AccountId, RW_Project__c, locobuzz__Locobuzz_ID__c, Post_Possession_Customer__c  FROM Case WHERE Id =: caseIds]){
+            for(Case c : [SELECT Id, AccountId, RW_Project__c, locobuzz__Locobuzz_ID__c, Post_Possession_Customer__c, RW_RM_Name__c, FM_Team_Assigned__c  FROM Case WHERE Id =: caseIds]){
                 if(accVsOppMap.get(c.AccountId) != null && accVsOppMap.get(c.AccountId).size() > 0){
                     c.RW_Project_Unit__c = accVsOppMap.get(c.AccountId)[0].RW_Project_Unit__c;
                     c.RW_Project__c = accVsOppMap.get(c.AccountId)[0].RW_Project__c;
                     c.Opportunity__c = accVsOppMap.get(c.AccountId)[0].Id;
-                    if(String.isBlank(c.locobuzz__Locobuzz_ID__c) && !c.Post_Possession_Customer__c){
+                    if(String.isBlank(c.locobuzz__Locobuzz_ID__c) && !c.Post_Possession_Customer__c && c.RW_RM_Name__c == null){  //Added c.RW_RM_Name__c == null by Vinay 19-01-2026
                         c.RW_RM_Name__c = accVsOppMap.get(c.AccountId)[0].RW_RM_Name__c;
+                    }
+                    if(accVsOppMap.get(c.AccountId)[0].Booking__r.RW_Key_handover_date__c == null && c.FM_Team_Assigned__c == true){  // Added by Vinay 12-01-2026
+                        c.Post_Possession_Customer__c = false;
+                        c.OwnerId = accVsOppMap.get(c.AccountId)[0].RW_Project_Unit__r.Relationship_Manager__r.user__c;
+                        c.FM_Team_Assigned__c = false;
                     }
                     caseList.add(c);
                 }
@@ -407,7 +419,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         updateEscalationTAT(lstTriggerNew,mapTriggerOld); // Added by coServe 13-11-2024
         //LocobuzzCaseAssignment.assignToProjectSpoc(lstTriggerNew); // Added by Vinay 16-01-2025 //Commented by Vinay 23-04-2025
         updateUnitWhenProjectChanged(lstTriggerNew, mapTriggerOld); // Added by Vinay 03-03-2025
-        //assigneOwnerPostPossession(lstTriggerNew,mapTriggerOld); //Added by Vinay 07-03-2025
+        assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 09-01-2026
     }
     
     private void onAfterInsert(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
@@ -427,6 +439,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         //CreateTask(lstTriggerNew, mapTriggerOld);  //Commented by Vinay 04-05-2025 to stop multiple tasks creation
         updateTaskOwner(lstTriggerNew, mapTriggerOld);
         List<String> projectChangedCaseIds = new List<String>();
+        List<Id> oppUpdatedCaseIds = new List<Id>(); //Added by Vinay 09-01-2026
         if(checkRecursion.isFirstRun()){ 
             for(Case objCase : lstTriggerNew){
                 if(objCase.Status != 'Case Closed'){
@@ -435,8 +448,22 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 if(objCase.RW_Project__c != mapTriggerOld.get(objCase.Id).RW_Project__c){
                     projectChangedCaseIds.add(objCase.Id);
                 }
+                if(objCase.Opportunity__c != null && mapTriggerOld.get(objCase.Id).Opportunity__c != objCase.Opportunity__c){ //Added by Vinay 09-01-2026
+                    oppUpdatedCaseIds.add(objCase.Id);
+                }
             }
             
+            //Added by Vinay 09-01-2026 Start
+			System.debug('oppUpdatedCaseIds: ' + oppUpdatedCaseIds);
+            if(oppUpdatedCaseIds.size() > 0){
+                List<Case> cases = [SELECT Id,Opportunity__c,Opportunity__r.Booking__c,Opportunity__r.Booking__r.RW_Key_handover_date__c FROM Case WHERE Id =: oppUpdatedCaseIds AND Opportunity__r.Booking__r.RW_Key_handover_date__c != null AND FM_Team_Assigned__c = false];
+                for(Case cs : cases){
+                    cs.OwnerId = System.label.Default_Facility_Management_User;
+                    cs.FM_Team_Assigned__c = true;
+                }
+                update cases;
+            }
+            //Added by Vinay 09-01-2026 End
            // sendWhatsAppFeedbackLink(lstTriggerNew,mapTriggerOld); // Added by coServe 30-10-2023
         }
         //assigneOwnerPostPossession(lstTriggerNew);

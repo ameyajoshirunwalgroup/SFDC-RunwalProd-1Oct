@@ -269,19 +269,30 @@ LIMIT 1
                     lstLeadSource.add(objWrap);
                 }
                 if(directLead){ //Added by coServe 17-06-2024
+                    List<String> nonEditableSources =System.label.Editable_walkin_Sources_for_CIF.split(',');
+
                     // List<String> sources = System.label.Editable_walkin_Sources_for_CIF.split(',');
                     // if(sources.contains(f.getLabel())){
                     //     objWrap.disable = false;
                     //     objWrap.strLabel = f.getLabel();
                     //     objWrap.strLeadSource = f.getValue();
                     //}else{
-                        if(f.getLabel() == 'Direct') {
-                            objWrap.isSelected = true;           //checked
-                        }
-                        system.debug('getLabel()------>'+f.getLabel());
-                        objWrap.disable = true;
-                        objWrap.strLabel = f.getLabel();
-                        objWrap.strLeadSource = f.getValue();
+                    if(f.getLabel() == 'Direct') {
+                        objWrap.isSelected = true;           //checked
+                        objWrap.disable = false;
+                    }
+                    else if(nonEditableSources.contains(f.getLabel())){
+                        objWrap.isSelected = false;
+        				objWrap.disable = true;
+                    }
+                    else{
+                        //objWrap.isSelected = false;
+        				objWrap.disable = false; 
+                    }
+                    system.debug('getLabel()------>'+f.getLabel());
+                       
+                    objWrap.strLabel = f.getLabel();
+                    objWrap.strLeadSource = f.getValue();
                     //}
                 }
                 

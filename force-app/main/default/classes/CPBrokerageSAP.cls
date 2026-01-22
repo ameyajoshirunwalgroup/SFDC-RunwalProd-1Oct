@@ -24,8 +24,8 @@ public class CPBrokerageSAP {
         // Initial validation in constructor (same as BrokerageInvoiceSAP)
         List<CP_Brokerage__c> blist = [SELECT Id, Name, Approval_Status__c, SAP_Document_No__c, Brokerage_Type__c, AOP__c
                                       FROM CP_Brokerage__c
-                                      WHERE Approval_Status__c = 'Approved By L4 - Accounts' AND Id = :BrokerageIds];
-                                      
+                                     // WHERE Approval_Status__c = 'Approved By L4 - Accounts' AND Id = :BrokerageIds];
+                                      WHERE Approval_Status__c = 'Approved By L3 - Accounts' AND Id = :BrokerageIds];//Added by Prashant as last status used is L3.//15-12-25..
         if (!blist.isEmpty() && blist.size() > 0 && EnterCondTypeforSAPDocNo == true) {
             if(blist[0].Brokerage_Type__c == 'Base Brokerage' && blist[0].AOP__c == null){
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,
@@ -53,7 +53,8 @@ public class CPBrokerageSAP {
                 }
                 
                 // Check approval status
-                if(brokerage.Approval_Status__c != 'Approved By L4 - Accounts'){
+                //if(brokerage.Approval_Status__c != 'Approved By L4 - Accounts'){
+                if(brokerage.Approval_Status__c != 'Approved By L3 - Accounts'){//Added by Prashant as last status used is L3.//15-12-25..
                     ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,
                         'CP Brokerage must be approved by L3-Accounts before SAP processing. Current Status: ' + brokerage.Approval_Status__c));
                 }
@@ -82,8 +83,8 @@ public class CPBrokerageSAP {
         CPBrokerageList = [SELECT Id, Name, Approval_Status__c, SAP_Document_No__c, Brokerage_Type__c, 
                           AOP__c, Total_Brokerage__c, Invoice_Status__c
                           FROM CP_Brokerage__c
-                          WHERE Approval_Status__c = 'Approved By L4 - Accounts' AND Id = :BrokerageIds];
-        
+                          //WHERE Approval_Status__c = 'Approved By L4 - Accounts' AND Id = :BrokerageIds];
+                           WHERE Approval_Status__c = 'Approved By L3 - Accounts' AND Id = :BrokerageIds];//Added by Prashant as last status used is L3.//15-12-25..
         System.debug('CPBrokerageList: ' + CPBrokerageList);
         System.debug('CPBrokerageList Size: ' + CPBrokerageList.size());
         System.debug('Selected Picklist Value: ' + selectedPicklistValue);

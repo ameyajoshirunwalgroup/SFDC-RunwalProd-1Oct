@@ -255,6 +255,8 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
         //Added by coServe 05-04-2024 End
         
         system.debug(' countryCode :: '+countryCode);
+
+        List<String> inboundCallCenterCampaigns = System.label.Inbound_Call_Center_Campaign.split(','); //Added by Vinay 01-12-2025
         
         string campaignId;
         String LeadSource, LeadSubSource,LeadSubSubSource, PrimaryCampaignCode, CampaignName, Project;
@@ -313,21 +315,26 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
             
             List<String> sList = Skill.split('\\,');
             system.debug('sList:'+sList.size());
-            if(sList.size()>1){
-                system.debug('true'+sList[1].isNumeric());
-                String AgentNumber = sList[1].right(10);
-                User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone  FROM User Where Phone  =: AgentNumber];
+            if(sList.size()>1 || inboundCallCenterCampaigns.contains(CampaignNameCTI)){
+                
+                //User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Campaign_Name__c  FROM User Where Phone  =: AgentNumber]; //Commented by Vinay 18-12-2025
+                User usr; //Added by Vinay 18-12-2025
+                if(CampaignNameCTI != 'CommonServiceDesk'){ //Added by Vinay 18-12-2025
+                    system.debug('true'+sList[1].isNumeric());
+                    String AgentNumber = sList[1].right(10);
+                    usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Campaign_Name__c  FROM User Where Phone  =: AgentNumber];
+                }
                 //List<Opportunity> oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c FROM Opportunity WHERE RW_Mobile_No__c =: customerNumber ]; //Commented by coServe 05-04-2024
                 //Added by coServe 05-04-2024 Start
                 List<Opportunity> oppoListinbd = new List<Opportunity>();
                 List<Opportunity> bookedOppList = new List<Opportunity>();
                 if(checkWithCode){
-                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
+                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
                     if(oppoListinbd.size() == 0){
-                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE RW_Mobile_No__c =: updatedMobile  OR RW_Secondary_Mobile_No__c =: updatedMobile];
+                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE RW_Mobile_No__c =: updatedMobile  OR RW_Secondary_Mobile_No__c =: updatedMobile];
                     }
                 }else{
-                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile];
+                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile];
                 }
                 for(Opportunity opp : oppoListinbd){ //Added by coServe 08-05-2024
                     if(opp.StageName == 'Unit Booked'){
@@ -372,7 +379,35 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                             t.Task_Type__c = 'Presales Call';
                             t.WhatId = oppoListinbd[0].id; //Added by coServe 08-05-2024
                         }
-                        t.OwnerId = usr.id;
+                        //t.OwnerId = usr.id; //Commented by Vinay 01-12-2025
+                        /*if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c) && oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){ //Added by Vinay 25-08-2025
+                            t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                        }else{
+                            t.OwnerId = usr.id;
+                        }*/
+                        if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c)){ //Added by Vinay 18-12-2025
+                            if(bookedOppList.size() > 0 && bookedOppList[0].RW_Project_Unit__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                t.OwnerId = bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;
+                            }else if(oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                            }
+                        }else{
+                            t.OwnerId = usr.id;
+                        }
+                    }
+                    if(inboundCallCenterCampaigns.contains(CampaignNameCTI)){ //Added by Vinay 18-12-2025
+                        List<String> inboundAgentAttemptedList = cb.AgentID.split(' -> '); //Added by Vinay 19-01-2026
+                        String inboundDeskAgent = inboundAgentAttemptedList[inboundAgentAttemptedList.size() - 1]; //Added by Vinay 19-01-2026
+                        if(bookedOppList.size() > 0 && bookedOppList[0].RW_Project_Unit__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                            t.OwnerId = bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;
+                            t.WhatId = bookedOppList[0].id;
+                            t.Inbound_Desk_Agent__c = (inboundDeskAgent != bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c)? inboundDeskAgent : null; //Added by Vinay 19-01-2026
+                        }else if(oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                            t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;   
+                            t.WhatId = oppoListinbd[0].id;
+                            t.Inbound_Desk_Agent__c = (inboundDeskAgent != oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c)? inboundDeskAgent : null; //Added by Vinay 19-01-2026                     
+                        }
+                        //t.Inbound_Desk_Agent__c = cb.AgentID; //Commented by Vinay 19-01-2026
                     }
                     if((callStatus.equalsIgnoreCase('NotAnswered'))){
                         t.Subject = 'Missed Call';
@@ -426,21 +461,26 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
             List<String> sList = Skill.split('\\,');
             system.debug('sList:'+sList.size());
             
-            if(sList.size()>1){
-                system.debug('true'+sList[1].isNumeric());
-                String AgentNumber = sList[1].right(10);
-                User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Phone  FROM User Where Phone  =: AgentNumber];
+            if(sList.size()>1 || inboundCallCenterCampaigns.contains(CampaignNameCTI)){
+                
+                //User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Phone,Campaign_Name__c  FROM User Where Phone  =: AgentNumber]; //Commented by Vinay 18-12-2025
+                User usr; //Added by Vinay 18-12-2025
+                if(!inboundCallCenterCampaigns.contains(CampaignNameCTI)){ //Added by Vinay 18-12-2025
+                    system.debug('true'+sList[1].isNumeric());
+                    String AgentNumber = sList[1].right(10);
+                	usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Phone,Campaign_Name__c  FROM User Where Phone  =: AgentNumber];
+                }
                 //List<Opportunity> oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c FROM Opportunity WHERE (RW_Mobile_No__c =: customerNumber OR RW_Secondary_Mobile_No__c =: customerNumber) ]; //Commented by coServe 05-04-2024
                 //Added by coServe 05-04-2024 Start
                 List<Opportunity> oppoListinbd = new List<Opportunity>();
                 List<Opportunity> bookedOppList = new List<Opportunity>();
                 if(checkWithCode){
-                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
+                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
                     if(oppoListinbd.size() == 0){
-                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
+                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
                     }
                 }else{
-                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
+                    oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
                 }
                 for(Opportunity opp : oppoListinbd){ //Added by coServe 08-05-2024
                     if(opp.StageName == 'Unit Booked'){
@@ -483,7 +523,35 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                             t.Task_Type__c = 'Presales Call';
                             t.WhatId = oppoListinbd[0].id; //Added by coServe 08-05-2024
                         }
-                        t.OwnerId = usr.id;
+                        //t.OwnerId = usr.id; //Commented by Vinay 01-12-2025
+                        /*if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c) && oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){ //Added by Vinay 25-08-2025
+                            t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                        }else{
+                            t.OwnerId = usr.id;
+                        }*/
+                        if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c)){ //Added by Vinay 18-12-2025
+                            if(bookedOppList.size() > 0 && bookedOppList[0].RW_Project_Unit__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                t.OwnerId = bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;
+                            }else if(oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                            }
+                        }else{
+                            t.OwnerId = usr.id;
+                        }
+                    }
+                    if(inboundCallCenterCampaigns.contains(CampaignNameCTI)){ //Added by Vinay 18-12-2025
+                        List<String> inboundAgentAttemptedList = cb.AgentID.split(' -> '); //Added by Vinay 19-01-2026
+                        String inboundDeskAgent = inboundAgentAttemptedList[inboundAgentAttemptedList.size() - 1]; //Added by Vinay 19-01-2026
+                        if(bookedOppList.size() > 0 && bookedOppList[0].RW_Project_Unit__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                            t.OwnerId = bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;
+                            t.WhatId = bookedOppList[0].id; 
+                            t.Inbound_Desk_Agent__c = (inboundDeskAgent != bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c)? inboundDeskAgent : null; //Added by Vinay 19-01-2026
+                        }else if(oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                            t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;   
+                            t.WhatId = oppoListinbd[0].id;  
+                            t.Inbound_Desk_Agent__c = (inboundDeskAgent != oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c)? inboundDeskAgent : null; //Added by Vinay 19-01-2026                    
+                        }
+                        //t.Inbound_Desk_Agent__c = cb.AgentID; //Commented by Vinay 19-01-2026
                     }
                     if((callStatus.equalsIgnoreCase('NotAnswered'))){
                         t.Subject = 'Missed Call';
@@ -532,19 +600,19 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                 if(UUIList[0] != ''){
                     system.debug('IM IN If');
                     String AgentID = UUIList[0];
-                    List<User> usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone  FROM User Where CTI_Agent_ID__c  =: AgentID];
+                    List<User> usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Campaign_Name__c  FROM User Where CTI_Agent_ID__c  =: AgentID];
                     //List<Opportunity> oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c FROM Opportunity WHERE (RW_Mobile_No__c =: customerNumber OR RW_Secondary_Mobile_No__c =: customerNumber) ];// Commented by coServe 05-04-2024
                     //Added by coServe 05-04-2024 Start
                     List<Opportunity> oppoListinbd = new List<Opportunity>();
                     List<Opportunity> bookedOppList = new List<Opportunity>();
                     
                     if(checkWithCode){
-                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
+                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
                         if(oppoListinbd.size() == 0){
-                            oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
+                            oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
                         }
                     }else{
-                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
+                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c,RW_Project_Unit__r.Relationship_Manager__r.User__r.Name FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) ];
                     }
                     for(Opportunity opp : oppoListinbd){ //Added by coServe 08-05-2024
                         if(opp.StageName == 'Unit Booked'){
@@ -597,7 +665,35 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                                 t.Task_Type__c = 'Presales Call';
                                 t.WhatId = oppoListinbd[0].id; //Added by coServe 08-05-2024
                             }
-                            t.OwnerId = usr[0].id;
+                            //t.OwnerId = usr[0].id; //Commented by Vinay 01-12-2025
+                            /*if(inboundCallCenterCampaigns.contains(usr[0].Campaign_Name__c) && oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){ //Added by Vinay 25-08-2025
+                                t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                            }else{
+                                t.OwnerId = usr[0].id;
+                            }*/
+                            if(inboundCallCenterCampaigns.contains(usr[0].Campaign_Name__c)){ //Added by Vinay 18-12-2025
+                                if(bookedOppList.size() > 0 && bookedOppList[0].RW_Project_Unit__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                    t.OwnerId = bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;
+                                }else if(oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                    t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                                }
+                            }else{
+                                t.OwnerId = usr[0].id;
+                            }
+                        }
+                        if(inboundCallCenterCampaigns.contains(CampaignNameCTI)){ //Added by Vinay 18-12-2025
+                            List<String> inboundAgentAttemptedList = cb.AgentID.split(' -> '); //Added by Vinay 19-01-2026
+                        	String inboundDeskAgent = inboundAgentAttemptedList[inboundAgentAttemptedList.size() - 1]; //Added by Vinay 19-01-2026
+                            if(bookedOppList.size() > 0 && bookedOppList[0].RW_Project_Unit__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__c != null && bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                t.OwnerId = bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;
+                                t.WhatId = bookedOppList[0].id;  
+                                t.Inbound_Desk_Agent__c = (inboundDeskAgent != bookedOppList[0].RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c)? inboundDeskAgent : null; //Added by Vinay 19-01-2026
+                            }else if(oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){
+                                t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;   
+                                t.WhatId = oppoListinbd[0].id; 
+                                t.Inbound_Desk_Agent__c = (inboundDeskAgent != oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__r.CTI_Agent_ID__c)? inboundDeskAgent : null; //Added by Vinay 19-01-2026                      
+                            }
+                            //t.Inbound_Desk_Agent__c = cb.AgentID; //Commented by Vinay 19-01-2026
                         }
                         if((callStatus.equalsIgnoreCase('NotAnswered'))){
                             t.Subject = 'Missed Call';
@@ -657,12 +753,12 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                     List<Opportunity> oppoListinbd = new List<Opportunity>();
                     List<Opportunity> bookedOppList = new List<Opportunity>();
                     if(checkWithCode){
-                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
+                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile];
                         if(oppoListinbd.size() == 0){
-                            oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile)];
+                            oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile)];
                         }
                     }else{
-                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile)];
+                        oppoListinbd = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile)];
                     }
                     for(Opportunity opp : oppoListinbd){ //Added by coServe 08-05-2024
                         if(opp.StageName == 'Unit Booked'){
@@ -689,7 +785,7 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                         t.Task_Type__c = 'Presales Call';
                         t.status = 'In-Progress';
                         if((callStatus.equalsIgnoreCase('NotAnswered'))){
-                            User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone  FROM User Where Name  =: 'Integration Admin'];
+                            User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Campaign_Name__c  FROM User Where Name  =: 'Integration Admin'];
                             t.Subject = 'Missed Call';
                             t.OwnerId = usr.id;
                             t.status = 'Completed';
@@ -781,7 +877,7 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                     
                     else{
                         List<Lead> leads = new List<Lead>(); //Added by Vinay 04-08-2025
-                        User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone  FROM User Where Name  =: 'Integration Admin'];
+                        User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c,MobilePhone,Campaign_Name__c  FROM User Where Name  =: 'Integration Admin'];
                         Lead l  = new Lead (
                             LastName = 'Missed Call', 
                             RW_Mobile_No__c = customerNumber,
@@ -837,7 +933,7 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
             List<String> PhoneNameList = PhoneName.split('\\ ->');
             system.debug('PhoneNameList[0]'+PhoneNameList[0]);
             system.debug('PhoneNameList:'+PhoneNameList.size());
-            List<User> usrs = [SELECT Id,FirstName,Name,Profile.Name,DID__c FROM User Where Offline_Agent_Name__c =: PhoneNameList[0]];
+            List<User> usrs = [SELECT Id,FirstName,Name,Profile.Name,DID__c,Campaign_Name__c FROM User Where Offline_Agent_Name__c =: PhoneNameList[0]];
             User usr;
             if(usrs.size() > 0){
                 usr = usrs[0];
@@ -923,7 +1019,7 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
             }
             else if(UUIforInbound != null && UUIforInbound.getSObjectType().getDescribe().getName() == 'Opportunity'){
                 
-                List <Opportunity> oppoList = [SELECT Id,AccountId,Name FROM Opportunity WHERE id =: UUIforInbound];
+                List <Opportunity> oppoList = [SELECT Id,AccountId,Name,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE id =: UUIforInbound];
                 if(oppoList != null && !oppoList.isEmpty()){
                     task t = new task();
                     t.status = 'In-Progress';
@@ -946,7 +1042,12 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                             t.RecordTypeId = PresalesRecordTypeId;
                             t.Task_Type__c = 'Presales Call';
                         }
-                        t.OwnerId = usr.id;
+                        //t.OwnerId = usr.id; //Commented by Vinay 01-12-2025
+                        if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c) && oppoList[0].RW_Project_Unit__c != null && oppoList[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){ //Added by Vinay 01-12-2025
+                            t.OwnerId = oppoList[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                        }else{
+                            t.OwnerId = usr.id;
+                        }
                         t.Attempted_By__c = usr.Name;
                     }
                     t.WhatId = oppoList[0].id;
@@ -1012,12 +1113,12 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                 List<Opportunity> bookedOppList = new List<Opportunity>();
                 if(usr != null){
                     if(checkWithCode){
-                        oppoListinbd = [SELECT Id,AccountId,Name,StageName FROM Opportunity WHERE (Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile) AND RW_Sales_Associate__c =: usr.Name ];
+                        oppoListinbd = [SELECT Id,AccountId,Name,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE (Mobile_No_with_Country_Code__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile) AND RW_Sales_Associate__c =: usr.Name ];
                         if(oppoListinbd.size() == 0){
-                            oppoListinbd = [SELECT Id,AccountId,Name,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) AND RW_Sales_Associate__c =: usr.Name ];
+                            oppoListinbd = [SELECT Id,AccountId,Name,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) AND RW_Sales_Associate__c =: usr.Name ];
                         }
                     }else{
-                        oppoListinbd = [SELECT Id,AccountId,Name,StageName FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) AND RW_Sales_Associate__c =: usr.Name ];
+                        oppoListinbd = [SELECT Id,AccountId,Name,StageName,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c FROM Opportunity WHERE (RW_Mobile_No__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile) AND RW_Sales_Associate__c =: usr.Name ];
                     }
                 }
                 for(Opportunity opp : oppoListinbd){ //Added by coServe 08-05-2024
@@ -1150,7 +1251,12 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                             t.Task_Type__c = 'Presales Call';
                             t.WhatId = oppoListinbd[0].id; //Added by coServe 08-05-2024
                         }
-                        t.OwnerId = usr.id;
+                        //t.OwnerId = usr.id; //Commented by Vinay 01-12-2025
+                        if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c) && oppoListinbd[0].RW_Project_Unit__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__c != null && oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){ //Added by Vinay 01-12-2025
+                            t.OwnerId = oppoListinbd[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                        }else{
+                            t.OwnerId = usr.id;
+                        }
                         t.Attempted_By__c = usr.Name;
                     }
                     if(String.isNotBlank(callStatus) && callStatus != null && (callStatus.equalsIgnoreCase('NotAnswered'))){
@@ -1201,7 +1307,7 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                     //List<Opportunity> lastmodifiedopp = [select id, name, lastmodifiedDate from opportunity where AccountID =: accList[0].id Order By lastmodifiedDate DESC ]; // Commented by Vinay 13-01-2025
                     List<Opportunity> lastmodifiedopp = new List<Opportunity>(); //Added by Vinay 13-01-2025
                     if(accList.size() > 0){ //Added by Vinay 13-01-2025
-                        lastmodifiedopp = [select id, name, lastmodifiedDate from opportunity where AccountID =: accList[0].id Order By lastmodifiedDate DESC ];
+                        lastmodifiedopp = [select id, name, lastmodifiedDate,RW_Project_Unit__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.User__c from opportunity where AccountID =: accList[0].id Order By lastmodifiedDate DESC ];
                     }
                     task t = new task();
                     t.status = 'In-Progress';
@@ -1219,7 +1325,12 @@ customerNumber = customerNumber.substring(customerNumber.length() - 10);
                             t.RecordTypeId = PresalesRecordTypeId;
                             t.Task_Type__c = 'Presales Call';
                         }
-                        t.OwnerId = usr.id;
+                        //t.OwnerId = usr.id; //Commented by Vinay 01-12-2025
+                        if(inboundCallCenterCampaigns.contains(usr.Campaign_Name__c) && lastmodifiedopp[0].RW_Project_Unit__c != null && lastmodifiedopp[0].RW_Project_Unit__r.Relationship_Manager__c != null && lastmodifiedopp[0].RW_Project_Unit__r.Relationship_Manager__r.User__c != null){ //Added by Vinay 01-12-2025
+                            t.OwnerId = lastmodifiedopp[0].RW_Project_Unit__r.Relationship_Manager__r.User__c;                        
+                        }else{
+                            t.OwnerId = usr.id;
+                        }
                         t.Attempted_By__c = usr.Name;
                     }
                     if(String.isNotBlank(callStatus) && callStatus != null && (callStatus.equalsIgnoreCase('NotAnswered'))){

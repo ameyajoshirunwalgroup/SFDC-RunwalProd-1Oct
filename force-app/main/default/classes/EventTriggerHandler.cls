@@ -9,6 +9,9 @@ public class EventTriggerHandler {
             System.debug('Check AccountId--->'+ev.WhatId);
             if (ev.RecordTypeId == rt.Id &&
                 ev.WhatId != null) {
+                    if(ev.StartDateTime.date()!=ev.EndDateTime.date()){
+                        ev.addError('Start Date And End Date For An Event Must Be Same!!');
+                    }
                 accountIds.add(ev.WhatId);
             }
         }
@@ -66,23 +69,12 @@ public class EventTriggerHandler {
         if (closedEvents.isEmpty()) return;
 
         // Step 2: Collect Account Ids
-        Set<Id> accountIds = new Set<Id>();
         for (Event ev : closedEvents) {
             channelPartnerId.add(ev.Channel_Partner__c);
-            accountIds.add(ev.WhatId);
         }
 
-        // Step 3: Query related Channel Partners from Account
-        Map<Id, Id> accountToChannelPartnerMap = new Map<Id, Id>();
-        for (Account acc : [
-            SELECT Id, Channel_Partner__c
-            FROM Account
-            WHERE Id IN :accountIds
-            AND Channel_Partner__c != null
-        ]) {
-            channelPartnerId.add(acc.Channel_Partner__c);
-            accountToChannelPartnerMap.put(acc.Id, acc.Channel_Partner__c);
-        }
+        if (channelPartnerId.isEmpty()) return;
+        
         Set<Id> channelPartnerAOP = new Set<Id>();
         List<AOP__c> aopList = [Select id,Channel_Partner__c,Start_Date__c,End_Date__c from AOP__c where Channel_Partner__c IN: channelPartnerId and Start_Date__c!=null and End_Date__c!=null];
         for(AOP__c aopObj: aopList){
@@ -93,7 +85,7 @@ public class EventTriggerHandler {
             }
         }
 
-        if (accountToChannelPartnerMap.isEmpty()) return;
+        
 
         // Step 4: Prepare data for query
         Set<String> smNames = new Set<String>();

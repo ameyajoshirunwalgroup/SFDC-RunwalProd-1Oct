@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Comment_is_required_for_event_completion</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( NOT(ISBLANK(CP_Meeting_Address__c)),ISPICKVAL( Event_Status__c , &apos;Completed&apos;), ISBLANK( Description ) )</errorConditionFormula>
+    <errorDisplayField>Description</errorDisplayField>
+    <errorMessage>Update the Description Is Mandatory Before Marking Event As Closed!!</errorMessage>
+</ValidationRule>

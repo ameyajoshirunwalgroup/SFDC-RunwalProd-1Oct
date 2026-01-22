@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Hold_Reject__c</fullName>
+    <label>Reason for Hold/Reject</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>RW_Welcome_Call_Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Non contactable</fullName>
+                <default>false</default>
+                <label>Non contactable</label>
+            </value>
+            <value>
+                <fullName>Cost sheet issue</fullName>
+                <default>false</default>
+                <label>Cost sheet issue</label>
+            </value>
+            <value>
+                <fullName>Sales Dispute</fullName>
+                <default>false</default>
+                <label>Sales Dispute</label>
+            </value>
+            <value>
+                <fullName>Fund issue</fullName>
+                <default>false</default>
+                <label>Fund issue</label>
+            </value>
+            <value>
+                <fullName>Payment related dispute</fullName>
+                <default>false</default>
+                <label>Payment related dispute</label>
+            </value>
+            <value>
+                <fullName>Unit transfer</fullName>
+                <default>false</default>
+                <label>Unit transfer</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Reject</controllingFieldValue>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>Non contactable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Reject</controllingFieldValue>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>Cost sheet issue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Reject</controllingFieldValue>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>Sales Dispute</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Reject</controllingFieldValue>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>Fund issue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Reject</controllingFieldValue>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>Payment related dispute</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Reject</controllingFieldValue>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>Unit transfer</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

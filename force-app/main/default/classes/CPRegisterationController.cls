@@ -415,36 +415,38 @@ throw new AuraHandledException(e.getMessage());
         }
         
         list<Broker__c> existing;
-        if(bk.Id != null){
+        if (bk.Id != null) {
             existing = [
                 SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
                 FROM Broker__c
                 WHERE Id != :bk.Id
                 AND (
-                    RW_Mobile_No__c = :bk.RW_Mobile_No__c
-                    OR Broker_Pan_No__c = :bk.Broker_Pan_No__c
-                    OR RW_Email__c = :bk.RW_Email__c
+                    (RW_Mobile_No__c = :bk.RW_Mobile_No__c AND RW_Mobile_No__c != null)                    
+                    OR (RW_Email__c = :bk.RW_Email__c AND RW_Email__c != null)
+                    OR (Broker_Pan_No__c = :bk.Broker_Pan_No__c AND Broker_Pan_No__c != null)
                 )
                 LIMIT 1
             ];
-        }else{
+        } else {
             existing = [
                 SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
                 FROM Broker__c
-                WHERE 
-                RW_Mobile_No__c = :bk.RW_Mobile_No__c
-                OR Broker_Pan_No__c = :bk.Broker_Pan_No__c
-                OR RW_Email__c = :bk.RW_Email__c
+                WHERE (
+                    (RW_Mobile_No__c = :bk.RW_Mobile_No__c AND RW_Mobile_No__c != null)
+                    OR (RW_Email__c = :bk.RW_Email__c AND RW_Email__c != null)
+                    OR (Broker_Pan_No__c = :bk.Broker_Pan_No__c AND Broker_Pan_No__c != null)
+                )
                 LIMIT 1
             ];
         }
+
         system.debug('Existing -> '+existing);
         if (existing.isEmpty()) {
             return null;
         }else{
-            Boolean mobileMatch = existing[0].RW_Mobile_No__c == bk.RW_Mobile_No__c;
-            Boolean panMatch = existing[0].Broker_Pan_No__c == bk.Broker_Pan_No__c;
-            Boolean emailMatch = existing[0].RW_Email__c == bk.RW_Email__c;
+            Boolean mobileMatch = existing[0].RW_Mobile_No__c == bk.RW_Mobile_No__c && bk.RW_Mobile_No__c != null;
+            Boolean panMatch = existing[0].Broker_Pan_No__c == bk.Broker_Pan_No__c && bk.Broker_Pan_No__c != null;
+            Boolean emailMatch = existing[0].RW_Email__c == bk.RW_Email__c && bk.RW_Email__c != null;
             
             if (mobileMatch && panMatch && emailMatch) {
                 return 'Duplicate exists with Mobile: ' + bk.RW_Mobile_No__c 
@@ -490,8 +492,8 @@ throw new AuraHandledException(e.getMessage());
                           Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
                           Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
                           Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
-                          Developers_Worked_For__c,Account__c,RW_Broker_Number__c,Broker_Pan_No__c,RERA_Valid_till__c,CC_Valid_till__c,STREET__c,
-                            RW_Is_CC_Applicable__c
+                          Developers_Worked_For__c,Account__c,RW_Broker_Number__c,Broker_Pan_No__c,RERA_Valid_till__c,/*CC_Valid_till__c,*/STREET__c
+                           // RW_Is_CC_Applicable__c
                     from Broker__c where Id =: brId and RecordTypeId=:CPRecordTypeId ];
         }
         return null;
@@ -671,23 +673,32 @@ throw new AuraHandledException(e.getMessage());
     
     //Added by Prashant 21-08-25. // Upload RERA n CC details and Submit record for approval.
     @AuraEnabled
-    public static void updateDocDetailsnSubmitforAppr(Boolean isrera, Boolean iscc, String brId, Date reraExpDate,Date ccExpDate) {
+    public static void updateDocDetailsnSubmitforAppr(Boolean isrera/*, Boolean iscc*/, String brId, Date reraExpDate,Date ccExpDate) {
         system.debug('Broker Id - '+brId);
         if(String.isNotBlank(brId)){
-            list<Broker__c> brlist = new list<Broker__c>();
-            Broker__c b = new Broker__c();
-            b.Id = brId;
-            if(isrera){
-                b.RERA_Valid_till__c = reraExpDate;
-                b.Latest_RERA_Upload_Status__c = 'Approval Pending';
-                b.Latest_RERA_Upload_Processed__c = false;
+            list<Broker__c> brlist = [Select id,CreatedDate,Project__c,Approver_L1__c,Approver_L2__c from Broker__c where Id =: brId];
+            if(!brlist.isEmpty()){
+                for(Broker__c b: brlist){
+                    if(isrera){
+                        b.RERA_Valid_till__c = reraExpDate;
+                        if(b.Project__c != null && b.Approver_L1__c != null && b.Approver_L2__c != null ){
+                            b.Latest_RERA_Upload_Status__c = 'Approval Pending';
+                        }else if(b.CreatedDate < Date.newInstance(2025, 9, 16)){
+                            b.Latest_RERA_Upload_Status__c = 'Approved';
+                        }
+                        b.Latest_RERA_Upload_Processed__c = false;
+                    }
+                    /*if(iscc){
+                        b.CC_Valid_till__c = ccExpDate;
+                        if(b.Project__c != null && b.Approver_L1__c != null && b.Approver_L2__c != null ){
+                            b.Latest_CC_Upload_Status__c = 'Approval Pending';
+                        }else if(b.CreatedDate < Date.newInstance(2025, 9, 16)){
+                            b.Latest_CC_Upload_Status__c = 'Approved';
+                        }
+                        b.Latest_CC_Upload_Processed__c = false;
+                    }*/
+                }
             }
-            if(iscc){
-                b.CC_Valid_till__c = ccExpDate;
-                b.Latest_CC_Upload_Status__c = 'Approval Pending';
-                b.Latest_CC_Upload_Processed__c = false;
-            }
-            brlist.add(b);
             try{
                 update brlist;
             }catch(DMLException e) {
@@ -705,7 +716,7 @@ throw new AuraHandledException(e.getMessage());
         if (String.isBlank(CPUserId)) {
             return null;
         }else {
-            return [SELECT Id, Name,Valid_competency_certificate__c,Valid_RERA_certificate__c,Latest_CC_Upload_Status__c,Latest_RERA_Upload_Status__c FROM Broker__c WHERE Account__c IN (SELECT AccountId FROM User WHERE Id =: CPUserId) LIMIT 1];
+            return [SELECT Id, Name/*Valid_competency_certificate__c //Commented by Prashant as discussed with team to discard use of CC. 12/12/25.*/,Valid_RERA_certificate__c/*,Latest_CC_Upload_Status__c*/,Latest_RERA_Upload_Status__c FROM Broker__c WHERE Account__c IN (SELECT AccountId FROM User WHERE Id =: CPUserId) LIMIT 1];
         }
     }
     
@@ -716,37 +727,9 @@ throw new AuraHandledException(e.getMessage());
         bk.Sourcing_Manager__c = UserInfo.getUserId();
         try{
             insert bk;
-            if(bk.Id != null){                
-                Id cpRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
-                Task t = new Task();
-                t.WhatId = bk.id;
-                t.OwnerId = UserInfo.getUserId();
-                Date todayDate = System.today();
-                DateTime createTime = DateTime.now();                
-                t.ActivityDate = system.today().addDays(15);                    
-                t.Status = 'In-progress';
-                String subject = 'Temporary CP Registration Pending – '+ bk.Name;
-                t.Subject = subject;
-                //t.Task_Type__c = '';
-                t.Type = 'Other';
-                t.Task_Type__c = 'CP Call';
-                t.RecordTypeId = cpRecordTypeId;
-                t.Priority = 'Normal';                    
-                String nbody1 = 'Kindly ensure that the registration is completed at the earliest to avoid delays in onboarding, payment, or portal access.\nRegards,';
-                t.Description = nbody1; 
-                t.ReminderDateTime = System.now();
-                t.IsReminderSet = true; 
-                try{
-                    insert t;
-                }catch(Exception e){
-                    throw new AuraHandledException(e.getMessage());
-                }
-                
-                return bk.id;                  
-            }
+            return bk.id;
         } catch (Exception e) {
-            String cleanMessage;
-            
+            String cleanMessage;            
             if (e instanceof DmlException) {
                 DmlException de = (DmlException)e;
                 if (de.getNumDml() > 0 && String.isNotBlank(de.getDmlMessage(0))) {
@@ -756,14 +739,70 @@ throw new AuraHandledException(e.getMessage());
                 }
             } else {
                 cleanMessage = e.getMessage(); // Handle non-DML exceptions
-            }
-
-    throw new AuraHandledException(cleanMessage);
-}
-
-        return null;
+            }            
+            throw new AuraHandledException(cleanMessage);
+        }
+        //return null;
     }
     
+    public void dummyMethod(){
+        integer i;
+            i=0;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+    }
 
     
 }

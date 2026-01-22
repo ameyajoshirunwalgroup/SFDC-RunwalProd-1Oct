@@ -38,7 +38,7 @@ public with sharing class CPBrokerageService {
                    Approval_Status__c, Approval_Status_clearing__c,
                    Date_Approved_by_L1__c, Date_Approved_by_L2__c, Date_Approved_by_L3__c,
                    Date_Approved_by_L4__c, Date_Approved_By_Submitter__c,
-                   Brokerage_Summary__r.AOP__c
+                   Brokerage_Summary__r.AOP__c,Project__c,Customer_Name__c,Tower_Unit__c,Type_of_Client__c,Brokerage_Scheme_Name__c
             FROM Brokerage_Invoice__c
             WHERE Id IN :invoiceIds
         ];
@@ -63,11 +63,29 @@ public with sharing class CPBrokerageService {
         for (String key : grouped.keySet()) {
             List<Brokerage_Invoice__c> groupInvoices = grouped.get(key);
             Brokerage_Invoice__c first = groupInvoices[0];
-            
+            //Added by Prashant to Map required customer details.. //21-01-26.Start
+            Set<String> projectNames = new Set<String>();
+            Set<String> customerNames = new Set<String>();
+            Set<String> towerUnits = new Set<String>();
+            Set<String> schemeNames = new Set<String>();
             Decimal totalBrokerage = 0;
             for (Brokerage_Invoice__c inv : groupInvoices) {
                 totalBrokerage += (inv.Brokerage_In_Rs__c != null ? inv.Brokerage_In_Rs__c : 0);
+                
+                if (inv.Project__c != null) {
+                    projectNames.add(inv.Project__c);
+                }
+                if (inv.Customer_Name__c != null) {
+                    customerNames.add(inv.Customer_Name__c);
+                }
+                if (inv.Tower_Unit__c != null) {
+                    towerUnits.add(inv.Tower_Unit__c);
+                }
+                if (inv.Brokerage_Scheme_Name__c != null) {
+                    schemeNames.add(inv.Brokerage_Scheme_Name__c);
+                }
             }
+            
             
             // Get type again to ensure consistent key
             String type = (first.Brokerage_Lookup__r != null && first.Brokerage_Lookup__r.Name == 'AOP Brokerage') 
@@ -81,6 +99,16 @@ public with sharing class CPBrokerageService {
             cpb.Total_Brokerage__c = totalBrokerage;
             cpb.Invoice_Date__c = Date.today();
             cpb.Brokerage_Type__c = type;
+            
+            String projectName = String.join(new List<String>(projectNames), ', ');
+            String customerName = String.join(new List<String>(customerNames), ', ');
+            String towerName = String.join(new List<String>(towerUnits), ', ');
+            String schemeName = String.join(new List<String>(schemeNames), ', ');
+
+            cpb.Project__c = projectName;
+            cpb.Customer_Name__c = customerName;
+            cpb.Tower_Unit__c = towerName;
+            cpb.Brokerage_Scheme_Name__c = schemeName;         
             
             // Approver fields
             cpb.CP_Invoice_Approver_L1__c = first.CP_Invoice_Approver_L2__c;

@@ -30,7 +30,11 @@ trigger trgTaskHandler on Task (after update, after insert, before update, befor
                     userMap = new Map<Id, User>([SELECT Id,FirstName,Name,Profile.Name,DID__c FROM User Where id =: ownerIds]);
                 }
                 //Added by Vinay 31-01-2025 End
+                Id serviceTaskRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId(); //Added by Vinay 07-01-2026
                 for(Task t : trigger.new){
+                    if(t.RecordTypeId == serviceTaskRecordTypeId && t.Task_Type__c == 'CRM Call' && t.Communication_Type__c == 'Inbound Call' && t.Subject == 'CRM Call'){ //Added by Vinay 07-01-2026
+                        t.Status = 'Completed';
+                    }
                     if(t.OwnerId != null){
                         //User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c FROM User Where id =: t.OwnerId]; //Commented by Vinay 31-01-2025
                         //t.Attempted_By__c = usr.Name; //Commented by Vinay 31-01-2025
@@ -102,6 +106,9 @@ trigger trgTaskHandler on Task (after update, after insert, before update, befor
                         }else if(tsk.whoId.getSObjectType().getDescribe().getName() == 'Lead'){
                             leadIds.add(tsk.WhoId);
                         }
+                    }
+                    if(tsk.RecordTypeId == CRMRecordTypeId && tsk.Task_Type__c == 'CRM Call' && tsk.Communication_Type__c == 'Inbound Call' && tsk.Subject == 'CRM Call'){ //Added by Vinay 12-01-2026
+                        tsk.Status = 'Completed';
                     }
                     
                 }
@@ -358,6 +365,7 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                 List<Task> nodChangedTasks = new List<Task>(); //Added by Vinay 10-09-2025
                 if(checkRecursion.isFirstRun()) 
                 {
+                    Id CRMRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId(); // Added by Vinay 13-01-2026
                     ///------------------added by vikas for edit option on customer interaction to rollup on opp &lead------------////
                     TaskManagementServices.latestTaskRollupToOpp(Trigger.new); 
                     TaskManagementServices.latestTaskRollupToLead(Trigger.new);
@@ -368,6 +376,7 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                     TaskManagementServices.createCommunicationEntries(trigger.new);
                     //  TaskManagementServices.RegTaskRollupToOpp(trigger.new);
                     List<Lead> LeadList = new List<Lead>();
+                    List <task> cifcreatecase = new List<task> (); //Added by Vinay 13-01-2026
                     ID LeadaccId ;
                     for(Task t: trigger.new)
                     {
@@ -397,6 +406,10 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                         if(t.Next_Action_Date__c != trigger.oldMap.get(t.id).Next_Action_Date__c && System.label.Allow_Auto_Callback == 'Yes' && (t.RecordTypeId == preSalesRecordTypeId  || t.Task_Type__c == 'Presales Call')){ //Added by Vinay 10-09-2025
                             nodChangedTasks.add(t);
                         }
+
+                        if(t.RecordTypeId==CRMRecordTypeId && t.Task_Type__c=='CRM Call' && t.Communication_Type__c=='Inbound Call' && t.Subject=='CRM Call'){ //Added by Vinay 13-01-2026
+                            cifcreatecase.add(t);
+                        }
                     }   
                     if(!LeadList.isEmpty()){
                         Update LeadList;
@@ -405,8 +418,11 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                         CIFManagementServices.updateFeedbackOnCif(cifTasklist);
                     if(nodChangedTasks.size() > 0){ //Added by Vinay 10-09-2025
                         ScheduleOzonetelCalls.callSchedule(nodChangedTasks);
-                    }    
-                }
+                    }   
+                    
+                    if(!cifcreatecase.isEmpty())   //Added by Vinay 13-01-2026
+                        CIFManagementServices.createcase(cifcreatecase); 
+                    }
                 
             }
             

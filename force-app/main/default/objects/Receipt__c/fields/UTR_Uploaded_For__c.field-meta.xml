@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UTR_Uploaded_For__c</fullName>
+    <label>UTR Uploaded For</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>StampDuty</fullName>
+                <default>false</default>
+                <label>StampDuty</label>
+            </value>
+            <value>
+                <fullName>Payment Principal</fullName>
+                <default>false</default>
+                <label>Payment Principal</label>
+            </value>
+            <value>
+                <fullName>Payment GST</fullName>
+                <default>false</default>
+                <label>Payment GST</label>
+            </value>
+            <value>
+                <fullName>Payment TDS</fullName>
+                <default>false</default>
+                <label>Payment TDS</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

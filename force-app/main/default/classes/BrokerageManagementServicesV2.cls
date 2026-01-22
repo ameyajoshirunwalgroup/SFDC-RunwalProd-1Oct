@@ -75,6 +75,7 @@ public class BrokerageManagementServicesV2 {
                     if(!bkList2.isEmpty()){
                         update bkList2;
                         system.debug('updated bkList2::'+bkList2);
+                        system.debug('updated bkList2 size::'+bkList2.size());
                     }
                     if(!brokerageScheme1.isEmpty() && !scprj.isEmpty() && sctower.isEmpty()){
                         if(brokerageScheme1[0].Type__c == 'Local' && (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&(bk.Is_Special_Brokerage_Scheme__c == true || bk.Is_AOP_CP_Applicable__c == true)))){
@@ -123,7 +124,7 @@ public class BrokerageManagementServicesV2 {
                         }
                     }
                     
-                    system.debug('bkList3::'+bkList3);
+                    system.debug('ngs                         vt::'+bkList3);
                     system.debug('bkList3 size::'+bkList3.size());
                 }
                 if(bk.Id != null){
@@ -155,7 +156,7 @@ public class BrokerageManagementServicesV2 {
                 
                 if(!sc.isEmpty()){
                     system.debug('Inside 2nd If----bk.Project__c::'+bk.Project__c);
-                    brokerageScheme = [select Id,Name,Base_Brokerage__c,AOP_CP__c,End_Date__c,Project__c,Tower__c,Slab_Type__c,Approval_Status__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c,
+                    brokerageScheme = [select Id,Name,Base_Brokerage__c,AOP_CP__c,End_Date__c,Project__c,Tower__c,Slab_Type__c,Approval_Status__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c,Base_Brokerage_for_NRI__c,
                                        Start_Date__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
                                        Start_Date__c <=: bookingDate and (End_Date__c = null or End_Date__c >=: bookingDate) and Approval_Status__c = 'Approved by Level 2'];
                     
@@ -182,7 +183,17 @@ public class BrokerageManagementServicesV2 {
                             if(KickerIncentiveId != null){
                                 bk.Kicker_Incentive_lookup__c = (Id)KickerIncentiveId;
                             }
-                        }else{
+                        }
+                        //Added by Prashant to add NRI base brokerage.//22-10-25.START
+                        else if(bk.Type_Of_Client_Formula__c == 'NRI'){
+                            bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - bk.Passback__c;
+                            bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - bk.Passback__c;
+                            if(KickerIncentiveId != null){
+                                bk.Kicker_Incentive_lookup__c = (Id)KickerIncentiveId;
+                            }
+                        }  
+                        //Added by Prashant to add NRI base brokerage.//22-10-25.END
+                        else if(bk.Type_Of_Client_Formula__c == 'Outstation'){
                             bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c;
                             bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c;
                             if(KickerIncentiveId != null){
@@ -218,8 +229,8 @@ public class BrokerageManagementServicesV2 {
                     map<Id,Id> mapforoptyAndBrokerSum = new map<Id,Id>();
                     
                     brokerageSlab1 = [select id,Name,From__c,To__c,Total_Brokerage__c,Base_Brokerage__c,Additional_Brokerage__c,Brokerage_Scheme__c,
-                                      Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,Base_Brokerage_for_Local_Bookings__c,
-                                      Base_Brokerage_for_OS_NRI__c,Total_Brokerage_for_OS_NRI__c,Total_Brokerage_for_Local_Bookings__c from Brokerage_Slab__c
+                                      Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c,Base_Brokerage_for_Local_Bookings__c,
+                                      Base_Brokerage_for_OS_NRI__c,Base_Brokerage_for_NRI__c,Total_Brokerage_for_OS_NRI__c,Total_Brokerage_for_Local_Bookings__c from Brokerage_Slab__c
                                       where Brokerage_Scheme__c =: brokerageScheme[0].Id And Slab_No__c = 1];
                     system.debug('brokerageSlab1::'+brokerageSlab1);
                     
@@ -296,18 +307,25 @@ b.Status__c = 'Due';
                                         // b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
                                         if(bk.Passback_Amount__c > 0){
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
-                                            system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
-                                            
-                                            
+                                            system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );  
                                         }
                                         else{
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
                                             system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
-                                            
                                         }
-                                        
-                                        
-                                    }else{
+                                    }
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'NRI'){
+                                        b.Brokerage__c = brokerageSlab1[0].Base_Brokerage_for_NRI__c - brokerageScheme[0].AOP_CP__c;
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
+                                        }                                                                                
+                                    } 
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'Outstation'){
                                         b.Brokerage__c = brokerageSlab1[0].Base_Brokerage_for_OS_NRI__c - brokerageScheme[0].AOP_CP__c;
                                         if(bk.Passback_Amount__c > 0){
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
@@ -318,6 +336,17 @@ b.Status__c = 'Due';
                                             system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
                                         }                                                                                
                                     } 
+                                    /*else{
+                                        b.Brokerage__c = brokerageSlab1[0].Base_Brokerage_for_OS_NRI__c - brokerageScheme[0].AOP_CP__c;
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
+                                        }                                                                                
+                                    } */
                                 }                                                                                                
                                 brokerage1.add(b);                                   
                                 Brokerage__c b1 = new Brokerage__c();
@@ -460,7 +489,32 @@ b.Status__c = 'Due';
                                             system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );                                            
                                         }
                                                                                 
-                                    }else{
+                                    }
+                                    //Added by Prashant
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'NRI'){
+                                        b.Brokerage__c = brokerageSlab1[0].Base_Brokerage_for_NRI__c - brokerageScheme[0].AOP_CP__c;
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
+                                        }                                                                                
+                                    } 
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'Outstation'){
+                                        b.Brokerage__c = brokerageSlab1[0].Base_Brokerage_for_OS_NRI__c - brokerageScheme[0].AOP_CP__c;
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
+                                        }                                                                                
+                                    } 
+                                    
+                                    /*else{
                                         b.Brokerage__c = (brokerageSlab1[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
                                         if(bk.Passback_Amount__c > 0){
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
@@ -473,7 +527,8 @@ b.Status__c = 'Due';
                                             
                                         }
                                         
-                                    } 
+                                    } */
+                                    //Added by Prashant END
                                 }
                                                                
                                 brokerage1.add(b);
@@ -569,7 +624,35 @@ b.Status__c = 'Due';
                                         
                                     }                                    
                                     
-                                }else{
+                                }
+                                
+                                else if(bkList4[0].Type_Of_Client_Formula__c == 'NRI'){
+                                    b.Brokerage__c = (brokerageSlab1[0].Base_Brokerage_for_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
+                                    // b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                    if(bk.Passback_Amount__c > 0){
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
+                                        system.debug('Brokerage Amount 291 ::'+ b.Brokerage_Amount__c );                                        
+                                    }
+                                    else{
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                        
+                                    }                                                                                  
+                                } 
+                                else if(bkList4[0].Type_Of_Client_Formula__c == 'Outstation'){
+                                    b.Brokerage__c = (brokerageSlab1[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
+                                    // b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                    if(bk.Passback_Amount__c > 0){
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
+                                        system.debug('Brokerage Amount 291 ::'+ b.Brokerage_Amount__c );                                        
+                                    }
+                                    else{
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                        
+                                    }                                                                                   
+                                } 
+                                /*else{
                                     b.Brokerage__c = (brokerageSlab1[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
                                     if(bk.Passback_Amount__c > 0){
                                         b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
@@ -582,7 +665,8 @@ b.Status__c = 'Due';
                                         
                                     }
                                     
-                                } 
+                                } */
+                                //Added by Prashant END
                             }
                            brokerage1.add(b);
                             if(!brokerage1.isEmpty() ){
@@ -675,7 +759,7 @@ b.Status__c = 'Due';
                             if(bs.Booking__r.Type_Of_Client_Formula__c == 'Local' || bs.Booking__r.Type_Of_Client_Formula__c == 'Corporate'){
                                 system.debug('Inside for loop of brokerSummary1 list');
                                 slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_Local_Bookings__c,
-                                         Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_OS_NRI__c from Brokerage_Slab__c
+                                         Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c from Brokerage_Slab__c
                                          where Brokerage_Scheme__c =: bs.Brokerage_Scheme__c and Name =: bs.Applied_Slab_Name__c ];
                                 system.debug('slab1::'+slab1);
                                 system.debug('size of slab1::'+slab1.size());
@@ -700,9 +784,10 @@ b.Status__c = 'Due';
                                     }
                                     system.debug('br::'+br);
                                 }
-                            }else{
+                            }
+                            else{
                                 system.debug('Inside for loop of brokerSummary1 list');
-                                slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_OS_NRI__c,
+                                slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c,
                                          Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_Local_Bookings__c
                                          from Brokerage_Slab__c
                                          where Brokerage_Scheme__c =: bs.Brokerage_Scheme__c and Name =: bs.Applied_Slab_Name__c ];
@@ -731,8 +816,10 @@ b.Status__c = 'Due';
                                         }
                                     }
                                 }
-                            }  
-                        }else{
+                            }
+                        }
+                        
+                        else{
                             if(bs.Booking__r.Type_Of_Client_Formula__c == 'Local' || bs.Booking__r.Type_Of_Client_Formula__c == 'Corporate'){
                                 system.debug('Inside for loop of Local brokerSummary1 list');
                                 slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_OS_NRI__c,
@@ -917,7 +1004,67 @@ b.Status__c = 'Due';
                                             
                                         }
                                     }
-                                }else{
+                                }
+                                else if(bk1.Type_Of_Client_Formula__c == 'NRI'){
+                                    system.debug('Inside for loop of bookList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false && brokerSummary2[0].Applied_Slab_Name__c != 'Slab 1'){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            system.debug('(bk1.Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c)::'+(bk1.Custom_Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c));
+                                            system.debug('(bk1.Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c)::'+(bk1.Custom_Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            br1.Brokerage__c = ((bk1.Custom_Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Custom_Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            //br1.Brokerage__c = (slab3[0].Total_Brokerage_for_OS_NRI__c - slab1[0].Total_Brokerage_for_OS_NRI__c );
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * (br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    if(cb.Cancelled_Brokerage_percentage__c == cb.Brokerage__c){
+                                                        cb.Cancelled__c = true;
+                                                    }
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update Updatecancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }  
+                                else if(bk1.Type_Of_Client_Formula__c == 'Outstation'){
                                     system.debug('Inside for loop of bookList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -1032,7 +1179,64 @@ b.Status__c = 'Due';
                                             
                                         }
                                     }
-                                }else{
+                                }
+	                              else if(bk1.Type_of_Client__c == 'NRI'){
+                                    system.debug('Inside for loop of bookList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false && brokerSummary2[0].Applied_Slab_Name__c != 'Slab 1'){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            br1.Brokerage__c = ((bk1.Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * (br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    if(cb.Cancelled_Brokerage_percentage__c == cb.Brokerage__c){
+                                                        cb.Cancelled__c = true;
+                                                    }
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update Updatecancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }  
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
                                     system.debug('Inside for loop of bookList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -1118,7 +1322,7 @@ b.Status__c = 'Due';
                         }
                         if(slabId1 != null){
                             slab3 = [select id,Name,From__c,To__c,Total_Brokerage__c,Brokerage_Scheme__c,Total_Brokerage_for_Local_Bookings__c,
-                                     Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c from Brokerage_Slab__c where Id IN : slabId1];
+                                     Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c from Brokerage_Slab__c where Id IN : slabId1];
                             system.debug('slab3::'+slab3);
                         }
                         
@@ -1179,7 +1383,65 @@ b.Status__c = 'Due';
                                             
                                         }
                                     } 
-                                }else{
+                                }
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
+                                    system.debug('Inside for loop of optyList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false && brokerSummary2[0].Applied_Slab_Name__c != 'Slab 1'){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            br1.Brokerage__c = (bk1.Custom_Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Custom_Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c);
+                                            //br1.Brokerage__c = (slab3[0].Total_Brokerage_for_OS_NRI__c - slab1[0].Total_Brokerage_for_OS_NRI__c );
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * (br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    if(cb.Cancelled_Brokerage_percentage__c == cb.Brokerage__c){
+                                                        cb.Cancelled__c = true;
+                                                    }
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update Updatecancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                } 
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
                                     system.debug('Inside for loop of optyList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -1292,7 +1554,64 @@ b.Status__c = 'Due';
                                             
                                         }
                                     } 
-                                }else{
+                                }
+                                else if(bk1.Type_of_Client__c == 'NRI'){
+                                    system.debug('Inside for loop of optyList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false && brokerSummary2[0].Applied_Slab_Name__c != 'Slab 1'){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            br1.Brokerage__c = ((bk1.Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * ( br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    if(cb.Cancelled_Brokerage_percentage__c == cb.Brokerage__c){
+                                                        cb.Cancelled__c = true;
+                                                    }
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update Updatecancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
                                     system.debug('Inside for loop of optyList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -1403,6 +1722,12 @@ b.Status__c = 'Due';
                     bk.Brokerage_Cancelled__c = true;
                     bookList2.add(bk);
                     system.debug('oppId1::'+oppId1);
+                    system.debug('bk id - '+ bk.Id );
+                    list<Brokerage_Summary__c> brokerSummary12 = [Select Id,Channel_Partner__c,Brokerage_Scheme__c,Booking__c from Brokerage_Summary__c];
+                    system.debug(' brokerSummary12 = > '+brokerSummary12);
+                    system.debug('bk Brokerage_Scheme__c - '+ bk.Brokerage_Scheme__c );
+                    system.debug('bk BrokerIId__c - '+ bk.BrokerIId__c );
+                    
                     brokerSummary1 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Channel_Partner__c,
                                       Brokerage_Scheme__c,Booking__r.Custom_Base_Brokerage__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Booking__c,Booking__r.Type_of_Client__c,
                                       Booking__r.Brokerage__c,Booking__r.Base_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk.Id 
@@ -1425,7 +1750,7 @@ b.Status__c = 'Due';
                             if(bs.Booking__r.Type_of_Client__c == 'Local' || bs.Booking__r.Type_of_Client__c == 'Corporate'){
                                 system.debug('Inside for loop of brokerSummary1 list');
                                 slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_Local_Bookings__c,
-                                         Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_OS_NRI__c from Brokerage_Slab__c
+                                         Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c from Brokerage_Slab__c
                                          where Brokerage_Scheme__c =: bs.Brokerage_Scheme__c and Name =: bs.Applied_Slab_Name__c ];
                                 system.debug('slab1::'+slab1);
                                 system.debug('size of slab1::'+slab1.size());
@@ -1444,7 +1769,36 @@ b.Status__c = 'Due';
                                     brokerage4.add(br);
                                     system.debug('br::'+br);
                                 }
-                            }else{
+                            }
+                            
+                             else if(bs.Booking__r.Type_of_Client__c == 'NRI'){
+                                system.debug('Inside for loop of brokerSummary1 list');
+                                slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_NRI__c,
+                                         Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_Local_Bookings__c
+                                         from Brokerage_Slab__c
+                                         where Brokerage_Scheme__c =: bs.Brokerage_Scheme__c and Name =: bs.Applied_Slab_Name__c ];
+                                system.debug('slab1::'+slab1);
+                                system.debug('size of slab1::'+slab1.size());
+                                if(!slab1.isEmpty()){
+                                    Brokerage__c br = new Brokerage__c();
+                                    br.Brokerage_Summary__c = bs.Id;
+                                    br.Brokerage_Scheme__c = bs.Brokerage_Scheme__c;
+                                    br.Opportunity__c = bs.Opportunity__c;
+                                    br.Booking__c = bs.Booking__c;
+                                    br.Channel_Partner__c = bs.Channel_Partner__c;
+                                    br.Brokerage_Type__c = 'Cancellation Brokerage';
+                                    br.Name = 'Cancellation Brokerage';
+                                    br.Opportunity_AV__c = bs.Total_Agreement_Value__c;
+                                    system.debug('bs.Booking__r.Brokerage__c::'+bs.Booking__r.Custom_Base_Brokerage__c);
+                                    system.debug('slab1[0].Additional_Brokerage_for_NRI__c::'+slab1[0].Additional_Brokerage_for_NRI__c);
+                                    br.Brokerage__c = -bs.Brokerage__c;
+                                    br.Brokerage_Amount__c = -bs.Total_Brokerage__c;
+                                    brokerage4.add(br);
+                                    system.debug('br::'+br);
+                                }
+                            }  
+                            
+                            else if(bs.Booking__r.Type_of_Client__c == 'Outstation'){
                                 system.debug('Inside for loop of brokerSummary1 list');
                                 slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_OS_NRI__c,
                                          Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_Local_Bookings__c
@@ -1470,7 +1824,9 @@ b.Status__c = 'Due';
                                     system.debug('br::'+br);
                                 }
                             }  
-                        }else{
+                        }
+                        
+                        else{
                             if(bs.Booking__r.Type_of_Client__c == 'Local' || bs.Booking__r.Type_of_Client__c == 'Corporate'){
                                 system.debug('Inside for loop of Local brokerSummary1 list');
                                 slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_OS_NRI__c,
@@ -1493,7 +1849,31 @@ b.Status__c = 'Due';
                                     brokerage4.add(br);
                                     system.debug('br::'+br);
                                 }
-                            }else{
+                            }
+                            else if(bs.Booking__r.Type_of_Client__c == 'NRI'){
+                                system.debug('Inside for loop of brokerSummary1 list');
+                                slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_Local_Bookings__c,
+                                         Additional_Brokerage_for_NRI__c,Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c from Brokerage_Slab__c
+                                         where Brokerage_Scheme__c =: bs.Brokerage_Scheme__c and Name =: bs.Applied_Slab_Name__c ];
+                                system.debug('slab1::'+slab1);
+                                system.debug('size of slab1::'+slab1.size());
+                                if(!slab1.isEmpty()){
+                                    Brokerage__c br = new Brokerage__c();
+                                    br.Brokerage_Summary__c = bs.Id;
+                                    br.Brokerage_Scheme__c = bs.Brokerage_Scheme__c;
+                                    br.Opportunity__c = bs.Opportunity__c;
+                                    br.Booking__c = bs.Booking__c;
+                                    br.Channel_Partner__c = bs.Channel_Partner__c;
+                                    br.Brokerage_Type__c = 'Cancellation Brokerage';
+                                    br.Name = 'Cancellation Brokerage';
+                                    br.Opportunity_AV__c = bs.Total_Agreement_Value__c;
+                                    br.Brokerage__c = -bs.Brokerage__c;
+                                    br.Brokerage_Amount__c = -bs.Total_Brokerage__c;
+                                    brokerage4.add(br);
+                                    system.debug('br::'+br);
+                                }
+                            }
+                            else if(bs.Booking__r.Type_of_Client__c == 'Outstation'){
                                 system.debug('Inside for loop of brokerSummary1 list');
                                 slab1 = [select id,Name,From__c,To__c,Brokerage_Scheme__c,Total_Brokerage__c,Additional_Brokerage__c,Base_Brokerage__c,Additional_Brokerage_for_Local_Bookings__c,
                                          Additional_Brokerage_for_OS_NRI__c,Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c from Brokerage_Slab__c
@@ -1640,7 +2020,66 @@ b.Status__c = 'Due';
                                             
                                         }
                                     }
-                                }else{
+                                
+                                }
+                                else if(bk1.Type_of_Client__c == 'NRI'){
+                                    system.debug('Inside for loop of bookList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            List<Brokerage__c> cancelledbrokerage = new List<Brokerage__c>();
+                                            List<Brokerage__c> Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            system.debug('(bk1.Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c)::'+(bk1.Custom_Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c));
+                                            system.debug('(bk1.Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c)::'+(bk1.Custom_Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            br1.Brokerage__c = ((bk1.Custom_Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Custom_Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            //br1.Brokerage__c = (slab3[0].Total_Brokerage_for_OS_NRI__c - slab1[0].Total_Brokerage_for_OS_NRI__c );
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * (br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update cancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }  
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
                                     system.debug('Inside for loop of bookList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -1751,7 +2190,62 @@ b.Status__c = 'Due';
                                             
                                         }
                                     }
-                                }else{
+                                }
+                                else if(bk1.Type_of_Client__c == 'NRI'){
+                                    system.debug('Inside for loop of bookList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            List<Brokerage__c> cancelledbrokerage = new List<Brokerage__c>();
+                                            List<Brokerage__c> Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            br1.Brokerage__c = ((bk1.Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * (br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update cancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }
+                                else if(bk1.Type_of_Client__c == 'Outstaion'){
                                     system.debug('Inside for loop of bookList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -1895,7 +2389,63 @@ b.Status__c = 'Due';
                                             
                                         }
                                     } 
-                                }else{
+                                }
+                                else if(bk1.Type_of_Client__c == 'NRI'){
+                                    system.debug('Inside for loop of optyList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            List<Brokerage__c> cancelledbrokerage = new List<Brokerage__c>();
+                                            List<Brokerage__c> Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            br1.Brokerage__c = (bk1.Custom_Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Custom_Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c);
+                                            //br1.Brokerage__c = (slab3[0].Total_Brokerage_for_OS_NRI__c - slab1[0].Total_Brokerage_for_OS_NRI__c );
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * (br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update cancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }  
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
                                     system.debug('Inside for loop of optyList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -2004,7 +2554,62 @@ b.Status__c = 'Due';
                                             
                                         }
                                     } 
-                                }else{
+                                }
+                                else if(bk1.Type_of_Client__c == 'NRI'){
+                                    system.debug('Inside for loop of optyList3');
+                                    if(bk1.Brokerage_Scheme__c != null){
+                                        brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
+                                                          Brokerage_Scheme__c,Total_Agreement_Value__c,Opportunity__c,Total_Brokerage__c,Invoice_Submitted_by_CP__c from Brokerage_Summary__c where Booking__c =: bk1.Id 
+                                                          and Brokerage_Scheme__c =: bk1.Brokerage_Scheme__c and Channel_Partner__c =: bk1.BrokerIId__c and Is_Kicker_Incentive_Summary__c = false];
+                                        system.debug('brokerSummary2::'+brokerSummary2);
+                                        if(!brokerSummary2.isEmpty() && !slab3.isEmpty() && brokerSummary2[0].Invoice_Submitted_by_CP__c == false){
+                                            system.debug('Inside if to insert cancelled Brokerage Recprd');
+                                            List<Brokerage__c> cancelledbrokerage = new List<Brokerage__c>();
+                                            List<Brokerage__c> Updatecancelledbrokerage = new List<Brokerage__c>();
+                                            Brokerage__c br1 = new Brokerage__c();
+                                            br1.Brokerage_Summary__c = brokerSummary2[0].Id;
+                                            br1.Brokerage_Scheme__c = bk1.Brokerage_Scheme__c;
+                                            br1.Opportunity__c = bk1.Opportunity__c;
+                                            br1.Booking__c = bk1.Id;
+                                            br1.Channel_Partner__c = bk1.BrokerIId__c;
+                                            br1.Brokerage_Type__c = 'Cancellation Brokerage';
+                                            br1.Name = 'Cancellation Brokerage';
+                                            br1.Opportunity_AV__c = bk1.Agreement_Value_for_brokers__c;
+                                            br1.Brokerage__c = ((bk1.Base_Brokerage__c + slab3[0].Additional_Brokerage_for_NRI__c) - (bk1.Base_Brokerage__c + slab1[0].Additional_Brokerage_for_NRI__c));
+                                            br1.Brokerage_Amount__c = ((bk1.Agreement_Value_for_brokers__c) * ( br1.Brokerage__c / 100));
+                                            cancelledbrokerage = [Select id,name,Cancelled__c,Cancelled_Brokerage_percentage__c,Cancelled_Brokerage_Amount__c,Brokerage__c
+                                                                  from Brokerage__c where Brokerage_Summary__c =: brokerSummary2[0].Id 
+                                                                  and (Brokerage_Type__c = 'Retrofit Brokerage' OR Brokerage_Type__c = 'Additional Brokerage') and Cancelled__c = false];
+                                            system.debug('cancelledbrokerage::'+cancelledbrokerage);
+                                            for(Brokerage__c cb :cancelledbrokerage){
+                                                if(cb.Brokerage__c == (-br1.Brokerage__c)){
+                                                    br1.Cancelled_Brokerage__c = cb.id;
+                                                    cb.Cancelled__c = true;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                    break;
+                                                }else if(cb.Brokerage__c > (-br1.Brokerage__c)){
+                                                    cb.Cancelled_Brokerage_percentage__c = cb.Cancelled_Brokerage_percentage__c + (-br1.Brokerage__c);
+                                                    cb.Cancelled_Brokerage_Amount__c = cb.Cancelled_Brokerage_Amount__c + br1.Brokerage_Amount__c;
+                                                    Updatecancelledbrokerage.add(cb);
+                                                }
+                                            }
+                                            if(!Updatecancelledbrokerage.isEmpty()){
+                                                update cancelledbrokerage;
+                                            }
+                                            brokerage5.add(br1);
+                                            system.debug('br1::'+br1);
+                                            
+                                            Brokerage_Summary__c bs5 = new Brokerage_Summary__c();
+                                            bs5.Id = brokerSummary2[0].Id;
+                                            bs5.Applied_Slab_Name__c = slab3[0].Name;
+                                            system.debug('slab3.Name::'+slab3[0].Name);
+                                            updateBrokerSummarySlab4.add(bs5);
+                                            system.debug('bs5::'+bs5);
+                                            
+                                        }
+                                    }
+                                }
+                                else if(bk1.Type_of_Client__c == 'Outstation'){
                                     system.debug('Inside for loop of optyList3');
                                     if(bk1.Brokerage_Scheme__c != null){
                                         brokerSummary2 = [select Id, Brokerage__c,Additional_Brokerage__c,Applied_Slab_Name__c,Base_Brokerage__c,Broker__c,Status__c,
@@ -2075,6 +2680,8 @@ b.Status__c = 'Due';
         }
         
     }
+    
+    
     public static String GetKickerIncentives(Id UId,Date activedate,Id PId, Id TId,String Toc){
         String kickerId = null;
         String kickertypoId = null;
@@ -2388,7 +2995,7 @@ Kicker_Incentive__c =:KId];*/
         Decimal KickerPercentage;
         bkList1 = [select Id,Name,Opportunity__c,Base_Brokerage_2__c,Agreement_Value_for_brokers__c,Project__c,Booking_Date__c,Tower__c,Passback__c,Type_of_Client__c,Is_Special_Brokerage_Scheme__c ,Is_AOP_CP_Applicable__c,
                    RW_Total_Receipt_Amount_Received__c,RW_Registration_Done__c,RW_Registration_Status__c,Brokerage_Scheme__c,BrokerIId__c,RW_Registration_Date__c,Type_Of_Client_Formula__c from Booking__c 
-                   where Id =: bookingId and Project__c != null and BrokerIId__c != null and Opportunity__c != null and Brokerage_Summary__c = null ];
+                   where Id =: bookingId and Project__c != null and BrokerIId__c != null and Opportunity__c != null and Brokerage_Summary__c = null /*Added by Prashant to update the filter conditions to add the RERA & CC check as well. 16-9-25.*/ AND BrokerIId__r.Valid_RERA_certificate__c = true/* AND BrokerIId__r.Valid_competency_certificate__c = true //Commented by Prashant as discussed with team to discard use of CC. 12/12/25.*/ AND Checklist_Approved__c = true/*Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025...*/];
         system.debug('bkList1::'+bkList1);
         system.debug('bkList1 size::'+bkList1.size());
         
@@ -2550,7 +3157,7 @@ Kicker_Incentive__c =:KId];*/
                 
                 system.debug('Inside 2nd If----bk.Project__c::'+bk.Project__c);
                 brokerageScheme = [select Id,Name,Base_Brokerage__c,End_Date__c,Project__c,Tower__c,Slab_Type__c,Approval_Status__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c,AOP_CP__c,
-                                   Start_Date__c from Brokerage_Scheme__c where id =: BrokerageSchemeId and Approval_Status__c = 'Approved by Level 2'];
+                                   Start_Date__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where id =: BrokerageSchemeId and Approval_Status__c = 'Approved by Level 2'];
                 
                 system.debug('brokerageScheme::'+brokerageScheme);
                 if(!brokerageScheme.isEmpty()){
@@ -2576,14 +3183,33 @@ Kicker_Incentive__c =:KId];*/
                             if(KickerIncentiveId != null){
                                 bk.Kicker_Incentive_lookup__c = (Id)KickerIncentiveId;
                             }
-                        }else{
+                        }/*else{
                             bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c;
                             bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c;
                             bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
                             if(KickerIncentiveId != null && bk.Type_of_Client__c == 'NRI'){
                                 bk.Kicker_Incentive_lookup__c = (Id)KickerIncentiveId;
                             }
+                        } */ 
+                        
+                        //Added by Prashant to add NRI base brokerage.//22-10-25.START
+                        else if(bk.Type_Of_Client_Formula__c == 'NRI'){
+                            bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - bk.Passback__c;
+                            bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - bk.Passback__c;
+                            bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_NRI__c;
+                            if(KickerIncentiveId != null){
+                                bk.Kicker_Incentive_lookup__c = (Id)KickerIncentiveId;
+                            }
                         }  
+                        //Added by Prashant to add NRI base brokerage.//22-10-25.END
+                        else if(bk.Type_Of_Client_Formula__c == 'Outstation'){
+                            bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c;
+                            bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c;
+                            bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
+                            if(KickerIncentiveId != null){
+                                bk.Kicker_Incentive_lookup__c = (Id)KickerIncentiveId;
+                            }
+                        }
                     }
                     
                     
@@ -2599,7 +3225,7 @@ Kicker_Incentive__c =:KId];*/
                     
                     brokerageSlab = [select id,Name,From__c,To__c,Total_Brokerage__c,Base_Brokerage__c,Additional_Brokerage__c,Brokerage_Scheme__c,
                                      Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,Base_Brokerage_for_Local_Bookings__c,
-                                     Base_Brokerage_for_OS_NRI__c,Total_Brokerage_for_OS_NRI__c,Total_Brokerage_for_Local_Bookings__c from Brokerage_Slab__c where Brokerage_Scheme__c =: brokerageScheme[0].Id and Name =: 'Slab 1'];
+                                     Base_Brokerage_for_OS_NRI__c,Base_Brokerage_for_NRI__c,Total_Brokerage_for_OS_NRI__c,Total_Brokerage_for_Local_Bookings__c from Brokerage_Slab__c where Brokerage_Scheme__c =: brokerageScheme[0].Id and Name =: 'Slab 1'];
                     system.debug('brokerageSlab::'+brokerageSlab);
                     
                     List<Brokerage_Summary__c> updateBrokerSummarySlab1 = new List<Brokerage_Summary__c>();
@@ -2697,7 +3323,32 @@ b.Status__c = 'Due';
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
                                             system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );                                    
                                         }                                        
-                                    }else{
+                                    }
+                                    
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'NRI'){
+                                        b.Brokerage__c = brokerageSlab[0].Base_Brokerage_for_NRI__c- brokerageScheme[0].AOP_CP__c;
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
+                                        }                                                                                
+                                    } 
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'Outstation'){
+                                        b.Brokerage__c = brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - brokerageScheme[0].AOP_CP__c;
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
+                                            system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );
+                                        }                                                                                
+                                    } 
+                                    
+                                   /* else{
                                         // b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
                                         b.Brokerage__c = brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - brokerageScheme[0].AOP_CP__c;
                                         
@@ -2709,7 +3360,7 @@ b.Status__c = 'Due';
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
                                             system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );                                    
                                         }                                
-                                    } 
+                                    } */
                                 }                               
                                brokerage1.add(b);
                                 
@@ -2867,7 +3518,40 @@ b.Status__c = 'Due';
                                         }
                                         
                                         
-                                    }else{
+                                    }
+                                    //Added by Prashant Start
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'NRI'){
+                                       b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
+                                        // b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                            
+                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                            system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                            
+                                        }                                                                              
+                                    } 
+                                    else if(bkList4[0].Type_Of_Client_Formula__c == 'Outstation'){
+                                        b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
+                                        // b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        if(bk.Passback_Amount__c > 0){
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
+                                            system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                            
+                                            
+                                        }
+                                        else{
+                                            b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                            system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                            
+                                        }                                                                               
+                                    } 
+                                    
+                                    /*else{
                                         b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
                                         if(bk.Passback_Amount__c > 0){
                                             b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
@@ -2880,7 +3564,8 @@ b.Status__c = 'Due';
                                             
                                         }
                                         
-                                    } 
+                                    } */
+                                    //Added by Prashant END
                                 }
                                                                 
                                  brokerage1.add(b);
@@ -2972,11 +3657,43 @@ b.Status__c = 'Due';
                                     else{
                                         b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
                                         system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
-                                        
                                     }
-                                    
-                                    
-                                }else{
+                                }
+                                
+                                else if(bkList4[0].Type_Of_Client_Formula__c == 'NRI'){
+                                    b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
+                                    if(bk.Passback_Amount__c > 0){
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
+                                        system.debug('Avb::'+bk.Agreement_Value_for_brokers__c);
+                                        system.debug('b::'+b.Brokerage__c);
+                                        system.debug('b1::'+(b.Brokerage__c)/ 100);
+                                        system.debug('dif::'+bk.Dif_Br__c);
+                                        system.debug('Ca::::'+((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        system.debug('Brokerage Amount 291 ::'+ b.Brokerage_Amount__c );                                        
+                                    }
+                                    else{
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                    }                                                                            
+                                } 
+                                else if(bkList4[0].Type_Of_Client_Formula__c == 'Outstation'){
+                                    b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
+                                    if(bk.Passback_Amount__c > 0){
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)) + bk.Dif_Br__c);
+                                        system.debug('Avb::'+bk.Agreement_Value_for_brokers__c);
+                                        system.debug('b::'+b.Brokerage__c);
+                                        system.debug('b1::'+(b.Brokerage__c)/ 100);
+                                        system.debug('dif::'+bk.Dif_Br__c);
+                                        system.debug('Ca::::'+((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        system.debug('Brokerage Amount 291 ::'+ b.Brokerage_Amount__c );                                        
+                                    }
+                                    else{
+                                        b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c)/ 100)));
+                                        system.debug('Brokerage Amount  ::'+ b.Brokerage_Amount__c );
+                                    }                                                                             
+                                } 
+                                
+                                /*else{
                                     b.Brokerage__c = (brokerageSlab[0].Base_Brokerage_for_OS_NRI__c - bk.Passback__c).setscale(2,RoundingMode.HALF_UP);
                                     if(bk.Passback_Amount__c > 0){
                                         b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)) + bk.Dif_Br__c);
@@ -2986,8 +3703,8 @@ b.Status__c = 'Due';
                                         b.Brokerage_Amount__c = (((bk.Agreement_Value_for_brokers__c) * ((b.Brokerage__c) / 100)));
                                         system.debug('Brokerage Amount ::'+ b.Brokerage_Amount__c );                                        
                                     }
-                                    
-                                } 
+                                } */
+                                //Added by Prashant END
                             }
                             brokerage1.add(b);
                             if(!brokerage1.isEmpty() ){
@@ -7653,7 +8370,6 @@ b.Status__c = 'Due';
         i++;
         i++;
         i++; i++;
-        i++;
         i++;
         i++;
         i++;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interest_Waiver_Requested__c</fullName>
+    <label>Interest Waiver Requested</label>
+    <summarizedField>Interest_Waiver__c.Waiver_Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>Interest_Waiver__c.Approval_Status__c</field>
+        <operation>notEqual</operation>
+        <value>Rejected</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Interest_Waiver__c.Demand__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

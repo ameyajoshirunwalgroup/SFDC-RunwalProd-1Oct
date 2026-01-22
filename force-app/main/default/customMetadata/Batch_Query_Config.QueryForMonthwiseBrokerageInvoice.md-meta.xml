@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>QueryForMonthwiseBrokerageInvoice</label>
+    <protected>false</protected>
+    <values>
+        <field>SOQL_Query__c</field>
+        <value xsi:type="xsd:string">SELECT Id,
+       Booking__c,
+CP_Brokerage__c,
+Brokerage_Scheme_Name__c,
+Type_of_Client__c,
+Tower_Unit__c,
+Brokerage_Lookup__r.Brokerage_Type__c,
+       Booking__r.Tower__r.Legal_Entity__c,
+  Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c,
+Customer_Name__c,
+       CP_Invoice_Clearing_L1__c,
+       CP_Invoice_Clearing_L2__c,
+       CP_Invoice_Approver_L2__c,
+       CP_Invoice_Approver_L3__c,
+       CP_Invoice_Approver_L4__c,
+       CP_Invoice_Approver_L5__c,
+       CP_Invoice_Approver_L1__c,
+       Channel_Partner__c,
+       Invoice_Amount__c,
+Project__c,
+       CreatedDate,
+       Brokerage_Lookup__r.Name,
+       Booking__r.Name,
+       Channel_Partner__r.Name
+FROM Brokerage_Invoice__c
+
+WHERE Brokerage_Lookup__r.Brokerage_Type__c = &apos;Additional Brokerage&apos;
+  
+  AND Booking__r.Tower__r.Legal_Entity__c != null AND Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c != null
+  AND Channel_Partner__c != null
+  AND CP_Brokerage__c = null</value>
+    </values>
+</CustomMetadata>

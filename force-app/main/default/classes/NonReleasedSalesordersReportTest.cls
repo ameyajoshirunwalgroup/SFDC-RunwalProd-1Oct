@@ -21,6 +21,7 @@ public class NonReleasedSalesordersReportTest {
         bkg.Status__c = 'Booking Confirmed';
         bkg.Project__c = proj.Id;
         bkg.Opportunity__c = opp.Id;
+        bkg.Booking_Date__c = system.now();
         insert bkg;
         
         NonReleasedSalesordersReport sch = new NonReleasedSalesordersReport();

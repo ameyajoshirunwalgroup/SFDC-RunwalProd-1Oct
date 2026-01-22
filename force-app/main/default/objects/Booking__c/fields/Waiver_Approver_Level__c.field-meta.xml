@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Waiver_Approver_Level__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+OR(
+AND(
+(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;)),
+Total_Waiver_Amount_to_be_Approved__c &lt;= 100000
+),
+AND(
+(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Dombivali&quot;)),
+Total_Waiver_Amount_to_be_Approved__c &lt;= 50000
+)
+),
+&quot;Level 1&quot;,
+
+IF(
+OR(
+AND(
+( ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;)),
+Total_Waiver_Amount_to_be_Approved__c &lt;= 200000
+),
+AND(
+(ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;Dombivali&quot;)),
+Total_Waiver_Amount_to_be_Approved__c &lt;= 100000
+)
+),
+&quot;Level 2&quot;,
+
+IF(
+OR(
+AND(
+(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;)),
+Total_Waiver_Amount_to_be_Approved__c &gt; 200000
+),
+AND(
+(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Dombivali&quot;)),
+Total_Waiver_Amount_to_be_Approved__c &gt; 100000
+)
+),
+&quot;Level 3&quot;,
+&quot;Not Applicable&quot;
+)
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Waiver Approver Level</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
