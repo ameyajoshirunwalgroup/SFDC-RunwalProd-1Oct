@@ -1241,7 +1241,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
             for(Case objCase : lstCase){
                 if(objCase.Origin == 'Channel Partner Portal' && objCase.RecordTypeId == ChannelPartnerId){
                     Case c = new Case();
-                    if(contact[0].Id != null){
+                    if(!contact.isEmpty() && contact[0].Id != null){
                         c.ContactId = contact[0].Id;
                         c.Account_Channel_Partner__c = contact[0].AccountId;
                     }
