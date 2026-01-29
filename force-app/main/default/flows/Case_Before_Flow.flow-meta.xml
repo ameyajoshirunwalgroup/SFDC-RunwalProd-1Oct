@@ -84,7 +84,9 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+            <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -155,7 +157,9 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+            <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -226,7 +230,9 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+            <elementReference>Get_User_For_This_Contact.Email</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -329,7 +335,9 @@ Runwal</stringValue>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+            <elementReference>$Record.Name_Confirmation_Form__r.Booking__r.Unit_No__r.Relationship_Manager__r.User__c</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
