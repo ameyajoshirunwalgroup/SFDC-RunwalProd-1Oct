@@ -13,9 +13,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Functional_User__r.Email</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -84,9 +82,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>{!$Record.Owner:User.Email}</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -157,9 +153,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>{!$Record.Owner:User.Email}</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -230,9 +224,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>{!Get_User_For_This_Contact.Email}</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -335,9 +327,7 @@ Runwal</stringValue>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>{!$Record.Name_Confirmation_Form__r.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email}</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>

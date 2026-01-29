@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>send_Email_To_Customer</name>
+        <label>send Email To Customer</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value>
+            <elementReference>get_Primary_Applicant_Details.Email_Address__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Introduction of Your Relationship Manager</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;Dear {!get_Primary_Applicant_Details.Name},&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;I take this opportunity to introduce myself &lt;/span&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!$Record.Booking__r.RM_Name__c}&lt;/strong&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;&amp;nbsp;as your Relationship Manager.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;Please contact me for any queries or information required regarding your flat at {!$Record.RW_Project__r.Name}. My contact details are as follows. Please make sure you call us from your registered mobile number only:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;Contact number- {!$Record.Relationship_Manager__r.Contact_Number__c}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;E-mail Id- {!$Record.Relationship_Manager__r.RM_Email__c}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;color: black; font-family: inherit;&quot;&gt;Please feel free to contact me if you need any further information.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;color: black; font-family: inherit;&quot;&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: black; font-family: inherit;&quot;&gt;Warm Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;{!$Record.Booking__r.RM_Name__c}&lt;/strong&gt;&lt;/p&gt;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Booking__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>check_Bookings_Record</name>
+        <label>check Bookings Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Booking Confirmed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_Primary_Applicant_Details</targetReference>
+            </connector>
+            <label>is Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_Email_of_Primary_Applicant</name>
+        <label>check Email of Primary Applicant</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Email_not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Primary_Applicant_Details.Email_Address__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>send_Email_To_Customer</targetReference>
+            </connector>
+            <label>is Email not null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_RM</name>
+        <label>check RM</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>RM_Gets_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Relationship_Manager__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Relationship_Manager__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_Bookings_Record</targetReference>
+            </connector>
+            <label>RM Gets Changed</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Project Unit( After Operation) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Project Unit( After Operation)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>get_Primary_Applicant_Details</name>
+        <label>get Primary Applicant Details</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>check_Email_of_Primary_Applicant</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Applicant_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Primary Applicant</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Booking__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Booking__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Applicant_Details__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>check_RM</targetReference>
+        </connector>
+        <object>Project_Unit__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
