@@ -34,7 +34,9 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+            <elementReference>$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -98,7 +100,9 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+            <elementReference>$Record.Booking__r.Primary_Applicant_Email__c</elementReference>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
