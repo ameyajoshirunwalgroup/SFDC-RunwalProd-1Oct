@@ -83,6 +83,72 @@ public class NameConfirmationController {
         //return base64String;
     }
     
+    @InvocableMethod(label='Generate and Send Form' description='Generates a PDF, creates a public link, and returns the URL' category='Booking')
+    public static List<String> generateAndSendFormInvocable(List<Id> formIds) {
+        List<String> results = new List<String>();
+
+        for (Id formId : formIds) {
+            System.debug('generateAndSendForm for ID: ' + formId);
+            
+            PageReference pdfPage = Page.NameConfirmationPDF;
+            pdfPage.getParameters().put('id', formId);
+            
+            Blob pdfBlob;
+            if(Test.isRunningTest()){
+                pdfBlob = Blob.valueOf('Test');
+            } else {
+                // Note: getContentAsPDF() is a callout-like action; 
+                // ensure this isn't called after DML in the same transaction.
+                pdfBlob = pdfPage.getContentAsPDF();
+            }
+
+            List<Booking__c> bkg = [SELECT Id, NCF_Document_Id__c FROM Booking__c WHERE Id = :formId LIMIT 1];
+            
+            // Check if URL already exists
+            if(!bkg.isEmpty() && bkg[0].NCF_Document_Id__c != null) {
+                List<ContentDistribution> existingDist = [SELECT DistributionPublicUrl FROM ContentDistribution 
+                                                           WHERE ContentDocumentId = :bkg[0].NCF_Document_Id__c 
+                                                           LIMIT 1];
+                if(!existingDist.isEmpty()) {
+                    results.add(existingDist[0].DistributionPublicUrl);
+                    continue; // Skip to next ID in list
+                }
+            }
+
+            // Create New Content
+            ContentVersion cv = new ContentVersion(
+                Title = 'NameConfirmation_' + formId,
+                PathOnClient = 'NameConfirmationForm.pdf',
+                VersionData = pdfBlob
+            );
+            insert cv;
+
+            Id docId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id].ContentDocumentId;
+            
+            ContentDistribution dist = new ContentDistribution(
+                Name = 'Name Confirmation Form',
+                ContentVersionId = cv.Id,
+                PreferencesAllowViewInBrowser = true,
+                PreferencesAllowOriginalDownload = true
+            );
+            insert dist;
+
+            ContentDistribution distr = [SELECT DistributionPublicUrl FROM ContentDistribution WHERE Id = :dist.Id];
+            
+            // Update Booking Record
+            if(!bkg.isEmpty()) {
+                bkg[0].NCF_Document_Id__c = docId;
+                BookingTriggerHandler.byPass = true;
+                update bkg[0];
+                BookingTriggerHandler.byPass = false;
+            }
+
+            results.add(distr.DistributionPublicUrl);
+        }
+
+        return results;
+    }
+    
     public class Name_Confirmation{
         public String dt { get; set; }
         public String Flat_No { get; set; }
