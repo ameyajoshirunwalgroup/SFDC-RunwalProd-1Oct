@@ -70,12 +70,12 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
 
         // Finalize Averages
         if (rw.totalNoOfBookings > 0) {
-            rw.brokerage = globalInvoiceSum / rw.totalNoOfBookings;
+            rw.brokerage = (globalInvoiceSum / rw.totalNoOfBookings).setScale(2, System.RoundingMode.HALF_UP);
         }
 
         for (ProjectData pd : projectMap.values()) {
             if (pd.projectSummary.noOfBookings > 0) {
-                pd.projectSummary.brokerage = pd.tempInvoiceSum / pd.projectSummary.noOfBookings;
+                pd.projectSummary.brokerage = (pd.tempInvoiceSum / pd.projectSummary.noOfBookings).setScale(2, System.RoundingMode.HALF_UP);
             }
             rw.projectDetails.add(pd);
         }
