@@ -46,15 +46,15 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         Decimal globalInvoiceSum = 0;
 
         for (CP_Brokerage__c rec : records) {
-            rw.totalNoOfBookings++;
-            rw.totalbrokerage += (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
-            rw.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
 
             // Track which projects this specific booking has already contributed to
             // to avoid double-counting the same booking for the same project
             Set<String> processedProjectsForThisRecord = new Set<String>();
 
             for (Brokerage_Invoice__c inv : rec.Brokerage_Invoices__r) {
+                rw.totalNoOfBookings++;
+                rw.totalbrokerage += (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
+                rw.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
                 globalInvoiceSum += (inv.Brokerage__c != null) ? inv.Brokerage__c : 0;
 
                 if (!projectMap.containsKey(inv.Project__c)) {
