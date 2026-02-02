@@ -27,7 +27,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                                       Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,
                                                       Invoice_Status__c,Invoice_Status_Brokerage_invoice__c,Booking__r.Booking_Date__c,Booking__r.Name,Opportunity__r.Name,
                                                       Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c,Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c, Booking__r.Allotment_Premium__c,
-                                                      Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c
+                                                      Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c,
+                                                      Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c
                                                               
                                                       
                                                                from Brokerage_Invoice__c  where Channel_Partner__c =: cpId ];
@@ -232,6 +233,16 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
             for(Brokerage_Invoice__c brokerageInvoiceObj: brokerageInvoice){
                 base.customerName = brokerageInvoiceObj.Customer_Name__c;
                 base.projectName = brokerageInvoiceObj.Project__c;
+                if(brokerageInvoiceObj.Booking__r.Payment_Received__c!=null){
+                    base.percentagePaidByCustomer = brokerageInvoiceObj.Booking__r.Payment_Received__c;
+                }
+                if(brokerageInvoiceObj.Booking__r.RW_Registration_Status__c!=null){
+                    base.registrationStatus = brokerageInvoiceObj.Booking__r.RW_Registration_Status__c;
+                }
+                if(brokerageInvoiceObj.Booking__r.Booking_Date__c !=null){
+                    Date d = brokerageInvoiceObj.Booking__r.Booking_Date__c.date();
+                    base.bookingDate = DateTime.newInstance(d.year(), d.month(), d.day()).format('dd/MM/yyyy');
+                }
                 if(brokerageInvoiceObj.Total_Agreement_Value__c!=null){
                 	base.avValueForBrokerage += brokerageInvoiceObj.Total_Agreement_Value__c;
                 }
@@ -379,6 +390,9 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
         public String salesOrderNumber;
         public String cpBrokerCode;
         public String customerNumber;
+        public Decimal percentagePaidByCustomer;
+        public String registrationStatus;
+        public String bookingDate;
     }
     
     public class InvDetailsForLadder{
