@@ -28,7 +28,7 @@ global without sharing class Lockated_CPGetMyLeads {
                                                (Walkin_Channel_Partner__c = :cpId OR RW_Broker__c =: cpId)
                                                AND (LeadSource = 'Channel Partner' OR Walkin_Source__c = 'Channel Partner' OR LeadSource = 'Temp Channel Partner' OR Walkin_Source__c = 'Temp Channel Partner') order by createddate desc];
                     
-                    list<Opportunity> opplist = [Select Id,Name,StageName,RW_Mobile_No__c,RW_Email__c,RW_Project__r.Name,Date_Of_Visit__c,Walkin_Source__c FROM Opportunity where
+                    list<Opportunity> opplist = [Select Id,Name,StageName,RW_Mobile_No__c,RW_Email__c,RW_Project__r.Name,Date_Of_Visit__c,Walkin_Source__c,Account.PersonEmail FROM Opportunity where
                                                  RW_Walkin_Channel_Partner__c  = : cpId 
                                                  AND (Walkin_Source__c  = 'Channel Partner'  OR Walkin_Source__c  = 'Temp Channel Partner')
                                                  AND StageName = 'Site Visit'  order by createddate desc];
@@ -145,7 +145,9 @@ global without sharing class Lockated_CPGetMyLeads {
                                     sv.status = o.StageName;
                                     sv.name = o.Name;
                                     sv.mobile = o.RW_Mobile_No__c;
-                                    sv.email = o.RW_Email__c;
+                                    if(o.AccountId!=null && o.Account.PersonEmail!=null){
+                                    	sv.email = o.Account.PersonEmail;
+                                    }
                                     sv.project = o.RW_Project__r.Name;
                                     // sv.siteVisitDate = o.Date_Of_Visit__c;
                                     if(o.Date_Of_Visit__c != null) {
@@ -280,7 +282,9 @@ global without sharing class Lockated_CPGetMyLeads {
                                     sv.status = o.StageName;
                                     sv.name = o.Name;
                                     sv.mobile = o.RW_Mobile_No__c;
-                                    sv.email = o.RW_Email__c;
+                                    if(o.AccountId!=null && o.Account.PersonEmail!=null){
+                                    	sv.email = o.Account.PersonEmail;
+                                    }
                                     sv.project = o.RW_Project__r.Name;
                                     // sv.siteVisitDate = o.Date_Of_Visit__c;
                                     if(o.Date_Of_Visit__c != null) {
