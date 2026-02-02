@@ -118,6 +118,17 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                             totalDetails.brokerageAmount = inv.Total_Brokerage__c;
                             // totalDetails.statementUrl = null;
                             totalDetails.status = sts;
+                            if(sts == 'paid'){
+                                totalDetails.status = 'Paid';
+                            }else if(sts == 'invoiceRaised'){
+                                totalDetails.status = 'Invoice Raised';
+                            }
+                            else if(sts == 'dueEligibleForInvoicing'){
+                                totalDetails.status = 'Due Eligible For Invoicing';
+                            }
+                            else if(sts == 'notdue'){
+                                totalDetails.status = 'Not Due';
+                            }
                             tlist.add(totalDetails);
                             // End For TotatlDetails In Wrapper
                             if(inv.Total_Brokerage__c!=null){
