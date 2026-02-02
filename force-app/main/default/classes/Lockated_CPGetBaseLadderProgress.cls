@@ -14,15 +14,9 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         }
 
         try {
-            Map<String, Date> fyDates = getFinancialYearDates();
-            Date startDate = fyDates.get('start');
-            Date endDate = fyDates.get('end');
-            
             List<CP_Brokerage__c> brokerageRecords = [
                 SELECT Id, Total_Brokerage__c, Total_Amount_Balance__c,
-                       (SELECT Id, Brokerage__c, Project__c, Booking__r.Booking_Date__c FROM Brokerage_Invoices__r WHERE Project__c != null 
-                       AND Booking__r.Booking_Date__c >= :startDate 
-                       AND Booking__r.Booking_Date__c <= :endDate) 
+                       (SELECT Id, Brokerage__c, Project__c FROM Brokerage_Invoices__r WHERE Project__c != null) 
                 FROM CP_Brokerage__c
                 WHERE Brokerage_Type__c = 'Base Brokerage' AND Channel_Partner__c = :cpId
             ];
@@ -76,34 +70,17 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
 
         // Finalize Averages
         if (rw.totalNoOfBookings > 0) {
-            rw.brokerage = (globalInvoiceSum / rw.totalNoOfBookings).setScale(0, System.RoundingMode.HALF_UP);
+            rw.brokerage = (globalInvoiceSum / rw.totalNoOfBookings).setScale(2, System.RoundingMode.HALF_UP);
         }
 
         for (ProjectData pd : projectMap.values()) {
             if (pd.projectSummary.noOfBookings > 0) {
-                pd.projectSummary.brokerage = (pd.tempInvoiceSum / pd.projectSummary.noOfBookings).setScale(0, System.RoundingMode.HALF_UP);
+                pd.projectSummary.brokerage = (pd.tempInvoiceSum / pd.projectSummary.noOfBookings).setScale(2, System.RoundingMode.HALF_UP);
             }
             rw.projectDetails.add(pd);
         }
 
         return rw;
-    }
-    
-    public static Map<String, Date> getFinancialYearDates() {
-        Date today = Date.today();
-        Integer currentMonth = today.month();
-        Integer currentYear = today.year();
-        
-        // If month is Jan, Feb, or Mar (1, 2, 3), the FY started in the previous calendar year
-        Integer startYear = (currentMonth <= 3) ? currentYear - 1 : currentYear;
-        
-        Date fyStart = Date.newInstance(startYear, 4, 1);
-        Date fyEnd = Date.newInstance(startYear + 1, 3, 31);
-        
-        return new Map<String, Date>{
-            'start' => fyStart,
-            'end' => fyEnd
-        };
     }
 
     private static void sendResponse(RestResponse res, Integer code, Object body) {
