@@ -14,7 +14,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         }
 
         try {
-            Map<String, Date> fyDates = getFinancialYearDates();
+            Map<String, Date> fyDates = getFinancialsYearDates();
             Date startDate = fyDates.get('start');
             Date endDate = fyDates.get('end');
             
@@ -89,7 +89,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         return rw;
     }
     
-    public static Map<String, Date> getFinancialYearDates() {
+    public static Map<String, Date> getFinancialsYearDates() {
         Date today = Date.today();
         Integer currentMonth = today.month();
         Integer currentYear = today.year();
