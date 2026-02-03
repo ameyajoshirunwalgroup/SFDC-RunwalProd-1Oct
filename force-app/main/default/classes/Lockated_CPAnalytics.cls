@@ -14,6 +14,10 @@ global without sharing class Lockated_CPAnalytics {
             resp.statusCode = 400;
         }else{ 
             try{
+                Map<String, Date> fyDates = getFinancialsYearDates();
+                Date startDate = fyDates.get('start');
+                Date endDate = fyDates.get('end');
+                
                 Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
                 Id TempCPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
                 list<Broker__c> brs = [Select Id,RecordTypeId from Broker__c where Id =: cpId limit 1];            
@@ -25,14 +29,14 @@ global without sharing class Lockated_CPAnalytics {
                         SELECT COUNT()
                         FROM Lead where IsActive__c = true
                         and (Walkin_Channel_Partner__c = :cpId OR RW_Broker__c =: cpId)
-                        AND (LeadSource = 'Channel Partner' OR Walkin_Source__c = 'Channel Partner')                     
+                        AND (LeadSource = 'Channel Partner' OR Walkin_Source__c = 'Channel Partner') AND CreatedDate >=: startDate AND CreatedDate <=: endDate                 
                     ];
                 } else if(brs[0].RecordTypeId == TempCPRecordTypeId){
                     activeLeadsCount = [
                         SELECT COUNT()
                         FROM Lead where IsActive__c = true
                         and (Walkin_Channel_Partner__c = :cpId OR RW_Broker__c =: cpId)
-                        AND (LeadSource = 'Temp Channel Partner' OR Walkin_Source__c = 'Temp Channel Partner')
+                        AND (LeadSource = 'Temp Channel Partner' OR Walkin_Source__c = 'Temp Channel Partner') AND CreatedDate >=: startDate AND CreatedDate <=: endDate
                     ];
                 }
                 
@@ -43,14 +47,14 @@ global without sharing class Lockated_CPAnalytics {
                         SELECT COUNT()
                         FROM Opportunity where
                         RW_Walkin_Channel_Partner__c  = : cpId and StageName = 'Site Visit'
-                        AND Walkin_Source__c  = 'Channel Partner'
+                        AND Walkin_Source__c  = 'Channel Partner' AND CreatedDate >=: startDate AND CreatedDate <=: endDate
                     ];
                 } else if(brs[0].RecordTypeId == TempCPRecordTypeId){
                     activeOppsCount = [
                         SELECT COUNT()
                         FROM Opportunity where
                         RW_Walkin_Channel_Partner__c  = : cpId and StageName = 'Site Visit'
-                        AND Walkin_Source__c  = 'Temp Channel Partner'
+                        AND Walkin_Source__c  = 'Temp Channel Partner' AND CreatedDate >=: startDate AND CreatedDate <=: endDate
                     ];
                 }
                 
@@ -61,7 +65,7 @@ global without sharing class Lockated_CPAnalytics {
                 List<SalesDetail> salesDetails = new List<SalesDetail>();
                 list<Booking__c> blist = [SELECT Id,Name,Agreement_Value_for_brokers__c,Booking_Date__c,Source_of_Booking__c,Status__c,Unit_Type__c,Unit_No__r.Name,Tower__r.Name,Project__r.Name,Opportunity__r.Name
                                           FROM Booking__c where 
-                                          (Source_of_Booking__c ='Channel Partner' OR Source_of_Booking__c ='Temp Channel Partner')  and BrokerIId__c =: cpId Order by Booking_Date__c Desc];
+                                          (Source_of_Booking__c ='Channel Partner' OR Source_of_Booking__c ='Temp Channel Partner')  and BrokerIId__c =: cpId AND Booking_Date__c >=: startDate AND Booking_Date__c <=: endDate Order by Booking_Date__c Desc];
                 if(!blist.isEmpty()){            
                     Date today = Date.today();
                     Integer year = today.year();
@@ -124,7 +128,7 @@ global without sharing class Lockated_CPAnalytics {
                                                       Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,
                                                       Invoice_Status__c,Invoice_Status_Brokerage_invoice__c,Booking__r.Booking_Date__c,Booking__r.Name,Opportunity__r.Name,
                                                       Opportunity__c,Booking__r.Id                                       
-                                                      from Brokerage_Invoice__c  where Channel_Partner__c =: cpId ];
+                                                      from Brokerage_Invoice__c  where Channel_Partner__c =: cpId AND Booking__r.Booking_Date__c >=: startDate AND Booking__r.Booking_Date__c <=: endDate];
                 
                 if(!invlist.isEmpty()){
                     list<SummaryWrapper> slist = new list<SummaryWrapper>();
@@ -175,6 +179,23 @@ global without sharing class Lockated_CPAnalytics {
                 resp.statusCode = 400;
             }
         }
+    }
+    
+    public static Map<String, Date> getFinancialsYearDates() {
+        Date today = Date.today();
+        Integer currentMonth = today.month();
+        Integer currentYear = today.year();
+        
+        // If month is Jan, Feb, or Mar (1, 2, 3), the FY started in the previous calendar year
+        Integer startYear = (currentMonth <= 3) ? currentYear - 1 : currentYear;
+        
+        Date fyStart = Date.newInstance(startYear, 4, 1);
+        Date fyEnd = Date.newInstance(startYear + 1, 3, 31);
+        
+        return new Map<String, Date>{
+            'start' => fyStart,
+            'end' => fyEnd
+        };
     }
     
     public class Summary {
