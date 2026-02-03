@@ -441,7 +441,7 @@ global without sharing class Lockated_CPAuth {
         cp.IFSC_Code__c = data.bankDetails.bankAccountIfscCode;
         cp.Account_Number__c = data.bankDetails.bankAccountNumber;
         cp.Bank_Name__c = data.bankDetails.bankName;
-        cp.Branch_Code__c = data.bankDetails.branchName;        
+        cp.Bank_Branch__c = data.bankDetails.branchName;        
         cp.Created_from_Lockated__c = true;
         
         list<String> approvers = CPRegisterationController.getApprovers(data.projectId);
