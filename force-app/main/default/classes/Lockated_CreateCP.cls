@@ -29,6 +29,7 @@ public class Lockated_CreateCP {
         body += writeBodyParameter('user[org_user_id]', con.Id); // Using as External ID
         body += writeBodyParameter('user[pan_number]', con.Broker_Pan_No__c);
         body += writeBodyParameter('user[gst_number]', con.RW_GST_Number__c);
+        body += writeBodyParameter('user[password]', 'runwal@1234');
         
         // Final Boundary
         body += '--' + BOUNDARY + '--';
