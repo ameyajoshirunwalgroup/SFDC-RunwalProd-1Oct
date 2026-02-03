@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Call_Applicant_Update_Class</name>
-        <label>Call Applicant Update Class</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>RW_SAPApplicantDetails</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Show_Success_Message</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>oIdSet</name>
-            <value>
-                <elementReference>varNCF.Booking__r.Opportunity__c</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>RW_SAPApplicantDetails</nameSegment>
-        <offset>0</offset>
-    </actionCalls>
-    <actionCalls>
         <name>redirect_To_Booking</name>
         <label>redirect To Booking</label>
         <locationX>0</locationX>
@@ -196,7 +176,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Call_Applicant_Update_Class</targetReference>
+            <targetReference>Show_Success_Message</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
