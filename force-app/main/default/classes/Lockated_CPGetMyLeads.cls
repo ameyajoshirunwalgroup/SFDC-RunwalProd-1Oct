@@ -645,7 +645,7 @@ global without sharing class Lockated_CPGetMyLeads {
         public String email;
         public String project;
         public String siteVisitDate;
-        public String protectionInDays;
+        public String protectionInDay;
     }
     
     public class BookingDetails{
