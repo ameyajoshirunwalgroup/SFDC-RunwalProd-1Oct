@@ -38,6 +38,8 @@ global without sharing class Lockated_CPGetPicklistValues {
         
         res.getPropertyTypefromLead = getPicklistValues('Lead', 'Project_Type__c');
         
+        res.getYears = getPicklistValues('Broker__c', 'CP_APP_Years__c');
+        
         //res.getCountrywiseCountryCode = getDependentPicklist('Lead','RDS_Country__c','RDS_Country_Code__c');
         
         res.getCountryStateCity = getThreeLevelPicklistNew('Lead','Country__c','State__c','City__c');
@@ -76,6 +78,7 @@ global without sharing class Lockated_CPGetPicklistValues {
         //public PicklistWrapper getCountryState;
         //public PicklistWrapper getStateCity;
         public Map<String, Map<String, List<String>>> getCountryStateCity;
+        public list<String> getYears;
         public list<String> getProjectNames;
     }
     
