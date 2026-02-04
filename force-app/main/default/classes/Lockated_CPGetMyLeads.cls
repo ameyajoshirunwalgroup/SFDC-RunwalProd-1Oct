@@ -24,7 +24,7 @@ global without sharing class Lockated_CPGetMyLeads {
                     list<LeadDetails> InactiveLeadDetailslist = new list<LeadDetails>();
                     list<SiteVisitDetails> SiteVisitDetailslist = new list<SiteVisitDetails>();
                     list<BookingDetails> BookingDetailslist = new list<BookingDetails>();
-                    list<lead> leadlist = [Select Id,Name,RW_Mobile_No__c,Email,RW_Project__c,RW_Project__r.Name,Proposed_Visit_Date__c,IsActive__c,LeadSource,Walkin_Source__c,(Select Id,Generated_OTP__c from OTPs__r order by createddate desc limit 1) FROM Lead where 
+                    list<lead> leadlist = [Select Id,Name,RW_Mobile_No__c,Email,RW_Project__c,CreatedDate,RW_Project__r.Name,Proposed_Visit_Date__c,IsActive__c,LeadSource,Walkin_Source__c,(Select Id,Generated_OTP__c from OTPs__r order by createddate desc limit 1) FROM Lead where 
                                                (Walkin_Channel_Partner__c = :cpId OR RW_Broker__c =: cpId)
                                                AND (LeadSource = 'Channel Partner' OR Walkin_Source__c = 'Channel Partner' OR LeadSource = 'Temp Channel Partner' OR Walkin_Source__c = 'Temp Channel Partner') order by createddate desc];
                     
@@ -84,6 +84,13 @@ global without sharing class Lockated_CPGetMyLeads {
                                         l.mobile = l1.RW_Mobile_No__c;
                                         l.email = l1.Email;
                                         l.project = l1.RW_Project__r.Name;
+                                        if(l1.CreatedDate != null) {
+                                            Date d = Date.valueOf(l1.CreatedDate);
+                                            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                                            l.createdDate = dt.format('dd-MM-yyyy');
+                                        } else {
+                                            l.createdDate = null;
+                                        }
                                         // l.siteVisitDate = Date.valueof(l1.Proposed_Visit_Date__c);  
                                         // *** DATE FIX FOR LEADS ***
                                         if(l1.Proposed_Visit_Date__c != null) {
@@ -111,6 +118,13 @@ global without sharing class Lockated_CPGetMyLeads {
                                         l.mobile = l1.RW_Mobile_No__c;
                                         l.email = l1.Email;
                                         l.project = l1.RW_Project__r.Name;
+                                        if(l1.CreatedDate != null) {
+                                            Date d = Date.valueOf(l1.CreatedDate);
+                                            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                                            l.createdDate = dt.format('dd-MM-yyyy');
+                                        } else {
+                                            l.createdDate = null;
+                                        }
                                         // l.siteVisitDate = Date.valueof(l1.Proposed_Visit_Date__c);
                                         // *** DATE FIX FOR LEADS ***
                                         if(l1.Proposed_Visit_Date__c != null) {
@@ -221,6 +235,13 @@ global without sharing class Lockated_CPGetMyLeads {
                                         l.mobile = l1.RW_Mobile_No__c;
                                         l.email = l1.Email;
                                         l.project = l1.RW_Project__r.Name;
+                                        if(l1.CreatedDate != null) {
+                                            Date d = Date.valueOf(l1.CreatedDate);
+                                            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                                            l.createdDate = dt.format('dd-MM-yyyy');
+                                        } else {
+                                            l.createdDate = null;
+                                        }
                                         // l.siteVisitDate = Date.valueof(l1.Proposed_Visit_Date__c);
                                         // *** DATE FIX FOR LEADS ***
                                         if(l1.Proposed_Visit_Date__c != null) {
@@ -248,6 +269,13 @@ global without sharing class Lockated_CPGetMyLeads {
                                         l.mobile = l1.RW_Mobile_No__c;
                                         l.email = l1.Email;
                                         l.project = l1.RW_Project__r.Name;
+                                        if(l1.CreatedDate != null) {
+                                            Date d = Date.valueOf(l1.CreatedDate);
+                                            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                                            l.createdDate = dt.format('dd-MM-yyyy');
+                                        } else {
+                                            l.createdDate = null;
+                                        }
                                         //l.siteVisitDate = Date.valueof(l1.Proposed_Visit_Date__c);
                                         // *** DATE FIX FOR LEADS ***
                                         if(l1.Proposed_Visit_Date__c != null) {
@@ -593,6 +621,7 @@ global without sharing class Lockated_CPGetMyLeads {
         public String inviteCode;//Clearify Needed.(For now mapped the latest OTP generated )
         public String visitType;
         public String leadId;
+        public String createdDate;
     }
     
     public class BookVisitDetails{
