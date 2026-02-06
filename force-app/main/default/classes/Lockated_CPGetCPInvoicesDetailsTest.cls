@@ -598,6 +598,7 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         CP_Brokerage__c cpBrokerage = new CP_Brokerage__c();
         List<Brokerage_Invoice__c> brokerageInvoice = new List<Brokerage_Invoice__c>();
         Lockated_CPGetCPInvoicesDetails.assignLadderBrokerage(LadderDetails,cpBrokerage,brokerageInvoice);
+        Lockated_CPGetCPInvoicesDetails.assignLadderBrokerageBI(LadderDetails, new Brokerage_Invoice__c());
         Lockated_CPGetCPInvoicesDetails.doGet();
         Test.stopTest();
         
@@ -624,6 +625,31 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         CP_Brokerage__c cpBrokerage = new CP_Brokerage__c();
         List<Brokerage_Invoice__c> brokerageInvoice = new List<Brokerage_Invoice__c>();
         Lockated_CPGetCPInvoicesDetails.assignAOPBrokerage(aopDetails,cpBrokerage,brokerageInvoice);
+        Lockated_CPGetCPInvoicesDetails.assignAOPBrokerageBI(aopDetails, new Brokerage_Invoice__c());
+        Lockated_CPGetCPInvoicesDetails.doGet();
+        Test.stopTest();
+        
+    }
+    @isTest
+    static void TestCase9(){
+        
+        
+        
+        RestRequest req = new RestRequest();
+        RestResponse res = new RestResponse();
+        req.httpMethod = 'GET';
+        req.requestURI = '/services/apexrest/cpGetCPInvoicesDetails';
+        req.addParameter('cpId', 'test');
+        
+        RestContext.request = req;
+        RestContext.response = res;
+        
+        // 4️⃣ Call REST method
+        Test.startTest();
+        Lockated_CPGetCPInvoicesDetails.InvDetailsForBase baseDetails = new Lockated_CPGetCPInvoicesDetails.InvDetailsForBase();
+        CP_Brokerage__c cpBrokerage = new CP_Brokerage__c();
+        List<Brokerage_Invoice__c> brokerageInvoice = new List<Brokerage_Invoice__c>();
+        Lockated_CPGetCPInvoicesDetails.assignBaseBrokerageBI(baseDetails, new Brokerage_Invoice__c());
         Lockated_CPGetCPInvoicesDetails.doGet();
         Test.stopTest();
         
@@ -1160,6 +1186,12 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         for(CP_Brokerage__c cpObj : cpList) {
             childInvoices.add(new Brokerage_Invoice__c(
                 CP_Brokerage__c = cpObj.Id,
+                Channel_Partner__c = cp.Id,
+                //Customer_Name__c = 'Test Customer',
+                Total_Agreement_Value__c = 500000,
+                Brokerage_Lookup__c = bro2.Id
+            ));
+            childInvoices.add(new Brokerage_Invoice__c(
                 Channel_Partner__c = cp.Id,
                 //Customer_Name__c = 'Test Customer',
                 Total_Agreement_Value__c = 500000,

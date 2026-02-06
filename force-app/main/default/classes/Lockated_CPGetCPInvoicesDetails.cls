@@ -17,80 +17,90 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                 Wrapper resp = new Wrapper();
                 ResponseWrapperTotal totalDetailsWrapper = new ResponseWrapperTotal();
                 
-                
                 list<CP_Brokerage__c> invlist = [Select id,Total_Invoice_Amount__c,Total_Amount_Paid__c,SAP_Document_No__c,Total_Brokerage__c, SAP_Posting_Date__c, If_GST_is_applicable__c, Approval_Status__c,
                                                       Invoice_Date__c,Invoice_Number__c,Status__c,Brokerage_Type__c, AOP__r.Name, AOP__r.AOP_Schemes__r.Name,AOP__r.Commitment_max__c,Company_Name__c, Approval_Status_clearing__c,
                                                       Invoice_Status__c, Tower_Unit__c,Brokerage_Scheme_Name__c,Brokerage__c,Invoice_Status_CP_Portal__c,SO_Number__c,
-                                                               SAP_Broker_code__c,Customer_Code__c from CP_Brokerage__c   where Channel_Partner__c =: cpId ];
-                
-                list<Brokerage_Invoice__c> brokerageinvlist = [Select id,Booking__c,Invoice_Amount__c,Total_Amount_Paid__c,Brokerage_Lookup__r.Brokerage_Type__c,SAP_Document_No__c,
-                                                      Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,
+                                                               SAP_Broker_code__c,Customer_Code__c,(Select id,Booking__c,Invoice_Amount__c,Total_Amount_Paid__c,Brokerage_Lookup__r.Brokerage_Type__c,SAP_Document_No__c,
+                                                      Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,CreatedDate,
                                                       Invoice_Status__c,Invoice_Status_Brokerage_invoice__c,Booking__r.Booking_Date__c,Booking__r.Name,Opportunity__r.Name,
                                                       Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c,Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c, Booking__r.Allotment_Premium__c,
                                                       Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c,
-                                                      Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c
-                                                              
-                                                      
-                                                               from Brokerage_Invoice__c  where Channel_Partner__c =: cpId ];
+                                                      Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c from Brokerage_Invoices__r) from CP_Brokerage__c   where Channel_Partner__c =: cpId ];
+                
+                Date baseBrkCutoffDate = Date.valueOf(label.Base_Brokerage_Cut_off_Date);
+                Date ladderBrkCutoffDate = Date.valueOf(label.Ladder_Brokerage_Cut_off_Date);
+                
+                list<Brokerage_Invoice__c> brokerageinvlist = [Select id,Booking__c,Invoice_Amount__c,Total_Amount_Paid__c,Brokerage_Lookup__r.Brokerage_Type__c,SAP_Document_No__c,
+                                                      Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,CreatedDate,
+                                                      Invoice_Status__c,Invoice_Status_Brokerage_invoice__c,Booking__r.Booking_Date__c,Booking__r.Name,Opportunity__r.Name,SAP_Posting_Date__c,
+                                                      If_GST_is_applicable__c,Approval_Status__c,Tower_Unit__c,Brokerage_Scheme_Name__c,Brokerage__c,SO_Number__c,SAP_Broker_code__c,
+                                                      Customer_Code__c,
+                                                      Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c,Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c, Booking__r.Allotment_Premium__c,
+                                                      Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c,
+                                                      Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c from Brokerage_Invoice__c  where 
+                                                      Channel_Partner__c =: cpId and CP_Brokerage__c = null and Brokerage_Lookup__r.Brokerage_Type__c != null 
+                                                      AND (
+                                                            (Brokerage_Lookup__r.Brokerage_Type__c = 'Base Brokerage' AND CreatedDate <= :baseBrkCutoffDate)
+                                                            OR 
+                                                            (Brokerage_Lookup__r.Brokerage_Type__c = 'Additional Brokerage' AND CreatedDate <= :ladderBrkCutoffDate)
+                                                        )];
                 
                 
-                Map<Id, List<Brokerage_Invoice__c>> parentToChildMap = new Map<Id, List<Brokerage_Invoice__c>>();
-
-                for(CP_Brokerage__c parent : invlist) {
-                    parentToChildMap.put(parent.Id, new List<Brokerage_Invoice__c>());
-                }
-                
-                for(Brokerage_Invoice__c child : brokerageinvlist) {
-                    if(child.CP_Brokerage__c != null && parentToChildMap.containsKey(child.CP_Brokerage__c)) {
-                        parentToChildMap.get(child.CP_Brokerage__c).add(child);
-                    }
-                }
-                
-                Map<String, List<CP_Brokerage__c>> invoiceMap = new Map<String, List<CP_Brokerage__c>>();
-                invoiceMap.put('paid', new List<CP_Brokerage__c>());
-                invoiceMap.put('invoiceRaised', new List<CP_Brokerage__c>());
-                invoiceMap.put('dueEligibleForInvoicing', new List<CP_Brokerage__c>());
-                invoiceMap.put('notdue', new List<CP_Brokerage__c>());
+                Map<String, wrapperBrokerage> invoiceMapNew = new Map<String, wrapperBrokerage>();
+                invoiceMapNew.put('paid', new wrapperBrokerage());
+                invoiceMapNew.put('invoiceRaised', new wrapperBrokerage());
+                invoiceMapNew.put('dueEligibleForInvoicing', new wrapperBrokerage());
+                invoiceMapNew.put('notdue', new wrapperBrokerage());
+                //New Invoices (CP Brokerage) Start Here..
                 if(!invlist.isEmpty()){
-                    Decimal totalBrokerageEarned = 0;
-                    Decimal pendingPayout = 0;
                     for(CP_Brokerage__c inv : invlist){
                         if(inv.Status__c == 'Paid'){//Paid
-                            invoiceMap.get('paid').add(inv);
-                            if(inv.Total_Brokerage__c!=null){
-                            	totalBrokerageEarned += inv.Total_Brokerage__c;
-                            }
+                            invoiceMapNew.get('paid').cpBrokerageList.add(inv);
                         }
                         else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded'){//Invoice Raised
-                            invoiceMap.get('invoiceRaised').add(inv);
-                            if(inv.Total_Brokerage__c!=null){
-                            	pendingPayout += inv.Total_Brokerage__c;
-                            }
+                            invoiceMapNew.get('invoiceRaised').cpBrokerageList.add(inv);
                         }
                         else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c != 'Invoice Uploaded' && (inv.Approval_Status_clearing__c == 'Approved By L1' || inv.Approval_Status_clearing__c == 'Approved By L2')){//dueEligibleForInvoicing
-                            invoiceMap.get('dueEligibleForInvoicing').add(inv);
-                            if(inv.Total_Brokerage__c!=null){
-                            	pendingPayout += inv.Total_Brokerage__c;
-                            }
+                            invoiceMapNew.get('dueEligibleForInvoicing').cpBrokerageList.add(inv);
                         }
                         else{
-                            invoiceMap.get('notdue').add(inv);
-                            if(inv.Total_Brokerage__c!=null){
-                            	pendingPayout += inv.Total_Brokerage__c;
-                            }
+                            invoiceMapNew.get('notdue').cpBrokerageList.add(inv);
                         }
                     }
+                }        
+                //New Invoices(CP Brokerage) Logic Ends Here..
+                //Old Invoices(Brokerage Invoice) Logic Starts Here..
+                if(!brokerageinvlist.isEmpty()){
+                    for(Brokerage_invoice__c inv : brokerageinvlist){                        
+                        //Old Invoices
+                        if(inv.Status__c == 'Paid' && inv.SAP_Document_No__c != null){//Paid
+                            invoiceMapNew.get('paid').brokerageInvList.add(inv);
+                        }
+                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded' && (inv.Invoice_Status_Brokerage_invoice__c == 'Payment in Process' || inv.Invoice_Status_Brokerage_invoice__c == 'Pending for Accounts Approval' ||inv.Invoice_Status_Brokerage_invoice__c == 'Bill Uploaded')){//Invoice Raised
+                            invoiceMapNew.get('invoiceRaised').brokerageInvList.add(inv);
+                        }
+                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status_Brokerage_invoice__c == 'Bill Due'){//Due
+                            invoiceMapNew.get('dueEligibleForInvoicing').brokerageInvList.add(inv);
+                        }
+                        else{
+                            invoiceMapNew.get('notdue').brokerageInvList.add(inv);
+                        }                        
+                    }
                 }
-                else{
+                //Old Invoices(Brokerage Invoice) Logic Ends Here..
+                if(invlist.isEmpty() && brokerageinvlist.isEmpty()){
 					errorResult.put('status', 'error');
                     errorResult.put('message', 'No CP Brokerage Record Found Against CPID');
                     res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
                     res.statusCode = 404; // Not Found
                     return; // Stop execution                    
                 }
-                if(!invoiceMap.isEmpty()){
-                    list<TotalInvDetails> tlist = new list<TotalInvDetails>();
-                    for(String sts : invoiceMap.keySet()){
+                
+                //
+                list<TotalInvDetails> tlist = new list<TotalInvDetails>();
+                //New Invoices(CP Brokerage) Logic
+                 if(!invoiceMapNew.isEmpty()){                    
+                    for(String sts : invoiceMapNew.keySet()){
                         Details details = new Details();
                         list<InvDetailsForBase> blist = new list<InvDetailsForBase>();
                         list<InvDetailsForLadder> llist = new list<InvDetailsForLadder>();
@@ -99,62 +109,124 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                         Decimal baseTotalAmount = 0;
                         Decimal ladderTotalAmount = 0;
                         Decimal aopTotalAmount = 0;
-                        for(CP_Brokerage__c inv : invoiceMap.get(sts)){
-                            InvDetailsForBase base = new InvDetailsForBase();
-                            InvDetailsForLadder ladder = new InvDetailsForLadder();
-                            InvDetailsForAOP aop = new InvDetailsForAOP();
-                            // For TotalDetails In wrapper
-                            TotalInvDetails totalDetails = new TotalInvDetails();
-                            // totalDetails.invdate = inv.Invoice_Date__c;
-                            // *** DATE FIX FOR Invoice ***
-                            if(inv.Invoice_Date__c != null) {
-                                Date d = Date.valueOf(inv.Invoice_Date__c);
-                                DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
-                                totalDetails.invdate = dt.format('dd-MM-yyyy');
-                            } else {
-                                totalDetails.invdate = null;
-                            }
-                            // totalDetails.invoiceNo = inv.Invoice_Number__c;
-                            totalDetails.transactionName = null;
-                            totalDetails.brokerageAmount = inv.Total_Brokerage__c;
-                            // totalDetails.statementUrl = null;
-                            totalDetails.status = sts;
-                            if(sts == 'paid'){
-                                totalDetails.status = 'Paid';
-                            }else if(sts == 'invoiceRaised'){
-                                totalDetails.status = 'Invoice Raised';
-                            }
-                            else if(sts == 'dueEligibleForInvoicing'){
-                                totalDetails.status = 'Due Eligible For Invoicing';
-                            }
-                            else if(sts == 'notdue'){
-                                totalDetails.status = 'Not Due';
-                            }
-                            tlist.add(totalDetails);
-                            // End For TotatlDetails In Wrapper
-                            if(inv.Total_Brokerage__c!=null){
-                                totalAmount += inv.Total_Brokerage__c;
-                            }
-                            if(parentToChildMap.containsKey(inv.id)){
-                                if(inv.Brokerage_Type__c == 'Base Brokerage'){
-                                    assignBaseBrokerage(base,inv,parentToChildMap.get(inv.id));
-                                    if(inv.Total_Brokerage__c!=null){
-                                    	baseTotalAmount += inv.Total_Brokerage__c;
-                                    }
-                                    blist.add(base); 
-                                }else if(inv.Brokerage_Type__c == 'Additional Brokerage'){
-                                    assignLadderBrokerage(ladder,inv,parentToChildMap.get(inv.id));
-                                    if(inv.Total_Brokerage__c!=null){
-                                    	ladderTotalAmount += inv.Total_Brokerage__c;
-                                    }
-                                    llist.add(ladder);
-                                }else if(inv.Brokerage_Type__c == 'AOP Brokerage'){
-                                    assignAOPBrokerage(aop,inv,parentToChildMap.get(inv.id));
-                                    if(inv.Total_Brokerage__c!=null){
-                                    	aopTotalAmount += inv.Total_Brokerage__c;
-                                    }
-                                    alist.add(aop);
+                        if(invoiceMapNew.containsKey(sts) && !invoiceMapNew.get(sts).cpBrokerageList.isEmpty()){
+                            for(CP_Brokerage__c inv : invoiceMapNew.get(sts).cpBrokerageList){
+                                InvDetailsForBase base = new InvDetailsForBase();
+                                InvDetailsForLadder ladder = new InvDetailsForLadder();
+                                InvDetailsForAOP aop = new InvDetailsForAOP();
+                                // For TotalDetails In wrapper
+                                TotalInvDetails totalDetails = new TotalInvDetails();
+                                // totalDetails.invdate = inv.Invoice_Date__c;
+                                // *** DATE FIX FOR Invoice ***
+                                if(inv.Invoice_Date__c != null) {
+                                    Date d = Date.valueOf(inv.Invoice_Date__c);
+                                    DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                                    totalDetails.invdate = dt.format('dd-MM-yyyy');
+                                } else {
+                                    totalDetails.invdate = null;
                                 }
+                                // totalDetails.invoiceNo = inv.Invoice_Number__c;
+                                totalDetails.transactionName = null;
+                                totalDetails.brokerageAmount = inv.Total_Brokerage__c;
+                                // totalDetails.statementUrl = null;
+                                totalDetails.status = sts;
+                                if(sts == 'paid'){
+                                    totalDetails.status = 'Paid';
+                                }else if(sts == 'invoiceRaised'){
+                                    totalDetails.status = 'Invoice Raised';
+                                }
+                                else if(sts == 'dueEligibleForInvoicing'){
+                                    totalDetails.status = 'Due Eligible For Invoicing';
+                                }
+                                else if(sts == 'notdue'){
+                                    totalDetails.status = 'Not Due';
+                                }
+                                tlist.add(totalDetails);
+                                // End For TotatlDetails In Wrapper
+                                if(inv.Total_Brokerage__c!=null){
+                                    totalAmount += inv.Total_Brokerage__c;
+                                }
+                                if(!inv.brokerage_invoices__r.isEmpty()){
+                                    if(inv.Brokerage_Type__c == 'Base Brokerage'){
+                                        assignBaseBrokerage(base,inv,inv.brokerage_invoices__r);
+                                        if(inv.Total_Brokerage__c!=null){
+                                            baseTotalAmount += inv.Total_Brokerage__c;
+                                        }
+                                        blist.add(base); 
+                                    }else if(inv.Brokerage_Type__c == 'Additional Brokerage'){
+                                        assignLadderBrokerage(ladder,inv,inv.brokerage_invoices__r);
+                                        if(inv.Total_Brokerage__c!=null){
+                                            ladderTotalAmount += inv.Total_Brokerage__c;
+                                        }
+                                        llist.add(ladder);
+                                    }else if(inv.Brokerage_Type__c == 'AOP Brokerage'){
+                                        assignAOPBrokerage(aop,inv,inv.brokerage_invoices__r);
+                                        if(inv.Total_Brokerage__c!=null){
+                                            aopTotalAmount += inv.Total_Brokerage__c;
+                                        }
+                                        alist.add(aop);
+                                    }
+                                }
+                            }
+                    	}
+                        if(invoiceMapNew.containsKey(sts) && !invoiceMapNew.get(sts).brokerageInvList.isEmpty()){
+                            for(Brokerage_invoice__c inv : invoiceMapNew.get(sts).brokerageInvList){
+                                InvDetailsForBase base = new InvDetailsForBase();
+                                InvDetailsForLadder ladder = new InvDetailsForLadder();
+                                InvDetailsForAOP aop = new InvDetailsForAOP();
+                                // For TotalDetails In wrapper
+                                TotalInvDetails totalDetails = new TotalInvDetails();
+                                // totalDetails.invdate = inv.Invoice_Date__c;
+                                // *** DATE FIX FOR Invoice ***
+                                if(inv.Invoice_Date__c != null) {
+                                    Date d = Date.valueOf(inv.Invoice_Date__c);
+                                    DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                                    totalDetails.invdate = dt.format('dd-MM-yyyy');
+                                } else {
+                                    totalDetails.invdate = null;
+                                }
+                                // totalDetails.invoiceNo = inv.Invoice_Number__c;
+                                totalDetails.transactionName = null;
+                                totalDetails.brokerageAmount = inv.Brokerage_In_Rs__c;
+                                // totalDetails.statementUrl = null;
+                                totalDetails.status = sts;
+                                if(sts == 'paid'){
+                                    totalDetails.status = 'Paid';
+                                }else if(sts == 'invoiceRaised'){
+                                    totalDetails.status = 'Invoice Raised';
+                                }
+                                else if(sts == 'dueEligibleForInvoicing'){
+                                    totalDetails.status = 'Due Eligible For Invoicing';
+                                }
+                                else if(sts == 'notdue'){
+                                    totalDetails.status = 'Not Due';
+                                }
+                                tlist.add(totalDetails);
+                                // End For TotatlDetails In Wrapper
+                                if(inv.Brokerage_In_Rs__c!=null){
+                                    totalAmount += inv.Brokerage_In_Rs__c;
+                                }
+                                //if(parentToChildMap.containsKey(inv.id)){
+                                    if(inv.Brokerage_Lookup__r.Brokerage_Type__c == 'Base Brokerage'){
+                                        assignBaseBrokerageBI(base,inv);
+                                        if(inv.Brokerage_In_Rs__c !=null){
+                                            baseTotalAmount += inv.Brokerage_In_Rs__c;
+                                        }
+                                        blist.add(base); 
+                                    }else if(inv.Brokerage_Lookup__r.Brokerage_Type__c == 'Additional Brokerage'){
+                                        assignLadderBrokerageBI(ladder,inv);
+                                        if(inv.Brokerage_In_Rs__c !=null){
+                                            ladderTotalAmount += inv.Brokerage_In_Rs__c;
+                                        }
+                                        llist.add(ladder);
+                                    }else if(inv.Brokerage_Lookup__r.Brokerage_Type__c == 'AOP Brokerage'){
+                                        assignAOPBrokerageBI(aop,inv);
+                                        if(inv.Brokerage_In_Rs__c !=null){
+                                            aopTotalAmount += inv.Brokerage_In_Rs__c;
+                                        }
+                                        alist.add(aop);
+                                    }
+                               // }
                             }
                         }
                         ResponseWrapper responsewrapper = new ResponseWrapper();
@@ -183,12 +255,17 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                             totalDetailsWrapper.notdue = responsewrapper.totalpaid;
                         }
                     }
-                    totalDetailsWrapper.details = tlist;
-                    resp.totalDetails = totalDetailsWrapper;
+                    //totalDetailsWrapper.details = tlist;
+                    //resp.totalDetails = totalDetailsWrapper;
                 }
+                
+                totalDetailsWrapper.details = tlist;
+                resp.totalDetails = totalDetailsWrapper;
+                
                 res.responseBody = Blob.valueOf(JSON.serialize(resp));
                 res.statusCode = 200;
-            }catch(Exception ex){
+            }
+            catch(Exception ex){
                 errorResult.put('status', 'error');
                 errorResult.put('message', ex.getMessage() + ';  ' + ex.getStackTraceString());
                 res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
@@ -348,12 +425,178 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
             }
         }
     }
+    
+    
+    public static void assignBaseBrokerageBI(InvDetailsForBase base,Brokerage_Invoice__c brokerageInvoice){
+        base.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        // base.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
+        if(brokerageInvoice.SAP_Posting_Date__c != null) {
+            Date d = Date.valueOf(brokerageInvoice.SAP_Posting_Date__c);
+            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+            base.invoiceProcessDate = dt.format('dd-MM-yyyy');
+        } else {
+            base.invoiceProcessDate = null;
+        }
+        base.invoiceNo = brokerageInvoice.Invoice_Number__c;
+        base.invId = brokerageInvoice.id;
+        base.isGstAppilcable = brokerageInvoice.If_GST_is_applicable__c;
+        // base.invDate = cpBrokerage.Invoice_Date__c;
+        if(brokerageInvoice.Invoice_Date__c != null) {
+            Date d = Date.valueOf(brokerageInvoice.Invoice_Date__c);
+            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+            base.invDate = dt.format('dd-MM-yyyy');
+        } else {
+            base.invDate = null;
+        }
+        base.approvalStatus = brokerageInvoice.Approval_Status__c;
+        base.invoiceStatus = brokerageInvoice.Status__c;
+        base.towerUnit = brokerageInvoice.Tower_Unit__c;
+        base.schemeName = brokerageInvoice.Brokerage_Scheme_Name__c;
+        base.brokerage = brokerageInvoice.Brokerage__c;
+        base.totalInvAmount = brokerageInvoice.Invoice_Amount__c;
+        base.salesOrderNumber = brokerageInvoice.SO_Number__c;
+        base.invoiceStatusPortal = brokerageInvoice.Invoice_Status_Brokerage_invoice__c;
+        base.cpBrokerCode = brokerageInvoice.SAP_Broker_code__c;
+        base.customerNumber = brokerageInvoice.Customer_Code__c;
+        //if(!brokerageInvoice.isEmpty()){
+            base.avValueForBrokerage = 0;
+            //for(Brokerage_Invoice__c brokerageInvoiceObj: brokerageInvoice){
+                base.customerName = brokerageInvoice.Customer_Name__c;
+                base.projectName = brokerageInvoice.Project__c;
+                if(brokerageInvoice.Booking__r.Payment_Received__c!=null){
+                    base.percentagePaidByCustomer = brokerageInvoice.Booking__r.Payment_Received__c;
+                }
+                if(brokerageInvoice.Booking__r.RW_Registration_Status__c!=null){
+                    base.registrationStatus = brokerageInvoice.Booking__r.RW_Registration_Status__c;
+                }
+                if(brokerageInvoice.Booking__r.Booking_Date__c !=null){
+                    Date d = brokerageInvoice.Booking__r.Booking_Date__c.date();
+                    base.bookingDate = DateTime.newInstance(d.year(), d.month(), d.day()).format('dd/MM/yyyy');
+                }
+                if(brokerageInvoice.Total_Agreement_Value__c!=null){
+                	base.avValueForBrokerage += brokerageInvoice.Total_Agreement_Value__c;
+                }
+                //return;//As Base Brokerage Always One on One Relationship
+            //}
+        //} 
+    }
+    
+    public static void assignLadderBrokerageBI(InvDetailsForLadder ladder, Brokerage_Invoice__c brokerageInvoice){
+        ladder.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        // ladder.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
+        if(brokerageInvoice.SAP_Posting_Date__c != null) {
+            Date d = Date.valueOf(brokerageInvoice.SAP_Posting_Date__c);
+            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+            ladder.invoiceProcessDate = dt.format('dd-MM-yyyy');
+        } else {
+            ladder.invoiceProcessDate = null;
+        }
+        ladder.invId = brokerageInvoice.id;
+        ladder.isGstAppilcable = brokerageInvoice.If_GST_is_applicable__c;
+        // ladder.invDate = cpBrokerage.Invoice_Date__c;
+        if(brokerageInvoice.Invoice_Date__c != null) {
+            Date d = Date.valueOf(brokerageInvoice.Invoice_Date__c);
+            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+            ladder.invDate = dt.format('dd-MM-yyyy');
+        } else {
+            ladder.invDate = null;
+        }
+        ladder.approvalStatus = brokerageInvoice.Approval_Status__c;
+        ladder.invoiceStatus = brokerageInvoice.Status__c;
+        //if(!brokerageInvoice.isEmpty()){
+            //for(Brokerage_Invoice__c brokerageInvoiceObj: brokerageInvoice){
+                if(brokerageInvoice.Brokerage_Summary__c!=null && brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__c!=null){
+                    ladder.schemeName = brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__r.Name; // Condiering the Brokerage Scheme is Same for ALL Invoices Against Same CP Invoice
+                }
+                if(brokerageInvoice.Brokerage_Summary__c!=null && brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__c!=null){
+                    // ladder.startDate = brokerageInvoiceObj.Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c; // Condiering the Brokerage Scheme is Same for ALL Invoices Against Same CP Invoice
+                    // ladder.endDate = brokerageInvoiceObj.Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c;
+                    if(brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c != null) {
+                        Date d = Date.valueOf(brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c);
+                        DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                        ladder.startDate = dt.format('dd-MM-yyyy');
+                    } else {
+                        ladder.startDate = null;
+                    }
+                    if(brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c != null) {
+                        Date d = Date.valueOf(brokerageInvoice.Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c);
+                        DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+                        ladder.endDate = dt.format('dd-MM-yyyy');
+                    } else {
+                        ladder.endDate = null;
+                    }
+                }
+                if(brokerageInvoice.Project__c!=null){
+                    ladder.projectName.add(brokerageInvoice.Project__c);
+                }
+                if(brokerageInvoice.Booking__c != null && brokerageInvoice.Booking__r.Name!=null){
+                    ladder.bookingEligble.add(brokerageInvoice.Booking__r.Name);
+                }
+            //}
+        //}
+    }
+    
+    public static void assignAOPBrokerageBI(InvDetailsForAOP aop, Brokerage_Invoice__c brokerageInvoice){
+        if(brokerageInvoice.AOP__c!=null && brokerageInvoice.AOP__r.AOP_Schemes__c!=null){
+            aop.fyOfAOPScheme = brokerageInvoice.AOP__r.AOP_Schemes__r.Name;
+        }
+        if(brokerageInvoice.AOP__c!=null && brokerageInvoice.AOP__r.Commitment_max__c != null){
+            aop.aopAmout = brokerageInvoice.AOP__r.Commitment_max__c;
+        }
+        //aop.runwalEntity = brokerageInvoice.Company_Name__c;
+        aop.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        // aop.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
+        if(brokerageInvoice.SAP_Posting_Date__c != null) {
+            Date d = Date.valueOf(brokerageInvoice.SAP_Posting_Date__c);
+            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+            aop.invoiceProcessDate = dt.format('dd-MM-yyyy');
+        } else {
+            aop.invoiceProcessDate = null;
+        }
+        aop.invId = brokerageInvoice.id;
+        aop.isGstAppilcable = brokerageInvoice.If_GST_is_applicable__c;
+        // aop.invDate = cpBrokerage.Invoice_Date__c;
+        if(brokerageInvoice.Invoice_Date__c != null) {
+            Date d = Date.valueOf(brokerageInvoice.Invoice_Date__c);
+            DateTime dt = DateTime.newInstance(d.year(), d.month(), d.day());
+            aop.invDate = dt.format('dd-MM-yyyy');
+        } else {
+            aop.invDate = null;
+        }
+        aop.approvalStatus = brokerageInvoice.Approval_Status__c;
+        aop.invoiceStatus = brokerageInvoice.Status__c;
+        //if(!brokerageInvoice.isEmpty()){
+            aop.avValueForBrokerage = 0;
+            aop.achievedRevenue = 0; 
+            //for(Brokerage_Invoice__c brokerageInvoiceObj: brokerageInvoice){
+                if(brokerageInvoice.Total_Agreement_Value__c!=null){
+                	aop.avValueForBrokerage += brokerageInvoice.Total_Agreement_Value__c;
+                }
+                if(brokerageInvoice.Booking__c!=null && brokerageInvoice.Booking__r.Allotment_Premium__c!=null){
+                    aop.achievedRevenue += brokerageInvoice.Booking__r.Allotment_Premium__c;
+                }
+            //}
+        //}
+    }
+    
+    
+    
+    
+    
+    
+    
     global class Wrapper {
         public ResponseWrapper paid;
         public ResponseWrapper invoiceRaised;
         public ResponseWrapper dueEligibleForInvoicing;
         public ResponseWrapper notdue;  
         public ResponseWrapperTotal totalDetails;
+    }
+    
+    global class wrapperBrokerage{
+        public List<CP_Brokerage__c> cpBrokerageList = new List<CP_Brokerage__c>();
+        public List<Brokerage_Invoice__c> brokerageInvList = new List<Brokerage_Invoice__c>();
+        
     }
     
     global class ResponseWrapper {
@@ -424,8 +667,6 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
         public String approvalStatus;
         public String invoiceStatus;
     }
-    
-    
     
     global class ResponseWrapperTotal {
         public decimal paid;
