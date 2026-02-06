@@ -551,7 +551,7 @@ public class Lockated_CPGetBaseLadderProgressTest {
         // 4️⃣ Call REST method
         Test.startTest();
         Lockated_CPGetBaseLadderProgress.doGet();
-        Lockated_CPGetBaseLadderProgress.processData(cpList);
+        Lockated_CPGetBaseLadderProgress.processData(cpList,childInvoices);
         Test.stopTest();
         
     }
