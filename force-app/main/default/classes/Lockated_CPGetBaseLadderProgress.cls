@@ -18,21 +18,32 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
             Date startDate = fyDates.get('start');
             Date endDate = fyDates.get('end');
             
+            String cutOffString = System.Label.Base_Brokerage_Cut_off_Date;
+			Date cutOffDate = Date.valueOf(cutOffString);
+            
             List<CP_Brokerage__c> brokerageRecords = [
-                SELECT Id, Total_Brokerage__c, Total_Amount_Balance__c,
-                       (SELECT Id, Brokerage__c, Project__c, Booking__r.Booking_Date__c FROM Brokerage_Invoices__r WHERE Project__c != null 
-                       AND Booking__r.Booking_Date__c >= :startDate 
-                       AND Booking__r.Booking_Date__c <= :endDate) 
+                SELECT Id, Total_Brokerage__c, Total_Amount_Balance__c, Project__c, Booking__r.Booking_Date__c, Brokerage__c 
                 FROM CP_Brokerage__c
-                WHERE Brokerage_Type__c = 'Base Brokerage' AND Channel_Partner__c = :cpId
+                WHERE Brokerage_Type__c = 'Base Brokerage' AND Channel_Partner__c = :cpId 
+                AND Booking__r.Booking_Date__c >= :startDate 
+                AND Booking__r.Booking_Date__c <= :endDate
+            ];
+            
+            List<Brokerage_Invoice__c> brokerageInvoicesRecords = [
+                SELECT Id, Brokerage_In_Rs__c, Total_Amount_Balance__c, Project__c, Booking__r.Booking_Date__c, Brokerage__c 
+                FROM Brokerage_Invoice__c
+                WHERE Brokerage_Lookup__r.Brokerage_Type__c ='Base Brokerage' AND Channel_Partner__c = :cpId 
+                AND Booking__r.Booking_Date__c >= :startDate 
+                AND Booking__r.Booking_Date__c <= :endDate
+                AND CreatedDate <=: cutOffDate
             ];
 
-            if (brokerageRecords.isEmpty()) {
+            if (brokerageRecords.isEmpty() && brokerageInvoicesRecords.isEmpty()) {
                 sendResponse(res, 404, new Map<String, String>{'status' => 'error', 'message' => 'No data found'});
                 return;
             }
 
-            ResponseWrapper response = processData(brokerageRecords);
+            ResponseWrapper response = processData(brokerageRecords,brokerageInvoicesRecords);
             sendResponse(res, 200, response);
 
         } catch (Exception ex) {
@@ -40,36 +51,63 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         }
     }
 
-    public static ResponseWrapper processData(List<CP_Brokerage__c> records) {
+    public static ResponseWrapper processData(List<CP_Brokerage__c> cpBrokerageInvoices,List<Brokerage_Invoice__c> brokerageInvoicesRecords) {
         ResponseWrapper rw = new ResponseWrapper();
         Map<String, ProjectData> projectMap = new Map<String, ProjectData>();
         Decimal globalInvoiceSum = 0;
-
-        for (CP_Brokerage__c rec : records) {
-
-            // Track which projects this specific booking has already contributed to
-            // to avoid double-counting the same booking for the same project
-            Set<String> processedProjectsForThisRecord = new Set<String>();
-
-            for (Brokerage_Invoice__c inv : rec.Brokerage_Invoices__r) {
+        
+        if(!cpBrokerageInvoices.isEmpty()){
+            for (CP_Brokerage__c rec : cpBrokerageInvoices) {
                 rw.totalNoOfBookings++;
                 rw.totalbrokerage += (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
                 rw.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
-                globalInvoiceSum += (inv.Brokerage__c != null) ? inv.Brokerage__c : 0;
-
-                if (!projectMap.containsKey(inv.Project__c)) {
-                    projectMap.put(inv.Project__c, new ProjectData(inv.Project__c));
+                // Track which projects this specific booking has already contributed to
+                // to avoid double-counting the same booking for the same project
+                Set<String> processedProjectsForThisRecord = new Set<String>();
+                
+                globalInvoiceSum += (rec.Brokerage__c != null) ? rec.Brokerage__c : 0;
+    
+                if (!projectMap.containsKey(rec.Project__c)) {
+                    projectMap.put(rec.Project__c, new ProjectData(rec.Project__c));
                 }
-
-                ProjectData pd = projectMap.get(inv.Project__c);
-                pd.tempInvoiceSum += (inv.Brokerage__c != null) ? inv.Brokerage__c : 0;
-
+                
+                ProjectData pd = projectMap.get(rec.Project__c);
+                pd.tempInvoiceSum += (rec.Brokerage__c != null) ? rec.Brokerage__c : 0;
+                
                 // Only add parent totals to the project summary ONCE per unique booking/project combo
-                if (!processedProjectsForThisRecord.contains(inv.Project__c)) {
+                if (!processedProjectsForThisRecord.contains(rec.Project__c)) {
                     pd.projectSummary.noOfBookings++;
                     pd.projectSummary.totalbrokerage += (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
                     pd.projectSummary.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
-                    processedProjectsForThisRecord.add(inv.Project__c);
+                    processedProjectsForThisRecord.add(rec.Project__c);
+                }
+            }
+        }
+        
+        if(!brokerageInvoicesRecords.isEmpty()){
+            for (Brokerage_Invoice__c rec : brokerageInvoicesRecords) {
+                rw.totalNoOfBookings++;
+                rw.totalbrokerage += (rec.Brokerage_In_Rs__c != null) ? rec.Brokerage_In_Rs__c : 0;
+                rw.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
+                // Track which projects this specific booking has already contributed to
+                // to avoid double-counting the same booking for the same project
+                Set<String> processedProjectsForThisRecord = new Set<String>();
+                
+                globalInvoiceSum += (rec.Brokerage__c != null) ? rec.Brokerage__c : 0;
+    
+                if (!projectMap.containsKey(rec.Project__c)) {
+                    projectMap.put(rec.Project__c, new ProjectData(rec.Project__c));
+                }
+                
+                ProjectData pd = projectMap.get(rec.Project__c);
+                pd.tempInvoiceSum += (rec.Brokerage__c != null) ? rec.Brokerage__c : 0;
+                
+                // Only add parent totals to the project summary ONCE per unique booking/project combo
+                if (!processedProjectsForThisRecord.contains(rec.Project__c)) {
+                    pd.projectSummary.noOfBookings++;
+                    pd.projectSummary.totalbrokerage += (rec.Brokerage_In_Rs__c != null) ? rec.Brokerage_In_Rs__c : 0;
+                    pd.projectSummary.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
+                    processedProjectsForThisRecord.add(rec.Project__c);
                 }
             }
         }

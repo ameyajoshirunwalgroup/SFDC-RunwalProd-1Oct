@@ -60,11 +60,25 @@ global without sharing class Lockated_CPUploadCPInvoices {
             
             insert cv;
             
-            CP_Brokerage__c brokerageRecord = new CP_Brokerage__c();
-            brokerageRecord.Id = invId; 
-            brokerageRecord.Invoice_Status__c = 'Invoice Uploaded';
-            
-            update brokerageRecord;
+            //Changes made by Prashant to update BI and CPB depends on what Id is received in request.// 04-02-26. START...
+            if (invId != null) {
+                Id invIdNew = invId;
+                Schema.SObjectType objType = invIdNew.getSObjectType();
+                if (objType == CP_Brokerage__c.SObjectType) {
+                    CP_Brokerage__c brokerageRecord = new CP_Brokerage__c();
+                    brokerageRecord.Id = invId; 
+                    brokerageRecord.Invoice_Status__c = 'Invoice Uploaded';
+                    
+                    update brokerageRecord;
+                } else if (objType == Brokerage_Invoice__c.SObjectType) {
+                    Brokerage_Invoice__c brokerageRecord = new Brokerage_Invoice__c();
+                    brokerageRecord.Id = invId; 
+                    brokerageRecord.Invoice_Status__c = 'Invoice Uploaded';
+                    
+                    update brokerageRecord;
+                }                
+            }
+            //Changes made by Prashant to update BI and CPB depends on what Id is received in request.// 04-02-26. END...
             
             res.statusCode = 200;
             responseMap.put('status', 'success');
