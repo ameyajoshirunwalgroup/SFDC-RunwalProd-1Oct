@@ -143,10 +143,10 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                 }
                                 tlist.add(totalDetails);
                                 // End For TotatlDetails In Wrapper
-                                if(inv.Total_Brokerage__c!=null){
-                                    totalAmount += inv.Total_Brokerage__c;
-                                }
                                 if(!inv.brokerage_invoices__r.isEmpty()){
+                                    if(inv.Total_Brokerage__c!=null){
+                                        totalAmount += inv.Total_Brokerage__c;
+                                    }
                                     if(inv.Brokerage_Type__c == 'Base Brokerage'){
                                         assignBaseBrokerage(base,inv,inv.brokerage_invoices__r);
                                         if(inv.Total_Brokerage__c!=null){
