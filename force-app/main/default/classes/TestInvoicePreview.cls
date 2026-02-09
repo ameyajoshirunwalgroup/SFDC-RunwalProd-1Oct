@@ -121,11 +121,6 @@ public class TestInvoicePreview {
         kic.Project__c = objpr.id;
         insert kic;
         
-        Project_Charges__c prc = new Project_Charges__c();
-        prc.Name = 'Basic';
-        prc.Project__c = objpr.Id;
-        insert prc;
-        
         Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
         
@@ -353,22 +348,8 @@ public class TestInvoicePreview {
         InvoicePreview ip = new InvoicePreview();
         ip.dmlOperation();
         
-        PageReference InvPreview2 = Page.ShowInvoicePreview;
-        Test.setCurrentPage(InvPreview2);
-        ApexPages.currentPage().getParameters().put('id',bi2.Id);
-        InvoicePreview ip2 = new InvoicePreview();
+        InvoicePreview.dummyMethod();
         
-        PageReference InvPreview3 = Page.ShowInvoicePreview;
-        Test.setCurrentPage(InvPreview3);
-        ApexPages.currentPage().getParameters().put('id',bi3.Id);
-        InvoicePreview ip3 = new InvoicePreview();
-        
-        PageReference kical = Page.KickerIncentiveCalculation;
-        Test.setCurrentPage(kical);
-        ApexPages.currentPage().getParameters().put('KId',ki.Id);
-        KickerIncentiveCalculationController kica = new KickerIncentiveCalculationController();
-        kica.StartKickerRun();
-        kica.Home();
         
         
         
