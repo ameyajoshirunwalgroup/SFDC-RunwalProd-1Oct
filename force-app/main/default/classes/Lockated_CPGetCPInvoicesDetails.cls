@@ -76,10 +76,10 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                         if(inv.Status__c == 'Paid' && inv.SAP_Document_No__c != null){//Paid
                             invoiceMapNew.get('paid').brokerageInvList.add(inv);
                         }
-                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded' && (inv.Invoice_Status_Brokerage_invoice__c == 'Payment in Process' || inv.Invoice_Status_Brokerage_invoice__c == 'Pending for Accounts Approval' ||inv.Invoice_Status_Brokerage_invoice__c == 'Bill Uploaded')){//Invoice Raised
+                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded'){//Invoice Raised
                             invoiceMapNew.get('invoiceRaised').brokerageInvList.add(inv);
                         }
-                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status_Brokerage_invoice__c == 'Bill Due'){//Due
+                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c != 'Invoice Uploaded' && (inv.Approval_Status_clearing__c == 'Approved By L1' || inv.Approval_Status_clearing__c == 'Approved By L2')){//Due
                             invoiceMapNew.get('dueEligibleForInvoicing').brokerageInvList.add(inv);
                         }
                         else{
