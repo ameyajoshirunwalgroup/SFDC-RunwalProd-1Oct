@@ -34,7 +34,7 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                                       Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,CreatedDate,
                                                       Invoice_Status__c,Invoice_Status_Brokerage_invoice__c,Booking__r.Booking_Date__c,Booking__r.Name,Opportunity__r.Name,SAP_Posting_Date__c,
                                                       If_GST_is_applicable__c,Approval_Status__c,Tower_Unit__c,Brokerage_Scheme_Name__c,Brokerage__c,SO_Number__c,SAP_Broker_code__c,
-                                                      Customer_Code__c,
+                                                      Customer_Code__c,Approval_Status_clearing__c,
                                                       Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c,Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c, Booking__r.Allotment_Premium__c,
                                                       Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c,
                                                       Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c from Brokerage_Invoice__c  where 
@@ -76,10 +76,10 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                         if(inv.Status__c == 'Paid' && inv.SAP_Document_No__c != null){//Paid
                             invoiceMapNew.get('paid').brokerageInvList.add(inv);
                         }
-                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded' && (inv.Invoice_Status_Brokerage_invoice__c == 'Payment in Process' || inv.Invoice_Status_Brokerage_invoice__c == 'Pending for Accounts Approval' ||inv.Invoice_Status_Brokerage_invoice__c == 'Bill Uploaded')){//Invoice Raised
+                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded'){//Invoice Raised
                             invoiceMapNew.get('invoiceRaised').brokerageInvList.add(inv);
                         }
-                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status_Brokerage_invoice__c == 'Bill Due'){//Due
+                        else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c != 'Invoice Uploaded' && (inv.Approval_Status_clearing__c == 'Approved By L1' || inv.Approval_Status_clearing__c == 'Approved By L2')){//Due
                             invoiceMapNew.get('dueEligibleForInvoicing').brokerageInvList.add(inv);
                         }
                         else{
