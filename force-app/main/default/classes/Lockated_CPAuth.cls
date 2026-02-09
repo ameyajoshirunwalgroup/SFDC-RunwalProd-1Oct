@@ -14,7 +14,7 @@ global without sharing class Lockated_CPAuth {
         Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
         Id TempCPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
         try{
-            String baseQuery = 'SELECT Id,Country__c,State__c,STREET__c,Bank_Branch__c,STR_SUPPL2__c,Account__r.Channel_Partner_Activated__c ,Sourcing_Manager__r.Name,Sourcing_Manager__r.Email,Sourcing_Manager__r.MobilePhone,STR_SUPPL3__c,Cheque_DD_Favouring_Name__c,Branch_Code__c,IFSC_Code__c,Account_Number__c,Bank_Name__c,Broker_Type__c,NAME_MIDDLE__c,Dialing_Country_Code1__c,Company_Name_As_per_RERA__c,RERA_Valid_till__c,Are_you_NRI__c,RW_GST_Number__c,Experience__c,Team_Size__c,House_Flat_Company__c, Name,OwnerId, RecordTypeId, CreatedById, LastModifiedById, Representative_Name__c, RW_Email__c, RW_Mobile_No__c, RW_Broker_Number__c, Address__c, Broker_Pan_No__c, City__c, Pin_Code__c, RW_RERA_Registration_Number__c, RW_Is_GST_Applicable__c, RW_Is_RERA_Applicable__c, Is_NRI_CP__c, SAP_CP_Code__c, Locality__c, Zone__c, Individual_CP__c, NAME_FIRST__c, NAME_LAST__c, RW_CreateFromIRIS__c, RW_IRIS_Sync__c, Unregistered_Channel_Partner__c, Place_of_Supply__c, Account__c, Approver_L1__c, Approver_L2__c, Channel_Partner_From_CP_Portal__c, Country_2__c, Is_T_C_Accepted__c, Project__c, Registration_Complete__c, State_Code__c, State_2__c, Activate_CP_Portal__c, Data_Error_Fixed__c, Deactivated__c, days_from_creation__c, Latest_RERA_Upload_Processed__c, Latest_CC_Upload_Processed__c, Valid_RERA_certificate__c, Valid_competency_certificate__c FROM Broker__c';
+            String baseQuery = 'SELECT Id,Country__c,Company_Name__c,State__c,STREET__c,Bank_Branch__c,STR_SUPPL2__c,Account__r.Channel_Partner_Activated__c ,Sourcing_Manager__r.Name,Sourcing_Manager__r.Email,Sourcing_Manager__r.MobilePhone,STR_SUPPL3__c,Cheque_DD_Favouring_Name__c,Branch_Code__c,IFSC_Code__c,Account_Number__c,Bank_Name__c,Broker_Type__c,NAME_MIDDLE__c,Dialing_Country_Code1__c,Company_Name_As_per_RERA__c,RERA_Valid_till__c,Are_you_NRI__c,RW_GST_Number__c,Experience__c,Team_Size__c,House_Flat_Company__c, Name,OwnerId, RecordTypeId, CreatedById, LastModifiedById, Representative_Name__c, RW_Email__c, RW_Mobile_No__c, RW_Broker_Number__c, Address__c, Broker_Pan_No__c, City__c, Pin_Code__c, RW_RERA_Registration_Number__c, RW_Is_GST_Applicable__c, RW_Is_RERA_Applicable__c, Is_NRI_CP__c, SAP_CP_Code__c, Locality__c, Zone__c, Individual_CP__c, NAME_FIRST__c, NAME_LAST__c, RW_CreateFromIRIS__c, RW_IRIS_Sync__c, Unregistered_Channel_Partner__c, Place_of_Supply__c, Account__c, Approver_L1__c, Approver_L2__c, Channel_Partner_From_CP_Portal__c, Country_2__c, Is_T_C_Accepted__c, Project__c, Registration_Complete__c, State_Code__c, State_2__c, Activate_CP_Portal__c, Data_Error_Fixed__c, Deactivated__c, days_from_creation__c, Latest_RERA_Upload_Processed__c, Latest_CC_Upload_Processed__c, Valid_RERA_certificate__c, Valid_competency_certificate__c FROM Broker__c';
             
             List<String> whereClauses = new List<String>();
             if (String.isNotBlank(cpId)) {
@@ -71,7 +71,7 @@ global without sharing class Lockated_CPAuth {
                 cp.basicDetails.mobileNo = brlist[0].RW_Mobile_No__c;
                 cp.basicDetails.panNo = brlist[0].Broker_Pan_No__c;
                 cp.basicDetails.countryCode = brlist[0].Dialing_Country_Code1__c;
-                cp.basicDetails.companyName = brlist[0].Company_Name_As_per_RERA__c;
+                cp.basicDetails.companyName = brlist[0].Company_Name_As_per_RERA__c!=null ? brlist[0].Company_Name_As_per_RERA__c : brlist[0].Company_Name__c;
                 cp.basicDetails.reraNo = brlist[0].RW_RERA_Registration_Number__c;
                 // cp.basicDetails.reraValidTill = String.valueOf(brlist[0].RERA_Valid_till__c);
                 if(brlist[0].RERA_Valid_till__c != null) {
@@ -393,6 +393,7 @@ global without sharing class Lockated_CPAuth {
         cp.RW_Mobile_No__c = data.phone;	
         cp.Broker_Pan_No__c = data.panNo;
         cp.Company_Name_As_per_RERA__c = data.companyName;
+        cp.Company_Name__c = data.companyName;
         cp.Name = data.fullName;
         if (data.companyName != null) {
             cp.Name = data.companyName;
