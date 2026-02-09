@@ -165,33 +165,39 @@ public class InvoicePreview {
     
     public void dmlOperation() {
         //CPInv[0].Invoice_Status__c = 'Invoice Downloaded';
-        if(showgst){
-            if(istaxapplicable){
-                CPInv[0].CGST__c = String.valueOf(Cgst);
-                CPInv[0].SGST__c = String.valueOf(Sgst);
-                //CPInv[0].IGST__c = String.valueOf(Igst);
-                CPInv[0].Invoice_Amount__c = TotalwithTax;
-            }else{
-                CPInv[0].CGST__c = '0';
-                CPInv[0].SGST__c = '0';
-                //CPInv[0].IGST__c = String.valueOf(Igst);
-                CPInv[0].Invoice_Amount__c = TotalwithTax;
+        try{
+            if(!CPInv.isEmpty()){
+                if(showgst){
+                    if(istaxapplicable){
+                        CPInv[0].CGST__c = String.valueOf(Cgst);
+                        CPInv[0].SGST__c = String.valueOf(Sgst);
+                        //CPInv[0].IGST__c = String.valueOf(Igst);
+                        CPInv[0].Invoice_Amount__c = TotalwithTax;
+                    }else{
+                        CPInv[0].CGST__c = '0';
+                        CPInv[0].SGST__c = '0';
+                        //CPInv[0].IGST__c = String.valueOf(Igst);
+                        CPInv[0].Invoice_Amount__c = TotalwithTax;
+                    }
+                    CPInv[0].IGST__c = '0';
+                }else if(showigst){
+                    if(istaxapplicable){
+                        CPInv[0].IGST__c = String.valueOf(Igst);
+                        CPInv[0].Invoice_Amount__c = TotalwithTax;
+                    }else{
+                        CPInv[0].IGST__c = '0';
+                        CPInv[0].Invoice_Amount__c = TotalwithTax;
+                    }
+                    CPInv[0].CGST__c = '0';
+                    CPInv[0].SGST__c = '0';
+                }
+                
+                
+                update CPInv;
             }
-            CPInv[0].IGST__c = '0';
-        }else if(showigst){
-            if(istaxapplicable){
-                CPInv[0].IGST__c = String.valueOf(Igst);
-                CPInv[0].Invoice_Amount__c = TotalwithTax;
-            }else{
-                CPInv[0].IGST__c = '0';
-                CPInv[0].Invoice_Amount__c = TotalwithTax;
-            }
-            CPInv[0].CGST__c = '0';
-            CPInv[0].SGST__c = '0';
+        }catch(Exception ex){
+            
         }
-        
-        
-        update CPInv;
     }
     
     public static String INFormat(Decimal money) {

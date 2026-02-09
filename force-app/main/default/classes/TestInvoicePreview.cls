@@ -47,6 +47,11 @@ public class TestInvoicePreview {
         cp.Channel_Partner_From_CP_Portal__c =true;
         insert cp;
         
+        Account a1 = new Account();
+        a1.Name = 'Test 1';
+        a1.Channel_Partner__c = cp.Id;
+        insert a1;
+        
         Legal_Entity__c le = new Legal_Entity__c();
         le.RDS_Company_Code__c = '1000';
         le.Name = 'Test Company';
@@ -486,6 +491,12 @@ public class TestInvoicePreview {
         prc.Project__c = objpr.Id;
         insert prc;
         
+        Account newAcc = new Account(
+            Name ='Aditya',
+            Channel_Partner__c = cp.Id
+        );
+        insert newAcc;
+        
         Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
         
@@ -877,10 +888,16 @@ public class TestInvoicePreview {
         kic.Project__c = objpr.id;
         insert kic;
         
-        Project_Charges__c prc = new Project_Charges__c();
+        /*Project_Charges__c prc = new Project_Charges__c();
         prc.Name = 'Basic';
         prc.Project__c = objpr.Id;
-        insert prc;
+        insert prc;*/
+        
+        Account newAcc = new Account(
+            Name ='Aditya',
+            Channel_Partner__c = cp.Id
+        );
+        insert newAcc;
         
         Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);

@@ -121,7 +121,7 @@ global without sharing class Lockated_CPPostInvoiceGeneration {
                         }
                         if(!brokerageUpdate.isEmpty()){
                             update brokerageUpdate;
-                            PageReference pdfPage = Page.ShowCP_InvoicePreview;
+                            PageReference pdfPage = Page.ShowInvoicePreview;
                             pdfPage.getParameters().put('id', invId);
                             Blob pdfBlob;
                             if (Test.isRunningTest()) { 
