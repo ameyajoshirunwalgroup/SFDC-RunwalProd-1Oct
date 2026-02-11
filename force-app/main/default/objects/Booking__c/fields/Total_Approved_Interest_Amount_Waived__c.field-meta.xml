@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Approved_Interest_Amount_Waived__c</fullName>
+    <description>Total Approved Interest Amount Waived</description>
+    <inlineHelpText>Roll Up of Total Approved Interest Amount Waived</inlineHelpText>
+    <label>Total Approved Interest Amount Waived</label>
+    <summarizedField>RW_Demand__c.Previously_Waived_Amount_SAP__c</summarizedField>
+    <summaryForeignKey>RW_Demand__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>
