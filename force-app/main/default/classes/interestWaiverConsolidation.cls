@@ -84,9 +84,9 @@ public class interestWaiverConsolidation {
             }
             
             try {
-                if(!Test.isRunningTest()){
+                //if(!Test.isRunningTest()){
                     update waiverlist;
-                }
+                //}
                 
                 
                 Decimal totalWaiverAmtApprovedTillNow =

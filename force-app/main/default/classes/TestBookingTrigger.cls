@@ -513,7 +513,7 @@ public class TestBookingTrigger {
         b.Booking_Date__c = Date.today();
         b.Account__c = cpaccount.Id;
         b.Type_of_Client__c = 'Local';
-        b.Status__c = 'Booking Confirmed';
+        b.Status__c = 'Unit Booked';
         b.RW_Registration_Done__c = 'No';
         b.BrokerIId__c = cp.Id;
         b.Exclude_From_Brokerage_Batch__c = false;
@@ -554,6 +554,7 @@ public class TestBookingTrigger {
         b.Source_of_Booking__c = 'Direct';
         b.Calculate_Brokerage__c = true;
         b.Brokerage_Summary__c = bs.Id;
+        b.Status__c='Booking Confirmed';
         update b;
         }catch(Exception ex){
             
@@ -1263,7 +1264,7 @@ public class TestBookingTrigger {
         insert hlrm1;
         
         Bank_with_RM__c bankRM = new Bank_with_RM__c();
-        bankRM.Name = 'Axis Bank Ltd-R Bliss';
+        bankRM.Name = 'Axis Bank';
         bankRM.RM_Name__c = 'Kunal Kate';
         bankRM.RM_Email__c = 'kunal@mail.com';
         bankRM.TL_Name__c = 'Apeksha Sathe';
