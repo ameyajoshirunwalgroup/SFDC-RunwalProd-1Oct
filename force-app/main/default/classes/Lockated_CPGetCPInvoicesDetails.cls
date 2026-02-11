@@ -54,7 +54,7 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                 //New Invoices (CP Brokerage) Start Here..
                 if(!invlist.isEmpty()){
                     for(CP_Brokerage__c inv : invlist){
-                        if(inv.Status__c == 'Paid'){//Paid
+                        if(inv.Status__c == 'Paid' && inv.SAP_Document_No__c != null){//Paid
                             invoiceMapNew.get('paid').cpBrokerageList.add(inv);
                         }
                         else if(inv.Status__c == 'Unpaid' && inv.Invoice_Status__c == 'Invoice Uploaded'){//Invoice Raised
