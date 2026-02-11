@@ -67,6 +67,7 @@ public class Test_Batch_IntWaiverAPICallout {
         // Create Booking record
         Booking__c objBooking = new Booking__c();
         objBooking.Opportunity__c = objOpp.Id;
+        objBooking.is_Approved_From_SAP__c=true;
         insert objBooking;
         
         // Insert a RW_Demand__c record with the same Billing Document Number as in mock
