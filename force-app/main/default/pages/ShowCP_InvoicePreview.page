@@ -115,13 +115,13 @@
                             <td style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">
                                 &nbsp;Invoice No: 
                                 <apex:outputText rendered="{!CPInv.size > 0}">
-                                    {!cpBrokerage.Invoice_Number__c}
+                                    {!invoiceNumber}
                                 </apex:outputText>
                             </td>
                             <td style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">
                                 &nbsp;Invoice Date: 
                                 <apex:outputText rendered="{!CPInv.size > 0}" value="{0,date,dd/MM/yy}"> 
-                                    <apex:param value="{!cpBrokerage.Invoice_Date__c}" /> 
+                                    <apex:param value="{!invoiceDate}" /> 
                                 </apex:outputText>&nbsp;
                             </td>
                         </tr>

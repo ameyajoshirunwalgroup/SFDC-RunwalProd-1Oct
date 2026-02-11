@@ -42,6 +42,10 @@ public class CP_InvoicePreview {
     public Decimal totalSGST {get;set;}
     public Decimal totalIGST {get;set;}
     public Decimal grandTotal {get;set;}
+    public String urlGstApp {get;set;}
+    public String invoiceNumber {get;set;}
+    public String invoiceDateString {get;set;}
+    public Date invoiceDate {get;set;}
     
     public class InvoiceWrapper {
         public Brokerage_Invoice__c invoice {get;set;}
@@ -145,11 +149,22 @@ this.totalWithTaxStr = INFormat(this.totalWithTax);
         
         // Get page parameter
         Id cpBrokerageId = ApexPages.currentPage().getParameters().get('id');
-        
+        urlGstApp = ApexPages.currentPage().getParameters().get('gstApp');
+        invoiceNumber = ApexPages.currentPage().getParameters().get('invoiceNumber');
+        invoiceDateString = ApexPages.currentPage().getParameters().get('invoiceDate');
+        if(String.isNotBlank(invoiceDateString)){
+            invoiceDate = Date.valueOf(invoiceDateString);
+        }
         System.debug('CP_InvoicePreview Constructor - cpBrokerageId: ' + cpBrokerageId);
+        
+        if(String.isNotBlank(urlGstApp)) {
+            this.istaxapplicable = (urlGstApp == 'Yes');
+        }
         
         if(cpBrokerageId != null) {
             fetchInvoices(cpBrokerageId);
+            invoiceNumber = String.isNotBlank(invoiceNumber) ? invoiceNumber : cpBrokerage.Invoice_Number__c;
+        	invoiceDate = String.isNotBlank(invoiceDateString) ? invoiceDate : cpBrokerage.Invoice_Date__c;
             
             if(isError1 == 0 && !CPInv.isEmpty()) {
                 Base = true;
@@ -296,7 +311,9 @@ this.totalWithTaxStr = INFormat(this.totalWithTax);
             showgst = (pos.size() > 0 && pos[0].Name == 'Maharashtra');
             showigst = !showgst;
             istaxapplicable = (cpBrokerage.If_GST_is_applicable__c == 'Yes');
-            
+            if(String.isNotBlank(urlGstApp)) {
+                this.istaxapplicable = (urlGstApp == 'Yes');
+            }
             System.debug('fetchInvoices - Tax settings: showgst=' + showgst + ', showigst=' + showigst + ', istaxapplicable=' + istaxapplicable);
             
             // Create invoice wrappers and calculate totals

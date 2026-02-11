@@ -75,6 +75,9 @@ global without sharing class Lockated_CPPostInvoiceGeneration {
                             update cpBrokerageUpdate;
                             PageReference pdfPage = Page.ShowCP_InvoicePreview;
                             pdfPage.getParameters().put('id', invId);
+                            pdfPage.getParameters().put('gstApp', requestData.invIsGSTApp);
+                            pdfPage.getParameters().put('invoiceNumber', requestData.invNumber);
+                            pdfPage.getParameters().put('invoiceDate', requestData.invDate);
                             Blob pdfBlob;
                             if (Test.isRunningTest()) { 
                                 pdfBlob = Blob.valueOf('Mock PDF Content');
@@ -123,6 +126,9 @@ global without sharing class Lockated_CPPostInvoiceGeneration {
                             update brokerageUpdate;
                             PageReference pdfPage = Page.ShowInvoicePreview;
                             pdfPage.getParameters().put('id', invId);
+                            pdfPage.getParameters().put('gstApp', requestData.invIsGSTApp);
+                            pdfPage.getParameters().put('invoiceNumber', requestData.invNumber);
+                            pdfPage.getParameters().put('invoiceDate', requestData.invDate);
                             Blob pdfBlob;
                             if (Test.isRunningTest()) { 
                                 pdfBlob = Blob.valueOf('Mock PDF Content');

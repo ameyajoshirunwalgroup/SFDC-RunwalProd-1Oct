@@ -30,8 +30,21 @@ public class InvoicePreview {
     Public static list<Legal_Entity__c> legalentity{get;set;}
     Public static list<Project__c> ProjectList{get;set;}
     Public List<Tower__c> tlist {get;set;}
+    public String urlGstApp {get;set;}
+    public String invoiceNumber {get;set;}
+    public String invoiceDateString {get;set;}
+    public Date invoiceDate {get;set;}
     public InvoicePreview(){
         Id cpId = ApexPages.currentPage().getParameters().get('id');
+        urlGstApp = ApexPages.currentPage().getParameters().get('gstApp');
+        invoiceNumber = ApexPages.currentPage().getParameters().get('invoiceNumber');
+        invoiceDateString = ApexPages.currentPage().getParameters().get('invoiceDate');
+        if(String.isNotBlank(invoiceDateString)){
+            invoiceDate = Date.valueOf(invoiceDateString);
+        }
+        System.debug('Check Gst---->'+urlGstApp);
+        System.debug('Check Invoice Number From APPS----->'+invoiceNumber);
+        System.debug('Check Invoice Date From APPS----->'+invoiceDate);
         CPInv = new List<Brokerage_Invoice__c>();
         ChannelPartner = new List<Broker__c>();
         bklist = new List<Booking__c>();
@@ -45,11 +58,11 @@ public class InvoicePreview {
         isError1 = 0;
         InvoiceMethod(cpId);
         dateStr = Date.today().format();
-        if(CPInv[0].If_GST_is_applicable__c == null){
+        if(CPInv[0].If_GST_is_applicable__c == null && String.isBlank(urlGstApp)){
             errormsg += 'Please Select If GST is Applicable(Y/N)'; 
             isError1 = 1; 
         }
-        if(CPInv[0].Invoice_Number__c == null){
+        if(CPInv[0].Invoice_Number__c == null && String.isBlank(invoiceNumber)){
             errormsg2 += 'Please Enter Invoice Number'; 
             isError1 = 1;
         }
@@ -68,12 +81,15 @@ public class InvoicePreview {
             showgst = false;
             showigst = true;
         }
-        if(CPInv[0].If_GST_is_applicable__c == 'Yes'){
+        if((String.isNotBlank(urlGstApp) && urlGstApp == 'Yes') || (String.isBlank(urlGstApp) && CPInv[0].If_GST_is_applicable__c == 'Yes')){
             istaxapplicable = true;
         }else{
             istaxapplicable = false;
         }
-        
+        invoiceNumber = String.isNotBlank(invoiceNumber) ? invoiceNumber : CPInv[0].Invoice_Number__c;
+        invoiceDate = String.isNotBlank(invoiceDateString) ? invoiceDate : CPInv[0].Invoice_Date__c;
+        System.debug('Check Invoice Number From APPS After Assignment----->'+invoiceNumber);
+        System.debug('Check Invoice Date From APPS After Assignment----->'+invoiceDate);
     }
     
     public void InvoiceMethod(Id BIID){
@@ -116,7 +132,7 @@ public class InvoicePreview {
         BrokerageAmtStr = INFormat(CPInv[0].Brokerage_In_Rs__c);
         pos = StateCodes(CPInv[0].Place_of_Supply__c);
         if(CPInv[0].Brokerage_Lookup__r.Brokerage_Type__c != 'Kicker Incentive'){
-            if(CPInv[0].If_GST_is_applicable__c == 'Yes' ){
+            if((String.isNotBlank(urlGstApp) && urlGstApp == 'Yes') || (String.isBlank(urlGstApp) && CPInv[0].If_GST_is_applicable__c == 'Yes')){
                 Cgst = (CPInv[0].Brokerage_In_Rs__c * 0.09).setscale(2,RoundingMode.HALF_UP);
                 Sgst = (CPInv[0].Brokerage_In_Rs__c * 0.09).setscale(2,RoundingMode.HALF_UP);
                 Igst = (Cgst + Sgst).setscale(2,RoundingMode.HALF_UP);
@@ -138,7 +154,7 @@ public class InvoicePreview {
                 GSTApplicable = false;
             }
         }else{
-            if(CPInv[0].If_GST_is_applicable__c == 'Yes' ){
+            if((String.isNotBlank(urlGstApp) && urlGstApp == 'Yes') || (String.isBlank(urlGstApp) && CPInv[0].If_GST_is_applicable__c == 'Yes')){
                 Cgst = (CPInv[0].Brokerage_In_Rs__c * 0.09).setscale(2,RoundingMode.HALF_UP);
                 Sgst = (CPInv[0].Brokerage_In_Rs__c * 0.09).setscale(2,RoundingMode.HALF_UP);
                 Igst = (Cgst + Sgst).setscale(2,RoundingMode.HALF_UP);
