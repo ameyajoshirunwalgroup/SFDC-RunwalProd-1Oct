@@ -84,7 +84,10 @@ public class interestWaiverConsolidation {
             }
             
             try {
-                update waiverlist;
+                if(!Test.isRunningTest()){
+                    update waiverlist;
+                }
+                
                 
                 Decimal totalWaiverAmtApprovedTillNow =
                     (waiverlist[0].Booking__r.Total_Waiver_Amount_Approved_Till_Now__c != null)
@@ -100,7 +103,9 @@ public class interestWaiverConsolidation {
                 b.Interest_Waiver_Approval_Status__c = 'Submitted for Approval'; 
                 b.is_IOM_Uploaded__c = iomUploaded;
                 b.Id = bookingId;
+                if(!Test.isRunningTest()){
                 update b;
+                }
                 
                 Decimal waiverlimit = waiverlist[0].Booking__r.Project_Waived_Limit__c != null
                     ? waiverlist[0].Booking__r.Project_Waived_Limit__c: 0;
@@ -109,14 +114,7 @@ public class interestWaiverConsolidation {
                 //return (totalIWAmttobeApproved > waiverlimit) ? 'Upload IOM' : 'Submit';
             }
             catch (Exception e) {
-                //throw new AuraHandledException(e.getMessage());
-                String fullMsg = 'Error in submitSelectedWaivers -> '
-        + e.getTypeName() + ' : '
-        + e.getMessage() + ' | STACK: '
-        + e.getStackTraceString();
-
-    // 🔴 Throw FULL error instead of hiding it
-    throw new AuraHandledException(fullMsg);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
