@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Previously_Waived_Amount_SAP__c</fullName>
+    <fullName>Previously_Waived_Amount_SAP_New__c</fullName>
     <externalId>false</externalId>
-    <inlineHelpText>Waiver Amount Approved from SAP</inlineHelpText>
+    <formula>Demand__r.Previously_Waived_Amount_SAP__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Previously Waived Amount (SAP)</label>
     <precision>18</precision>
     <required>false</required>

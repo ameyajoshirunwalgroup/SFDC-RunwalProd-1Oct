@@ -3,48 +3,48 @@
     <fullName>Waiver_Approver_Level__c</fullName>
     <externalId>false</externalId>
     <formula>IF(
-OR(
-AND(
-(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;)),
-Total_Waiver_Amount_to_be_Approved__c &lt;= 100000
-),
-AND(
-(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Dombivali&quot;)),
-Total_Waiver_Amount_to_be_Approved__c &lt;= 50000
-)
-),
-&quot;Level 1&quot;,
+ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Dombivali&quot;),
+
+    IF(
+        Total_Waiver_Amount_to_be_Approved__c +
+        Total_Approved_Interest_Amount_Waived__c +
+        Interest_Waiver_Approved_but_not_Waived__c &lt;= 50000,
+        &quot;Level 1&quot;,
+
+        IF(
+            Total_Waiver_Amount_to_be_Approved__c +
+            Total_Approved_Interest_Amount_Waived__c +
+            Interest_Waiver_Approved_but_not_Waived__c &lt;= 150000,
+            &quot;Level 2&quot;,
+            &quot;Level 3&quot;
+        )
+    ),
 
 IF(
 OR(
-AND(
-( ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;)),
-Total_Waiver_Amount_to_be_Approved__c &lt;= 200000
+ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;),
+ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;South Mumbai&quot;)
 ),
-AND(
-(ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;Dombivali&quot;)),
-Total_Waiver_Amount_to_be_Approved__c &lt;= 100000
-)
-),
-&quot;Level 2&quot;,
 
-IF(
-OR(
-AND(
-(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Mumbai&quot;)),
-Total_Waiver_Amount_to_be_Approved__c &gt; 200000
-),
-AND(
-(ISPICKVAL(Project__r.Project_Location__r.Location__c,&quot;Dombivali&quot;)),
-Total_Waiver_Amount_to_be_Approved__c &gt; 100000
-)
-),
-&quot;Level 3&quot;,
+    IF(
+        Total_Waiver_Amount_to_be_Approved__c +
+        Total_Approved_Interest_Amount_Waived__c +
+        Interest_Waiver_Approved_but_not_Waived__c &lt;= 100000,
+        &quot;Level 1&quot;,
+
+        IF(
+            Total_Waiver_Amount_to_be_Approved__c +
+            Total_Approved_Interest_Amount_Waived__c +
+            Interest_Waiver_Approved_but_not_Waived__c &lt;= 300000,
+            &quot;Level 2&quot;,
+            &quot;Level 3&quot;
+        )
+    ),
+
 &quot;Not Applicable&quot;
-)
-)
-)</formula>
+))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Approval level hirarchy</inlineHelpText>
     <label>Waiver Approver Level</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
