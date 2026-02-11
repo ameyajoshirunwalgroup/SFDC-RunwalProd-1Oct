@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Previously_Waived_Amount_SAP__c</fullName>
+    <fullName>Demand_Id__c</fullName>
     <externalId>false</externalId>
-    <inlineHelpText>Waiver Amount Approved from SAP</inlineHelpText>
-    <label>Previously Waived Amount (SAP)</label>
-    <precision>18</precision>
+    <formula>Demand__r.Id</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Demand Id</label>
     <required>false</required>
-    <scale>2</scale>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
-    <type>Number</type>
+    <type>Text</type>
     <unique>false</unique>
 </CustomField>
