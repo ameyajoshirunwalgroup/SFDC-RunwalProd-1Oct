@@ -86,7 +86,7 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                         
                         if(bkg.Status__c == 'Booking Confirmed' && (trigger.oldMap.get(bkg.id).Status__c!= bkg.Status__c )){
                             System.debug('trigger Line 10 Booking Confirmed___');
-                            RW_Welcome_Call__c wc = new RW_Welcome_Call__c();
+                            RW_Welcome_Call__c wc = new RW_Welcome_Call__c();   
                             wc.Booking_Id__c = bkg.Id;
                             wc.RW_Booking__c = bkg.Id;
                             wc.RW_Welcome_Call_Status__c = 'Due';

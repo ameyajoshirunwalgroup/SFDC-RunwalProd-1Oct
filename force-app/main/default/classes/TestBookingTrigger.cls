@@ -805,6 +805,7 @@ public class TestBookingTrigger {
         b.RW_Expected_Registration_Date__c = system.today();
         b.RW_Registration_Date__c = system.today();
         b.RW_Total_Receipt_Amount_Received__c = 2000000;
+        b.Funding_Status__c='Self Funded';
         insert b;
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
@@ -815,7 +816,7 @@ public class TestBookingTrigger {
         bs.Show_Invoice__c = true;
         bs.Booking__c = b.Id;
         insert bs;
-        
+             
         Brokerage__c bro = new Brokerage__c();
         bro.Name = 'Base Brokerage';
         bro.Brokerage__c = 2;
@@ -827,11 +828,17 @@ public class TestBookingTrigger {
         bro.Brokerage_Type__c = 'Base Brokerage';
         bro.Booking__c = b.Id;
         insert bro;
+        
+        RW_Welcome_Call__c wc = new RW_Welcome_Call__c();
+        wc.RW_Booking__c=b.id;
+        insert wc;
+        
         try{
         b.Source_of_Booking__c = 'Direct';
         b.Calculate_Brokerage__c = true;
         b.Brokerage_Summary__c = bs.Id;
         b.Status__c='Unit Booked';
+            b.Funding_Status__c='Loan Bank';
         update b;
         }catch(Exception ex){
             
