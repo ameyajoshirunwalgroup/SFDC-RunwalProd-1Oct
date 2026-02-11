@@ -109,7 +109,14 @@ public class interestWaiverConsolidation {
                 //return (totalIWAmttobeApproved > waiverlimit) ? 'Upload IOM' : 'Submit';
             }
             catch (Exception e) {
-                throw new AuraHandledException(e.getMessage());
+                //throw new AuraHandledException(e.getMessage());
+                String fullMsg = 'Error in submitSelectedWaivers -> '
+        + e.getTypeName() + ' : '
+        + e.getMessage() + ' | STACK: '
+        + e.getStackTraceString();
+
+    // 🔴 Throw FULL error instead of hiding it
+    throw new AuraHandledException(fullMsg);
             }
         }
         
