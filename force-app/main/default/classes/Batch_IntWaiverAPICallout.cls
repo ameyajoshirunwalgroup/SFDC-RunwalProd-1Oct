@@ -122,7 +122,7 @@ global class Batch_IntWaiverAPICallout implements Database.Batchable<SObject>, D
                     SELECT Id, Booking__c, RW_Billing_Document_Number__c, Due_Date__c, SAP_Customer_Number__c, Project_Code__c,
                     SAP_Slab_Code__c, Demand_Amount__c, Interest_Days__c, Remaining_Amount__c,
                     Total_Interest_Amount__c, Net_Interest_Amount__c, Previously_Waived_Amount_SAP__c, Total_Demand_Paid__c,
-                    SAP_Slab_Description__c, Unit_No__c
+                    SAP_Slab_Description__c, Unit_No__c, Booking__r.is_Approved_From_SAP__c
                     FROM RW_Demand__c
                     WHERE RW_Billing_Document_Number__c IN :mapWrappWithBillingNo.keySet()
                 ];
@@ -152,6 +152,10 @@ global class Batch_IntWaiverAPICallout implements Database.Batchable<SObject>, D
                         if (item.unit_no != null){
                             objDemand.Unit_No__c = item.unit_no;
                         }
+                        if(objDemand.Booking__r.is_Approved_From_SAP__c == True){
+                            objDemand.Booking__r.is_Approved_From_SAP__c = False;
+                        }
+                        
                         lstToUpdateDemand.add(objDemand);
                     }
                 }
