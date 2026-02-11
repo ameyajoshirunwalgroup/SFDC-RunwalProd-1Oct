@@ -232,6 +232,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         List<Brokerage_Summary__c> BrokerSummaryList = new List<Brokerage_Summary__c>();
         List<Brokerage__c> BrokerageList = new List<Brokerage__c>();
         list<id> bidsonSchUpdate = new list<id>();//Added by Prashant .... 20-05-2025..
+        List<Booking__c> iwBlist = new List<Booking__c>();//Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+        List<Booking__c> bklistforNotif = new List<Booking__c>();//Added by Prashant to send notifications to approvers.//18-12-25 STart.
+        List<Id> apprRejWaiverBIds = new List<Id>();//Added by Prashant to update waiver records and send mail.09-12-25
+        List<Id> inProcessApproval = new List<Id>();
+        List<Id> iwBIds = new List<Id>();//Added by Prashant to submit record for approval.//17-12-25.
         for(Booking__c bk: trigger.new){
             if(( trigger.newMap.get(bk.id).RW_Registration_Done__c == 'Yes' 
                && bk.Brokerage_Scheme__c != null && bk.BrokerIId__c != null && bk.RW_X9_99_Received__c == true )){
@@ -291,9 +296,37 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             }
             //Added by Prashant to update brokerage % whenever scheme is updated ///Added by Prashant. 20-05-2025..//End/////
             //
+             //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.            
+            if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && bk.Interest_Waiver_Approval_Status__c == 'Approved' && bk.Total_Waiver_Amount_to_be_Approved__c != null && bk.Total_Approved_Interest_Amount_Waived__c != null ){                
+                apprRejWaiverBIds.add(bk.Id);
+            }
+            else if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && (bk.Interest_Waiver_Approval_Status__c == 'Rejected' ) ){                
+                apprRejWaiverBIds.add(bk.Id);
+            }else if(trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && bk.Interest_Waiver_Approval_Status__c != 'Approved' && bk.Interest_Waiver_Approval_Status__c != 'Rejected' && bk.Interest_Waiver_Approval_Status__c != 'Submitted for Approval'){
+                inProcessApproval.add(bk.Id);
+            }
+            if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && bk.Interest_Waiver_Approval_Status__c == 'Submitted for Approval' && bk.Total_Waiver_Amount_to_be_Approved__c != null ){                 
+                iwBIds.add(bk.Id);
+            }
+            if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null ){                 
+                bklistforNotif.add(bk);
+            }
         }
         if(!bidsonSchUpdate.isEmpty()){
             BookingTriggerHandler.updateBrokerageonSchemeChange(bidsonSchUpdate);//Added by Prashant to update brokerage % whenever scheme is updated ///Added by Prashant. 20-05-2025..///////
+        }
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+        if(!apprRejWaiverBIds.isEmpty()){
+            BookingTriggerHandler.processWaivers(apprRejWaiverBIds);
+        }
+        if(!inProcessApproval.isEmpty()){
+            BookingTriggerHandler.processWaiversInProcess(inProcessApproval);
+        }
+        if(!bklistforNotif.isEmpty()){
+            //BookingTriggerHandler.sendWaiverNotifications(bklistforNotif);
+        }
+        if(!iwBIds.isEmpty()){
+            BookingTriggerHandler.submitBookingforWaiverApproval(iwBIds);
         }
         if(!bid.isEmpty()){
             BrokerageManagementService.BookingSourceChange(bid);
@@ -362,7 +395,13 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
     
    // trigger BookingTrigger on Booking__c (before update) {
     if (Trigger.isBefore && Trigger.isUpdate) {
+        //Added By Dolly
+        BookingTriggerHandler.validateIOMBeforeApproval(
+            Trigger.new,
+            Trigger.oldMap
+        );
         List<Booking__c> changedBookings = new List<Booking__c>();
+        List<Booking__c> iwBlist = new List<Booking__c>();//Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
         for (Integer i = 0; i < Trigger.new.size(); i++) {
             Booking__c newRec = Trigger.new[i];
             Booking__c oldRec = Trigger.old[i];
@@ -370,10 +409,24 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             if (newRec.Quotation__c != oldRec.Quotation__c && newRec.Quotation__c != null) {
                 changedBookings.add(newRec);
             }
+            //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+            if( oldRec.Interest_Waiver_Approval_Status__c != newRec.Interest_Waiver_Approval_Status__c && newRec.Interest_Waiver_Approval_Status__c != null && newRec.Interest_Waiver_Approval_Status__c == 'Approved' && newRec.Total_Waiver_Amount_to_be_Approved__c != null && newRec.RW_Total_Interest_Amount_Waived__c != null ){                
+                iwBlist.add(newRec);
+            }
+            if( oldRec.Interest_Waiver_Approval_Status__c != newRec.Interest_Waiver_Approval_Status__c && newRec.Interest_Waiver_Approval_Status__c != null && (newRec.Interest_Waiver_Approval_Status__c == 'Rejected' ) ){                
+                newRec.Total_Waiver_Amount_to_be_Approved__c = 0;               
+            }
+            //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
         }
         if (!changedBookings.isEmpty()) {
             BookingTriggerHandler.processQuoteAndRelatedUpdates(changedBookings);
         }
+
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+        if(!iwBlist.isEmpty()){
+            BookingTriggerHandler.updateWaiverApprovedtillNow(iwBlist);
+        }
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
         
     }
 
