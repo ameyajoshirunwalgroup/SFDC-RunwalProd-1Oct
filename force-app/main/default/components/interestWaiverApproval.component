@@ -1,2 +1,88 @@
-<apex:component >
+<apex:component controller="InterestWaiverApprovalTemplateController" allowDML="true" access="Global">
+    <apex:attribute assignTo="{!BkId}" type="string" name="idoff" description="Related Document Id" /> 
+    <html style="font-family: geneva;font-size: 10.0pt;">
+        <body>
+            
+            Dear {!currentApproverName},<br/><br/>
+            
+            
+            <apex:outputPanel rendered="{!showPendingApprSec}">An <b>interest waiver request</b> has been raised and is pending your approval. Details are as below:<br/><br/></apex:outputPanel>
+            <apex:outputPanel rendered="{!showApprovedSec}">The <b>interest waiver request</b> has been <b>approved</b> in the system with the following details:<br/><br/></apex:outputPanel>
+            <apex:outputPanel rendered="{!showRejectedSec}">The <b>interest waiver request</b> has been <b>rejected</b> in the system with the following details::<br/><br/></apex:outputPanel>
+            
+            <apex:outputText rendered="{!AND(NOT(ISNULL(iwlist)), iwlist.size > 0)}">
+                <table border="1"
+                       style="font-family: Lato,verdana, arial, sans-serif;
+                              font-size: 12px;
+                              border-width: 1px;
+                              border-collapse: collapse;
+                              width: 100%;">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Waiver Name</th>
+                        <th>Demand</th> 
+                        <th>Waiver Reason</th>
+                        <th>Sub Reason</th>
+                        <th>Waiver Amount</th>
+                        <th>Remarks</th>
+                        <th>Status</th>
+                    </tr>
+                    
+                    <apex:variable var="i" value="{!1}" />
+                    
+                    <apex:repeat value="{!iwlist}" var="iw">
+                        <tr>
+                            <td style="text-align:center;">{!i}</td>
+                            <td>{!iw.Name}</td>
+                            <td>{!iw.Demand__r.Name}</td>
+                            <td>{!iw.Waiver_Reason__c}</td>
+                            <!-- <td>{!iw.Sub_Reason__c}</td> -->
+                            <td>{!subReasonPicklistMap[iw.Sub_Reason__c]}</td>
+                            <td style="text-align:right;">{!iw.Waiver_Amount__c}</td>
+                            <td>{!iw.Remarks__c}</td>
+                            <td>{!iw.Approval_Status__c}</td>
+                        </tr>
+                        
+                        <apex:variable var="i" value="{!i + 1}" />
+                    </apex:repeat>
+                </table>
+            </apex:outputText>
+            <br/><br/>
+            
+            <b>Remarks from Requestor:</b><br/>
+            {!approverComments}
+            <br/><br/>
+            
+            <apex:outputPanel rendered="{!showRejectedSec}">Request you to take appropriate action accordingly.</apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!showPendingApprSec}">
+                To approve or reject this item,
+                <!--<a href="{!ApprovalRequest.ActionURL}">
+                {!ApprovalRequest.ActionURL}
+                </a>
+                <br/><br/>-->
+                
+                reply to this email using only one of the following words in the first line of the email message:
+                <br/>
+                <!--<b>APPROVE, APPROVED, YES, REJECT, REJECTED, NO</b>-->
+                <b>Approve</b> or <b>Reject</b>
+                <br/><br/>
+                
+
+                <!-- ADDED BOOKING LINK RECORD-->
+                <b>Booking:</b>
+                <a href="{!bookingLink}">
+                    {!bklist[0].Name}
+                </a>
+                <br/><br/>
+                <!-- END -->
+                
+                If replying via email, you can also add comments on the second line.
+                Comments will be stored with the approval request in Salesforce CRM.<br/><br/>
+            </apex:outputPanel>
+            
+            Thanks and Regards,<br/>
+            Runwal Team
+        </body>
+    </html>
 </apex:component>
