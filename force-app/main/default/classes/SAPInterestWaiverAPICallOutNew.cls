@@ -7,7 +7,7 @@ public class SAPInterestWaiverAPICallOutNew implements Queueable, Database.Allow
     
     public SAPInterestWaiverAPICallOutNew(List<Id> IWIds) {
         this.waiverIds = IWIds;
-    }
+     }
     
     public void execute(QueueableContext context) {
         Set<Id> setWaiverId = new Set<Id>(waiverIds);
@@ -160,19 +160,20 @@ objWrapp.bukrs = null;
                 if(res.getStatusCode() == 201 || res.getStatusCode() == 200){
                     for(Interest_Waiver__c objIW : lstWaiver){
                         objIW.Is_Send_To_SAP__c = True;
+						objIW.Booking__r.is_Approved_From_SAP__c = True;
                         lstIWUpdate.add(objIW);
                     }
                 }
                 else if(res.getStatusCode() != 201 || res.getStatusCode() != 200){
                     system.debug('res.getStatusCode()>>>>>>>>>>>' +res.getStatusCode());
                     for(Interest_Waiver__c objIW1 : lstWaiver){
-                        SAP_IntegrationHelper.insertLogEntry('Interest Waiver', 'Failure', objIW1.id, objIW1.Demand__c, requestBody, res.getBody(), res.getStatus(), '');   
+                        SAP_IntegrationHelper.insertLogEntry('Interest Waiver', 'Failure', objIW1.id, objIW1.Booking__c, requestBody, res.getBody(), res.getStatus(), '');   
                     }
                 }
                 if(!lstIWUpdate.isEmpty()){
                     System.debug('IW is Sent to SAP? ' +lstIWUpdate);
                     Update lstIWUpdate;
-                    SAP_IntegrationHelper.insertLogEntry('Interest Waiver', 'Success', lstIWUpdate[0].Id, lstIWUpdate[0].Demand__c, requestBody, res.getBody(), '', '');
+                    SAP_IntegrationHelper.insertLogEntry('Interest Waiver', 'Success', lstIWUpdate[0].Id, lstIWUpdate[0].Booking__c, requestBody, res.getBody(), '', '');
                     
                     for(Interest_Waiver__c objIW : lstIWUpdate){
                         if(string.isNotBlank(objIW.Customer_Name__c) && String.isNotBlank(objIW.Unit__c)
