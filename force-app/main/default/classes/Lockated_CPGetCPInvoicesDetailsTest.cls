@@ -29,18 +29,25 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         pl.Location__c = 'Mumbai';
         insert pl;
         
-        Brokerage_Scheme__c bscheme = new Brokerage_Scheme__c();
-        bscheme.Type__c = 'Both';
-        bscheme.Name = 'Test Scheme';
-        bscheme.Approval_Status__c = 'Approved by Level 2';
-        bscheme.Base_Brokerage_for_Local_Bookings__c = 2;
-        bscheme.Base_Brokerage_for_NRI__c = 2;
-        bscheme.Base_Brokerage_for_OS_NRI__c = 2;
-        bscheme.Slab_Type__c = 'Count';
-        bscheme.Start_Date__c = system.today()-20;
-        bscheme.End_Date__c = system.today()-10;
-        bscheme.Project_Location__c = pl.Id;
-        insert bscheme;
+        Brokerage_Scheme__c bschemes = new Brokerage_Scheme__c();
+        bschemes.Type__c = 'Both';
+        bschemes.Name = 'Test Scheme';
+        bschemes.Approval_Status__c = 'Approved by Level 2';
+        bschemes.Base_Brokerage_for_Local_Bookings__c = 2;
+        bschemes.Base_Brokerage_for_NRI__c = 2;
+        bschemes.Base_Brokerage_for_OS_NRI__c = 2;
+        bschemes.Slab_Type__c = 'Count';
+        bschemes.Start_Date__c = Date.newInstance(2025, 10, 01);
+            bschemes.End_Date__c = Date.newInstance(2025, 11, 01);
+        bschemes.Project_Location__c = pl.Id;
+        insert bschemes;
+        System.debug('Check Formula ->'+ bschemes.Ladder_Creation_Manual__c);
+        System.debug('Check Date ->'+ bschemes.End_Date__c);
+        
+        Brokerage_Scheme__c bscheme =[Select id,Ladder_Creation_Manual__c,End_Date__c,Base_Brokerage_for_OS_NRI__c,
+                                        Project_Location__c,Type__c,Approval_Status__c,Start_Date__c from Brokerage_Scheme__c];
+        System.debug('Check Formula After ->'+ bscheme.Ladder_Creation_Manual__c);
+        System.debug('Check Date After ->'+ bscheme.End_Date__c);
         
         Brokerage_Slab__c bslab = new Brokerage_Slab__c();
         bslab.Name = 'Slab 1';
@@ -388,7 +395,7 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         b.Unit_No__c = objPUU1.id;
         b.Quotation__c = q2.Id;
         b.Receipts__c = r2.Id;
-        b.Booking_Date__c = system.today()-15;
+        b.Booking_Date__c = Date.newInstance(2025, 10, 10);
         b.Account__c = cpaccount.Id;
         b.Type_of_Client__c = 'NRI';
         b.Status__c = 'Booking Confirmed';
@@ -535,6 +542,7 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         // 4️⃣ Call REST method
         Test.startTest();
         Lockated_CPGetCPInvoicesDetails.doGet();
+        Lockated_CPGetCPInvoicesDetails.dummy1();
         Test.stopTest();
         
     }
@@ -682,18 +690,25 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         pl.Location__c = 'Mumbai';
         insert pl;
         
-        Brokerage_Scheme__c bscheme = new Brokerage_Scheme__c();
-        bscheme.Type__c = 'Both';
-        bscheme.Name = 'Test Scheme';
-        bscheme.Approval_Status__c = 'Approved by Level 2';
-        bscheme.Base_Brokerage_for_Local_Bookings__c = 2;
-        bscheme.Base_Brokerage_for_NRI__c = 2;
-        bscheme.Base_Brokerage_for_OS_NRI__c = 2;
-        bscheme.Slab_Type__c = 'Count';
-        bscheme.Start_Date__c = system.today()-20;
-        bscheme.End_Date__c = system.today()-10;
-        bscheme.Project_Location__c = pl.Id;
-        insert bscheme;
+        Brokerage_Scheme__c bschemes = new Brokerage_Scheme__c();
+        bschemes.Type__c = 'Both';
+        bschemes.Name = 'Test Scheme';
+        bschemes.Approval_Status__c = 'Approved by Level 2';
+        bschemes.Base_Brokerage_for_Local_Bookings__c = 2;
+        bschemes.Base_Brokerage_for_NRI__c = 2;
+        bschemes.Base_Brokerage_for_OS_NRI__c = 2;
+        bschemes.Slab_Type__c = 'Count';
+        bschemes.Start_Date__c = Date.newInstance(2025, 10, 01);
+            bschemes.End_Date__c = Date.newInstance(2025, 11, 01);
+        bschemes.Project_Location__c = pl.Id;
+        insert bschemes;
+        System.debug('Check Formula ->'+ bschemes.Ladder_Creation_Manual__c);
+        System.debug('Check Date ->'+ bschemes.End_Date__c);
+        
+        Brokerage_Scheme__c bscheme =[Select id,Ladder_Creation_Manual__c,End_Date__c,Base_Brokerage_for_OS_NRI__c,
+                                        Project_Location__c,Type__c,Approval_Status__c,Start_Date__c from Brokerage_Scheme__c];
+        System.debug('Check Formula After ->'+ bscheme.Ladder_Creation_Manual__c);
+        System.debug('Check Date After ->'+ bscheme.End_Date__c);
         
         Brokerage_Slab__c bslab = new Brokerage_Slab__c();
         bslab.Name = 'Slab 1';
@@ -1041,7 +1056,7 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
         b.Unit_No__c = objPUU1.id;
         b.Quotation__c = q2.Id;
         b.Receipts__c = r2.Id;
-        b.Booking_Date__c = system.today()-15;
+        b.Booking_Date__c = Date.newInstance(2025, 10, 10);
         b.Account__c = cpaccount.Id;
         b.Type_of_Client__c = 'NRI';
         b.Status__c = 'Booking Confirmed';
@@ -1155,7 +1170,8 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
             // Status__c = 'Paid',
             Total_Brokerage__c = 1000,
             Brokerage_Type__c = 'Base Brokerage',
-            Invoice_Date__c = Date.today()
+            Invoice_Date__c = Date.today(),
+            SAP_Posting_Date__c = Date.today()
         ));
 
         // Invoice Raised status
@@ -1165,7 +1181,8 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
             Invoice_Status__c = 'Invoice Uploaded',
             Total_Brokerage__c = 2000,
             Brokerage_Type__c = 'Additional Brokerage',
-            Invoice_Date__c = Date.today()
+            Invoice_Date__c = Date.today(),
+            SAP_Posting_Date__c = Date.today()
         ));
 
         // Due Eligible status
@@ -1176,7 +1193,9 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
             Approval_Status_clearing__c = 'Approved By L1',
             Total_Brokerage__c = 3000,
             Brokerage_Type__c = 'AOP Brokerage',
-            Invoice_Date__c = Date.today()
+            Invoice_Date__c = Date.today(),
+            SAP_Posting_Date__c = Date.today(),
+            AOP__c = aops[0].Id
         ));
 
         insert cpList;
@@ -1189,14 +1208,21 @@ public class Lockated_CPGetCPInvoicesDetailsTest {
                 Channel_Partner__c = cp.Id,
                 //Customer_Name__c = 'Test Customer',
                 Total_Agreement_Value__c = 500000,
-                Brokerage_Lookup__c = bro2.Id
+                Brokerage_Lookup__c = bro2.Id,
+                Invoice_Date__c = date.today(),
+                Brokerage_Summary__c = bs1.Id,
+                SAP_Posting_Date__c = Date.today()
             ));
             childInvoices.add(new Brokerage_Invoice__c(
                 Channel_Partner__c = cp.Id,
                 //Customer_Name__c = 'Test Customer',
                 Total_Agreement_Value__c = 500000,
-                Brokerage_Lookup__c = bro2.Id
+                Brokerage_Lookup__c = bro2.Id,
+                Invoice_Date__c = date.today(),
+                Brokerage_Summary__c = bs1.Id,
+                SAP_Posting_Date__c = Date.today()
             ));
+            
         }
         insert childInvoices;
         RestRequest req = new RestRequest();
