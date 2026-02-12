@@ -1,4 +1,6 @@
 public with sharing class InventoryCostServices {
+    public static Boolean sdPaidByRunwalContext = false;//Added for SDR/ROC Mangement
+    public static Boolean regPaidByRunwalContext = false;//Added for SDR/ROC Mangement
     public static decimal baseRateVal;
     public static decimal premiumRateVal;
     public static decimal allotmentChargeVal;
@@ -352,7 +354,7 @@ public with sharing class InventoryCostServices {
         
         List<Project_Unit__c> unit = [Select Id, RW_Project__r.Name, RW_Project__r.ClientLookup__r.Id, 
                                       RW_Project__r.ClientLookup__r.Name, RW_Project__r.OC_Approved__c,New_Floor__c, // Old field -- RW_Floor__c
-                                      TowerName__r.OC_Approved__c,OC_Approved__c,S_Charge_Percentage__c,
+                                      TowerName__r.OC_Approved__c,OC_Approved__c,S_Charge_Percentage__c,RW_Project__r.S_Ready_Reckoner_Rate__c,SD_Paid_By_Runwal__c,//AddedSD_Paid_By_Runwal__c, RW_Project__r.S_Ready_Reckoner_Rate__cfor SDR/ROC Management
                                       RW_Project__r.Id from Project_Unit__c where Id = :unitId];
         
         if(unit.size() ==1 ) {
@@ -537,7 +539,8 @@ else {
                     Decimal rrVal = 0.0;
                     Decimal avVal = 0.0;
                     Decimal flatCostVal = 0.0;    
-                    System.debug('Charge Details:' + pc);                
+                    Decimal agreementValue = 0.0; //Added for SDR/ROC Management
+                    Decimal basicRate  = 0.0; //Added for SDR/ROC Management
                     
                     if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
                         chargeVal = rateListMap.get(pc.Charge_Code__r.Name);
@@ -578,6 +581,12 @@ else {
                     } 
                 }
             }
+            /**Added for SDR Changes starts */
+                if(allChargesMap.containsKey('Add SD in AV') && (unit[0].S_Charge_Percentage__c == 0 || unit[0].S_Charge_Percentage__c == null)){
+                    System.debug('SD**'+allChargesMap);
+                    allChargesMap.put('Stamp Duty',allChargesMap.get('Add SD in AV'));
+                }
+            /**Added for SDR Changes starts */
             
             Decimal charge2Sum = 0;
             Decimal charge3Sum = 0;
@@ -715,6 +724,27 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
             for(String key : allChargesMap.keySet()) {
                 System.debug(key + ':' + allChargesMap.get(key));
             }
+            /**Added for SDR/ROC starts */
+            if(sdPaidByRunwalContext == true){//Added for SDR/ROC              
+                System.debug('SD AV**'+allChargesMap.get('AGREEMENTVALUE'));
+                System.debug('Add SD in AV**' +allChargesMap.get('Add SD in AV'));
+                System.debug('agreementVal9**'+agreementVal);
+                allChargesMap.put('AGREEMENTVALUE',allChargesMap.get('AGREEMENTVALUE') +allChargesMap.get('Stamp Duty'));
+                //allChargesMap.put('AGREEMENTVALUE',allChargesMap.get('AGREEMENTVALUE') +allChargesMap.get('Add SD in AV'));
+                System.debug('SD after AV**'+allChargesMap.get('AGREEMENTVALUE'));
+                allChargesMap.put('Stamp Duty',0);
+                System.debug('SD after**'+allChargesMap.get('Stamp Duty'));
+            }
+
+            if(regPaidByRunwalContext == true){
+                System.debug('Before after Reg'+allChargesMap.get('AGREEMENTVALUE'));
+                allChargesMap.put('AGREEMENTVALUE',allChargesMap.get('AGREEMENTVALUE') + allChargesMap.get('Registration Charges'));
+                allChargesMap.put('Registration Charges',0);
+                System.debug('AV after Reg'+allChargesMap.get('AGREEMENTVALUE'));
+                System.debug('Registration Cahregs**'+allChargesMap.get('Registration Charges'));
+            }
+
+            /**Added for SDR/ROC ends */
             return allChargesMap;
         } else {
             // throw exception
@@ -822,7 +852,7 @@ return registration;
                                       TowerName__r.ProjectName__r.Allotment_Charges_1__c, TowerName__r.ProjectName__r.Allotment_Charges_2__c,
                                       TowerName__r.ProjectName__r.Allotment_Charges_3__c, TowerName__r.ProjectName__r.Allotment_Charges_4__c,
                                       TowerName__r.ProjectName__r.Allotment_Charges_5__c, TowerName__r.ProjectName__r.Allotment_Charges_8__c, TowerName__r.ProjectName__r.Allotment_Charges_9__c,RW_Project__r.OC_Approved__c,TowerName__r.OC_Approved__c,
-                                      OC_Approved__c, Tax_Rate_Basic__c,MLCP_Earmarked__c,S_Charge_Percentage__c
+                                      OC_Approved__c, Tax_Rate_Basic__c,MLCP_Earmarked__c,S_Charge_Percentage__c,SD_Paid_by_Runwal__c,Registration_Charges_Paid_By_Runwal__c//Added Registration_Charges_Paid_By_Runwal__c and SD_Paid_by_Runwal__c for SDR/ROC Management
                                       from Project_Unit__c where Id = :unitId];
         if(unit.size() ==1) {
             return unit[0];
