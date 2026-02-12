@@ -49,7 +49,7 @@ global without sharing class Lockated_CPGetMyLeads {
                         }
                         List<Brokerage_Invoice__c> brokerageInvoices = [
                             SELECT Id,
-                                   Booking__c,
+                                   Booking__c,Status__c,
                             	   CP_Brokerage__c,
                                    CP_Brokerage__r.Status__c,
                                    CP_Brokerage__r.Brokerage_Type__c
@@ -208,12 +208,12 @@ global without sharing class Lockated_CPGetMyLeads {
                                     b.bookingSummary.status = b1.Status__c;
                                     
                                     b.financialDetails = new FinancialDetails();
-                                    b.financialDetails.agreementValue = b1.Agreement_Value_for_brokers__c;
-                                    b.financialDetails.percentagePaid = b1.Payment_Received__c;
-                                    b.financialDetails.registrationStatus = b1.Registration_date_status__c;
-                                    b.financialDetails.brokerageStatus = '';
-                                    if(bookingToBrokerageInvoiceMap.containsKey(b1.Id) && bookingToBrokerageInvoiceMap.get(b1.Id).CP_Brokerage__c!=null && bookingToBrokerageInvoiceMap.get(b1.Id).CP_Brokerage__r.Status__c!=null){
-                                    	b.financialDetails.brokerageStatus = bookingToBrokerageInvoiceMap.get(b1.Id).CP_Brokerage__r.Status__c;
+                                    b.financialDetails.agreementValue = b1.Agreement_Value_for_brokers__c!=null ? b1.Agreement_Value_for_brokers__c : 0;
+                                    b.financialDetails.percentagePaid = b1.Payment_Received__c!=null ? b1.Payment_Received__c : 0;
+                                    b.financialDetails.registrationStatus = b1.Registration_date_status__c!=null ? b1.Registration_date_status__c : 'Un-Registered';
+                                    b.financialDetails.brokerageStatus = 'Unpaid';
+                                    if(bookingToBrokerageInvoiceMap.containsKey(b1.Id) && bookingToBrokerageInvoiceMap.get(b1.Id).Status__c!=null){
+                                    	b.financialDetails.brokerageStatus = bookingToBrokerageInvoiceMap.get(b1.Id).Status__c;
                                     }
                                     BookingDetailslist.add(b);
                                 }
@@ -356,12 +356,12 @@ global without sharing class Lockated_CPGetMyLeads {
                                     b.bookingSummary.status = b1.Status__c;
                                     
                                     b.financialDetails = new FinancialDetails();
-                                    b.financialDetails.agreementValue = b1.Agreement_Value_for_brokers__c;
-                                    b.financialDetails.percentagePaid = b1.Payment_Received__c;
-                                    b.financialDetails.registrationStatus = b1.Registration_date_status__c;
-                                    b.financialDetails.brokerageStatus = '';
-                                    if(bookingToBrokerageInvoiceMap.containsKey(b1.Id) && bookingToBrokerageInvoiceMap.get(b1.Id).CP_Brokerage__c!=null && bookingToBrokerageInvoiceMap.get(b1.Id).CP_Brokerage__r.Status__c!=null){
-                                    	b.financialDetails.brokerageStatus = bookingToBrokerageInvoiceMap.get(b1.Id).CP_Brokerage__r.Status__c;
+                                    b.financialDetails.agreementValue = b1.Agreement_Value_for_brokers__c!=null ? b1.Agreement_Value_for_brokers__c : 0;
+                                    b.financialDetails.percentagePaid = b1.Payment_Received__c!=null ? b1.Payment_Received__c : 0;
+                                    b.financialDetails.registrationStatus = b1.Registration_date_status__c!=null ? b1.Registration_date_status__c : 'Un-Registered';
+                                    b.financialDetails.brokerageStatus = 'Unpaid';
+                                    if(bookingToBrokerageInvoiceMap.containsKey(b1.Id) && bookingToBrokerageInvoiceMap.get(b1.Id).Status__c!=null){
+                                    	b.financialDetails.brokerageStatus = bookingToBrokerageInvoiceMap.get(b1.Id).Status__c;
                                     }
                                     BookingDetailslist.add(b);
                                 }
