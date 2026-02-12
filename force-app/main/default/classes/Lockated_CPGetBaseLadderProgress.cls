@@ -22,7 +22,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
 			Date cutOffDate = Date.valueOf(cutOffString);
             
             List<CP_Brokerage__c> brokerageRecords = [
-                SELECT Id, Total_Brokerage__c, Total_Amount_Balance__c, Project__c, Booking__r.Booking_Date__c, Brokerage__c 
+                SELECT Id, Total_Brokerage__c, Total_Amount_Balance__c, Project__c, Booking__r.Booking_Date__c, Brokerage__c, Total_Invoice_Amount__c  
                 FROM CP_Brokerage__c
                 WHERE Brokerage_Type__c = 'Base Brokerage' AND Channel_Partner__c = :cpId 
                 AND Booking__r.Booking_Date__c >= :startDate 
@@ -30,7 +30,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
             ];
             
             List<Brokerage_Invoice__c> brokerageInvoicesRecords = [
-                SELECT Id, Brokerage_In_Rs__c, Total_Amount_Balance__c, Project__c, Booking__r.Booking_Date__c, Brokerage__c 
+                SELECT Id, Brokerage_In_Rs__c, Total_Amount_Balance__c, Project__c, Booking__r.Booking_Date__c, Brokerage__c, Invoice_Amount__c  
                 FROM Brokerage_Invoice__c
                 WHERE Brokerage_Lookup__r.Brokerage_Type__c ='Base Brokerage' AND Channel_Partner__c = :cpId 
                 AND Booking__r.Booking_Date__c >= :startDate 
@@ -59,7 +59,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         if(!cpBrokerageInvoices.isEmpty()){
             for (CP_Brokerage__c rec : cpBrokerageInvoices) {
                 rw.totalNoOfBookings++;
-                rw.totalbrokerage += (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
+                rw.totalbrokerage += (rec.Total_Invoice_Amount__c  != null) ? rec.Total_Invoice_Amount__c  : (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
                 rw.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
                 // Track which projects this specific booking has already contributed to
                 // to avoid double-counting the same booking for the same project
@@ -77,7 +77,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
                 // Only add parent totals to the project summary ONCE per unique booking/project combo
                 if (!processedProjectsForThisRecord.contains(rec.Project__c)) {
                     pd.projectSummary.noOfBookings++;
-                    pd.projectSummary.totalbrokerage += (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
+                    pd.projectSummary.totalbrokerage += (rec.Total_Invoice_Amount__c  != null) ? rec.Total_Invoice_Amount__c  : (rec.Total_Brokerage__c != null) ? rec.Total_Brokerage__c : 0;
                     pd.projectSummary.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
                     processedProjectsForThisRecord.add(rec.Project__c);
                 }
@@ -87,7 +87,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
         if(!brokerageInvoicesRecords.isEmpty()){
             for (Brokerage_Invoice__c rec : brokerageInvoicesRecords) {
                 rw.totalNoOfBookings++;
-                rw.totalbrokerage += (rec.Brokerage_In_Rs__c != null) ? rec.Brokerage_In_Rs__c : 0;
+                rw.totalbrokerage += (rec.Invoice_Amount__c != null) ? rec.Invoice_Amount__c : (rec.Brokerage_In_Rs__c!=null) ? rec.Brokerage_In_Rs__c : 0;
                 rw.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
                 // Track which projects this specific booking has already contributed to
                 // to avoid double-counting the same booking for the same project
@@ -105,7 +105,7 @@ global with sharing class Lockated_CPGetBaseLadderProgress {
                 // Only add parent totals to the project summary ONCE per unique booking/project combo
                 if (!processedProjectsForThisRecord.contains(rec.Project__c)) {
                     pd.projectSummary.noOfBookings++;
-                    pd.projectSummary.totalbrokerage += (rec.Brokerage_In_Rs__c != null) ? rec.Brokerage_In_Rs__c : 0;
+                    pd.projectSummary.totalbrokerage +=(rec.Invoice_Amount__c != null) ? rec.Invoice_Amount__c : (rec.Brokerage_In_Rs__c!=null) ? rec.Brokerage_In_Rs__c : 0;
                     pd.projectSummary.brokeragePending += (rec.Total_Amount_Balance__c != null) ? rec.Total_Amount_Balance__c : 0;
                     processedProjectsForThisRecord.add(rec.Project__c);
                 }
