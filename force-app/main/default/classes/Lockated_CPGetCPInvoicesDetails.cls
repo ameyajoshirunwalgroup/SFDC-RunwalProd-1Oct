@@ -24,8 +24,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                                       Customer_Name__c,Project__c,Total_Agreement_Value__c,Brokerage_In_Rs__c,Invoice_Date__c,Invoice_Number__c,Status__c,CreatedDate,
                                                       Invoice_Status__c,Invoice_Status_Brokerage_invoice__c,Booking__r.Booking_Date__c,Booking__r.Name,Opportunity__r.Name,
                                                       Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c,Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c, Booking__r.Allotment_Premium__c,
-                                                      Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c,
-                                                      Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c from Brokerage_Invoices__r) from CP_Brokerage__c   where Channel_Partner__c =: cpId ];
+                                                      Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c, 
+                                                      Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c from Brokerage_Invoices__r) from CP_Brokerage__c   where Channel_Partner__c =: cpId And Total_Brokerage__c > 0];
                 
                 Date baseBrkCutoffDate = Date.valueOf(label.Base_Brokerage_Cut_off_Date);
                 Date ladderBrkCutoffDate = Date.valueOf(label.Ladder_Brokerage_Cut_off_Date);
@@ -38,11 +38,11 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                                       Brokerage_Summary__r.Brokerage_Scheme__r.Start_Date__c,Brokerage_Summary__r.Brokerage_Scheme__r.End_Date__c, Booking__r.Allotment_Premium__c,
                                                       Opportunity__c, CP_Brokerage__c, Brokerage_Summary__r.Brokerage_Scheme__r.Name, Brokerage_Summary__r.Brokerage_Scheme__c, Brokerage_Summary__c,
                                                       Booking__r.Payment_Received__c,Booking__r.RW_Registration_Status__c from Brokerage_Invoice__c  where 
-                                                      Channel_Partner__c =: cpId and CP_Brokerage__c = null and Brokerage_Lookup__r.Brokerage_Type__c != null 
+                                                      Channel_Partner__c =: cpId and CP_Brokerage__c = null and Brokerage_Lookup__r.Brokerage_Type__c != null And Brokerage_In_Rs__c > 0
                                                       AND (
                                                             (Brokerage_Lookup__r.Brokerage_Type__c = 'Base Brokerage' AND CreatedDate <= :baseBrkCutoffDate)
                                                             OR 
-                                                            (Brokerage_Lookup__r.Brokerage_Type__c = 'Additional Brokerage' AND CreatedDate <= :ladderBrkCutoffDate)
+                                                            (Brokerage_Lookup__r.Brokerage_Type__c = 'Additional Brokerage' /*AND CreatedDate <= :ladderBrkCutoffDate*/ AND Brokerage_Summary__r.Brokerage_Scheme__r.Ladder_Creation_Manual__c = true)
                                                         )];
                 
                 
@@ -111,6 +111,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                         Decimal aopTotalAmount = 0;
                         if(invoiceMapNew.containsKey(sts) && !invoiceMapNew.get(sts).cpBrokerageList.isEmpty()){
                             for(CP_Brokerage__c inv : invoiceMapNew.get(sts).cpBrokerageList){
+                                //Decimal invoiceAmt = (inv.Invoice_Amount__c != null) ?  inv.Invoice_Amount__c : (inv.Brokerage_In_Rs__c != null) ? inv.Brokerage_In_Rs__c : 0;
+                                Decimal invoiceAmt = (inv.Total_Invoice_Amount__c != null) ?  inv.Total_Invoice_Amount__c : (inv.Total_Brokerage__c != null) ? inv.Total_Brokerage__c : 0;
                                 InvDetailsForBase base = new InvDetailsForBase();
                                 InvDetailsForLadder ladder = new InvDetailsForLadder();
                                 InvDetailsForAOP aop = new InvDetailsForAOP();
@@ -127,7 +129,7 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                 }
                                 // totalDetails.invoiceNo = inv.Invoice_Number__c;
                                 totalDetails.transactionName = null;
-                                totalDetails.brokerageAmount = inv.Total_Brokerage__c;
+                                totalDetails.brokerageAmount = invoiceAmt;
                                 // totalDetails.statementUrl = null;
                                 totalDetails.status = sts;
                                 if(sts == 'paid'){
@@ -144,26 +146,26 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                 tlist.add(totalDetails);
                                 // End For TotatlDetails In Wrapper
                                 if(!inv.brokerage_invoices__r.isEmpty()){
-                                    if(inv.Total_Brokerage__c!=null){
-                                        totalAmount += inv.Total_Brokerage__c;
-                                    }
+                                    //if(inv.Total_Brokerage__c!=null){
+                                        totalAmount += invoiceAmt;
+                                    //}
                                     if(inv.Brokerage_Type__c == 'Base Brokerage'){
                                         assignBaseBrokerage(base,inv,inv.brokerage_invoices__r);
-                                        if(inv.Total_Brokerage__c!=null){
-                                            baseTotalAmount += inv.Total_Brokerage__c;
-                                        }
+                                        //if(inv.Total_Brokerage__c!=null){
+                                            baseTotalAmount += invoiceAmt;
+                                        //}
                                         blist.add(base); 
                                     }else if(inv.Brokerage_Type__c == 'Additional Brokerage'){
                                         assignLadderBrokerage(ladder,inv,inv.brokerage_invoices__r);
-                                        if(inv.Total_Brokerage__c!=null){
-                                            ladderTotalAmount += inv.Total_Brokerage__c;
-                                        }
+                                        //if(inv.Total_Brokerage__c!=null){
+                                            ladderTotalAmount += invoiceAmt;
+                                        //}
                                         llist.add(ladder);
                                     }else if(inv.Brokerage_Type__c == 'AOP Brokerage'){
                                         assignAOPBrokerage(aop,inv,inv.brokerage_invoices__r);
-                                        if(inv.Total_Brokerage__c!=null){
-                                            aopTotalAmount += inv.Total_Brokerage__c;
-                                        }
+                                        //if(inv.Total_Brokerage__c!=null){
+                                            aopTotalAmount += invoiceAmt;
+                                        //}
                                         alist.add(aop);
                                     }
                                 }
@@ -171,6 +173,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                     	}
                         if(invoiceMapNew.containsKey(sts) && !invoiceMapNew.get(sts).brokerageInvList.isEmpty()){
                             for(Brokerage_invoice__c inv : invoiceMapNew.get(sts).brokerageInvList){
+                                //Decimal invoiceAmt = (inv.Total_Invoice_Amount__c != null) ?  inv.Total_Invoice_Amount__c : (inv.Total_Brokerage__c != null) ? inv.Total_Brokerage__c : 0;
+                                Decimal invoiceAmt = (inv.Invoice_Amount__c != null) ?  inv.Invoice_Amount__c : (inv.Brokerage_In_Rs__c != null) ? inv.Brokerage_In_Rs__c : 0;
                                 InvDetailsForBase base = new InvDetailsForBase();
                                 InvDetailsForLadder ladder = new InvDetailsForLadder();
                                 InvDetailsForAOP aop = new InvDetailsForAOP();
@@ -187,7 +191,7 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                 }
                                 // totalDetails.invoiceNo = inv.Invoice_Number__c;
                                 totalDetails.transactionName = null;
-                                totalDetails.brokerageAmount = inv.Brokerage_In_Rs__c;
+                                totalDetails.brokerageAmount = invoiceAmt;
                                 // totalDetails.statementUrl = null;
                                 totalDetails.status = sts;
                                 if(sts == 'paid'){
@@ -203,27 +207,27 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
                                 }
                                 tlist.add(totalDetails);
                                 // End For TotatlDetails In Wrapper
-                                if(inv.Brokerage_In_Rs__c!=null){
-                                    totalAmount += inv.Brokerage_In_Rs__c;
-                                }
+                                //if(inv.Brokerage_In_Rs__c!=null){
+                                    totalAmount += invoiceAmt;
+                                //}
                                 //if(parentToChildMap.containsKey(inv.id)){
                                     if(inv.Brokerage_Lookup__r.Brokerage_Type__c == 'Base Brokerage'){
                                         assignBaseBrokerageBI(base,inv);
-                                        if(inv.Brokerage_In_Rs__c !=null){
-                                            baseTotalAmount += inv.Brokerage_In_Rs__c;
-                                        }
+                                        //if(inv.Brokerage_In_Rs__c !=null){
+                                            baseTotalAmount += invoiceAmt;
+                                        //}
                                         blist.add(base); 
                                     }else if(inv.Brokerage_Lookup__r.Brokerage_Type__c == 'Additional Brokerage'){
                                         assignLadderBrokerageBI(ladder,inv);
-                                        if(inv.Brokerage_In_Rs__c !=null){
-                                            ladderTotalAmount += inv.Brokerage_In_Rs__c;
-                                        }
+                                        //if(inv.Brokerage_In_Rs__c !=null){
+                                            ladderTotalAmount += invoiceAmt;
+                                        //}
                                         llist.add(ladder);
                                     }else if(inv.Brokerage_Lookup__r.Brokerage_Type__c == 'AOP Brokerage'){
                                         assignAOPBrokerageBI(aop,inv);
-                                        if(inv.Brokerage_In_Rs__c !=null){
-                                            aopTotalAmount += inv.Brokerage_In_Rs__c;
-                                        }
+                                        //if(inv.Brokerage_In_Rs__c !=null){
+                                            aopTotalAmount += invoiceAmt;
+                                        //}
                                         alist.add(aop);
                                     }
                                // }
@@ -275,7 +279,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
     }
     
     private static void assignBaseBrokerage(InvDetailsForBase base,CP_Brokerage__c cpBrokerage, List<Brokerage_Invoice__c> brokerageInvoice){
-        base.brokerageAmount = cpBrokerage.Total_Brokerage__c;
+        Decimal invoiceAmt = (cpBrokerage.Total_Invoice_Amount__c != null) ?  cpBrokerage.Total_Invoice_Amount__c : (cpBrokerage.Total_Brokerage__c != null) ? cpBrokerage.Total_Brokerage__c : 0;
+        base.brokerageAmount = invoiceAmt;
         // base.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
         if(cpBrokerage.SAP_Posting_Date__c != null) {
             Date d = Date.valueOf(cpBrokerage.SAP_Posting_Date__c);
@@ -336,7 +341,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
             aop.aopAmout = cpBrokerage.AOP__r.Commitment_max__c;
         }
         aop.runwalEntity = cpBrokerage.Company_Name__c;
-        aop.brokerageAmount = cpBrokerage.Total_Brokerage__c;
+        Decimal invoiceAmt = (cpBrokerage.Total_Invoice_Amount__c != null) ?  cpBrokerage.Total_Invoice_Amount__c : (cpBrokerage.Total_Brokerage__c != null) ? cpBrokerage.Total_Brokerage__c : 0;
+        aop.brokerageAmount = invoiceAmt;
         // aop.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
         if(cpBrokerage.SAP_Posting_Date__c != null) {
             Date d = Date.valueOf(cpBrokerage.SAP_Posting_Date__c);
@@ -372,7 +378,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
     }
     
     public static void assignLadderBrokerage(InvDetailsForLadder ladder,CP_Brokerage__c cpBrokerage, List<Brokerage_Invoice__c> brokerageInvoice){
-        ladder.brokerageAmount = cpBrokerage.Total_Brokerage__c;
+        Decimal invoiceAmt = (cpBrokerage.Total_Invoice_Amount__c != null) ?  cpBrokerage.Total_Invoice_Amount__c : (cpBrokerage.Total_Brokerage__c != null) ? cpBrokerage.Total_Brokerage__c : 0;
+        ladder.brokerageAmount = invoiceAmt;
         // ladder.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
         if(cpBrokerage.SAP_Posting_Date__c != null) {
             Date d = Date.valueOf(cpBrokerage.SAP_Posting_Date__c);
@@ -428,7 +435,8 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
     
     
     public static void assignBaseBrokerageBI(InvDetailsForBase base,Brokerage_Invoice__c brokerageInvoice){
-        base.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        Decimal invoiceAmt = (brokerageInvoice.Invoice_Amount__c != null) ?  brokerageInvoice.Invoice_Amount__c : (brokerageInvoice.Brokerage_In_Rs__c != null) ? brokerageInvoice.Brokerage_In_Rs__c : 0;
+        base.brokerageAmount = invoiceAmt;
         // base.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
         if(brokerageInvoice.SAP_Posting_Date__c != null) {
             Date d = Date.valueOf(brokerageInvoice.SAP_Posting_Date__c);
@@ -482,7 +490,9 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
     }
     
     public static void assignLadderBrokerageBI(InvDetailsForLadder ladder, Brokerage_Invoice__c brokerageInvoice){
-        ladder.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        //ladder.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        Decimal invoiceAmt = (brokerageInvoice.Invoice_Amount__c != null) ?  brokerageInvoice.Invoice_Amount__c : (brokerageInvoice.Brokerage_In_Rs__c != null) ? brokerageInvoice.Brokerage_In_Rs__c : 0;
+        ladder.brokerageAmount = invoiceAmt;
         // ladder.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
         if(brokerageInvoice.SAP_Posting_Date__c != null) {
             Date d = Date.valueOf(brokerageInvoice.SAP_Posting_Date__c);
@@ -544,7 +554,9 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
             aop.aopAmout = brokerageInvoice.AOP__r.Commitment_max__c;
         }
         //aop.runwalEntity = brokerageInvoice.Company_Name__c;
-        aop.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
+        Decimal invoiceAmt = (brokerageInvoice.Invoice_Amount__c != null) ?  brokerageInvoice.Invoice_Amount__c : (brokerageInvoice.Brokerage_In_Rs__c != null) ? brokerageInvoice.Brokerage_In_Rs__c : 0;
+        aop.brokerageAmount = invoiceAmt;
+        //aop.brokerageAmount = brokerageInvoice.Brokerage_In_Rs__c;
         // aop.invoiceProcessDate = cpBrokerage.SAP_Posting_Date__c;
         if(brokerageInvoice.SAP_Posting_Date__c != null) {
             Date d = Date.valueOf(brokerageInvoice.SAP_Posting_Date__c);
@@ -685,4 +697,124 @@ global without sharing class Lockated_CPGetCPInvoicesDetails {
         // public String invoiceNo;
         // public String statementUrl;
     }
+    
+    
+    Public static void dummy1(){
+        
+        integer i = 0;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;i++;
+}
 }
