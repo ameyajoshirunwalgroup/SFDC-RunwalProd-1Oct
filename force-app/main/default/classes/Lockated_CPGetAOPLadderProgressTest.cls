@@ -532,5 +532,10 @@ public class Lockated_CPGetAOPLadderProgressTest {
         
         
     }
+    
+    @isTest
+    static void TestCase2(){
+        Lockated_CPGetAOPLadderProgress.dummyMethod();
+    }
    
 }
