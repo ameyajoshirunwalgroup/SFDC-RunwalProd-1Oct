@@ -2,7 +2,7 @@
 public class Lockated_CPGetAOPLadderProgressTest {
 	@isTest
     static void TestCase1(){
-        
+        Test.setMock(HttpCalloutMock.class, new Lockated_CP_Mock());
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Booking__c objBooking;
@@ -515,7 +515,6 @@ public class Lockated_CPGetAOPLadderProgressTest {
             system.debug('9.99 b3::' + [SELECT Id, Name, RW_X9_99_Received__c FROM Booking__c WHERE Id = :b3.Id]);
          system.debug('9.99 b3::' + [SELECT Id, Name, RW_X9_99_Received__c FROM Booking__c WHERE RW_X9_99_Received__c = true]);
         
-        try{
             RestRequest req = new RestRequest();
             RestResponse res = new RestResponse();
             req.httpMethod = 'GET';
@@ -530,9 +529,7 @@ public class Lockated_CPGetAOPLadderProgressTest {
             Lockated_CPGetAOPLadderProgress.doGet();
             Lockated_CPGetLadderProgress.doGet();
             Test.stopTest();
-        }catch(Exception ex){
-            
-        }
+        
         
     }
    
