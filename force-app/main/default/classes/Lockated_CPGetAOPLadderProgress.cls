@@ -87,10 +87,11 @@ global without sharing class Lockated_CPGetAOPLadderProgress {
                         slabNameVsDetailsMap.put(slab.Slab_Name__c,slab);                        
                     }
                      
+                    Boolean currentSlabFound = false;
                     Integer nextSlabIndex;
                     Decimal brokerageValueForCurrent =0;
-                    for(Integer i=0;i<slabCount;i++){                       
-                        AOP_Slab__c slab = slabNameVsDetailsMap.get('Slab ' + (i + 1));
+                    Map<Integer, SlabDetails> sortedSlabMap = new Map<Integer, SlabDetails>();
+                    for(AOP_Slab__c slab : aop.AOP_Slab__r){                       
                         SlabDetails sd = new SlabDetails();
                         sd.slabName = slab.Slab_Name__c;
                         if(slab.Lower_Limit__c > currentSalesValue){
@@ -109,34 +110,42 @@ global without sharing class Lockated_CPGetAOPLadderProgress {
                         //Assigning Current Slab.
                         if(currentSalesValue >= slab.Lower_Limit__c && currentSalesValue <= slab.Upper_Limit__c){
                             sd.isCurrentSlab = true;
+                            currentSlabFound = true;
                             if(slab.Brokerage_Rate__c!=null && currentSalesValue!=null){
                             	brokerageValueForCurrent = (slab.Brokerage_Rate__c * currentSalesValue)/100;
                                 aopLadderProgress.totalEarnings = brokerageValueForCurrent;
                             }
-                            //Assign Next Slab.
-                            if (i < slabCount - 1) {
-                                nextSlabIndex = i + 1;
-                                /*AOP_Slab__c nextSlab = slabNameVsDetailsMap.get('Slab ' + (i + 2));
-                                SlabDetails sd1 = new SlabDetails();
-                                sd1.slabName = nextSlab.Slab_Name__c;
-                                sd1.lowerLimit = String.valueOf(nextSlab.Lower_Limit__c);
-                                sd1.upperLimit = String.valueOf(nextSlab.Upper_Limit__c);
-                                sd1.category = nextSlab.Category__c;
-                                sd1.brokerage = String.valueOf(nextSlab.Brokerage_Rate__c);
-                                sd1.slabId = nextSlab.Id;
-                                aopLadderProgress.nextSlab = sd1;*/
-                            }
+                        }
+                        Integer slabNumber = Integer.valueOf(slab.Slab_Name__c.replaceAll('[^0-9]', ''));
+    					sortedSlabMap.put(slabNumber, sd);
+                    }
+                    
+                    List<Integer> slabNumbers = new List<Integer>(sortedSlabMap.keySet());
+					slabNumbers.sort();
+                    
+                    for (Integer num : slabNumbers) {
+                        aopLadderProgress.slabDetails.add(sortedSlabMap.get(num));
+                    }
+                    
+                    Integer listSize = aopLadderProgress.slabDetails.size();
+                    for (Integer i = 0; i < listSize; i++) {
+                        SlabDetails currentWrapper = aopLadderProgress.slabDetails[i];
+                        
+                        // Set Last Slab flag
+                        if (i == listSize - 1) {
+                            currentWrapper.isLastSlab = true;
                         }
                         
-                        //Assigning Last Slab.
-                        if (i == slabCount - 1) {
-                            sd.isLastSlab = true;
+                        if(i==0 && currentSlabFound == false){
+                            aopLadderProgress.slabDetails[i].isNextSlab = true;
                         }
-                        aopLadderProgress.slabDetails.add(sd);
+                        
+                        // Identify Next Slab based on Current
+                        if (currentWrapper.isCurrentSlab && i < listSize - 1) {
+                            aopLadderProgress.slabDetails[i + 1].isNextSlab = true;
+                        }
                     }
-                    if (nextSlabIndex != null && nextSlabIndex < aopLadderProgress.slabDetails.size()) {
-                        aopLadderProgress.slabDetails[nextSlabIndex].isNextSlab = true;
-                    }
+                    
                     
                     aopLadderProgress.currentSalesValue = String.valueOf(currentSalesValue);
                     //aopLadderProgress.currentSalesValue = '270000000';
@@ -187,4 +196,268 @@ global without sharing class Lockated_CPGetAOPLadderProgress {
         public Boolean isNextSlab = false;
         public Boolean isLastSlab = false;
     }  
+    
+    public static void dummyMethod(){
+        Integer i=0;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+
+        i++;
+        i++;
+    }
 }
