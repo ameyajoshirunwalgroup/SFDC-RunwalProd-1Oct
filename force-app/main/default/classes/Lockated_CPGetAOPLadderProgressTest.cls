@@ -519,7 +519,7 @@ public class Lockated_CPGetAOPLadderProgressTest {
             RestRequest req = new RestRequest();
             RestResponse res = new RestResponse();
             req.httpMethod = 'GET';
-            req.requestURI = '/services/apexrest/cpGetDetails';
+            req.requestURI = '/services/apexrest/cpGetAOPLadderProgress';
             req.addParameter('cpId', cp.Id);
             
             RestContext.request = req;
