@@ -5,7 +5,7 @@ public class Lockated_CreateCP {
     public static void createCPUser(Id contactId) {
         // 1. Fetch data (Assuming data is on a Contact or Custom Object)
         // Adjust fields based on your formula fields like Ageing or Registration Date
-        Broker__c con = [SELECT Id,NAME_FIRST__c,NAME_LAST__c, RW_Email__c, RW_Mobile_No__c,Broker_Pan_No__c,RW_GST_Number__c, CP_APP_Registration__c FROM Broker__c WHERE Id = :contactId LIMIT 1];
+        Broker__c con = [SELECT Id,NAME_FIRST__c,NAME_LAST__c, RW_Email__c,CP_APP_Registration_Error__c, RW_Mobile_No__c,Broker_Pan_No__c,RW_GST_Number__c, CP_APP_Registration__c FROM Broker__c WHERE Id = :contactId LIMIT 1];
         String apiToken = 'dDOaBl-r-IL0C9zBevduQK3YCoUDdoTzM1nlXQvHSI4';
         String endpoint = 'https://runwal-cp-api.lockated.com/users/cp_registration.json?token='+apiToken;
         
@@ -47,7 +47,21 @@ public class Lockated_CreateCP {
                 update con; 
                 System.debug('Success: Broker record updated.');
             } else {
-                System.debug('API Error: Received Status Code ' + res.getStatusCode());
+                String errorMessage = 'Status Code: ' + res.getStatusCode();
+                try {
+                    Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+                    if (results.containsKey('messages')) {
+                        List<Object> msgList = (List<Object>) results.get('messages');
+                        // Join messages into a single string if there are multiple
+                        errorMessage = String.join(msgList, ', ');
+                    } else if (results.containsKey('error')) {
+                        errorMessage = (String) results.get('error');
+                    }
+                    con.CP_APP_Registration_Error__c = errorMessage;
+                	update con;
+                }catch(Exception ex){
+                	System.debug('API Error: Received Status Code ' + res.getStatusCode());
+                }
             }
         } catch (Exception e) {
             System.debug('Error: ' + e.getMessage());
