@@ -38,7 +38,7 @@ public without sharing class CPBrokerageInvoiceController {
     
         String query =
             'SELECT Id, Name, Invoice_Number__c, Invoice_Date__c, If_GST_is_applicable__c,Total_Brokerage__c,Company_Name__c,Invoice_Status__c,Status__c,' +
-            ' Approval_Status__c, Approval_Status_clearing__c, Brokerage_Type__c,' +
+            ' Approval_Status__c, Approval_Status_clearing__c, Brokerage_Type__c,Customer_Name__c,Brokerage_Scheme_Name__c,Project__c,Tower_Unit__c, ' +
             ' Channel_Partner__c,Legal_Entity__c,Legal_Entity__r.Name, CreatedDate, LastModifiedDate' +
             ' FROM CP_Brokerage__c' + ' WHERE  (Approval_Status_clearing__c = :a OR Approval_Status_clearing__c = :b)'+' AND Channel_Partner__c = :cpAccountId';
           System.debug('Cp Brokerag record'+query);//Channel_Partner__c = :cpAccountId' +

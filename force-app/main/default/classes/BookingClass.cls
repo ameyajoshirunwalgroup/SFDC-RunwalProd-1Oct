@@ -467,11 +467,11 @@ set;
         // Added by UBSDigicloud  Start------------------------------- Date 19-06-2025
         List<Blocking_Unit_Information__c> blkUnitInfoList = [
             SELECT Id, 
-            Amount__c, Amount_2__c, Amount_3__c, Amount_4__c, Amount_5__c,
-            Mode_Of_Payment__c, Mode_Of_Payment_2__c, Mode_Of_Payment_3__c, Mode_Of_Payment_4__c, Mode_Of_Payment_5__c,
-            Paid_Date__c, Paid_Date_2__c, Paid_Date_3__c, Paid_Date_4__c, Paid_Date_5__c,
-            Transaction_Details__c, Transaction_Details_2__c, Transaction_Details_3__c, Transaction_Details_4__c, Transaction_Details_5__c,Pan_Number__c,Aadhar_Number__c,
-            /*Added for unidentified payments starts*/ Bank_Name__c,Bank_Name_2__c,Bank_Name_3__c,Bank_Name_4__c,Bank_Name_5__c,Opportunity__r.RW_Mobile_No__c /*Added for unidentified payments ends*/
+            Amount__c, Amount_2__c, Amount_3__c, Amount_4__c, Amount_5__c,Amount_6__c,Amount_7__c, Amount_8__c, Amount_9__c,Amount_10__c,
+            Mode_Of_Payment__c, Mode_Of_Payment_2__c, Mode_Of_Payment_3__c, Mode_Of_Payment_4__c, Mode_Of_Payment_5__c,Mode_Of_Payment_6__c,Mode_Of_Payment_7__c, Mode_Of_Payment_8__c, Mode_Of_Payment_9__c,Mode_Of_Payment_10__c,
+            Paid_Date__c, Paid_Date_2__c, Paid_Date_3__c, Paid_Date_4__c, Paid_Date_5__c,Paid_Date_6__c,Paid_Date_7__c, Paid_Date_8__c, Paid_Date_9__c,Paid_Date_10__c,
+            Transaction_Details__c, Transaction_Details_2__c, Transaction_Details_3__c, Transaction_Details_4__c, Transaction_Details_5__c,Transaction_Details_6__c,Transaction_Details_7__c, Transaction_Details_8__c, Transaction_Details_9__c,Transaction_Details_10__c,Pan_Number__c,Aadhar_Number__c,
+            /*Added for unidentified payments starts*/ Bank_Name__c,Bank_Name_2__c,Bank_Name_3__c,Bank_Name_4__c,Bank_Name_5__c,Bank_Name_6__c,Bank_Name_7__c,Bank_Name_8__c,Bank_Name_9__c,Bank_Name_10__c,Opportunity__r.RW_Mobile_No__c /*Added for unidentified payments ends*/
             FROM Blocking_Unit_Information__c 
             WHERE Opportunity__c = :boookingObj.Opportunity__c AND Active__c = true
         ];
@@ -496,7 +496,7 @@ set;
             
             List<Receipt__c> tempList = new List<Receipt__c>();
             
-            for (Integer i = 0; i < 5; i++) {
+            for (Integer i = 0; i < 10; i++) { // Changed the row count from 5 to 10 by Vinay 09-02-2026
                 Decimal amount;
                 String mode;
                 Date datePaid;
@@ -538,6 +538,41 @@ set;
                     datePaid = blk.Paid_Date_5__c;
                     txn = blk.Transaction_Details_5__c;
                     bank = blk.Bank_Name_5__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 5) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_6__c;
+                    mode = blk.Mode_Of_Payment_6__c;
+                    datePaid = blk.Paid_Date_6__c;
+                    txn = blk.Transaction_Details_6__c;
+                    bank = blk.Bank_Name_6__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 6) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_7__c;
+                    mode = blk.Mode_Of_Payment_7__c;
+                    datePaid = blk.Paid_Date_7__c;
+                    txn = blk.Transaction_Details_7__c;
+                    bank = blk.Bank_Name_7__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 7) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_8__c;
+                    mode = blk.Mode_Of_Payment_8__c;
+                    datePaid = blk.Paid_Date_8__c;
+                    txn = blk.Transaction_Details_8__c;
+                    bank = blk.Bank_Name_8__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 8) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_9__c;
+                    mode = blk.Mode_Of_Payment_9__c;
+                    datePaid = blk.Paid_Date_9__c;
+                    txn = blk.Transaction_Details_9__c;
+                    bank = blk.Bank_Name_9__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 9) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_10__c;
+                    mode = blk.Mode_Of_Payment_10__c;
+                    datePaid = blk.Paid_Date_10__c;
+                    txn = blk.Transaction_Details_10__c;
+                    bank = blk.Bank_Name_10__c;//Added for unidentified payments
                     mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
                 }
                 

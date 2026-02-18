@@ -528,7 +528,7 @@ public class TestREST_CallbackCTI {
         RestContext.response = res;
         
         REST_CallbackCTI.CreateEnquiry();  
-         REST_CallbackCTI.dummyMethod();
+         //REST_CallbackCTI.dummyMethod(); //Commented by Vinay 06-02-2026
     }
       
 	@isTest(SeeAllData=false)
@@ -548,7 +548,9 @@ public class TestREST_CallbackCTI {
         RestContext.response = res;
         
         REST_CallbackCTI.CreateEnquiry();  
-         REST_CallbackCTI.dummyMethod();
-        REST_CallbackCTI.createERPlog(json,'','','Test');
+         //REST_CallbackCTI.dummyMethod(); //Commented by Vinay 06-02-2026
+         CallbackCTI_Queueable.dummyMethod(); //Added by Vinay 06-02-2026
+         CallbackCTI_Queueable.createERPlog(json,'','','Test'); //Added by Vinay 06-02-2026
+         //REST_CallbackCTI.createERPlog(json,'','','Test'); //Commented by Vinay 06-02-2026
     }
 }

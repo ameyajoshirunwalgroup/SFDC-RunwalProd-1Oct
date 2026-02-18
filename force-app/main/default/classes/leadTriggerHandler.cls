@@ -840,7 +840,10 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                             String oppKey = mobile + '@@' + EachLead.Development__c + '@@' + 'NoVertical';
                             if (mapOfDuplicateOpp.containsKey(oppKey)) {
                                 for (Opportunity dupOpp : mapOfDuplicateOpp.get(oppKey)) {
-                                    EachLead.addError('An opportunity already exists with the specified mobile number. Opp Id: ' + dupOpp.Id);
+                                    //EachLead.addError('An opportunity already exists with the specified mobile number. Opp Id: ' + dupOpp.Id); //Commented by Vinay 16-01-2026
+                                    if(dupOpp.RW_Project__c == EachLead.RW_Project__c){ //Added by Vinay 16-01-2026
+                                        EachLead.addError('An opportunity already exists with the specified mobile number. Opp Id: ' + dupOpp.Id);
+                                    }
                                 }
                             }
                         }

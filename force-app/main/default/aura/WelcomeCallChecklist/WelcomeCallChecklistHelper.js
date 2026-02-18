@@ -176,7 +176,7 @@
                               'ApplicantName3', 'EmailAddresses3', 'MobileNo3', 'PermanentAddress3', 
                               'ApplicantName4', 'EmailAddresses4', 'MobileNo4', 'PermanentAddress4', 
                               'ApplicantName5', 'EmailAddresses5', 'MobileNo5', 'PermanentAddress5', 
-                              'Project', 'FlatTypology', 'Wing', 'Floor', 'FlatNo', 'CarpetArea', 'CarParkings',
+                              'Project', 'FlatTypology', 'Wing', 'Floor', 'FlatNo', 'CarpetArea', 'DeckArea', 'UtilityArea', 'TotalCarpetArea', 'CarParkings',
                               'AgreementValue','SourceOfBooking','BankingPreferenceforLoan', 'PaymentPlanType',
                               'PaymentPlanMilestonesDetails','ViewCostSheet','ReceiptListRemarks',
                               'ModeOfFunding','RMName','RMcontactNumber','RMworkhours','RMemail', 'Remarks', 'PrimaryPANDetails',

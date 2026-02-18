@@ -529,7 +529,7 @@ billPlanList.item.add(billPlan);
             
             String unitId = bList[0].Unit_No__c;
             List<Project_Unit__c>     uList = [Select Id, Name,Unit_SAP_Code__c,Saleable_Area__c, Carpet_area__c from Project_Unit__c where Id = :unitId];
-            List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_7__c,allotment_charges_8__c,Allotment_Charges_9__c from Project__c where Id = : bList[0].Project__c];
+            List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_7__c,allotment_charges_8__c,Allotment_Charges_9__c,Stack_Car_Park_Charges__c from Project__c where Id = : bList[0].Project__c];
             List<Project_Charges__c> pList = new List<Project_Charges__c>();
             pList = [Select Id, Name, Charge_Code__c, S_Charge_Bucket__c from Project_charges__c where Project__c = :pRec[0].Id];
             
@@ -791,6 +791,9 @@ billPlanList.item.add(billPlan);
                     }
                     if(cp.Parking__c.equalsIgnoreCase('Puzzle Car Park')) { //Added by Vinay 28-03-2025
                         allotmentCharges += pRec[0].Allotment_Charges_9__c;
+                    }
+                    if(cp.Parking__c.equalsIgnoreCase('Stack')) { //Added by Vinay 13-02-2026
+                        allotmentCharges += pRec[0].Stack_Car_Park_Charges__c;
                     }
                     count++;
                 }

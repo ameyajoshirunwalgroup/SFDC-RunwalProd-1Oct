@@ -299,24 +299,6 @@
         <pageOrSobjectType>Case</pageOrSobjectType>
         <recordType>Case.Customer</recordType>
         <type>Flexipage</type>
-        <profile>Facility Management</profile>
-    </profileActionOverrides>
-    <profileActionOverrides>
-        <actionName>View</actionName>
-        <content>Case_Record_Page_Locobuzz1</content>
-        <formFactor>Large</formFactor>
-        <pageOrSobjectType>Case</pageOrSobjectType>
-        <recordType>Case.Customer</recordType>
-        <type>Flexipage</type>
-        <profile>Facility Management</profile>
-    </profileActionOverrides>
-    <profileActionOverrides>
-        <actionName>View</actionName>
-        <content>Case_Record_Page_Locobuzz1</content>
-        <formFactor>Small</formFactor>
-        <pageOrSobjectType>Case</pageOrSobjectType>
-        <recordType>Case.Customer</recordType>
-        <type>Flexipage</type>
         <profile>Admin</profile>
     </profileActionOverrides>
     <profileActionOverrides>
@@ -1080,9 +1062,17 @@
     <tabs>Registration_Schedule__c</tabs>
     <tabs>Referral_Credits__c</tabs>
     <tabs>CP_Brokerage__c</tabs>
+    <tabs>AOP_Schemes__c</tabs>
+    <tabs>AOP_Schemes_Slabs__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Ozonetel_App_UtilityBar</utilityBar>
     <workspaceConfig>
+        <mappings>
+            <tab>AOP_Schemes_Slabs__c</tab>
+        </mappings>
+        <mappings>
+            <tab>AOP_Schemes__c</tab>
+        </mappings>
         <mappings>
             <tab>AOP__c</tab>
         </mappings>

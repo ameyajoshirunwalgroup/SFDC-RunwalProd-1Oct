@@ -1002,6 +1002,56 @@ implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:avail
            <aura:if isTrue="{!v.predatabln}">
            <td> {!v.preMap.CarpetArea}</td></aura:if>
         </tr>
+        <!-- Added by Vinay 09-02-2026 Start -->
+        <tr>
+            <td>Deck Area (in Sq.ft):</td>
+            <td>{!v.bookingList.bkg.Unit_No__r.Deck_Area__c}</td>
+            <td>
+             <lightning:select name="DeckArea" label="{!v.bookingList.bkg.Unit_No__r.Deck_Area__c}" variant="label-hidden" class="label-hidden" 
+              value="{!v.preMapYesNo.DeckArea}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+               <aura:iteration items="{!v.dropDownOpts}" var="item">
+                  <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+               </aura:iteration>
+               </lightning:select>
+           </td>
+            <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="DeckArea" class="{!v.CriticalMap.DeckArea ? 'changeMe' : ''}" value="{!v.inputValueList.DeckArea}" /></td> 
+            <aura:if isTrue="{!v.predatabln}">
+            <td> {!v.preMap.DeckArea}</td></aura:if>
+         </tr>
+         <tr>
+            <td>Utility Area (in Sq.ft):</td>
+            <td>{!v.bookingList.bkg.Unit_No__r.Utility_Area__c}</td>
+            <td>
+             <lightning:select name="UtilityArea" label="{!v.bookingList.bkg.Unit_No__r.Utility_Area__c}" variant="label-hidden" class="label-hidden" 
+              value="{!v.preMapYesNo.UtilityArea}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+               <aura:iteration items="{!v.dropDownOpts}" var="item">
+                  <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+               </aura:iteration>
+               </lightning:select>
+           </td>
+            <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="UtilityArea" class="{!v.CriticalMap.UtilityArea ? 'changeMe' : ''}" value="{!v.inputValueList.UtilityArea}" /></td> 
+            <aura:if isTrue="{!v.predatabln}">
+            <td> {!v.preMap.UtilityArea}</td></aura:if>
+         </tr>
+         <tr>
+            <td>Total Carpet Area (in Sq.ft):</td>
+            <td>{!v.bookingList.bkg.Unit_No__r.Total_RERA_Carpet_Area__c}</td>
+            <td>
+             <lightning:select name="TotalCarpetArea" label="{!v.bookingList.bkg.Unit_No__r.Total_RERA_Carpet_Area__c}" variant="label-hidden" class="label-hidden" 
+              value="{!v.preMapYesNo.TotalCarpetArea}" messageWhenValueMissing="Please select DropDown" onchange="{! c.handleCheckbox }">
+               <aura:iteration items="{!v.dropDownOpts}" var="item">
+                  <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+               </aura:iteration>
+               </lightning:select>
+           </td>
+            <td><lightning:input type="input" pattern="[a-zA-z0-9 @!#$'*+/=?^_`{|}.-]+" messageWhenPatternMismatch="Special Characters like :;,~%&amp; are not allowed"
+                aura:id="TotalCarpetArea" class="{!v.CriticalMap.TotalCarpetArea ? 'changeMe' : ''}" value="{!v.inputValueList.TotalCarpetArea}" /></td> 
+            <aura:if isTrue="{!v.predatabln}">
+            <td> {!v.preMap.TotalCarpetArea}</td></aura:if>
+         </tr>
+         <!-- Added by Vinay 09-02-2026 Start -->
         <tr>
            <td>Total No. of Parking:</td>
            <td>{!v.bookingList.bkg.Quotation__r.Total_No_of_Parking__c}</td>

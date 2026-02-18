@@ -256,6 +256,8 @@ t.Task_Type__c = 'Presales Call';
              {
                  if(t.RecordTypeId==CRMRecordTypeId && t.Task_Type__c=='CRM Call' && t.Communication_Type__c=='Inbound Call' && t.Subject=='CRM Call')
                  {
+                    System.debug('t.WhatId: ' + t.WhatId);
+                    System.debug('t.WhoId: ' + t.WhoId);
                      cifcreatecase.add(t);
                  }
                  if(t.Task_Type__c=='Presales Call')
@@ -420,8 +422,8 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                         ScheduleOzonetelCalls.callSchedule(nodChangedTasks);
                     }   
                     
-                    if(!cifcreatecase.isEmpty())   //Added by Vinay 13-01-2026
-                        CIFManagementServices.createcase(cifcreatecase); 
+                    //if(!cifcreatecase.isEmpty())   //Added by Vinay 13-01-2026 //Commented by Vinay 09-02-2026
+                        //CIFManagementServices.createcase(cifcreatecase);  //Commented by Vinay 09-02-2026
                     }
                 
             }

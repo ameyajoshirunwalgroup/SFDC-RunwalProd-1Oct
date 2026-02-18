@@ -258,7 +258,7 @@ public without sharing class WelcomeCallChecklist {
                                  Receipts__r.DraweeBank__c,Receipts__r.Cheque_DD_Date__c,Opportunity__r.Account.No_of_family_members__c,Opportunity__r.Account.RW_Zip_Code__c,
                                  Opportunity__r.Account.RW_Occupation__c,Opportunity__r.Account.Distance_To_Office__c,Opportunity__r.Account.RW_Company_Name__c,Opportunity__r.Account.Industry,
                                  Opportunity__r.Account.RW_Designation__c,Opportunity__r.Account.Family_Income__c,Opportunity__r.Account.Purpose__c,
-                                 Opportunity__r.Account.Vehicles_owned__c,Opportunity__r.Account.Four_Wheeler__c,
+                                 Opportunity__r.Account.Vehicles_owned__c,Opportunity__r.Account.Four_Wheeler__c,Unit_No__r.Deck_Area__c,Unit_No__r.Utility_Area__c,Unit_No__r.Total_RERA_Carpet_Area__c,
                                  (SELECT Id,name,RW_Welcome_Call_Completed__c,RW_Welcome_Call_Status__c
                                  FROM Welcome_Calls__r Limit 1)
                                  FROM Booking__c WHERE Id =: strBookingId Limit 1];
@@ -365,6 +365,9 @@ public without sharing class WelcomeCallChecklist {
             WC.RW_Floor__c                          = wrapperListToSave.bkg.Floor__c;
             WC.RW_Flat_No__c                        = wrapperListToSave.bkg.Unit_No__r.RW_Param4__c;//Flat_No__c;
             WC.RW_Carpet_Area_in_Sq_ft__c           = wrapperListToSave.bkg.Carpet_Area__c;
+            WC.Deck_Area__c                         = wrapperListToSave.bkg.Unit_No__r.Deck_Area__c; //Added by Vinay 09-02-2026
+            WC.Utility_Area__c                      = wrapperListToSave.bkg.Unit_No__r.Utility_Area__c; //Added by Vinay 09-02-2026
+            WC.Total_RERA_Carpet_Area__c            = wrapperListToSave.bkg.Unit_No__r.Total_RERA_Carpet_Area__c; //Added by Vinay 09-02-2026
             WC.RW_No_of_Car_Parkings__c             = wrapperListToSave.bkg.Quotation__r.Total_No_of_Parking__c;
             WC.RW_Agreement_Value__c                = wrapperListToSave.bkg.Allotment_Premium__c;
             WC.RW_Source_Of_Booking__c              = wrapperListToSave.bkg.Source_of_Booking__c;

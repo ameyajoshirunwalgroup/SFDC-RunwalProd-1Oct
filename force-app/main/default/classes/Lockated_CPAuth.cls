@@ -108,38 +108,33 @@ global without sharing class Lockated_CPAuth {
                     }
                 }
                 
-                //Calculating AVG Quarterly Business..... 15-01-26. START
+                //Calculating AVG Quarterly Business..... 15-01-26.
+                list<Booking__c> blist = [select Id,Name,Opportunity__c,BrokerIId__c,Agreement_Value_for_brokers__c,Project__c,Tower__c,Status__c,Additional_Brokerage_Accrued_Dashboards__c,
+                                          Base_Brokerage_Accrued_Dashboards__c,Project_Name__c,Unit_No__r.Name,Brokerage_Scheme__r.End_Date__c,Booking_Date__c,Payment_Received__c,Registration_date_status__c,
+                                          RW_X9_99_Received__c,RW_Registration_Done__c,Brokerage_Scheme__c from Booking__c where Project__c != null and Status__c = 'Booking Confirmed'
+                                          and BrokerIId__c =: brlist[0].Id and Opportunity__c != null
+                                          AND BrokerIId__r.Valid_RERA_certificate__c = true 	
+                                          ORDER BY Booking_Date__c DESC];
+                
                 //Last FY + Current FY..
                 Date todayDate = Date.today();
                 Integer currentMonth = todayDate.month();
                 Integer lastFYMonths = 12;      
                 Integer currentFYMonths;
-                Integer currentYr = todayDate.year();
-                Integer previousYr;
                 if (currentMonth >= 4) {
                     currentFYMonths = currentMonth - 3;
-                    previousYr = currentYr - 1;
                 } else {
                     currentFYMonths = currentMonth + 9;
-                    previousYr = currentYr - 2;
                 }
-                Integer totalMonthCount = lastFYMonths + currentFYMonths; 
+                Integer totalMonthCount = lastFYMonths + currentFYMonths;  
+                Integer currentYr = todayDate.year();
+                Integer previousYr = currentYr - 1;
                 System.debug('Current Year: ' + currentYr);
                 Date previousFYDate = Date.newInstance(previousYr, 04, 01);
                 Date currentFYDate = Date.newInstance(currentYr, 03, 31); 
                 System.debug('Current Month: ' + currentMonth);
                 System.debug('Current FY Months: ' + currentFYMonths);
                 System.debug('Total Month Count (Last FY + Current FY): ' + totalMonthCount);
-                
-                list<Booking__c> blist = [select Id,Name,Opportunity__c,BrokerIId__c,Agreement_Value_for_brokers__c,Project__c,Tower__c,Status__c,Additional_Brokerage_Accrued_Dashboards__c,
-                                          Base_Brokerage_Accrued_Dashboards__c,Project_Name__c,Unit_No__r.Name,Brokerage_Scheme__r.End_Date__c,Booking_Date__c,Payment_Received__c,Registration_date_status__c,
-                                          RW_X9_99_Received__c,RW_Registration_Done__c,Brokerage_Scheme__c from Booking__c where 
-                                          Booking_Date__c != null and Booking_Date__c >=: previousFYDate and Booking_Date__c <=: currentFYDate and
-                                          Project__c != null and Status__c = 'Booking Confirmed'
-                                          and BrokerIId__c =: brlist[0].Id and Opportunity__c != null
-                                          AND BrokerIId__r.Valid_RERA_certificate__c = true 	
-                                          ORDER BY Booking_Date__c DESC];
-                
                 Decimal AVtillNow = 0;
                 if(!blist.isEmpty()){
                     for(Booking__c b : blist){

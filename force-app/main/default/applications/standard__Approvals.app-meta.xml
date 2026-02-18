@@ -14,15 +14,6 @@
         <pageOrSobjectType>Case</pageOrSobjectType>
         <recordType>Case.Customer</recordType>
         <type>Flexipage</type>
-        <profile>Facility Management</profile>
-    </profileActionOverrides>
-    <profileActionOverrides>
-        <actionName>View</actionName>
-        <content>Case_Record_Page_Locobuzz1</content>
-        <formFactor>Large</formFactor>
-        <pageOrSobjectType>Case</pageOrSobjectType>
-        <recordType>Case.Customer</recordType>
-        <type>Flexipage</type>
         <profile>Admin</profile>
     </profileActionOverrides>
     <profileActionOverrides>
@@ -184,8 +175,16 @@
     <tabs>RW_EOI__c</tabs>
     <tabs>Referral_Credits__c</tabs>
     <tabs>CP_Brokerage__c</tabs>
+    <tabs>AOP_Schemes__c</tabs>
+    <tabs>AOP_Schemes_Slabs__c</tabs>
     <uiType>Lightning</uiType>
     <workspaceConfig>
+        <mappings>
+            <tab>AOP_Schemes_Slabs__c</tab>
+        </mappings>
+        <mappings>
+            <tab>AOP_Schemes__c</tab>
+        </mappings>
         <mappings>
             <tab>Budget_vs_Expenses__c</tab>
         </mappings>

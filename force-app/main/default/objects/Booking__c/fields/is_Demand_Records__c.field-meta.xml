@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>is_Demand_Records__c</fullName>
+    <label>is Demand Records?</label>
+    <summaryFilterItems>
+        <field>RW_Demand__c.Net_Interest_Amount__c</field>
+        <operation>notEqual</operation>
+        <value></value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>RW_Demand__c.RW_Demand_Status__c</field>
+        <operation>equals</operation>
+        <value>Paid</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>RW_Demand__c.Payment_Date_Formula__c</field>
+        <operation>equals</operation>
+        <value>False</value>
+    </summaryFilterItems>
+    <summaryForeignKey>RW_Demand__c.Booking__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

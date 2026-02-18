@@ -14,8 +14,10 @@ public class SendRMdetailstoSAPTest {
         	RW_Mobile_No__c = '186112211',
         	RW_Email__c = 'test3723111@gmail.com',
             RW_Sourcing_Manager__c='Rohit Sharma',
+            Sourcing_Manager_User__c= UserInfo.getUserId(), //Added by Vinay 04-12-2025
             RW_Closing_Head__c = 'Rohit Gupta',
-            RW_Sales_Associate__c = UserInfo.getUserId()
+            RW_Sales_Associate__c = UserInfo.getUserId(),
+            Sales_Manager_User__c= UserInfo.getUserId() //Added by Vinay 09-12-2025
             //Last_Sourcing_Closing_Mgr_Change__c = yesterdayDate
         );
         insert opp;
@@ -56,6 +58,7 @@ public class SendRMdetailstoSAPTest {
                                LanguageLocaleKey = 'en_US',
                                ProfileId = p1.id,
                                Tata_CTI_Agent_Number__c = '33443322',
+                               DID__c = '748848493',
                                Alias = '4657687'
                               );
         insert tuser1;

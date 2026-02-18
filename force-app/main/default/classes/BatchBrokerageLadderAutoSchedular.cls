@@ -11,7 +11,7 @@ global class BatchBrokerageLadderAutoSchedular implements Schedulable {
                                    AND BrokerIId__r.RecordTypeId =: CPRecordTypeId //Added by Prashant to Stop billing creation until cp is Registered. 12-09-25. 
                                    AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....
                                    AND BrokerIId__r.Valid_RERA_certificate__c = true/* AND BrokerIId__r.Valid_competency_certificate__c = true*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.///Added by Prashant to update th condition to restrict billing creation for the cps who dont have valid RERA & CC.11-09-25.	
-                                   and Brokerage_Scheme__r.End_Date__c >= LAST_90_DAYS and  Brokerage_Scheme__r.Active__c = false and Brokerage_Scheme__r.End_Date__c >= 2025-10-01/*Added deployment date filter to ignore the earlier ended schemes*/
+                                   and Brokerage_Scheme__r.End_Date__c >= LAST_90_DAYS /*and  Brokerage_Scheme__r.Active__c = false*/ and Brokerage_Scheme__r.Ladder_Creation_Manual__c = false/*Added deployment date filter to ignore the earlier ended schemes*/
                                    ORDER BY Booking_Date__c ASC];
         Set<Id> bookingIds = new Set<Id>();
         for (Booking__c b : bkList) {

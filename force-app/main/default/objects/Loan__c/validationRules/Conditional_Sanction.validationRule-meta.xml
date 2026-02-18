@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Conditional_Sanction</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+				ISPICKVAL(RW_Loan_Record_Status__c , &apos;Conditional Sanction&apos;),
+				ISBLANK(Conditional_Remarks__c)
+)</errorConditionFormula>
+    <errorDisplayField>Conditional_Remarks__c</errorDisplayField>
+    <errorMessage>Please Add Condition Remarks!!</errorMessage>
+</ValidationRule>

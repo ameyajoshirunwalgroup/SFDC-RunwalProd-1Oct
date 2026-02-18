@@ -126,11 +126,12 @@ public class leadTriggerHandlertracker
         autoUsers.Primary_User_Ids__c = objUser1.Id;
         autoUsers.Secondary_User_Ids__c = objUser2.Id;
         autoUsers.Project_Id__c = objProject.Id;
+        autoUsers.User_Ids__c = objUser1.Id;
         insert autoUsers;
         
 
         GetCurrentLoggedInAgents.getAgentsDetailsForBatch(new List<Id>{ld1.Id});
-        GetCurrentLoggedInAgents.getAgentsDetails(new List<Id>{ld1.Id});
+        GetCurrentLoggedInAgents.assignAgent(new List<Id>{ld1.Id});
         
         objLead.Retention_RM_Name__c = objUser2.Id;
         objLead.Retention_Closing_Head_Name__c = objUser2.Id;

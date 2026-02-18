@@ -31,7 +31,8 @@ Project__c,
 FROM Brokerage_Invoice__c
 
 WHERE Brokerage_Lookup__r.Brokerage_Type__c = &apos;Additional Brokerage&apos;
-  
+  AND CreatedDate = THIS_MONTH
+AND Brokerage_Summary__r.Brokerage_Scheme__r.Ladder_Creation_Manual__c = false
   AND Booking__r.Tower__r.Legal_Entity__c != null AND Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c != null
   AND Channel_Partner__c != null
   AND CP_Brokerage__c = null</value>

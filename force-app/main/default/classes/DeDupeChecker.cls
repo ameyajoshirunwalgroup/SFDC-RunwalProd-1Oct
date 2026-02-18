@@ -496,6 +496,29 @@ return personAccountEmailDup;
                 }
             }
         }
+        //Added by Vinay 30-01-2026 Start
+        List<Opportunity> oppList = [SELECT Id,RW_Mobile_No__c,RW_Opportunity_Status__c,RW_Project__c FROM Opportunity WHERE RW_Mobile_No__c =: mobileKeyMap.keySet() AND RW_Opportunity_Status__c = 'Active'];
+        Map<String, List<Opportunity>> mobileVsOppMap = new Map<String, List<Opportunity>>();
+        for(Opportunity opp : oppList){
+            if(mobileVsOppMap.get(opp.RW_Mobile_No__c) != null){
+                mobileVsOppMap.get(opp.RW_Mobile_No__c).add(opp);
+            }else{
+                mobileVsOppMap.put(opp.RW_Mobile_No__c, new List<Opportunity>{opp});
+            }
+        }
+        List<Communication__c> communications = new List<Communication__c>();
+        for(Lead ld: leadList){
+            if(mobileVsOppMap.get(ld.RW_Mobile_No__c) != null){
+                for(Opportunity opp : mobileVsOppMap.get(ld.RW_Mobile_No__c)){
+                    if(opp.RW_Project__c != ld.RW_Project__c ){
+                        if (PAMobileDupMap.containsKey(ld)) {
+                            PAMobileDupMap.remove(ld);
+                        }
+                    }
+                }
+            }
+        }
+         //Added by Vinay 30-01-2026 End
         return PAMobileDupMap;
     }
     // alt email and mobile logic for accounts deduping added on 3/1/16

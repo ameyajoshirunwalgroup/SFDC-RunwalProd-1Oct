@@ -125,7 +125,7 @@ public with sharing class SAPIntegrationServices {
             errMsg += 'Customer number not present,';
         } 
         // project data check
-        List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_8__c, Allotment_Charges_9__c from Project__c where Id = : oList[0].RW_Project__c];
+        List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_8__c, Allotment_Charges_9__c,Stack_Car_Park_Charges__c from Project__c where Id = : oList[0].RW_Project__c];
         if(pRec == null || pRec.size() > 1) {
             errMsg += 'Project Data Issue,';
             dataError = true;
@@ -560,6 +560,9 @@ public with sharing class SAPIntegrationServices {
                     }
                     if(cp.Parking__c.equalsIgnoreCase('Puzzle Car Park')) { //Added by Vinay 28-03-2025
                         allotmentCharges += pRec[0].allotment_charges_9__c;
+                    }
+                    if(cp.Parking__c.equalsIgnoreCase('Stack')) { //Added by Vinay 13-02-2026
+                        allotmentCharges += pRec[0].Stack_Car_Park_Charges__c;
                     }
                     count++;
                 }

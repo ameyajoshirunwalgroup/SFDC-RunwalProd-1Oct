@@ -55,6 +55,30 @@ public class RWCaseTriggerHandler
         //changeOwnerFromSysAdminToRM(lstTriggerNew); //Added by Vinay 18-04-2025 to reassign the owner from System Admin to RM
     }
 
+    public static void ownerAssignment(List<Case> caseList){ //Added by Vinay 16-02-2026
+        List<Id> oppIds = new List<Id>();
+        for(Case cs : caseList){
+            if(cs.Opportunity__c != null){
+                oppIds.add(cs.Opportunity__c);
+            }
+        }
+        if(oppIds != null){
+            Map<Id,Opportunity> oppMap = new Map<Id, Opportunity>([SELECT Id,Booking__c,Booking__r.RW_Key_handover_date__c FROM Opportunity WHERE Id =: oppIds]);
+            for(Case cs : caseList){
+                
+                if(cs.Opportunity__c != null && oppMap.get(cs.Opportunity__c).Booking__c != null && oppMap.get(cs.Opportunity__c).Booking__r.RW_Key_handover_date__c != null && cs.FM_Team_Assigned__c == false){
+                    System.debug('cs.Opportunity__r.Booking__r.RW_Key_handover_date__c: ' + oppMap.get(cs.Opportunity__c).Booking__r.RW_Key_handover_date__c);
+                    System.debug('cs.Opportunity__r.Booking__r.RW_Key_handover_date__c: ' + oppMap.get(cs.Opportunity__c).Booking__r.RW_Key_handover_date__c + 60);
+                    if(cs.CreatedDate > (oppMap.get(cs.Opportunity__c).Booking__r.RW_Key_handover_date__c + 60)){
+                        cs.OwnerId = System.label.Default_Facility_Management_User;
+                        cs.FM_Team_Assigned__c = true; 
+                    }
+                }
+            }
+        }
+        
+    }
+
     //Added by Vinay 18-04-2025 Start
     /*public void changeOwnerFromSysAdminToRM(List<Case> lstTriggerNew){ 
         Set<String> rmNames = new Set<String>();
@@ -279,11 +303,11 @@ public class RWCaseTriggerHandler
                 emailVsCase.get(email).Opportunity__c = OppId;//Added by Prashant - 11-2-25.
                 emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(emailVsAccounts.get(email)[0].Id); //Added by Vinay 10-06-2025
             }
-            if(firstOpp != null && firstOpp.Booking__c != null && firstOpp.Booking__r.RW_Key_handover_date__c != null){  // Added by Vinay 09-01-2026
+            /*if(firstOpp != null && firstOpp.Booking__c != null && firstOpp.Booking__r.RW_Key_handover_date__c != null){  // Added by Vinay 09-01-2026  //Commented by Vinay 07-02-2026 to stop the FM team assignment for post possession cases.
                 emailVsCase.get(email).Post_Possession_Customer__c = true;
                 emailVsCase.get(email).OwnerId = System.label.Default_Facility_Management_User;
                 emailVsCase.get(email).FM_Team_Assigned__c = true;
-            }
+            }*/
         }
         
         //Added by Vinay 15-01-2025 Start //Commented by Vinay 09-01-2026
@@ -398,7 +422,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 system.debug('#### listOfoppoties '+listOfoppoties.size());
                 if(listOfoppoties.size() == 1){//auto email wont go when rm is the case owner?
                     system.debug('listOfoppoties '+listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c);
-                    if(listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c != null){
+                    if(listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c != null && objCase.FM_Team_Assigned__c == false){ //Added objCase.FM_Team_Assigned__c == false by Vinay 16-02-2026
                         system.debug('listOpportunities____Unit Blocked '+listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c != null);
                         objCase.OwnerId = listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__r.user__c;
                     }
@@ -419,7 +443,8 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         updateEscalationTAT(lstTriggerNew,mapTriggerOld); // Added by coServe 13-11-2024
         //LocobuzzCaseAssignment.assignToProjectSpoc(lstTriggerNew); // Added by Vinay 16-01-2025 //Commented by Vinay 23-04-2025
         updateUnitWhenProjectChanged(lstTriggerNew, mapTriggerOld); // Added by Vinay 03-03-2025
-        assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 09-01-2026
+        //assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 09-01-2026  //Commented by Vinay 07-02-2026 to stop the FM team assignment for post possession cases.
+        ownerAssignment(lstTriggerNew); //Added by Vinay 12-02-2026
     }
     
     private void onAfterInsert(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
@@ -456,12 +481,13 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
             //Added by Vinay 09-01-2026 Start
 			System.debug('oppUpdatedCaseIds: ' + oppUpdatedCaseIds);
             if(oppUpdatedCaseIds.size() > 0){
-                List<Case> cases = [SELECT Id,Opportunity__c,Opportunity__r.Booking__c,Opportunity__r.Booking__r.RW_Key_handover_date__c FROM Case WHERE Id =: oppUpdatedCaseIds AND Opportunity__r.Booking__r.RW_Key_handover_date__c != null AND FM_Team_Assigned__c = false];
+                //Commented by Vinay 07-02-2026 to stop the FM team assignment for post possession cases.
+                /*List<Case> cases = [SELECT Id,Opportunity__c,Opportunity__r.Booking__c,Opportunity__r.Booking__r.RW_Key_handover_date__c FROM Case WHERE Id =: oppUpdatedCaseIds AND Opportunity__r.Booking__r.RW_Key_handover_date__c != null AND FM_Team_Assigned__c = false];
                 for(Case cs : cases){
                     cs.OwnerId = System.label.Default_Facility_Management_User;
                     cs.FM_Team_Assigned__c = true;
                 }
-                update cases;
+                update cases;*/
             }
             //Added by Vinay 09-01-2026 End
            // sendWhatsAppFeedbackLink(lstTriggerNew,mapTriggerOld); // Added by coServe 30-10-2023

@@ -185,7 +185,76 @@ global without sharing class WebToLead{
             return r;
         }
         if (l != null) {
-            leadList.add(l);
+            //Added by Vinay 27-01-2026 Start
+            List<Lead> leads = [SELECT Id,RW_Mobile_No__c,RW_Project__c FROM Lead WHERE RW_Mobile_No__c =: wl.mobileNumber];
+            List<Opportunity> oppList = [SELECT Id FROM Opportunity WHERE RW_Mobile_No__c =: wl.mobileNumber AND RW_Project__c =: projectId AND StageName = 'Unit Booked'];
+            Boolean addLead = true;
+            List<RW_Presales_Communication__c> presalesCommList = new List<RW_Presales_Communication__c>();
+            List<Task> tskList = new List<Task>();
+            for(Lead ld : leads){
+                Boolean createTask = false;
+                if(ld.RW_Project__c == projectId){
+                    addLead = false;
+                    RW_Presales_Communication__c preSalesComm = new RW_Presales_Communication__c();
+                    preSalesComm.RW_Lead__c = ld.Id;
+                    presalesCommList.add(preSalesComm);
+                    createTask = true;
+                }else if(ld.RW_Project__c != projectId && oppList.size() == 0){
+                    addLead = true;
+                }else if(oppList.size() > 0){
+                    addLead = false;
+                    RW_Presales_Communication__c preSalesComm = new RW_Presales_Communication__c();
+                    preSalesComm.RW_Lead__c = ld.Id;
+                    presalesCommList.add(preSalesComm);
+                    createTask = true;
+                }
+                if(createTask){
+                    Task t = new Task();
+                    t.WhoId = ld.Id;
+                    t.status = 'Completed';
+                    t.task_type__c = 'Enquiry Received';
+                    t.Subject = 'New Enquiry Received From:' + wl.RwLeadSource;
+                    t.FullName__c = wl.fullName;
+                    t.emailAddress__c = wl.emailAddress;   
+                    t.Email_Id__c = wl.emailAddress; 
+                    t.country__c = CountryCode.checkCode1(wl.dialingCode);
+                    t.dialingCode__c = wl.dialingCode;
+                    t.Mobile_Number_Webform__c = wl.mobileNumber;    
+                    t.Source_of_enquiry__c = wl.RwLeadSource; 
+                    t.Sub_source_of_enquiry__c = Wl.RwLeadSubSource; 
+                    t.Budget_WebForm__c = wl.budget;
+                    t.Project__c = projectId;
+                    t.description = wl.Description;    
+                    t.web_banner_source__c = wl.BannerType;
+                    t.Anarock_Sourcing_Manager__c = wl.CTASource;                
+                    t.web_banner_size__c = wl.WebBannersize;
+                    t.IP_address_web2lead__c = wl.IPAddress;
+                    t.Configuration__c = wl.configuration;
+                    t.Is_Created_through_Anarock__c = isAnarockLead;   
+                    t.UTM_Campaign__c = wl.UTMCampaign;
+                    t.UTM_Display__c = (wl.UTMAdGroup != null)? wl.UTMAdGroup : (wl.AdGroup != null)? wl.AdGroup : null;                            
+                    t.UTM_Medium__c = wl.UTMMedium;
+                    t.UTM_Source__c = wl.UTMSource;
+                    t.UTM_Term__c = wl.Placement;
+                    t.New_Channel_Partner_Name__c = (wl.UTMDevice != null)? wl.UTMDevice : (wl.Device != null)? wl.Device : null;
+                    t.New_Channel_Partner_Email__c = wl.GCLID;
+                    t.New_Channel_Partner_Email__c = wl.GCLID;
+                    t.Ad_ID__c = wl.AdID;
+                    t.Ad_name__c = wl.Adname;
+                    tskList.add(t);
+                }
+            }
+            if(presalesCommList.size() > 0){
+                insert presalesCommList;
+            }
+            if(tskList.size() > 0){
+                insert tskList;
+            }
+            if(addLead){
+                leadList.add(l);
+            }
+            //Added by Vinay 27-01-2026 End
+            //leadList.add(l); //Commented by Vinay 27-01-2026
             try {
                // List < DupResultsDTO > dupList = new List < DupResultsDTO >();  //Added by Vinay 03-07-2025
                List < DupResultsDTO > dupList = LeadManagementServices.leadPreprocessing(leadList, 'WEB'); //Commented by Vinay 03-07-2025

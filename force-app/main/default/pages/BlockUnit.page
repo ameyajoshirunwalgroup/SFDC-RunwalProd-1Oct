@@ -390,16 +390,69 @@
                                 document.getElementById('totalAmount').innerText = total.toFixed(2);
                             }
                             
-                            
+                            function calculateTotalAmount() { //Added by Vinay 09-02-2026
+                                    let total = 0;
+                                    const inputs = document.getElementsByClassName('amountField');
+                                    console.log('inputs: ', inputs);
+                                    for (let i = 0; i < inputs.length; i++) {
+                                        let val = parseFloat(inputs[i].value);
+                                        if (!isNaN(val)) {
+                                            total += val;
+                                        }
+                                    }
+                                    
+                                    document.getElementById('totalAmount').innerText = total.toFixed(2);
+                                }
+                                
                             </script>
                             
                             <div style="position: relative;">
-                                
-                                <div style="position: absolute; top: -40px; right: 0;">
+                                 
+                                <!--<div style="position: absolute; top: -40px; right: 0;">     Commented by Vinay 09-02-2026)
                                     <input type="button" value="Add Row" onclick="showRow()" id="addBtn" />
                                     <input type="button" value="Remove Row" onclick="hideRow()" id="removeBtn" disabled="disabled" />
+                                </div> -->
+                                <!-- Added by Vinay 09/02/2026 Start -->
+                                <div style="width: 70%;">
+                                    <div style="position: absolute; top: -40px; right: 50;">
+                                        <apex:commandButton value="Add Row" action="{!addRow}" />
+                                    </div>
+                                    
+                                        
+                                    
+                                    <table style="width: 90%; table-layout: auto; border-collapse: collapse;" border="1" cellpadding="4px">
+                                        
+                                            <tr>
+                                                <th >S No</th>
+                                                <th >Mode of Payment</th>
+                                                <th >Amount</th>
+                                                <th >Date</th>
+                                                <th >Cheque / UTR Details</th>
+                                                <th >Bank Name</th>
+                                                <th >Upload File</th>
+                                            </tr>
+                                            <apex:repeat value="{!rowList}" var="row">
+                                            	<tr>
+                                                	<td ><apex:inputText value="{!row.sNo}" style="width:30px;"/></td>
+                                                    <td ><apex:selectList value="{!row.payment_mode}" size="1"><apex:selectOptions value="{!payModeList}" /></apex:selectList></td>
+                                                    <td ><apex:input value="{!row.amount}" styleClass="amountField" onkeyup="calculateTotalAmount()"/></td>
+                                                    <td ><apex:input type="date" value="{!row.pay_date}" style="max-width:120px;"/></td>
+                                                    <td ><apex:input value="{!row.cheque_utr}"/></td>
+                                                    <td ><apex:selectList value="{!row.bank}" size="1" style="width:300px;"><apex:selectOptions value="{!bankList}"/></apex:selectList></td>
+                                                    <td ><apex:inputFile value="{!row.file_body}" filename="{!row.file_name}"/></td>
+                                                    <td>
+                                                        <apex:commandLink action="{!removeRow}">
+                                                            <apex:param name="rowIndex"  value="{!row.sNo - 1}" assignTo="{!rowIndex}"/>❌
+                                                        </apex:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                  
+                                    <b>Total: ₹ <span id="totalAmount">0.00</span></b>
                                 </div>
-                                <table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="4px">
+                                <!-- Added by Vinay 09/02/2026 End -->
+                                <!--<table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="4px">
                                     
                                     
                                     <tr>
@@ -471,16 +524,17 @@
                                             <b>Total: ₹ <span id="totalAmount">0.00</span></b>
                                         </td>
                                     </tr>
-                                </table>
+                                </table> --> <!-- Commented by Vinay 09/02/2026 -->
                             </div>
                             <br/>
                             
                             <div style="text-align: center; margin-top: 20px;">
                             <!--<apex:commandButton value="Save" action="{!saveDetails}" status="idActionStatus" rendered="{!showContinueButton == false}" disabled="false" rerender="idActionStatus,pageMsg"/>-->
-                            <apex:commandButton value="Save" 
+                            <!--<apex:commandButton value="Save" 
                                                 action="{!saveDetails}" 
                                                 onclick="showSpinner();"  
-                                                /><!--Added onclick for unidentified payments-->
+                                                />--><!--Added onclick for unidentified payments--> <!-- Commented by Vinay 09/02/2026 -->
+                            <apex:commandButton value="Save" action="{!saveDetails1}" onclick="showSpinner();" />    <!-- Added by Vinay 09/02/2026 -->             
                                                 
                                                 <!--status="spinnerStatus"-->
                                                 <!--rerender="idActionStatus,pageMsg,flagPanel"-->

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Disbursement_Overdue__c</fullName>
+    <formula>ISNULL(RW_First_Disbursement_Date__c) &amp;&amp;
+(Today() - RW_Booking__r.RW_Registration_Date__c &gt;= 15)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Disbursement Overdue</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

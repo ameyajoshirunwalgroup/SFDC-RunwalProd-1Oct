@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SDR_Release_Ageing_Bucket__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    ISBLANK( Ageing_SDR_Req_sub_date_to_SDR_release__c ),
+    NULL,
+    IF(
+        Ageing_SDR_Req_sub_date_to_SDR_release__c &lt;= 3,
+        &quot;0–3 Days&quot;,
+        IF(
+            Ageing_SDR_Req_sub_date_to_SDR_release__c &lt;= 5,
+            &quot;3–5 Days&quot;,
+            IF(
+                Ageing_SDR_Req_sub_date_to_SDR_release__c &lt;= 7,
+                &quot;6–7 Days&quot;,
+                &quot;&gt;7 Days&quot;
+            )
+        )
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>SDR Release Ageing Bucket</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
