@@ -91,12 +91,20 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.Brokerage_Lookup__r.Brokerage_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Additional Brokerage</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>AOP_Present</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
     </decisions>
+    <description>Added the condition that only Additional Brokerage invoices will go for approval</description>
     <environments>Default</environments>
     <interviewLabel>CP Invoice Clearing Approval Process {!$Flow.CurrentDateTime}</interviewLabel>
     <label>CP Invoice Clearing Approval Process</label>

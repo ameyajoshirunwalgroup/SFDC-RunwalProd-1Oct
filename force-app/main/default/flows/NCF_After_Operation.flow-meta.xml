@@ -35,7 +35,7 @@
         <inputParameters>
             <name>recipientAddresses</name>
             <value>
-            <elementReference>$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
+                <elementReference>$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -101,7 +101,7 @@
         <inputParameters>
             <name>recipientAddresses</name>
             <value>
-            <elementReference>$Record.Booking__r.Primary_Applicant_Email__c</elementReference>
+                <elementReference>$Record.Booking__r.Primary_Applicant_Email__c</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -331,7 +331,7 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>InvalidDraft</status>
     <variables>
         <name>PDFURL</name>
         <dataType>String</dataType>

@@ -2,7 +2,6 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>Print_Form_New</customButtons>
     <customButtons>CP_ACKNOWLEDGEMENT</customButtons>
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
@@ -211,7 +210,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Total_Waiver_Amount_Approved_till_now__c</field>
+                <field>Total_Waiver_Amount_Approved_Till_Now__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -224,6 +223,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Booking_to_TAT__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>GST_Percent__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

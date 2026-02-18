@@ -14,7 +14,9 @@
         <inputParameters>
             <name>recipientAddresses</name>
             <value>
-            <elementReference>$Record.Customer__r.RW_Email__c</elementReference>
+                <collectionElements>
+                    <elementReference>$Record.Customer__r.RW_Email__c</elementReference>
+                </collectionElements>
             </value>
         </inputParameters>
         <inputParameters>
@@ -123,22 +125,6 @@ Warm regards,
         </assignmentItems>
         <connector>
             <targetReference>Copy_2_of_Assign_to_Collection_Variable</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Sum</name>
-        <label>Assign Sum</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>TotalSumofTotalInterestWaivedonDemand</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Loop_Over_Demands.Total_Interest_Waiver_Amount__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Over_Demands</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -372,28 +358,6 @@ Warm regards,
             </connector>
             <label>Check Signed Agreement handover Date</label>
         </rules>
-        <rules>
-            <name>is_Total_Waiver_Amount_to_be_Approved_changed</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Total_Waiver_Amount_to_be_Approved__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Total_Waiver_Amount_to_be_Approved__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>get_All_Demands_Records</targetReference>
-            </connector>
-            <label>is Total Waiver Amount to be Approved changed</label>
-        </rules>
     </decisions>
     <decisions>
         <name>check_ROC_Status</name>
@@ -490,28 +454,6 @@ Warm regards,
                 <targetReference>aasign_Re_Raise_Var</targetReference>
             </connector>
             <label>is Re Raise Roc True</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>check_Total_sum_of_Total_Interest_Waived_on_Demand</name>
-        <label>check Total sum of Total Interest Waived on Demand</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>is_Greater_Than_0</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>TotalSumofTotalInterestWaivedonDemand</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Booking</targetReference>
-            </connector>
-            <label>is Greater Than 0</label>
         </rules>
     </decisions>
     <decisions>
@@ -686,20 +628,6 @@ Warm regards,
             <targetReference>check_Pending_Status_List</targetReference>
         </noMoreValuesConnector>
     </loops>
-    <loops>
-        <name>Loop_Over_Demands</name>
-        <label>Loop Over Demands</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>get_All_Demands_Records</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Assign_Sum</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>check_Total_sum_of_Total_Interest_Waived_on_Demand</targetReference>
-        </noMoreValuesConnector>
-    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -770,27 +698,6 @@ Warm regards,
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
-        <name>get_All_Demands_Records</name>
-        <label>get All Demands Records</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Loop_Over_Demands</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Booking__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>RW_Demand__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>get_Exixting</name>
         <label>get Existing Records</label>
         <locationX>0</locationX>
@@ -818,19 +725,6 @@ Warm regards,
         <object>Release_Of_Charge__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordUpdates>
-        <name>Update_Booking</name>
-        <label>Update Booking</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <inputAssignments>
-            <field>Interest_Waiver_Requested__c</field>
-            <value>
-                <elementReference>TotalSumofTotalInterestWaivedonDemand</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
     <recordUpdates>
         <name>update_Existing_Records_Active_Status</name>
         <label>update Existing Records Active Status</label>
@@ -899,7 +793,7 @@ Warm regards,
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <variables>
         <name>ActiveCheckbox</name>
         <dataType>Boolean</dataType>

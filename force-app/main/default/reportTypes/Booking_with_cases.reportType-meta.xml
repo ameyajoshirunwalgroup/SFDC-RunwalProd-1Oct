@@ -2176,7 +2176,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Total_Waiver_Amount_Approved_till_now__c</field>
+            <field>Total_Waiver_Amount_Approved_Till_Now__c</field>
             <table>Booking__c</table>
         </columns>
         <columns>
@@ -2197,6 +2197,36 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Referral_Benefit_Eligible__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>SDR_Request_Submitted_Date__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>SDR_Release_From_Accounts__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>SDR_Paid_By_Customer_Date__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registered_Agreement_Email_Sent_Date__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>GST_Percent__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Applicant_Updated__c</field>
             <table>Booking__c</table>
         </columns>
         <masterLabel>Booking</masterLabel>
@@ -4312,6 +4342,21 @@
             <field>Opt_for_Referral__c</field>
             <table>Booking__c.Opportunities__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RM_TL_Name__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Days__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Hours__c</field>
+            <table>Booking__c.Opportunities__r</table>
+        </columns>
         <masterLabel>Opportunities</masterLabel>
     </sections>
     <sections>
@@ -4963,6 +5008,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Stop_Emails__c</field>
+            <table>Booking__c.Opportunities__r.Cases__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Name_Confirmation_Form__c</field>
+            <table>Booking__c.Opportunities__r.Cases__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Key_Handover_Date__c</field>
             <table>Booking__c.Opportunities__r.Cases__r</table>
         </columns>
         <masterLabel>Cases</masterLabel>

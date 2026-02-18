@@ -29,6 +29,22 @@
         <template>Welcome_Call_Emails/Welcome_Call_Email</template>
     </alerts>
     <alerts>
+        <fullName>Welcome_Call_Email_alert_Runwal_Woods</fullName>
+        <description>Welcome Call Email alert_Runwal Woods</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RM_email__c</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <field>RW_Applicant1_Email_Address__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>customer.care@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Welcome_Call_Emails/Welcome_Call_Email_for_Runwal_Woods</template>
+    </alerts>
+    <alerts>
         <fullName>Welcome_Call_Email_to_RM_for_Mahaxmi</fullName>
         <description>Welcome Call Email to RM for Mahaxmi</description>
         <protected>false</protected>

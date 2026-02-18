@@ -470,6 +470,11 @@
             <field>IsActiveText__c</field>
             <table>User</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Skill__c</field>
+            <table>User</table>
+        </columns>
         <masterLabel>Users</masterLabel>
     </sections>
     <sections>
@@ -2351,6 +2356,21 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Opt_for_Referral__c</field>
+            <table>User.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RM_TL_Name__c</field>
+            <table>User.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Days__c</field>
+            <table>User.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Hours__c</field>
             <table>User.Opportunities__r</table>
         </columns>
         <masterLabel>Opportunities</masterLabel>

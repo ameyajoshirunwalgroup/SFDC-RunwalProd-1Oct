@@ -344,6 +344,16 @@
             <field>Stack_Car_Park_Available__c</field>
             <table>Project__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>ROC_Bank__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approved_till_now__c</field>
+            <table>Project__c</table>
+        </columns>
         <masterLabel>Projects</masterLabel>
     </sections>
     <sections>
@@ -1245,6 +1255,21 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Opt_for_Referral__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RM_TL_Name__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Days__c</field>
+            <table>Project__c.Opportunities__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Hours__c</field>
             <table>Project__c.Opportunities__r</table>
         </columns>
         <masterLabel>Opportunities</masterLabel>

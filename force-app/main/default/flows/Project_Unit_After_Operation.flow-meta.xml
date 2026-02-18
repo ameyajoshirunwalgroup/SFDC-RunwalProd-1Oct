@@ -11,7 +11,7 @@
         <inputParameters>
             <name>recipientAddresses</name>
             <value>
-            <elementReference>get_Primary_Applicant_Details.Email_Address__c</elementReference>
+                <elementReference>get_Primary_Applicant_Details.Email_Address__c</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -196,5 +196,5 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>InvalidDraft</status>
 </Flow>

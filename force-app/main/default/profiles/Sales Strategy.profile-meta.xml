@@ -31,6 +31,10 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Applicant_Details_After_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Applicant_Details_Update_After_Registration</flow>
     </flowAccesses>
     <flowAccesses>
@@ -135,6 +139,14 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Case_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Case_Before_Flows</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Case_Owner_for_Portal_User</flow>
     </flowAccesses>
     <flowAccesses>
@@ -152,6 +164,10 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>Clone_task_for_follow_up</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Collection_Task_Notification</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -184,6 +200,10 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>Create_Partner_Portal_User</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Create_ROC</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -243,6 +263,10 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Interest_Waiver_Before_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Interest_Waiver_POST_API_CallOut_Button</flow>
     </flowAccesses>
     <flowAccesses>
@@ -295,7 +319,23 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Loan_Scheduled_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Loan_Status_Update</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>NCF_After_Operation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>NCF_Assign_Applicants_Sub_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>NCF_Before_Flow</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -391,6 +431,10 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Project_Unit_After_Operation</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Queue1</flow>
     </flowAccesses>
     <flowAccesses>
@@ -419,7 +463,15 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>ROC_After_Update_Flow</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>RW_Payment_Milestone_Email_Notifications</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Re_assign_the_System_Admin_cases_to_RM</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -472,6 +524,10 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>SMS_for_Sitevisit_on_CIF</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Salesorder_failure_email</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -604,6 +660,10 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>Update_Agreement_Value_for_Brokers</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_Applicants</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -903,6 +963,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>CP_Meeting_Targets__c-CP Meeting Targets Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CP_Profile_Field__mdt-CP Profile Field Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>CP_Profile_Update__c-CP Profile Update Layout</layout>
@@ -1708,6 +1771,14 @@
         <layout>cloudx_cms__SS_Carousel__c-cloudx_cms__Banner Layout</layout>
     </layoutAssignments>
     <tabVisibilities>
+        <tab>AOP_Schemes_Slabs__c</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>AOP_Schemes__c</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
         <tab>AOP__c</tab>
         <visibility>DefaultOff</visibility>
     </tabVisibilities>
@@ -1966,6 +2037,10 @@
     <tabVisibilities>
         <tab>Legal_Entity__c</tab>
         <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Live_Missed_Call_Dashboard</tab>
+        <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>
         <tab>Loan__c</tab>

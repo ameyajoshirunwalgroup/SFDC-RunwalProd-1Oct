@@ -2050,6 +2050,21 @@
             <field>Opt_for_Referral__c</field>
             <table>Opportunity</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RM_TL_Name__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Days__c</field>
+            <table>Opportunity</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Missed_Call_ageing_in_Hours__c</field>
+            <table>Opportunity</table>
+        </columns>
         <masterLabel>Opportunities</masterLabel>
     </sections>
     <sections>
@@ -2591,6 +2606,16 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Stop_Emails__c</field>
+            <table>Opportunity.Cases__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Name_Confirmation_Form__c</field>
+            <table>Opportunity.Cases__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Key_Handover_Date__c</field>
             <table>Opportunity.Cases__r</table>
         </columns>
         <masterLabel>Cases</masterLabel>
