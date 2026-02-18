@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -86,6 +87,12 @@
         <fields>Amount__c</fields>
         <fields>Amount_Value__c</fields>
         <fields>Is_to_be_Paid__c</fields>
+        <fields>Project__c</fields>
+        <fields>Tower__c</fields>
+        <fields>Value__c</fields>
+        <fields>RW_SAP_Milestone_Code__c</fields>
+        <fields>Due_Date__c</fields>
+        <fields>Due_Date_on_Quote__c</fields>
         <relatedList>Standard_Customer_Pay_Plan_Detail__c.Standard_Pay_Plan_Header__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

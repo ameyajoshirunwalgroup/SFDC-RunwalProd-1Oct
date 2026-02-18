@@ -4,7 +4,7 @@
         <name>Send_CP_For_Approval</name>
         <label>Send CP For Approval</label>
         <locationX>176</locationX>
-        <locationY>335</locationY>
+        <locationY>323</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -27,6 +27,7 @@
             </value>
         </inputParameters>
         <nameSegment>submit</nameSegment>
+        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>56.0</apiVersion>
@@ -59,7 +60,7 @@
         <connector>
             <targetReference>Send_CP_For_Approval</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
+        <filterLogic>(1 OR 7) AND 2 AND 3 AND 4 AND 5 AND 6</filterLogic>
         <filters>
             <field>Channel_Partner_From_CP_Portal__c</field>
             <operator>EqualTo</operator>
@@ -98,6 +99,13 @@
         <filters>
             <field>Registration_Complete__c</field>
             <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Created_from_Lockated__c</field>
+            <operator>EqualTo</operator>
             <value>
                 <booleanValue>true</booleanValue>
             </value>

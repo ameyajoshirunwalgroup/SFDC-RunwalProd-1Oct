@@ -847,6 +847,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>No_of_Opportunities__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Distance_To_Office__c</field>
             <table>Account</table>
         </columns>
@@ -877,12 +882,62 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Secondary_Mobile_No_with_code__c</field>
+            <field>Visit_Done_Not_Booked_Customers__c</field>
             <table>Account</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Vendor_Code__c</field>
+            <field>Booked_Opportunities__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_App_Version__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Source__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_OS_Version__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Model__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Type_A_I__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Custom_Device_ID__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Customer__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_FCM_ID_Action__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Points__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_Loyalty_Member_Id__c</field>
             <table>Account</table>
         </columns>
         <masterLabel>Accounts</masterLabel>
@@ -2288,42 +2343,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>First_Call_Attempt_Time_Gap__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>First_Connected_Date_Time__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Second_Connected_Date_Time__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Time_Between_First_Second_Follow_up__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Secondary_Mobile_No_with_Country_Code__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Reason_for_not_qualified__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Lost_Reason__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>First_Call_Attempted_By__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
@@ -2333,22 +2353,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Second_Follow_up_date_time__c</field>
+            <field>Secondary_Mobile_No_with_Country_Code__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>First_Follow_up_date_time__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Time_Between_First_Second_connected__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Owners_Team__c</field>
+            <field>No_of_Family_Members__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
@@ -2363,7 +2373,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>No_of_Family_Members__c</field>
+            <field>No_of_Vehicles__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
@@ -2373,17 +2383,42 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>No_of_Vehicles__c</field>
-            <table>Account.Leads2__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Proposed_Visit_Date__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Secondary_Mobile_No_with_code__c</field>
+            <field>IsActive__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Budget_In_Lakh__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Owners_Team__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Generated_OTP_On_Lead__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CRM_Remarks__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sales_Remarks__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
@@ -2393,12 +2428,87 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Related_Account__c</field>
+            <field>Lead_Sourcing_Manager__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Lead_Sourcing_Manager__c</field>
+            <field>Temp_CP__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Anarock_Sourcing_Manager_LU__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CRM_Sourcing_Manger_LU__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>NRI_OS_Sourcing_Manager_LU__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Pre_Sales_User_LU__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Auto_Call_Completed__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Lead_Status__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Lead_Stage__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Lead_LimeChat__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Qualification_Tag__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Unqualification_Reason__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Drop_Off_Stage__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Drop_Off_Timestamp__c</field>
+            <table>Account.Leads2__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Resume_Timestamp__c</field>
             <table>Account.Leads2__r</table>
         </columns>
         <masterLabel>Leads</masterLabel>

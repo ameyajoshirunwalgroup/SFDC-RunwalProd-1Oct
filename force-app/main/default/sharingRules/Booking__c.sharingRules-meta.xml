@@ -2,7 +2,7 @@
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
         <fullName>Bliss_RM_Access</fullName>
-        <accessLevel>Edit</accessLevel>
+        <accessLevel>Read</accessLevel>
         <label>Bliss RM Access</label>
         <sharedTo>
             <role>Bliss_Relationship_Manager</role>
@@ -101,10 +101,16 @@
         <sharedTo>
             <role>Forests_Relationship_Manager</role>
         </sharedTo>
+        <booleanFilter>1 OR 2</booleanFilter>
         <criteriaItems>
             <field>Status__c</field>
             <operation>equals</operation>
             <value>,Sent for Revision,Cancellation Initiated,Booking Cancelled – Refund Pending,Cancelled,Processed,UnProcessed,Booking In Process,Unit Booked,Booking Received,Booking Confirmed,Booking Blocked,Booking Registered,Sent for Approval</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <operation>equals</operation>
+            <value>Draft,Submitted for Approval,Approved By Project Lead,Approved By CRM Head,Approved By CEO,Rejected By Project Lead,Rejected By CRM Head,Rejected By CEO,Approved,Rejected</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -513,6 +519,20 @@
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
+    <sharingGuestRules>
+        <fullName>Guest_user_sharing_rule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Guest user sharing rule</label>
+        <sharedTo>
+            <guestUser>Runwal_Cares</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>New Booking,Detailed Booking</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
     <sharingGuestRules>
         <fullName>Public_Access</fullName>
         <accessLevel>Read</accessLevel>

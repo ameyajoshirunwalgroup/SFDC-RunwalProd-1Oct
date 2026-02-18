@@ -10,12 +10,19 @@
     "type" : "region"
   }, {
     "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:cpBrokerageListView",
+      "id" : "4ce2781c-0613-4d4a-a864-cc907b97aa0d",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
       "componentAttributes" : {
         "enableInlineEdit" : true,
-        "filterName" : "{!filterId}",
+        "filterName" : "All",
         "layout" : "FULL",
         "pageSize" : 25,
-        "scope" : "{!objectName}",
+        "scope" : "CP_Brokerage__c",
         "showActionBar" : true,
         "showChartsPanel" : true,
         "showDisplay" : "showall",
@@ -27,7 +34,7 @@
         "showSearchBar" : true
       },
       "componentName" : "forceCommunity:objectHome",
-      "id" : "6a447afb-5abf-4799-8b74-5fc2dbefd412",
+      "id" : "aae96a4e-affc-4ed3-a92d-467ee6175aa4",
       "renderPriority" : "NEUTRAL",
       "renditionMap" : { },
       "type" : "component"

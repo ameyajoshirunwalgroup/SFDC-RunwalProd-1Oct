@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <description>Referral Passback Submit for Approval</description>
+        <name>Quotation_Referral_Discount_Approval</name>
+        <label>Quotation Referral Passback Approval</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <actionName>submit</actionName>
+        <actionType>submit</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>objectId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>processDefinitionNameOrId</name>
+            <value>
+                <stringValue>Quotation_Referral_Discount_Approval</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>submit</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
         <description>Referral Discount Submit for Approval</description>
         <name>Referral_Discount_Submit_for_Approval</name>
         <label>Referral Discount Submit for Approval</label>
-        <locationX>176</locationX>
-        <locationY>335</locationY>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -22,13 +47,58 @@
             </value>
         </inputParameters>
         <nameSegment>submit</nameSegment>
+        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>56.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Submit_for_Approval</name>
+        <label>Submit for Approval</label>
+        <locationX>314</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Submit_for_Referral_Discount</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Discount_11_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Referral</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Discount_10_Type__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Referral_Discount_Submit_for_Approval</targetReference>
+            </connector>
+            <label>Submit for Referral Discount</label>
+        </rules>
+        <rules>
+            <name>Sumit_for_Referral_Passback</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Discount_10_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Referral Passback</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Quotation_Referral_Discount_Approval</targetReference>
+            </connector>
+            <label>Sumit for Referral Passback</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <interviewLabel>Quotation - Referral Discount  Submit for Approval {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Quotation - Referral Discount  Submit for Approval</label>
+    <label>Quotation - Referral Discount &amp; Passback - Submit for Approval</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -49,10 +119,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>50</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Referral_Discount_Submit_for_Approval</targetReference>
+            <targetReference>Submit_for_Approval</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -70,13 +140,6 @@
             </value>
         </filters>
         <filters>
-            <field>Discount_11_Type__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Referral</stringValue>
-            </value>
-        </filters>
-        <filters>
             <field>Level_One_Approver__c</field>
             <operator>IsNull</operator>
             <value>
@@ -84,10 +147,10 @@
             </value>
         </filters>
         <filters>
-            <field>Discount_10_Type__c</field>
+            <field>Level_Two_Approver__c</field>
             <operator>IsNull</operator>
             <value>
-                <booleanValue>true</booleanValue>
+                <booleanValue>false</booleanValue>
             </value>
         </filters>
         <object>Quotation__c</object>

@@ -31,6 +31,14 @@
                 <behavior>Edit</behavior>
                 <field>AOP_CP__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>AOP_Brokerage__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>New_Process__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -164,6 +172,10 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Brokerage__c</fields>
+        <fields>Invoice_Amount__c</fields>
+        <fields>Invoice_Status__c</fields>
+        <fields>Invoice_Status_Brokerage_invoice__c</fields>
         <relatedList>Brokerage_Invoice__c.Brokerage_Lookup__c</relatedList>
     </relatedLists>
     <relatedLists>

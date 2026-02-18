@@ -39,6 +39,14 @@
                 <behavior>Readonly</behavior>
                 <field>Project__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>AOP__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>AOP_Brokerage__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -97,7 +105,7 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Brokerage__c</fields>
+        <fields>Total_Brokerage__c</fields>
         <fields>Brokerage_Amount__c</fields>
         <fields>Channel_Partner__c</fields>
         <fields>Eligible_Slab__c</fields>

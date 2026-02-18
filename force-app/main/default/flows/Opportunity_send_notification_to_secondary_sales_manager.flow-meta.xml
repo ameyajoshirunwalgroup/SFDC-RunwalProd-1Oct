@@ -32,9 +32,6 @@
                 <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
-        <inputParameters>
-            <name>recipientId</name>
-        </inputParameters>
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
     </actionCalls>
@@ -138,13 +135,11 @@
     <textTemplates>
         <name>emailBody</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Hello {!get_user.FirstName},&lt;/p&gt;&lt;p&gt;You have been assigned as the Secondary Sales Manager for the following Opportunity:&lt;/p&gt;&lt;p&gt;Opportunity Name: {!$Record.Name}&amp;nbsp;&amp;nbsp;&lt;/p&gt;&lt;p&gt;Primary Sales Manager: &lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;{!$Record.Sales_Manager_User__r.FirstName}{!$Record.Sales_Manager_User__r.LastName}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;Please &amp;lt;a href=&quot;https://runwal.lightning.force.com/lightning/r/Opportunity/{!$Record.Id}/view&quot;&amp;gt;click here&amp;lt;/a&amp;gt; to review the opportunity details and take appropriate action.&lt;/p&gt;&lt;pre class=&quot;ql-syntax&quot; spellcheck=&quot;false&quot;&gt;Regards,&amp;nbsp;&amp;nbsp;
-Salesforce Team
-&lt;/pre&gt;</text>
+        <text>&lt;p&gt;Hello {!get_user.FirstName},&lt;/p&gt;&lt;p&gt;You have been assigned as the Secondary Sales Manager for the following Opportunity:&lt;/p&gt;&lt;p&gt;Opportunity Name: {!$Record.Name}&amp;nbsp;&amp;nbsp;&lt;/p&gt;&lt;p&gt;Primary Sales Manager: &lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;{!$Record.Sales_Manager_User__r.FirstName}{!$Record.Sales_Manager_User__r.LastName}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please log in to Salesforce to review the opportunity details and take appropriate action.&lt;/p&gt;&lt;p&gt;Regards,&amp;nbsp;&amp;nbsp;&lt;/p&gt;&lt;p&gt;Salesforce Team&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>emailSubject</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>&lt;p&gt;New Opportunity Assigned: {!$Record.Name}&lt;/p&gt;</text>
     </textTemplates>
 </Flow>

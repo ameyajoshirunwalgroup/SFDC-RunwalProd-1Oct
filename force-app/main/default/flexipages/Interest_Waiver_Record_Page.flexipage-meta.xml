@@ -111,6 +111,16 @@
                 <identifier>RecordProject_Waived_Limit__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Sent_for_Approval__c</fieldItem>
+                <identifier>RecordSent_for_Approval__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-4a0c15e1-d252-492a-9637-f8f50baaf522</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -129,7 +139,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Approval_Status__c</fieldItem>
                 <identifier>RecordApproval_Status_cField</identifier>
@@ -161,8 +171,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Waiver_Approval_Level__c</fieldItem>
-                <identifier>RecordWaiver_Approval_Level__cField</identifier>
+                <fieldItem>Record.Demand_Id__c</fieldItem>
+                <identifier>RecordDemand_Id__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-c17ed88c-e7a5-4804-b6c5-d7986648d7ea</name>
@@ -228,12 +238,6 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
-            <componentInstance>
-                <componentName>flexipage:blankSpace</componentName>
-                <identifier>flexipage_blankSpace</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
@@ -241,6 +245,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Sub_Reason__c</fieldItem>
                 <identifier>RecordSub_Reason_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Sent_for_Approval__c</fieldItem>
+                <identifier>RecordSent_for_Approval_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -302,10 +316,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Previously_Waived_Amount_SAP__c</fieldItem>
-                <identifier>RecordPreviously_Waived_Amount_SAP__cField</identifier>
+                <fieldItem>Record.Previously_Waived_Amount_SAP_New__c</fieldItem>
+                <identifier>RecordPreviously_Waived_Amount_SAP_New_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -397,68 +411,6 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-cd98acd6-25c1-47fc-9785-13fd94bc567d</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Project_Lead__c</fieldItem>
-                <identifier>RecordProject_Lead_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.CEO__c</fieldItem>
-                <identifier>RecordCEO_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-f5f71116-41d2-4f36-b99b-c46bc44fc1f6</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.CRM_Head__c</fieldItem>
-                <identifier>RecordCRM_Head_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-0b0ddd64-7af1-4858-96fc-72883be132e0</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-f5f71116-41d2-4f36-b99b-c46bc44fc1f6</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column7</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-0b0ddd64-7af1-4858-96fc-72883be132e0</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column8</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-89faec71-fec6-4461-b451-559f42ce1d68</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -693,31 +645,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection8</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-89faec71-fec6-4461-b451-559f42ce1d68</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Approver Information</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection4</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.IsNew__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>

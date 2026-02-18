@@ -83,7 +83,7 @@
             <name>Tata_Webhook</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.CreatedById</leftValueReference>
+                <leftValueReference>$Record.CreatedBy.CreatedBy.Id</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>005J4000000StuEIAS</stringValue>

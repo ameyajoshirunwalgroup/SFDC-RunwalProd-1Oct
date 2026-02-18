@@ -472,13 +472,6 @@
                 <leftValueReference>Get_Leads.Status</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Interested</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Get_Leads.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
                     <stringValue>VCVP</stringValue>
                 </rightValue>
             </conditions>
@@ -812,6 +805,7 @@
             <label>Is Null</label>
         </rules>
     </decisions>
+    <description>Removed Interested lead status value for connected leads.</description>
     <environments>Default</environments>
     <formulas>
         <name>IncrementTaskCount</name>
@@ -1131,18 +1125,11 @@
                 <stringValue>Presales Call</stringValue>
             </value>
         </filters>
-        <filters>
-            <field>WhoId</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
         <object>Task</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <triggerOrder>1</triggerOrder>
     <variables>
         <name>ConnectedFound</name>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Fields_To_Update</name>
+        <label>Assign Fields To Update</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Offer_Unique_Key__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>offerUniqueKey</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordName</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>offerUniqueKey</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Name} &amp;
+{!$Record.Project__r.Name} &amp;
+IF(
+    ISBLANK({!$Record.Tower__c}),
+    &quot;&quot;,
+    &quot;-&quot; &amp; {!$Record.Tower__r.Name}
+)
+&amp;
+IF(
+    ISBLANK(TEXT({!$Record.Typology__c})),
+    &quot;&quot;,
+    &quot;-&quot; &amp; TEXT({!$Record.Typology__c})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>recordName</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Name}&amp;
+IF(
+    ISBLANK({!$Record.Tower__c}),
+    &quot;&quot;,
+    &quot; - &quot; &amp; {!$Record.Tower__r.Name}
+)
+&amp;
+IF(
+    ISBLANK(TEXT({!$Record.Typology__c})),
+    &quot;&quot;,
+    &quot; - &quot; &amp; TEXT( {!$Record.Typology__c})
+)</expression>
+    </formulas>
+    <interviewLabel>Offer Master After Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Offer Master After Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Fields_To_Update</targetReference>
+        </connector>
+        <object>Offer_Master__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

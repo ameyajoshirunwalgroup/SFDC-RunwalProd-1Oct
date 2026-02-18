@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>X3Days_Before_Notify_RM_for_Clearance</fullName>
+        <description>3Days Before Notify RM for Clearance</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RM_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>shraddha.shahari@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/X3Days_Before_Notify_RM_for_Clearance_Due</template>
+    </alerts>
+</Workflow>

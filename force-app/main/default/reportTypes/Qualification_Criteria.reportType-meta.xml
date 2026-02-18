@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
     <baseObject>Qualification_Criteria__c</baseObject>
-    <category>leads</category>
+    <category>other</category>
     <deployed>true</deployed>
     <description>QC records for presales team</description>
     <label>Qualification Criteria</label>
     <sections>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Active__c</field>
+            <field>Id</field>
             <table>Qualification_Criteria__c</table>
         </columns>
         <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Budget_QC__c</field>
-            <table>Qualification_Criteria__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Configuration_QC__c</field>
-            <table>Qualification_Criteria__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>CreatedBy</field>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Name</field>
             <table>Qualification_Criteria__c</table>
         </columns>
         <columns>
@@ -33,12 +23,42 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>LastModifiedBy</field>
+            <field>CreatedBy</field>
             <table>Qualification_Criteria__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>LastModifiedDate</field>
+            <table>Qualification_Criteria__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>LastModifiedBy</field>
+            <table>Qualification_Criteria__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project__c</field>
+            <table>Qualification_Criteria__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Configuration_QC__c</field>
+            <table>Qualification_Criteria__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Type__c</field>
+            <table>Qualification_Criteria__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Active__c</field>
+            <table>Qualification_Criteria__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Budget_QC__c</field>
             <table>Qualification_Criteria__c</table>
         </columns>
         <columns>
@@ -53,32 +73,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Project__c</field>
-            <table>Qualification_Criteria__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Id</field>
-            <table>Qualification_Criteria__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>true</checkedByDefault>
-            <field>Name</field>
-            <table>Qualification_Criteria__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Project_Type__c</field>
+            <field>MIN_Budget_In_Lakh__c</field>
             <table>Qualification_Criteria__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>MAX_Budget_In_Lakh__c</field>
-            <table>Qualification_Criteria__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>MIN_Budget_In_Lakh__c</field>
             <table>Qualification_Criteria__c</table>
         </columns>
         <masterLabel>Qualification Criterias</masterLabel>

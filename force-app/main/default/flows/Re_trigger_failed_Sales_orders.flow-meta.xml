@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Re_trigger_Salesorder</name>
+        <label>Re-trigger Salesorder</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>RW_ERPErrorHandler</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>ids</name>
+            <value>
+                <elementReference>$Record.Opportunity__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>RW_ERPErrorHandler</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Re trigger failed Sales orders {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Re trigger failed Sales orders</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>API_Name__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Sales Order</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Error_Reason__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Web service callout failed</stringValue>
+            </value>
+        </filters>
+        <object>ERP_Integration_Log__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>After_1_hour</name>
+            <connector>
+                <targetReference>Re_trigger_Salesorder</targetReference>
+            </connector>
+            <label>After 1 hour</label>
+            <offsetNumber>1</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <timeSource>RecordTriggerEvent</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

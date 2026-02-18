@@ -38,7 +38,7 @@
         <name>Create_Records_1</name>
         <label>Create Records 1</label>
         <locationX>176</locationX>
-        <locationY>431</locationY>
+        <locationY>323</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -48,7 +48,7 @@
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
-                <elementReference>get_Record_Type.Id</elementReference>
+                <stringValue>01228000000nR1AAAU</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -78,32 +78,11 @@
         <object>Task</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
-    <recordLookups>
-        <name>get_Record_Type</name>
-        <label>get Record Type</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Create_Records_1</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>DeveloperName</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>RW_Sales_Task</stringValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>RecordType</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>get_Record_Type</targetReference>
+            <targetReference>Create_Records_1</targetReference>
         </connector>
         <filterLogic>1 AND  (3 OR 2)</filterLogic>
         <filters>

@@ -4,7 +4,7 @@
         <name>CP_Invoice_Clearing</name>
         <label>CP Invoice Clearing</label>
         <locationX>314</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -21,13 +21,14 @@
             </value>
         </inputParameters>
         <nameSegment>submit</nameSegment>
+        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
         <name>CP_Invoice_Clearing_AOP</name>
         <label>CP Invoice Clearing AOP</label>
         <locationX>50</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -44,6 +45,7 @@
             </value>
         </inputParameters>
         <nameSegment>submit</nameSegment>
+        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>56.0</apiVersion>
@@ -52,7 +54,7 @@
         <name>AOP_Present</name>
         <label>AOP Present?</label>
         <locationX>182</locationX>
-        <locationY>323</locationY>
+        <locationY>431</locationY>
         <defaultConnector>
             <targetReference>CP_Invoice_Clearing</targetReference>
         </defaultConnector>
@@ -73,6 +75,36 @@
             <label>AOP</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Ladder_scheme_created_prior_to_October_2025</name>
+        <label>Ladder scheme created prior to October 2025</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Brokerage_Summary__r.Brokerage_Scheme__r.Ladder_Creation_Manual__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Brokerage_Lookup__r.Brokerage_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Additional Brokerage</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AOP_Present</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Added Brokerage type as Additional Brokerage</description>
     <environments>Default</environments>
     <interviewLabel>CP Invoice Clearing Approval Process {!$Flow.CurrentDateTime}</interviewLabel>
     <label>CP Invoice Clearing Approval Process</label>
@@ -96,10 +128,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>56</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>AOP_Present</targetReference>
+            <targetReference>Ladder_scheme_created_prior_to_October_2025</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

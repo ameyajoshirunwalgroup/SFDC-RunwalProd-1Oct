@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -25,6 +26,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Base_Brokerage_for_NRI__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Base_Brokerage_for_OS_NRI__c</field>
             </layoutItems>
             <layoutItems>
@@ -46,6 +51,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Legacy_booking_treated__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Ladder_Creation_Manual__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

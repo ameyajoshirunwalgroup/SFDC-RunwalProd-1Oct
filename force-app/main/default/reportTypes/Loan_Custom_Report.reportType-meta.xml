@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
     <baseObject>Loan__c</baseObject>
-    <category>other</category>
-    <deployed>true</deployed>
+    <category>admin</category>
+    <deployed>false</deployed>
     <description>Loan Custom Report</description>
     <join>
         <outerJoin>false</outerJoin>
@@ -148,11 +148,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_First_Disbursement_Amount__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_First_Disbursement_Date__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -602,17 +597,17 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>First_Disbursement_Follow_Up_Date__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Sanction_Follow_Up_Date__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Payment_Type__c</field>
+            <field>First_Disbursement_Follow_Up_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Payment_type__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -627,17 +622,32 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Sanction_Remarks__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Logged_In_Date__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Account_Name__c</field>
+            <field>Sanction_Remarks__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Mobile_Number__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>HL_RM_Names__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>HL_TL_Names__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sanction_Connector_Fee__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -657,22 +667,17 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Mobile_Number__c</field>
+            <field>Tenure__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Sanction_Connector_Fee__c</field>
+            <field>Comments__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>HL_RM_Names__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>HL_TL_Names__c</field>
+            <field>Account_Name__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -693,6 +698,66 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Update_Record__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_App_Loan_Request_Id__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Agreement_Value__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Percentage_of_Bank_Funding__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Ageing_from_Registration_to_First_Disb__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Loan_Document_Received_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Payment_Deviation_to_Disb_Ageing__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_to_Disbursement_Days__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Is_Disbursement_Overdue__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Conditional_Remarks__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Block_to_Sanction_TAT_Days__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Document_Submitted_to_Sanction_TAT__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Docket_Handover_to_Disbursement_Date__c</field>
             <table>Loan__c</table>
         </columns>
         <masterLabel>Loans</masterLabel>
@@ -864,5 +929,28 @@
             <table>Loan__c.Loan_Disbursement_Details__r</table>
         </columns>
         <masterLabel>Loan Disbursement Details</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>HL_RM__c.RM_Name__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>HL_RM__c.User__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>HL_RM__c.User__c.Name</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RW_First_Disbursement_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <masterLabel>Home Loan RM</masterLabel>
     </sections>
 </ReportType>

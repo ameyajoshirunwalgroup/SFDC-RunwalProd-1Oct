@@ -17,6 +17,7 @@
     </exitCriteriaFilterItems>
     <milestones>
         <criteriaBooleanFilter>1 OR 2</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Status</field>
             <operation>notEqual</operation>
@@ -35,7 +36,7 @@
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Second_Escalation</name>
+                <name>Case.Second_Escalation</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>1440</timeLength>
@@ -43,15 +44,15 @@
         </timeTriggers>
         <timeTriggers>
             <actions>
-                <name>Escalation_Email_Alert</name>
+                <name>Case.Escalation_Email_Alert</name>
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Case_Escalated</name>
+                <name>Case.Case_Escalated</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>First_Escalation</name>
+                <name>Case.First_Escalation</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -59,11 +60,11 @@
         </timeTriggers>
         <timeTriggers>
             <actions>
-                <name>Fourth_Escalation</name>
+                <name>Case.Fourth_Escalation</name>
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Fourth_Escalation</name>
+                <name>Case.Fourth_Escalation</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>4320</timeLength>
@@ -75,7 +76,7 @@
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Third_Escalation</name>
+                <name>Case.Third_Escalation</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>2880</timeLength>

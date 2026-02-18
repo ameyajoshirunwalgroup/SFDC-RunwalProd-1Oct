@@ -54,7 +54,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sourcing_Manager_User__c</field>
+                <field>RW_Sourcing_Manager__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -162,11 +162,27 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Opportunity_cooling_period_on_assignmen__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Opportunity_cooling_period_on_re_assign__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Pre_Book_Ageing__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Booking_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Agreement_Value_for_brokers__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RW_Total_Receipt_Amount_Received__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -177,16 +193,12 @@
                 <field>Blocking_Amount_Received__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Development__c</field>
+                <behavior>Edit</behavior>
+                <field>Referral_Incentive__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Cancellation_approved_date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Sales_Manager__c</field>
+                <field>Sourcing_Manager_User__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -199,12 +211,8 @@
                 <field>RW_Project__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>Sales_Manager_User__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RW_Sales_Associate__c</field>
+                <field>Sales_Manager_User__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -317,10 +325,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Reason_for_Release_Inventory__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Blocked_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -450,6 +454,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Walk_In_Details__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RW_Sales_Associate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -1107,6 +1115,30 @@
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Customer Interaction</label>
+        <layoutColumns>
+            <layoutItems>
+                <height>300</height>
+                <page>TaskRelatedList</page>
+                <showLabel>false</showLabel>
+                <showScrollbars>true</showScrollbars>
+                <width>100%</width>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Mailing_Address__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Permanent_Address__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>OneColumn</style>
+    </layoutSections>
+    <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
         <editHeading>true</editHeading>
@@ -1301,14 +1333,21 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Quote_Status__c</fields>
         <relatedList>Quotation__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Allotment_Premium__c</fields>
+        <fields>Booking_Date__c</fields>
         <relatedList>Booking__c.Customer__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Mode__c</fields>
+        <fields>DraweeBank__c</fields>
+        <fields>Cheque_DD__c</fields>
+        <fields>Active__c</fields>
         <relatedList>Receipt__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -1395,7 +1434,11 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Booking__c.Customer_Reference_Opportunity__c</relatedList>
+        <relatedList>CP_Brokerage__c.Opportunity__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>RW_Welcome_Call__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

@@ -5,8 +5,8 @@
     <assignments>
         <name>AppCount</name>
         <label>Count</label>
-        <locationX>270</locationX>
-        <locationY>539</locationY>
+        <locationX>534</locationX>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>count</assignToReference>
             <operator>Add</operator>
@@ -21,18 +21,44 @@
     <customErrors>
         <name>Error_Message</name>
         <label>Error Message</label>
-        <locationX>50</locationX>
-        <locationY>839</locationY>
+        <locationX>314</locationX>
+        <locationY>1055</locationY>
         <customErrorMessages>
             <errorMessage>Please change the Secondary Applicant to Primary before making the Primary Applicant to Secondary.</errorMessage>
             <isFieldError>false</isFieldError>
         </customErrorMessages>
     </customErrors>
     <decisions>
+        <name>check_Booking_Record</name>
+        <label>check Booking Record?</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_not_Tagged</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__r.Booking__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>is not Tagged</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_count</name>
         <label>Check count</label>
-        <locationX>182</locationX>
-        <locationY>731</locationY>
+        <locationX>446</locationX>
+        <locationY>947</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>count_check</name>
@@ -50,14 +76,78 @@
             <label>count check</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>is_Applicant_Number_Changed</name>
+        <label>is Applicant Number Changed?</label>
+        <locationX>644</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Changed_True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Applicant_Number__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Records_1</targetReference>
+            </connector>
+            <label>is Changed True</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>is_Inserted_is_Updated</name>
+        <label>is Inserted/ is Updated</label>
+        <locationX>578</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Inserted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_Booking_Record</targetReference>
+            </connector>
+            <label>is Inserted</label>
+        </rules>
+        <rules>
+            <name>Is_Updated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>is_Applicant_Number_Changed</targetReference>
+            </connector>
+            <label>Is Updated</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
     <interviewLabel>Applicant Primary check {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Primary Applicant  Check</label>
     <loops>
         <name>App_Loop</name>
         <label>App Loop</label>
-        <locationX>182</locationX>
-        <locationY>431</locationY>
+        <locationX>446</locationX>
+        <locationY>647</locationY>
         <collectionReference>allPrimary</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -89,8 +179,8 @@
     <recordLookups>
         <name>Get_Records_1</name>
         <label>Get Records 1</label>
-        <locationX>182</locationX>
-        <locationY>323</locationY>
+        <locationX>446</locationX>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>App_Loop</targetReference>
@@ -116,24 +206,16 @@
         <queriedFields>Applicant_Number__c</queriedFields>
     </recordLookups>
     <start>
-        <locationX>56</locationX>
+        <locationX>452</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Records_1</targetReference>
+            <targetReference>is_Inserted_is_Updated</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Applicant_Number__c</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
         <object>Applicant_Details__c</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>allPrimary</name>
         <dataType>SObject</dataType>

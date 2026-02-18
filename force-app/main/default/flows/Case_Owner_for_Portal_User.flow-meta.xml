@@ -79,6 +79,37 @@
                     <stringValue>Portal</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.FM_Team_Assigned__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>myRule_1_A1</targetReference>
             </connector>
@@ -92,11 +123,11 @@
                 <stringValue>[Case].User_Id__c </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_3451358478</name>
+        <name>formula_2_myRule_1_A1_2338692349</name>
         <dataType>String</dataType>
         <expression>{!myVariable_current.User_Id__c}</expression>
     </formulas>
-    <interviewLabel>Case_Owner_for_Portal_User-2_InterviewLabel</interviewLabel>
+    <interviewLabel>Case_Owner_for_Portal_User-3_InterviewLabel</interviewLabel>
     <label>Case Owner for Portal User</label>
     <processMetadataValues>
         <name>ObjectType</name>
@@ -199,7 +230,7 @@
             </processMetadataValues>
             <field>OwnerId</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_3451358478</elementReference>
+                <elementReference>formula_2_myRule_1_A1_2338692349</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>

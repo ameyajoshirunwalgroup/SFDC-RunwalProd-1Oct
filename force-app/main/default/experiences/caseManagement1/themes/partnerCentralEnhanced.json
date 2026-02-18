@@ -1,0 +1,553 @@
+{
+  "activeBrandingSetId" : "c2c0d242-bbd2-4f56-b281-513f53dd1c7d",
+  "customCSS" : "",
+  "developerName" : "prmEnhanced",
+  "id" : "68a2ca36-02d1-4960-9d4e-d3162f99fc18",
+  "label" : "Partner Central (Enhanced)",
+  "layouts" : {
+    "Home" : "1612760e-47c5-45cd-a186-a8f8e08a63d0",
+    "Inner" : "6b0cf4a3-b25f-4d77-a45b-5def1272cfa9",
+    "Login" : "b0519e69-4f8c-498f-8b4b-bbea742ae71a",
+    "ServiceNotAvailable" : "ec169a29-da87-4454-b721-aed27f59c090"
+  },
+  "type" : "theme",
+  "views" : [ {
+    "componentAttributes" : { },
+    "componentName" : "salesforceIdentity:loginBody2",
+    "id" : "b0519e69-4f8c-498f-8b4b-bbea742ae71a",
+    "label" : "Login",
+    "regions" : [ {
+      "id" : "326aaccb-52c5-4ee0-884b-fb39614cc209",
+      "regionName" : "header",
+      "type" : "region"
+    }, {
+      "id" : "370c97ed-f5dd-4be3-90a6-7298c80e56c3",
+      "regionName" : "content",
+      "type" : "region"
+    }, {
+      "id" : "265677aa-b0db-4435-88e9-2848428b34f6",
+      "regionName" : "footer",
+      "type" : "region"
+    } ],
+    "type" : "view"
+  }, {
+    "componentAttributes" : {
+      "fixedPageWidth" : 1440,
+      "headerBgColor" : "rgba(0, 0, 0, 0)",
+      "isHeaderPinned" : false,
+      "isHeroUnderHeader" : false,
+      "isPageWidthFixed" : true,
+      "showHeader" : true,
+      "showHero" : false
+    },
+    "componentName" : "siteforce:themeLayoutStarter",
+    "id" : "6b0cf4a3-b25f-4d77-a45b-5def1272cfa9",
+    "label" : "Default",
+    "regions" : [ {
+      "components" : [ {
+        "componentAttributes" : { },
+        "componentName" : "runtime_sales_prm:globalJavaScriptRunner",
+        "id" : "9b3ef7fb-9f49-4526-81cd-3bfa371c7cf0",
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : {
+          "background" : "background: #FFFFFF",
+          "backgroundOverlayColor" : "rgba(0, 0, 0, 0)",
+          "borderBottomColor" : "rgba(0, 0, 0, 0)",
+          "borderTopColor" : "rgba(0, 0, 0, 0)",
+          "bottomRowHeight" : "8",
+          "bottomRowOverlayColor" : "rgba(0, 0, 0, 0)",
+          "containHeader" : true,
+          "containHeaderWidth" : "1440",
+          "dropdownBackgroundColor" : "rgb(255, 255, 255)",
+          "dropdownBackgroundHoverColor" : "",
+          "dropdownBorderColor" : "rgb(240, 240, 240)",
+          "dropdownTextColor" : "",
+          "dropdownTextHoverColor" : "",
+          "iconLinkColor" : "rgb(24, 24, 24)",
+          "iconLinkHoverColor" : "rgb(145, 145, 145)",
+          "iconLinkTextShadowColor" : "rgba(0, 0, 0, 0)",
+          "linkActiveBorderColor" : "",
+          "linkColor" : "#747474",
+          "linkHoverColor" : "#747474",
+          "linkTextShadowColor" : "",
+          "logoWidth" : "100",
+          "searchPosition" : "right",
+          "searchStyle" : "expanded",
+          "showAppLauncher" : false,
+          "showNotifications" : true,
+          "showProfileMenu" : true,
+          "showSearch" : true,
+          "topRowHeight" : "16"
+        },
+        "componentName" : "runtime_sales_prm:prmThemeHeader",
+        "id" : "3de1b5aa-d71c-4de5-a685-8964da6d3d8b",
+        "regions" : [ {
+          "components" : [ {
+            "componentAttributes" : {
+              "actions" : "[{\"label\":\"Register a Deal\",\"action\":\"prm_slack_flows__DealRegistration\",\"type\":\"flow\"}]"
+            },
+            "componentName" : "runtime_sales_prm:actionDropdownContainer",
+            "id" : "774cbb26-d475-4a6e-8c31-25f8c430efad",
+            "renditionMap" : { },
+            "type" : "component"
+          }, {
+            "componentAttributes" : {
+              "accountManagementLabel" : "Account Management",
+              "buttonBackgroundColor" : "",
+              "buttonBackgroundHoverColor" : "",
+              "buttonBorderColor" : "rgba(0, 0, 0, 0)",
+              "buttonBorderRadius" : 4,
+              "buttonText" : "Log in",
+              "buttonTextColor" : "",
+              "buttonTextHoverColor" : "",
+              "communityBuilderLabel" : "Experience Builder",
+              "communitySetupLabel" : "Salesforce Setup",
+              "contactSupportLabel" : "Contact Support",
+              "filterName" : "MyCases",
+              "homeLabel" : "Home",
+              "logoutLabel" : "Logout",
+              "menuStyle" : "iconAndName",
+              "messagesLabel" : "Messages",
+              "myAccountLabel" : "Account Information",
+              "showAccountManagement" : true,
+              "showContactSupport" : false,
+              "showMessages" : false,
+              "showUserSettings" : false,
+              "userSettingsLabel" : "My Settings",
+              "viewProfileLabel" : "Profile"
+            },
+            "componentName" : "forceCommunity:themeProfileMenu",
+            "id" : "d964ac22-33c0-41c1-8a7a-7e7f24d03cac",
+            "renditionMap" : { },
+            "type" : "component"
+          } ],
+          "id" : "06c44c25-ec53-4771-b40e-bcc1bb2c00b8",
+          "regionName" : "themeHeaderProfileMenu",
+          "type" : "region"
+        }, {
+          "components" : [ {
+            "componentAttributes" : {
+              "maxAutoCompleteResults" : 5,
+              "searchLabel" : "Search...",
+              "searchObjects" : [ {
+                "isPublic" : false,
+                "name" : "Lead"
+              }, {
+                "isPublic" : false,
+                "name" : "Opportunity"
+              }, {
+                "isPublic" : false,
+                "name" : "ContentDocument"
+              }, {
+                "isPublic" : false,
+                "name" : "Case"
+              }, {
+                "isPublic" : false,
+                "name" : "Contact"
+              }, {
+                "isPublic" : false,
+                "name" : "Account"
+              }, {
+                "isPublic" : false,
+                "name" : "Order"
+              } ]
+            },
+            "componentName" : "forceCommunity:globalSearchInput",
+            "id" : "746db24f-e987-4e2f-a882-5499b384f702",
+            "renditionMap" : { },
+            "type" : "component"
+          } ],
+          "id" : "865f5625-2c30-4c0c-b5ee-fdb48b27820d",
+          "regionName" : "search",
+          "type" : "region"
+        }, {
+          "components" : [ {
+            "componentAttributes" : {
+              "NavigationMenuEditorRefresh" : "Default_Navigation5",
+              "alignment" : "left",
+              "showAppLauncher" : false,
+              "showBackLabel" : false,
+              "showHomeLink" : true
+            },
+            "componentName" : "forceCommunity:multiLevelNavigationWrapper",
+            "id" : "52faa446-2bbb-472f-8bf8-555e8b807d8d",
+            "renditionMap" : { },
+            "type" : "component"
+          } ],
+          "id" : "6ac49070-a6b3-4f8d-a5d7-41e71541704b",
+          "regionName" : "nav",
+          "type" : "region"
+        } ],
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : { },
+        "componentName" : "runtime_sales_prm:navigationTabsetContainer",
+        "id" : "8108eaa6-6265-4a03-aec5-8f352027bf0e",
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : { },
+        "componentName" : "runtime_sales_prm:navigateBackButtonContainer",
+        "id" : "a7aa138d-f703-46bf-bba7-a4ef1ed35f25",
+        "renditionMap" : { },
+        "type" : "component"
+      } ],
+      "id" : "773c76fd-6e5a-42e4-b228-cdf023ee260e",
+      "regionName" : "themeHeader",
+      "type" : "region"
+    }, {
+      "components" : [ {
+        "componentAttributes" : {
+          "clientVersion" : "WebV1",
+          "hideChatButtonOnLoad" : "Default",
+          "isExpSiteAuthMode" : true,
+          "scrtUrl" : "https://runwal--fullcopy.sandbox.my.salesforce-scrt.com"
+        },
+        "componentName" : "experience_messaging:embeddedMessaging",
+        "id" : "849ad6ba-b653-4012-a383-cb3c481ec153",
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : {
+          "richTextValue" : "<div style='background-image: url(/sfsites/assets/Images/PrmEnhancedFooter/footer-background-img.png); background-repeat: no-repeat; background-size: cover; background-position: center; background-color: var(--slds-g-color-brand-base-50); color: #ffffff; font-family: Arial, sans-serif; padding: 4rem 4rem 2rem;'>             <div class='slds-grid slds-wrap slds-grid_vertical-align-center'>                 <div class='slds-size_1-of-2' style='text-align: left;'>                     <div class='slds-grid slds-grid_align-start'>                         <a href='https://www.linkedin.com/company/salesforce' class='slds-m-right_x-small slds-p-around_x-small'>                             <img src='/sfsites/assets/Images/PrmEnhancedFooter/linkedinIcon.svg' alt='LinkedIn' style='width: 24px; height: 24px;' />                         </a>                         <a href='https://www.facebook.com/salesforce/' class='slds-m-right_x-small slds-p-around_x-small'>                             <img src='/sfsites/assets/Images/PrmEnhancedFooter/facebookIcon.svg' alt='Facebook' style='width: 24px; height: 24px;' />                         </a>                         <a href='https://x.com/salesforce' class='slds-p-around_x-small'>                             <img src='/sfsites/assets/Images/PrmEnhancedFooter/customIcon.svg' alt='Custom Link' style='width: 24px; height: 24px;' />                         </a>                     </div>                 </div>                 <div class='slds-size_1-of-2' style='text-align: right;'>                     <img src='/sfsites/assets/Images/PrmEnhancedFooter/stepsLogo.svg' alt='Steps Logo' style='height: 32px;' />                 </div>             </div>             <hr style='border: none; border-top: 1px solid #ffffff; margin: 1.5rem 0;'>             <div class='slds-grid slds-wrap slds-grid_vertical-align-center'>                 <div class='slds-size_1-of-2' style='text-align: left; font-size: 12px; font-weight: normal;'>                     <span>English (US)</span>                 </div>                 <div class='slds-size_1-of-2' style='text-align: right; font-size: 12px; font-weight: normal;'>                     <span>© Steps Corporation. All rights reserved.</span>                 </div>             </div>         </div>"
+        },
+        "componentName" : "forceCommunity:htmlBlock",
+        "id" : "083d6645-7cbb-447e-ad86-90a8a3745db3",
+        "renditionMap" : { },
+        "type" : "component"
+      } ],
+      "id" : "6b82d500-fcc7-4a8c-874e-b31f0b180e27",
+      "regionName" : "themeFooter",
+      "type" : "region"
+    } ],
+    "type" : "view"
+  }, {
+    "componentAttributes" : {
+      "fixedPageWidth" : 1440,
+      "headerBgColor" : "rgba(28, 22, 28, 0.9)",
+      "isHeaderPinned" : false,
+      "isHeroUnderHeader" : false,
+      "isPageWidthFixed" : true,
+      "showHeader" : true,
+      "showHero" : true
+    },
+    "componentName" : "siteforce:themeLayoutStarter",
+    "id" : "1612760e-47c5-45cd-a186-a8f8e08a63d0",
+    "label" : "Home",
+    "regions" : [ {
+      "components" : [ {
+        "componentAttributes" : { },
+        "componentName" : "runtime_sales_prm:globalJavaScriptRunner",
+        "id" : "95441929-9f12-461f-968c-56575973c55f",
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : {
+          "background" : "background: #FFFFFF",
+          "backgroundOverlayColor" : "rgba(0, 0, 0, 0)",
+          "borderBottomColor" : "rgba(0, 0, 0, 0)",
+          "borderTopColor" : "rgba(0, 0, 0, 0)",
+          "bottomRowHeight" : "8",
+          "bottomRowOverlayColor" : "rgba(0, 0, 0, 0)",
+          "containHeader" : true,
+          "containHeaderWidth" : "1440",
+          "dropdownBackgroundColor" : "rgb(255, 255, 255)",
+          "dropdownBackgroundHoverColor" : "",
+          "dropdownBorderColor" : "rgb(240, 240, 240)",
+          "dropdownTextColor" : "",
+          "dropdownTextHoverColor" : "",
+          "iconLinkColor" : "rgb(24, 24, 24)",
+          "iconLinkHoverColor" : "rgb(145, 145, 145)",
+          "iconLinkTextShadowColor" : "rgba(0, 0, 0, 0)",
+          "linkActiveBorderColor" : "",
+          "linkColor" : "#747474",
+          "linkHoverColor" : "#747474",
+          "linkTextShadowColor" : "",
+          "logoWidth" : "100",
+          "searchPosition" : "right",
+          "searchStyle" : "expanded",
+          "showAppLauncher" : false,
+          "showNotifications" : true,
+          "showProfileMenu" : true,
+          "showSearch" : true,
+          "topRowHeight" : "16"
+        },
+        "componentName" : "runtime_sales_prm:prmThemeHeader",
+        "id" : "e07899b2-a11a-4551-8a6f-8c8bc73f7fc7",
+        "regions" : [ {
+          "components" : [ {
+            "componentAttributes" : {
+              "actions" : "[{\"label\":\"Register a Deal\",\"action\":\"prm_slack_flows__DealRegistration\",\"type\":\"flow\"}]"
+            },
+            "componentName" : "runtime_sales_prm:actionDropdownContainer",
+            "id" : "f10219f3-47cb-43e5-a38b-db7c5ebfe0b4",
+            "renditionMap" : { },
+            "type" : "component"
+          }, {
+            "componentAttributes" : {
+              "accountManagementLabel" : "Account Management",
+              "buttonBackgroundColor" : "",
+              "buttonBackgroundHoverColor" : "",
+              "buttonBorderColor" : "rgba(0, 0, 0, 0)",
+              "buttonBorderRadius" : 4,
+              "buttonText" : "Log in",
+              "buttonTextColor" : "",
+              "buttonTextHoverColor" : "",
+              "communityBuilderLabel" : "Experience Builder",
+              "communitySetupLabel" : "Salesforce Setup",
+              "contactSupportLabel" : "Contact Support",
+              "filterName" : "MyCases",
+              "homeLabel" : "Home",
+              "logoutLabel" : "Logout",
+              "menuStyle" : "iconAndName",
+              "messagesLabel" : "Messages",
+              "myAccountLabel" : "Account Information",
+              "showAccountManagement" : true,
+              "showContactSupport" : false,
+              "showMessages" : false,
+              "showUserSettings" : false,
+              "userSettingsLabel" : "My Settings",
+              "viewProfileLabel" : "Profile"
+            },
+            "componentName" : "forceCommunity:themeProfileMenu",
+            "id" : "460b8820-d962-4a09-b1dc-2ef04d91e5a8",
+            "renditionMap" : { },
+            "type" : "component"
+          } ],
+          "id" : "0bf645f6-99ba-4e91-8a48-3729c04e5399",
+          "regionName" : "themeHeaderProfileMenu",
+          "type" : "region"
+        }, {
+          "components" : [ {
+            "componentAttributes" : {
+              "maxAutoCompleteResults" : 5,
+              "searchLabel" : "Search...",
+              "searchObjects" : [ {
+                "isPublic" : false,
+                "name" : "Lead"
+              }, {
+                "isPublic" : false,
+                "name" : "Opportunity"
+              }, {
+                "isPublic" : false,
+                "name" : "ContentDocument"
+              }, {
+                "isPublic" : false,
+                "name" : "Case"
+              }, {
+                "isPublic" : false,
+                "name" : "Contact"
+              }, {
+                "isPublic" : false,
+                "name" : "Account"
+              }, {
+                "isPublic" : false,
+                "name" : "Order"
+              } ]
+            },
+            "componentName" : "forceCommunity:globalSearchInput",
+            "id" : "63781bca-00e0-4e5d-876f-507b43007a7b",
+            "renditionMap" : { },
+            "type" : "component"
+          } ],
+          "id" : "9f03ab6c-ab2a-4715-8d28-89947259fd09",
+          "regionName" : "search",
+          "type" : "region"
+        }, {
+          "components" : [ {
+            "componentAttributes" : {
+              "NavigationMenuEditorRefresh" : "",
+              "alignment" : "left",
+              "showAppLauncher" : false,
+              "showBackLabel" : false,
+              "showHomeLink" : true
+            },
+            "componentName" : "forceCommunity:multiLevelNavigationWrapper",
+            "id" : "dc3af5c3-9b39-4806-a57e-2e4944da8177",
+            "renditionMap" : { },
+            "type" : "component"
+          } ],
+          "id" : "fdaaf1df-6730-4da0-b515-4092a206f6d6",
+          "regionName" : "nav",
+          "type" : "region"
+        } ],
+        "renditionMap" : { },
+        "type" : "component"
+      } ],
+      "id" : "71a7234c-64bf-49eb-9909-a6b355bfe081",
+      "regionName" : "themeHeader",
+      "type" : "region"
+    }, {
+      "components" : [ {
+        "componentAttributes" : {
+          "richTextValue" : "<div id='placeholderBanner' style='position: relative; height: 485px; width: 100%; display: flex; align-items: center; color: white; font-family: Arial, sans-serif; overflow: hidden;'>             <img src='/sfsites/assets/Images/PrmEnhancedBanner/PrmEnhancedBanner.png' alt='Banner' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;' />             <div style='position: relative; z-index: 2; padding: 3rem; max-width: 60%; text-align: left;'>                 <h1 style='font-size: 3rem; margin-bottom: 1.5rem; font-weight: bold; line-height: 1.2; color: #333333;'>Welcome Partners or Highlight Key Updates</h1>                 <p style='font-size: 1.25rem; margin-bottom: 2rem; line-height: 1.4; color: #666666;'>Use this space to share a message that aligns with your goals-from onboarding to announcements. This area is fully customizable to fit your needs.</p>             </div>         </div>"
+        },
+        "componentName" : "forceCommunity:htmlBlock",
+        "id" : "17899990-4b4b-428e-85ec-337abfa6a0e3",
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : {
+          "config" : {
+            "collectionLayoutDefinition" : {
+              "attributes" : {
+                "contentIndicatorSpacing" : "none",
+                "limitItems" : 5,
+                "pauseButtonPlacement" : "left",
+                "progressionPace" : 5,
+                "shouldAutoScroll" : false,
+                "showPauseButton" : true,
+                "showProgressArrows" : true,
+                "showProgressIndicator" : true,
+                "transitionSpeed" : 600,
+                "transitionType" : "slide"
+              },
+              "componentName" : "forceCommunity:dynamicCollectionCarousel"
+            },
+            "dataProviderDefinition" : {
+              "componentName" : "forceCommunity:managedContentCollectionDataProvider"
+            },
+            "itemLayoutDefinition" : {
+              "attributes" : {
+                "additionalLinks" : "{}",
+                "backgroundPosition" : "center center",
+                "backgroundSize" : "cover",
+                "bannerAspectRatio" : "16:9",
+                "bannerHeight" : "485",
+                "bannerSubTitleTextColor" : "#ffffff",
+                "bannerTitleTextColor" : "#ffffff",
+                "callToActionButtonBackgroundColor" : "",
+                "callToActionButtonBackgroundColorHover" : "",
+                "callToActionButtonBorderColor" : "",
+                "callToActionButtonBorderColorHover" : "",
+                "callToActionButtonBorderStyles" : "",
+                "callToActionButtonTextColor" : "",
+                "callToActionButtonTextColorHover" : "",
+                "callToActionLabel" : "View",
+                "componentHoverEffect" : "none",
+                "contentWidth" : 80,
+                "dateFormat" : "none",
+                "datetime" : "",
+                "datetimeFontSize" : "regular",
+                "datetimeTextColor" : "#ffffff",
+                "datetimeTextDecoration" : "",
+                "defaultLinksOverrides" : "",
+                "displayDayOfWeek" : false,
+                "eyebrowFontSize" : "regular",
+                "eyebrowHighlightColor" : "",
+                "eyebrowText" : "",
+                "eyebrowTextColor" : "#ffffff",
+                "eyebrowTextDecoration" : "",
+                "flagAlignment" : "top left",
+                "flagBackgroundColor" : "#ff0000",
+                "flagBorderColor" : "#ffffff",
+                "flagBorderStyles" : "",
+                "flagRotation" : 0,
+                "flagSpacing" : "medium",
+                "flagText" : "",
+                "flagTextColor" : "#ffffff",
+                "flagTextDecoration" : "",
+                "hideTextElementsForVideo" : false,
+                "imageAltText" : "{!CurrentItem.source.url}",
+                "imageUrl" : "{!CurrentItem.source.url}",
+                "metadata1HighlightColor" : "",
+                "metadata1Text" : "",
+                "metadata2HighlightColor" : "",
+                "metadata2Text" : "",
+                "metadataFontSize" : "regular",
+                "metadataTextColor" : "#ffffff",
+                "metadataTextDecoration" : "",
+                "overlayBackgroundColor" : "rgba(0, 0, 0, 0.4)",
+                "showButton" : false,
+                "showCaption" : false,
+                "showDateTime" : false,
+                "showEyebrow" : false,
+                "showEyebrowHighlight" : false,
+                "showFlag" : false,
+                "showMetadata1" : false,
+                "showMetadata1Highlight" : false,
+                "showMetadata2" : false,
+                "showMetadata2Highlight" : false,
+                "showTitle" : false,
+                "showTitleHighlight" : false,
+                "subTitle" : "",
+                "subTitleFontSize" : "regular",
+                "textAlignment" : "center center",
+                "timeFormat" : "none",
+                "timeZoneDisplay" : "short",
+                "timeZoneOptions" : "none",
+                "title" : "",
+                "titleFontSize" : "large",
+                "titleHeadingTag" : "p",
+                "titleHighlightColor" : "",
+                "titleTextDecoration" : "",
+                "useAspectRatio" : false,
+                "videoUrl" : "{!CurrentItem.source.url}"
+              },
+              "componentName" : "forceCommunity:bannerLayout"
+            },
+            "schemaVersion" : "V2.0"
+          }
+        },
+        "componentName" : "forceCommunity:dynamicCollection",
+        "id" : "7ddf16d3-ac48-4175-b3d7-d99b8463a5ad",
+        "renditionMap" : { },
+        "type" : "component"
+      } ],
+      "id" : "60967fa8-a70e-475c-b19d-13dabe54b9dd",
+      "regionName" : "themeHero",
+      "type" : "region"
+    }, {
+      "components" : [ {
+        "componentAttributes" : {
+          "clientVersion" : "WebV1",
+          "hideChatButtonOnLoad" : "Default",
+          "isExpSiteAuthMode" : true,
+          "scrtUrl" : "https://runwal--fullcopy.sandbox.my.salesforce-scrt.com"
+        },
+        "componentName" : "experience_messaging:embeddedMessaging",
+        "id" : "0140b81a-e606-457f-b2b9-4bf54c4e8960",
+        "renditionMap" : { },
+        "type" : "component"
+      }, {
+        "componentAttributes" : {
+          "richTextValue" : "<div style='background-image: url(/sfsites/assets/Images/PrmEnhancedFooter/footer-background-img.png); background-repeat: no-repeat; background-size: cover; background-position: center; background-color: var(--slds-g-color-brand-base-50); color: #ffffff; font-family: Arial, sans-serif; padding: 4rem 4rem 2rem;'>             <div class='slds-grid slds-wrap slds-grid_vertical-align-center'>                 <div class='slds-size_1-of-2' style='text-align: left;'>                     <div class='slds-grid slds-grid_align-start'>                         <a href='https://www.linkedin.com/company/salesforce' class='slds-m-right_x-small slds-p-around_x-small'>                             <img src='/sfsites/assets/Images/PrmEnhancedFooter/linkedinIcon.svg' alt='LinkedIn' style='width: 24px; height: 24px;' />                         </a>                         <a href='https://www.facebook.com/salesforce/' class='slds-m-right_x-small slds-p-around_x-small'>                             <img src='/sfsites/assets/Images/PrmEnhancedFooter/facebookIcon.svg' alt='Facebook' style='width: 24px; height: 24px;' />                         </a>                         <a href='https://x.com/salesforce' class='slds-p-around_x-small'>                             <img src='/sfsites/assets/Images/PrmEnhancedFooter/customIcon.svg' alt='Custom Link' style='width: 24px; height: 24px;' />                         </a>                     </div>                 </div>                 <div class='slds-size_1-of-2' style='text-align: right;'>                     <img src='/sfsites/assets/Images/PrmEnhancedFooter/stepsLogo.svg' alt='Steps Logo' style='height: 32px;' />                 </div>             </div>             <hr style='border: none; border-top: 1px solid #ffffff; margin: 1.5rem 0;'>             <div class='slds-grid slds-wrap slds-grid_vertical-align-center'>                 <div class='slds-size_1-of-2' style='text-align: left; font-size: 12px; font-weight: normal;'>                     <span>English (US)</span>                 </div>                 <div class='slds-size_1-of-2' style='text-align: right; font-size: 12px; font-weight: normal;'>                     <span>© Steps Corporation. All rights reserved.</span>                 </div>             </div>         </div>"
+        },
+        "componentName" : "forceCommunity:htmlBlock",
+        "id" : "b45103e0-2200-4284-9d25-5ef797151fef",
+        "renditionMap" : { },
+        "type" : "component"
+      } ],
+      "id" : "3e0fd627-a800-419f-ba0d-57796a8225ed",
+      "regionName" : "themeFooter",
+      "type" : "region"
+    } ],
+    "type" : "view"
+  }, {
+    "componentAttributes" : {
+      "fixedPageWidth" : 1170,
+      "headerBgColor" : "rgba(0, 0, 0, 0)",
+      "isHeaderPinned" : false,
+      "isHeroUnderHeader" : false,
+      "isPageWidthFixed" : true,
+      "showHeader" : true,
+      "showHero" : true
+    },
+    "componentName" : "siteforce:themeLayoutStarter",
+    "id" : "ec169a29-da87-4454-b721-aed27f59c090",
+    "label" : "ServiceNotAvailable",
+    "regions" : [ {
+      "id" : "5305f907-63ef-43dd-a22b-739d7864c9bf",
+      "regionName" : "themeHeader",
+      "type" : "region"
+    }, {
+      "id" : "584100d7-4a36-4303-8a60-9c6f5cb681e9",
+      "regionName" : "themeFooter",
+      "type" : "region"
+    } ],
+    "type" : "view"
+  } ]
+}

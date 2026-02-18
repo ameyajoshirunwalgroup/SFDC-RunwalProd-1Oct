@@ -2,10 +2,10 @@
 <Network xmlns="http://soap.sforce.com/2006/04/metadata">
     <allowInternalUserLogin>false</allowInternalUserLogin>
     <allowMembersToFlag>false</allowMembersToFlag>
-    <changePasswordTemplate>unfiled$public/CommunityChangePasswordEmailTemplate</changePasswordTemplate>
+    <changePasswordTemplate>My_View/CommunityChangePasswordEmailTemplate</changePasswordTemplate>
     <communityRoles/>
     <disableReputationRecordConversations>false</disableReputationRecordConversations>
-    <emailSenderAddress>runwalcare@runwal.com</emailSenderAddress>
+    <emailSenderAddress>shraddha.shahari@runwalgroup.in</emailSenderAddress>
     <emailSenderName>Runwal Cares</emailSenderName>
     <embeddedLoginEnabled>true</embeddedLoginEnabled>
     <enableApexCDNCaching>true</enableApexCDNCaching>
@@ -30,10 +30,10 @@
     <enableTopicAssignmentRules>true</enableTopicAssignmentRules>
     <enableTopicSuggestions>false</enableTopicSuggestions>
     <enableUpDownVote>false</enableUpDownVote>
-    <forgotPasswordTemplate>unfiled$public/CommunityForgotPasswordEmailTemplate</forgotPasswordTemplate>
+    <forgotPasswordTemplate>My_View/CommunityForgotPasswordEmailTemplate</forgotPasswordTemplate>
     <gatherCustomerSentimentData>false</gatherCustomerSentimentData>
-    <headlessForgotPasswordTemplate>unfiled$public/CommunityHeadlessForgotPasswordTemplate</headlessForgotPasswordTemplate>
-    <headlessRegistrationTemplate>unfiled$public/CommunityHeadlessRegistrationTemplate</headlessRegistrationTemplate>
+    <headlessForgotPasswordTemplate>My_View/CommunityHeadlessForgotPasswordTemplate</headlessForgotPasswordTemplate>
+    <headlessRegistrationTemplate>My_View/CommunityHeadlessRegistrationTemplate</headlessRegistrationTemplate>
     <maxFileSizeKb>5120</maxFileSizeKb>
     <networkAuthApiSettings>
         <doesForgotPasswordRequireAuth>false</doesForgotPasswordRequireAuth>
@@ -60,6 +60,8 @@
         <profile>Runwal Customer Portal</profile>
         <profile>MIS</profile>
         <profile>CP MIS</profile>
+        <profile>Customer Community Login User</profile>
+        <profile>Community Login User Custm</profile>
     </networkMemberGroups>
     <networkPageOverrides>
         <changePasswordPageOverrideSetting>Standard</changePasswordPageOverrideSetting>
@@ -70,7 +72,7 @@
     </networkPageOverrides>
     <picassoSite>Runwal_Cares1</picassoSite>
     <selfRegistration>false</selfRegistration>
-    <sendWelcomeEmail>false</sendWelcomeEmail>
+    <sendWelcomeEmail>true</sendWelcomeEmail>
     <site>Runwal_Cares</site>
     <siteArchiveStatus>NotArchived</siteArchiveStatus>
     <status>Live</status>

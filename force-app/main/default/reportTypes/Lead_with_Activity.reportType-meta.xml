@@ -5,7 +5,7 @@
     <deployed>true</deployed>
     <description>Lead with Activity</description>
     <join>
-        <outerJoin>false</outerJoin>
+        <outerJoin>true</outerJoin>
         <relationship>Activities</relationship>
     </join>
     <label>Lead with Activity</label>
@@ -48,11 +48,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>City</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>No_of_Follow_ups_After_1st_Call__c</field>
             <table>Lead</table>
         </columns>
         <columns>
@@ -213,11 +208,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>FirstName</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>First_Call_Attempt_Date__c</field>
             <table>Lead</table>
         </columns>
         <columns>
@@ -717,36 +707,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>First_Call_Attempt_Time_Gap__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>First_Connected_Date_Time__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Second_Connected_Date_Time__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Time_Between_First_Second_Follow_up__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Secondary_Mobile_No_with_Country_Code__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Reason_for_not_qualified__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Lost_Reason__c</field>
             <table>Lead</table>
         </columns>
@@ -757,22 +717,47 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Second_Follow_up_date_time__c</field>
+            <field>First_Connected_Date_Time__c</field>
             <table>Lead</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>First_Follow_up_date_time__c</field>
+            <field>First_Call_Attempt_Time_Gap__c</field>
             <table>Lead</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Time_Between_First_Second_connected__c</field>
+            <field>Second_Connected_Date_Time__c</field>
             <table>Lead</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Owners_Team__c</field>
+            <field>Time_Between_First_Second_Call__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>First_Call_Attempt_Date__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lead_Qualification__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>No_of_Follow_ups_After_1st_Call__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Secondary_Mobile_No_with_Country_Code__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>No_of_Family_Members__c</field>
             <table>Lead</table>
         </columns>
         <columns>
@@ -787,7 +772,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>No_of_Family_Members__c</field>
+            <field>No_of_Vehicles__c</field>
             <table>Lead</table>
         </columns>
         <columns>
@@ -797,17 +782,42 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>No_of_Vehicles__c</field>
-            <table>Lead</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Proposed_Visit_Date__c</field>
             <table>Lead</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Secondary_Mobile_No_with_code__c</field>
+            <field>IsActive__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Budget_In_Lakh__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Owners_Team__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Generated_OTP_On_Lead__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CRM_Remarks__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sales_Remarks__c</field>
             <table>Lead</table>
         </columns>
         <columns>
@@ -817,12 +827,87 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Related_Account__c</field>
+            <field>Lead_Sourcing_Manager__c</field>
             <table>Lead</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Lead_Sourcing_Manager__c</field>
+            <field>Temp_CP__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Anarock_Sourcing_Manager_LU__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CRM_Sourcing_Manger_LU__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>NRI_OS_Sourcing_Manager_LU__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Pre_Sales_User_LU__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Auto_Call_Completed__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Lead_Status__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Lead_Stage__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Lead_LimeChat__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Qualification_Tag__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Unqualification_Reason__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Drop_Off_Stage__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Drop_Off_Timestamp__c</field>
+            <table>Lead</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>WhatsApp_Resume_Timestamp__c</field>
             <table>Lead</table>
         </columns>
         <masterLabel>Leads</masterLabel>
@@ -855,11 +940,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>CallDurationInSeconds</field>
-            <table>Lead.Activities</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>CallObject</field>
             <table>Lead.Activities</table>
         </columns>
@@ -885,11 +965,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Task_Type__c</field>
-            <table>Lead.Activities</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Description</field>
             <table>Lead.Activities</table>
         </columns>
@@ -911,11 +986,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>ActivityTimeOnly</field>
-            <table>Lead.Activities</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>DurationInMinutes</field>
             <table>Lead.Activities</table>
         </columns>
         <columns>
@@ -1035,12 +1105,22 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Call_Duration__c</field>
+            <field>Service_Category__c</field>
             <table>Lead.Activities</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Service_Category__c</field>
+            <field>Task_Created_Date__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Task_Type__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Disposition_Type__c</field>
             <table>Lead.Activities</table>
         </columns>
         <columns>
@@ -1050,23 +1130,137 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Task_Created_Date__c</field>
-            <table>Lead.Activities</table>
-        </columns>
-        <columns>
-            <checkedByDefault>true</checkedByDefault>
-            <displayNameOverride>Name</displayNameOverride>
             <field>Who</field>
             <table>Lead.Activities</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Time_Line__c</field>
+            <field>CallDurationInSeconds</field>
             <table>Lead.Activities</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Preferred_Location__c</field>
+            <field>Call_Duration__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_for_Lost_Junk__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Budget_In_Lakh__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Demand__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Demand_Due_Date__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Outstanding__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>PTP_Amount__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Collection_Status__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Non_Collectible_Reasons__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Unreachable_Reasons__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reference_No__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Date_of_Payment__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Amount_of_Payment__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Type_of_Payment__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Booking__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Billing_Checklist__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Segment__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Activity__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_location_MMR__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Location_Sub_Zone__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Interaction_Status__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Meeting_Targets__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Other_Location__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Inbound_Desk_Agent__c</field>
+            <table>Lead.Activities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Year__c</field>
             <table>Lead.Activities</table>
         </columns>
         <masterLabel>Activities</masterLabel>

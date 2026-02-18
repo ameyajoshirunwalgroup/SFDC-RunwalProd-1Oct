@@ -3081,7 +3081,27 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Cancellation_approved_date__c</field>
+            <field>Sourcing_Manager_User__c</field>
+            <table>User.Accounts1__r.Opportunities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Todays_Date__c</field>
+            <table>User.Accounts1__r.Opportunities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Pre_Sales_User_LU__c</field>
+            <table>User.Accounts1__r.Opportunities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CRM_Manager_LU__c</field>
+            <table>User.Accounts1__r.Opportunities</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>NRI_OS_Sourcing_Manager_LU__c</field>
             <table>User.Accounts1__r.Opportunities</table>
         </columns>
         <masterLabel>Opportunities</masterLabel>
@@ -3174,16 +3194,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Approved_from_account_team__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Approved_from_tech_team__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Area__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3205,11 +3215,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Basic_Booking_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>BookingIId__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -3269,16 +3274,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Call_Back_Date__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Call_Disposition_L2__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Call_Disposition__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3299,7 +3294,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Commission_Calculated__c</field>
+            <field>Company__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -3344,22 +3339,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Dispatch_Mode__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Document_Checklist_Link_del__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Effective_From__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Flat_Applicants__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -3419,11 +3404,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Last_Call_Date__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Level_One_Approver__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3464,16 +3444,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Name_of_Referer_Customer_Customer_Refer__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Name_of_Referer_Direct_Corporate_Book__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>No_of_Parking__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3499,17 +3469,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Project_of_Referer_Customer_Customer_Re__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Quotation__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Reason_For_CRM_returns_to_sales__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -3589,11 +3549,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>State__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Status__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3639,6 +3594,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Welcome_Call_Done_By__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Wing__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3649,22 +3609,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>isSave__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Primary_Applicant_Name__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Sale_Order__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>AFS_Internal_Signoff_Status__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -3849,11 +3799,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>RW_AFS_Id__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>RW_AFS_sent_to_registration_office_date__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -3865,11 +3810,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_Actual_Possession_Date__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_Agreement_Id__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -3969,11 +3909,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>RW_Last_Reminder_letter_sent_name__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>RW_Last_SDR_Received__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -4000,11 +3935,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_Market_Values__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_Name_confirmation_letter_Sent_status__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -4089,42 +4019,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>RW_SDR_Instrument_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_SDR_Instrument_Number__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>RW_SDR_Letter_Sent_Date__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_SDR_Letter_Sent__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_SDR_Reminder_1__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_SDR_Reminder_2__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_SDR_Reminder_3__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_SDR_Schedule_Date__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -4245,11 +4145,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_X9_99_Received__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>RW_confirmation_letter_Received_Status__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -4389,11 +4284,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>BillDesk_Terms_and_Conditions__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Emp_Manager_Name__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -4484,11 +4374,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>CP_Invoice_Clearing_L1__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>CP_Invoice_Clearing_L2__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -4510,11 +4395,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Invoice_Submitted_by_CP__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Kicker_Incentive__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -4570,11 +4450,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Total_Brokerage_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Total_Brokerage__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -4649,11 +4524,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Retention_Customer_SAP_Code__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Retention_Closing_Head_Name__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -4670,36 +4540,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Retention_Sales_Manager__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>MLCP_Additional_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Single_Covered_Additional_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Single_Open_Additional_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Stilt_Additional_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Tandem_Covered_Additional_Amount__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Tandem_Open_Additional_Amount__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
@@ -4798,6 +4638,56 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Income_Bracket_Per_Month__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>No_of_Opportunities__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_App_Version__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Source__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_OS_Version__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Model__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Type_A_I__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Custom_Device_ID__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Customer__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_FCM_ID_Action__c</field>
+            <table>User.Accounts1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Referral_Points__c</field>
             <table>User.Accounts1__r</table>
         </columns>
         <masterLabel>Accounts</masterLabel>
@@ -4945,11 +4835,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Registration_Fee_Inclusive__c</field>
-            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Temp_Channel_Partner_Name__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
@@ -4975,47 +4860,177 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Test_Checkbox__c</field>
+            <field>Monthly_Collection_Status__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Test_Picklist__c</field>
+            <field>Project_Waived_Limit__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>X20_Received__c</field>
+            <field>ADF_Interest_Amount_Payable1__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>X20_Received_Date__c</field>
+            <field>Base_Brokerage_Accrued_Dashboards__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Customer_Reference_Opportunity__c</field>
+            <field>Additional_Brokerage_Accrued_Dashboards__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Reference_Booking_X20_Received__c</field>
+            <field>UUID__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Reference_Booking_Registration_Date__c</field>
+            <field>isSigned__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Customer_Reference_Primary_Applicant_Nam__c</field>
+            <field>Bare_Shell__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>X1_of_Agreement_Value__c</field>
+            <field>RW_Unit_Type__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Checklist_Approved__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Checklist_Approval_Date_Time__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sanction_Date_To_Booking_Date_Ageing__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sanction_Date_To_Book_Now_Date_Ageing__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Today_Date_To_Book_Now_Date_Ageing__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>SAP_Status__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>NCF_Document_Id__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_for_Registration_Pending__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registrable_Status__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>checklist__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Interest_Waiver_Approval_Status__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Waiver_Amount_to_be_Approved__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Waiver_Approver_Level__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>IW_Approver_Level_1__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Categories_of_Cancellation_Phase__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_For_10_Delay__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cancellation_Completed_Diff_Paid_Value__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reason_for_Upgrade__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Current_AV_for_Transfer_Upgrade__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Ageing_of_Upgrade_Transfer_in_Diff_Stage__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Customer_Base_Count__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Ageing_of_Negotiation_Phase__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Incremental_AV_for_Upgrade__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>SD_Paid__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>X2_Received__c</field>
+            <table>User.Accounts1__r.Opportunities.Booking1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Lead__c</field>
             <table>User.Accounts1__r.Opportunities.Booking1__r</table>
         </columns>
         <masterLabel>Booking</masterLabel>

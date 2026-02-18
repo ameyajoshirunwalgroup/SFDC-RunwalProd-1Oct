@@ -7,6 +7,32 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
+                            <value>Booking__c.Generate_AFS</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.GET_ADF_Details</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.ADF_Opted__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.Opted_ADF</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.ADF_Opted__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.Create_Lead</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Booking__c.Bulk_Aadhar_Verification</value>
                             <visibilityRule>
                                 <booleanFilter>1 AND 2</booleanFilter>
@@ -26,61 +52,57 @@
                             <value>CustomButton.Booking__c.Generate_Booking_Application_Form</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Clone</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Edit</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Delete</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Booking__c.ADF_Calculator</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Booking__c.Opted_ADF</value>
+                            <value>Booking__c.Submit_for_Approval_Interest_Waiver</value>
                             <visibilityRule>
+                                <booleanFilter>1 AND (2 OR 3 OR 4 OR 5 ) AND 6 AND 7</booleanFilter>
                                 <criteria>
-                                    <leftValue>{!Record.ADF_Opted__c}</leftValue>
+                                    <leftValue>{!Record.Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Booking Confirmed</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Interest_Waiver_Approval_Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Draft</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Interest_Waiver_Approval_Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Interest_Waiver_Approval_Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Rejected</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Interest_Waiver_Approval_Status_Visibili__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.is_Approved_From_SAP__c}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>false</rightValue>
                                 </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Booking__c.GET_ADF_Details</value>
-                            <visibilityRule>
                                 <criteria>
-                                    <leftValue>{!Record.ADF_Opted__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
+                                    <leftValue>{!Record.is_Demand_Records__c}</leftValue>
+                                    <operator>GT</operator>
+                                    <rightValue>0</rightValue>
                                 </criteria>
                             </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Booking__c.ADF_Credit_Note</value>
-                            <visibilityRule>
-                                <criteria>
-                                    <leftValue>{!Record.ADF_Opted__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>CustomButton.Booking__c.CP_ACKNOWLEDGEMENT</value>
                         </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Booking__c.Print_Form_New</value>
                         </valueListItems>
                         <valueListItems>
+                            <value>Booking__c.Trigger_SAP_Receipts</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Booking__c.Welcome_Call</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Booking__c.SDR_Letter</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Global.Allot_Car_Parking</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Global.Unit_Transfer_and_Cancellation</value>
@@ -89,10 +111,22 @@
                             <value>Global.Send_Cancellation_for_Approval</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Global.Upload_handover_document</value>
+                            <value>CustomButton.Booking__c.CP_ACKNOWLEDGEMENT</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Booking__c.Submit_for_Approval</value>
+                            <value>CustomButton.Booking__c.Referral_IOM</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.ADF_Credit_Note</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.SDR_Letter</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Global.Allot_Car_Parking</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Global.Upload_handover_document</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Booking__c.Interest_Ledger_Pdf</value>
@@ -113,10 +147,29 @@
                             <value>Booking__c.DMS_Documents</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Booking__c.Trigger_SAP_Receipts</value>
+                            <value>Booking__c.Schedule_Registration</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Booking__c.Schedule_Registration</value>
+                            <value>Share</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.Submit_for_Approval</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.Booking__c.Submit_for_Approval</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.Re_Raise_ROC</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Booking__c.Update_Applicants</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Applicant_Updated__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -138,10 +191,20 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>numVisibleActions</name>
-                    <value>3</value>
+                    <value>9</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
                 <identifier>force_highlightsPanel</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>hideHeader</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListQuickLinksContainer</componentName>
+                <identifier>force_relatedListQuickLinksContainer</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -273,16 +336,6 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
-            <componentInstance>
-                <componentName>EditBookingComponent</componentName>
-                <identifier>EditBookingComponent</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-70f088cf-d315-462a-a33c-439a08e4f690</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
@@ -296,7 +349,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Total_ADF_Amount__c</fieldItem>
                 <identifier>RecordTotal_ADF_Amount_cField</identifier>
@@ -306,129 +359,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.ADF_Interest_Amount_Payable1__c</fieldItem>
-                <identifier>RecordADF_Interest_Amount_Payable1_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.X20_Received__c</fieldItem>
-                <identifier>RecordX20_Received__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.X20_Received_Date__c</fieldItem>
-                <identifier>RecordX20_Received_Date__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Customer_Reference_Opportunity__c</fieldItem>
-                <identifier>RecordCustomer_Reference_Opportunity__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Reference_Booking_X20_Received__c</fieldItem>
-                <identifier>RecordReference_Booking_20_Received__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Reference_Booking_Registration_Date__c</fieldItem>
-                <identifier>RecordReference_Booking_Registration_Date__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Registration_Status__c</fieldItem>
-                <identifier>RecordRegistration_Status__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Customer_Reference_Flat_No__c</fieldItem>
-                <identifier>RecordCustomer_Reference_Flat_No__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Customer_Reference_Primary_Applicant_Nam__c</fieldItem>
-                <identifier>RecordCustomer_Reference_Primary_Applicant_Nam__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.X1_of_Agreement_Value__c</fieldItem>
-                <identifier>RecordX1_of_Agreement_Value__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.TDS_5_to_be_deducted__c</fieldItem>
-                <identifier>RecordTDS_5_to_be_deducted__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Referral_Amount_to_be_Adjusted__c</fieldItem>
-                <identifier>RecordReferral_Amount_to_be_Adjusted__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Reference_Registration_date_status__c</fieldItem>
-                <identifier>RecordReference_Registration_date_status__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Registration_Due_Status__c</fieldItem>
-                <identifier>RecordRegistration_Due_Status__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Registration_date_status__c</fieldItem>
-                <identifier>RecordRegistration_date_status__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Referral_IOM_Comments__c</fieldItem>
-                <identifier>RecordReferral_IOM_Comments__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Referral_IOM_Created_checkbox__c</fieldItem>
-                <identifier>RecordReferral_IOM_Created_checkbox__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Customer_Reference_Amount_Received__c</fieldItem>
-                <identifier>RecordCustomer_Reference_Amount_Received__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-627dbfa7-7294-4a30-a98b-805df6640dcd</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>flexipage:blankSpace</componentName>
-                <identifier>flexipage_blankSpace</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.ADF_Balance__c</fieldItem>
                 <identifier>RecordADF_Balance_cField</identifier>
@@ -440,11 +371,55 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Total_Approved_Interest_Amount_Waived__c</fieldItem>
+                <identifier>RecordTotal_Approved_Interest_Amount_Waived__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-2780001b-8055-431b-b527-dd3c28e73f29</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ADF_Interest_Amount_Payable1__c</fieldItem>
+                <identifier>RecordADF_Interest_Amount_Payable1__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ADF_Adjusted__c</fieldItem>
+                <identifier>RecordADF_Adjusted_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.ADF_Interest_Paid__c</fieldItem>
                 <identifier>RecordADF_Interest_Paid_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-172bc9cb-48a6-42aa-b15a-3557841bffae</name>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ADF_Interest_Balance__c</fieldItem>
+                <identifier>RecordADF_Interest_Balance__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-ffa147b7-1ab9-4d21-aef0-c5abd077c1f2</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -452,7 +427,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-627dbfa7-7294-4a30-a98b-805df6640dcd</value>
+                    <value>Facet-2780001b-8055-431b-b527-dd3c28e73f29</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column</identifier>
@@ -462,13 +437,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-172bc9cb-48a6-42aa-b15a-3557841bffae</value>
+                    <value>Facet-ffa147b7-1ab9-4d21-aef0-c5abd077c1f2</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column2</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-91ade9fb-dc98-4158-9c14-81c92f0ba312</name>
+        <name>Facet-187842d3-2d09-4efe-866c-226178780c82</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -476,7 +451,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-91ade9fb-dc98-4158-9c14-81c92f0ba312</value>
+                    <value>Facet-187842d3-2d09-4efe-866c-226178780c82</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -490,7 +465,17 @@
                 <identifier>flexipage_fieldSection</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-af487bc4-a80c-4879-b170-f324f8027387</name>
+        <name>Facet-d0cb98c5-c7ab-431a-8d7e-0756835b22d2</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentName>cpBillingChecklist</componentName>
+                <identifier>c_cpBillingChecklist</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-a9f530c1-0be7-4fb3-8995-bc3a4b8cb362</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -530,21 +515,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-70f088cf-d315-462a-a33c-439a08e4f690</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Applicant Details</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>customTab</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-af487bc4-a80c-4879-b170-f324f8027387</value>
+                    <value>Facet-d0cb98c5-c7ab-431a-8d7e-0756835b22d2</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
@@ -557,6 +528,38 @@
                         <leftValue>{!Record.ADF_Opted__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-a9f530c1-0be7-4fb3-8995-bc3a4b8cb362</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Check List</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>CP Access</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>CP Billing Access</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
@@ -578,6 +581,12 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
                 <identifier>flexipage_tabset</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>currentPreviousMilestoneUpdateOnBooking</componentName>
+                <identifier>c_currentPreviousMilestoneUpdateOnBooking</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -626,6 +635,162 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>CombinedAttachments</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer6</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>OpenActivities</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer5</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Interest_Waivers__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Credit_Notes__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Demands__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Post_Dated_Cheques__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer3</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>label</name>
                     <value>Tabs</value>
                 </componentInstanceProperties>
@@ -635,6 +800,32 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
                 <identifier>flexipage_tabset2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Booking__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>ProcessSteps</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer7</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

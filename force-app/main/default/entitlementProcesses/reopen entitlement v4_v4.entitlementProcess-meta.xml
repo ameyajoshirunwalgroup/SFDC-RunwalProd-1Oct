@@ -10,6 +10,7 @@
         <value>true</value>
     </exitCriteriaFilterItems>
     <milestones>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.RW_Case_Reopened_Date__c</field>
             <operation>notEqual</operation>
@@ -19,7 +20,7 @@
         <minutesToComplete>8640</minutesToComplete>
         <timeTriggers>
             <actions>
-                <name>Reopen_Escalation</name>
+                <name>Case.Reopen_Escalation</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>

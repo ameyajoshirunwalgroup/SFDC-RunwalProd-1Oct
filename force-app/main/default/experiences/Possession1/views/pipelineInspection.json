@@ -1,0 +1,33 @@
+{
+  "appPageId" : "856d3934-99ff-4071-a05e-f35d8c6a5bc0",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "7450bb00-cc1a-48c8-8da5-63adfb615f08",
+  "label" : "Pipeline Inspection",
+  "regions" : [ {
+    "id" : "5c8b06a7-d333-4314-81f8-265e87013b44",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "objectApiName" : "Opportunity"
+      },
+      "componentName" : "runtime_pipeline_inspector:pipelineInspectorHomeExperienceContainer",
+      "id" : "1ee811cd-f64e-4d0b-bded-ff27e06dc855",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "81e16b32-bf9d-4a5f-87ed-b4ca5bb56cb9",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "fe828c81-b9c8-414a-9603-058dcc4309f1",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "pipeline-inspection"
+}

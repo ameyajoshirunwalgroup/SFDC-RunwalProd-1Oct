@@ -17,6 +17,7 @@
     </exitCriteriaFilterItems>
     <milestones>
         <businessHours>RW Business Hour</businessHours>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>
@@ -50,19 +51,19 @@
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Case_Escalated1</name>
+                <name>Case.Case_Escalated1</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>Escalation_L1_Status</name>
+                <name>Case.Escalation_L1_Status</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>First_Escalation1</name>
+                <name>Case.First_Escalation1</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>Stage_L3</name>
+                <name>Case.Stage_L3</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -73,6 +74,7 @@
     <milestones>
         <businessHours>RW Business Hour</businessHours>
         <criteriaBooleanFilter>(1 OR 3) AND 2 AND 4 AND 5</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>
@@ -102,11 +104,11 @@
         <minutesToComplete>4</minutesToComplete>
         <timeTriggers>
             <actions>
-                <name>Second_Escalation1</name>
+                <name>Case.Second_Escalation1</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>Stage_L4</name>
+                <name>Case.Stage_L4</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -117,6 +119,7 @@
     <milestones>
         <businessHours>RW Business Hour</businessHours>
         <criteriaBooleanFilter>(1 OR 3) AND 2 AND 4 AND 5</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>
@@ -150,11 +153,11 @@
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Second_Escalation_2New</name>
+                <name>Case.Second_Escalation_2New</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>Stage_L5</name>
+                <name>Case.Stage_L5</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -165,6 +168,7 @@
     <milestones>
         <businessHours>RW Business Hour</businessHours>
         <criteriaBooleanFilter>(1 OR 2) AND 3 AND 4 AND 5</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>
@@ -194,11 +198,11 @@
         <minutesToComplete>8</minutesToComplete>
         <timeTriggers>
             <actions>
-                <name>Stage_L6New</name>
+                <name>Case.Stage_L6New</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>Third_Escalation_1</name>
+                <name>Case.Third_Escalation_1</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -209,6 +213,7 @@
     <milestones>
         <businessHours>RW Business Hour</businessHours>
         <criteriaBooleanFilter>(1 OR 2) AND 3 AND 4 AND 5</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>
@@ -242,11 +247,11 @@
                 <type>Alert</type>
             </actions>
             <actions>
-                <name>Stage_L7New</name>
+                <name>Case.Stage_L7New</name>
                 <type>FieldUpdate</type>
             </actions>
             <actions>
-                <name>Third_Escalation_2New</name>
+                <name>Case.Third_Escalation_2New</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -257,6 +262,7 @@
     <milestones>
         <businessHours>RW Business Hour</businessHours>
         <criteriaBooleanFilter>(1 OR 2) AND 3 AND 4 AND 5</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>
@@ -286,7 +292,7 @@
         <minutesToComplete>12</minutesToComplete>
         <timeTriggers>
             <actions>
-                <name>Last_Escalation</name>
+                <name>Case.Last_Escalation</name>
                 <type>FieldUpdate</type>
             </actions>
             <timeLength>0</timeLength>
@@ -297,6 +303,7 @@
     <milestones>
         <businessHours>RW Business Hour</businessHours>
         <criteriaBooleanFilter>(1 OR 2) AND 3 AND 4 AND 5</criteriaBooleanFilter>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
         <milestoneCriteriaFilterItems>
             <field>Case.Origin</field>
             <operation>equals</operation>

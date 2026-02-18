@@ -82,10 +82,6 @@
                 <behavior>Edit</behavior>
                 <field>mass_email_date__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Vendor_Code__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -506,6 +502,7 @@
     <relatedLists>
         <fields>FULL_NAME</fields>
         <fields>RW_Project__c</fields>
+        <fields>LEAD.LEAD_SOURCE</fields>
         <fields>LEAD.MOBILE_PHONE</fields>
         <fields>LEAD.RATING</fields>
         <fields>LEAD.STATUS</fields>
@@ -549,14 +546,6 @@
         <fields>Error_Reason__c</fields>
         <fields>Status__c</fields>
         <relatedList>Anarock_Integration_Log__c.Account__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>FULL_NAME</fields>
-        <fields>RW_Project__c</fields>
-        <fields>LEAD.MOBILE_PHONE</fields>
-        <fields>LEAD.RATING</fields>
-        <fields>LEAD.STATUS</fields>
-        <relatedList>Lead.Related_Account__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

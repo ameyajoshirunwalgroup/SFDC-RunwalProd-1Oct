@@ -73,6 +73,17 @@
                         <valueListItems>
                             <value>Lead.Qualification</value>
                             <visibilityRule>
+                                <booleanFilter>(1 OR 2 ) AND 3</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Contacted</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Interested</rightValue>
+                                </criteria>
                                 <criteria>
                                     <leftValue>{!Record.Owners_Team__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -90,7 +101,14 @@
                             <value>Lead.Schedule_Meeting</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Lead.Send_Project_Details2</value>
+                            <value>Clone</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.IsActive__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -138,6 +156,16 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Title</fieldItem>
+                <identifier>RecordTitleField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Name</fieldItem>
@@ -161,7 +189,7 @@
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.RDS_Country_Code__c</fieldItem>
-                <identifier>RecordRDS_Country_Code_cField2</identifier>
+                <identifier>RecordRDS_Country_Code_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -190,38 +218,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.RW_Secondary_Mobile_No__c</fieldItem>
-                <identifier>RecordRW_Secondary_Mobile_No_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Secondary_Mobile_No__c</fieldItem>
-                <identifier>RecordSecondary_Mobile_No_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.RDS_Country__c</fieldItem>
-                <identifier>RecordRDS_Country_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Country__c</fieldItem>
-                <identifier>RecordCountry_cField</identifier>
+                <identifier>RecordCountry_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -260,28 +258,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.RDS_Country_Code__c</fieldItem>
-                <identifier>RecordRDS_Country_Code_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Country_Code_2__c</fieldItem>
-                <identifier>RecordCountry_Code_2_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Dialing_Country_2__c</fieldItem>
-                <identifier>RecordDialing_Country_2_cField</identifier>
+                <fieldItem>Record.RDS_Country__c</fieldItem>
+                <identifier>RecordRDS_Country_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -300,6 +278,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.RW_Neighbourhood_Places__c</fieldItem>
+                <identifier>RecordRW_Neighbourhood_Places_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Proposed_Visit_Date__c</fieldItem>
                 <identifier>RecordProposed_Visit_Date__cField</identifier>
             </fieldInstance>
@@ -310,8 +298,24 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.RW_Neighbourhood_Places__c</fieldItem>
-                <identifier>RecordRW_Neighbourhood_Places_cField</identifier>
+                <fieldItem>Record.Opt_for_Referral__c</fieldItem>
+                <identifier>RecordOpt_for_Referral__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Budget_In_Lakh__c</fieldItem>
+                <identifier>RecordBudget_In_Lack__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.CoolOff_Date__c</fieldItem>
+                <identifier>RecordCoolOff_Date__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-1418bd66-d88c-4775-bffc-6f8eabbadba5</name>
@@ -326,6 +330,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.RW_Project__c</fieldItem>
                 <identifier>RecordRW_Project_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Development__c</fieldItem>
+                <identifier>RecordDevelopment_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -424,6 +438,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Country__c</fieldItem>
+                <identifier>RecordCountry_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.RW_Designation__c</fieldItem>
                 <identifier>RecordRW_Designation_cField</identifier>
             </fieldInstance>
@@ -502,6 +526,46 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Country_Code_2__c</fieldItem>
+                <identifier>RecordCountry_Code_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.RW_Secondary_Mobile_No__c</fieldItem>
+                <identifier>RecordRW_Secondary_Mobile_No_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Secondary_Mobile_No__c</fieldItem>
+                <identifier>RecordSecondary_Mobile_No_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Dialing_Country_2__c</fieldItem>
+                <identifier>RecordDialing_Country_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Employee_Reference__c</fieldItem>
                 <identifier>RecordEmployee_Reference_cField</identifier>
             </fieldInstance>
@@ -532,16 +596,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.RW_Sourcing_Manager__c</fieldItem>
-                <identifier>RecordRW_Sourcing_Manager_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.CRM_Manager__c</fieldItem>
                 <identifier>RecordCRM_Manager_cField</identifier>
             </fieldInstance>
@@ -554,6 +608,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Corporate__c</fieldItem>
                 <identifier>RecordCorporate_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CRM_Manager__c</fieldItem>
+                <identifier>RecordCRM_Manager_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-ad0e64da-af40-41e2-b7e9-75aff96d9ef1</name>
@@ -1399,16 +1463,10 @@
                 <componentName>generateOtp</componentName>
                 <identifier>c_generateOtp</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.Status}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>VCVP</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Is_Record_Owner__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>

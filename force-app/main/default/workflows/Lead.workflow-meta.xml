@@ -8,8 +8,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_Interested_email_temp_to_customer</template>
     </alerts>
     <alerts>
@@ -20,8 +19,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_Not_able_to_contact_email_templet</template>
     </alerts>
     <alerts>
@@ -32,8 +30,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_Site_visit_scheduled_email_temp</template>
     </alerts>
     <alerts>
@@ -43,8 +40,7 @@
         <recipients>
             <type>owner</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_notify_PreSalesExe_Scheduled</template>
     </alerts>
     <alerts>
@@ -55,8 +51,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_notify_on_Visit_day_Email_Temp</template>
     </alerts>
     <alerts>
@@ -66,8 +61,7 @@
         <recipients>
             <type>owner</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_notify_presalesExe_Pripr_visit</template>
     </alerts>
     <alerts>
@@ -78,8 +72,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Lead_Site_visit_scheduled_email_temp</template>
     </alerts>
     <alerts>
@@ -90,8 +83,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>runwalcare@runwalgroup.in</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>DefaultWorkflowUser</senderType>
         <template>Lead_Email_Templates/Send_Project_Details_on_Lead_Create</template>
     </alerts>
     <alerts>
@@ -103,7 +95,7 @@
             <type>email</type>
         </recipients>
         <senderType>CurrentUser</senderType>
-        <template>unfiled$public/WebToLead</template>
+        <template>My_View/WebToLead</template>
     </alerts>
     <fieldUpdates>
         <fullName>Lead_Record_Type_Change</fullName>

@@ -11,7 +11,7 @@
                 <identifier>RecordNameField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-ded7e9d4-3938-4da7-901a-af217ab8e76f</name>
+        <name>Facet-91221554-2bf9-4708-98f6-f556e0fdc627</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -65,7 +65,7 @@
                 <identifier>RecordRating_image_formula_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-e7696659-cba4-447c-b848-336828650614</name>
+        <name>Facet-de247932-6b95-4fc7-b164-22b18c829935</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -74,9 +74,6 @@
                 <componentInstanceProperties>
                     <name>actionNames</name>
                     <valueList>
-                        <valueListItems>
-                            <value>Opportunity.Call_Customer</value>
-                        </valueListItems>
                         <valueListItems>
                             <value>Edit</value>
                         </valueListItems>
@@ -87,22 +84,10 @@
                             <value>CustomButton.Opportunity.Send_SMS</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Opportunity.Schedule_Meeting</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Opportunity.Send_Project_Details</value>
+                            <value>Opportunity.Portal_User_Password_Reset</value>
                         </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Opportunity.Block_A_Unit</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>CustomButton.Opportunity.Book_Now</value>
-                            <visibilityRule>
-                                <criteria>
-                                    <leftValue>{!Record.Unit1__c}</leftValue>
-                                    <operator>NE</operator>
-                                </criteria>
-                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Opportunity.Generate_Quote</value>
@@ -117,10 +102,7 @@
                             <value>CustomButton.Opportunity.Token_Receipt</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Opportunity.Generate_Digital_EOI_Link</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Opportunity.Generate_Digital_Payment_Link</value>
+                            <value>CustomButton.Opportunity.Book_Now</value>
                         </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Opportunity.Possesion_Feedback1</value>
@@ -129,13 +111,16 @@
                             <value>CustomButton.Opportunity.Site_Visit_Feedback1</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Opportunity.Update_Mobile_And_Email</value>
+                            <value>Opportunity.Schedule_Meeting</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Opportunity.Update_Mobile_Number</value>
+                            <value>Opportunity.Send_Project_Details</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Opportunity.Opportunity_Clone</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Opportunity.Update_Mobile_And_Email</value>
                         </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Opportunity.Site_Visit_Survey</value>
@@ -154,11 +139,11 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>primaryField</name>
-                    <value>Facet-ded7e9d4-3938-4da7-901a-af217ab8e76f</value>
+                    <value>Facet-91221554-2bf9-4708-98f6-f556e0fdc627</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>secondaryFields</name>
-                    <value>Facet-e7696659-cba4-447c-b848-336828650614</value>
+                    <value>Facet-de247932-6b95-4fc7-b164-22b18c829935</value>
                 </componentInstanceProperties>
                 <componentName>record_flexipage:dynamicHighlights</componentName>
                 <identifier>record_flexipage_dynamicHighlights</identifier>
@@ -188,6 +173,16 @@
             <componentInstance>
                 <componentName>redirecttToLWC</componentName>
                 <identifier>c_redirecttToLWC2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>hideHeader</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListQuickLinksContainer</componentName>
+                <identifier>force_relatedListQuickLinksContainer</identifier>
             </componentInstance>
         </itemInstances>
         <name>header</name>
@@ -247,7 +242,7 @@
                 <identifier>flexipage_visualforcePage</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-a063c87a-3151-4c2f-98e6-17c5e753dbad</name>
+        <name>Facet-6ce33529-ce2d-4538-acbf-a4fe79fc2da6</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -283,7 +278,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-a063c87a-3151-4c2f-98e6-17c5e753dbad</value>
+                    <value>Facet-6ce33529-ce2d-4538-acbf-a4fe79fc2da6</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>

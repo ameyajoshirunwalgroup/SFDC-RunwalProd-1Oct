@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -10,6 +11,10 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Name</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Development__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -30,6 +35,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>RDS_Company_Code__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Opportunity_cooling_period_on_assignment__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Opportunity_cooling_period_on_re_assign__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -169,10 +182,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Segment_Lookup__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>CEO__c</field>
             </layoutItems>
             <layoutItems>
@@ -185,15 +194,43 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Accounts_Team_Email__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Referral_Percentage__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Project_Waived_Limit_In_Cr__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Segment_Lookup__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Enable_E_Sign__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Accounts_Head_Email__c</field>
+                <field>Home_Loan_Brochure_Public_URL__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Accounts_Team_Email__c</field>
+                <field>ROC_Bank__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Project_Account_Team_Email__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CP_Helpdesk_1_Contact__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CP_Helpdesk_2_Contact__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -307,17 +344,25 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>ADF Section</label>
+        <label>Image Section</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>ADF_Threshold_Amount__c</field>
+                <field>Project_site_URL__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Project_Last_Page_URL__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>ADF_Interest_Rate__c</field>
+                <behavior>Readonly</behavior>
+                <field>Front_Page__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Project_Last_page__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -326,21 +371,17 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Interest Waiver Approvers</label>
+        <label>Terms &amp; Condition</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>IW_Project_Lead__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>IW_CEO__c</field>
+                <field>Booking_Terms_Conditions__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>IW_CRM_Head__c</field>
+                <field>Booking_Terms_Conditions_2__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -375,6 +416,56 @@
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>ADF Details</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>ADF_Threshold_Amount__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>ADF_Interest_Rate__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Interest Waiver Approvers</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>IW_Project_Lead__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>IW_CEO__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Waiver_Approved_till_now__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>IW_CRM_Head__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Team_Leader__c</field>
+            </layoutItems>
+        </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -492,6 +583,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Allotment_Charges_4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Stack_Car_Park_Charges__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -952,6 +1047,37 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
+        <label>Stack Car Park</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Stack_Car_Park_Available__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Stack_Car_Park_Assigned__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Stack_Car_Park_Booked__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Stack_Car_Park_Sold__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Stack_Car_Park_Total__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
         <label>Survey Information</label>
         <layoutColumns>
             <layoutItems>
@@ -1109,52 +1235,6 @@
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>Image Section</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Project_site_URL__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Project_Last_Page_URL__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Front_Page__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Project_Last_page__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>Booking Terms &amp; Conditions</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Booking_Terms_Conditions__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Booking_Terms_Conditions_2__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
         <editHeading>true</editHeading>
@@ -1200,15 +1280,35 @@
             <actionType>StandardButton</actionType>
             <sortOrder>2</sortOrder>
         </platformActionListItems>
+        <platformActionListItems>
+            <actionName>Project__c.Create_Offer</actionName>
+            <actionType>QuickAction</actionType>
+            <sortOrder>3</sortOrder>
+        </platformActionListItems>
     </platformActionList>
     <relatedLists>
+        <relatedList>RelatedFileList</relatedList>
+    </relatedLists>
+    <relatedLists>
         <fields>NAME</fields>
-        <fields>Budget_QC__c</fields>
+        <fields>MIN_Budget_In_Lakh__c</fields>
+        <fields>MAX_Budget_In_Lakh__c</fields>
         <fields>Configuration_QC__c</fields>
         <fields>Location_QC__c</fields>
         <fields>Possession_QC__c</fields>
-        <fields>Project_Type__c</fields>
         <relatedList>Qualification_Criteria__c.Project__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Discount_Category__c</fields>
+        <fields>Offer_type__c</fields>
+        <fields>Offer_Value__c</fields>
+        <fields>Start_Date__c</fields>
+        <fields>End_Date__c</fields>
+        <fields>Tower__c</fields>
+        <fields>Typology__c</fields>
+        <fields>Offer_calculation__c</fields>
+        <relatedList>Offer_Master__c.Project__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
@@ -1243,8 +1343,8 @@
         <fields>Payment_Plan_Applicable__c</fields>
         <fields>Charge_Code__c</fields>
         <fields>Rate__c</fields>
-        <fields>Service_Tax_Applicable_on_this_charge__c</fields>
         <fields>S_Lumpsum_Charge_Amount__c</fields>
+        <fields>Service_Tax_Applicable_on_this_charge__c</fields>
         <relatedList>Project_Charges__c.Project__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -1265,6 +1365,9 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Tower__c</fields>
+        <fields>Pay_Plan_ID__c</fields>
+        <fields>Effective_from__c</fields>
+        <fields>Effective_To__c</fields>
         <relatedList>Standard_Pay_Plan_Header__c.Project__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -1309,6 +1412,9 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Active__c</fields>
+        <fields>Type__c</fields>
+        <fields>Brokerage_Scheme__c</fields>
         <relatedList>Scheme_Configuration__c.Project__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -1336,6 +1442,22 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Budget_vs_Expenses__c.Project__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Discount_Details__c.Project__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Voucher_Details__c.Project__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Project_Development__c.Project__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Quote_Applied_Discounts__c.Project__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

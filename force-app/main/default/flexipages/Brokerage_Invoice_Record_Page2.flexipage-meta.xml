@@ -7,15 +7,6 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>CustomButton.Brokerage_Invoice__c.Download_Invoice</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>CustomButton.Brokerage_Invoice__c.Submit_For_Approval</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>CustomButton.Brokerage_Invoice__c.Download_Topsheet</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>CustomButton.Brokerage_Invoice__c.Generate_SAP_DOcument_No</value>
                         </valueListItems>
                         <valueListItems>
@@ -43,6 +34,18 @@
                                     <rightValue>System Administrator</rightValue>
                                 </criteria>
                             </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Clone</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.Brokerage_Invoice__c.Download_Invoice</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.Brokerage_Invoice__c.Submit_For_Approval</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.Brokerage_Invoice__c.Download_Topsheet</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -148,6 +151,10 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>tabs</name>
                     <value>maintabs</value>

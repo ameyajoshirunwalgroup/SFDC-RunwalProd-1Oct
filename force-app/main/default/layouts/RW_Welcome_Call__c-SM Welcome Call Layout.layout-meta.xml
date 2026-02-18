@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -31,6 +30,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>RW_Send_Welcome_Letter_to_RM__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Opportunity__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -237,6 +240,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>RW_Agreement_Value__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>RW_Source_Of_Booking__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

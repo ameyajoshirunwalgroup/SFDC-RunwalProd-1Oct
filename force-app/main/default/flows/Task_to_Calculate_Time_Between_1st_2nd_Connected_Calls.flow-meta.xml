@@ -6,7 +6,7 @@
         <name>Count_Task</name>
         <label>Count Task</label>
         <locationX>314</locationX>
-        <locationY>600</locationY>
+        <locationY>431</locationY>
         <assignmentItems>
             <assignToReference>taskCount</assignToReference>
             <operator>AssignCount</operator>
@@ -19,39 +19,10 @@
         </connector>
     </assignments>
     <decisions>
-        <name>Check_1st_2nd_Call_DateTime_Fields</name>
-        <label>Check 1st &amp; 2nd Call DateTime Fields</label>
-        <locationX>578</locationX>
-        <locationY>384</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>X1st_2nd_Field_Blank</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>get_Related_Lead.First_Connected_Date_Time__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>get_Related_Lead.Second_Connected_Date_Time__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>get_Task_Records</targetReference>
-            </connector>
-            <label>1st &amp; 2nd Field Blank</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Check_Task_Count</name>
         <label>Check Task Count</label>
         <locationX>314</locationX>
-        <locationY>708</locationY>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>First_Connected</name>
@@ -107,31 +78,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>get_Related_Lead</name>
-        <label>get Related Lead</label>
-        <locationX>578</locationX>
-        <locationY>276</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_1st_2nd_Call_DateTime_Fields</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.WhoId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Lead</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>get_Task_Records</name>
         <label>get Task Records</label>
         <locationX>314</locationX>
-        <locationY>492</locationY>
+        <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Task</targetReference>
@@ -159,9 +109,6 @@
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
-        <limit>
-            <numberValue>2.0</numberValue>
-        </limit>
         <object>Task</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
@@ -169,7 +116,7 @@
         <name>First_Connected_Date</name>
         <label>First Connected Date</label>
         <locationX>50</locationX>
-        <locationY>816</locationY>
+        <locationY>647</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -190,7 +137,7 @@
         <name>Second_Connected_Date</name>
         <label>Second Connected Date</label>
         <locationX>314</locationX>
-        <locationY>816</locationY>
+        <locationY>647</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -208,8 +155,11 @@
         <object>Lead</object>
     </recordUpdates>
     <start>
-        <locationX>56</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>get_Task_Records</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Task_Type__c</field>
@@ -218,31 +168,11 @@
                 <stringValue>Presales Call</stringValue>
             </value>
         </filters>
-        <filters>
-            <field>WhoId</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Call_Status__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Connected</stringValue>
-            </value>
-        </filters>
         <object>Task</object>
-        <recordTriggerType>Create</recordTriggerType>
-        <scheduledPaths>
-            <connector>
-                <targetReference>get_Related_Lead</targetReference>
-            </connector>
-            <pathType>AsyncAfterCommit</pathType>
-        </scheduledPaths>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>taskCount</name>
         <dataType>Number</dataType>
