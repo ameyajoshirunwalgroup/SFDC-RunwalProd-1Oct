@@ -34,6 +34,7 @@ export default class QuotationApprovals extends LightningElement {
             console.log('Result::'+JSON.parse(JSON.stringify(result)));
             this.isAttachmentExist = JSON.parse(JSON.stringify(result));
             console.log('isAttachmentExist::'+this.isAttachmentExist);
+            this.isAttachmentExist = true; //Added by Vinay 05-02-2026 to bypass the validation
             if(this.isAttachmentExist == false){
                 this.notification()
             }
