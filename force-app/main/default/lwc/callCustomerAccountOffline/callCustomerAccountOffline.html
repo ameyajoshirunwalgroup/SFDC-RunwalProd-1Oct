@@ -1,0 +1,29 @@
+<template>
+    <lightning-card title="Call Customer Offline" icon-name="standard:call">
+        <template if:true={accountData}>
+
+            <div class="slds-m-around_medium">
+                <template if:true={mobile1}>
+                    <p>
+                        <lightning-button-icon icon-name="standard:voice_call" alternative-text="Call Mobile 1"
+                            title="Call Mobile 1" size="small" variant="brand" onclick={callmobile1}>
+                        </lightning-button-icon> &nbsp; &nbsp;
+                        <lightning-formatted-text value={mobile1}></lightning-formatted-text>
+                    </p>
+                </template><br />
+                <template if:true={mobile2}>
+                    <p>
+                        <lightning-button-icon icon-name="standard:voice_call" alternative-text="Call Mobile 2"
+                            title="Call Mobile 2" size="small" variant="brand" onclick={callmobile2}>
+                        </lightning-button-icon> &nbsp; &nbsp;
+                        <lightning-formatted-text value={mobile2}></lightning-formatted-text>
+                    </p>
+                </template>
+            </div>
+        </template>
+        <template if:true={accountDataError}>
+            <p></p>{accountDataError}></p>
+        </template>
+    </lightning-card>
+
+</template>

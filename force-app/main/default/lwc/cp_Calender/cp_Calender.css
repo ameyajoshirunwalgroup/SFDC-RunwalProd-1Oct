@@ -1,0 +1,73 @@
+.highlight {
+    background-color: rgb(242, 242, 242);
+}
+.white-icon{
+    /* --sds-c-icon-color-background: #004987; */
+    /* --slds-c-icon-color-foreground:#004987; */
+    --slds-c-icon-color-foreground-default:#004987;
+}
+.backColor{
+    position: relative;
+    height: 3.82em; 
+    background-color:#f1f1f1;
+    /* url('https://savvymoney--varasihub--c.sandbox.vf.force.com/resource/1649335867000/BlueGeometricImage?') no-repeat; */
+    background-position: center;background-size: cover;
+}
+.cust-width{
+    width:72% !important;
+    /* position: relative; */
+}
+.cust-font{
+    font-size:20px!important;
+    color: #004987;
+}
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+50% {
+    opacity: 0;
+}
+}
+
+
+.bear-tile {
+    border: 1px solid rgb(199, 195, 195);
+    background-color: #f1f1f1;
+    border-radius: .25rem;
+    display: block;
+    height: 135px;
+  }
+  .bear-silhouette {
+    height: 100px;
+  }
+  .bear-tile-body {
+    background: linear-gradient(180deg, rgba(255,255,255,1) 80%, #666666 100%);
+  }
+  .eventsCalenderStyle{
+    margin-top: 52px;
+  }
+  .event-footer {
+    display: flex;
+    justify-content: flex-end; /* pushes content to the right */
+    align-items: flex-end;     /* aligns to bottom */
+    margin-top: 10px;
+    text-align: right;
+}
+.event-attendees {
+    font-weight: bold;   /* make text bold */
+    color: #d35400;      /* orange color (you can change, e.g., #2c3e50 for dark blue) */
+    margin-left: 8px;
+}
+
+
+/*Add the class name below to the lightning-icon element.*/
+.custom-icon-address { 
+ --slds-c-icon-color-foreground: #bb8926;
+ --slds-c-icon-color-background: #f7f7f7;
+}
+.rsvp-label {
+    color: #BB892C;      /* Text color */
+    font-weight: bold;   /* Make it bold */
+}

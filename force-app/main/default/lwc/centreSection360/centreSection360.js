@@ -38,12 +38,13 @@ export default class CenterSectionComponent extends NavigationMixin(LightningEle
     @track isPersonalDetails = true;
     @track isBookingDetails = false;
     @wire(MessageContext)
-    messageContext;
+    messageContext; 
     @track isDND = false;
     @track isStopCaseEmails = false;
     showStopCaseEmailsCheckbox = false;
+
     label = {ProfilesRorStopCaseEmailsLabel};
-    
+
     @wire(getRecord, { recordId: USER_ID, fields: FIELDS })
     userRecord({ data, error }) {
         if (data) {
@@ -97,6 +98,7 @@ export default class CenterSectionComponent extends NavigationMixin(LightningEle
     stopCaseEmailsFromAccount() {
         stopCaseEmailsFromAcc({ accountId: this.recordId })
             .then((result) => {
+                console.log('--stopCaseEmailsFromAcc: ' , result);
                 this.isStopCaseEmails = result;
             })
             .catch((error) => {
@@ -359,7 +361,7 @@ export default class CenterSectionComponent extends NavigationMixin(LightningEle
         });
     }
 
-    openCustomerDetailsForm() { //Added by Vinay 20-06-2025
+    openCustomerDetailsForm() {
         window.open('/apex/CustomerDetailsForm?id='+this.opportunityId, '_blank');
     }
 }

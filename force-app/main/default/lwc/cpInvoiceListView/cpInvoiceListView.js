@@ -265,7 +265,7 @@ export default class CpInvoiceListView extends NavigationMixin(LightningElement)
             this[NavigationMixin.Navigate]({
                 "type": "standard__webPage",
                 "attributes": {
-                    "url": 'https://cpdesk.runwalgroup.in/apex/ShowInvoicePreview?id=' + this.BIId
+                    "url": window.location.origin + '/apex/ShowInvoicePreview?id=' + this.BIId
                 }
             });
 
@@ -318,11 +318,12 @@ export default class CpInvoiceListView extends NavigationMixin(LightningElement)
         //this.url = 'https://runwal--uat.sandbox.my.site.com/channelpartner/apex/ShowInvoicePreview?id=' + this.BIId
         //this.showiframe = true
         this[NavigationMixin.Navigate]({
-            "type": "standard__webPage",
-            "attributes": {
-                "url": 'https://cpdesk.runwalgroup.in/apex/ShowInvoicePreview?id=' + this.BIId
-            }
-        });
+    type: "standard__webPage",
+    attributes: {
+        url: window.location.origin + '/apex/ShowCP_InvoicePreview?id=' + this.BIId
+    }
+});
+
         console.log('onsuccess event recordEditForm', event.detail.id);
     }
 

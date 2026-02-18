@@ -4,6 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import showUploadSection from '@salesforce/apex/SubmitForApprovalReferral.CheckUploadAttachmenttobeShown';
 import checkAttachment from '@salesforce/apex/SubmitForApprovalReferral.CheckAttachmentinReferralCredit';
 import sendapproval from '@salesforce/apex/SubmitForApprovalReferral.SendForReferralApproval';
+import submitReferral from '@salesforce/apex/SubmitForApprovalReferral.SendForReferralSubmission';
 import createcdl from '@salesforce/apex/SubmitForApprovalReferral.createContentLink';
 import getFiles from '@salesforce/apex/SubmitForApprovalReferral.returnFiles';
 const columns = [{
@@ -226,13 +227,14 @@ export default class referralCreditApproval extends LightningElement {
     }
     submitapproval() {
         this.isSpinner = true;
-        sendapproval({ comment: this.cmnt, rcId: this.rcId })
+        // sendapproval({ comment: this.cmnt, rcId: this.rcId })
+            submitReferral({rcId: this.rcId})
             .then(result => {
                 console.log('Result::' + JSON.parse(JSON.stringify(result)));
                 this.isSpinner = false;
                 const saveMessage = new ShowToastEvent({
                     title: 'Success !',
-                    message: 'Approval Sent !',
+                    message: 'IOM Uploaded Succesfully !',
                     variant: 'success',
                     mode: 'dismissable'
                 })

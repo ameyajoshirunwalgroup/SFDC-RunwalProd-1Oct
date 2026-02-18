@@ -1,0 +1,417 @@
+<template>
+    <template if:true={showSpinner}>
+        <div class="spinner-backdrop">
+            <lightning-spinner alternative-text="Submitting..." size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <template if:true={showIWCreationPage}>
+        <section>
+            <div>
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close"
+                            title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Select Demands to Create Interest Waiver</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="totals-container">
+                        <span><strong>Total Interest Levied:</strong> {totalWaiverLevied}</span>
+                        <span><strong>IWR Requested:</strong> {totalWaiverRequested}</span>
+                        <span><strong>Balance Interest Levied:</strong> {totalNetAmount}</span>
+                        <span><strong>Total SAP Waived Amount:</strong> {totalSAPWaivedAmount}</span>
+                    </div>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                        style="table-layout: fixed; width: 100%;">
+                        <thead>
+                            <tr class="slds-text-title_caps  small-header-font">
+                                <!-- <th style="width: 40%;" scope="col">Id</th> -->
+                                <th style="width: 33%;" scope="col">Name</th>
+                                <th style="width: 23%;" scope="col">Demand Date</th>
+                                <th style="width: 23%;" scope="col">Status</th>
+                                <th style="width: 23%;" scope="col">Demand Amnt Payable</th>
+                                <th style="width: 23%;" scope="col">Interest Levied</th>
+                                <th style="width: 23%;" scope="col">SAP Waived</th>
+                                <th style="width: 23%;" scope="col">Waiver Req</th>
+                                <th style="width: 40%;" scope="col">Generate IWR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={demands} for:item="demand">
+                                <tr key={demand.id} class="small-header-font">
+                                    <td>
+                                        <a class="wrap-link" style="font-weight: bold;text-decoration: underline;"
+                                            href="javascript:void(0)" data-id={demand.Id}
+                                            onclick={handleRecordNavigation} target="_blank">
+                                           <!-- {demand.Name} -->
+                                            {demand.RW_Demand_Milestone__c}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <lightning-formatted-date-time value={demand.Demand_Date__c} year="numeric"
+                                            month="2-digit" day="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </td>
+                                    <td>{demand.RW_Demand_Status__c}</td>
+                                    <td>{demand.Demand_Amount__c}</td>
+                                    <td>{demand.Net_Interest_Amount__c}</td>
+                                    <!-- <td>{demand.Total_Interest_Amount__c}</td> -->
+                                    <td>{demand.Previously_Waived_Amount_SAP__c}</td>
+                                    <td>{demand.Interest_Waiver_Requested__c}</td>
+
+                                    <!-- <td>
+                                        <lightning-input type="checkbox" data-id={demand.Id}
+                                            onchange={handleCheckboxChange}>
+                                        </lightning-input>
+                                    </td> -->
+                                    <td>
+                                        <template if:true={demand.generateIW}>
+                                            <lightning-button variant="brand" label="Generate IWR" data-id={demand.Id}
+                                                onclick={generateIWPanel}>
+                                            </lightning-button>
+                                        </template>
+                                        <template if:true={demand.openUpdateIW}>
+                                            <lightning-button variant="brand" label="Update IWR" data-id={demand.Id}
+                                                onclick={generateIWPanel}>
+                                            </lightning-button>
+                                        </template>
+                                        <template if:true={demand.hasApprovedPendingIW}>
+
+                                        </template>
+                                    </td>
+
+                                    <!-- <td>
+                                        <lightning-input type="number" label="Waiver Amount"
+                                            onchange={handleIWAmountChange} class="input-amount" name="Waiver Amount">
+                                        </lightning-input>
+                                    </td> -->
+                                </tr>
+                            </template>
+                            <template if:true={openGenerateIWPanel}>
+                                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container custom-modal-width">
+
+                                        <header class="slds-modal__header">
+                                            <h2 class="slds-text-heading_medium">Generate Interest Waiver</h2>
+                                            <button class="slds-button slds-button_icon slds-modal__close" onclick={closeIWPanel}>
+                                                <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                                            </button>
+                                        </header>
+
+                                        <div class="slds-modal__content slds-p-around_medium modal-scroll">
+                                            <!-- Section: Waiver Information -->
+                                            <div class="slds-section slds-m-bottom_medium">
+                                                <h3
+                                                    class="slds-section__title slds-text-title_caps slds-m-bottom_small">
+                                                    Waiver Information</h3>
+
+                                                <div class="slds-grid slds-wrap slds-gutters">
+
+                                                    <!-- Waiver Amount -->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input type="number" label="Waiver Amount" required
+                                                            value={waiverAmount} onchange={handleIWAmtFieldChange}>
+                                                        </lightning-input>
+                                                    </div>
+
+                                                    <!-- Unit Name -->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input type="text" label="Unit Name"
+                                                            value={selectedDemandforIW.Booking__r.Unit_No__r.Name}
+                                                            disabled></lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <!-- Demand -->
+                                                        <lightning-input type="text" label="Demand"
+                                                            value={selectedDemandforIW.Name} disabled></lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <!-- Booking -->
+                                                        <lightning-input type="text" label="Booking"
+                                                            value={selectedDemandforIW.Booking__r.Name} disabled>
+                                                        </lightning-input>
+                                                    </div>
+
+                                                    <!-- Project Name -->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input type="text" label="Project Name"
+                                                            value={selectedDemandforIW.Booking__r.Project__r.Name}
+                                                            disabled></lightning-input>
+                                                    </div>
+
+                                                    <!-- Project Location -->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input type="text" label="Project Location"
+                                                            value={selectedDemandforIW.Booking__r.Project__r.Project_Location__r.Name}
+                                                            disabled></lightning-input>
+                                                    </div>
+
+                                                    <!-- Waiver Reason -->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-combobox label="Waiver Reason"
+                                                            value={selectedwaiverReason} required options={waiverReason}
+                                                            placeholder="-- Select Reason --"
+                                                            onchange={handlewaiverReasonChange}>
+                                                        </lightning-combobox>
+                                                    </div>
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-combobox label="Sub Reason"
+                                                            value={selectedwaiverSubReason} options={waiverSubReason}
+                                                            placeholder="-- Select Sub Reason --"
+                                                            onchange={handlewaiverSubReasonChange}
+                                                            disabled={iswaiverSubReasonDisabled}>
+                                                        </lightning-combobox>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Section: Interest Details -->
+                                            <div class="slds-section">
+                                                <h3
+                                                    class="slds-section__title slds-text-title_caps slds-m-bottom_small">
+                                                    Interest Details</h3>
+
+                                                <div class="slds-grid slds-wrap slds-gutters">
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input label="Total Interest Levied on Demand"
+                                                            value={selectedDemandforIW.Total_Interest_Amount__c}
+                                                            disabled></lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input label="Net Interest Post Waiver"
+                                                            value={selectedDemandforIW.Net_Interest_Amount__c} disabled>
+                                                        </lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input label="Interest Days"
+                                                            value={selectedDemandforIW.Interest_Days__c} disabled>
+                                                        </lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input label="Previously Waived Amount (SAP)"
+                                                            value={selectedDemandforIW.Previously_Waived_Amount_SAP__c}
+                                                            disabled></lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input label="Slab Code"
+                                                            value={selectedDemandforIW.SAP_Slab_Code__c} disabled>
+                                                        </lightning-input>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-input label="Slab Description"
+                                                            value={selectedDemandforIW.SAP_Slab_Description__c}
+                                                            disabled></lightning-input>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Section: Remarks -->
+                                            <div class="slds-section slds-m-bottom_medium">
+                                                <h3
+                                                    class="slds-section__title slds-text-title_caps slds-m-bottom_small">
+                                                    Remarks</h3>
+                                                <div>
+                                                    <lightning-textarea label="Enter your description"
+                                                        class="slds-m-top_small" name="descriptionField"
+                                                        value={waiverdesc} onchange={handleDescriptionChange}
+                                                        maxlength="255"
+                                                        placeholder="Type your detailed description here...">
+                                                    </lightning-textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <footer class="slds-modal__footer">
+                                            <lightning-button style="margin:0 5px;" variant="neutral" label="Cancel"
+                                                onclick={closeIWPanel}>
+                                            </lightning-button>
+                                            <lightning-button style="margin:0 5px;" variant="brand" label="Save"
+                                                onclick={saveIW}>
+                                            </lightning-button>
+                                        </footer>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal/Popup Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button style="margin-right: 6px;" variant="neutral" label="Cancel" onclick={closeModal}>
+                    </lightning-button>
+                    <lightning-button variant="brand" label="Next" onclick={switchtoNextPage}></lightning-button>
+                </footer>
+
+            </div>
+        </section>
+    </template>
+
+    <template if:true={showIWSubmissionPage}>
+        <section>
+            <div>
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close"
+                            title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Select Interest Waivers to Submit</h2>
+                    <!-- <span><strong>Total Waiver Amount:</strong> {totalWaiverAmount}</span> -->
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="totals-container">
+                        <span><strong>Total Waiver Amount:</strong> {totalWaiverAmount}</span>
+                    </div>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                        style="table-layout: fixed; width: 100%;">
+                        <thead>
+                            <tr class="slds-text-title_caps  small-header-font">
+                                <!-- <th style="width: 50%;" scope="col">Id</th> -->
+                                <th style="width: 30%;" scope="col">Name</th>
+                                <th style="width: 25%;" scope="col">Waiver Amount </th>
+                                <th style="width: 25%;" scope="col">Demand Name</th>
+                                <th style="width: 20%;" scope="col">Select</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={interestWaivers} for:item="iw">
+                                <tr key={iw.id} class="small-header-font">
+                                    <td>
+                                        <a style="font-weight: bold;text-decoration: underline;"
+                                            href="javascript:void(0)" data-id={iw.Id} onclick={handleRecordNavigation}
+                                            target="_blank">
+                                            {iw.Name}
+                                        </a>
+                                    </td>
+                                    <td>{iw.Waiver_Amount__c}</td>
+                                    <td>{iw.Demand__r.Name}</td>
+                                    <td>
+                                        <lightning-input type="checkbox" data-id={iw.Id} checked={iw.isSelected}
+                                            onchange={handleIWCheckboxChange}>
+                                        </lightning-input>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- Modal/Popup Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button style="margin-right:6px" variant="neutral" label="Previous"
+                        onclick={switchtoPage1}>
+                    </lightning-button>
+                    <template if:true={showSubmit}>
+                        <lightning-button variant="brand" label="Submit" onclick={submitSelectedWaivers}>
+                        </lightning-button>
+                    </template>
+                </footer>
+
+            </div>
+        </section>
+    </template>
+
+
+
+    <!--<template if:true={showIomMessage}>
+        <lightning-card title="Upload IOM">
+            <div class="slds-p-around_medium">
+                <header class="slds-modal__header">
+                <div class="slds-m-top_medium">
+                    <h1>{iomMessage}</h1>
+                </div>
+                </header>
+                <template if:true={showIomFileUpload}>
+                    <div class="slds-grid slds-grid_align-center">
+                        <div class="slds-size_1-of-1">
+                        <lightning-file-upload
+                            label="Upload Document"
+                            record-id={recordId}
+                            accepted-formats={acceptedFormats}
+                            onuploadfinished={handleUploadFinished}>
+                        </lightning-file-upload>
+                    </div>
+                    </div>
+                </template>
+            </div>
+            <footer class="slds-modal__footer"></footer>
+        </lightning-card>
+    </template>-->
+
+    <template if:true={showIomMessage}>
+        <section>
+            <div>
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close"
+                            title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Upload IOM Document</h2>
+                    <!-- <span><strong>Total Waiver Amount:</strong> {totalWaiverAmount}</span> -->
+                </header>
+
+                <lightning-card>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="totals-container">
+                            <span><strong>Total Waiver Amount:</strong> {totalRequestedAmount}</span>
+                            <span><strong>Total Project Limit:</strong> {projectWaiverLimit}</span>
+                        </div>
+                        <!-- Warning Message -->
+                        <div class="warning-box slds-m-bottom_medium">
+                            <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="small"
+                                class="slds-m-right_small">
+                            </lightning-icon>
+
+                            <span style="text-align:center">
+                        Total Waiver Amount requested exceeded the limit.
+                        Please upload the IOM file.
+                    </span>
+                        </div>
+                        <!-- File Upload Section -->
+                        <div class="upload-box">
+                            <lightning-file-upload label="Upload IOM Document" record-id={recordId}
+                                accepted-formats={acceptedFormats} onuploadfinished={handleUploadFinished}>
+                            </lightning-file-upload>
+                        </div>
+
+                    </div>
+                </lightning-card>
+                <lightning-card title="Uploaded Files" icon-name="standard:account">
+                    <div style="width: auto;">
+                        <lightning-datatable data={lstAllFiles} columns={columns} key-field="id">
+                        </lightning-datatable>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button style="margin-right:6px" variant="neutral" label="Previous"
+                            onclick={switchtoPage2}>
+                        </lightning-button>
+                       
+                            <lightning-button variant="brand" label="Submit" onclick={submitSelectedWaiverswithIOM} class="slds-m-left_x-small">
+                            </lightning-button>
+                       
+                    </footer>
+                </lightning-card>
+            </div>
+        </section>
+    </template>
+
+    <!-- File Upload -->
+
+    <!-- <div class="slds-backdrop slds-backdrop_open"></div> -->
+</template>

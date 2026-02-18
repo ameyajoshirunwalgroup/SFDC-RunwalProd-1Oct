@@ -1,0 +1,135 @@
+<template>
+    <lightning-card title="All Brokerage Details">
+
+        <div class="slds-m-around_medium">
+           
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-input type="search"
+                        onchange={handleKeyChange}
+                        class="slds-m-bottom_small"
+                        label="Search by Invoice Number"
+                        value={searchKey}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-input type="search"
+                        onchange={handleKeystatusChange}
+                        class="slds-m-bottom_small"
+                        label="Search by Approval Status"
+                        value={searchKeystatus}>
+                    </lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            
+            <lightning-datatable data-id="table"
+                key-field="Id"
+                data={data}
+                columns={columns}
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection}
+                onrowselection={onRowSelection}
+                selected-rows={allSelectedRows}
+                onrowaction={callRowAction}
+                onsort={sortColumns}>
+            </lightning-datatable>
+
+            <br />
+          
+            <template if:true={showEditfrom}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container terms-and-conditions-modal">
+
+                        <header class="slds-modal__header terms-and-conditions-header">
+                            <!--slds-button slds-button_icon slds-button_icon-inverse -->
+                            <button
+                                class="terms-and-conditions-close"
+                                title="Close" onclick={closeTermsAndConditions}>
+                                <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close"
+                                    size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"><a
+                                    href="javascript:void(0);" class="terms-and-conditions-heading">Update Record</a>
+                            </h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium terms-and-conditions-body"
+                            id="termsAndConditionsModal">
+                            <template if:true={showspinner}>
+                                <lightning-spinner class="termsAndConditionsLoading" alternative-text="Loading"
+                                    size="medium"></lightning-spinner>
+                            </template>
+                            <lightning-record-edit-form record-id={CPBIId} object-api-name="CP_Brokerage__c"
+                                onsuccess={handleSuccess} onsubmit={handleSubmit}>
+                                <lightning-messages>
+                                </lightning-messages>
+
+                                <lightning-input-field field-name="Invoice_Number__c" required>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Invoice_Date__c" required>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="If_GST_is_applicable__c" onchange={handlegstchange} required>
+                                </lightning-input-field>
+                                <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="update"
+                                    label="Update">
+                                </lightning-button>
+                            </lightning-record-edit-form>
+
+                        </div>
+                    </div>
+                </section>
+            </template>
+             <template if:true={showiframe}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container terms-and-conditions-modal">
+
+                        <header class="slds-modal__header terms-and-conditions-header">
+                            <button
+                                class="slds-button slds-button_icon slds-button_icon-inverse terms-and-conditions-close"
+                                title="Close" onclick={closeTermsAndConditions2}>
+                                <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close"
+                                    size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-012" class="slds-modal__title slds-hyphenate"><a
+                                    href="javascript:void(0);" class="terms-and-conditions-heading">CP Invoice Preview</a>
+                            </h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium terms-and-conditions-body"
+                            id="termsAndConditionsModal2">
+                            <template if:true={showspinner}>
+                                <lightning-spinner class="termsAndConditionsLoading" alternative-text="Loading"
+                                    size="medium"></lightning-spinner>
+                            </template>
+                            <template if:true={showiframe}>
+                                <iframe src={url} width="100%" height="500px;"></iframe>
+                            </template>
+                        </div>
+                    </div>
+                </section>
+            </template>
+            <!-- ⏮️ Pagination -->
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button label="Previous"
+                        icon-name="utility:chevronleft"
+                        onclick={previousHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    Page {page} of {totalPage}
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button label="Next"
+                        icon-name="utility:chevronright"
+                        icon-position="right"
+                        onclick={nextHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>

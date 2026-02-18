@@ -41,8 +41,8 @@ export default class MyOpportunitiesComponent extends NavigationMixin(LightningE
     @track disableLink = false;
     opportunitydatabasedonPercentage;
     isPageRefreshed = false;
-
-
+    
+   
     constructor() {
         super();
     }
@@ -63,19 +63,18 @@ export default class MyOpportunitiesComponent extends NavigationMixin(LightningE
         console.log('inside connected call back');
         console.log('shownewModal' + this.shownewModal);
         this.shownewModal = false;
-
-
+         
+         
     }
 
-    @wire(CurrentPageReference)
+  @wire(CurrentPageReference)
     get360PageRefrence(currentPageReference) {
-        this.recordId = null;
-        this.oppid = null;
+        this.recordId =null;
+        this.oppid =null;
         if (currentPageReference) {
             this.recordId = currentPageReference.state?.c__var2;
             this.oppid = currentPageReference.state?.c__var1;
-        }
-    }
+        }}
     @wire(getOppbasedonPercentage, { accountId: '$recordId' })
     wiredOpprecordsbasedonPercentage(result) {
         this.opportunitydatabasedonPercentage = result;
@@ -277,7 +276,6 @@ export default class MyOpportunitiesComponent extends NavigationMixin(LightningE
         getOppRecords({ oppId: opportunityid })
             .then(result => {
                 console.log('getOppRecords::::: ', JSON.parse(JSON.stringify(result)));
-                console.log('getOppRecords::::: ', (JSON.stringify(result)));
                 this.bookingData = JSON.parse(JSON.stringify(result));
                 this.showLoader = true;
             })

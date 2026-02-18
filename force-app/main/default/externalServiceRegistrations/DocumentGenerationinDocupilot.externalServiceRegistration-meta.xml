@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>DocumentGenerationinDocupilot</label>
+    <namedCredentialReference>Docupilot</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>docx20genx20inx20docupilot</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;DocumentGenerationinDocupilot&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/dashboard/documents/create/9780d9f9/2a58e6b1&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;Doc Gen in Docupilot&quot;,
+        &quot;parameters&quot;: [{
+          &quot;name&quot;: &quot;download&quot;,
+          &quot;in&quot;: &quot;query&quot;,
+          &quot;description&quot;: &quot;&quot;,
+          &quot;required&quot;: true,
+          &quot;allowEmptyValue&quot;: false,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        }],
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;Podium_No&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Society_Formation&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Share_Money_Application&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Electric_Water_Connection_MGL_Connection&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Agreement_Value&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Height_CarPark&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Nominee_Name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Carpet_Area_in_SqFt&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Total_RERA_Area_in_SqFt&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Payment_Details&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;Payment_Description&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Payment_FC&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Payment_Milestone&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;Car_Parking&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;Podium_No&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Parking_Type&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Width_CarPark&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Height_CarPark&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Length_CarPark&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;CarPark_Space_No&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Utility_Area_in_SqFt&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Amount_Received&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Electric_Receiving_Substation&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;CCAM_Charges_Rate&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Corpus_Fund&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Floor&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Applicants Details&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;Applicant_Name&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;Applicant_PAN&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;Is_Bare_Shell&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Email_Address&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Deck_Area_in_SqFt&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Legal_Charges&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Width_CarPark&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;BCAM_Charges_Rate&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Unit_No&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Tower&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Customer_Address&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;Length_CarPark&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;2XX&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;data&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;file_url&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;file_name&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    },
+                    &quot;status&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>8</systemVersion>
+</ExternalServiceRegistration>

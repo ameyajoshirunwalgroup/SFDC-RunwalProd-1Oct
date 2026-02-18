@@ -29,7 +29,7 @@ export default class CallCustomeronAccount extends LightningElement {
         if (this.AccData.data.fields.Mobile_No__c.value != null)
             return this.AccData.data.fields.Country_Code__c.value + ' ' + this.AccData.data.fields.Mobile_No__c.value.replace(this.AccData.data.fields.Mobile_No__c.value.substring(0, 5), 'XXXXX');
         else
-        alert('mobile1:'+this.AccData.data.fields.Mobile_No__c.value);
+        //alert('mobile1:'+this.AccData.data.fields.Mobile_No__c.value);
             return null;
     }
 

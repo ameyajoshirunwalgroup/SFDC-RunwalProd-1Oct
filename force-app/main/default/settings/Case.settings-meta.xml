@@ -27,7 +27,7 @@
         <movingEmailEnabled>false</movingEmailEnabled>
         <notifyOwnerOnNewCaseEmail>false</notifyOwnerOnNewCaseEmail>
         <notifySenderE2CError>false</notifySenderE2CError>
-        <overEmailLimitAction>Requeue</overEmailLimitAction>
+        <overEmailLimitAction>Bounce</overEmailLimitAction>
         <preQuoteSignature>false</preQuoteSignature>
         <replyWithNewContentOnly>false</replyWithNewContentOnly>
         <routingAddresses>
@@ -38,12 +38,27 @@
             <casePriority>Medium</casePriority>
             <createTask>false</createTask>
             <emailAddress>cpcare@runwalgroup.in</emailAddress>
-            <emailServicesAddress>cpcare@1-16mt3xqkajdi64xsv0hmzrblskvyyyehmfpiqxamzfb9nwsxrb.28-15emqeae.ap27.case.salesforce.com</emailServicesAddress>
+            <emailServicesAddress>cpcare@w-2p8e73r5huwj1093fabpk0tyrp7nzu2u40afpw1pn63a9tmyo0.9i-1thavuam.ind6s.case.sandbox.salesforce.com</emailServicesAddress>
             <isPermsetControlled>false</isPermsetControlled>
             <isVerified>true</isVerified>
             <newEntityRecordType>Case.Channel_Partner_Portal</newEntityRecordType>
             <routingName>CP Portal Email to case</routingName>
             <saveEmailHeaders>true</saveEmailHeaders>
+        </routingAddresses>
+        <routingAddresses>
+            <addressType>EmailToCase</addressType>
+            <caseOrigin>EmailToCase</caseOrigin>
+            <caseOwner>email_to_case_queue</caseOwner>
+            <caseOwnerType>Queue</caseOwnerType>
+            <casePriority>Medium</casePriority>
+            <createTask>false</createTask>
+            <emailAddress>shraddha.shahari@runwalgroup.in</emailAddress>
+            <emailServicesAddress>shraddha.shahari@28r6grsxffwwyu60r549d83lggeinc53iemqs3kdjatraj5vou.9i-1thavuam.ind6s.case.sandbox.salesforce.com</emailServicesAddress>
+            <isPermsetControlled>false</isPermsetControlled>
+            <isVerified>true</isVerified>
+            <newEntityRecordType>Case.Customer</newEntityRecordType>
+            <routingName>Email to Case</routingName>
+            <saveEmailHeaders>false</saveEmailHeaders>
         </routingAddresses>
         <routingAddresses>
             <addressType>EmailToCase</addressType>
@@ -53,7 +68,7 @@
             <casePriority>Medium</casePriority>
             <createTask>true</createTask>
             <emailAddress>crm7mahalaxmi@runwalgroup.in</emailAddress>
-            <emailServicesAddress>crm7mahalaxmi@m-icjx08frzup1nmpempyz18kcvin7s6wlpgdh9dbm27ymadq2a.28-15emqeae.ap62.case.salesforce.com</emailServicesAddress>
+            <emailServicesAddress>crm7mahalaxmi@o-2t7o7hc6j6mgek1diuv9t06hqeow1h0y309fojzca0zakas90u.9i-1thavuam.ind6s.case.sandbox.salesforce.com</emailServicesAddress>
             <isPermsetControlled>false</isPermsetControlled>
             <isVerified>true</isVerified>
             <newEntityRecordType>Case.Customer</newEntityRecordType>
@@ -69,7 +84,7 @@
             <casePriority>Medium</casePriority>
             <createTask>false</createTask>
             <emailAddress>complaints@runwal.com</emailAddress>
-            <emailServicesAddress>complaints@1tcyql27rac0ov5ecip2b8pny29khqpynyqnsid7digeg2uvti.28-15emqeae.ap7.case.salesforce.com</emailServicesAddress>
+            <emailServicesAddress>complaints@dwx7e4026d1c3a2oo5p50712vbt8m2v6kg4bknov0e0prqhvt.9i-1thavuam.ind6s.case.sandbox.salesforce.com</emailServicesAddress>
             <isPermsetControlled>false</isPermsetControlled>
             <isVerified>true</isVerified>
             <newEntityRecordType>Case.Customer</newEntityRecordType>
@@ -84,7 +99,7 @@
             <casePriority>Medium</casePriority>
             <createTask>true</createTask>
             <emailAddress>customer.care@runwalgroup.in</emailAddress>
-            <emailServicesAddress>customer.care@6-o9zvyaby5u59a849acgpkehe8xydbuvi8b55m2buy6whlb7su.28-15emqeae.ap7.case.salesforce.com</emailServicesAddress>
+            <emailServicesAddress>customer.care@8-19hltwqfwrxgf6ckkkywkiuf4ob1eg7kbfskkrussls3i1qyyc.9i-1thavuam.ind6s.case.sandbox.salesforce.com</emailServicesAddress>
             <isPermsetControlled>false</isPermsetControlled>
             <isVerified>true</isVerified>
             <newEntityRecordType>Case.Customer</newEntityRecordType>
@@ -95,36 +110,20 @@
         <routingAddresses>
             <addressType>EmailToCase</addressType>
             <caseOrigin>Email</caseOrigin>
-            <caseOwner>Runwal_Gardens_Queue</caseOwner>
+            <caseOwner>General_Queue</caseOwner>
             <caseOwnerType>Queue</caseOwnerType>
             <casePriority>Medium</casePriority>
             <createTask>true</createTask>
-            <emailAddress>crmgardens@runwalgroup.in</emailAddress>
-            <emailServicesAddress>crmgardens@h-28ukf2ja79q39r6dr4g7k09huwl8zyv80caotvrydjhkb1tiro.28-15emqeae.ap7.case.salesforce.com</emailServicesAddress>
+            <emailAddress>vinay.kumar.os@runwalgroup.in</emailAddress>
+            <emailServicesAddress>vinay.kumar.os@1-33ei8h2pmcz67auwav2yw9fc1b31s9ushnk84tlpyrv2adixm7.9i-1thavuam.ind6s.case.sandbox.salesforce.com</emailServicesAddress>
             <isPermsetControlled>false</isPermsetControlled>
-            <isVerified>true</isVerified>
+            <isVerified>false</isVerified>
             <newEntityRecordType>Case.Customer</newEntityRecordType>
-            <routingName>Runwal Gardens Customer Care</routingName>
+            <routingName>vinay.kumar.os@runwalgroup.in</routingName>
             <saveEmailHeaders>false</saveEmailHeaders>
             <taskStatus>Not Started</taskStatus>
         </routingAddresses>
-        <routingAddresses>
-            <addressType>EmailToCase</addressType>
-            <caseOrigin>Email</caseOrigin>
-            <caseOwner>Runwal_MyCity_Queue</caseOwner>
-            <caseOwnerType>Queue</caseOwnerType>
-            <casePriority>Medium</casePriority>
-            <createTask>true</createTask>
-            <emailAddress>mycity.customercare@runwalgroup.in</emailAddress>
-            <emailServicesAddress>mycity.customercare@18jmculnbebdc4vbei27xyrsav2bzy8reb6sc7l0ts9l6699b0.28-15emqeae.ap27.case.salesforce.com</emailServicesAddress>
-            <isPermsetControlled>false</isPermsetControlled>
-            <isVerified>true</isVerified>
-            <newEntityRecordType>Case.Customer</newEntityRecordType>
-            <routingName>Runwal MyCity Customer Care</routingName>
-            <saveEmailHeaders>false</saveEmailHeaders>
-            <taskStatus>Not Started</taskStatus>
-        </routingAddresses>
-        <unauthorizedSenderAction>Bounce</unauthorizedSenderAction>
+        <unauthorizedSenderAction>Discard</unauthorizedSenderAction>
     </emailToCase>
     <enableCaseFeed>true</enableCaseFeed>
     <enableCaseSwarming>false</enableCaseSwarming>
@@ -146,12 +145,14 @@
     <enableSuggestedArticlesPartnerPortal>false</enableSuggestedArticlesPartnerPortal>
     <enableSuggestedSolutions>true</enableSuggestedSolutions>
     <escalateCaseBefore>false</escalateCaseBefore>
+    <hidePublicInCaseComment>false</hidePublicInCaseComment>
     <keepRecordTypeOnAssignmentRule>true</keepRecordTypeOnAssignmentRule>
     <notifyContactOnCaseComment>false</notifyContactOnCaseComment>
     <notifyDefaultCaseOwner>false</notifyDefaultCaseOwner>
     <notifyOwnerOnCaseComment>false</notifyOwnerOnCaseComment>
     <notifyOwnerOnCaseOwnerChange>false</notifyOwnerOnCaseOwnerChange>
     <rtaCaseComment>false</rtaCaseComment>
+    <rtaCaseDescription>false</rtaCaseDescription>
     <showEmailAttachmentsInCaseAttachmentsRL>true</showEmailAttachmentsInCaseAttachmentsRL>
     <showFewerCloseActions>false</showFewerCloseActions>
     <systemUserEmail>automatedcase@00d280000015emqeae.ext</systemUserEmail>

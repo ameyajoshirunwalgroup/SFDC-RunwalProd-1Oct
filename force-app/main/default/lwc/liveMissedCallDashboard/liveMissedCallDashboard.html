@@ -1,0 +1,154 @@
+<template>
+    <lightning-card title="Live Missed Call Monitoring Dashboard">
+
+        <div class="slds-m-around_medium">
+
+            <!-- SUMMARY CARDS -->
+            <div class="summary-container">
+
+                <div class="summary-card total">
+                    <div class="card-title">Total Calls</div>
+                    <div class="card-value">{totalCount}</div>
+                </div>
+
+                <div class="summary-card overdue">
+                    <div class="card-title">Overdue (>6 Hrs)</div>
+                    <div class="card-value">{overdueCount}</div>
+                </div>
+
+                <div class="summary-card within">
+                    <div class="card-title">Within SLA</div>
+                    <div class="card-value">{withinSlaCount}</div>
+                </div>
+
+            </div>
+
+            <!-- FILTER + BUTTON ROW -->
+            <div class="top-bar slds-grid slds-wrap slds-m-bottom_medium">
+
+                <!-- LEFT SIDE : FILTERS -->
+                <div class="slds-col slds-size_3-of-4">
+                    <div class="filter-container">
+
+
+                        <lightning-combobox label="Project" value={selectedProject} options={projectOptions}
+                            onchange={handleProjectChange}>
+                        </lightning-combobox>
+
+                        <lightning-combobox label="TL Name" value={selectedTL} options={tlOptions}
+                            onchange={handleTLChange}>
+                        </lightning-combobox>
+
+                        <lightning-combobox label="RM Name" value={selectedRM} options={rmOptions}
+                            onchange={handleRMChange}>
+                        </lightning-combobox>
+
+
+                        <lightning-button label="Reset" onclick={handleReset} class="slds-m-left_small">
+                        </lightning-button>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE : BUTTONS -->
+                <div class="slds-col slds-size_1-of-4 slds-text-align_right">
+
+                    <lightning-button label="Refresh" icon-name="utility:refresh" onclick={handleRefresh}
+                        class="slds-m-right_small">
+                    </lightning-button>
+
+                    <lightning-button label="Export" icon-name="utility:download" onclick={handleExport}>
+                    </lightning-button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CUSTOM SORTABLE TABLE -->
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th onclick={handleSort} data-field="customerName">
+                                Customer Name {getSortIcon.customerName}
+                            </th>
+                            <th onclick={handleSort} data-field="customerNumber">
+                                SAP Customer Number {getSortIcon.customerNumber}
+                            </th>
+                            <th onclick={handleSort} data-field="project">
+                                Project {getSortIcon.project}
+                            </th>
+                            <th onclick={handleSort} data-field="unit">
+                                Unit {getSortIcon.unit}
+                            </th>
+                            <th onclick={handleSort} data-field="tower">
+                                Tower {getSortIcon.tower}
+                            </th>
+                            <th onclick={handleSort} data-field="phase">
+                                Phase {getSortIcon.phase}
+                            </th>
+                            <th onclick={handleSort} data-field="rmName">
+                                RM Name {getSortIcon.rmName}
+                            </th>
+                            <th onclick={handleSort} data-field="tlName">
+                                TL Name {getSortIcon.tlName}
+                            </th>
+                            <th onclick={handleSort} data-field="commType">
+                                Communication Type {getSortIcon.commType}
+                            </th>
+                            <th onclick={handleSort} data-field="inboundDeskAgent">
+                                Inbound Desk Agent {getSortIcon.inboundDeskAgent}
+                            </th>
+                            <th onclick={handleSort} data-field="callDate">
+                                Date of Call {getSortIcon.callDate}
+                            </th>
+                            <th onclick={handleSort} data-field="callTime">
+                                Time of Call {getSortIcon.callTime}
+                            </th>
+                            <th onclick={handleSort} data-field="ageMinutes">
+                                Ageing Minutes {getSortIcon.ageMinutes}
+                            </th>
+                            <th onclick={handleSort} data-field="ageHours">
+                                Ageing Hours {getSortIcon.ageHours}
+                            </th>
+                            <th onclick={handleSort} data-field="ageDays">
+                                Ageing Days {getSortIcon.ageDays}
+                            </th>
+                            <th>Call Overdue > 6 Hours</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <template for:each={data} for:item="row">
+                            <tr key={row.recordId} class={row.rowClass}>
+                                <td>{row.customerName}</td>
+                                <td>{row.customerNumber}</td>
+                                <td>{row.project}</td>
+                                <td>{row.unit}</td>
+                                <td>{row.tower}</td>
+                                <td>{row.phase}</td>
+                                <td>{row.rmName}</td>
+                                <td>{row.tlName}</td>
+                                <td>{row.communicationType}</td>
+                                <td>{row.inboundDeskAgent}</td>
+                                <td>{row.callDate}</td>
+                                <td>{row.callTime}</td>
+                                <td>{row.ageMinutes}</td>
+                                <td>{row.ageHours}</td>
+                                <td>{row.ageDays}</td>
+                                <td>
+                                    <span class={row.overdueClass}>
+                                        {row.overdueText}
+                                    </span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </lightning-card>
+</template>

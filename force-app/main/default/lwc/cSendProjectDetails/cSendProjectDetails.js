@@ -237,36 +237,31 @@ handleChangeCheckboxGroup(event) {
 .then(result => {
 
     const sentProjects = result?.RW_ProjectDetails_Sent__c;
-    console.log('sentProjects__'+ sentProjects);
     const failedProjects = result?.RW_ProjectDetails_Send_Failed__c;
-    console.log('failedProjects__'+ failedProjects);  
     
     let title, message, variant;
 
     if (sentProjects && failedProjects) {
         // Some succeeded, some failed
         title = 'Partial Success';
-        message = `Successfully sent for: ${sentProjects} and Failed to send for: ${failedProjects}`;
+        message = `Successfully sent to: ${sentProjects}\nFailed to send to: ${failedProjects}`;
         variant = 'warning';
-        console.log('Inside sentProjects && failedProjects__');
     } else if (sentProjects) {
         // All succeeded
         title = 'Success';
-        message = `Successfully sent for: ${sentProjects}`;
-        variant = 'success'; 
-        console.log('Inside sentProjects __' + sentProjects);
+        message = `Successfully sent to: ${sentProjects}`;
+        variant = 'success';
     } else if (failedProjects) {
         // All failed
         title = 'Failed';
-        message = `Failed to send for: ${failedProjects}`;
+        message = `Failed to send to: ${failedProjects}`;
         variant = 'error';
-        console.log('Inside failedProjects __'+ failedProjects);
-    } /* else { 
+    } else {
         // No projects processed
         title = 'No Action';
         message = 'No projects were processed';
         variant = 'info';
-    } */
+    }
 
     this.dispatchEvent(
         new ShowToastEvent({
@@ -316,9 +311,9 @@ handleChangeCheckboxGroup(event) {
         }   
         this.showExistingProjectScreen = true;  
         this.showCrossProjectScreen = false; 
-    } 
+    }
 
-    // Handle Cancel Button Click 
+    // Handle Cancel Button Click
     handleClose() {
         this.showExistingProjectScreen = false;
         this.showCrossProjectScreen = false;

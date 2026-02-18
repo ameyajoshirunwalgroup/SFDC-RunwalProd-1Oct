@@ -6,63 +6,63 @@ import getOpps from '@salesforce/apex/CPBookingController.getCpMandateInvoice';
 import { loadScript } from 'lightning/platformResourceLoader';
 import CheckGst from '@salesforce/apex/CPBookingController.CheckForGSTNo';
 const columns = [
-{
-    label: 'Name',
-    fieldName: 'Name',
-    sortable: true
-},
-{
-    label: 'Invoice Number',
-    fieldName: 'Invoice_Number__c',
-    sortable: true
-},
-{
-    label: 'Invoice Status',
-    fieldName: 'Invoice_Status__c',
-    sortable: true
-},
-{
-    label: 'Payment Status',
-    fieldName: 'Status__c',
-    sortable: true
-},
-{
-    label: 'Eligible Slab',
-    fieldName: 'RW_Eligible_Slab__c',
-    sortable: true
-},
-{
-    type: "button", label: 'Preview Invoice', initialWidth: 150,
-    typeAttributes: {
-        label: 'Preview',
-        name: 'Preview',
-        title: 'Preview',
-        disabled: false,
-        value: 'edit',
-        iconPosition: 'left'
+    {
+        label: 'Name',
+        fieldName: 'Name',
+        sortable: true
+    },
+    {
+        label: 'Invoice Number',
+        fieldName: 'Invoice_Number__c',
+        sortable: true
+    },
+    {
+        label: 'Invoice Status',
+        fieldName: 'Invoice_Status__c',
+        sortable: true
+    },
+    {
+        label: 'Payment Status',
+        fieldName: 'Status__c',
+        sortable: true
+    },
+    {
+        label: 'Eligible Slab',
+        fieldName: 'RW_Eligible_Slab__c',
+        sortable: true
+    },
+    {
+        type: "button", label: 'Preview Invoice', initialWidth: 150,
+        typeAttributes: {
+            label: 'Preview',
+            name: 'Preview',
+            title: 'Preview',
+            disabled: false,
+            value: 'edit',
+            iconPosition: 'left'
+        }
+    },
+    {
+        type: "button", label: 'Generate Invoice', initialWidth: 150,
+        typeAttributes: {
+            label: 'Generate',
+            name: 'Generate',
+            title: 'Generate',
+            disabled: false,
+            value: 'edit',
+            iconPosition: 'left'
+        }
+    },
+    {
+        type: "button", label: 'View', typeAttributes: {
+            label: 'View',
+            name: 'View',
+            title: 'View',
+            disabled: false,
+            value: 'view',
+            iconPosition: 'left'
+        }
     }
-},
-{
-    type: "button", label: 'Generate Invoice', initialWidth: 150,
-    typeAttributes: {
-        label: 'Generate',
-        name: 'Generate',
-        title: 'Generate',
-        disabled: false,
-        value: 'edit',
-        iconPosition: 'left'
-    }
-},
-{
-    type: "button", label: 'View', typeAttributes: {
-        label: 'View',
-        name: 'View',
-        title: 'View',
-        disabled: false,
-        value: 'view',
-        iconPosition: 'left'
-    }
-}
 
 ];
 
@@ -228,7 +228,7 @@ export default class CpMandateInvoiceList extends NavigationMixin(LightningEleme
         if (actionName === 'Generate') {
 
             this.showEditfrom = true;
-            
+
         } else if (actionName === 'View') {
 
             this[NavigationMixin.Navigate]({
