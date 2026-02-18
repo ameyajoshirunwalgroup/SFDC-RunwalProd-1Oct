@@ -148,7 +148,7 @@ global without sharing class Lockated_CPAnalytics {
                             s.bookingDate = dt.format('dd-MM-yyyy');
                         }
                         s.bookingId = (inv.Booking__r.Id != null && inv.Booking__c != null) ? inv.Booking__r.Id : null;
-                        s.brokerageAmount = (inv.Invoice_Amount__c != null) ? inv.Invoice_Amount__c : 0;
+                        s.brokerageAmount = (inv.Invoice_Amount__c != null) ? inv.Invoice_Amount__c : (inv.Brokerage_In_Rs__c!=null) ? inv.Brokerage_In_Rs__c : 0;
                         if(inv.Status__c == 'Paid'){//Paid                    
                             s.payoutStatus = 'Paid';
                         }else{//Not Due
