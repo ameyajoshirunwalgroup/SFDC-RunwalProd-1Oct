@@ -151,11 +151,11 @@ global without sharing class Lockated_CPAnalytics {
                         s.brokerageAmount = (inv.Invoice_Amount__c != null) ? inv.Invoice_Amount__c : 0;
                         if(inv.Status__c == 'Paid'){//Paid                    
                             s.payoutStatus = 'Paid';
-                            totalBrokerageEarned += s.brokerageAmount;
                         }else{//Not Due
                             s.payoutStatus = 'Pending';
                             pendingPayout += s.brokerageAmount;
                         }
+                        totalBrokerageEarned += s.brokerageAmount;
                         slist.add(s);
                     }
                     res.summary.grossBrokerageEarned.totalBrokerageEarned = totalBrokerageEarned;
