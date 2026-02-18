@@ -10,7 +10,7 @@ trigger trgTaskHandler on Task (after update, after insert, before update, befor
         }
     }
     
-    Id preSalesRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Presales Task').getRecordTypeId(); //Added by Vinay 10-09-2025
+    Id preSalesRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Presales Task').getRecordTypeId(); //Added by Vinay 19-08-2025
     public list<Lead> lstLead{get; set;}
     
     if(!byPassTriggerExceution)
@@ -30,7 +30,12 @@ trigger trgTaskHandler on Task (after update, after insert, before update, befor
                     userMap = new Map<Id, User>([SELECT Id,FirstName,Name,Profile.Name,DID__c FROM User Where id =: ownerIds]);
                 }
                 //Added by Vinay 31-01-2025 End
+                Id serviceTaskRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId(); //Added by Vinay 07-01-2026
                 for(Task t : trigger.new){
+                    
+                    if(t.RecordTypeId == serviceTaskRecordTypeId && t.Task_Type__c == 'CRM Call' && t.Communication_Type__c == 'Inbound Call' && t.Subject == 'CRM Call'){ //Added by Vinay 07-01-2026
+                        t.Status = 'Completed';
+                    }
                     if(t.OwnerId != null){
                         //User usr = [SELECT Id,FirstName,Name,Profile.Name,DID__c FROM User Where id =: t.OwnerId]; //Commented by Vinay 31-01-2025
                         //t.Attempted_By__c = usr.Name; //Commented by Vinay 31-01-2025
@@ -103,7 +108,9 @@ trigger trgTaskHandler on Task (after update, after insert, before update, befor
                             leadIds.add(tsk.WhoId);
                         }
                     }
-                    
+                    if(tsk.RecordTypeId == CRMRecordTypeId && tsk.Task_Type__c == 'CRM Call' && tsk.Communication_Type__c == 'Inbound Call' && tsk.Subject == 'CRM Call'){ //Added by Vinay 12-01-2026
+                        tsk.Status = 'Completed';
+                    }
                 }
                 if(conIds.size() > 0){
                     conMap = new Map<Id,Contact>([select id,firstName,lastName from Contact where id =: conIds]);
@@ -137,12 +144,13 @@ objTaskNew.Lead_Account_Name__c = le.name;
                         UcId.add(t.CallObject); 
                     }
                 }
-                //List<Task> DuplicateTask= [Select Id,CallObject from Task where CallObject IN: UcId ];  //Commented by Vinay 01-07-2025 Start
-                 //Added by Vinay 01-07-2025 Start
-                 List<Task> DuplicateTask= new List<Task>();
-                 if(UcId.size() > 0)
-                     DuplicateTask= [Select Id,CallObject from Task where CallObject IN: UcId ];
-                 //Added by Vinay 01-07-2025 End
+                //List<Task> DuplicateTask= [Select Id,CallObject from Task where CallObject IN: UcId ]; //Commented by Vinay 30-06-2025
+                //Added by Vinay 30-06-2025 Start
+                List<Task> DuplicateTask= new List<Task>();
+                if(UcId.size() > 0)
+                    DuplicateTask= [Select Id,CallObject from Task where CallObject IN: UcId ];
+                //Added by Vinay 30-06-2025 End
+                System.debug('DuplicateTask: ' + DuplicateTask);
                 Map<String,List<Task>> UcidTask=new Map<String,List<Task>>();
                 for (Task uc : DuplicateTask) {
                     if (UcidTask.containsKey(uc.CallObject)) {
@@ -173,7 +181,7 @@ objTaskNew.Lead_Account_Name__c = le.name;
                     }
                     else if(t.RecordTypeId == CRMRecordTypeId){
                         t.Task_Type__c = 'CRM Call';
-                        if(UcidTask.size()>1) 
+                        if(UcidTask.size()>1 ) 
                         {
                             if(t.CallObject != null && UcidTask.get(t.CallObject) != null && UcidTask.get(t.CallObject).size()>1) 
                             {
@@ -225,6 +233,8 @@ t.Task_Type__c = 'Presales Call';
         if(Trigger.isInsert) 
         {   
             Id CRMRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId();
+            Id reminderLetterRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Reminder letter').getRecordTypeId(); //Added by Vinay 20-01-2026
+            
             if(Trigger.isAfter) 
             {        List <task> cifcreatecase = new List<task> ();
              TaskManagementServices.latestTaskRollupToOpp(Trigger.new);
@@ -237,7 +247,7 @@ t.Task_Type__c = 'Presales Call';
              
              // Added by Shailesh //
              TaskManagementServices.countNumberOfVisitsOnOpportunity(trigger.new, trigger.oldMap);
-             List<Task> callsToSchedule = new List<Task>(); //Added by Vinay 10-09-2025
+             List<Task> callsToSchedule = new List<Task>(); //Added by Vinay 07-08-2025
              List <Task> TaskLst2 = new List <Task> ();
              List <task> cifTasklist = new List<task> ();
              Set < Id > enquiryIds = new Set < Id > ();
@@ -245,6 +255,8 @@ t.Task_Type__c = 'Presales Call';
              List<Lead> LeadList = new List<Lead>();
              ID LeadaccId ;
              List<Task> missedCallTasks = new List<Task>();
+             List<Task> inboundMissedCallTasks = new List<Task>();
+             List<Task> reminderLetterTasks = new List<Task>(); //Added by Vinay 20-01-2026
              for(Task t: trigger.new)
              {
                  if(t.RecordTypeId==CRMRecordTypeId && t.Task_Type__c=='CRM Call' && t.Communication_Type__c=='Inbound Call' && t.Subject=='CRM Call')
@@ -266,6 +278,9 @@ t.Task_Type__c = 'Presales Call';
                  if(t.task_type__c == 'Enquiry Received') {
                      enquiryLeads.add(t.Id);
                  }
+                 if(t.Communication_Type__c == 'Inbound Call' && t.Subject == 'Missed Call'){ //Added by Vinay 20-01-2026
+                     inboundMissedCallTasks.add(t);
+                 }
                  // Added by Vinay 03-05-2023 Start
                  if(t.Task_Type__c == 'CRM Call' && t.Communication_Type__c == 'Inbound Call' && t.Subject == 'Missed Call') {
                      missedCallTasks.add(t);
@@ -279,9 +294,13 @@ t.Task_Type__c = 'Presales Call';
                          LeadList.add(l);
                      }
                  }
-                 if(t.Next_Action_Date__c != null && System.label.Allow_Auto_Callback == 'Yes' && (t.RecordTypeId == preSalesRecordTypeId || t.Task_Type__c == 'Presales Call')){ //Added by Vinay 10-09-2025
-                    callsToSchedule.add(t); 
-                }
+                 if(t.Next_Action_Date__c != null && System.label.Allow_Auto_Callback == 'Yes' && (t.RecordTypeId == preSalesRecordTypeId || t.Task_Type__c == 'Presales Call')){ //Added by Vinay 08-08-2025
+                     callsToSchedule.add(t); 
+                 }
+                 
+                 if(t.RecordTypeId == reminderLetterRecTypeId){ //Added by Vinay 20-01-2026
+                     reminderLetterTasks.add(t);
+                 }
                  
                  // Added by Vinay 01-11-2023 Start
                  /*if(t.Disposition_Type__c == 'Success' || t.Disposition_Type__c == 'Answered'){
@@ -342,11 +361,16 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
              // Added by Vinay 03-05-2023 
              if(!missedCallTasks.isEmpty())
                  TaskManagementServices.missedCallemailAlert(missedCallTasks);
-             if(callsToSchedule.size() > 0){ //Added by Vinay 10-09-2025
-                ScheduleOzonetelCalls.callSchedule(callsToSchedule);
+             if(callsToSchedule.size() > 0){ //Added by Vinay 08-08-2025
+                 ScheduleOzonetelCalls.callSchedule(callsToSchedule);
+             }
+             if(inboundMissedCallTasks.size() > 0){ //Added by Vinay 20-01-2026
+                 CustomNotificationController.callBackNotification(inboundMissedCallTasks);
+             }
+             if(reminderLetterTasks.size() > 0){ //Added by Vinay 20-01-2026
+                 LockatedApp_Notifications.reminderLetterTaskNotification(reminderLetterTasks);
              }
             }
-            
         }
         List<Id> TaskIddisp = new List<Id>();
         Set<Id> TaskIdsche = new Set<Id>();
@@ -355,11 +379,12 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
             if(Trigger.isAfter) 
             {
                 List <task> cifTasklist = new List<task> ();
-                List<Task> nodChangedTasks = new List<Task>(); //Added by Vinay 10-09-2025
+                List<Task> nodChangedTasks = new List<Task>(); //Added by Vinay 08-08-2025
                 if(checkRecursion.isFirstRun()) 
                 {
+                    Id CRMRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId(); // Added by Vinay 13-01-2026
                     ///------------------added by vikas for edit option on customer interaction to rollup on opp &lead------------////
-                    TaskManagementServices.latestTaskRollupToOpp(Trigger.new); 
+                    //TaskManagementServices.latestTaskRollupToOpp(Trigger.new); //Commented by Vinay 20-08-2025
                     TaskManagementServices.latestTaskRollupToLead(Trigger.new);
                     TaskManagementServices.latestTaskRollupToProspect(Trigger.new);
                     /////// ------------------------------ vikas added end here ------------------------/////////////////////////
@@ -368,6 +393,7 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                     TaskManagementServices.createCommunicationEntries(trigger.new);
                     //  TaskManagementServices.RegTaskRollupToOpp(trigger.new);
                     List<Lead> LeadList = new List<Lead>();
+                    List <task> cifcreatecase = new List<task> (); //Added by Vinay 13-01-2026
                     ID LeadaccId ;
                     for(Task t: trigger.new)
                     {
@@ -394,18 +420,27 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
                         if((trigger.oldMap.get(t.id).Next_Action_Date__c != trigger.newMap.get(t.id).Next_Action_Date__c) && t.Next_Action_Date__c != null && t.Next_Action_Date__c >= system.today()){
                             TaskIdsche.add(t.id);
                         }
-                        if(t.Next_Action_Date__c != trigger.oldMap.get(t.id).Next_Action_Date__c && System.label.Allow_Auto_Callback == 'Yes' && (t.RecordTypeId == preSalesRecordTypeId  || t.Task_Type__c == 'Presales Call')){ //Added by Vinay 10-09-2025
+                        
+                        if(t.Next_Action_Date__c != trigger.oldMap.get(t.id).Next_Action_Date__c && System.label.Allow_Auto_Callback == 'Yes' && (t.RecordTypeId == preSalesRecordTypeId  || t.Task_Type__c == 'Presales Call')){ //Added by Vinay 08-08-2025
                             nodChangedTasks.add(t);
+                        }
+                        if(t.RecordTypeId==CRMRecordTypeId && t.Task_Type__c=='CRM Call' && t.Communication_Type__c=='Inbound Call' && t.Subject=='CRM Call'){ //Added by Vinay 13-01-2026
+                            cifcreatecase.add(t);
                         }
                     }   
                     if(!LeadList.isEmpty()){
                         Update LeadList;
                     }
                     if(!cifTasklist.isEmpty())
-                        CIFManagementServices.updateFeedbackOnCif(cifTasklist);
-                    if(nodChangedTasks.size() > 0){ //Added by Vinay 10-09-2025
+                        CIFManagementServices.updateFeedbackOnCif(cifTasklist);   
+                    
+                    if(nodChangedTasks.size() > 0){ //Added by Vinay 08-08-2025
                         ScheduleOzonetelCalls.callSchedule(nodChangedTasks);
-                    }    
+                    }
+                    
+                    //if(!cifcreatecase.isEmpty())   //Added by Vinay 13-01-2026 //Commented by Vinay 09-02-2026
+                        //CIFManagementServices.createcase(cifcreatecase);  //Commented by Vinay 09-02-2026
+                    
                 }
                 
             }
@@ -424,6 +459,8 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
             System.debug('Inside call sendDisposition');
             OzonetelCallDisposition.sendDisposition(TaskIddisp);
         }
+         
+        
         if(Trigger.isUpdate) 
         {
             Id WelcomeRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Welcome Call').getRecordTypeId();	//Added by Sheetal on 16/6/2022 to solve issue I0189
@@ -433,11 +470,81 @@ SendWhatsAppMsg.methodToSendWhatsAppMsg(objId, customerName, null, null, null, n
             {
                 for(Task t: trigger.new)
                 {
-                    if(t.Description != null && t.Description != '' && t.RecordTypeId != WelcomeRecordTypeId && t.RecordTypeId != CPMeeting && t.RecordTypeId != ReminderLetterRecTypeId){
+                    if(t.Description != null && t.Description != '' && t.RecordTypeId != WelcomeRecordTypeId && t.RecordTypeId != CPMeeting && t.RecordTypeId != ReminderLetterRecTypeId && t.Task_Type__c != 'CP Call'){
                         t.Status = 'Completed';
-                        
                     }
                 }
+            }
+        }
+              
+        // Method to update target records for Sourcing Manager from tasks created for CP Meeting - Digicloud Team - Suraj
+        if(Trigger.isUpdate && Trigger.isAfter){
+            // List to hold target records we want to upsert
+            List<CP_Meeting_Targets__c> targetsToUpdate = new List<CP_Meeting_Targets__c>();
+            List<CP_Meeting_Targets__c> targetsToInsert = new List<CP_Meeting_Targets__c>();
+            
+            // This will hold our composite key (for finding existing records) and the target record
+            Map<String, CP_Meeting_Targets__c> targetMap = new Map<String, CP_Meeting_Targets__c>();
+            Set<String> sKeys = new Set<String>();
+            
+            String monthString, skey;
+            
+            for (CP_Meeting_Targets__c target : [SELECT Id, SM_Name__c, CP_Name__c, OwnerId,  Month__c, Achievement__c FROM CP_Meeting_Targets__c ]){
+                //skey = String.valueOf(target.SM_Name__c) +'-'+ String.valueOf(target.Segment__c) +'-'+ String.valueOf(target.Month__c);   
+                skey = String.valueOf(target.SM_Name__c) +'-'+ String.valueOf(target.Month__c); 
+                system.debug('skey__'+ skey);
+                targetMap.put(skey, target);
+            } 
+              for (Task t : Trigger.new) {   
+                if (t.Status == 'Completed' && Trigger.oldMap.get(t.Id).Status != 'Completed') {
+                    if (t.OwnerId != null && t.WhatId != null) { 
+                        Date today = Date.today();
+                        //monthString = String.valueOf(today.month()) + '-' + String.valueOf(today.year());
+                        monthString = DateTime.now().format('MMMM');  
+                        //skey = String.valueOf(t.OwnerId) +'-'+ String.valueOf(t.Segment__c) +'-'+ monthString; 
+                        skey = String.valueOf(t.OwnerId)+'-'+ monthString; 
+                        system.debug('task skey__'+ skey); 
+                        
+                        CP_Meeting_Targets__c existingTarget;
+                        // Check if a target record already exists for this key
+                        if(targetMap != null && targetMap.containsKey(skey) && targetMap.get(skey) != null){
+                         existingTarget = targetMap.get(skey);
+                        }                           
+                        // getting count of the completed tasks for this key for current month
+                        Integer completedTaskCount = [ SELECT COUNT() FROM Task  WHERE OwnerId = :t.OwnerId  AND Segment__c = :t.Segment__c AND Status = 'Completed' AND CALENDAR_MONTH(CreatedDate) = :today.month() AND CALENDAR_YEAR(CreatedDate) = :today.year()];
+                        
+                        // Increment the achievement count by 1
+                        if(existingTarget != null && completedTaskCount != null){ 
+                            //existingTarget.Achievement__c = (existingTarget.Achievement__c != null ? existingTarget.Achievement__c : 0) + 1;
+                            existingTarget.Achievement__c = completedTaskCount;
+                            targetsToUpdate.add(existingTarget); 
+                        }
+                        // Create new target record
+                        else{ 
+                            CP_Meeting_Targets__c objTarget = new CP_Meeting_Targets__c();
+                            objTarget.Achievement__c = (objTarget.Achievement__c != null ? objTarget.Achievement__c : 0) + 1;
+                            objTarget.SM_Name__c = t.OwnerId;
+                            objTarget.CP_Name__c = t.WhatId;
+                            objTarget.Month__c = monthString;
+                            targetsToInsert.add(objTarget); 
+                        }
+                    }
+                }  
+            } 
+            
+            if (!targetsToUpdate.isEmpty()) {
+                try {
+                    update targetsToUpdate;
+                } catch (Exception e) {
+                    System.debug('Error updating target records: ' + e.getMessage());
+                } 
+            }
+            if (!targetsToInsert.isEmpty()) {  
+                try {
+                    insert targetsToInsert;
+                } catch (Exception e) {
+                    System.debug('Error inserting target records: ' + e.getMessage());
+                } 
             }
         }
     }

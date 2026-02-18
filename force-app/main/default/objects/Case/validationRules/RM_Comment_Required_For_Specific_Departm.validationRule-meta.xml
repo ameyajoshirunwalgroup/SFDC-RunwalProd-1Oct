@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RM_Comment_Required_For_Specific_Departm</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Department__c, &quot;Facility Management&quot;) ||
+    ISPICKVAL(Department__c, &quot;Projects&quot;) ||
+    ISPICKVAL(Department__c, &quot;Legal Team&quot;),
+    ISBLANK(RM_Comment_For_Functional_User__c)
+)</errorConditionFormula>
+    <errorDisplayField>RM_Comment_For_Functional_User__c</errorDisplayField>
+    <errorMessage>Please enter RM Comment for Functional User when Department is Facility Management, Projects, or Legal Team.</errorMessage>
+</ValidationRule>

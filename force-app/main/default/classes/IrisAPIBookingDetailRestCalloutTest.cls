@@ -20,7 +20,8 @@ public class IrisAPIBookingDetailRestCalloutTest {
         
         Broker__c br = new Broker__c();
         br.name ='test';
-        br.Broker_Pan_No__c ='tyui6uus';
+        //br.Broker_Pan_No__c ='tyui6uus';
+        br.Broker_Pan_No__c ='TYUI6UUS';
         br.RW_RERA_Registration_Number__c='fghjkl';
         br.RW_CreateFromIRIS__c=true;
         br.RW_IRIS_Sync__c = true;

@@ -1,5 +1,6 @@
 ({
     doInit : function(component, event, helper) {
+        
         var action = component.get("c.getPortalHomeData");
         action.setCallback(this, function(response) {
             var state = response.getState();
@@ -62,6 +63,7 @@
                             }
                             }
                         }
+                //helper.disableContactUs(component,event); //Added by Vinay 09-06-2025
             }
         });
         $A.enqueueAction(action); 
@@ -140,6 +142,7 @@
         	action.setParams({newCase:component.get("v.complaintRecord"),"Details": details});
         	action.setCallback(this, function(response) {
                     var state = response.getState();
+                console.log('response.getReturnValue(): ', response.getReturnValue());
                     if (state === "SUCCESS") 
                     {
                         
@@ -158,10 +161,8 @@
                             //"title": "SUCCESS!",
                             "type":"success",
                             "mode": "sticky",
-                           //"message": "Case is created successfully. Relationship Manager will check and revert"});
                             "message" : message});
                         toastEvent.fire();
-                        
                     }
                 else
                 {
@@ -170,11 +171,12 @@
                         component.set("v.complaintRecord.RW_Complaint_SubType__c","");
                         component.set("v.unitNumber","");
                         component.set("v.complaintRecord.Description","");
+                    var errors = response.getError();
                     var toastEvent = $A.get("e.force:showToast");
                         toastEvent.setParams({
                             "title": "ERROR!",
                             "type":"error",
-                           "message": "There was an error. Please try later." + response.getReturnValue() + "; " + errors[0].message});
+                            "message": "There was an error. Please try later." + response.getReturnValue()});
                         toastEvent.fire();
                     $A. get('e. force:refreshView').fire();
                 }

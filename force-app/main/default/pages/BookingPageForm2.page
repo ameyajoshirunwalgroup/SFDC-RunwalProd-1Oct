@@ -516,8 +516,8 @@
                     </apex:inputField>
                     <apex:selectList id="selectquoteId" value="{!selectedQuote}" size="1" label="Quotation ">
                         <apex:selectOptions value="{!getQuote}"/> 
-                        <apex:actionSupport event="onchange" action="{!getTokenAmount}"  status="status">
-                            <apex:param name="selectedQuote" value="{!getQuote}" assignTo="{!selectedQuote}"/>
+                        <apex:actionSupport event="onchange" action="{!getTokenAmount}" rerender="messages,token,discountSection" status="status">
+                            <!--<apex:param name="selectedQuote" value="{!getQuote}" assignTo="{!selectedQuote}"/>-->
                         </apex:actionSupport>
                     </apex:selectList>
                     <apex:OutputText id="token" value="{!tokenamt}" label="Token Amount"/>
@@ -571,6 +571,20 @@
 
                     <apex:outputText ></apex:outputText>
                 </apex:pageBlockSection>
+                <!--Added by Aditya to Show Applied Discounts Start -->
+                <apex:pageBlockSection title="Applied Discounts" id="discountSection" columns="1">
+                    <apex:pageBlockTable value="{!appliedDiscountList}" var="disc" rendered="{!NOT(ISNULL(appliedDiscountList)) && appliedDiscountList.size > 0}">
+                        <apex:column value="{!disc.Name}" headerValue="Offer Name"/>
+                        <apex:column value="{!disc.Offer_type__c}" headerValue="Offer Type"/>
+                        <apex:column value="{!disc.Discount_Category__c}" headerValue="Offer Category"/>
+                        <apex:column value="{!disc.Offer_Value__c}" headerValue="Offer Value"/>
+                        
+                    </apex:pageBlockTable>
+                    
+                    <apex:outputText value="No non-monetary discounts applied to this quotation." 
+                                     rendered="{!(ISNULL(appliedDiscountList) || appliedDiscountList.size == 0) && NOT(ISBLANK(selectedQuote))}"/>
+                </apex:pageBlockSection>
+                <!--Added by Aditya to Show Applied Discounts End -->
             </apex:pageBlock>
             <!--------------------------------------------Applicant Form--------------------------------------------->
             <ul id="tabs">

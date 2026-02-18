@@ -1,5 +1,6 @@
 public with sharing class QuotationStartController
 {
+   
     public string unitId{get;set;}
     public string oppId{get;set;}
     public Project_Unit__c u{get;set;}
@@ -22,6 +23,8 @@ public with sharing class QuotationStartController
             oppId = (Id)ApexPages.currentPage().getParameters().get('oppId'); 
         
         // Addded By UBSdigicloud Start --------------
+
+
         List<Opportunity> lstOpp = new List<Opportunity>();
         
         lstOpp = [
@@ -55,7 +58,7 @@ public with sharing class QuotationStartController
         
         if( string.isNotBlank(unitId)) {
             u = InventoryCostServices.getUnitDetails(unitId);
-            //system.debug('u is:: '+u);
+            system.debug('u is:: '+u);
             if(u != null){
                 qObj.Project_Unit__c = u.id;
             }
@@ -117,12 +120,14 @@ public with sharing class QuotationStartController
                 pageRef.getParameters().put('id',qObj.Project_Unit__c);
                 pageRef.getParameters().put('oppId',qObj.Opportunity__c);
                 pageRef.getParameters().put('subPlanId',selectedPlanId); 
+
                 return pageRef;
             }
             else{
                 PageReference pageRef = new PageReference('/apex/Quotation2');
                 pageRef.getParameters().put('id',qObj.Project_Unit__c);
                 pageRef.getParameters().put('oppId',qObj.Opportunity__c);
+
                 return pageRef;
             }
             /* if(qObj.Plan_Type__c.equals('Non Subvention Plan')){

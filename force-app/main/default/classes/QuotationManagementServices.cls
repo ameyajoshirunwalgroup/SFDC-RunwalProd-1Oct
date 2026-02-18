@@ -1,8 +1,9 @@
 public with sharing class QuotationManagementServices {
     
     public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId) {
-        
+        System.debug('allotment charges in quotation m ===>'+allotmentCharges );
         Map<String,Decimal> allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum, subPlanId);
+        system.debug('allChargesMap=='+allChargesMap);
         Project_Unit__c u = InventoryCostServices.getUnitDetails(unitId);
         Map<String,List<QuoteUIWrapper>> UIMap = new Map<String,List<QuoteUIWrapper>>();
         Boolean printBreakup = false;
@@ -89,7 +90,7 @@ public with sharing class QuotationManagementServices {
             tempList1.add(new QuoteUIWrapper('Allotment Premium     ( A )', INFormat(allChargesMap.get('AGREEMENTVALUE')), 'bold','aval'));
         }
         
-        
+        system.debug('Allotment Premium( A ) -> ' + INFormat(allChargesMap.get('AGREEMENTVALUE')));
         List<Project_Charges__c> projCharges = InventoryCostServices.getProjectChargesDefined(u.RW_Project__r.Name);
         
         Decimal charge1Sum = 0;
@@ -207,7 +208,8 @@ public with sharing class QuotationManagementServices {
         UIMap.putAll(leftTopMap);
         UIMap.putAll(rightTopMap);
         UIMap.putAll(leftBottomMap);
-        
+        system.debug('UIMap=='+UIMap);
+        system.debug('rightTopMap=='+rightTopMap);
         return UIMap;
         
         

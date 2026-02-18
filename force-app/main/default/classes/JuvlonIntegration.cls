@@ -2,12 +2,8 @@ public with sharing class JuvlonIntegration {
     
     @future (callout=true)
     public static void reportMethod( List<ID> ids){
-        system.debug('ids___'+ids);
         
-        RW_Juvlon_Campaign__c juvCampRec = [SELECT  Id, Name,RW_Approved_By__c, RW_Campaign_Status__c, RW_ListId__c,
-                                            RW_Report_Id__c,RW_from_date__c, RW_to_date__c, RW_Juvlon_Object__c FROM 
-                                            RW_Juvlon_Campaign__c  WHERE Id in :ids LIMIT 1 ];// Id='a1n6D000000KgKvQAK'
-        system.debug('juvCampRec___'+juvCampRec);
+        RW_Juvlon_Campaign__c juvCampRec = [SELECT  Id, Name,RW_Approved_By__c,RW_Campaign_Status__c,RW_ListId__c,RW_Report_Id__c,RW_from_date__c, RW_to_date__c, RW_Juvlon_Object__c FROM RW_Juvlon_Campaign__c  WHERE Id in :ids LIMIT 1 ];// Id='a1n6D000000KgKvQAK'
         
         
         //List<Report> reportList = [SELECT Id,DeveloperName FROM Report where  DeveloperName = 'Juvlon_Campaign_Report'];
@@ -17,7 +13,6 @@ public with sharing class JuvlonIntegration {
         if(!String.isBlank(juvCampRec.RW_Report_Id__c)){
             reportId  = juvCampRec.RW_Report_Id__c;
         }                
-        system.debug('jreportId___'+reportId);
         
         
         // Get the report metadata
@@ -26,15 +21,8 @@ public with sharing class JuvlonIntegration {
         Reports.ReportResults runResults = Reports.ReportManager.runReport(reportId);
         
         Reports.ReportMetadata reportMd = describe.getReportMetadata();
-        system.debug('reportMd.getstandardDateFilter:::'+reportMd.getstandardDateFilter());
-        system.debug('reportMd.getDetailColumns():::'+reportMd.getDetailColumns());
-        system.debug('---col ReportType---'+reportMd.getReportType());
         Reports.standardDateFilter rprtDateFltr = reportMd.getstandardDateFilter();
-        system.debug('---standardColumn---'+rprtDateFltr.getColumn());
         
-        system.debug('---getDurationValue()---'+rprtDateFltr.getDurationValue());
-        system.debug('---standardStartDate---'+rprtDateFltr.getStartDate());
-        system.debug('---standardEndDate---'+rprtDateFltr.getEndDate());
         
         Map<String,String> mapFieldMtd = new Map<String,String>();
         
@@ -43,23 +31,17 @@ public with sharing class JuvlonIntegration {
             mapFieldMtd.put(repMtd.MasterLabel,repMtd.RW_Field_Name__c);
         } 
         
-        system.debug('---mapFieldMtd values---'+mapFieldMtd.values());
         
         String allFields='';
         if(!reportMd.getDetailColumns().isEmpty() ){ 
             for(String str: reportMd.getDetailColumns()){
-                system.debug('###str '+str);
-                system.debug('###mapFieldMtd '+mapFieldMtd);
 
-                system.debug(mapFieldMtd.get(str));
                 if(mapFieldMtd.containsKey(str)){
                   allFields += mapFieldMtd.get(str)+','; 
-                    system.debug('allFields____ '+allFields);
                 }
                 
             }
         }
-        system.debug('allFields____ 62 '+allFields);
         // Get the report metadata
         String projFilter='';
         Map<String,String> operatorMap = New Map<String,String>();
@@ -67,18 +49,12 @@ public with sharing class JuvlonIntegration {
         operatorMap.put('notEqual','!=');
         
         Reports.ReportMetadata rm = runResults.getReportMetadata();
-        system.debug('### rm '+rm);
         for(Reports.ReportFilter rf : rm.getreportFilters()){
-            system.debug('---col name---'+rf.getcolumn());
-            system.debug('---col value---'+rf.getValue());
-            system.debug('---col FilterType()---'+rf.getFilterType()); 
-            system.debug('---col Operator---'+rf.getOperator());
             
             if(!String.isBlank(rf.getcolumn()) ){
                 if(rf.getcolumn().contains(juvCampRec.RW_Juvlon_Object__c) ){
                  
                     string cloumfilter = rf.getcolumn().remove(juvCampRec.RW_Juvlon_Object__c+'.');
-                    system.debug('---cloumfilter---'+cloumfilter);
                    // if(juvCampRec.RW_Juvlon_Object__c == 'Lead'){
                        projFilter = mapFieldMtd.get(cloumfilter)+operatorMap.get(rf.getOperator())+ '\'' +rf.getValue()+'\'';
                    // }
@@ -86,15 +62,12 @@ public with sharing class JuvlonIntegration {
                         projFilter = cloumfilter+operatorMap.get(rf.getOperator())+ '\'' +rf.getValue()+'\'';
                     }*/
                    
-                    system.debug('projFilter___'+projFilter);
                 }
                 
             }   
         }
-        system.debug('---projFilter---'+projFilter);
         string whereclause ='';
         String query = 'Select '+allFields.removeEndIgnoreCase(',') +' From '+juvCampRec.RW_Juvlon_Object__c;
-        system.debug('---query---'+query);
         if(!String.isBlank(projFilter) ){
            // query += ' where '+projFilter;
            whereclause= projFilter;
@@ -128,9 +101,8 @@ public with sharing class JuvlonIntegration {
             query += ' where '+ whereclause;
         }
         List<sObject> sobjList = new List<sObject>();
-        if(!test.isRunningTest())    {    System.debug('### query '+query);
+        if(!test.isRunningTest())    {   
          sobjList = Database.query(query);
-        System.debug('### sobjList '+sobjList.size());
     }
         if(sobjList != null && sobjList.size()> 0){
             subscribersSetUp(sobjList, juvCampRec.RW_Juvlon_Object__c, juvCampRec.RW_ListId__c, juvCampRec.Id);
@@ -185,9 +157,7 @@ public with sharing class JuvlonIntegration {
         }   
         }
 subScrbList.isUnique = '0';        
-       system.debug('___subScrbList  '+subScrbList);
         str = System.JSON.serialize(subScrbList);
-        system.debug('__JsonStr  '+str);
         if(test.isRunningTest()){
         	JuvlonJson.parse(str);
         }    
@@ -200,12 +170,8 @@ subScrbList.isUnique = '0';
         req.setEndpoint('https://api2.juvlon.com/v4/addSubscribers');
         req.setBody(str);
         HTTPResponse res = http.send(req);
-        System.debug('res!!! getBody '+res.getBody());
-        System.debug('res!!! getStatusCode '+res.getStatusCode());
         
-        RW_Juvlon_Campaign__c juvlonObj =  [select Id,Name,RW_Juvlon_Status__c,RW_Report_Id__c,RW_Juvlon_Object__c 
-                                            from RW_Juvlon_Campaign__c WHERE Id =:juvCampRecId LIMIT 1];
-            system.debug('juvlonObj:::'+juvlonObj); 
+        RW_Juvlon_Campaign__c juvlonObj =  [select Id,Name,RW_Juvlon_Status__c,RW_Report_Id__c,RW_Juvlon_Object__c from RW_Juvlon_Campaign__c WHERE Id =:juvCampRecId LIMIT 1];
         if(res.getStatusCode() == 200){
             juvlonObj.RW_Juvlon_Status__c = 'Success';
         }

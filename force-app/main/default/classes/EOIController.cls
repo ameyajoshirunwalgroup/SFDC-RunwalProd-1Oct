@@ -1,5 +1,4 @@
-public without sharing class EOIController 
-{
+public without sharing class EOIController{
     //public static final Blob CRYPTOKEY = EncodingUtil.base64Decode('aKUh/QDcqCZfRs6jBbmDEaQi3WCZ+OUEZagi6j3Ni74=');
     public static final Blob CRYPTOKEY = EncodingUtil.base64Decode(Label.URL_Encryption_Key);
     private static final String KEY = 'OTVO07DZOH'; 
@@ -8,10 +7,8 @@ public without sharing class EOIController
 
 
 	@AuraEnabled
-    public static Map<String,List<String>> getPreferredResidence(String projectName,String TowerName)
-    {
-        try
-        {
+    public static Map<String,List<String>> getPreferredResidence(String projectName,String TowerName){
+        try{
         Map<String,List<String>> preferredResidenceMap = new  Map<String,List<String>>();
         List<String> UnitTypes = new List<String>();
         List<String> budgetTypes = new List<String>();
@@ -19,14 +16,11 @@ public without sharing class EOIController
         List<String> sizes = new List<String>(); //Added by coServe 09-10-2024
         List<String> eoiAmounts = new List<String>(); //Added by coServe 09-10-2024
         Projects__mdt[] projMappings = [SELECT Id,Label FROM Projects__mdt Where Label =:projectName ];
-        if(projMappings != null && projMappings.size() >0)
-        {
+        if(projMappings != null && projMappings.size() >0){
             Project_Towers__mdt[] towerMappings = [SELECT Id,Label, Projects__c FROM Project_Towers__mdt Where Projects__c = :projMappings[0].Id and Label =:TowerName ];
-            if(towerMappings != null && towerMappings.size() >0)
-            {
+            if(towerMappings != null && towerMappings.size() >0){
                 Preferred_Unit_Type__mdt[] unitTypeMappings = [SELECT Id,Label, Project__c ,Order__c FROM Preferred_Unit_Type__mdt Where Project_Towers__c = :towerMappings[0].Id Order by Order__c ASC];
-                for(Preferred_Unit_Type__mdt unitTypeMapping : unitTypeMappings) 
-                {
+                for(Preferred_Unit_Type__mdt unitTypeMapping : unitTypeMappings){
                     UnitTypes.add(unitTypeMapping.Label);
                 }
                 if(UnitTypes.size() >0)
@@ -35,9 +29,8 @@ public without sharing class EOIController
                 throw new CommonException('No unit types found for this Project/Tower');
                 
                 
-                Preferred_Budget__mdt[] budgetMappings = [SELECT Id,Label, Project__c ,Order__c FROM Preferred_Budget__mdt Where Project_Towers__c = :towerMappings[0].Id Order by Order__c ASC];
-                for(Preferred_Budget__mdt budgetMapping : budgetMappings) 
-                {
+                Preferred_Budget__mdt[] budgetMappings = [SELECT Id,Label,Project__c ,Order__c FROM Preferred_Budget__mdt Where Project_Towers__c = :towerMappings[0].Id Order by Order__c ASC];
+                for(Preferred_Budget__mdt budgetMapping : budgetMappings){
                     budgetTypes.add(budgetMapping.Label);
                 }
                 
@@ -49,8 +42,7 @@ public without sharing class EOIController
                 
                 
                 Preferred_Floors__mdt[] floorMappings = [SELECT Id,Label,Projects__c,Order__c FROM Preferred_Floors__mdt Where Project_Towers__c = :towerMappings[0].Id Order by Order__c ASC];
-                for(Preferred_Floors__mdt floorMapping : floorMappings) 
-                {
+                for(Preferred_Floors__mdt floorMapping : floorMappings){
                     floorTypes.add(floorMapping.Label);
                 }
                 
@@ -91,8 +83,7 @@ public without sharing class EOIController
             return preferredResidenceMap;
  
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
             system.debug(e.getMessage());
             throw new AuraHandledException(e.getMessage());
         }
@@ -214,8 +205,7 @@ public without sharing class EOIController
     // Decrypt Data
     @AuraEnabled
     public static String getDecryptedData(String data){
-        try
-        {
+        try{
             return Utility.getDecryptedData(data);
         /*System.debug('**data**'+data);
         System.debug('**cryptokey**'+EncodingUtil.base64Encode(CRYPTOKEY));
@@ -224,9 +214,7 @@ public without sharing class EOIController
         System.debug('**blob data**'+decryptedData);
         return decryptedData.toString();*/
         }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -240,75 +228,49 @@ public without sharing class EOIController
     }*/
     
     @AuraEnabled
-    public static void sendEOILink(String opprecordId,Decimal Amount,String towerId,Map<String,String> offerDetails, String paymentGateway)
-    {
-        System.debug('offerDeta*'+offerDetails);
+    public static void sendEOILink(String opprecordId,Decimal Amount,String towerId,Map<String,String> offerDetails, String paymentGateway){
         String customerEmail='';
-        try
-        {
+        try{
         Opportunity opportunityRec = Utility.getOpportunityRecord(opprecordId);
         Id eoiRecordTypeId =Schema.SObjectType.RW_Digital_Link_Status__c.getRecordTypeInfosByName().get('EOI').getRecordTypeId();
-        for(RW_Digital_Link_Status__c eoiLink : opportunityRec.Digital_Link_Status__r)
-              {
-                  if(eoiLink.RW_Link_Status__c == 'Active' && eoiLink.RecordTypeId == eoiRecordTypeId )
-                  {
+        for(RW_Digital_Link_Status__c eoiLink : opportunityRec.Digital_Link_Status__r){
+                  if(eoiLink.RW_Link_Status__c == 'Active' && eoiLink.RecordTypeId == eoiRecordTypeId){
                       throw new CommonException('There is already an active link sent to the customer. Please check with customer again or change the Link status to \'Expired\' from \'Active\' and then try again to send the link');
                   }
               }
             
-        if(opportunityRec !=null)
-        {
+        if(opportunityRec !=null){
             customerEmail = opportunityRec.RW_Email__c;
         }
         
-        if(!String.isEmpty(customerEmail))
-        {
+        if(!String.isEmpty(customerEmail)){
             String eoiRecordId='';
             List<RW_EOI__c> existingEoiRecords = new List<RW_EOI__c>();
             List<RW_EOI__c> existingSentEoiRecords = new List<RW_EOI__c>();
             RW_EOI__c eoiRec;
-            if(opportunityRec.EOI__r.size() == 0)
-            {
+            if(opportunityRec.EOI__r.size() == 0){
              eoiRec= CreateEOIRecord(opportunityRec,towerId);
              
-            }
-            else
-            {
-              for(RW_EOI__c eoiRecs : opportunityRec.EOI__r)
-              {
-                  if(eoiRecs.RW_Status__c != 'EOI Cancelled -Refunded' && eoiRecs.RW_Status__c != 'EOI Sent to Customer')
-                  {
+            }else{
+              for(RW_EOI__c eoiRecs : opportunityRec.EOI__r){
+                  if(eoiRecs.RW_Status__c != 'EOI Cancelled -Refunded' && eoiRecs.RW_Status__c != 'EOI Sent to Customer'){
                       existingEoiRecords.add(eoiRecs);
                   }
                   
-                  else if(eoiRecs.RW_Status__c == 'EOI Sent to Customer')
-                  {
-                      System.debug('inside add List*');
+                  else if(eoiRecs.RW_Status__c == 'EOI Sent to Customer'){
                       existingSentEoiRecords.add(eoiRecs);
-                      System.debug('inside add List done*');
-                      
                   }
-                 
-                
               }
-                if(existingSentEoiRecords.size() >0)
-                {
-						System.debug('inside if check*'+existingSentEoiRecords.size()+'**'+existingSentEoiRecords);
+                if(existingSentEoiRecords.size() >0){
                      eoiRec = existingSentEoiRecords[0];
-                    System.debug('inside if check done*');
-                }
-                else if(existingEoiRecords.size() >0)
-                {
+                }else if(existingEoiRecords.size() >0){
                      throw new CommonException('There is/are already EOI records in this opportunity which are active and not cancelled. Please cancel the existing EOI\'s and then send the link');
 
-                }
-                else
-                {
+                }else{
                   eoiRec= CreateEOIRecord(opportunityRec,towerId);
                 }
               
             }
-            system.debug('eoi**'+eoiRec);
             String eoiLinkRecordId = CreateEOILinkRecord(opprecordId);
             String applicableOfferId='';
             if(offerDetails.size() > 0)
@@ -316,7 +278,6 @@ public without sharing class EOIController
             //String encryptedData = getEncryptedData(opprecordId+','+eoiRec.Id+','+eoiLinkRecordId+','+String.valueOf(Amount)+','+towerId);
             //String encryptedData = Utility.getEncryptedData(opprecordId+','+eoiRec.Id+','+eoiLinkRecordId+','+String.valueOf(Amount)+','+towerId+','+applicableOfferId);
             String encryptedData = Utility.getEncryptedData(opprecordId+','+eoiRec.Id+','+eoiLinkRecordId+','+String.valueOf(Amount)+','+towerId+','+applicableOfferId+','+'EaseBuzz'); /* bkk */
-            System.debug('***paymentGateway***'+paymentGateway); /* bkk */
             EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Form_Link_Customer'];
             String htmlBody = template.HtmlValue; 
             if(eoiRec.RW_Primary_First_Name__c != null)
@@ -330,8 +291,8 @@ public without sharing class EOIController
             htmlBody = htmlBody.replace('{!RW_EOI__c.RW_Project_Name__c}', opportunityRec.RW_Project__r.Name);
             htmlBody = htmlBody.replace('{!EOIFormLink}','<a href="'+Label.Community_URL+'eoi/?data='+encryptedData+'">Click Here'+'</a>' );
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c)!=null)
-            htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__c )!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+            htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__r.Name ).RW_Phone__c)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             else
             htmlBody = htmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
             
@@ -353,8 +314,8 @@ public without sharing class EOIController
             plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', '');   
             plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_Project_Name__c}', opportunityRec.RW_Project__r.Name);
             plainTextBody = plainTextBody.replace('{!EOIFormLink}',  Label.Community_URL+'eoi/?data='+encryptedData);
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c)!=null)
-            plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+            plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__r.Name).RW_Phone__c));	 //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             else
             plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
             
@@ -378,48 +339,28 @@ public without sharing class EOIController
             Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
             String URLMessage = Label.Community_URL+'eoi/?data='+encryptedData;
             List<String> SMSdata = new List<String>();
-            System.debug('**before**');
             SMSdata.add(opprecordId);
             SMSdata.add(URLMessage);
-            System.debug('**before !**'+opprecordId+'*'+URLMessage);
             EOIOutboundSMSFutureHandler.SendSMSOnEOIInterest(SMSdata);
-            if (results[0].success) 
-            {
+            if (results[0].success){
                 System.debug('The email is sent successfully');
                 
-            } 
-            
-            else 
-            {
-                System.debug('The email failed to send: ' + results[0].errors[0].message);
+            }else{
                 throw new CommonException('There was an error sending the EOI link in a mail. Please check with administrator.');
-                
             }
             
-        }
-        
-        else
-        {
+        }else{
             throw new CommonException('There is no email present in Opportunity. Please add the email in opportunity first and then generate the EOI link');
         }
-        }
-        
-        
-     
-        
-        catch (Exception e)
-        {
+        }catch (Exception e){
             //system.debug('*catch*'+e+'**message**'+e.getMessage());
             throw new AuraHandledException(e.getMessage());
         }
-        
     }
     
     
-    public static RW_EOI__c CreateEOIRecord(Opportunity oppRecord,String TowerId)
-    { 
-        try
-        {
+    public static RW_EOI__c CreateEOIRecord(Opportunity oppRecord,String TowerId){ 
+        try{
         Account accRecord = Utility.getAccountFromOpportunityRecord(oppRecord);
         System.debug('**'+accRecord);
         RW_EOI__c eoiRecord = new RW_EOI__c();
@@ -428,9 +369,7 @@ public without sharing class EOIController
         eoiRecord.RW_Primary_First_Name__c = accRecord.FirstName;
         eoiRecord.RW_Primary_Last_Name__c = accRecord.LastName;
         eoiRecord.RW_Status__c='EOI Sent to Customer';
-        if(accRecord !=null)
-        {
-             System.debug('***'+accRecord);
+        if(accRecord !=null){
         eoiRecord.RW_City__c =accRecord.City__c;
         eoiRecord.RW_Pin__c =accRecord.RW_Zip_Code__c;
         eoiRecord.RW_State__c = accRecord.State__c;
@@ -452,29 +391,20 @@ public without sharing class EOIController
         eoiRecord.RW_Secondary_Email__c = oppRecord.RW_Secondary_Email__c;
         //eoiRecord.RW_Application_Source__c = oppRecord.Walkin_Source__c;
         //eoiRecord.RW_Source_Details__c = oppRecord.Walkin_SubSource__c;
-         System.debug('*Before Insert*'+eoiRecord);
         insert eoiRecord;
-         System.debug('*After Insert*'+eoiRecord);
         return eoiRecord;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     
-    public static String CreateApplicableOfferRecord(Map<String,String> OfferDetails,Opportunity opportunityRec,String eoiRecordId )
-    { 
-        try
-        {
-            System.debug('before'+OfferDetails+'**'+opportunityRec+'**'+eoiRecordId);
+    public static String CreateApplicableOfferRecord(Map<String,String> OfferDetails,Opportunity opportunityRec,String eoiRecordId){ 
+        try{
            //List<Offer__c> offerRec = [Select Id,(Select Id,Name from Sub_Offers__r Where Name=: OfferDetails.get('subofferName')) from Offer__c where Name=:OfferDetails.get('offerName') and Project__c=:opportunityRec.RW_Project__c and Offer_Type__c='EOI' ];
             List<RW_Sub_Offer__c> subofferRecords = [Select Name,Offer__c,Offer__r.Name,Project__c from RW_Sub_Offer__c Where Project__c=: opportunityRec.RW_Project__c and RW_Offer_Type__c ='EOI' and Name=: OfferDetails.get('subofferName') and Offer__r.Name =:OfferDetails.get('offerName')];
          
-            if(subofferRecords != null && subofferRecords.size()>0)
-            {
+            if(subofferRecords != null && subofferRecords.size()>0){
                Applicable_Offer__c applicableOffer = new Applicable_Offer__c(); 
                applicableOffer.EOI__c = eoiRecordId;
                //applicableOffer.Opportunity__c = opportunityRec.Id;
@@ -483,21 +413,15 @@ public without sharing class EOIController
                applicableOffer.Sub_Offer__c = subofferRecords[0].Id;
                insert applicableOffer;
                 return applicableOffer.Id;
-           }
-            else
+           }else
                 return '';
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
-    public static String CreateEOILinkRecord(String oppRecordId)
-    { 
-        try
-        {
+    public static String CreateEOILinkRecord(String oppRecordId){ 
+        try{
         DateTime LinkSentTime = DateTime.parse(System.Now().format());
                /* RW_EOI_Link_Status__c eoiLink = new RW_EOI_Link_Status__c();
                 eoiLink.Opportunity__c = oppRecordId;
@@ -514,18 +438,13 @@ public without sharing class EOIController
         
                 insert digitalLinkStatus;
         		return digitalLinkStatus.Id;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
-    public static String CreateDigitalEOIPaymentLinkRecord(String oppRecordId)
-    { 
-        try
-        {
+    public static String CreateDigitalEOIPaymentLinkRecord(String oppRecordId){ 
+        try{
         DateTime LinkSentTime = DateTime.parse(System.Now().format());
                /* RW_EOI_Link_Status__c eoiLink = new RW_EOI_Link_Status__c();
                 eoiLink.Opportunity__c = oppRecordId;
@@ -542,21 +461,16 @@ public without sharing class EOIController
         
                 insert digitalLinkStatus;
         		return digitalLinkStatus.Id;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     @AuraEnabled
-    public  static void saveEOIrecord(String recordId,String eoiRecord)
-    { 
+    public  static void saveEOIrecord(String recordId,String eoiRecord){ 
         try{
             if(recordId != null && eoiRecord != null){
                 EOIWrapper obj = (EOIWrapper)JSON.deserialize(eoiRecord, EOIWrapper.class);
-                System.debug('**'+obj+'**Org**'+obj.RWOriginDetails);
                 RW_EOI__c eoi = new RW_EOI__c();
                 eoi.Id=recordId;
                 if(eoi.RW_Status__c != 'EOI Confirmed')
@@ -605,10 +519,8 @@ public without sharing class EOIController
                 eoi.RW_Document_Number__c=obj.RWDocumentNumber;
                 eoi.RW_Document_Proof__c = obj.RWDocumentProof;
 
-                System.debug('**'+obj+'**Org1**'+obj.RWOriginDetails);
                 eoi.RW_Type_Of_Origin__c = obj.RWTypeOfOrigin;
                 eoi.RW_Origin_Details__c =obj.RWOriginDetails;
-                System.debug('**Org2**'+eoi.RW_Origin_Details__c);
                 eoi.RW_Pan_Card_Number_of_AuthoritySignatory__c = obj.RWPanCardNumberofAuthoritySignatory;
                 eoi.RW_PassportNoDetails__c = obj.RWPassportNoDetails;
                 eoi.RW_Channel_Partner_s_Company__c =obj.RWChannelPartnersCompany;
@@ -636,23 +548,19 @@ public without sharing class EOIController
                 eoi.RW_Nationality__c = obj.RWNationality;
                 eoi.RW_Digitally_Accepted_On__c = DateTime.parse(obj.RWDigitallyAcceptedOn);
                 
-                System.debug('before'+obj.RWTypeofapplicant);
-                if(obj.RWTypeofapplicant == '' ||  obj.RWTypeofapplicant == null)
-                {
+                if(obj.RWTypeofapplicant == '' ||  obj.RWTypeofapplicant == null){
                     System.debug('inside'+obj.RWTypeofapplicant);
                     eoi.RW_Type_Of_Applicant__c = null;
                 }
                 else
                 eoi.RW_Type_Of_Applicant__c = obj.RWTypeofapplicant;
                 
-                if(obj.RWResidentialstatus == '' ||  obj.RWResidentialstatus == null)
-                {
+                if(obj.RWResidentialstatus == '' ||  obj.RWResidentialstatus == null){
                     eoi.RW_Residential_Status__c = null;
                 }
                 else
                 eoi.RW_Residential_Status__c = obj.RWResidentialstatus;
                 
-                System.debug('**Org2**'+eoi.RW_Origin_Details__c+'**'+eoi);
                 
                 //Added by coServe 09-10-2024 Start
                 eoi.Landline_No__c = obj.LandlineNo;
@@ -676,25 +584,19 @@ public without sharing class EOIController
 
                List<RW_EOI__c> eoiRec = [Select Id,Name,RW_City__c,RW_State__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Date_of_Birth__c,RW_Gender__c,RW_Salutation__c,RW_Primary_Alternate_Email__c,RW_Countries__c,RW_Pin__c,Opportunity__c, Opportunity__r.AccountId, (Select Id,Sub_Offer__r.RW_Status__c from Applicable_Offers__r Where Sub_Offer__r.RW_Status__c='Active') from RW_EOI__c where Id =:eoi.Id];
                List<Applicable_Offer__c> applicableOffers = new List<Applicable_Offer__c>();
-                for(RW_EOI__c eoiRecValue : eoiRec )
-               {
-                   if(eoiRecValue.Applicable_Offers__r.size() >0)
-                   {
-                       for(Applicable_Offer__c appOffers : eoiRecValue.Applicable_Offers__r)
-                       {
+                for(RW_EOI__c eoiRecValue : eoiRec ){
+                   if(eoiRecValue.Applicable_Offers__r.size() >0){
+                       for(Applicable_Offer__c appOffers : eoiRecValue.Applicable_Offers__r){
                            appOffers.Offer_Availed__c = true;
                            applicableOffers.add(appOffers);
                        }
                    }
                }
-                if(applicableOffers.size() >0)
-                {
+                if(applicableOffers.size() >0){
                     update applicableOffers;
                 }
                 
-                if(eoiRec !=null && eoiRec.size() >0 )
-                {
-                    System.debug('inside if1*'+eoiRec);
+                if(eoiRec !=null && eoiRec.size() >0 ){
                 Account accRecord = Utility.getAccountFromOpportunityRecord(eoiRec[0].Opportunity__r);
                 accRecord.FirstName = eoiRec[0].RW_Primary_First_Name__c;
                 accRecord.LastName = eoiRec[0].RW_Primary_Last_Name__c;
@@ -707,28 +609,23 @@ public without sharing class EOIController
                 accRecord.Alternate_Email__c = eoiRec[0].RW_Primary_Alternate_Email__c;
                 accRecord.Gender__c= eoiRec[0].RW_Gender__c;
                 accRecord.Birth_Date__c = eoiRec[0].RW_Date_of_Birth__c;
-                     System.debug('inside if1 before update*'+eoiRec);
                     update accRecord;
-                    System.debug('inside if1 after update*'+eoiRec);
                     
                     Opportunity opp = Utility.getOpportunityRecord(eoiRec[0].Opportunity__c);
                     String Name ='';
                     
-                    if(eoiRec[0].RW_Primary_First_Name__c != '' && eoiRec[0].RW_Primary_First_Name__c != null)
-                    {
+                    if(eoiRec[0].RW_Primary_First_Name__c != '' && eoiRec[0].RW_Primary_First_Name__c != null){
                         Name = Name+eoiRec[0].RW_Primary_First_Name__c;
                     }
                     
-                    if(eoiRec[0].RW_Primary_Last_Name__c != '' && eoiRec[0].RW_Primary_Last_Name__c != null)
-                    {
+                    if(eoiRec[0].RW_Primary_Last_Name__c != '' && eoiRec[0].RW_Primary_Last_Name__c != null){
                         if(Name !='')
                         Name = Name+' '+eoiRec[0].RW_Primary_Last_Name__c;
                         else
                         Name = eoiRec[0].RW_Primary_Last_Name__c;    
                     }
                     
-                    if(opp.Name != Name)
-                    {
+                    if(opp.Name != Name){
                     opp.Name = Name;
                     update opp;
                     }
@@ -744,16 +641,11 @@ public without sharing class EOIController
     
     
     @AuraEnabled
-    public static EOIWrapper loadEOIdata(String eoiRecordId)
-    { 
-        try
-        {
-        	System.debug('**'+eoiRecordId);
+    public static EOIWrapper loadEOIdata(String eoiRecordId){ 
+        try{
             EOIWrapper eoiWrap = new EOIWrapper();
-            if(eoiRecordId != null)
-            {
+            if(eoiRecordId != null){
                 RW_EOI__c eoiRecord = Utility.getEOIRecord(eoiRecordId);
-                System.debug('**'+eoiRecord);
                 eoiWrap.Id=eoiRecord.Id;
                 eoiWrap.RWName=eoiRecord.Name;
                 eoiWrap.RWTowerName=eoiRecord.Tower__r.Name;
@@ -859,26 +751,19 @@ public without sharing class EOIController
                 eoiWrap.EOIAmount = eoiRecord.EOI_Amount__c;
                 //Added by coServe 09-10-2024 End
                 
-                List<Payment_Gateway__mdt > payments =  Utility.getPaymentGatewayDetails( eoiRecord.RW_Project_Name__c,eoiRecord.Tower__r.Name );
+                List<Payment_Gateway__mdt > payments =  Utility.getPaymentGatewayDetails(eoiRecord.RW_Project_Name__c,eoiRecord.Tower__r.Name);
 
-                 if(payments.size() > 0)
-                 {
+                 if(payments.size() > 0){
                  eoiWrap.gateway = payments[0];
                  eoiWrap.paymentGatewayAvailable = true;
-                 }
-                else
-                {
+                 }else{
                  eoiWrap.paymentGatewayAvailable = false;
                 }
                 
             }
-
             return eoiWrap;
             
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
        
@@ -887,13 +772,10 @@ public without sharing class EOIController
     
     
     @AuraEnabled
-    public static OpportunityWrapper loadOpportunityData(String oppRecordId)
-    { 
-        try
-        {
+    public static OpportunityWrapper loadOpportunityData(String oppRecordId){ 
+        try{
          OpportunityWrapper oppWrap = new OpportunityWrapper();
-            if(oppRecordId != null)
-            {
+            if(oppRecordId != null){
                 Opportunity oppRecord = Utility.getOpportunityRecord(oppRecordId);
                 oppWrap.OpportunityName = oppRecord.Name;
                 oppWrap.Email = oppRecord.RW_Email__c;
@@ -902,68 +784,44 @@ public without sharing class EOIController
                 
             }
         return oppWrap;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
    @AuraEnabled
-    public static String checkLinkExpiry(String eoiLinkRecordId)
-    { 
-        try
-        {
-        if(eoiLinkRecordId != null)
-        {
+    public static String checkLinkExpiry(String eoiLinkRecordId){ 
+        try{
+        if(eoiLinkRecordId != null){
         RW_Digital_Link_Status__c eoiLinkRec = Utility.digitalLinkStatusRecord(eoiLinkRecordId);
-        if(eoiLinkRec.RW_Link_Status__c == 'Expired')
-        {
+        if(eoiLinkRec.RW_Link_Status__c == 'Expired'){
             return 'Expired';
-        }
-        
-        else
-        {
+        }else{
         return 'Active';
         }
-        }
-        else
+        }else
             throw new CommonException('Error Fetching Digital Link Data.');
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     @AuraEnabled
-    public static List<String> retreiveStatesList(String ObjectApiName , String FieldName)
-    { 
-        try
-        {
+    public static List<String> retreiveStatesList(String ObjectApiName , String FieldName){ 
+        try{
         List<String> StatesList = Utility.getGlobalPicklists(ObjectApiName, fieldName);
         return StatesList;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     @AuraEnabled
-    public static List<String> retreiveCountryList(String ObjectApiName , String FieldName)
-    { 
-        try
-        {
+    public static List<String> retreiveCountryList(String ObjectApiName , String FieldName){ 
+        try{
         List<String> CountriesList = Utility.getGlobalPicklists(ObjectApiName, fieldName);
         return CountriesList;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -984,19 +842,14 @@ public without sharing class EOIController
     }*/
     
     @AuraEnabled
-    public static String retreiveProjectName(String opportunityId )
-    {
-        try
-        {
+    public static String retreiveProjectName(String opportunityId ){
+        try{
         Opportunity opp = Utility.getOpportunityRecord(opportunityId);
         if(opp != null)
         return opp.RW_Project__r.Name;
         else
         throw new CommonException('Error Fetching Project Data.');
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -1054,55 +907,38 @@ public without sharing class EOIController
     */
     
     @AuraEnabled
-    public static List<Applicable_Offer__c> getEOIApplicableOffers(String recordId,String applicableOfferId)
-        {
-            try
-            {
-            if(recordId != null && recordId !='' && applicableOfferId != null && applicableOfferId != '')
-            {
-            List<Applicable_Offer__c> applicableOfferRecord = [SELECT Id,Offer__c, Offer__r.Name ,RW_Offer_Name__c, RW_Sub_Offer_Name__c ,RW_End_Date__c,opportunity__c FROM Applicable_Offer__c WHERE EOI__c= :recordId and Id =:applicableOfferId];
-            
+    public static List<Applicable_Offer__c> getEOIApplicableOffers(String recordId,String applicableOfferId){
+        try{
+            if(recordId != null && recordId !='' && applicableOfferId != null && applicableOfferId != ''){
+                List<Applicable_Offer__c> applicableOfferRecord = [SELECT Id,Offer__c,Offer__r.Name,RW_Offer_Name__c,RW_Sub_Offer_Name__c,RW_End_Date__c,opportunity__c FROM Applicable_Offer__c WHERE EOI__c= :recordId and Id =:applicableOfferId];
                 
-            if(applicableOfferRecord!= null && applicableOfferRecord.size() >0)
-            {  
-                return applicableOfferRecord;
-            }
-            else
+                
+                if(applicableOfferRecord!= null && applicableOfferRecord.size() >0){  
+                    return applicableOfferRecord;
+                }else
+                    return null;
+            }else{
                 return null;
             }
-                else
-            {
-                return null;
-            }
-            }
-            
-            catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
-        }
+    }
     
     
     @AuraEnabled
-    public static String getLoggedInProfileName()
-        {
-            try
-            {
+    public static String getLoggedInProfileName(){
+        try{
             String profileName =Utility.getLoggedInProfileName();
             return profileName;
-            }
-            catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
         }
     
     @auraEnabled
     public static string getPaymentResponseDecryptedData(String inputdata,String decryptionKey){
-        try
-        {
+        try{
             
        // Blob cryptoKey = Blob.valueOf('E9A2B6448EB867A7A9E622341452EECF');
         Blob cryptoKey = Blob.valueOf(decryptionKey);
@@ -1112,10 +948,7 @@ public without sharing class EOIController
         String PLAIN_TEXT = decryptedText.toString();
             //throw new AuraHandledException('test');
         return PLAIN_TEXT;
-        }
-        catch(Exception e)
-        {
-            System.debug('Exception is'+ e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -1123,32 +956,24 @@ public without sharing class EOIController
     @auraEnabled
     public static string encrypt(String inputdata,String encryptionKey){
         //Blob cryptoKey = Blob.valueOf('E9A2B6448EB867A7A9E622341452EECF');
-        try
-        {
+        try{
         Blob cryptoKey = Blob.valueOf(encryptionKey);
         Blob hash = Crypto.generateDigest('MD5', cryptoKey );
         Blob data = Blob.valueOf(inputdata);
         Blob encryptedData = Crypto.encryptWithManagedIV('AES128', hash , data);     
         String encRequest = EncodingUtil.convertToHex(encryptedData );
-        system.debug(encRequest);
        // system.debug(decrypt(encRequest));
         return encRequest;
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
      @AuraEnabled
-    public static void insertPartialPaymentDetails(Map<String,String> details)
-    {
-        try
-        {
+    public static void insertPartialPaymentDetails(Map<String,String> details){
+        try{
             
         
-        system.debug('**'+details);
          List<String> toAddress = new List<String>();
           Set<String> eoiSalesManagerSet = new Set<String>();
         Map<String,String> eoiSalesManagerEmailIds = new Map<String,String>();
@@ -1169,49 +994,41 @@ public without sharing class EOIController
             
          insert receipt;
             
-        RW_EOI__c eoiRec =[Select Id,Name,Total_Amount_Received__c,RW_Primary_First_Name__c,Opportunity__r.SAP_Customer_Number__c, Opportunity__r.RW_Sales_Associate__c,RW_Primary_Last_Name__c,RW_Primary_Email__c,Opportunity__r.RW_Project__c,Opportunity__c,Opportunity__r.RW_Project__r.Name,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email from RW_EOI__c where Id =: details.get('eoiRecId')];
+        RW_EOI__c eoiRec =[Select Id,Name,Total_Amount_Received__c,RW_Primary_First_Name__c,Opportunity__r.SAP_Customer_Number__c, Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,RW_Primary_Last_Name__c,RW_Primary_Email__c,Opportunity__r.RW_Project__c,Opportunity__c,Opportunity__r.RW_Project__r.Name,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email from RW_EOI__c where Id =: details.get('eoiRecId')]; //Added Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
         
-           if(eoiRec.Opportunity__r.RW_Sales_Associate__c != null)
-           eoiSalesManagerSet.add(eoiRec.Opportunity__r.RW_Sales_Associate__c);
+           if(eoiRec.Opportunity__r.Sales_Manager_User__c != null)  //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+           eoiSalesManagerSet.add(eoiRec.Opportunity__r.Sales_Manager_User__r.Name); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
            ProjetRecIds.add(eoiRec.Opportunity__r.RW_Project__c);
         
             
             Set<Id> teamIds = new Set<Id>();
            List<Team__c> teamRecord = [Select id from Team__c where Team_Type__c ='MIS' and Project__c IN:ProjetRecIds] ;
-           if(teamRecord != null && teamRecord.size() >0)
-           {
-               for(Team__c teamRec : teamRecord)
-               {
+           if(teamRecord != null && teamRecord.size() >0){
+               for(Team__c teamRec : teamRecord){
                    teamIds.add(teamRec.Id);
                }
            }
              
            List<Team_Members__c> teamMembers = [Select Id,Email_Id__c,Team__r.Project__c from Team_Members__c where Team__c IN :teamIds];
-           for(Team_Members__c teammem : teamMembers)
-           {
+           for(Team_Members__c teammem : teamMembers){
 
-               if(projectTeamEmailIds.containsKey(teammem.Team__r.Project__c))
-               {
+               if(projectTeamEmailIds.containsKey(teammem.Team__r.Project__c)){
                   List<String> emailIdValues =  projectTeamEmailIds.get(teammem.Team__r.Project__c);
                   emailIdValues.add(teammem.Email_Id__c);
                   projectTeamEmailIds.put(teammem.Team__r.Project__c,emailIdValues);
-               }
-               else
-               {
+               }else{
                    projectTeamEmailIds.put(teammem.Team__r.Project__c,new List<String>{teammem.Email_Id__c});
                }
            }
         
         
             List<User> userRec = [Select id,Name,Email from User Where Name IN:eoiSalesManagerSet];
-            if(userRec != null && userRec.size() >0)
-            {
+            if(userRec != null && userRec.size() >0){
                 for(User u : userRec)
                 eoiSalesManagerEmailIds.put(u.Name,u.Email);
             }
             
-             if(projectTeamEmailIds.containsKey(eoiRec.Opportunity__r.RW_Project__c))
-            {
+             if(projectTeamEmailIds.containsKey(eoiRec.Opportunity__r.RW_Project__c)){
                 if(projectTeamEmailIds.get(eoiRec.Opportunity__r.RW_Project__c) != null && projectTeamEmailIds.get(eoiRec.Opportunity__r.RW_Project__c).size() >0)
                 toAddress.addAll(projectTeamEmailIds.get(eoiRec.Opportunity__r.RW_Project__c));
             }
@@ -1219,9 +1036,8 @@ public without sharing class EOIController
             if(eoiRec.Opportunity__r.RW_Project__r.Sales_Site_Head__c != null && eoiRec.Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email != null )
             toAddress.add(eoiRec.Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email);
 
-            if(eoiRec.Opportunity__r.RW_Sales_Associate__c != null && eoiSalesManagerEmailIds.containsKey(eoiRec.Opportunity__r.RW_Sales_Associate__c))
-            {
-                toAddress.add(eoiSalesManagerEmailIds.get(eoiRec.Opportunity__r.RW_Sales_Associate__c));
+            if(eoiRec.Opportunity__r.Sales_Manager_User__c  != null && eoiSalesManagerEmailIds.containsKey(eoiRec.Opportunity__r.Sales_Manager_User__r.Name)){ //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                toAddress.add(eoiSalesManagerEmailIds.get(eoiRec.Opportunity__r.Sales_Manager_User__r.Name)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             }
             
             
@@ -1246,32 +1062,22 @@ public without sharing class EOIController
             Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
             Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);   
             
-             List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id, RecordTypeId, Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =: details.get('digitalLinkId')];
-         if(digitalLinkRec != null && digitalLinkRec.size() >0)
-         {
+             List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id,RecordTypeId,Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =: details.get('digitalLinkId')];
+         if(digitalLinkRec != null && digitalLinkRec.size() >0){
              digitalLinkRec[0].RW_Link_Status__c ='Expired';
              update digitalLinkRec[0];
          }
-        }
-        
-       
-        
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     
     @AuraEnabled
-    public static void insertPaymentDetails(Map<String,String> details)
-    {
-        try
-        {
+    public static void insertPaymentDetails(Map<String,String> details){
+        try{
             
         
-        system.debug('**'+details);
          List<String> toAddress = new List<String>();
        /* RW_Payment_Details__c paydet = new RW_Payment_Details__c();
         paydet.Opportunity__c = details.get('oppRecId');
@@ -1282,7 +1088,6 @@ public without sharing class EOIController
          system.debug('*before*'+details);
         insert paydet;*/
         
-         System.debug('before Insert');
          Opportunity opp = [Select Id,RW_Project__c from Opportunity Where id =:details.get('oppRecId')];
          Receipt__c receipt = new Receipt__c();
          receipt.Mode__c = 'Digital';
@@ -1297,7 +1102,7 @@ public without sharing class EOIController
          receipt.Project__c = opp.RW_Project__c;
          
          insert receipt;
-        RW_EOI__c eoiRecord = [Select id,Name,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,Opportunity__r.RW_Project__c,RW_Project_Name__c,Opportunity__c,Opportunity__r.RW_Sales_Associate__c,RW_EOI_Acknowledgment_Sent__c,RW_EOI_Acknowledgement_Sent_Date_Time__c from RW_EOI__c where id= : details.get('eoiRecId')];
+        RW_EOI__c eoiRecord = [Select id,Name,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,Opportunity__r.RW_Project__c,RW_Project_Name__c,Opportunity__c,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,RW_EOI_Acknowledgment_Sent__c,RW_EOI_Acknowledgement_Sent_Date_Time__c from RW_EOI__c where id= : details.get('eoiRecId')]; //Added Opportunity__r.Sales_Manager_User__c, Opportunity__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
         /*Team_Email_IDs__mdt[] teamEmails = [SELECT Id,Email_IDs__c FROM Team_Email_IDs__mdt Where DeveloperName ='Sales' or DeveloperName ='MIS' or DeveloperName='Accounts'];
             if(teamEmails != null && teamEmails.size() >0)
             {
@@ -1327,8 +1132,7 @@ public without sharing class EOIController
         
             
          
-         if(eoiRecord.RW_Status__c != 'EOI Confirmed')
-         {
+         if(eoiRecord.RW_Status__c != 'EOI Confirmed'){
              eoiRecord.RW_Status__c = 'EOI Confirmed';
              eoiRecord.RW_EOI_Acknowledgment_Sent__c = 'Yes';
              eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c =  DateTime.now();
@@ -1337,8 +1141,7 @@ public without sharing class EOIController
          
          List<String> emailIds = Utility.getExternalTeamEmailIds(new List<String>{'CRM Team','Accounts','Sales Approvers Team'},eoiRecord.Opportunity__r.RW_Project__c);
              
-             if(emailIds.size() >  0)
-             {
+             if(emailIds.size() >  0){
                 toAddress.addAll(emailIds);
              }   
           
@@ -1355,22 +1158,22 @@ public without sharing class EOIController
             if(body != null)
             attach.Body = body;
             
-         EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Confirmed_Customer'];
+         EmailTemplate template = [SELECT Id,Name,Subject,HtmlValue,Body,DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Confirmed_Customer'];
         	String htmlBody = template.HtmlValue; 
             htmlBody = htmlBody.replace('{!RW_EOI__c.RW_Primary_First_Name__c}', eoiRecord.RW_Primary_First_Name__c);
             htmlBody = htmlBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', eoiRecord.RW_Primary_Last_Name__c);
             htmlBody = htmlBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c)!=null)
-            htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+            htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             else
             htmlBody = htmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
             String plainTextBody = template.Body; 
             plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_Primary_First_Name__c}', eoiRecord.RW_Primary_First_Name__c);
             plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', eoiRecord.RW_Primary_Last_Name__c);
             plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
-              if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c)!=null)
-            plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c).RW_Phone__c));	
+              if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+            plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c));	 //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             else
             plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
             
@@ -1388,59 +1191,43 @@ public without sharing class EOIController
             Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);   
             
          List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id, RecordTypeId, Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =: details.get('digitalLinkId')];
-         if(digitalLinkRec != null && digitalLinkRec.size() >0)
-         {
+         if(digitalLinkRec != null && digitalLinkRec.size() >0){
              digitalLinkRec[0].RW_Link_Status__c ='Expired';
              update digitalLinkRec[0];
          }
-         system.debug('*after*'+details);
             
             
-           List<String> SMSdata = new List<String>();
-            System.debug('**before**');
+            List<String> SMSdata = new List<String>();
             SMSdata.add(eoiRecord.Opportunity__c);
             SMSdata.add(String.valueOf(System.now().format('dd MMM YYYY')));
             EOIOutboundSMSFutureHandler.SendSMSOnEOIConfirm(SMSdata);    
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     @AuraEnabled
-    public static /*List<RW_Payment_Details__c>*/ List<Receipt__c>  getPaymentDetailsOfOpportunity(String oppRecordId,String TransactionId )
-    {
+    public static /*List<RW_Payment_Details__c>*/ List<Receipt__c>  getPaymentDetailsOfOpportunity(String oppRecordId,String TransactionId ){
       /*List<RW_Payment_Details__c> PaymentRecord =  [Select Id,RW_Transaction_Id__c,RW_Bank_Reference_Number__c from RW_Payment_Details__c Where Opportunity__c =:oppRecordId and RW_Transaction_Id__c =:TransactionId and RW_Bank_Reference_Number__c =:BankRefNumber];
       if(PaymentRecord != null && PaymentRecord.size() >0)
       {
           return PaymentRecord;
       }*/
-        try
-        { 
+        try{ 
       List<Receipt__c> receipt =  [Select Id,Cheque_DD__c from Receipt__c Where Opportunity__c =:oppRecordId and Cheque_DD__c =:TransactionId];
-         if(receipt != null && receipt.size() >0)
-      {
+         if(receipt != null && receipt.size() >0){
           return receipt;
-      }
-       else
-       {
+      }else{
            return null;
        }
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
     
       @AuraEnabled
-     public static void savePaymentRecord(String opprecordId, String eoiRecId , String digitalLinkId ,String paymentRecord)
-     {
-         try
-         {
+     public static void savePaymentRecord(String opprecordId, String eoiRecId , String digitalLinkId ,String paymentRecord){
+         try{
           /* PaymentDetailsWrapper obj = (PaymentDetailsWrapper)JSON.deserialize(paymentRecord, PaymentDetailsWrapper.class);
          RW_Payment_Details__c paymentRec = new RW_Payment_Details__c();
          paymentRec.RW_Instrument_Number__c = obj.RWInstrumentNumber;
@@ -1449,7 +1236,6 @@ public without sharing class EOIController
          paymentRec.Opportunity__c = oppRecId;
          
          insert paymentRec;*/
-         System.debug('**'+opprecordId);
          Opportunity opp = [Select Id,RW_Project__c from Opportunity Where id =:opprecordId];
          PaymentDetailsWrapper obj = (PaymentDetailsWrapper)JSON.deserialize(paymentRecord, PaymentDetailsWrapper.class);
          Receipt__c receipt = new Receipt__c();
@@ -1463,16 +1249,14 @@ public without sharing class EOIController
          receipt.RW_Payment_Collection_Type__c='EOI';
          receipt.EOI__c=eoiRecId;
          insert receipt;
-         System.debug('*done*'+opprecordId);
            
-         List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id, RecordTypeId, Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =: digitalLinkId];
-         if(digitalLinkRec != null && digitalLinkRec.size() >0)
-         {
+         List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id,RecordTypeId,Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =: digitalLinkId];
+         if(digitalLinkRec != null && digitalLinkRec.size() >0){
              digitalLinkRec[0].RW_Link_Status__c ='Expired';
              update digitalLinkRec[0];
          }
            
-            RW_EOI__c eoiRecord = [Select id,RW_EOI_Acknowledgment_Sent__c,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.RW_Project__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,RW_EOI_Acknowledgement_Sent_Date_Time__c,Opportunity__c,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c from RW_EOI__c where id= :eoiRecId];
+            RW_EOI__c eoiRecord = [Select id,RW_EOI_Acknowledgment_Sent__c,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,Opportunity__r.RW_Project__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,RW_EOI_Acknowledgement_Sent_Date_Time__c,Opportunity__c,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c from RW_EOI__c where id= :eoiRecId]; //Added Opportunity__r.Sales_Manager_User__c, Opportunity__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
            /*   Messaging.SingleEmailMessage customermessage = new Messaging.SingleEmailMessage();
             customermessage.toAddresses = new String[] { eoiRecord.RW_Primary_Email__c };
             String emailBody = '';
@@ -1492,8 +1276,7 @@ public without sharing class EOIController
               List<String> AckToAddress = new List<String>();
               List<String> teamemailIds = Utility.getExternalTeamEmailIds(new List<String>{'CRM Team','Accounts','Sales Approvers Team'},eoiRecord.Opportunity__r.RW_Project__c);
              
-             if(teamemailIds.size() >  0)
-             {
+             if(teamemailIds.size() >  0){
                 AckToAddress.addAll(teamemailIds);
              } 
              
@@ -1510,23 +1293,23 @@ public without sharing class EOIController
            	if(body != null)
             attach.Body = body;
              
-             EmailTemplate custtemplate = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Confirmed_Customer'];
+             EmailTemplate custtemplate = [SELECT Id,Name,Subject,HtmlValue,Body,DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Confirmed_Customer'];
         	String custhtmlBody = custtemplate.HtmlValue; 
             custhtmlBody = custhtmlBody.replace('{!RW_EOI__c.RW_Primary_First_Name__c}', eoiRecord.RW_Primary_First_Name__c);
             custhtmlBody = custhtmlBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', eoiRecord.RW_Primary_Last_Name__c);
             custhtmlBody = custhtmlBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.Opportunity__r.RW_Sales_Associate__c)!=null)
-            custhtmlBody = custhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.Opportunity__r.RW_Sales_Associate__c).RW_Phone__c));
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.Opportunity__r.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+            custhtmlBody = custhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.Opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             else
             custhtmlBody = custhtmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');    
             String custplainTextBody = custtemplate.Body; 
             custplainTextBody = custplainTextBody.replace('{!RW_EOI__c.RW_Primary_First_Name__c}', eoiRecord.RW_Primary_First_Name__c);
             custplainTextBody = custplainTextBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', eoiRecord.RW_Primary_Last_Name__c);
             custplainTextBody = custplainTextBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.Opportunity__r.RW_Sales_Associate__c)!=null)
-            custplainTextBody = custplainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.Opportunity__r.RW_Sales_Associate__c).RW_Phone__c));
-            else
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.Opportunity__r.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+            custplainTextBody = custplainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.Opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+            else 
             custhtmlBody = custhtmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');   
             
             Messaging.SingleEmailMessage custmessage = new Messaging.SingleEmailMessage();
@@ -1548,19 +1331,17 @@ public without sharing class EOIController
              
              List<String> emailIds = Utility.getExternalTeamEmailIds(new List<String>{'MIS'},eoiRecord.Opportunity__r.RW_Project__c);
              
-             if(emailIds.size() >  0)
-             {
+             if(emailIds.size() >  0){
                 toAddress.addAll(emailIds);
              }
              
-             if(eoiRecord.Opportunity__r.RW_Sales_Associate__c != null)
-             {
-                 User SalesManager = Utility.getUserRecordByName(eoiRecord.Opportunity__r.RW_Sales_Associate__c);
+             if(eoiRecord.Opportunity__r.Sales_Manager_User__c != null){ //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                 User SalesManager = Utility.getUserRecordByName(eoiRecord.Opportunity__r.Sales_Manager_User__r.Name); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                  if(SalesManager !=null)
                  toAddress.add(SalesManager.email);    
              }
              
-            EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Offline_Payment'];
+            EmailTemplate template = [SELECT Id,Name,Subject,HtmlValue,Body,DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Offline_Payment'];
             String htmlBody = template.HtmlValue; 
             htmlBody = htmlBody.replace('{!RW_EOI__c.Name}', eoiRecord.Name);
             htmlBody = htmlBody.replace('{!RW_EOI__c.Link}', Url.getOrgDomainUrl().toExternalForm()+'/'+eoiRecord.Id);
@@ -1584,77 +1365,56 @@ public without sharing class EOIController
             
            
             List<String> SMSdata = new List<String>();
-            System.debug('**before**');
             SMSdata.add(eoiRecord.Opportunity__c);
             SMSdata.add(String.valueOf(System.now().format('dd MMM YYYY')));
             EOIOutboundSMSFutureHandler.SendSMSOnEOIConfirm(SMSdata);    
              
-         }
-         catch(Exception e)
-        {
-            system.debug(e.getMessage());
+         }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
      }
     
      @AuraEnabled
-     public static Map<String,List<String>> getPicklistValuesForFields(String objectName,List<String> fieldNames)
-     {
-         try
-         {
-         system.debug('**'+objectName+'****'+fieldNames);
+     public static Map<String,List<String>> getPicklistValuesForFields(String objectName,List<String> fieldNames){
+         try{
          Map<String,List<String>> picklistValues = new Map<String,List<String>>();
-         for(String fieldName : fieldNames)
-         {
+         for(String fieldName : fieldNames){
              picklistValues.put(fieldName,Utility.getPicklistValues(objectName,fieldName));
          }
-         system.debug('**'+picklistValues);
          Return picklistValues;
-         }
-         catch(Exception e)
-        {
-            system.debug(e.getMessage());
+         }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
      }
     
     @AuraEnabled
-     public static Map<String,String> getTowersOfProject(String recordId)
-     {
-         try
-         {
+     public static Map<String,String> getTowersOfProject(String recordId){
+         try{
          List<String> towerNames = new List<String>();
          //Map<String,List<String>> towerData = new Map<String,List<String>>();
          Map<String,String> towerData = new Map<String,String>();
          Opportunity oppRec = Utility.getOpportunityRecord(recordId);
          
         Projects__mdt[] projMappings = [SELECT Id,Label FROM Projects__mdt Where Label =:oppRec.RW_Project__r.Name];
-        if(projMappings != null && projMappings.size() >0)
-        {    
+        if(projMappings != null && projMappings.size() >0){    
              
          Project_Towers__mdt[] towerMappings = [SELECT Id,Label, Projects__c FROM Project_Towers__mdt Where Projects__c = :projMappings[0].Id ];
-            if(towerMappings != null && towerMappings.size() >0)
-            {
+            if(towerMappings != null && towerMappings.size() >0){
                 for(Project_Towers__mdt towers :towerMappings)
                 towerNames.add(towers.Label);
             }
              
          List<Tower__c> tRec = [Select Id, Name, ProjectName__c , ProjectName__r.Name from Tower__c where ProjectName__c = : oppRec.RW_Project__c order by Name];
-         for(Tower__c towerRec : tRec)
-         {
-             for(String towers : towerNames)
-             {
-                 if(towers.equals(towerRec.Name))
-                 {
+         for(Tower__c towerRec : tRec){
+             for(String towers : towerNames){
+                 if(towers.equals(towerRec.Name)){
                      towerData.put(towerRec.Id, towers);
                  }
              }
          }
         }
             return towerData;
-         }
-         catch(Exception e)
-        {
+         }catch(Exception e){
             system.debug(e.getMessage());
             throw new AuraHandledException(e.getMessage());
         }
@@ -1750,7 +1510,7 @@ public without sharing class EOIController
         
     }  */
     
-  public Static String generateUniqueTransactionId() {
+  public Static String generateUniqueTransactionId(){
         Blob randomBlob = Crypto.generateAesKey(128);  // Generate 128-bit random key
         String encodedString = EncodingUtil.convertToHex(randomBlob);
         String uniqueId = encodedString.substring(0, 28); // Take first 28 characters
@@ -1758,10 +1518,10 @@ public without sharing class EOIController
         return uniqueId;
     }    
  @AuraEnabled
- public static String generateHashAndReturnPaymentLink(Id opportunityId, String amount) {
-    Opportunity opp = [SELECT Id, Name, Hash__c, Account.Name, Account.PersonEmail, Account.Mobile_No__c FROM Opportunity WHERE Id = :opportunityId LIMIT 1];
+ public static String generateHashAndReturnPaymentLink(Id opportunityId, String amount){
+    Opportunity opp = [SELECT Id,Name,Hash__c,Account.Name,Account.PersonEmail,Account.Mobile_No__c FROM Opportunity WHERE Id = :opportunityId LIMIT 1];
 
-       if (opp == null || opp.Account.PersonEmail == null) {
+       if (opp == null || opp.Account.PersonEmail == null){
         throw new AuraHandledException('Opportunity or Account email not found');
     }
     String key = 'OTVO07DZOH';
@@ -1780,7 +1540,6 @@ public without sharing class EOIController
     
     String hashString = key + '|' + merchant_txn + '|' + name + '|' + email + '|' + phone + '|' + amount + '|' + udf1 + '|' + udf2 + '|' + udf3 + '|' + udf4 + '|' + udf5 + '|' + message + '|' + salt;
     String hash = generateSHA512(hashString);
-    System.debug('hash'+hash);
     String paymentLink = callEasebuzzAPI(merchant_txn, amount, name, phone, email, hash, message);
      
     opp.Hash__c = hash;
@@ -1789,7 +1548,7 @@ public without sharing class EOIController
     return paymentLink; 
 }
 
-public static String callEasebuzzAPI(String merchant_txn, String amount, String name, String phone, String email, String hash, String message) {
+public static String callEasebuzzAPI(String merchant_txn, String amount, String name, String phone, String email, String hash, String message){
     Http http = new Http();
     HttpRequest request = new HttpRequest();
     request.setEndpoint('https://dashboard.easebuzz.in/easycollect/v1/create');
@@ -1815,25 +1574,24 @@ public static String callEasebuzzAPI(String merchant_txn, String amount, String 
     };
 
     request.setBody(JSON.serialize(requestBody));
-    System.debug('requestBody::'+requestBody);
     HttpResponse response = http.send(request);
-    if (response.getStatusCode() != 200) {
+    if(response.getStatusCode() != 200){
         throw new AuraHandledException('Failed to call Easebuzz API: ' + response.getStatus());
     }
     Map<String, Object> responseMap = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-    if (response.getStatusCode()==200) {
+    if(response.getStatusCode()==200){
         Map<String, Object> data = (Map<String, Object>) responseMap.get('data');
         return (String) data.get('payment_url'); 
-    } else {
+    }else{
         throw new AuraHandledException('Failed to generate payment link: ' + (String) responseMap.get('message'));
     }
 }
 
    
   @AuraEnabled
-public static void generateHashAndSendRequest(Id opportunityId, String amount) {
+public static void generateHashAndSendRequest(Id opportunityId, String amount){
     Opportunity opp = [SELECT Id, Name, Hash__c, Account.Name, Account.PersonEmail, Account.Mobile_No__c FROM Opportunity WHERE Id = :opportunityId LIMIT 1];
-    if (opp == null || opp.Account.PersonEmail == null) {
+    if(opp == null || opp.Account.PersonEmail == null){
         throw new AuraHandledException('Opportunity or Account email not found');
     }
 
@@ -1861,12 +1619,12 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
     System.enqueueJob(new PaymentLinkQueueable(opportunityId, amount, hash,merchant_txn));
 }
 
-    private static String generateTransactionId(Id opportunityId) {
+    private static String generateTransactionId(Id opportunityId){
         return opportunityId + String.valueOf(Datetime.now().getTime()); 
     }
 
  
-    private static String generateSHA512(String input) {
+    private static String generateSHA512(String input){
         Blob inputBlob = Blob.valueOf(input);
         Blob hash = Crypto.generateDigest('SHA-512', inputBlob);
         return EncodingUtil.convertToHex(hash);
@@ -1878,13 +1636,11 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
   
     
     @AuraEnabled
-    public static String getTowerTC(String towerId)
-    {
+    public static String getTowerTC(String towerId){
         return Utility.retreiveTowerTC(towerId);
     }
     @AuraEnabled
-    public static String getProjectTC(String projectId)
-    {
+    public static String getProjectTC(String projectId){
         return Utility.retreiveProjectTC(Utility.getDecryptedDatawithdecode(projectId));
     }
     
@@ -1927,15 +1683,12 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
     */
     
      @AuraEnabled
-    public static Map<String,List<String>> getOffersForTower(String towerId,String offerType)
-    {
+    public static Map<String,List<String>> getOffersForTower(String towerId,String offerType){
         Map<String,List<String>> OfferMap = new Map<String,List<String>>();
          List<RW_Sub_Offer__c> subofferRecords = [Select Name,Offer__c,Offer__r.Name,Project__c,Tower__c from RW_Sub_Offer__c Where Tower__c=: towerId and RW_Status__c='Active' and RW_Offer_Type__c =:offerType and RW_Approval_Status__c='Approved'];
-            for(RW_Sub_Offer__c subOffers : subofferRecords)
-            {
+            for(RW_Sub_Offer__c subOffers : subofferRecords){
   
-                        if(OfferMap.containsKey(subOffers.Offer__r.Name))
-                        {
+                        if(OfferMap.containsKey(subOffers.Offer__r.Name)){
                          List<String> SubofferNames = OfferMap.get(subOffers.Offer__r.Name);
                          SubofferNames.add(subOffers.Name);
                          OfferMap.put(subOffers.Offer__r.Name , SubofferNames);
@@ -1949,38 +1702,33 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
     }
     
     @AuraEnabled
-     public static Map<String,String> getProjectTowers(String recordId)
-     {
+     public static Map<String,String> getProjectTowers(String recordId){
          return Utility.getTowersOfProject(recordId);
      }
     
     @AuraEnabled
-     public static List<RW_Sub_Offer__c> getSubOfferRecord(String recordId)
-     {
+     public static List<RW_Sub_Offer__c> getSubOfferRecord(String recordId){
          List<RW_Sub_Offer__c> subofferRecords = [Select Id,Name,Offer__c,Offer__r.Name,Project__c,Tower__c,Tower__r.Name from RW_Sub_Offer__c Where Id=: recordId];
          return subofferRecords;
      }
     
      @AuraEnabled
-     public static String generateEOIOTP(String OTPType,String CustomerNo , String recordId)
-     {
+     public static String generateEOIOTP(String OTPType,String CustomerNo , String recordId){
          String OTPNumber = Utility.generateOTP(OTPType,CustomerNo,recordId);
          RW_EOI__c eoiRec = [Select id,Name,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c from RW_EOI__c where id= : recordId];
          String CustomerName = '';
-            if(eoiRec.RW_Primary_First_Name__c != null)
-            {
+            if(eoiRec.RW_Primary_First_Name__c != null){
                 CustomerName = eoiRec.RW_Primary_First_Name__c ;
             }
             
-            if(eoiRec.RW_Primary_Last_Name__c != null)
-            {
+            if(eoiRec.RW_Primary_Last_Name__c != null){
                 if(CustomerName != null && CustomerName !='')
                 CustomerName = CustomerName + ' ' +eoiRec.RW_Primary_Last_Name__c ;
                 else
                 CustomerName = eoiRec.RW_Primary_Last_Name__c ;    
             }
          	Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
-            message.toAddresses = new String[] { eoiRec.RW_Primary_Email__c };
+            message.toAddresses = new String[] {eoiRec.RW_Primary_Email__c};
             String emailBody = '';
             String plainTextBody ='';
             message.subject = 'Digital EOI Form OTP';
@@ -1996,19 +1744,16 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
      }
     
     @AuraEnabled
-     public static String getCommunityDigitalEOIFormURL()
-     {
+     public static String getCommunityDigitalEOIFormURL(){
          return Utility.getCommunityURL();
      }
     
     @AuraEnabled
-     public static void notifyPaymentFailure(String eoiRecordId, String TrackingId, String failureReason)
-     {
-          RW_EOI__c eoiRecord = [Select id,RW_EOI_Acknowledgment_Sent__c,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.RW_Project__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,RW_EOI_Acknowledgement_Sent_Date_Time__c,Opportunity__c,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c from RW_EOI__c where id= :eoiRecordId];
+     public static void notifyPaymentFailure(String eoiRecordId, String TrackingId, String failureReason){
+          RW_EOI__c eoiRecord = [Select id,RW_EOI_Acknowledgment_Sent__c,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,Opportunity__r.RW_Project__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,RW_EOI_Acknowledgement_Sent_Date_Time__c,Opportunity__c,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c from RW_EOI__c where id= :eoiRecordId]; //Added Opportunity__r.Sales_Manager_User__c, Opportunity__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
           List<String> toAddress = new List<String>();
-            if(eoiRecord.Opportunity__r.RW_Sales_Associate__c != null)
-             {
-                 User SalesManager = Utility.getUserRecordByName(eoiRecord.Opportunity__r.RW_Sales_Associate__c);
+            if(eoiRecord.Opportunity__r.Sales_Manager_User__c != null){ //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                 User SalesManager = Utility.getUserRecordByName(eoiRecord.Opportunity__r.Sales_Manager_User__r.Name); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                  if(SalesManager !=null)
                  toAddress.add(SalesManager.email);    
              }
@@ -2037,51 +1782,40 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
     
     
      @AuraEnabled
-     public static List<String> getDependentStatePicklists(String objectName , String CountryFieldName , String CountryFieldValue , String StateField )
-     {
+     public static List<String> getDependentStatePicklists(String objectName , String CountryFieldName , String CountryFieldValue , String StateField ){
          List<String> stateValues = new List<String>();
          Sobject sobjectName = new RW_EOI__c();
          Map<String, List<String>> dependentmap = DependentPicklistUtility.getDependentMap(sobjectName, CountryFieldName, StateField);
-         if(dependentmap.containsKey(CountryFieldValue))
-         {
+         if(dependentmap.containsKey(CountryFieldValue)){
              stateValues.addAll(dependentmap.get(CountryFieldValue));
              return stateValues;
-         }
-         else
-         {
+         }else{
              return stateValues;
          }
      }
     
     @AuraEnabled
-     public static List<String> getDependentCityPicklists(String objectName , String StateFieldName , String StateFieldValue , String CityField )
-     {
+     public static List<String> getDependentCityPicklists(String objectName , String StateFieldName , String StateFieldValue , String CityField ){
          List<String> cityValues = new List<String>();
          Sobject sobjectName = new RW_EOI__c();
          Map<String, List<String>> dependentmap = DependentPicklistUtility.getDependentMap(sobjectName, StateFieldName, CityField);
-         if(dependentmap.containsKey(StateFieldValue))
-         {
+         if(dependentmap.containsKey(StateFieldValue)) {
              cityValues.addAll(dependentmap.get(StateFieldValue));
              return cityValues;
-         }
-         else
-         {
+         }else{
              return cityValues;
          }
      }
     
     @AuraEnabled
-    public static String getBillDeskData(Map<String,String> DetailMap)
-    {   
+    public static String getBillDeskData(Map<String,String> DetailMap){   
         String billDeskChecksumKey = '';
-        try
-        {
+        try{
             Map<String,String> BillDeskInputMap = new Map<String,String>();
             List<Tower__c> towerData = [Select Name,Id,ProjectName__c,ProjectName__r.Name from Tower__c Where ID =: DetailMap.get('towerId')];
             
             List<Payment_Gateway__mdt> BillDeskDetails = Utility.getBIllDeskPaymentGatewayDetails(towerData[0].ProjectName__r.Name, towerData[0].Name);
-            if(BillDeskDetails != null && BillDeskDetails.size() >0)
-            {
+            if(BillDeskDetails != null && BillDeskDetails.size() >0){
                 Receipt__c receipt = new Receipt__c();
                 receipt.EOI__c = DetailMap.get('eoiRecId');
                 receipt.Opportunity__c = DetailMap.get('oppRecId');
@@ -2093,9 +1827,7 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                 
                 insert receipt;
                 
-                List<Receipt__c> receiptRecord = [Select Name, Opportunity__r.SalesOrder_Number__c, Opportunity__r.SAP_Customer_Number__c, 
-                                                    Opportunity__r.RW_Mobile_No__c, Opportunity__r.RW_Email__c, Project_Unit__r.RW_Param1__c, 
-                                                    Project_Unit__r.RW_Param4__c from Receipt__c Where Id =:receipt.Id ];
+                List<Receipt__c> receiptRecord = [Select Name,Opportunity__r.SalesOrder_Number__c,Opportunity__r.SAP_Customer_Number__c,Opportunity__r.RW_Mobile_No__c,Opportunity__r.RW_Email__c,Project_Unit__r.RW_Param1__c,Project_Unit__r.RW_Param4__c from Receipt__c Where Id =:receipt.Id];
                 BillDeskInputMap.put('MerchantID',BillDeskDetails[0].Bill_Desk_Merchant_ID__c);
                 BillDeskInputMap.put('CustomerID',receiptRecord[0].Name);
                 BillDeskInputMap.put('SecurityID',BillDeskDetails[0].Bill_Desk_Security_ID__c);
@@ -2103,7 +1835,6 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                 BillDeskInputMap.put('CurrencyType','INR');
                 BillDeskInputMap.put('TypeField1', 'R');
                 BillDeskInputMap.put('TypeField2', 'F');
-                System.Debug('*****'+BillDeskDetails[0].Bill_Desk_Pay_Category__c);
                 //Added by coServe 02-02-2023 Start
                 BillDeskInputMap.put('AdditionalInfo2',receiptRecord[0].Opportunity__r.SalesOrder_Number__c);
                 BillDeskInputMap.put('AdditionalInfo3',receiptRecord[0].Opportunity__r.SAP_Customer_Number__c);
@@ -2116,39 +1847,30 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                 
                 return Utility.generateBillDeskMessageString(BillDeskInputMap, billDeskChecksumKey);
                 
-            }
-            else
-            {
+            }else{
                 throw new CommonException('Payment Gateway unavailable right now. Please try later');
             }        
-        }
-        catch(Exception e)
-        {
+        }catch(Exception e){
             throw new CommonException('There was an error -'+e.getMessage()+'. Please try later');
         }
     }
     
     @AuraEnabled
-    public static String saveBillDeskResp(String msg, String digitalLinkId, String eoiRecId, String towerId)
-    {	
+    public static String saveBillDeskResp(String msg, String digitalLinkId, String eoiRecId, String towerId){	
         String BillDeskResFormat = 'MerchantID|CustomerID|TxnReferenceNo|BankReferenceNo|TxnAmount|BankID|BankMerchantID|TxnType|CurrencyName|ItemCode|SecurityType|SecurityID|SecurityPassword|TxnDate|AuthStatus|SettlementType|AdditionalInfo1|AdditionalInfo2|AdditionalInfo3|AdditionalInfo4|AdditionalInfo5|AdditionalInfo6|AdditionalInfo7|ErrorStatus|ErrorDescription|CheckSum';
         /*						    BDSKUATY  |R-6668    |U1230002028226|1              |00087666.00|123 |NA            |01     |INR         |DIRECT  |NA          |NA        |00.00           |16-07-2021 17:23:49|0300|NA      |NA             |NA             |NA             |NA             |NA             |NA             |NA             |NA         |NA              |1104D57AF9C00022172162983BF515FABE9C35BCEB0836098854F99105DA963C */
-        system.debug('****'+BillDeskResFormat);
         List<String> BillDeskResFormat1 = BillDeskResFormat.split('\\|');
         List<String> msgList = msg.split('\\|');
         String actualinputData = msg.substring(0,msg.lastIndexOf('|'));
         String checksumValue = msg.substring(msg.lastIndexOf('|')+1);
-        system.debug('*actualinputData**'+actualinputData+'*checksumValue**'+checksumValue);
         String ChecksumKey='';
-        try
-        {
+        try{
             List<Tower__c> towerData = [Select Name,Id,ProjectName__c,ProjectName__r.Name from Tower__c Where ID =: towerId];
             List<Payment_Gateway__mdt> BillDeskDetails = Utility.getBIllDeskPaymentGatewayDetails(towerData[0].ProjectName__r.Name, towerData[0].Name);
 
             ChecksumKey = BillDeskDetails[0].Bill_Desk_Checksum_Key__c;
 
-            if(ChecksumKey != '' && checksumValue == Utility.getChecksumKey(actualinputData,ChecksumKey))
-            {
+            if(ChecksumKey != '' && checksumValue == Utility.getChecksumKey(actualinputData,ChecksumKey)){
                 List<Receipt__c> receiptRecord = [Select Name,Mode__c,Cheque_DD__c,Receipt_Status__c,Payment_Gateway_Response_Code__c,Cheque_DD_Date__c from Receipt__c Where Name =: msgList[BillDeskResFormat1.indexOf('CustomerID')]];
                 
                 if(receiptRecord != null && receiptRecord.size() >0){
@@ -2176,17 +1898,15 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                 
                 if(msgList.get(BillDeskResFormat1.indexOf('AuthStatus')) == '0300'){
                     
-                    List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id, RecordTypeId, Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =:digitalLinkId];
+                    List<RW_Digital_Link_Status__c> digitalLinkRec =[Select id,RecordTypeId,Name,RW_Link_Status__c,RW_Link_Sent_Time__c FROM RW_Digital_Link_Status__c WHERE Id =:digitalLinkId];
                     
-                    if(digitalLinkRec != null && digitalLinkRec.size() >0)
-                    {
+                    if(digitalLinkRec != null && digitalLinkRec.size() >0){
                         digitalLinkRec[0].RW_Link_Status__c ='Expired';
                         update digitalLinkRec[0];
                     }
                     
-                    RW_EOI__c eoiRecord = [Select id,RW_EOI_Acknowledgment_Sent__c,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.RW_Project__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,RW_EOI_Acknowledgement_Sent_Date_Time__c,Opportunity__c,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c from RW_EOI__c where id= :eoiRecId];
-                    if(eoiRecord != null)
-                    {   
+                    RW_EOI__c eoiRecord = [Select id,RW_EOI_Acknowledgment_Sent__c,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,Opportunity__r.RW_Project__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,RW_EOI_Acknowledgement_Sent_Date_Time__c,Opportunity__c,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c from RW_EOI__c where id= :eoiRecId]; //Added Opportunity__r.Sales_Manager_User__c, Opportunity__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
+                    if(eoiRecord != null){   
                         eoiRecord.RW_Status__c = 'EOI Confirmed';
                         eoiRecord.RW_EOI_Acknowledgment_Sent__c = 'Yes';
                         eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c =  DateTime.now();
@@ -2195,8 +1915,7 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                     List<String> toAddress = new List<String>();
                     List<String> emailIds = Utility.getExternalTeamEmailIds(new List<String>{'CRM Team','Accounts','Sales Approvers Team'},eoiRecord.Opportunity__r.RW_Project__c);
                     
-                    if(emailIds.size() >  0)
-                    {
+                    if(emailIds.size() >  0){
                         toAddress.addAll(emailIds);
                     }  
                     PageReference pdf = Page.CustomerEOIForm;
@@ -2212,22 +1931,22 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                     if(body != null)
                         attach.Body = body;
                     
-                    EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Confirmed_Customer'];
+                    EmailTemplate template = [SELECT Id,Name,Subject,HtmlValue,Body,DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Confirmed_Customer'];
                     String htmlBody = template.HtmlValue; 
                     htmlBody = htmlBody.replace('{!RW_EOI__c.RW_Primary_First_Name__c}', eoiRecord.RW_Primary_First_Name__c);
                     htmlBody = htmlBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', eoiRecord.RW_Primary_Last_Name__c);
                     htmlBody = htmlBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
                     map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-                    if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c)!=null)
-                        htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c).RW_Phone__c));	
+                    if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                        htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                     else
                         htmlBody = htmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
                     String plainTextBody = template.Body; 
                     plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_Primary_First_Name__c}', eoiRecord.RW_Primary_First_Name__c);
                     plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_Primary_Last_Name__c}', eoiRecord.RW_Primary_Last_Name__c);
                     plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoiRecord.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
-                    if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c)!=null)
-                        plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.RW_Sales_Associate__c).RW_Phone__c));	
+                    if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__c)!=null)  //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                        plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoiRecord.opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c));	 //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                     else
                         plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
                     
@@ -2244,17 +1963,13 @@ public static void generateHashAndSendRequest(Id opportunityId, String amount) {
                     Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
                         Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
                     return 'Success';   
-                }
-                else{ 
+                }else{ 
                     return 'Failure';  
                 }
-            }
-            else{ 
+            }else{ 
                 return 'Failure';  
             }
-        }
-        catch(Exception e)
-        {
+        }catch(Exception e){
             throw new CommonException('There was an error -'+e.getMessage()+'. Please try later');
         }
     }

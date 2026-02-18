@@ -46,7 +46,7 @@ public class EasebuzzPaymentAPITest {
 
         Test.startTest();
         EasebuzzPaymentAPI.handlePaymentCallback();
-        EasebuzzPaymentAPI.dummyMethod();
+        //EasebuzzPaymentAPI.dummyMethod();
         Test.stopTest();
 
         

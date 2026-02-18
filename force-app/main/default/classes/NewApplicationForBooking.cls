@@ -147,11 +147,11 @@ set;
              opportunity__r.RW_Walkin_Channel_Partner__r.RW_Email__c,project__r.TermsAndConditions__c,Unit_No__r.Legal_Entity__c,
              opportunity__r.RW_Walkin_Channel_Partner__c,opportunity__r.RW_Configuration__c, 
              Booking_Date__c, Wing__c, Token_Amount__c, opportunity__r.RW_Walkin_Channel_Partner__r.Representative_Name__c,
-             Contact_No_of_Referer_Customer_Custome__c, Allotment_Premium__c, No_of_Parking__c,Quotation__r.Total_No_of_Parking__c, Sales_Managers__c ,
+             Contact_No_of_Referer_Customer_Custome__c, Allotment_Premium__c, No_of_Parking__c,Quotation__r.Total_No_of_Parking__c, Company__c, Sales_Managers__c ,
              Unit_No__r.TowerName__r.Front_Page_Image__c,Emp_Manager_Name__c,opportunity__r.Walk_in_Corporate__c,opportunity__r.Employee_Reference__r.Employee_ID__c,
              opportunity__r.RW_Referral_Details__c, opportunity__r.Customer_Reference__c
              From Booking__c Where id =: BookingId
-            ]; // Removed the field Company__c from soql by Vinay 01-10-2025
+            ];
         system.debug(b);
         Token = b[0].Token_Amount__c;
         TokenInWords = S_NumberToWord.convertNumbertoWords(Token);
@@ -188,7 +188,7 @@ set;
         re = [Select Id, Bank__c, DraweeBank__c, AmountToWords__c, Amount_Rs__c, Receipt_No__c, Name, Mode__c, 
               Token_Amount_Receipt__c, Token_Amount_ST__c,
               Total_Amount__c, Cheque_DD__c, Cheque_DD_Date__c, Drawn_in_favour_of__c,
-              TDS_Amount_In_Rs__c, Receipt_Date__c From Receipt__c Where Booking__c =:BookingId];
+              TDS_Amount_In_Rs__c, Receipt_Date__c From Receipt__c Where Booking__c =:BookingId]; 
         
         /*rectax = [Select Id, Bank__c, DraweeBank__c, AmountToWords__c, Amount_Rs__c, Receipt_No__c, Name, Mode__c, 
 Token_Amount_Receipt__c, Token_Amount_ST__c,
@@ -232,7 +232,8 @@ TDS_Amount_In_Rs__c, Receipt_Date__c From Receipt__c Where Booking__c =:BookingI
             if(r.Token_Amount_ST__c == false) {
                 //ShowpageBlockFlag = true;
                 dvar += r.Total_Amount__c ;
-                datevar += r.Cheque_DD_Date__c.format()  +' / ' ;
+                //datevar += r.Cheque_DD_Date__c.format()  +' / ' ; //Commented by Vinay 03-11-2025
+                datevar += (r.Cheque_DD_Date__c != null)? r.Cheque_DD_Date__c.format() : ''  +' / ' ; // Added by Vinay 03-11-2025
                 checkvar +=  + r.Cheque_DD__c + ' / '; 
                 bankname +=  r.DraweeBank__c + ' / '  ;
                 favourvar +=  r.Drawn_in_favour_of__c + ' / ' ;

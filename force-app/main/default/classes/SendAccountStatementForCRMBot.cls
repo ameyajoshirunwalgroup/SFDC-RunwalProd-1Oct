@@ -8,8 +8,7 @@ public class SendAccountStatementForCRMBot implements Queueable, Database.Allows
     
     public void execute(QueueableContext context) {
         
-        List<Booking__c> bkgs = [SELECT Id, Project__c, Unit_No__r.Relationship_Manager__r.User__c, Opportunity__r.RW_Email__c, 
-                                 Opportunity__r.Name, Primary_Applicant_Name__c FROM Booking__c WHERE Id =: bkgIds];
+        List<Booking__c> bkgs = [SELECT Id,Project__c,Unit_No__r.Relationship_Manager__r.User__c,Opportunity__r.RW_Email__c,Opportunity__r.Name, Primary_Applicant_Name__c FROM Booking__c WHERE Id =: bkgIds];
         
         String email = bkgs[0].Opportunity__r.RW_Email__c;
         String customer = (bkgs[0].Primary_Applicant_Name__c != null)? bkgs[0].Primary_Applicant_Name__c : bkgs[0].Opportunity__r.Name;
@@ -36,15 +35,12 @@ public class SendAccountStatementForCRMBot implements Queueable, Database.Allows
                 body = 'Test';
             }
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             isError = true;
             tsk.Description = 'Error: ' + e.getMessage(); 
         }
         insert tsk;
         try{
-            System.debug('--body--: '+ body);
             if(body != null && body != '' && !isError){
-                System.debug('--body--: '+ body);
                 Messaging.EmailFileAttachment att = new Messaging.EmailFileAttachment();
                 att.setFileName('Account Statement.pdf');
                 att.setBody(EncodingUtil.base64Decode(body));
@@ -59,12 +55,10 @@ public class SendAccountStatementForCRMBot implements Queueable, Database.Allows
                 message.setOrgWideEmailAddressId(Utility.getOrgWideEmailAddress());
                 messages.add(message);
                 Messaging.SendEmailResult[] result = Messaging.sendEmail(messages);
-                System.debug('--result: ' + result);
                 bkgs[0].Send_Account_Statement__c = false;//Added for Triggering mails multiple times-depening on the customer.Changed - 25-11-24
             }
             tsk.Status = 'Completed';
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             tsk.Description = 'Error: ' + e.getMessage();
         }
         update tsk;

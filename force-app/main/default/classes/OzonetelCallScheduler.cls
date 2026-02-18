@@ -125,6 +125,7 @@ public class OzonetelCallScheduler {
             req.setHeader('apiKey', apiKey);
             req.setBody(jsonData);
             System.debug('jsonData: ' + jsonData);
+            System.debug('req: ' + req.getBody());
             Http http = new Http();
             HTTPResponse res = new HttpResponse();
             if(!Test.isRunningTest()){
@@ -140,6 +141,19 @@ public class OzonetelCallScheduler {
             }else{
                 sc.Error_Message__c = resBody.message[0];
             }
+            /*Map<String, Object> resMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+            String status = (String) resMap.get('status');
+            if(status == 'success'){
+                sc.Deleted_In_Ozonetel__c = true;
+            }else{
+                List<String> errorMessages = (List<String>) resMap.get('message');
+                List<Object> errors = (List<Object>) resMap.get('message');
+                List<String> messages = new List<String>();
+                for (Object o : errors) {
+                    messages.add((String)o);
+                }
+                sc.Error_Message__c = errorMessages[0];
+            }*/
         }
         update scList;
     }

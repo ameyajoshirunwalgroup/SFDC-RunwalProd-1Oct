@@ -150,7 +150,7 @@ static testmethod void ReferedLeadCreationTest() {
     ReferedLeadCreation refLead = new ReferedLeadCreation();
     Database.executeBatch(refLead);
    
-    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg('param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7','param8','param9', '8989898989', System.Label.Lead_Project_Content_HSM);
+    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg('param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7','param8','param9', '8989898989', System.Label.Lead_Project_Content_HSM); //Commented by Vinay 29-08-2025
     
     SendWhatsAppOnNewLeadCreation.WhatsAppOnNewLeadCreation(new list<Id>{objLead.Id});
     

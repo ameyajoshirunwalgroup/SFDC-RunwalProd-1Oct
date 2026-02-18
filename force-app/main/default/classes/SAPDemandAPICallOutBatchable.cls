@@ -114,6 +114,8 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
                 { // check if the BookingMap has customer id in response, i.e  booking is present in the system && the demand is not present in the system
                     if(BookingMap.containsKey(response.CUSTOMER) && !mapOfDemandNumber.ContainsKey(response.B_DOC_NO))
                     {
+                        system.debug('If response.CUSTOMER -> '+response.CUSTOMER);
+                        system.debug('If response.B_DOC_NO -> '+response.B_DOC_NO);
                         // if there are 1 demand items for the demand then there will be already entry in the mapOfDemandWrapper
                         if(mapOfDemandWrapper.containsKey(response.B_DOC_NO))
                         {     
@@ -204,6 +206,8 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
                         }             
                     }else if(BookingMap.containsKey(response.CUSTOMER) && mapOfDemandNumber.ContainsKey(response.B_DOC_NO))
                     {
+                        system.debug('Else if response.CUSTOMER -> '+response.CUSTOMER);
+                        system.debug('Else if response.B_DOC_NO -> '+response.B_DOC_NO);
                         //if the demand is already present in the system
                         
                         RW_Demand__c demandupd =   mapOfDemandNumber.get(response.B_DOC_NO);

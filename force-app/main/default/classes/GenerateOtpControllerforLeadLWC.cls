@@ -4,7 +4,7 @@ public with sharing class GenerateOtpControllerforLeadLWC {
     public static String generateOtp(String leadId) {
         try {
             Lead leadObj = [
-                SELECT Id, Status, RW_Project__c, RW_Sourcing_Manager__c,
+                SELECT Id, Status, RW_Project__c, RW_Sourcing_Manager__c,Lead_Sourcing_Manager__c,
                        Lead_Source__c, Lead_Sub_Source__c, Customer_Reference__c, LeadSource, OwnerId,
                        RW_Broker__c, Temp_Channel_Partner__c, Vertical__c, Generated_OTP_On_Lead__c, RW_Lead_Sub_Source__c,Proposed_Visit_Date__c
                 FROM Lead
@@ -47,6 +47,10 @@ public with sharing class GenerateOtpControllerforLeadLWC {
                 len = String.valueOf(y).length();
                 OTPNumber = String.valueOf(y);
             } while (len < 5);
+            
+            if (String.isBlank(OTPNumber)) {
+                return 'ERROR: OTP generation failed.';
+            }
 
             OTP__c otp = new OTP__c();
             otp.Generated_OTP__c = OTPNumber;
@@ -59,8 +63,11 @@ public with sharing class GenerateOtpControllerforLeadLWC {
 
             leadObj.Generated_OTP_On_Lead__c = OTPNumber;
 
-            if (leadObj.RW_Sourcing_Manager__c != null) {
+            /*if (leadObj.RW_Sourcing_Manager__c != null) {  //Commented by Vinay 25-11-2025
                 otp.Sourcing_Manager__c = leadObj.RW_Sourcing_Manager__c;
+            }*/
+            if (leadObj.Lead_Sourcing_Manager__c != null) { //Added by Vinay 25-11-2025
+                otp.Sourcing_Manager_LU__c = leadObj.Lead_Sourcing_Manager__c;
             }
             
             if(leadObj.Proposed_Visit_Date__c != null){
@@ -83,7 +90,7 @@ public with sharing class GenerateOtpControllerforLeadLWC {
                 leadObj.Customer_Reference__c != null) {
 
                 otp.Customer_Reference_Lookup__c = leadObj.Customer_Reference__c;
-                otp.Referral_Sub_Source__c = leadObj.Lead_Sub_Source__c;
+                otp.Referral_Sub_Source__c = leadObj.RW_Lead_Sub_Source__c;
 
                 List<Opportunity> lstopp = [
                     SELECT SAP_Customer_Number__c, RW_Project_Unit__c, AccountId

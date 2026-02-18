@@ -74,9 +74,9 @@ public class SendReferralCreditEmails {
             'Runwal Team<br/>';
          Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();  
         if (!toAddress.isEmpty()) {
-            //email.setToAddresses(toAddress);//Original Email Id
+            email.setToAddresses(toAddress);//Original Email Id
             // email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
-            email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
+            //email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
         }
         email.setSubject('Referral Credit Note / Payout.');
         email.setHtmlBody(emailBody);
@@ -154,9 +154,9 @@ public class SendReferralCreditEmails {
         // Prepare the email
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();  
         if (!toAddress.isEmpty()) {
-            //email.setToAddresses(toAddress);//Original Email Id
+            email.setToAddresses(toAddress);//Original Email Id
            // email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
-            email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
+            //email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
         }
         if (!ccAddress.isEmpty()) {
             email.setCcAddresses(ccAddress);
@@ -238,14 +238,14 @@ public class SendReferralCreditEmails {
         // Prepare the email
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();  
         if (!toAddress.isEmpty()) {
-            //email.setToAddresses(toAddress);//Original Email Id
+            email.setToAddresses(toAddress);//Original Email Id
             // email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
-            email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
+            //email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
         }
         if (!ccAddress.isEmpty()) {
             email.setCcAddresses(ccAddress);
             //email.setCcAddresses(new List<String>{'shraddha.shahari@runwalgroup.in'});//Testing Email Id
-        } 
+        }			 
         
         String customerName = rcList[0].Name_of_Existing_Customer__c != null ? rcList[0].Name_of_Existing_Customer__c : 'N/A';
         String flatNumber = rcList[0].Existing_Customer_Flat_no__c != null ? rcList[0].Existing_Customer_Flat_no__c : 'N/A';
@@ -270,97 +270,82 @@ public class SendReferralCreditEmails {
     }
     
     public static void sendEmailtoAccounts(List<Id> rcIdSet) {
-        System.debug('rcIdSet ' + rcIdSet);
-        
-        List<String> fileIds = new List<String>();
+        if (rcIdSet == null || rcIdSet.isEmpty()) {
+            System.debug('No referral credit Ids passed.');
+            return;
+        }
         
         List<Referral_Credits__c> rcList = [
-            SELECT Id, Accounts_Head_Email__c, Accounts_Team_Email__c,Booking_RM__r.Email,
-            Name_of_Existing_Customer__c,Existing_Customer_Flat_no__c,Vendor_Code__c,SAP_Document_No__c
+            SELECT Id, Accounts_Head_Email__c, Accounts_Team_Email__c, Booking_RM__r.Email,
+            Name_of_Existing_Customer__c, Existing_Customer_Flat_no__c,
+            Vendor_Code__c, SAP_Document_No__c
             FROM Referral_Credits__c
             WHERE Id IN :rcIdSet
         ];
         
+        if (rcList.isEmpty()) {
+            System.debug('No referral credit records found for given IDs: ' + rcIdSet);
+            return;
+        }
+        
+        // Attachments
         List<ContentDocumentLink> fileLinks = [
-            SELECT ContentDocumentId, LinkedEntityId
+            SELECT ContentDocumentId
             FROM ContentDocumentLink
             WHERE LinkedEntityId IN :rcIdSet
         ];
-        
-        for(ContentDocumentLink c : fileLinks){
+        List<String> fileIds = new List<String>();
+        for(ContentDocumentLink c : fileLinks) {
             fileIds.add(c.ContentDocumentId);
         }
         
-        List<ContentVersion> files = [
-            SELECT Id, Title, VersionData,FileExtension
-            FROM ContentVersion
-            WHERE ContentDocumentId IN :fileIds and IsLatest = true
-        ];
+        List<ContentVersion> files = new List<ContentVersion>();
+        if (!fileIds.isEmpty()) {
+            files = [
+                SELECT Id, Title, VersionData, FileExtension
+                FROM ContentVersion
+                WHERE ContentDocumentId IN :fileIds AND IsLatest = true
+            ];
+        }
         
-        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         List<Messaging.EmailFileAttachment> attachments = new List<Messaging.EmailFileAttachment>();
         for (ContentVersion file : files) {
             Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
-            Blob fileData = file.VersionData;
-            attachment.setBody(fileData);
+            attachment.setBody(file.VersionData);
             attachment.setFileName(file.Title + '.' + file.FileExtension);
             attachments.add(attachment);
         }
         
-        List<String> ccAddress = new List<String>();
+        // Recipients
         List<String> toAddress = new List<String>();
+        List<String> ccAddress = new List<String>();
         
-        if(rcList[0].Accounts_Team_Email__c!= null){
-            toAddress.add(rcList[0].Accounts_Team_Email__c);
-        }else{
-            toAddress.add(UserInfo.getUserEmail());
-        }
+        Referral_Credits__c rc = rcList[0];
         
-        if(rcList[0].Accounts_Head_Email__c!= null){
-            ccAddress.add(rcList[0].Accounts_Head_Email__c);
-        }
+        toAddress.add(rc.Accounts_Team_Email__c != null ? rc.Accounts_Team_Email__c : UserInfo.getUserEmail());
+        if (rc.Accounts_Head_Email__c != null) ccAddress.add(rc.Accounts_Head_Email__c);
+        if (rc.Booking_RM__r != null && rc.Booking_RM__r.Email != null) ccAddress.add(rc.Booking_RM__r.Email);
         
-        if(rcList[0].Booking_RM__r.Email!= null){
-            ccAddress.add(rcList[0].Booking_RM__r.Email);
-        }
-        
-        Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();  
-        if (!toAddress.isEmpty()) {
-            //email.setToAddresses(toAddress);//Original Email Id
-            // email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
-            email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
-        }
-        if (!ccAddress.isEmpty()) {
-            email.setCcAddresses(ccAddress);
-            //email.setCcAddresses(new List<String>{'shraddha.shahari@runwalgroup.in'});//Testing Email Id
-        } 
-        
-        String customerName = rcList[0].Name_of_Existing_Customer__c != null ? rcList[0].Name_of_Existing_Customer__c : 'N/A';
-        String flatNumber = rcList[0].Existing_Customer_Flat_no__c != null ? rcList[0].Existing_Customer_Flat_no__c : 'N/A';
-        String vendorCode = rcList[0].Vendor_Code__c != null ? rcList[0].Vendor_Code__c : 'N/A';
-        String sapDocNumber = rcList[0].SAP_Document_No__c != null ? rcList[0].SAP_Document_No__c : 'N/A';
-
+        // Email body
         String emailBody = 'Dear Sir/Ma\'am,<br/><br/>' +
-            'Referral IOM for Customer ' + customerName + ', Unit no. ' + flatNumber + ' has been approved by CRM HOD.<br/>' +
-            'Vendor Code - ' + vendorCode + '<br/><br/>' +
-            'SAP Document Number - ' + sapDocNumber + '<br/><br/>' +
+            'Referral IOM for Customer ' + (rc.Name_of_Existing_Customer__c != null ? rc.Name_of_Existing_Customer__c : 'N/A') +
+            ', Unit no. ' + (rc.Existing_Customer_Flat_no__c != null ? rc.Existing_Customer_Flat_no__c : 'N/A') + ' has been approved by CRM HOD.<br/>' +
+            'Vendor Code - ' + (rc.Vendor_Code__c != null ? rc.Vendor_Code__c : 'N/A') + '<br/><br/>' +
+            'SAP Document Number - ' + (rc.SAP_Document_No__c != null ? rc.SAP_Document_No__c : 'N/A') + '<br/><br/>' +
             'Request you to process the credit note/payout as per attached approved IOM.<br/><br/><br/>' +
-        	'Thanks and Regards,<br/>' +
-            'Runwal Team<br/>';
+            'Thanks and Regards,<br/>Runwal Team<br/>';
         
+        Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+        if (!toAddress.isEmpty()) email.setToAddresses(toAddress);
+        //email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'}); // testing
+        if (!ccAddress.isEmpty()) email.setCcAddresses(ccAddress);
         email.setSubject('Vendor creation and expenses booked.');
-        email.setHtmlBody(emailBody);        
-        email.setFileAttachments(attachments);
-        /*email.setSaveAsActivity(true);
-        email.setWhatId(rcList[0].Id);*/
+        email.setHtmlBody(emailBody);
+        if (!attachments.isEmpty()) email.setFileAttachments(attachments);
         
-        emails.add(email);
-        
-        if (!emails.isEmpty()) {
-            Messaging.sendEmail(emails);
-        }
+        Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ email });
     }
-    
+
     public static void send20PercentReport(){
         Date todaysDate = Date.today();
         List<Booking__c> bList = [SELECT Id, Name,Unit_No__r.Relationship_Manager__r.User__r.IsActive, Unit_No__r.Relationship_Manager__r.User__c,Primary_Applicant_Name__c,Flat_No__c,Unit_No__r.Relationship_Manager__r.RM_Email__c,Unit_No__r.Relationship_Manager__r.TL_Email__c,SO_Release_Date_in_SAP__c,
@@ -368,9 +353,9 @@ public class SendReferralCreditEmails {
                                   Payment_Received__c,X5_Received__c,X5_Received_Date__c,RW_X9_99_Received__c,X9_90_Received_Date__c,Unit_No__r.Relationship_Manager__r.Name,RW_Total_Amount_Received_Without_GST__c,RW_Project_Name__c,
                                   Unit_No__r.Relationship_Manager__r.User__r.Manager.Id,Customer__r.StageName,RW_BRL_Number__c,Status__c,RW_Registration_Date__c,Project__r.CRM_MIS_Head__c,Project__r.Overall_CRM_Head__c,
                                   Project__r.Home_Loan_Email__c,Project__r.CRMHead__c,X20_Received_Date__c
-                                  FROM Booking__c WHERE /*X20_Received_Date__c =: todaysDate and*/ Status__c = 'Booking Confirmed' AND Customer__r.StageName = 'Unit Booked' 
-                                  and Source_of_Booking__c = 'Referral' and Sub_Source__c = 'Existing client reference' /*and Referral_Passback__c < 1.00 and Referral_Passback__c != 0*/
-                                  order by Booking_Date__c desc limit 100
+                                  FROM Booking__c WHERE X20_Received_Date__c =: todaysDate and Status__c = 'Booking Confirmed' AND Customer__r.StageName = 'Unit Booked' 
+                                  and Source_of_Booking__c = 'Referral' and Sub_Source__c = 'Existing client reference' and Referral_Passback__c < 1.00 
+                                  order by Booking_Date__c desc 
                                  ];
         if (!bList.isEmpty()) {
             Map<Id, List<Booking__c>> groupedByBookingswithRms = new Map<Id, List<Booking__c>>();
@@ -475,13 +460,13 @@ public class SendReferralCreditEmails {
             //email.setOrgWideEmailAddressId('0D25j0000008QPACA2');
             
             //if (!toAddress.isEmpty()) {
-                //email.setToAddresses(toAddress);//Original Email Id
+                email.setToAddresses(toAddress);//Original Email Id
                 //email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
-            	 email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
+            	// email.setToAddresses(new List<String>{'prashant.chaurasia.os@runwalgroup.in'});//Testing Email Id
             //email.setToAddresses(new List<String>{'prashant.chaurasia@stetig.in'});//Testing Email Id
             //}
             if (!ccAddress.isEmpty()) {
-                //email.setCcAddresses(ccAddress);
+                email.setCcAddresses(ccAddress);
                 //email.setCcAddresses(new List<String>{'shraddha.shahari@runwalgroup.in'});//Testing Email Id
             } 
             
@@ -489,7 +474,7 @@ public class SendReferralCreditEmails {
             String subject = '';
             String body = '';
             
-                subject = 'NOTIFICATION : PAYMENT MILESTONE RECD 20%.' + rm_tlMap.get(rmId).Name;
+                subject = 'NOTIFICATION : PAYMENT MILESTONE RECD 20%.' /*+ rm_tlMap.get(rmId).Name*/;
                 body = 'Dear Team,\n\nPlease find the attached details of the customers whose 20% payment is completed, Please proceed with their Referral Credit Payout.\n\nRegards,';
             email.setSubject(subject);
             email.setPlainTextBody(body);
@@ -531,10 +516,11 @@ public class SendReferralCreditEmails {
     
     public static void sendEmailafterPosting(list<Id> rcIds) {
         //Send whatsapp msg...
+        //Whatsapp template pending from business.
         //SendWhatsAppMsg.methodToSendWhatsAppMsg(param1, param2, param3, param4, param5, param6, param7, param8, param9, countryCode, MobileNo, elementName);
         //Also Send an Email to posting completion.
         List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
-		List<Referral_Credits__c> refClist = [SELECT Id,SAP_Posting_Date__c,Name_of_New_Customer__c,Referral_Amount_Due__c,Booking__r.Primary_Applicant_Email__c,Booking__r.Future_Correspondence_Contact_Email__c FROM Referral_Credits__c WHERE Id IN :rcIds];
+		List<Referral_Credits__c> refClist = [SELECT Id,SAP_Posting_Date__c,Name_of_New_Customer__c,Referral_Amount_Due__c,Reference_Booking__r.Primary_Applicant_Email__c,Reference_Booking__r.Future_Correspondence_Contact_Email__c FROM Referral_Credits__c WHERE Id IN :rcIds];
 		
         for(Referral_Credits__c rf : refClist){
             Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
@@ -545,7 +531,7 @@ public class SendReferralCreditEmails {
                 email.setOrgWideEmailAddressId(owea[0].id);
             }
             String htmlBody = buildEmailBody(rf.Name_of_New_Customer__c,rf.Referral_Amount_Due__c);
-            email.setToAddresses(new String[] {rf.Booking__r.Future_Correspondence_Contact_Email__c});
+            email.setToAddresses(new String[] {rf.Reference_Booking__r.Future_Correspondence_Contact_Email__c});
             email.setHtmlBody(htmlBody);
             email.WhatId = rf.Id;            
             email.setSaveAsActivity(true);
@@ -571,7 +557,7 @@ public class SendReferralCreditEmails {
             '<div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border: 1px solid #ddd; border-radius: 6px;">' +
             '<p>Dear ' + contactName + ',</p>' +
             '<p>We are pleased to inform you that a credit note of <strong>Rs ' + referralAmount + '</strong> has been passed towards the referral benefit.</p>' +
-            '<p>We thank you for your continued partnership with Runwal. Keep referring and earning rewards with us!</p>' +
+            '<p>We thank you for your continued partnership with Runwal, keep referring and earning rewards with us!</p>' +
             '<p>Thank you for being a part of the Runwal family.</p>' +
             '<br/>' +
             '<p>Warm Regards,<br/>' +

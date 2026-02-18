@@ -113,6 +113,7 @@ public class NOCTemplateControllerTest {
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_CUstomer_Number__c='0020009875';

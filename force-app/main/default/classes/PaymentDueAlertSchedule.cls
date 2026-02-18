@@ -73,9 +73,9 @@ global class PaymentDueAlertSchedule implements Database.Batchable <sObject>, Sc
         list <Messaging.SingleEmailMessage> mails = new list <Messaging.SingleEmailMessage>();
         System.debug('opp: ' + opps.size());
         List<String> oppIds = System.label.Opportunity_Ids_to_skip_Payment_due_alert.split(','); //Added by Vinay 30-05-2025
-        List<String> projects = System.label.Payment_Due_Alert_Excluded_Projects.split(','); //Added by Vinay 04-07-2025
+        List<String> projects = System.label.Payment_Due_Alert_Excluded_Projects.split(','); //Added by Vinay 02-07-2025
         for(Opportunity opp : opps){
-            if(opp.Booking__c != null && !oppIds.contains(opp.Id) && !projects.contains(opp.RW_Project__c)){ // Added !oppIds.contains(opp.Id) by Vinay 30-05-2025 //Added !projects.contains(opp.Booking__r.RW_Project_Name__c) by Vinay 04-07-2025
+            if(opp.Booking__c != null && !oppIds.contains(opp.Id) && !projects.contains(opp.RW_Project__c)){ // Added !oppIds.contains(opp.Id) by Vinay 30-05-2025 //Added !projects.contains(opp.Booking__r.RW_Project_Name__c) by Vinay 02-07-2025
                 Decimal demOut = opp.Booking__r.FBL5N__c;
                 List<String> args = new String[]{'0','number','##,##,##,###.##'};
                 String amount = String.format(demOut.format(), args);

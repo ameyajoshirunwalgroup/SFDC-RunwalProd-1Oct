@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SM_From_Opportunity__c</fullName>
     <externalId>false</externalId>
-    <formula>TEXT(Opportunity__r.RW_Sales_Associate__c)</formula>
+    <formula>/*TEXT(Opportunity__r.RW_Sales_Associate__c)*/ /*Commented by Vinay 05-12-2025 */
+
+Opportunity__r.Sales_Manager_User__r.FirstName + &apos; &apos; + Opportunity__r.Sales_Manager_User__r.LastName /*Added by Vinay 05-12-2025 */</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>SM From Opportunity</label>
     <required>false</required>

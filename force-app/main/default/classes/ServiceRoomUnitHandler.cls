@@ -65,7 +65,6 @@ public class ServiceRoomUnitHandler {
         for(Project_Unit__c unit : unitList){
             srIds.add(unit.Service_Room_Unit__c);
         }
-        System.debug('srIds: ' + srIds);
         if(srIds.size() > 0){
             Map<Id,Project_Unit__c> srMap = new Map<Id,Project_Unit__c>([SELECT Id, RW_Project__c, TowerName__c, New_Floor__c, Service_Room_Status__c, Actual_Area_value__c, Deck_Area__c, Carpet_Area__c, Utility_Area__c, Saleable_Area__c, Loading__c FROM Project_Unit__c WHERE Id =: srIds]);
             for(Project_Unit__c sr : srMap.values()){

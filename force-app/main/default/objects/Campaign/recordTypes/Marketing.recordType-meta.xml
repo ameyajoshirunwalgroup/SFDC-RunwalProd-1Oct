@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Marketing</fullName>
+    <active>true</active>
+    <label>Marketing</label>
+    <picklistValues>
+        <picklist>Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Required</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Origin__c</picklist>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporate Outreach</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Offline</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral %26 Loyalty</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RW_Sub_Type__c</picklist>
+        <values>
+            <fullName>99 Acres</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AOP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cold Outreach</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dead Lead Harvesting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Emailer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employee Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enquiry Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gantry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hoarding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Journal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loyalty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Magazine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newspaper</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased Data</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RCP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transport Branding</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status</picklist>
+        <values>
+            <fullName>Aborted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Planned</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sub_Sub_Source__c</picklist>
+        <values>
+            <fullName>99 Acres</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Activation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Airoli - koparkhairane</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BKC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bombay Times</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Call Us Widget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Call-Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chembur %E2%80%93 Wadala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Churchgate %E2%80%93 Worli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collateral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commercial Lease</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporate website</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporate website-Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Crm Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Crm Call2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EEH %E2%80%93 Kanjurmarg - Mulund - Nahur</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EEH %E2%80%93 Sion %E2%80%93Vikhroli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Economic Times</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Call - Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Call -Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Call-Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Call-GardenVista</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Call-Pinnacle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook call-Sunflower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook_call_ NumeroUno</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook_call_Liberty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook_call_NumeroUno</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook_call_ParkAvenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook_call_RunwalEdge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook_call_Runwalcommerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call - Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call - MyCity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call -Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call-Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call-GardenVista</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call-Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Call-Pinnacle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google call-Sunflower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google_call_ NumeroUno</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google_call_Liberty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google_call_ParkAvenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google_call_RunwalEdge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google_call_Runwalcommerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujarati</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gujrat Samachar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-FB-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-Google-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-India-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-Org-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-Paytm-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-Taboola-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HF-Yahoo-call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hindustan Times</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Housing%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>JVLR %E2%80%93 Andheri %E2%80%93 Jogeshwari</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>JVLR %E2%80%93 Powai %E2%80%93 Kanjurmarg</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kalyan-Dombivali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBS %E2%80%93 Kanjurmarg %E2%80%93 Mulund</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBS %E2%80%93 Sion %E2%80%93 Kurla</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBS %E2%80%93 Vikhroli %E2%80%93 Ghatkopar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lokmat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loksatta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDS_RGC_SMS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDS_RGC_WhatsApp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maharashtra Times</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite- NumeroUno</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-GardenVista</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-Lily</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite-Pinnacle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite_Liberty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite_ParkAvenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite_RunwalEdge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsite_Runwalcommerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Midday</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mobile Activity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Pune Expressway</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Pune Expressway-1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai Pune Expressway-2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mumbai_Mirror</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI Digital - GardenVista</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI Digital Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI Digital Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI Digital Lily</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI Digital Pinnacle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI call Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI call Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI call Sunflower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI_digital_Liberty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI_digital_ParkAvenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI_digital_RunwalEdge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI_digital_Runwalcommerz</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Navbharat Times</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Navi Mumbai</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nerul-Panvel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other Paper</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other Radio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outdoor-Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outdoor-Mahalaxmi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paper Insert</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Passerby %2F Site branding activity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Playtunes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Property  Show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pune City-1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pune City-2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>R-Galleria</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio Mirchi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Red FM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retail Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Road Show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS Avenue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS Bliss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS Forests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS Pinnacle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS-Mahalaxmi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS_Gardens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saamana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site branding-Dombivli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Society Activation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Society Activation-1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Society Insert</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sunflower-microsite</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surround Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Lower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thane Upper</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Times of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transit Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ulhasnagar-Ambarnath</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VT %E2%80%93 Dadar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vashi %E2%80%93 Nerul</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WEH %E2%80%93 Bandra %E2%80%93 Andheri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WEH %E2%80%93 Jogeshwari %E2%80%93 Borivali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Western %E2%80%93 Andheri %E2%80%93 Borivali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Western %E2%80%93 Bandra %E2%80%93 Vile Parle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Western Suburbs</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chatbot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cold Outreach</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporate Outreach</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Emailers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instagram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OOH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Print</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Property Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral %26 Loyalty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>ATL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BTL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TTL</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

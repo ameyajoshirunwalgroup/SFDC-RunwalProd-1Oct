@@ -114,7 +114,13 @@ public class SAPCreditNotADFAPICallout implements Queueable, Database.AllowsCall
                         objADF_CN.Pstng_Date = ''; 
                     }
                     if(documentDate != null){
-                        objADF_CN.Fisc_Year  = String.valueOf(documentDate.year());
+                        String month = String.valueOf(documentDate.month()); // Added by Vinay 22-01-2026
+                        if(month == '1' || month == '2' || month == '3' ){ // Added by Vinay 22-01-2026
+                            objADF_CN.Fisc_Year  = String.valueOf(documentDate.year() - 1);
+                        }else{
+                            objADF_CN.Fisc_Year  = String.valueOf(documentDate.year());
+                        }
+                        //objADF_CN.Fisc_Year  = String.valueOf(documentDate.year()); // Commented by Vinay 22-01-2026
                     } 
                     else{
                         objADF_CN.Fisc_Year = '';
@@ -184,6 +190,7 @@ public class SAPCreditNotADFAPICallout implements Queueable, Database.AllowsCall
                                     SAP_IntegrationHelper.insertLogEntry('ADF Credit Note', 'Failure', objCN.Id, objCN.Booking__c,jsonPayload, res.getBody(), record.INV_DOC_MSG, '');
                                 }else if(record.STATUS == 'Success'){
                                     objCN.Sent_to_SAP__c = true;
+                                    objCN.SAP_Document_Number__c = record.CRN_DOC; //Added by Vinay 12-01-2026
                                     SAP_IntegrationHelper.insertLogEntry('ADF Credit Note', 'Success', objCN.Id, objCN.Booking__c, jsonPayload, res.getBody(), '', '');
                                 }
                                 lstCNUpdate.add(objCN);

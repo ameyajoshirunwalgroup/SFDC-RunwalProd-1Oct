@@ -138,9 +138,9 @@ public class SendWhatsAppMsgForBatchTest {
         
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
         Test.startTest();
-        SendWhatsAppMsgForBatch.genaricMethodToSendWhatsAppMsgForBatch(objLead.Id, System.Label.Lead_Project_Content2_HSM);
-        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg('param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7','param8','param9', '8989898989', System.Label.Lead_Project_Content_HSM);
-        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch('param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7','param8','param9', '8989898989', System.Label.Lead_Project_Content_HSM);
+        //SendWhatsAppMsgForBatch.genaricMethodToSendWhatsAppMsgForBatch(objLead.Id, System.Label.Lead_Project_Content2_HSM); //Commented by Vinay 29-08-2025
+        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg('param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7','param8','param9', '8989898989', System.Label.Lead_Project_Content_HSM); //Commented by Vinay 29-08-2025
+        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch('param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7','param8','param9', '8989898989', System.Label.Lead_Project_Content_HSM); //Commented by Vinay 29-08-2025
         SendWhatsAppMsg.methodToSendWhatsAppMsg('Test', null, null, null, null, null, null, null, null, '+91', '8989898989', 'welcome_call_ov');
         SendWhatsAppMsg.methodToSendWhatsAppMsgBatch('Test', null, null, null, null, null, null, null, null, '+91', '8989898989', 'welcome_call_ov');
         SendWhatsAppMsg.methodTofetchLeadforSendingWhatsAppMsg(new List<String>{lstLead[0].Id});

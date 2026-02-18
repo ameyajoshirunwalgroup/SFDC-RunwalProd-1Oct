@@ -29,7 +29,8 @@ AND(
 		RecordTypeId = &apos;012J40000008V2A&apos;
 	),
 ISBLANK(locobuzz__Locobuzz_ID__c),
-$Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+$Label.Disable_all_validations_from_case == &quot;false&quot;, /*Added by Prashant to control disabling all validations together*/
+NOT(CONTAINS( Subject , &apos;Undeliverable:&apos;)) /*Added by Vinay 23-05-2025 */
 )</errorConditionFormula>
     <errorMessage>Customer Lifecycle Touchpoint, complaint type and subtype is mandatory</errorMessage>
 </ValidationRule>

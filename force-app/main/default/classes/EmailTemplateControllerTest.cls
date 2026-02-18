@@ -287,7 +287,7 @@ public class EmailTemplateControllerTest {
         EmailTemplateController.shareEmailTemplateWithCustomer(emailTemplate.Id, opportunity.Id);
         EmailTemplateController.shareEmailTemplateWithRMOnly(emailTemplate.Id, opportunity.Id);
         EmailTemplateController.shareEmailTemplateWithRMCustomer(emailTemplate.Id, opportunity.Id);
-        EmailTemplateController.dummyMethod();
+        //EmailTemplateController.dummyMethod();
         EmailTemplateController.sendReceiptEmail(recieptId);
         EmailTemplateController.sendDemandEmail(demandId);
         Test.stopTest();

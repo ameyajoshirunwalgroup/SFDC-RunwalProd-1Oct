@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Rating_image_formula__c</fullName>
+    <description>This is System Generated Rating.</description>
     <externalId>false</externalId>
     <formula>CASE(
-Rating_system__c,
-&quot;Hot&quot;, IMAGE(&quot;/resource/HotRating&quot;, &quot;Hot Rating&quot;, 30, 80),
-&quot;Warm&quot;, IMAGE(&quot;/resource/WarmRating&quot;, &quot;Warm Rating&quot;, 30, 80),
-&quot;Cold&quot;, IMAGE(&quot;/resource/coldRating&quot;, &quot;Cold Rating&quot;, 30, 80),
-&quot;&quot;
+    Rating_system__c,
+    &quot;Hot&quot;, IMAGE(&quot;/resource/HotRating&quot;, &quot;Hot Rating&quot;, 30, 80),
+    &quot;Warm&quot;, IMAGE(&quot;/resource/WarmRating&quot;, &quot;Warm Rating&quot;, 30, 80),
+    &quot;Cold&quot;, IMAGE(&quot;/resource/coldRating&quot;, &quot;Cold Rating&quot;, 30, 80),
+    &quot;&quot;
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Rating</label>

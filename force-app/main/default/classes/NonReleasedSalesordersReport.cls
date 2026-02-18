@@ -20,7 +20,7 @@ public class NonReleasedSalesordersReport  implements Schedulable{
             List<String> toAddresses = System.label.Non_Released_SO_Report_Email_Ids.split(',');
             if(toAddresses.size() > 0){
                 List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
-                String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Allotment Premium,Receipt \n';
+                String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Agreement Value,Receipt \n';//Changed the Allotment Premium label to Agreement Value as per Shraddha's requirement. Mail subject - Change field lable  in Booking. 13/10/25.
                 
                 String data = header;
                 for(Booking__c bkg : bookings){
@@ -53,18 +53,18 @@ public class NonReleasedSalesordersReport  implements Schedulable{
     @future (callout=true)
     public static void nonReleasedSoReportSM(){
         Datetime dt = DateTime.newInstance(2024,12,01);
-        List<Booking__c> bookings = [SELECT Id, Name, Booking_Date__c, Allotment_Premium__c, Opportunity__r.Name, Project__r.Name, Sales_Managers__c, Sales_Head__r.Name, Project__r.Sales_Head__r.Name, Opportunity__r.SAP_Customer_Number__c, Opportunity__r.SalesOrder_Number__c, Unit_Number__c, Status__c, RW_Total_Receipt_Amount_Received__c, Receipts__c, Receipts__r.Name, Opportunity__r.RW_Sales_Associate__c  FROM Booking__c WHERE Id NOT IN (SELECT RW_Booking__c FROM RW_Welcome_Call__c) AND Status__c = 'Booking Confirmed' AND X5_Received__c = false AND SO_Release_Date_in_SAP__c = null AND Project__c != null AND CreatedDate >=: dt];
+        List<Booking__c> bookings = [SELECT Id, Name, Booking_Date__c, Allotment_Premium__c, Opportunity__r.Name, Project__r.Name, Sales_Managers__c, Sales_Head__r.Name, Project__r.Sales_Head__r.Name, Opportunity__r.SAP_Customer_Number__c, Opportunity__r.SalesOrder_Number__c, Unit_Number__c, Status__c, RW_Total_Receipt_Amount_Received__c, Receipts__c, Receipts__r.Name, Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name FROM Booking__c WHERE Id NOT IN (SELECT RW_Booking__c FROM RW_Welcome_Call__c) AND Status__c = 'Booking Confirmed' AND X5_Received__c = false AND SO_Release_Date_in_SAP__c = null AND Project__c != null AND CreatedDate >=: dt]; 	//Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
         if(bookings.size() > 0){
             Map<String, List<Booking__c>> smVsBkgMap = new Map<String, List<Booking__c>>();
             Set<String> smNames = new Set<String>();
             for(Booking__c bkg : bookings){
-                if(String.isNotBlank(bkg.Opportunity__r.RW_Sales_Associate__c)){
-                    if(smVsBkgMap.containsKey(bkg.Opportunity__r.RW_Sales_Associate__c)){
-                        smVsBkgMap.get(bkg.Opportunity__r.RW_Sales_Associate__c).add(bkg);
+                if(String.isNotBlank(bkg.Opportunity__r.Sales_Manager_User__c)){  //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+                    if(smVsBkgMap.containsKey(bkg.Opportunity__r.Sales_Manager_User__r.Name)){ //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
+                        smVsBkgMap.get(bkg.Opportunity__r.Sales_Manager_User__r.Name).add(bkg); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                     }else{
-                        smVsBkgMap.put(bkg.Opportunity__r.RW_Sales_Associate__c, new List<Booking__c>{bkg});
+                        smVsBkgMap.put(bkg.Opportunity__r.Sales_Manager_User__r.Name, new List<Booking__c>{bkg}); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                     }
-                    smNames.add(bkg.Opportunity__r.RW_Sales_Associate__c);
+                    smNames.add(bkg.Opportunity__r.Sales_Manager_User__r.Name); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 }
             }
             List<User> smUsers = [SELECT Id, Name, Email FROM User WHERE Name =: smNames AND Profile.Name != 'Runwal Customer Portal'];
@@ -73,7 +73,7 @@ public class NonReleasedSalesordersReport  implements Schedulable{
                 userNameVsEmail.put(usr.Name, usr.Email);
             }
             List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
-            String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Allotment Premium,Receipt \n';
+            String header = 'Booking Id,Booking Name,Customer Name,Booking Date,SAP Customer Number,SalesOrder Number,Project,Unit Number,Status,Total Amount Received,Agreement Value,Receipt \n';//Changed the Allotment Premium label to Agreement Value as per Shraddha's requirement. Mail subject - Change field lable  in Booking. 13/10/25.
             for(String sm : userNameVsEmail.keySet()){
                 if(smVsBkgMap.get(sm) != null && smVsBkgMap.get(sm).size() > 0){
                     String data = header;

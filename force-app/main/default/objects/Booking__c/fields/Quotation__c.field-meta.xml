@@ -3,6 +3,15 @@
     <fullName>Quotation__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Quotation</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Opportunity__c</field>
+            <operation>equals</operation>
+            <valueField>Quotation__c.Opportunity__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>Quotation__c</referenceTo>
     <relationshipLabel>Booking</relationshipLabel>
     <relationshipName>Booking</relationshipName>

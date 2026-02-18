@@ -604,7 +604,7 @@ o.Next_Action_Date_VDNB__c = opptyTaskMap.get(o.Id).Next_Action_Date__c;
         List < AggregateResult > taskCountAg = new List<AggregateResult>();
         if(!leadTaskMap.isEmpty()){ //Added if condition by Vinay 01-07-2025
             leadList = [select Name, Id, call_proposed_date_of_visit__c, Follow_up_date__c,
-                                  Last_call_attempted_by__c, Last_call_attempt_status__c, Last_call_description__c,
+                                  Last_call_attempted_by__c, Last_call_attempt_status__c, Last_call_description__c,Sales_Call_Description__c,
                                   Call_Rating__c, Last_Call_Rating__c, Presales_Call_counter__c,IsFirstSalesCall__c,Sales_Call_Count__c,last_call_attempt_date__c,First_Call_Attempt_Date__c,First_Sales_Call_Attempt_Date__c, First_Call_Attempt_Status__c, First_Sales_Call_Attempt_Status__c, IsFirstPresalesCall__c from lead
                                   where Id in : leadTaskMap.keySet()
                                  ];
@@ -702,7 +702,7 @@ o.Next_Action_Date_VDNB__c = opptyTaskMap.get(o.Id).Next_Action_Date__c;
                 l.Sales_Call_Follow_Up_Bucket__c = leadTaskMap.get(l.Id).Follow_Up_Status__c;
                 l.Sales_Call_Reason_Not_Interested__c = leadTaskMap.get(l.Id).Sales_Reason_Not_Interested__c;
                 
-                system.debug(''+l.Sales_Call_Description__c);
+                //system.debug(''+l.Sales_Call_Description__c); //Commented by Vinay 26-09-2025
                 if (leadTaskMap.get(l.Id).description != null){
                     system.debug('in Sales call desc IF loop');
                     l.Sales_Call_Description__c += '\n' + system.today().format() + ' : ' + leadTaskMap.get(l.Id).Call_Rating__c + ' : ' +leadTaskMap.get(l.Id).description;

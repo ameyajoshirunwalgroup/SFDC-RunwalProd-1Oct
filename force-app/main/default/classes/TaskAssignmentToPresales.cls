@@ -39,7 +39,7 @@ public class TaskAssignmentToPresales {
             List<Id> loggedInUserIds = new List<Id>();
             List<Task> tasksNew = [SELECT Id, WhoId FROM Task WHERE Id =: taskIds];
             for(Task tsk: tasksNew){
-                if(tskIds.contains(tsk.Id) && leadMap.get(tsk.WhoId) != null && leadMap.get(tsk.WhoId).Integration_Source__c != 'Website'){ //Added '&& leadMap.get(tsk.WhoId) != null && leadMap.get(tsk.WhoId).Integration_Source__c != 'Website'' by vinay 26-09-2025
+                if(tskIds.contains(tsk.Id) && leadMap.get(tsk.WhoId) != null  && leadMap.get(tsk.WhoId).Integration_Source__c != 'Website'){
                     Integer currentTskIdIndex = tskIds.indexOf(tsk.Id);
                     if(availableUsers.size() > 0){
                         Integer rr = math.mod(currentTskIdIndex, availableUsers.size());
@@ -146,4 +146,5 @@ public class TaskAssignmentToPresales {
         i++;
         i++; 
     }
+    
 }

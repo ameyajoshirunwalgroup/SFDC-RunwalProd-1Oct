@@ -56,6 +56,7 @@ public class SAP_Rest_ReferralCreditAPI {
             String sapdocno = '';
             String sapdocdate = '';
             String VendorNo = '';
+            String financialYear = '';
             
             /* Calling get method for Authentication */            
             JSONGenerator gen = JSON.createGenerator(true);
@@ -250,6 +251,9 @@ gen.writeStringField('TITLE','');
                     	sapdocdate = String.valueOf(responseBody.DOCUMENT_DT);
                     if(responseBody.LIFNR != null)
                     	VendorNo = String.valueOf(responseBody.LIFNR);
+                    if(responseBody.FIN_YEAR != null)
+                    	financialYear = String.valueOf(responseBody.FIN_YEAR);
+                    
                     
                     if(response.getStatusCode() == 200 && responseBody.STATUS == 'Success'){
                         Account acc = New Account();
@@ -267,6 +271,10 @@ gen.writeStringField('TITLE','');
                         if( Rc.Vendor_Code__c== Null && VendorNo != ''){
                             Rc.Vendor_Code__c = VendorNo;
                         }
+                        if( Rc.Financial_Year__c== Null && financialYear != ''){
+                            Rc.Financial_Year__c = financialYear;
+                        }
+                        
                         if(sapdocdate != '')
                         	Rc.SAP_Document_Date__c =  Date.valueOf(sapdocdate);
                         Rc.Id =RcList[0].id;
@@ -316,6 +324,7 @@ gen.writeStringField('TITLE','');
         public String LIFNR;
         public String DOCUMENT_NO;
         public String DOCUMENT_DT;
+        public String FIN_YEAR;
         public String ERR_TEXT;
         public String BROKER_CD;
         public String STATUS;        

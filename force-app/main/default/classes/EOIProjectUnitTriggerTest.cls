@@ -48,6 +48,7 @@ public class EOIProjectUnitTriggerTest
         oppRec1.Sourcing_Manager__c='Aniket Sapre';
         oppRec1.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec1.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec1.RW_Closing_Head__c='Karthik Chettiar';
         oppRec1.Walkin_Source__c='Direct';
         insert oppRec1;

@@ -40,15 +40,13 @@ public class RWTaskTriggerHandler
     }
     public void onBeforeUpdate(list<Task> lstTriggerNew, map<id, Task> mapTriggerOld)
     {
-        //Added by Vinay 01-07-2025 Start
-        List<Task> tasksForServiceCategory = new List<Task>(); 
-        for(Task tsk : lstTriggerNew){ 
+        List<Task> tasksForServiceCategory = new List<Task>(); //Added by Vinay 01-07-2025
+        for(Task tsk : lstTriggerNew){ //Added by Vinay 01-07-2025
             if(tsk.Call_Status__c != null && mapTriggerOld.get(tsk.Id).Call_Status__c != tsk.Call_Status__c){
                 tasksForServiceCategory.add(tsk);
             }
         }
-        updateServiceCategory(tasksForServiceCategory, mapTriggerOld); 
-        //Added by Vinay 01-07-2025 End
+        updateServiceCategory(tasksForServiceCategory, mapTriggerOld); //Added by Vinay 01-07-2025
         //updateServiceCategory(lstTriggerNew, mapTriggerOld); //Added by Vinay 31-03-2025 //Commented by Vinay 01-07-2025
     }
     private void onAfterInsert(list<Task> lstTriggerNew, map<id, Task> mapTriggerOld)
@@ -66,7 +64,35 @@ public class RWTaskTriggerHandler
         sendEmailAndSMSOnPresalesOutboundCall sendEmailAndSMS = new sendEmailAndSMSOnPresalesOutboundCall();
         sendEmailAndSMS.presalesOutboundCall(lstTriggerNew);
         //Ends Here 
-        updateRemarksOnCase(lstTriggerNew); //Added by Vinay 25-03-2025
+        updateRemarksOnCase(lstTriggerNew); //Added by Vinay 07-03-2025
+        updateRemarksOnOpportunity(lstTriggerNew, null); //Added by Vinay 13-06-2025
+        //Added by Vinay 08-05-2025 Start
+        Id serviceTaskRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId(); 
+        List<Id> serviceTaskIds = new List<Id>(); 
+        for(Task tsk : lstTriggerNew){
+            if(tsk.Subject != 'CRM Call' && tsk.RecordTypeId == serviceTaskRecordTypeId && tsk.WhatId != null && tsk.WhatId.getSObjectType().getDescribe().getName() == 'Opportunity'){ 
+                serviceTaskIds.add(tsk.Id);
+            }
+        }
+        if(!serviceTaskIds.isEmpty()){ 
+            List<Task> serviceTskList = [SELECT Id, WhatId FROM Task WHERE Id =: serviceTaskIds];
+            List<Id> oppIds = new List<Id>();
+            for(Task tsk : serviceTskList){
+                oppIds.add(tsk.WhatId);
+            }
+            Map<Id, Opportunity> bookedOppMap = new Map<Id, Opportunity>([SELECT Id, StageName FROM Opportunity WHERE Id =: oppIds AND StageName = 'Unit Booked']);
+            List<Task> tasksToUpdate = new List<Task>();
+            for(Task tsk : serviceTskList){
+                if(bookedOppMap.containsKey(tsk.WhatId)){
+                    tsk.Subject = 'CRM Call';
+                    tasksToUpdate.add(tsk);
+                }
+            }
+            if(!tasksToUpdate.isEmpty()){
+                update tasksToUpdate;
+            }
+        }
+        //Added by Vinay 08-05-2025 End
         
     }
     private void onAfterUpdate(list<Task> lstTriggerNew, map<id, Task> mapTriggerOld)
@@ -76,8 +102,8 @@ public class RWTaskTriggerHandler
         //for the phase 1 trigger
         sendEmailOnEsclatationHandler objHandler = new sendEmailOnEsclatationHandler();
         objHandler.sendEsclation(lstTriggerNew, mapTriggerOld);
-        //notContactableEmailAlert(lstTriggerNew, mapTriggerOld); //Added by coServe 02-05-2024 //Commented by Vinay 01-07-2025
-        //Added by Vinay 01-07-2025 Start
+        //notContactableEmailAlert(lstTriggerNew, mapTriggerOld); //Added by coServe 02-05-2024 //Commented by Vinay 30-06-2025
+        //Added by Vinay 30-06-2025 Start
         List<String> statusValues = System.Label.Call_Status_value.split(',');
         Id presalesTaskRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Presales Task').getRecordTypeId();
         List<Task> notContactableTasks = new List<Task>();
@@ -90,18 +116,133 @@ public class RWTaskTriggerHandler
         if(notContactableTasks.size() > 0){
             notContactableEmailAlert(lstTriggerNew, mapTriggerOld); 
         }
-        //Added by Vinay 01-07-2025 End
-        updateRemarksOnCase(lstTriggerNew); //Added by Vinay 25-03-2025
-        
-        
+        //Added by Vinay 30-06-2025 End
+        updateRemarksOnCase(lstTriggerNew); //Added by Vinay 07-03-2025
+        cloneWelcomeCallTask(lstTriggerNew, mapTriggerOld); //Added by Vinay 18-03-2025
+        updateRemarksOnOpportunity(lstTriggerNew, mapTriggerOld); //Added by Vinay 13-06-2025
     }
     
     public void onBeforeDelete(list<Task> lstTriggerNew, map<id, Task> mapTriggerOld)
     {
         validateDelete(lstTriggerNew, mapTriggerOld);
     }
-
-    //Added by coServe 25-03-2025
+    
+    //Added by Vinay 13-06-2025
+    /*public void updateRemarksOnOpportunity(List<Task> tskList, Map<Id, Task> oldMap){
+        Id serviceRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId();
+        Id salesRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Sales Task').getRecordTypeId();
+        Set<Id> oppIds = new Set<Id>();
+        List<Task> tasksToProcess = new List<Task>();
+        for(Task tsk : tskList){
+            if(oldMap == null && (tsk.RecordTypeId == serviceRecTypeId || tsk.RecordTypeId == salesRecTypeId) && tsk.Remarks__c != null && tsk.WhatId != null && tsk.WhatId.getSObjectType().getDescribe().getName() == 'Opportunity'){
+                oppIds.add(tsk.WhatId);
+                tasksToProcess.add(tsk);
+            }else if(oldMap != null && (tsk.RecordTypeId == serviceRecTypeId || tsk.RecordTypeId == salesRecTypeId) && tsk.Remarks__c != null && tsk.Remarks__c != oldMap.get(tsk.Id).Remarks__c && tsk.WhatId != null && tsk.WhatId.getSObjectType().getDescribe().getName() == 'Opportunity'){
+                oppIds.add(tsk.WhatId);
+                tasksToProcess.add(tsk);
+            }
+            
+        }
+        if(oppIds.size() > 0){
+            Map<Id, Opportunity> oppMap = new Map<Id, Opportunity>([SELECT Id, CRM_Remarks__c, Sales_Remarks__c FROM Opportunity WHERE Id =: oppIds]);
+            for(Task tsk : tasksToProcess){
+                if(tsk.RecordTypeId == serviceRecTypeId){
+                    if(oppMap.get(tsk.WhatId).CRM_Remarks__c == null){
+                        oppMap.get(tsk.WhatId).CRM_Remarks__c = tsk.Remarks__c;
+                    }else{
+                        String str = tsk.Remarks__c + '; * ' + oppMap.get(tsk.WhatId).CRM_Remarks__c;
+                        oppMap.get(tsk.WhatId).CRM_Remarks__c = (str.length() > 131072) ? str.substring(0, 131072) : str;
+                    }
+                }else if(tsk.RecordTypeId == salesRecTypeId){
+                    if(oppMap.get(tsk.WhatId).Sales_Remarks__c == null){
+                        oppMap.get(tsk.WhatId).Sales_Remarks__c = tsk.Remarks__c;
+                    }else{
+                        String str = tsk.Remarks__c + '; * ' + oppMap.get(tsk.WhatId).Sales_Remarks__c;
+                        oppMap.get(tsk.WhatId).Sales_Remarks__c = (str.length() > 131072) ? str.substring(0, 131072) : str;
+                    }
+                }
+            }
+            update oppMap.values();
+        }
+    }*/
+    
+    
+    //Added by Vinay 27-06-2025
+    public void updateRemarksOnOpportunity(List<Task> tskList, Map<Id, Task> oldMap){
+        Id serviceRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId();
+        Id salesRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Sales Task').getRecordTypeId();
+        Set<Id> oppIds = new Set<Id>();
+        Set<Id> leadIds = new Set<Id>();
+        List<Task> tasksToProcess = new List<Task>();
+        for(Task tsk : tskList){
+            if(oldMap == null && (tsk.RecordTypeId == serviceRecTypeId || tsk.RecordTypeId == salesRecTypeId) && tsk.Remarks__c != null ){
+                if(tsk.WhatId != null && tsk.WhatId.getSObjectType().getDescribe().getName() == 'Opportunity'){
+                    oppIds.add(tsk.WhatId);
+                	tasksToProcess.add(tsk);
+                }else if(tsk.WhoId != null && tsk.WhoId.getSObjectType().getDescribe().getName() == 'Lead'){
+                    leadIds.add(tsk.WhoId);
+                	tasksToProcess.add(tsk);
+                }
+                
+            }else if(oldMap != null && (tsk.RecordTypeId == serviceRecTypeId || tsk.RecordTypeId == salesRecTypeId) && tsk.Remarks__c != null && tsk.Remarks__c != oldMap.get(tsk.Id).Remarks__c){
+                if(tsk.WhatId != null && tsk.WhatId.getSObjectType().getDescribe().getName() == 'Opportunity'){
+                    oppIds.add(tsk.WhatId);
+                	tasksToProcess.add(tsk);
+                }else if(tsk.WhoId != null && tsk.WhoId.getSObjectType().getDescribe().getName() == 'Lead'){
+                    leadIds.add(tsk.WhoId);
+                	tasksToProcess.add(tsk);
+                }
+            }
+            
+        }
+        Map<Id, Opportunity> oppMap = new Map<Id, Opportunity>();
+        Map<Id, Lead> leadMap = new Map<Id, Lead>();
+        if(oppIds.size() > 0)
+            oppMap = new Map<Id, Opportunity>([SELECT Id, CRM_Remarks__c, Sales_Remarks__c FROM Opportunity WHERE Id =: oppIds]);
+        if(leadMap.size() > 0)
+            leadMap = new Map<Id, Lead>([SELECT Id, CRM_Remarks__c, Sales_Remarks__c FROM Lead WHERE Id =: leadIds]);
+        if(tasksToProcess.size() > 0){
+            for(Task tsk : tasksToProcess){
+                if(tsk.RecordTypeId == serviceRecTypeId){
+                    if(oppMap.get(tsk.WhatId) != null){
+                        if(oppMap.get(tsk.WhatId).CRM_Remarks__c == null){
+                            oppMap.get(tsk.WhatId).CRM_Remarks__c = tsk.Remarks__c;
+                        }else{
+                            String str = tsk.Remarks__c + '; * ' + oppMap.get(tsk.WhatId).CRM_Remarks__c;
+                            oppMap.get(tsk.WhatId).CRM_Remarks__c = (str.length() > 131072) ? str.substring(0, 131072) : str;
+                        }
+                    }else if(leadMap.get(tsk.WhoId) != null){
+                        if(leadMap.get(tsk.WhoId).CRM_Remarks__c == null){
+                            leadMap.get(tsk.WhoId).CRM_Remarks__c = tsk.Remarks__c;
+                        }else{
+                            String str = tsk.Remarks__c + '; * ' + leadMap.get(tsk.WhoId).CRM_Remarks__c;
+                            leadMap.get(tsk.WhoId).CRM_Remarks__c = (str.length() > 131072) ? str.substring(0, 131072) : str;
+                        }
+                    }
+                }else if(tsk.RecordTypeId == salesRecTypeId){
+                    if(oppMap.get(tsk.WhatId) != null){
+                        if(oppMap.get(tsk.WhatId).Sales_Remarks__c == null){
+                            oppMap.get(tsk.WhatId).Sales_Remarks__c = tsk.Remarks__c;
+                        }else{
+                            String str = tsk.Remarks__c + '; * ' + oppMap.get(tsk.WhatId).Sales_Remarks__c;
+                            oppMap.get(tsk.WhatId).Sales_Remarks__c = (str.length() > 131072) ? str.substring(0, 131072) : str;
+                        }
+                    }else if(leadMap.get(tsk.WhoId) != null){
+                        if(leadMap.get(tsk.WhoId).Sales_Remarks__c == null){
+                            leadMap.get(tsk.WhoId).Sales_Remarks__c = tsk.Remarks__c;
+                        }else{
+                            String str = tsk.Remarks__c + '; * ' + leadMap.get(tsk.WhoId).Sales_Remarks__c;
+                            leadMap.get(tsk.WhoId).Sales_Remarks__c = (str.length() > 131072) ? str.substring(0, 131072) : str;
+                        }
+                    }
+                }
+            }
+            update oppMap.values();
+            update leadMap.values();
+        }
+    }
+    
+    //Added by coServe 07-03-2025
     public void updateRemarksOnCase(List<Task> tskList){
         Id recTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Customer Interaction').getRecordTypeId();
         Set<Id> caseIds = new Set<Id>();
@@ -112,7 +253,7 @@ public class RWTaskTriggerHandler
                 tskIds.add(tsk.Id);
             }
         }
-        if(caseIds.size() > 0 || Test.isRunningTest()){
+        if(caseIds.size() > 0){
             List<Case> caseList = [SELECT Id, Description FROM Case WHERE Id =: caseIds AND locobuzz__Locobuzz_ID__c != null];
             List<Task> listTasks = [SELECT Id, WhatId, Description FROM Task WHERE WhatId =: caseIds AND RecordTypeId =: recTypeId Order by CreatedDate DESC];
             System.debug('listTasks: ' + listTasks.size());
@@ -138,7 +279,6 @@ public class RWTaskTriggerHandler
             update caseList;
         }
     }
-
     //Added by coServe 09-05-2024 Start
     public void reassignSysAdminTaskToRM(List<Task> tskList){
         List<String> oppIds = new List<String>();
@@ -201,8 +341,8 @@ public class RWTaskTriggerHandler
                        }
                 }
             }
-            List<Opportunity> oppList = [SELECT Id, Name, RW_Email__c, RW_Project__c, RW_Project__r.Name, Not_Contactable_Email_Sent_Date__c, RW_Project_Unit__r.Relationship_Manager__r.Contact_Number__c, RW_Project_Unit__c, RW_Project_Unit__r.Relationship_Manager__c FROM Opportunity WHERE Id =: oppIds AND StageName = 'Unit Booked'];
-            if(oppList.size() > 0){
+            if(oppIds.size() > 0){
+            	List<Opportunity> oppList = [SELECT Id, Name, RW_Email__c, RW_Project__c, RW_Project__r.Name, Not_Contactable_Email_Sent_Date__c, RW_Project_Unit__r.Relationship_Manager__r.Contact_Number__c, RW_Project_Unit__c, RW_Project_Unit__r.Relationship_Manager__c FROM Opportunity WHERE Id =: oppIds AND StageName = 'Unit Booked'];
                 Map<String, Project__c> projMap;
                 List<String> projIds = new List<String>();
                 for(Opportunity opp : oppList){
@@ -286,12 +426,15 @@ public class RWTaskTriggerHandler
             }
         }
         //List<Opportunity> oppList = [SELECT Id, Name, RW_Email__c, Primary_Name__c, RW_Project__c, RW_Project__r.Name, Account.Country_Code__c, RW_Mobile_No__c, RW_Project__r.Customer_Care_Email__c, RW_Project__r.Contact_No__c  FROM Opportunity WHERE Id =: oppIds];
-        List<Opportunity> oppList = [SELECT Id, Name, RW_Email__c, Primary_Name__c, RW_Project__c, RW_Project__r.Name, Account.Country_Code__c, RW_Mobile_No__c, RW_Project__r.Customer_Care_Email__c, RW_Project__r.Contact_No__c  FROM Opportunity WHERE Id =: opportunityIds AND StageName = 'Unit Booked'];
-        for(Opportunity opp : oppList){
-            if(!Test.isRunningTest()){
-                SendWhatsAppMsg.methodToSendWhatsAppMsg(null,opp.Primary_Name__c, opp.RW_Project__r.Contact_No__c, opp.RW_Project__r.Customer_Care_Email__c,null,null,null,null,null,opp.Account.Country_Code__c,opp.RW_Mobile_No__c,'Customer Non Contactable');
+        if(opportunityIds.size() > 0){
+            List<Opportunity> oppList = [SELECT Id, Name, RW_Email__c, Primary_Name__c, RW_Project__c, RW_Project__r.Name, Account.Country_Code__c, RW_Mobile_No__c, RW_Project__r.Customer_Care_Email__c, RW_Project__r.Contact_No__c  FROM Opportunity WHERE Id =: opportunityIds AND StageName = 'Unit Booked'];
+            for(Opportunity opp : oppList){
+                if(!Test.isRunningTest()){
+                    SendWhatsAppMsg.methodToSendWhatsAppMsg(null,opp.Primary_Name__c, opp.RW_Project__r.Contact_No__c, opp.RW_Project__r.Customer_Care_Email__c,null,null,null,null,null,opp.Account.Country_Code__c,opp.RW_Mobile_No__c,'Customer Non Contactable');
+                }
             }
         }
+        
         //Added by coServe 15-07-2024 End
         
     }
@@ -343,6 +486,58 @@ public class RWTaskTriggerHandler
             if(loggedinUser.Profile.Name != 'System Administrator' && loggedinUser.Profile.Name != 'Sales Strategy') //Sales Strategy added by Priya on 9th september 2018
             {
                 EachTask.addError('You cannot delete the task, please contact your system admin.');
+            }
+        }
+    }
+    
+    //Added by coServe 18-03-2025
+    public void cloneWelcomeCallTask(List<Task> newList, map<Id, Task> oldMap){
+        List<Id> oppIds = new List<Id>();
+        List<Task> tskList = new List<Task>();
+        for(Task tsk : newList){
+            if(tsk.WhatId != null){
+                String sobjectType = tsk.WhatId.getSObjectType().getDescribe().getName(); 
+                if(sobjectType == 'Opportunity' && tsk.Call_Status__c == 'Welcome call' && oldMap.get(tsk.Id).Call_Status__c != tsk.Call_Status__c){
+                    oppIds.add(tsk.WhatId);
+                    tskList.add(tsk);
+                }
+            }
+        }
+        if(oppIds.size() > 0){
+            Map<Id,Opportunity> oppMap = new Map<Id, Opportunity>([SELECT Id, AccountId, RW_Project__r.Name FROM Opportunity WHERE Id =: oppIds AND RW_Project__r.Name = '7 Mahalaxmi']);
+            List<Task> mahalaxmiTasks = new List<Task>();
+            for(Task tsk : tskList){
+                if(oppMap.containsKey(tsk.WhatId)){
+                    mahalaxmiTasks.add(tsk);
+                }
+            }
+            Map<Id, Id> oppIdvsAccId = new Map<Id, Id>();
+            for(Opportunity opp : oppMap.values()){
+                oppIdvsAccId.put(opp.Id, opp.AccountId);
+            }
+            List<Opportunity> oppList = [SELECT Id, AccountId FROM Opportunity WHERE AccountId =: oppIdvsAccId.values()];
+            Map<Id, List<Id>> accIdVsOppIds = new Map<Id, List<Id>>();
+            for(Opportunity op : oppList){
+                if(accIdVsOppIds.get(op.AccountId) != null){
+                    accIdVsOppIds.get(op.AccountId).add(op.Id);
+                }else{
+                    accIdVsOppIds.put(op.AccountId, new List<Id>{op.Id});
+                }
+            }
+            List<Task> clonedTasks = new List<Task>();
+            for(Task t : mahalaxmiTasks){
+                if(accIdVsOppIds.get(oppIdvsAccId.get(t.WhatId)).size() > 1){
+                    for(Integer i=0;i<accIdVsOppIds.get(oppIdvsAccId.get(t.WhatId)).size();i++){
+                        if(accIdVsOppIds.get(oppIdvsAccId.get(t.WhatId))[i] != t.WhatId){
+                            Task clnTsk = t.clone(false, true, false,false);
+                            clnTsk.WhatId = accIdVsOppIds.get(oppIdvsAccId.get(t.WhatId))[i];
+                            clonedTasks.add(clnTsk);
+                        }
+                    }
+                }
+            }
+            if(clonedTasks.size() > 0){
+                insert clonedTasks;
             }
         }
     }

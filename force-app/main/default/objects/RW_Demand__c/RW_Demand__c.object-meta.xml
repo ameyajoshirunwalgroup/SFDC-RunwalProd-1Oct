@@ -166,7 +166,11 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Demands</pluralLabel>
-    <searchLayouts></searchLayouts>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Due_Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>RW_Demand_Milestone__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>RW_Total_Demand_Amount__c</lookupDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

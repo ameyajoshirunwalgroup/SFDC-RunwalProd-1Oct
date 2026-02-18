@@ -1,12 +1,8 @@
-public without sharing class EOICancellationController 
-{
+public without sharing class EOICancellationController{
     @AuraEnabled
-    public  static void sendApprovalRequest(String recordId)
-    {
-        try
-        {
-        Approval.ProcessSubmitRequest req1 = 
-            new Approval.ProcessSubmitRequest();
+    public  static void sendApprovalRequest(String recordId){
+        try{
+        Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
         req1.setComments('Request for EOI Cancellation');
         req1.setObjectId(recordId);
         
@@ -22,29 +18,24 @@ public without sharing class EOICancellationController
         // Verify the result
         //System.assert(result.isSuccess());
     }
-        catch(Exception e)
-        {
+        catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
 }
     
     @AuraEnabled
-    public static String getProjectSiteHead(String eoiRecId)
-    {
+    public static String getProjectSiteHead(String eoiRecId){
         RW_EOI__c eoirec = Utility.getEOIRecord(eoiRecId);
-        if(eoirec != null)
-        {
+        if(eoirec != null){
         return Utility.getProjectSiteHead(eoirec.Opportunity__r.RW_Project__c);
         }
-        else
-        {
+        else{
             return '';
         }
     }
     
     @AuraEnabled
-    public static RW_EOI__c getEOIRecordData(String eoiRecId)
-    {
+    public static RW_EOI__c getEOIRecordData(String eoiRecId){
         return Utility.getEOIRecord(eoiRecId);
     }
 }

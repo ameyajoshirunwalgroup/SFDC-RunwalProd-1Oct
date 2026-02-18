@@ -22,6 +22,7 @@ public with sharing class SAPIntegrationServices {
             //oList[0].SAP_Customer_Number__c = customerNumber;
             
             if(customerNumber != null && customerNumber!= ''){
+                system.debug('customerNumber>>>' +customerNumber);
                 SONumber = generateSalesOrder(oIdSet, customerNumber);
             }else if(oList[0].SAP_Customer_Number__c != null && oList[0].SAP_Customer_Number__c != ''){
                 SONumber = generateSalesOrder(oIdSet, oList[0].SAP_Customer_Number__c);
@@ -33,8 +34,28 @@ public with sharing class SAPIntegrationServices {
             
             system.debug(oList[0]);
             system.debug(customerNumber+SONumber);
-            if(SONumber != null)
-                oList[0].SalesOrder_Number__c = SONumber;
+            if(SONumber != null){
+                List<String> soNumWithGst = SONumber.split(','); //Added by Vinay 13-02-2026
+                
+                //oList[0].SalesOrder_Number__c = SONumber;
+                oList[0].SalesOrder_Number__c = (soNumWithGst.size() > 0)? soNumWithGst[0] : ''; //Added by Vinay 13-02-2026
+                
+                //Added by Vinay 11-12-2025 Start
+                Booking__c bkg = new Booking__c();
+                bkg.Id = oList[0].Booking__c;
+                bkg.SO_Release_Date_in_SAP__c = Date.today();
+				bkg.X4_5_Received__c = true;
+                if(soNumWithGst.size() > 1){ //Added by Vinay 13-02-2026
+                    List<GST_Conversion__mdt> gstConversion = [SELECT Id, MasterLabel, Label, SAP_GST__c,GST_Value__c FROM GST_Conversion__mdt WHERE SAP_GST__c =: Decimal.valueOf(soNumWithGst[1]) LIMIT 1];
+                    //bkg.GST_Percent__c =  Decimal.valueOf(soNumWithGst[1]); 
+                    if(gstConversion != null && gstConversion.size() > 0){
+                        bkg.GST_Percent__c = gstConversion[0].GST_Value__c;
+                    }
+                }
+                update bkg;
+                //Added by Vinay 11-12-2025 End
+            }
+                
             
             //if(oList != null)
                 //update oList;
@@ -125,7 +146,7 @@ public with sharing class SAPIntegrationServices {
             errMsg += 'Customer number not present,';
         } 
         // project data check
-        List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_8__c, Allotment_Charges_9__c from Project__c where Id = : oList[0].RW_Project__c];
+        List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_8__c, Allotment_Charges_9__c,Stack_Car_Park_Charges__c from Project__c where Id = : oList[0].RW_Project__c];
         if(pRec == null || pRec.size() > 1) {
             errMsg += 'Project Data Issue,';
             dataError = true;
@@ -153,7 +174,7 @@ public with sharing class SAPIntegrationServices {
                      RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c,Passback__c,Brokerage1_Amount__c,
                      RW_Nominee_Name__c	,Date_of_Occupation_Certificate__c	,Date_of_Cancellation__c,RW_Key_handover_date__c,Agreement_Value_for_brokers__c,
                      Referral__c, Customer_reference_SAP_Code__c, Referral_Amount__c, Referral_Passback__c,Loan_Bank__c, RW_Loan_Bank__c, RW_Loan_Amount__c, 
-                     RW_Loan_Account_Number__c, RW_Loan_Sanction_Date__c, RW_Noc_Generated_Date__c, Interest_to_be_Applied__c,  ADF_Opted__c //added by digicloud
+                     RW_Loan_Account_Number__c, RW_Loan_Sanction_Date__c, RW_Noc_Generated_Date__c, Interest_to_be_Applied__c, ADF_Opted__c //added by digicloud
                      from Booking__c where Id = : bookingId];
         }
         // quotation check
@@ -235,68 +256,69 @@ public with sharing class SAPIntegrationServices {
                 globalChargesMap.put(g.Name, g);
             }
             // Order Header
-            SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader = new SalesOrderSAPAPIMCS.ZsdstOrderHeader();
+             SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader = new SalesOrderSAPAPIMCS.ZsdstOrderHeader();
             // Changes made to take Property type from tower level instead of Project on 10-10-2020 By Shailesh
             if(String.isNotBlank(tRec[0].Property_Type__c) && tRec[0].Property_Type__c.equalsIgnoreCase('Residential') ){
-                orderHeader.DocType = 'ZRES';
-                orderHeader.DistrChan= '10'; // for residential
+                orderHeader.DOC_TYPE = 'ZRES';
+                orderHeader.DISTR_CHAN= '10'; // for residential
             } else if (String.isNotBlank(tRec[0].Property_Type__c) && tRec[0].Property_Type__c.equalsIgnoreCase('Commercial') ) {
-                orderHeader.DocType = 'ZCOC'; 
-                orderHeader.DistrChan= '20'; 
+                orderHeader.DOC_TYPE = 'ZCOC'; 
+                orderHeader.DISTR_CHAN= '20'; 
             }
             if(bList[0].Interest_to_be_Applied__c == 'Yes'){ // Added by coServe 18-10-2024
-                orderHeader.IntCalcFlag = 'X';
+                orderHeader.INT_CALC_FLAG = 'X';
             }else{
-                orderHeader.IntCalcFlag = '';
+                orderHeader.INT_CALC_FLAG = '';
             }
-            orderHeader.Plant = tRec[0].SAP_Plant_Code__c;
-            orderHeader.Division= '00';
-            orderHeader.SalesGrp = '';
-            orderHeader.SalesOff= '';
-            orderHeader.PurchNoC= bList[0].Name;
-            orderHeader.PoDatS = '';
-            orderHeader.DocDate = '';
-            orderHeader.SalesOrdNo=oList[0].SalesOrder_Number__c;
-            //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
-             // added by digicloud for ADF Option
+            orderHeader.PLANT = tRec[0].SAP_Plant_Code__c;
+            orderHeader.DIVISION= '00';
+            orderHeader.SALES_GRP = '';
+            orderHeader.SALES_OFF= '';
+            orderHeader.PURCH_NO_C= bList[0].Name;
+            orderHeader.PO_DAT_S = '';
+            orderHeader.DOC_DATE = '';
+            orderHeader.SALES_ORD_NO=oList[0].SalesOrder_Number__c;
+            // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
                 orderHeader.ADF_OPTION = 'Y';
             }else{
                 orderHeader.ADF_OPTION = 'N';
             }
-            orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
-            orderHeader.ZZREGDT = String.valueOf(bList[0].RW_Registration_Date__c);
-            orderHeader.ZzbookDt=String.ValueOf( bList[0].Booking_Date__c.date() );
-            orderHeader.ZZREGSRNO=bList[0].RW_BRL_Number__c;
-            orderHeader.ZZRROCDT=String.ValueOf( bList[0].RW_ROC_Date__c );
-            orderHeader.ZZAGRMTDT=String.ValueOf( bList[0].RW_Signed_Agreement_to_Customer_Date__c );
-            orderHeader.ZZAGRPOSSDT=String.ValueOf( bList[0].RW_Agreement_Possession_Date__c );
-            orderHeader.ZZPOSSSTRDT=String.ValueOf( bList[0].RW_Actual_Possession_Date__c );
-            orderHeader.ZZKEYHDOVRDT=String.ValueOf( bList[0].RW_Key_handover_date__c );
-            orderHeader.ZZOCCPCERTDT=String.ValueOf( bList[0].Date_of_Occupation_Certificate__c );
-            orderHeader.Nomini1 = bList[0].RW_Nominee_Name__c;	
+ //orderHeader.AdfOption = 'Y';
+            //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
+            orderHeader.ZZSTM_REG_PD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
+            orderHeader.ZZREG_DT = String.valueOf(bList[0].RW_Registration_Date__c);
+            orderHeader.ZZBOOK_DT=String.ValueOf( bList[0].Booking_Date__c.date() );
+            orderHeader.ZZREG_SR_NO=bList[0].RW_BRL_Number__c;
+            orderHeader.ZZRROC_DT=String.ValueOf( bList[0].RW_ROC_Date__c );
+            orderHeader.ZZAGRMT_DT=String.ValueOf( bList[0].RW_Signed_Agreement_to_Customer_Date__c );
+            orderHeader.ZZAGR_POSS_DT=String.ValueOf( bList[0].RW_Agreement_Possession_Date__c );
+            orderHeader.ZZPOSS_STR_DT=String.ValueOf( bList[0].RW_Actual_Possession_Date__c );
+            orderHeader.ZZKEY_HDOVR_DT=String.ValueOf( bList[0].RW_Key_handover_date__c );
+            orderHeader.ZZOCCP_CERT_DT=String.ValueOf( bList[0].Date_of_Occupation_Certificate__c );
+            orderHeader.NOMINI1 = bList[0].RW_Nominee_Name__c;	
             //Added by coServe 10-01-2023 Start
             if(bList[0].Funding_Status__c == 'Self Funded'){
-                orderHeader.ZZPAYMODE = '1';
+                orderHeader.ZZPAY_MODE = '1';
             }else if(bList[0].Funding_Status__c == 'Loan Bank'){
-                orderHeader.ZZPAYMODE = '2';
+                orderHeader.ZZPAY_MODE = '2';
             }
             //Added by coServe 10-01-2023 End
             //Added by coServe 05-06-2023 Start
             //orderHeader.ZzloanBd = bList[0].Loan_Bank__c; //commented by coServe 13-09-2023
-            orderHeader.ZzloanBd = bList[0].RW_Loan_Bank__c; //Added by coServe 13-09-2023
+            orderHeader.ZZLOAN_BD = bList[0].RW_Loan_Bank__c; //Added by coServe 13-09-2023
             if(bList[0].RW_Loan_Amount__c != null)
-                orderHeader.ZzloanAmt = String.valueOf(bList[0].RW_Loan_Amount__c);
+                orderHeader.ZZLOAN_AMT = String.valueOf(bList[0].RW_Loan_Amount__c);
             if(bList[0].RW_Loan_Account_Number__c != null)
-                orderHeader.ZzloanFileNo = String.valueOf(bList[0].RW_Loan_Account_Number__c);
+                orderHeader.ZZLOAN_FILE_NO = String.valueOf(bList[0].RW_Loan_Account_Number__c);
             if(bList[0].RW_Loan_Sanction_Date__c != null)
-                orderHeader.ZzsanctionDt  =String.valueOf(bList[0].RW_Loan_Sanction_Date__c) ;
+                orderHeader.ZZSANCTION_DT  =String.valueOf(bList[0].RW_Loan_Sanction_Date__c) ;
             if(bList[0].RW_Noc_Generated_Date__c != null)
-            orderHeader.ZznocIssDt=String.valueOf(bList[0].RW_Noc_Generated_Date__c) ;
+            orderHeader.ZZNOC_ISS_DT=String.valueOf(bList[0].RW_Noc_Generated_Date__c) ;
             //Added by coServe 05-06-2023 End
         //    orderHeader.ZzcarparkAlt=Integer.valueOf(qList[0].No_of_parking__c);
-          orderHeader.ZzcarparkAlt=Integer.valueOf(qList[0].Total_No_of_Parking__c);   	
-           orderHeader.PaymentPlanType = qList[0].PaymentPlan__r.name;
+          orderHeader.ZZCARPARK_ALT=Integer.valueOf(qList[0].Total_No_of_Parking__c);   	
+           orderHeader.PAYMENT_PLAN_TYPE = qList[0].PaymentPlan__r.name;
             // Order Header for logging
            /* SalesOrderLogger.ZsdstOrderHeader orderHeaderLog = new SalesOrderLogger.ZsdstOrderHeader();
             orderHeaderLog.DocType = orderHeader.DocType;
@@ -351,8 +373,8 @@ public with sharing class SAPIntegrationServices {
                         orderItemsList.item.add(orderLine);
                         count++;
                         // order conditions for Basic. If there are Additional Premium , then include that as a condition of Basic.
-
-                        if(uList[0].Service_Room_Unit__c != null){ // Added by Vinay 04-08-2025
+                        
+                        if(uList[0].Service_Room_Unit__c != null){ // Added by Vinay 01-07-2025
                             SalesOrderSAPAPIMCS.ZsdstOrderItem  orderLine1 = new SalesOrderSAPAPIMCS.ZsdstOrderItem();
                             orderLine1.ItmNumber = string.valueOf(SeqNo * count);
                             orderLine1.Material = uList[0].Service_Room_Unit__r.Unit_SAP_Code__c;
@@ -432,7 +454,7 @@ public with sharing class SAPIntegrationServices {
                                orderLine.TargetQu='';
                                orderLine.Mtart = '';
                                orderLine.Pltyp = '';
-                               orderLine.Konda = '';
+                               orderLine.Konda	 = '';
                                orderItemsList.item.add(orderLine);
                                // order condition for other charges
                                SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
@@ -449,7 +471,7 @@ public with sharing class SAPIntegrationServices {
                                orderLine.TargetQu='';
                                orderLine.Mtart = '';
                                orderLine.Pltyp = '';
-                               orderLine.Konda = '';
+                               orderLine.Konda	 = '';
                                orderItemsList.item.add(orderLine);
                                
                                // order condition for other charges
@@ -561,12 +583,15 @@ public with sharing class SAPIntegrationServices {
                     if(cp.Parking__c.equalsIgnoreCase('Puzzle Car Park')) { //Added by Vinay 28-03-2025
                         allotmentCharges += pRec[0].allotment_charges_9__c;
                     }
+                    if(cp.Parking__c.equalsIgnoreCase('Stack')) { //Added by Vinay 13-02-2026
+                        allotmentCharges += pRec[0].Stack_Car_Park_Charges__c;
+                    }
                     count++;
                 }
                 // order condition for parking charges
                 SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                 orderCondition.ItmNumber = '10';
-                orderCondition.condValue = String.valueOf(allotmentCharges);
+                orderCondition.CondValue = String.valueOf(allotmentCharges);
                 orderCondition.CondType = globalChargesMap.get('Allotment Charges').SAP_Condition_Type__c;
                 orderConditionsList.item.add(orderCondition);
             }
@@ -613,12 +638,12 @@ public with sharing class SAPIntegrationServices {
                     // order condition for parking charges
                     SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                     orderCondition.ItmNumber = '10';
-                    /*if(bList[0].Passback__c != null && bList[0].Passback__c != 0){//Commented by Prashant 18-07-2025.////
+                    /*if(bList[0].Passback__c != null && bList[0].Passback__c != 0){ //Added by Prashant.. 18-07-2025.///
                         orderCondition.condValue = String.valueOf(bList[0].Brokerage1_Amount__c);
-                    }else */if(bList[0].Brokerage__c != null && bList[0].Brokerage__c != 0){
-                        orderCondition.condValue = String.valueOf(bList[0].Brokerage__c);
+                    }else*/ if(bList[0].Brokerage__c != null && bList[0].Brokerage__c != 0){
+                        orderCondition.CondValue = String.valueOf(bList[0].Brokerage__c);
                     }else{
-                        orderCondition.condValue = '0';
+                        orderCondition.CondValue = '0';
                     }
                     orderCondition.CondType = 'ZBRK';
                     orderConditionsList.item.add(orderCondition);
@@ -647,16 +672,17 @@ public with sharing class SAPIntegrationServices {
             if(oList[0].Walkin_Source__c != null && oList[0].Walkin_Source__c.equalsIgnoreCase('Referral') && oList[0].Referral_Sub_Source__c != null &&
                oList[0].Referral_Sub_Source__c.equalsIgnoreCase('Existing client reference')){
                 if(qList[0].Discount_10_L__c != null && qList[0].Discount_10_L__c != 0) {
+                    
                         SalesOrderSAPAPIMCS.ZsdstCondition orderCondition1 = new SalesOrderSAPAPIMCS.ZsdstCondition();
                         orderCondition1.ItmNumber = '10';
-                        orderCondition1.CondValue = String.valueOf(qList[0].Discount_10_L__c);
+                        orderCondition1.CondValue = String.valueOf((qList[0].Discount_10_L__c).setscale(2,RoundingMode.HALF_UP));
                         orderCondition1.CondType = 'ZRPB';
                         orderConditionsList.item.add(orderCondition1);
                 }  
                 if(qList[0].Discount_11_L__c != null && qList[0].Discount_11_L__c != 0) {
                         SalesOrderSAPAPIMCS.ZsdstCondition orderCondition2 = new SalesOrderSAPAPIMCS.ZsdstCondition();
                         orderCondition2.ItmNumber = '10';
-                        orderCondition2.CondValue = String.valueOf(qList[0].Discount_11_L__c);
+                        orderCondition2.CondValue = String.valueOf((qList[0].Discount_11_L__c).setscale(2,RoundingMode.HALF_UP));
                         orderCondition2.CondType = 'ZRED';
                         orderConditionsList.item.add(orderCondition2);
                 }
@@ -721,7 +747,7 @@ public with sharing class SAPIntegrationServices {
             }
             
             SalesOrderSAPAPIMCS.TableOfBapiret2 bapiRet2List = new SalesOrderSAPAPIMCS.TableOfBapiret2();
-            bapiRet2List.item = new List<SalesOrderSAPAPIMCS.Bapiret2>();
+            bapiRet2List.item = new List<SalesOrderSAPAPIMCS.BAPIRET2>();
             SalesOrderSAPAPIMCS.Bapiret2 bapiItem = new SalesOrderSAPAPIMCS.Bapiret2();
             bapiItem.Type_x ='';
             bapiItem.Id  ='';
@@ -773,10 +799,10 @@ public with sharing class SAPIntegrationServices {
                 system.debug(json.serialize(orderHeader));
                 
                 system.debug(json.serialize(partnerFunctionList));
-                
                 salesOrderResponse = salesorder1.ZsdSdfcSalesOrder(billPlanList,CustomerNumber, orderConditionsList, orderHeader, orderItemsList, partnerFunctionList, bapiRet2List);
                 system.debug(JSON.serialize(salesOrderResponse));
                 system.debug(salesOrderResponse.Salesdocument+'salesOrderResponse.Salesdocument;');
+                System.debug('salesOrderResponse.GstPerc: ' + salesOrderResponse.GstPerc);
                 if(salesOrderResponse.Return_x.item != null) {
                     system.debug('MK'+salesOrderResponse.Return_x.item);
                     for(SalesOrderSAPAPIMCS.Bapiret2 returnMsg :  salesOrderResponse.Return_x.item) {
@@ -804,6 +830,9 @@ public with sharing class SAPIntegrationServices {
                 if(salesOrderResponse.Salesdocument != null && salesOrderResponse.Salesdocument != '') {
                     responseLog.Salesdocument = salesOrderResponse.Salesdocument;
                     SONumber = salesOrderResponse.Salesdocument;
+                    if(salesOrderResponse.GstPerc != null && salesOrderResponse.GstPerc != ''){ //Added by Vinay 13-02-2026
+                        SONumber = salesOrderResponse.Salesdocument + ',' + salesOrderResponse.GstPerc;
+                    }
                     system.debug(sonumber);
                 } else {
                     callOutError = true;
@@ -867,7 +896,7 @@ public with sharing class SAPIntegrationServices {
         Map<String, Applicant_Details__c> appMap = new Map<String, Applicant_Details__c>();
         String errMsg ='';
         // Added RW_Project_Unit__r.Booking__c by Tejaswini in the query
-        List<Opportunity> oList  = [Select Id, SAP_Customer_Number__c, RW_Project_Unit__c, Booking__c, Booking__r.Quotation__c,  RW_Project_Unit__r.TowerName__c,  RW_Project__c, Sales_Manager__c,RW_Sales_Associate__c, RW_Closing_Head__c, RW_Sourcing_Manager__c, RW_Sourcing_Head__c,Walkin_Source__c,RW_Project_Unit__r.Booking__c from Opportunity where Id in: oIdSet];   
+        List<Opportunity> oList  = [Select Id, SAP_Customer_Number__c, RW_Project_Unit__c, Booking__c, Booking__r.Quotation__c,  RW_Project_Unit__r.TowerName__c,  RW_Project__c, Sales_Manager__c,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Closing_Head__c, RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name, RW_Sourcing_Head__c,Walkin_Source__c,RW_Project_Unit__r.Booking__c from Opportunity where Id in: oIdSet];   //Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 04-12-2025
         //opportunity check
         if(oList.isEmpty() || oList.size() == 0 || oList.size() > 1) {
             dataError = true;
@@ -986,7 +1015,6 @@ public with sharing class SAPIntegrationServices {
                     errMsg += 'Applicant Details not present';
                 } else {
                     for(Applicant_Details__c a : appList) {
-                        System.debug('a**'+a);
                         appMap.put(a.Applicant_Number__c, a);
                     }
                 }
@@ -1058,12 +1086,12 @@ public with sharing class SAPIntegrationServices {
                 customerHeader.kukla = 'Partnership Firm';
             
             // these need to mapped in SAP based on SFDC data
-            if(String.isNotBlank(oList[0].RW_Sourcing_Manager__c))
-                customerHeader.Kvgr1 = oList[0].RW_Sourcing_Manager__c;
+            if(String.isNotBlank(oList[0].Sourcing_Manager_User__c)) // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025
+                customerHeader.Kvgr1 = oList[0].Sourcing_Manager_User__r.Name; // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__r.Name by Vinay 04-12-2025
             if(String.isNotBlank(oList[0].RW_Sourcing_Head__c))
                 customerHeader.Kvgr2 = oList[0].RW_Sourcing_Head__c;
-            if(String.isNotBlank(oList[0].RW_Sales_Associate__c))
-                customerHeader.Kvgr3 = oList[0].RW_Sales_Associate__c;
+            if(String.isNotBlank(oList[0].Sales_Manager_User__c)) 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+                customerHeader.Kvgr3 = oList[0].Sales_Manager_User__r.Name; 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             if(String.isNotBlank(oList[0].RW_Closing_Head__c))
                 customerHeader.Kvgr4 = oList[0].RW_Closing_Head__c;
             if(String.isNotBlank(oList[0].Walkin_Source__c))

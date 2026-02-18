@@ -22,6 +22,9 @@ trigger Apptrig on Applicant_Details__c (After insert, After update)
         set<Id> opportunityIds = new Set<Id>();
         if(Trigger.isUpdate)
         {
+            List<LockatedApp_UserDetailUpdate.ApplicantUpdateWrap> appUpdateWrapperList = new List<LockatedApp_UserDetailUpdate.ApplicantUpdateWrap>(); //Added by Vinay 30-12-2025
+            List<Id> addressChangedApplicantIds = new List<Id>(); //Added by Vinay 14-01-2026
+            List<Id> phoneChangedApplicantIds = new List<Id>(); //Added by Vinay 14-01-2026
             for(Applicant_Details__c app : trigger.new)
             {
                 system.debug('*inside for 1*');
@@ -70,6 +73,51 @@ trigger Apptrig on Applicant_Details__c (After insert, After update)
                     system.debug('*inside added*');
                     applicantIds.add(app.Id);
                 }
+                //Added by Vinay 07-01-2026 Start
+                LockatedApp_UserDetailUpdate.ApplicantUpdateWrap applicantUpdateWrapper = new LockatedApp_UserDetailUpdate.ApplicantUpdateWrap();
+                Boolean appMobileOrEmailUpdated = false;
+                if(app.Mobile_Number__c != null && app.Mobile_Number__c != trigger.oldMap.get(app.Id).Mobile_Number__c){
+                    applicantUpdateWrapper.primaryMobileChanged = true;
+                    applicantUpdateWrapper.oldPrimaryMobile = Trigger.oldMap.get(app.Id).Mobile_Number__c;
+                    applicantUpdateWrapper.newPrimaryMobile = app.Mobile_Number__c; 
+                    appMobileOrEmailUpdated = true;
+                }
+                if(app.Email_Address__c != null && app.Email_Address__c != trigger.oldMap.get(app.Id).Email_Address__c){
+                    applicantUpdateWrapper.primaryEmailChanged = true;
+                    applicantUpdateWrapper.oldPrimaryEmail = Trigger.oldMap.get(app.Id).Email_Address__c;
+                    applicantUpdateWrapper.newPrimaryEmail = app.Email_Address__c; 
+                    appMobileOrEmailUpdated = true;
+                }
+                if(app.Secondary_Mobile_Number__c != null && (app.Secondary_Mobile_Number__c != Trigger.oldMap.get(app.Id).Secondary_Mobile_Number__c)){ // Added by Vinay 30-12-2025
+                    applicantUpdateWrapper.secondaryMobileChanged = true;
+                    applicantUpdateWrapper.oldSecondaryMobile = Trigger.oldMap.get(app.Id).Secondary_Mobile_Number__c;
+                    applicantUpdateWrapper.newSecondaryMobile = app.Secondary_Mobile_Number__c;
+                    appMobileOrEmailUpdated = true;
+                }
+                if(appMobileOrEmailUpdated == true){
+                    appUpdateWrapperList.add(applicantUpdateWrapper);
+                    applicantUpdateWrapper.applicantId = app.Id;
+                }
+                //Added by Vinay 07-01-2026 End
+                
+                if(app.Permanent_Address__c != null && app.Permanent_Address__c != Trigger.oldMap.get(app.Id).Permanent_Address__c ||
+                  app.Permanent_Address_Line_1__c != null && app.Permanent_Address_Line_1__c != Trigger.oldMap.get(app.Id).Permanent_Address_Line_1__c ||
+                  app.Permanent_Address_Line_2__c != null && app.Permanent_Address_Line_2__c != Trigger.oldMap.get(app.Id).Permanent_Address_Line_2__c ||
+                  app.Permanent_Address_Line_3__c != null && app.Permanent_Address_Line_3__c != Trigger.oldMap.get(app.Id).Permanent_Address_Line_3__c){  //Added by Vinay 14-01-2026
+                    addressChangedApplicantIds.add(app.Id);
+                }
+                if(app.Mobile_Number__c != null && app.Mobile_Number__c != Trigger.oldMap.get(app.Id).Mobile_Number__c){ //Added by Vinay 14-01-2026
+                    phoneChangedApplicantIds.add(app.Id);
+                }
+            }
+            if(appUpdateWrapperList.size() > 0){ //Added by Vinay 07-01-2026
+                system.enqueuejob(new LockatedApp_UserDetailUpdate(appUpdateWrapperList));
+            }
+            if(addressChangedApplicantIds.size() > 0){ //Added by Vinay 14-01-2026
+               LockatedApp_Notifications.correspondenceAddressChangeNotification(addressChangedApplicantIds); // Added by Vinay 14-01-2026 
+            }
+            if(phoneChangedApplicantIds.size() > 0){ //Added by Vinay 14-01-2026
+                LockatedApp_Notifications.phoneNumberChangeNotification(phoneChangedApplicantIds); // Added by Vinay 14-01-2026
             }
             Map<Id,Id> BookingOppMap = new Map<Id,Id>();
             List<String> status = new List<String>{'Booking Confirmed','Booking Registered','Unit Booked','UnProcessed'};
@@ -83,10 +131,11 @@ trigger Apptrig on Applicant_Details__c (After insert, After update)
             if(opportunityIds.size() >0)
                 CustomerUpdateCallout.afterUpdateApplicant(opportunityIds);
         }
-		
-		
-		if(Trigger.isInsert)
+        
+        
+        if(Trigger.isInsert)
         {
+            List<Id> appIds = new List<Id>(); //Added by Vinay 13-01-2026
             for(Applicant_Details__c app : trigger.new)
             {
                 system.debug('*inside for 1*');
@@ -107,6 +156,10 @@ trigger Apptrig on Applicant_Details__c (After insert, After update)
                     system.debug('*inside added*');
                     applicantIds.add(app.Id);
                 }
+                
+                if(app.Mobile_Number__c != null && app.Email_Address__c != null){ //Added by Vinay 13-01-2026
+                    appIds.add(app.Id);
+                }
             }
             Map<Id,Id> BookingOppMap = new Map<Id,Id>();
             List<String> status = new List<String>{'Booking Confirmed','Booking Registered','Unit Booked','UnProcessed'};
@@ -119,6 +172,10 @@ trigger Apptrig on Applicant_Details__c (After insert, After update)
             }
             if(opportunityIds.size() >0)
                 CustomerUpdateCallout.afterUpdateApplicant(opportunityIds);
+            
+            if(appIds.size() > 0){ //Added by Vinay 13-01-2026
+                CreateUserWhenUnitBooked.createuserWhenApplicantCreated(appIds);
+            }
             
         }
     }

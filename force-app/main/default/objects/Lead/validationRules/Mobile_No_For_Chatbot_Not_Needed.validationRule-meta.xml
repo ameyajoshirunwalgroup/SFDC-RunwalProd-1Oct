@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Mobile_No_For_Chatbot_Not_Needed</fullName>
-    <active>false</active>
-    <errorConditionFormula>AND( NOT (ISPICKVAL( LeadSource ,&apos;CHATBOT&apos;)) ,
+    <active>true</active>
+    <errorConditionFormula>AND(   
+($User.Username &lt;&gt; $Label.UserId)  , 
+ NOT (ISPICKVAL( LeadSource ,&apos;CHATBOT&apos;)) ,
      ISBLANK( RW_Mobile_No__c ) ,
 $Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
 

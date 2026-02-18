@@ -91,6 +91,7 @@ public class EOITestClass
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         insert oppRec;
@@ -467,6 +468,7 @@ public class EOITestClass
     {
         List<Opportunity> oppRecords = [Select id from Opportunity];
         oppRecords[0].RW_Sales_Associate__c='A Heena Rawal';
+        oppRecords[0].Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         update oppRecords[0];
         List<Tower__c> towerRecords = [Select id from Tower__c];
         RW_EOI__c eoiRecord = new RW_EOI__c();

@@ -210,7 +210,38 @@ public without sharing class WelcomeCallChecklist {
         return mapModeFunding;
     }
       
-    
+    @AuraEnabled
+    public static Map<String, Object> getHoldRejectData(String strBookingId) {
+        Map<String, Object> resultMap = new Map<String, Object>();
+        
+        try {
+            //Fetch picklist values dynamically
+            Schema.DescribeFieldResult fieldResult = RW_Welcome_Call__c.Reason_for_Hold_Reject__c.getDescribe();
+            List<String> picklistValues = new List<String>();
+            for (Schema.PicklistEntry entry : fieldResult.getPicklistValues()) {
+                picklistValues.add(entry.getLabel());
+            }
+            resultMap.put('picklistValues', picklistValues);
+            
+            //Fetch stored reason
+            List<RW_Welcome_Call__c> welcomeCalls = [
+                SELECT Reason_for_Hold_Reject__c
+                FROM RW_Welcome_Call__c
+                WHERE RW_Booking__c = :strBookingId
+                ORDER BY CreatedDate DESC 
+                LIMIT 1
+            ];
+            
+            if (!welcomeCalls.isEmpty()) {
+                resultMap.put('reason', welcomeCalls[0].Reason_for_Hold_Reject__c);
+            }
+        } catch (Exception e) {
+            System.debug('Error: ' + e.getMessage());
+        }
+        
+        return resultMap;
+    }
+
     //This Method is to show Booking/Applicant details in WC checklist
     @AuraEnabled
     public static WrpClsWelcomeObj callCheckList(string strBookingId){
@@ -227,10 +258,10 @@ public without sharing class WelcomeCallChecklist {
                                  Receipts__r.DraweeBank__c,Receipts__r.Cheque_DD_Date__c,Opportunity__r.Account.No_of_family_members__c,Opportunity__r.Account.RW_Zip_Code__c,
                                  Opportunity__r.Account.RW_Occupation__c,Opportunity__r.Account.Distance_To_Office__c,Opportunity__r.Account.RW_Company_Name__c,Opportunity__r.Account.Industry,
                                  Opportunity__r.Account.RW_Designation__c,Opportunity__r.Account.Family_Income__c,Opportunity__r.Account.Purpose__c,
-                                 Opportunity__r.Account.Vehicles_owned__c,Opportunity__r.Account.Four_Wheeler__c,
+                                 Opportunity__r.Account.Vehicles_owned__c,Opportunity__r.Account.Four_Wheeler__c,Unit_No__r.Deck_Area__c,Unit_No__r.Utility_Area__c,Unit_No__r.Total_RERA_Carpet_Area__c,
                                  (SELECT Id,name,RW_Welcome_Call_Completed__c,RW_Welcome_Call_Status__c
                                  FROM Welcome_Calls__r Limit 1)
-                                 FROM Booking__c WHERE Id =: strBookingId Limit 1]; // Removed the field Welcome_Call_Done_By__c from SOQL by Vinay 01-10-2025
+                                 FROM Booking__c WHERE Id =: strBookingId Limit 1];
         system.debug('objBooking___'+objBooking);
         
         List<Applicant_Details__c> applicantList =[SELECT Name,PancardNo__c,Email_Address__c,Permanent_Address__c,Mobile_Number__c,Applicant_Number__c FROM Applicant_Details__c 
@@ -253,6 +284,7 @@ public without sharing class WelcomeCallChecklist {
         @AuraEnabled
      public static RW_Welcome_Call__c saveCheckList(List<string> finalRemarksList,WrpClsWelcomeObj wrapperListToSave, String Status,
                                                     String addRrmks, String modeOfFunding, String bankPrefrence1, String bankPrefrence2, String bankPrefrence3, List<string>  BankPreferenceforLoan, 
+                                                    String reasonsForHoldReject,
                                                     List<Receipt__c> receiptList,Boolean isDhamaka){
                                                         
           
@@ -286,8 +318,15 @@ public without sharing class WelcomeCallChecklist {
 * Commented by Prashant bcoz it was giving error. Eg - valid email - royaltvlab@gmail.com and dummy email- ab@gmail.com which gives error*/wrpApplist.Email_Address__c != null){
     
     if(str.contains(wrpApplist.Email_Address__c)) {
+        System.debug('Dummy Email Detected for ' + wrpApplist.Applicant_Number__c);
         System.debug('Dummy Email Detected');
-        throw new AuraHandledException('It seems you are using a dummy email ID in this record. This will result in the failure of extending customer portal access. Please update the correct email ID in the Primary Applicant record and continue further.');
+        //throw new AuraHandledException('It seems you are using a dummy email ID in this record. This will result in the failure of extending customer portal access. Please update the correct email ID in the Primary Applicant record and continue further.');
+        throw new AuraHandledException(
+                'It seems you are using a dummy email ID for the ' 
+                + wrpApplist.Applicant_Number__c 
+                + ' in this record. This will result in failure of extending customer portal access. '
+                + 'Please update the correct email ID and continue further.'
+            );
     }
 }
                }
@@ -333,6 +372,9 @@ public without sharing class WelcomeCallChecklist {
             WC.RW_Floor__c                          = wrapperListToSave.bkg.Floor__c;
             WC.RW_Flat_No__c                        = wrapperListToSave.bkg.Unit_No__r.RW_Param4__c;//Flat_No__c;
             WC.RW_Carpet_Area_in_Sq_ft__c           = wrapperListToSave.bkg.Carpet_Area__c;
+            WC.Deck_Area__c                         = wrapperListToSave.bkg.Unit_No__r.Deck_Area__c; //Added by Vinay 09-02-2026
+            WC.Utility_Area__c                      = wrapperListToSave.bkg.Unit_No__r.Utility_Area__c; //Added by Vinay 09-02-2026
+            WC.Total_RERA_Carpet_Area__c            = wrapperListToSave.bkg.Unit_No__r.Total_RERA_Carpet_Area__c; //Added by Vinay 09-02-2026
             WC.RW_No_of_Car_Parkings__c             = wrapperListToSave.bkg.Quotation__r.Total_No_of_Parking__c;
             WC.RW_Agreement_Value__c                = wrapperListToSave.bkg.Allotment_Premium__c;
             WC.RW_Source_Of_Booking__c              = wrapperListToSave.bkg.Source_of_Booking__c;
@@ -353,7 +395,7 @@ public without sharing class WelcomeCallChecklist {
             Wc.RW_Welcome_Call_Initiation_date__c   = System.today();
             Wc.RW_Booking__c                        = wrapperListToSave.bkg.Id;
             Wc.Booking_Id__c                        = wrapperListToSave.bkg.Id;
-                                                        
+            Wc.Reason_for_Hold_Reject__c = (Status == 'Accept') ? '' : reasonsForHoldReject;                                     
          
             if(Status == 'Accept'){ 
                 Wc.RW_Welcome_Call_Accepted_date__c = System.today();

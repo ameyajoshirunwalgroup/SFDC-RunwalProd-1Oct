@@ -540,7 +540,7 @@ insert objOpportunity;
         
         Broker__c br = new Broker__c();
         br.name ='test';
-        br.Broker_Pan_No__c ='tyui6uus';
+        br.Broker_Pan_No__c ='AZSXD9898I';
         br.RW_RERA_Registration_Number__c='fghjkl';
         insert br;
         Opportunity objOpportunity = new Opportunity();
@@ -622,7 +622,7 @@ update o3;
         
         Broker__c br = new Broker__c();
         br.name ='test';
-        br.Broker_Pan_No__c ='tyui6uus';
+        br.Broker_Pan_No__c ='AZSXD9898I';
         br.RW_RERA_Registration_Number__c='fghjkl';
         insert br;
         Opportunity objOpportunity = new Opportunity();
@@ -726,7 +726,7 @@ update o24;
         
         Broker__c br = new Broker__c();
         br.name ='test';
-        br.Broker_Pan_No__c ='tyui6uus';
+        br.Broker_Pan_No__c ='AZSXD9898I';
         br.RW_RERA_Registration_Number__c='fghjkl';
         insert br;
         Opportunity objOpportunity = new Opportunity();
@@ -981,7 +981,7 @@ update o27;
         
         Broker__c br = new Broker__c();
         br.name ='test';
-        br.Broker_Pan_No__c ='tyui6uus';
+        br.Broker_Pan_No__c ='AZSXD9898I';
         br.RW_RERA_Registration_Number__c='fghjkl';
         insert br;
         Opportunity objOpportunity = new Opportunity();
@@ -1011,7 +1011,7 @@ insert objOpportunity;
     @istest
     public static void kserve(){
          user sitehead = UniversalTestClassSetup.createusers('System Administrator', 'site','headpriject','site.head@runwal.com.uat','site.headtest@runwal.com.uat');
-        user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
+        //user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
             system.runAs(sitehead){
             Test.startTest();
             Legal_Entity__c objlglentity = new Legal_Entity__c();
@@ -1084,7 +1084,7 @@ RestContext.request.requestBody = Blob.valueOf('{"AttemptedBy":"Abhishek Sonawan
        @istest
     public static void kserve1(){
          user sitehead = UniversalTestClassSetup.createusers('System Administrator', 'site','headpriject','site.head@runwal.com.uat','site.headtest@runwal.com.uat');
-        user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
+        //user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
             system.runAs(sitehead){
             Test.startTest();
             Legal_Entity__c objlglentity = new Legal_Entity__c();
@@ -1181,7 +1181,7 @@ headers.put('Content-Type', 'application/json');
     @istest 
     public static void rwshorpage(){
          user sitehead = UniversalTestClassSetup.createusers('System Administrator', 'site','headpriject','site.head@runwal.com.uat','site.headtest@runwal.com.uat');
-        user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
+        //user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
   
          Legal_Entity__c objlglentity = new Legal_Entity__c();
             objlglentity.Name = 'RS';

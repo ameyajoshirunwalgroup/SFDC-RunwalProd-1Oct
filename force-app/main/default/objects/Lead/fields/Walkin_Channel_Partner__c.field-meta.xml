@@ -5,31 +5,10 @@
     <label>Walkin Channel Partner</label>
     <lookupFilter>
         <active>true</active>
-        <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5))</booleanFilter>
         <filterItems>
             <field>Broker__c.Deactivated__c</field>
             <operation>equals</operation>
             <value>False</value>
-        </filterItems>
-        <filterItems>
-            <field>$Source.Walkin_Source__c</field>
-            <operation>equals</operation>
-            <value>Channel Partner</value>
-        </filterItems>
-        <filterItems>
-            <field>Broker__c.RecordType.Name</field>
-            <operation>equals</operation>
-            <value>Channel Partner</value>
-        </filterItems>
-        <filterItems>
-            <field>$Source.Walkin_Source__c</field>
-            <operation>equals</operation>
-            <value>Temp Channel Partner</value>
-        </filterItems>
-        <filterItems>
-            <field>Broker__c.RecordType.Name</field>
-            <operation>equals</operation>
-            <value>Temp Channel Partner</value>
         </filterItems>
         <isOptional>true</isOptional>
     </lookupFilter>

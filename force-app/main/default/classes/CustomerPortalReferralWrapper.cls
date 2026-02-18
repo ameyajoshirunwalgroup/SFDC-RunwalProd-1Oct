@@ -1,5 +1,4 @@
-public class CustomerPortalReferralWrapper 
-{
+public class CustomerPortalReferralWrapper{
     @AuraEnabled
     public List<projects> projectNames{get;set;}
     
@@ -7,15 +6,13 @@ public class CustomerPortalReferralWrapper
     public List<referralWrapper> referralRecords{get;set;}
     
     
-    public CustomerPortalReferralWrapper()
-    {
+    public CustomerPortalReferralWrapper(){
 
         referralRecords = new List<referralWrapper>();
         projectNames = new List<projects>();
     }
     
-    public class referralWrapper
-    {
+    public class referralWrapper{
 	@AuraEnabled
     public String firstName{get;set;}
     
@@ -32,8 +29,7 @@ public class CustomerPortalReferralWrapper
     public String leadStatus{get;set;}
     }
     
-    public class projects
-    {
+    public class projects{
     @AuraEnabled
     public String projId{get;set;}
     

@@ -4,17 +4,9 @@
     <active>true</active>
     <label>New Booking</label>
     <picklistValues>
-        <picklist>AFS_Internal_Signoff_Status__c</picklist>
+        <picklist>Ageing_of_Upgrade_Transfer_in_Diff_Stage__c</picklist>
         <values>
-            <fullName>Completed</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>In Progress</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pending</fullName>
+            <fullName>Test</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -83,61 +75,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Call_Disposition_L2__c</picklist>
-        <values>
-            <fullName>Change of Mind</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Customer</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dependency on CC</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dependency on Customer</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dependency on Sales</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Financial Constraints</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Greetings</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Misselling</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Others</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Payment schedule</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Re-allocation not done</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Third-party</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Wrong number</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Call_Disposition__c</picklist>
         <values>
             <fullName>Call back request</fullName>
@@ -157,6 +94,13 @@
         </values>
         <values>
             <fullName>Wrong number%2FNo Number</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_Completed_Diff_Paid_Value__c</picklist>
+        <values>
+            <fullName>Test</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -308,6 +252,25 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Categories_of_Cancellation_Phase__c</picklist>
+        <values>
+            <fullName>DOC Executed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retained</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>City__c</picklist>
         <values>
             <fullName>Nagpur</fullName>
@@ -315,6 +278,29 @@
         </values>
         <values>
             <fullName>Pune</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Customer_Base_Count__c</picklist>
+        <values>
+            <fullName>Commercial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EWS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Residential</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retail Shops</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -342,13 +328,21 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Dispatch_Mode__c</picklist>
+        <picklist>Customer_Lifecycle__c</picklist>
         <values>
-            <fullName>Soft Copy via Email</fullName>
+            <fullName>Home Loan Team</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Soft copy via email and hardcopy</fullName>
+            <fullName>Onboarding Team</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Possession Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sustenance Team</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -406,6 +400,57 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Interest_Waiver_Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved By CEO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved By CRM Head</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved By Project Lead</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending at CEO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending at CRM Head</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected By CEO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected By CRM Head</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected By Project Lead</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted for Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Interest_to_be_Applied__c</picklist>
         <values>
             <fullName>No</fullName>
@@ -424,10 +469,6 @@
         </values>
         <values>
             <fullName>Aadhar Housing Finance ltd</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Aavas Housing Finance Limited</fullName>
             <default>false</default>
         </values>
         <values>
@@ -711,14 +752,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Jio Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Jio finance limited</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
             <default>false</default>
         </values>
@@ -875,10 +908,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>RBL Bank Ltd</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Rajasthan State Co-operative Bank</fullName>
             <default>false</default>
         </values>
@@ -900,10 +929,6 @@
         </values>
         <values>
             <fullName>Rupee Co-operative Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>SBI Caps</fullName>
             <default>false</default>
         </values>
         <values>
@@ -979,7 +1004,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Tata Capital Housing Finance Limited</fullName>
+            <fullName>Tata Cap Housing Finc Ltd</fullName>
             <default>false</default>
         </values>
         <values>
@@ -988,10 +1013,6 @@
         </values>
         <values>
             <fullName>Thane Bharat Sahakari Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Thane Janata Sahakari Bank</fullName>
             <default>false</default>
         </values>
         <values>
@@ -1116,61 +1137,13 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>POA_Name__c</picklist>
+        <picklist>NCF_Status__c</picklist>
         <values>
-            <fullName>Ajay Sawant</fullName>
+            <fullName>Completed</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Ameya Joshi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Amit Vyas</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Deepak Pimpalkar</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Kalpesh Patel</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Manish Kotian</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Meenal Sharma</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pradnesh Pingale</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Raghvendra Poojary</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Rama Vishwakarma</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Saurabh Chaturvedi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Shriniwas Dalvi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Umesh Patil</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Vikas Bobade</fullName>
+            <fullName>Pending</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2172,28 +2145,230 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>RW_confirmation_letter_Received_Status__c</picklist>
+        <picklist>Reason_For_10_Delay__c</picklist>
         <values>
-            <fullName>Details Incorporated</fullName>
+            <fullName>AFS WIP</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Not yet received</fullName>
+            <fullName>Barter Deal</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Received</fullName>
+            <fullName>Cancellation Written</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Delay</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fund transfer-DOC Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fund transfer-Unregister Unit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal %2F Dependency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NCF Awaited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI%2FOut station%2F2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OCR%2FSDR%2FSanction Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PTR of Current Month</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-term Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RERA Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RL1 %26 RL2 Sent - Defaulters</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Hold Cases</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subvention %2F Deviation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade %26 Downgrade To Other Unit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verbal Cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC On Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC Rejected-Other Reasons</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC Rejected-Unit Cancellations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC Yet To be Received From Sales</fullName>
             <default>false</default>
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Reason_For_CRM_returns_to_sales__c</picklist>
+        <picklist>Reason_for_Registration_Pending__c</picklist>
         <values>
-            <fullName>Physical Document Rejected</fullName>
+            <fullName>AFS WIP</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Welcome Call Rejected</fullName>
+            <fullName>Barter Deal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Written</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Delay</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fund transfer-DOC Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fund transfer-Unregister Unit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal %2F Dependency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NCF Awaited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRI%2FOut station%2F2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OCR%2FSDR%2FSanction Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PTR of Current Month</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-term Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RERA Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RL1 %26 RL2 Sent - Defaulters</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROC Hold Cases</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Dispute</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subvention %2F Deviation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Termination Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade %26 Downgrade To Other Unit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verbal Cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC On Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC Rejected-Other Reasons</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC Rejected-Unit Cancellations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WC Yet To Be Received From Sales</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason_for_Upgrade__c</picklist>
+        <values>
+            <fullName>Test</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Referral_IOM_Created__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2209,6 +2384,17 @@
         </values>
         <values>
             <fullName>Sales Manager</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Registrable_Status__c</picklist>
+        <values>
+            <fullName>Non Registrable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registrable</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2290,10 +2476,6 @@
         </values>
         <values>
             <fullName>Kruti Bhandare</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Kunal Parmar</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2416,6 +2598,10 @@
         </values>
         <values>
             <fullName>Employee %2F Managemen</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PreSales</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2563,153 +2749,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>State__c</picklist>
-        <values>
-            <fullName>Andaman %26 Nicobar</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Andhra Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Arunachal Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Assam</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Bihar</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Chandigarh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Chhattisgarh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dadar %26 Nagar Haveli</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Daman %26 Diu</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Delhi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Goa</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Gujarat</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Haryana</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Himachal Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Jammu and Kashmir</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Jharkhand</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Karnataka</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Kerala</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Lakshadweep</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Madhya Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Maharashtra</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Manipur</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Meghalaya</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Mizoram</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Nagaland</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Orissa</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pondichery</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Punjab</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Rajasthan</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Sikkim</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Tamil Nadu</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Telangana</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Tripura</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Uttar Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Uttaranchal</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>West Bengal</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Status__c</picklist>
         <values>
             <fullName>Booking Blocked</fullName>
@@ -2803,10 +2842,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Existing client reference</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Hoardings</fullName>
             <default>false</default>
         </values>
@@ -2848,29 +2883,6 @@
         </values>
         <values>
             <fullName>Websites</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>Test_Picklist__c</picklist>
-        <values>
-            <fullName>A</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>B</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>C</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>D</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>E</fullName>
             <default>false</default>
         </values>
     </picklistValues>

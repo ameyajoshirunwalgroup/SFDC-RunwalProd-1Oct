@@ -6,7 +6,7 @@ public class SendNotificationtoSMforVisitFollowUp {
         Id SalesRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Sales Task').getRecordTypeId();
         for(Opportunity opp : opplist){
             system.debug('Date of Visit:-'+opp.Date_Of_Visit__c);
-            list<User> ulist = [Select Id,Name,Profile.Name from User where name =: opp.RW_Sales_Associate__c and IsActive = true];
+            list<User> ulist = [Select Id,Name,Profile.Name from User where name =: opp.Sales_Manager_User__r.Name and IsActive = true]; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             system.debug('ulist'+ulist);
             if(ulist.size() == 1){
                 system.debug('User'+ulist);

@@ -89,6 +89,7 @@ public class PresalesProjectDetailsControllerTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.RW_Mobile_No__c='1221122100';
@@ -264,7 +265,7 @@ public class PresalesProjectDetailsControllerTest {
         PresalesProjectDetailsController.sendProjectDetailsAsEmail(ledId,led, new List<String>{'WhatsApp'},projectId2);
         
         
-        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg('Name', 'Runwal Bliss', localityName, 'https://runwal--uat.my.salesforce.com/', 'https://runwal--uat.my.salesforce.com/', 'https://runwal--uat.my.salesforce.com/',System.Label.Website_URL,'Best Wishes',System.Label.RW_CPContactNumber, '8989898989',System.Label.Lead_Project_Content2_HSM);
+        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg('Name', 'Runwal Bliss', localityName, 'https://runwal--uat.my.salesforce.com/', 'https://runwal--uat.my.salesforce.com/', 'https://runwal--uat.my.salesforce.com/',System.Label.Website_URL,'Best Wishes',System.Label.RW_CPContactNumber, '8989898989',System.Label.Lead_Project_Content2_HSM); //Commented by Vinay 29-08-2025
         Test.stopTest();
         
     }

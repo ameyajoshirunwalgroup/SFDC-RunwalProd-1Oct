@@ -13,7 +13,7 @@ public class OpportunityScoringHandlerTest {
             Description__c = 'High',
             Score__c = 10,
             Matching_Type__c = 'Static',
-            Opportunity_Field__c = 'Budget_In_Lakh__c'
+            Opportunity_Field__c = 'RW_Budget__c'
         ));
 
      
@@ -23,7 +23,7 @@ public class OpportunityScoringHandlerTest {
             Description__c = 'Match',
             Score__c = 20,
             Matching_Type__c = 'Dynamic',
-            Opportunity_Field__c = 'Budget_In_Lakh__c'
+            Opportunity_Field__c = 'RW_Budget__c'
         ));
 
         insert settings;
@@ -35,9 +35,7 @@ public class OpportunityScoringHandlerTest {
         
         Qualification_Criteria__c qc = new Qualification_Criteria__c(
             Project__c = project.Id,
-            //Budget_QC__c = '1.30 Cr – 1.40 Cr'
-            MIN_Budget_In_Lakh__c= 80.00,
-            MAX_Budget_In_Lakh__c= 150.00,
+            Budget_QC__c = '1.30 Cr – 1.40 Cr',
             Possession_QC__c = '1 to 2 year',
             Configuration_QC__c = '2 BHK',
             Location_QC__c = 'Airoli'
@@ -45,13 +43,13 @@ public class OpportunityScoringHandlerTest {
         insert qc;
     }
 
-    static Opportunity createTestOpportunity(Id projectId, Decimal budget, String timeline, String config, String location) {
+    static Opportunity createTestOpportunity(Id projectId, String budget, String timeline, String config, String location) {
         return new Opportunity(
             Name = 'Test Opportunity',
             StageName = 'Prospecting',
             CloseDate = System.today().addDays(30),
             RW_Project__c = projectId,
-            Budget_In_Lakh__c = budget,
+            RW_Budget__c = budget,
             RW_Time_line__c = timeline,
             RW_Configuration__c = config,
             RW_Location__c = location
@@ -66,7 +64,7 @@ public class OpportunityScoringHandlerTest {
     
         Opportunity opp = createTestOpportunity(
             projectId,
-            120.00,   
+            '1.30 Cr – 1.40 Cr',   
             '1 to 2 year',  
             '2 BHK',    
             'Airoli'   

@@ -65,10 +65,10 @@
         </rejectionActions>
     </approvalStep>
     <description>Approval process when Referral discount is applied.</description>
-    <emailTemplate>unfiled$public/ReferralQuotation_Approval_Email_Template</emailTemplate>
+    <emailTemplate>My_View/ReferralQuotation_Approval_Email_Template</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
-        <booleanFilter>1 AND 2 AND 3</booleanFilter>
+        <booleanFilter>1 AND 2 AND 3 AND 4 AND 5</booleanFilter>
         <criteriaItems>
             <field>Quotation__c.Quote_Status__c</field>
             <operation>equals</operation>
@@ -83,6 +83,14 @@
             <field>Quotation__c.Discount_11_Type__c</field>
             <operation>equals</operation>
             <value>Referral</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Quotation__c.Level_One_Approver__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Quotation__c.Level_Two_Approver__c</field>
+            <operation>notEqual</operation>
         </criteriaItems>
     </entryCriteria>
     <finalApprovalActions>

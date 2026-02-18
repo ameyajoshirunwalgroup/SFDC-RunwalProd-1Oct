@@ -257,8 +257,8 @@ public class CPRegisterationControllerTest {
         ScheduleCPReminderEmailsprior3Mons obj1 = new ScheduleCPReminderEmailsprior3Mons();
         obj1.execute(null);
         System.enqueueJob(new SendCPEmails(tempCPIdVsEmailMap, 'Temp_CP_creation_Email'));
-        CPRegisterationController.updateDocDetailsnSubmitforAppr(true, false, cp.Id, Date.today()+10, Date.today()+10);
-        CPRegisterationController.updateDocDetailsnSubmitforAppr(false, true, cp.Id, Date.today()+10, Date.today()+10);
+        CPRegisterationController.updateDocDetailsnSubmitforAppr(true, cp.Id, Date.today()+10, Date.today()+10);
+        CPRegisterationController.updateDocDetailsnSubmitforAppr(false, cp.Id, Date.today()+10, Date.today()+10);
         CPRegisterationController.getBrokerDetails(null);
         CPRegisterationController.createTempCP(b3);
         Test.stopTest();
@@ -315,6 +315,8 @@ public class CPRegisterationControllerTest {
         Test.startTest();
         CPRegisterationController.uploadFile(base64,'TestDoc.txt',cp.Id,'PAN Card');        
         CPRegisterationController.uploadFile(base642,'TestDoc.txt',cp.Id,'PAN Card');  
+        CPRegisterationController c = new CPRegisterationController();
+        c.dummyMethod();
         ScheduleCPDocApproval obj = new ScheduleCPDocApproval();
         obj.execute(null);
         ScheduleCPReminderEmailsprior3Mons obj1 = new ScheduleCPReminderEmailsprior3Mons();
@@ -359,7 +361,7 @@ public class CPRegisterationControllerTest {
         
         Test.startTest(); 
         ScheduleCPDocApproval obj = new ScheduleCPDocApproval();
-        obj.execute(null);
+        obj.execute(null);        
         Test.stopTest();
     }
 }

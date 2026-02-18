@@ -11,13 +11,14 @@ public class ProspectManagementServices {
             }
         }
         if(!prospectmap.isEmpty()) {
-            lstopty = [Select id, name,RW_Sales_Associate__c from Opportunity where Id =:prospectmap.keySet()];
+            lstopty = [Select id, name,RW_Sales_Associate__c,Sales_Manager_User__c from Opportunity where Id =:prospectmap.keySet()];  //Added Sales_Manager_User__c by Vinay 05-12-2025
         }
         if(!lstopty.isEmpty()) {
             for(Opportunity o : lstopty) {
                 if(prospectmap.containsKey(o.Id)) {
                     if(prospectmap.get(o.Id).User__r.Name != null) {
-                        o.RW_Sales_Associate__c = prospectmap.get(o.Id).User__r.Name;
+                        //o.RW_Sales_Associate__c = prospectmap.get(o.Id).User__r.Name; //Commented by Vinay 05-112-2025
+                        o.Sales_Manager_User__c = prospectmap.get(o.Id).User__c; //Added by Vinay 05-112-2025
                         lstOptyToUodate.add(o);
                     }
                 }

@@ -3,11 +3,11 @@
     <fullName>Uncheck_of_Stop_Case_Emails</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-ISCHANGED( Stop_Case_Emails__c ),
-Stop_Case_Emails__c = false,
-$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
-$Profile.Name &lt;&gt; &apos;Relationship Manager&apos;,
-$Profile.Name &lt;&gt; &apos;Team Leader&apos;
+  ISCHANGED( Stop_Case_Emails__c ),
+  Stop_Case_Emails__c = false,
+  $Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+  $Profile.Name &lt;&gt; &apos;Relationship Manager&apos;,
+  $Profile.Name &lt;&gt; &apos;Team Leader&apos;
 )</errorConditionFormula>
     <errorMessage>You can not uncheck this checkbox</errorMessage>
 </ValidationRule>

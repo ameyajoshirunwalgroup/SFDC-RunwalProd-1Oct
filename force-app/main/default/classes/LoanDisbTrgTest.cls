@@ -57,7 +57,7 @@ public class LoanDisbTrgTest {
         objTower.ProjectName__c = objpr.id;
         objTower.Name = 'A';
         objTower.SAP_Plant_Code__c = '111';
-        objTower.RW_Terms_And_Conditions__c ='TC';
+        //objTower.RW_Terms_And_Conditions__c ='TC';
         objTower.Property_Type__c = 'Residential';
         insert objTower;
         
@@ -97,6 +97,7 @@ public class LoanDisbTrgTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -163,6 +164,7 @@ public class LoanDisbTrgTest {
         	bankRM.RM_Email__c = 'kunal@mail.com';
         	bankRM.TL_Name__c = 'Apeksha Sathe';
         	bankRM.TL_Email__c = 'apeksha@mail.com';
+        	bankRM.Inactive__c = false;
         	insert bankRM;
         
         	Project_Shortforms__c proShort = new Project_Shortforms__c();
@@ -295,7 +297,7 @@ public class LoanDisbTrgTest {
         objTower.ProjectName__c = objpr.id;
         objTower.Name = 'A';
         objTower.SAP_Plant_Code__c = '111';
-        objTower.RW_Terms_And_Conditions__c ='TC';
+        //objTower.RW_Terms_And_Conditions__c ='TC';
         objTower.Property_Type__c = 'Commercial';
         insert objTower;
         
@@ -335,6 +337,7 @@ public class LoanDisbTrgTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -401,6 +404,7 @@ public class LoanDisbTrgTest {
         	bankRM.RM_Email__c = 'kunal@mail.com';
         	bankRM.TL_Name__c = 'Apeksha Sathe';
         	bankRM.TL_Email__c = 'apeksha@mail.com';
+        bankRM.Inactive__c = false;
         	insert bankRM;
         
         	Project_Shortforms__c proShort = new Project_Shortforms__c();
@@ -519,7 +523,7 @@ public class LoanDisbTrgTest {
         objTower.ProjectName__c = objpr.id;
         objTower.Name = 'A';
         objTower.SAP_Plant_Code__c = '111';
-        objTower.RW_Terms_And_Conditions__c ='TC';
+        //objTower.RW_Terms_And_Conditions__c ='TC';
         objTower.Property_Type__c = 'Residential';
         insert objTower;
         
@@ -559,6 +563,7 @@ public class LoanDisbTrgTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -625,6 +630,7 @@ public class LoanDisbTrgTest {
         	bankRM.RM_Email__c = 'kunal@mail.com';
         	bankRM.TL_Name__c = 'Apeksha Sathe';
         	bankRM.TL_Email__c = 'apeksha@mail.com';
+        	bankRM.Inactive__c = false;
         	insert bankRM;
         
         	Project_Shortforms__c proShort = new Project_Shortforms__c();

@@ -4,10 +4,10 @@
     <externalId>false</externalId>
     <formula>IF(
 	ISPICKVAL( OTP_Generate_For__c ,&apos;Channel Partner&apos;),
-	&apos;CP Name: &apos; +  Channel_Partner_Lookup__r.Name,
+	&apos;CP Name: &apos; + Prospect__r.Channel_Partner__r.Name,
 	IF(
 		ISPICKVAL( OTP_Generate_For__c ,&apos;Temp Channel Partner&apos;),
-		&apos;CP Name: &apos; +  Temp_Channel_Partner__r.Name,
+		&apos;CP Name: &apos; + Prospect__r.Temp_Channel_Partner__r.Name,
 		&apos; &apos;
 	)
 )

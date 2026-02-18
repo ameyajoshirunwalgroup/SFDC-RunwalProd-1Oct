@@ -75,16 +75,16 @@ public class SalesOrderUpdateCallout {
             errMsg = 'Booking not present,';
         }  else {
             bookingId = oList[0].Booking__c;
-            bList = [Select Id,Status__c,RW_Cancellation_initiated_by__c,Cancellation_Sub_reason__c,Cancellation_Reason__c	, Booking_Date__c,Funding_Status__c, Source_Of_Booking__c, Name,RW_Last_SDR_Received__c,
-                  RW_Index_2__c,   RW_Registration_Date__c,RW_BRL_Number__c,RW_Release_of_Charge_issue_status__c,RW_ROC_Date__c,RW_Signed_Agreement_to_Customer_Date__c,ADF_Opted__c, //added by digicloud
-                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c, Project__r.Name, Interest_to_be_Applied__c,
+            bList = [Select Id,Status__c,RW_Cancellation_initiated_by__c,Cancellation_Sub_reason__c,Cancellation_Reason__c	, Booking_Date__c,Funding_Status__c, Source_Of_Booking__c, Name,RW_Last_SDR_Received__c, CreatedDate,
+                  RW_Index_2__c,   RW_Registration_Date__c,RW_BRL_Number__c,RW_Release_of_Charge_issue_status__c,RW_ROC_Date__c,RW_Signed_Agreement_to_Customer_Date__c, ADF_Opted__c, //added by digicloud
+                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c, Project__r.Name, Interest_to_be_Applied__c, 
                     RW_Noc_Generated_Date__c,RW_Loan_Sanction_Date__c, RW_Loan_Account_Number__c,RW_Loan_Amount__c,RW_Loan_Bank__c,Loan_Bank__c,RW_Nominee_Name__c	,Date_of_Occupation_Certificate__c	,Date_of_Cancellation__c,RW_Key_handover_date__c
                      
                      from Booking__c where Id = : bookingId];
         }
         // quotation check
         if(oList[0].Booking__r.Quotation__c == null) {
-            if(bList[0].Project__r.Name == 'Runwal MyCity' && bList[0].RW_Registration_Date__c < Date.valueOf('2023-04-01')){ // Added by coServe 06-11-2023
+            if(bList[0].Project__r.Name == 'Runwal MyCity' && bList[0].CreatedDate < Date.valueOf('2023-04-01')){ // Added by coServe 06-11-2023  Changed RW_Registration_Date__c by CreatedDate by Vinay 10-07-2025
                 
             }else{
                 dataError = true;
@@ -166,63 +166,64 @@ public class SalesOrderUpdateCallout {
             SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader = new SalesOrderSAPAPIMCS.ZsdstOrderHeader();
             // Changes made to take Property type from tower level instead of Project on 10-10-2020 By Shailesh
             if(String.isNotBlank(tRec[0].Property_Type__c) && tRec[0].Property_Type__c.equalsIgnoreCase('Residential') ){
-                orderHeader.DocType = 'ZRES';
-                orderHeader.DistrChan= '10'; // for residential
+                orderHeader.DOC_TYPE = 'ZRES';
+                orderHeader.DISTR_CHAN= '10'; // for residential
             } else if (String.isNotBlank(tRec[0].Property_Type__c) && tRec[0].Property_Type__c.equalsIgnoreCase('Commercial') ) {
-                orderHeader.DocType = 'ZCOC'; 
-                orderHeader.DistrChan= '20'; 
+                orderHeader.DOC_TYPE = 'ZCOC'; 
+                orderHeader.DISTR_CHAN= '20'; 
             }
             if(bList[0].Interest_to_be_Applied__c == 'Yes'){ // Added by coServe 18-10-2024
-                orderHeader.IntCalcFlag = 'X';
+                orderHeader.INT_CALC_FLAG = 'X';
             }else{
-                orderHeader.IntCalcFlag = '';
+                orderHeader.INT_CALC_FLAG = '';
             }
-            orderHeader.Plant = tRec[0].SAP_Plant_Code__c;
-            orderHeader.Division= '00';
-            orderHeader.SalesGrp = '';
-            orderHeader.SalesOff= '';
-            orderHeader.PurchNoC= bList[0].Name;
-            orderHeader.PoDatS = '';
-            orderHeader.DocDate = '';
-            orderHeader.SalesOrdNo=oList[0].SalesOrder_Number__c;
-            // added by digicloud for ADF Option
+            orderHeader.PLANT = tRec[0].SAP_Plant_Code__c;
+            orderHeader.DIVISION= '00';
+            orderHeader.SALES_GRP = '';
+            orderHeader.SALES_OFF= '';
+            orderHeader.PURCH_NO_C= bList[0].Name;
+            orderHeader.PO_DAT_S = '';
+            orderHeader.DOC_DATE = '';
+            orderHeader.SALES_ORD_NO=oList[0].SalesOrder_Number__c;
+            //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
+             // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
                 orderHeader.ADF_OPTION = 'Y';
             }else{
                 orderHeader.ADF_OPTION = 'N';
             }
-            //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
-            orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
+ //orderHeader.AdfOption = 'Y';
+            orderHeader.ZZSTM_REG_PD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
             
            
-            orderHeader.ZZREGDT = String.valueOf(bList[0].RW_Registration_Date__c); 
+            orderHeader.ZZREG_DT = String.valueOf(bList[0].RW_Registration_Date__c); 
             
             
-            orderHeader.ZzbookDt=String.ValueOf( bList[0].Booking_Date__c.date() );
-            orderHeader.ZZREGSRNO=bList[0].RW_BRL_Number__c;
-            orderHeader.ZZRROCDT=String.ValueOf( bList[0].RW_ROC_Date__c );
-            orderHeader.ZZAGRMTDT=String.ValueOf( bList[0].RW_Signed_Agreement_to_Customer_Date__c );
-            orderHeader.ZZAGRPOSSDT=String.ValueOf( bList[0].RW_Agreement_Possession_Date__c );
-            orderHeader.ZZPOSSSTRDT=String.ValueOf( bList[0].RW_Actual_Possession_Date__c );
-            orderHeader.ZZKEYHDOVRDT=String.ValueOf( bList[0].RW_Key_handover_date__c );
-            orderHeader.ZZOCCPCERTDT=String.ValueOf( bList[0].Date_of_Occupation_Certificate__c );
-            orderHeader.Nomini1 = bList[0].RW_Nominee_Name__c;	
+            orderHeader.ZZBOOK_DT=String.ValueOf( bList[0].Booking_Date__c.date() );
+            orderHeader.ZZREG_SR_NO=bList[0].RW_BRL_Number__c;
+            orderHeader.ZZRROC_DT=String.ValueOf( bList[0].RW_ROC_Date__c );
+            orderHeader.ZZAGRMT_DT=String.ValueOf( bList[0].RW_Signed_Agreement_to_Customer_Date__c );
+            orderHeader.ZZAGR_POSS_DT=String.ValueOf( bList[0].RW_Agreement_Possession_Date__c );
+            orderHeader.ZZPOSS_STR_DT=String.ValueOf( bList[0].RW_Actual_Possession_Date__c );
+            orderHeader.ZZKEY_HDOVR_DT=String.ValueOf( bList[0].RW_Key_handover_date__c );
+            orderHeader.ZZOCCP_CERT_DT=String.ValueOf( bList[0].Date_of_Occupation_Certificate__c );
+            orderHeader.NOMINI1 = bList[0].RW_Nominee_Name__c;	
             if(bList[0].RW_Release_of_Charge_issue_status__c == 'Received'){
-                orderHeader.ZZROCST = 'X';
+                orderHeader.ZZROC_ST = 'X';
             }
             if(bList[0].Funding_Status__c == 'Self Funded'){
-                orderHeader.ZZPAYMODE = '1';
+                orderHeader.ZZPAY_MODE = '1';
             }else if(bList[0].Funding_Status__c == 'Loan Bank'){
-                orderHeader.ZZPAYMODE = '2';
+                orderHeader.ZZPAY_MODE = '2';
             }else if(bList[0].Funding_Status__c == 'Not decided'){
-                orderHeader.ZZPAYMODE = '3';
+                orderHeader.ZZPAY_MODE = '3';
             }
-            orderHeader.ZzloanBd = bList[0].RW_Loan_Bank__c; //Added by coServe 13-09-2023
+            orderHeader.ZZLOAN_BD = bList[0].RW_Loan_Bank__c; //Added by coServe 13-09-2023
             //orderHeader.ZzloanBd = bList[0].Loan_Bank__c; //commented by coServe 13-09-2023
-                orderHeader.ZzloanAmt = String.valueOf(bList[0].RW_Loan_Amount__c);
-                orderHeader.ZzloanFileNo = String.valueOf(bList[0].RW_Loan_Account_Number__c);//Added String.valueOf on 09-08-2022
-            orderHeader.ZzsanctionDt  =String.valueOf(bList[0].RW_Loan_Sanction_Date__c) ;
-            orderHeader.ZznocIssDt=String.valueOf(bList[0].RW_Noc_Generated_Date__c) ;
+                orderHeader.ZZLOAN_AMT = String.valueOf(bList[0].RW_Loan_Amount__c);
+                orderHeader.ZZLOAN_FILE_NO = String.valueOf(bList[0].RW_Loan_Account_Number__c);//Added String.valueOf on 09-08-2022
+            orderHeader.ZZSANCTION_DT  =String.valueOf(bList[0].RW_Loan_Sanction_Date__c) ;
+            orderHeader.ZZNOC_ISS_DT=String.valueOf(bList[0].RW_Noc_Generated_Date__c) ;
           /*  if (bList[0].Status__c =='Booking Cancelled – Refund Pending'||  bList[0].Status__c =='Cancelled'){
                 if (bList[0].Cancellation_Reason__c == 'Unit transfer'){
                     orderHeader.RejReason='Z8';
@@ -234,7 +235,7 @@ public class SalesOrderUpdateCallout {
             orderHeader.ZzcanlDt = String.ValueOf(system.today());
 
             }*/
-            orderHeader.ZzmktVal = String.valueOf(bList[0].RW_Index_2__c);
+            orderHeader.ZZMKT_VAL = String.valueOf(bList[0].RW_Index_2__c);
             // Order Header for logging
            /* SalesOrderLogger.ZsdstOrderHeader orderHeaderLog = new SalesOrderLogger.ZsdstOrderHeader();
             orderHeaderLog.DocType = orderHeader.DocType;
@@ -391,10 +392,11 @@ billPlanList.item.add(billPlan);
                 system.debug(json.serialize(orderHeader));
                 
                 system.debug(json.serialize(partnerFunctionList));
-                
+
                 salesOrderResponse = salesorder1.ZsdSdfcSalesOrder(billPlanList,CustomerNumber, orderConditionsList, orderHeader, orderItemsList, partnerFunctionList, bapiRet2List);
                 system.debug(JSON.serialize(salesOrderResponse));
                 system.debug(salesOrderResponse.Salesdocument+'salesOrderResponse.Salesdocument;');
+                system.debug(salesOrderResponse.GstPerc+'salesOrderResponse.GstPerc;');
                 //system.debug(salesOrderResponse.Status+'salesOrderResponse.Status;');
                 if(salesOrderResponse.Return_x.item != null) {
                     system.debug('MK'+salesOrderResponse.Return_x.item);
@@ -515,7 +517,9 @@ billPlanList.item.add(billPlan);
             integer BasicPlanSequenceNo;
             String BasicCPPHId ;
             // Order Header
-            SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader = new SalesOrderSAPAPIMCS.ZsdstOrderHeader();
+           SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader = new SalesOrderSAPAPIMCS.ZsdstOrderHeader(); 
+
+
             // Changes made to take Property type from tower level instead of Project on 10-10-2020 By Shailesh
             String     bookingId = oList[0].Booking__c;
             bList = [Select Id,Cancellation_approved_date__c,RW_Index_2__c,RW_Cancellation_initiated_by__c,Status__c,Cancellation_Sub_reason__c,Cancellation_Reason__c	, Booking_Date__c,Funding_Status__c, Source_Of_Booking__c, Name,RW_Last_SDR_Received__c,
@@ -529,7 +533,7 @@ billPlanList.item.add(billPlan);
             
             String unitId = bList[0].Unit_No__c;
             List<Project_Unit__c>     uList = [Select Id, Name,Unit_SAP_Code__c,Saleable_Area__c, Carpet_area__c from Project_Unit__c where Id = :unitId];
-            List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_7__c,allotment_charges_8__c,Allotment_Charges_9__c from Project__c where Id = : bList[0].Project__c];
+            List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_7__c,allotment_charges_8__c,Allotment_Charges_9__c,Stack_Car_Park_Charges__c from Project__c where Id = : bList[0].Project__c];
             List<Project_Charges__c> pList = new List<Project_Charges__c>();
             pList = [Select Id, Name, Charge_Code__c, S_Charge_Bucket__c from Project_charges__c where Project__c = :pRec[0].Id];
             
@@ -549,58 +553,59 @@ billPlanList.item.add(billPlan);
             for(Global_Charges__c g : glList) {
                 globalChargesMap.put(g.Name, g);
             }
-            orderHeader.Division= '00';
-            orderHeader.SalesGrp = '';
-            orderHeader.SalesOff= '';
-            orderHeader.PurchNoC= bList[0].Name;
-            orderHeader.PoDatS = '';
-            orderHeader.DocDate = '';
-            orderHeader.SalesOrdNo=oList[0].SalesOrder_Number__c;
+            orderHeader.DIVISION= '00';
+            orderHeader.SALES_GRP = '';
+            orderHeader.SALES_OFF= '';
+            orderHeader.PURCH_NO_C= bList[0].Name;
+            orderHeader.PO_DAT_S = '';
+            orderHeader.DOC_DATE = '';
+            orderHeader.SALES_ORD_NO=oList[0].SalesOrder_Number__c;
             //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
-            orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
-            
-            orderHeader.ZZREGDT = String.valueOf(bList[0].RW_Registration_Date__c);
-            
-              // added by digicloud for ADF Option
+             // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
                 orderHeader.ADF_OPTION = 'Y';
             }else{
                 orderHeader.ADF_OPTION = 'N';
             }
-            orderHeader.ZzbookDt=String.ValueOf( bList[0].Booking_Date__c.date() );
-            orderHeader.ZZREGSRNO=bList[0].RW_BRL_Number__c;
-            orderHeader.ZZRROCDT=String.ValueOf( bList[0].RW_ROC_Date__c );
-            orderHeader.ZZAGRMTDT=String.ValueOf( bList[0].RW_Signed_Agreement_to_Customer_Date__c );
-            orderHeader.ZZAGRPOSSDT=String.ValueOf( bList[0].RW_Agreement_Possession_Date__c );
-            orderHeader.ZZPOSSSTRDT=String.ValueOf( bList[0].RW_Actual_Possession_Date__c );
-            orderHeader.ZZKEYHDOVRDT=String.ValueOf( bList[0].RW_Key_handover_date__c );
-            orderHeader.ZZOCCPCERTDT=String.ValueOf( bList[0].Date_of_Occupation_Certificate__c );
-            orderHeader.Nomini1 = bList[0].RW_Nominee_Name__c;	
+            orderHeader.ZZSTM_REG_PD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
+            
+            orderHeader.ZZREG_DT = String.valueOf(bList[0].RW_Registration_Date__c);
+            
+            
+            orderHeader.ZZBOOK_DT=String.ValueOf( bList[0].Booking_Date__c.date() );
+            orderHeader.ZZREG_SR_NO=bList[0].RW_BRL_Number__c;
+            orderHeader.ZZRROC_DT=String.ValueOf( bList[0].RW_ROC_Date__c );
+            orderHeader.ZZAGRMT_DT=String.ValueOf( bList[0].RW_Signed_Agreement_to_Customer_Date__c );
+            orderHeader.ZZAGR_POSS_DT=String.ValueOf( bList[0].RW_Agreement_Possession_Date__c );
+            orderHeader.ZZPOSS_STR_DT=String.ValueOf( bList[0].RW_Actual_Possession_Date__c );
+            orderHeader.ZZKEY_HDOVR_DT=String.ValueOf( bList[0].RW_Key_handover_date__c );
+            orderHeader.ZZOCCP_CERT_DT=String.ValueOf( bList[0].Date_of_Occupation_Certificate__c );
+            orderHeader.NOMINI1 = bList[0].RW_Nominee_Name__c;	
             if(bList[0].RW_Release_of_Charge_issue_status__c == 'Received'){
-                orderHeader.ZZROCST = 'X';
+                orderHeader.ZZROC_ST = 'X';
             }
             if(bList[0].Funding_Status__c == 'Self Funded'){
-                orderHeader.ZZPAYMODE = '1';
+                orderHeader.ZZPAY_MODE = '1';
             }else if(bList[0].Funding_Status__c == 'Loan Bank'){
-                orderHeader.ZZPAYMODE = '2';
+                orderHeader.ZZPAY_MODE = '2';
             }else if(bList[0].Funding_Status__c == 'Not decided'){
-                orderHeader.ZZPAYMODE = '3';
+                orderHeader.ZZPAY_MODE = '3';
             }
             system.debug( bList[0].Status__c);
             if (bList[0].Status__c =='Booking Cancelled – Refund Pending'||  bList[0].Status__c =='Cancelled' || bList[0].Status__c == 'Cancellation Initiated'){
-                           orderHeader.ZzcanlInitBy = bList[0].RW_Cancellation_initiated_by__c;
-            orderHeader.ZzcanlDt = String.ValueOf( bList[0].Cancellation_approved_date__c);
+                           orderHeader.ZZCANL_INIT_BY = bList[0].RW_Cancellation_initiated_by__c;
+            orderHeader.ZZCANL_DT = String.ValueOf( bList[0].Cancellation_approved_date__c);
 
                 if (bList[0].Cancellation_Reason__c == 'Unit transfer'){
-                    orderHeader.RejReason='Z8';
+                    orderHeader.REJ_REASON='Z8';
                 }else{	
                     
-                    orderHeader.RejReason = bList[0].Cancellation_Sub_reason__c;
+                    orderHeader.REJ_REASON = bList[0].Cancellation_Sub_reason__c;
                 }
             }
-            orderHeader.ZzmktVal = String.valueOf(bList[0].RW_Index_2__c);
+            orderHeader.ZZMKT_VAL = String.valueOf(bList[0].RW_Index_2__c);
           //  orderHeader.ZzcanlDt = String.valueOf(bList[0].Cancellation_initiation_date__c);
-            system.debug(  orderHeader.RejReason);
+            system.debug(  orderHeader.REJ_REASON);
             // Order Header for logging
       
             Integer seqNo = 10;
@@ -614,7 +619,9 @@ billPlanList.item.add(billPlan);
             orderConditionsList.item = new List<SalesOrderSAPAPIMCS.ZsdstCondition>();
             
             List<Customer_Pay_Plan_Header__C> cpphList = new List<Customer_Pay_Plan_Header__C>();
-            cpphList = [Select Id, Name, Global_Charges__c, Global_Charges__R.Name, Global_Charges__r.SAP_Material_Code__c, Global_Charges__r.SAP_Condition_Type__c,Global_Charges__r.SAP_Material_Type__c, Standard_Pay_Plan_Header__c, Standard_Pay_Plan_Header__r.Charge_Code__c ,Standard_Pay_Plan_Header__r.Charge_Code__r.S_Charge_Calculated_As__c, Standard_Pay_Plan_Header__r.Charge_Code__r.S_Charge_Bucket__c, Amount__c from customer_pay_plan_header__c where Quotation__c = :quoteId  order by Global_Charges__r.Name];
+            if(quoteId != null){
+                cpphList = [Select Id, Name, Global_Charges__c, Global_Charges__R.Name, Global_Charges__r.SAP_Material_Code__c, Global_Charges__r.SAP_Condition_Type__c,Global_Charges__r.SAP_Material_Type__c, Standard_Pay_Plan_Header__c, Standard_Pay_Plan_Header__r.Charge_Code__c ,Standard_Pay_Plan_Header__r.Charge_Code__r.S_Charge_Calculated_As__c, Standard_Pay_Plan_Header__r.Charge_Code__r.S_Charge_Bucket__c, Amount__c from customer_pay_plan_header__c where Quotation__c = :quoteId  order by Global_Charges__r.Name];
+            }
             List<Rate_List__c> rList = new List<Rate_List__c>();
             rList = [Select Id, Name, Global_Charges__c, Global_Charges__r.Name,Rate__c, Amount__c, Charge_on_Area_Type__c, Charged_Based_On__c,Charge_Based_On_Master__c from Rate_List__c where Project_Unit__c = :unitId];
             Map<String, Rate_List__c> rateMap = new Map<String, Rate_List__c>();
@@ -697,7 +704,7 @@ billPlanList.item.add(billPlan);
                 }
             }
             // check for Discounts
-            if(qList[0].Total_Discount_L__c != 0) {
+            if(qList.size() > 0 && qList[0].Total_Discount_L__c != 0) { //Added qList.size() > 0 by Vinay 17-07-2025
                 Decimal GSTDiscount = 0;
                 // send all discounts in one line and GST discount in another.
                 if(qList[0].Discount_1_Type__c != null && qList[0].Discount_1_Type__c.equalsIgnoreCase('GST Discount') ) {
@@ -710,7 +717,7 @@ billPlanList.item.add(billPlan);
                     GSTDiscount = qList[0].Discount_1_L__c;
                 }
                 // this means there are other discounts as well, apart from the GST discount as well.
-                if(qList[0].Total_Discount_L__c - GSTDiscount > 0) {
+                if(qList[0].Total_Discount_L__c - GSTDiscount > 0) { 
                     // order condition for other charges
                     SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                     orderCondition.ItmNumber = '10';
@@ -723,7 +730,7 @@ billPlanList.item.add(billPlan);
                 
             }
             // check for Additional Premium [ZPRM]
-            if(qList[0].Premium_Charges_Amount_1__c != null && qList[0].Premium_Charges_Amount_1__c != 0) {
+            if(qList.size() > 0 && qList[0].Premium_Charges_Amount_1__c != null && qList[0].Premium_Charges_Amount_1__c != 0) { //Added qList.size() > 0 by Vinay 17-07-2025
                 SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                 orderCondition.ItmNumber = '10';
                 orderCondition.CondValue = String.valueOf((qList[0].Premium_Charges_Amount_1__c * uList[0].Saleable_Area__c).setscale(2,RoundingMode.HALF_UP));
@@ -732,7 +739,7 @@ billPlanList.item.add(billPlan);
             }
             // Added by shailesh on 23rd of Oct 2019
             // check for CAM value [ZBEX]
-            if(qList[0].CAM_Charges__c != null && qList[0].CAM_Charges__c != 0) {
+            if(qList.size() > 0 && qList[0].CAM_Charges__c != null && qList[0].CAM_Charges__c != 0) { //Added qList.size() > 0 by Vinay 17-07-2025
                 SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                 orderCondition.ItmNumber = '10';
                 orderCondition.CondValue = String.valueOf((qList[0].CAM_Charges__c).setscale(2,RoundingMode.HALF_UP));
@@ -740,7 +747,7 @@ billPlanList.item.add(billPlan);
                 orderConditionsList.item.add(orderCondition);
             }
             // check for BCAM value [ZMAN]
-            if(qList[0].BCAM_Charges__c != null && qList[0].BCAM_Charges__c != 0) {
+            if(qList.size() > 0 && qList[0].BCAM_Charges__c != null && qList[0].BCAM_Charges__c != 0) { //Added qList.size() > 0 by Vinay 17-07-2025
                 SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                 orderCondition.ItmNumber = '10';
                 orderCondition.CondValue = String.valueOf((qList[0].BCAM_Charges__c).setscale(2,RoundingMode.HALF_UP));
@@ -792,6 +799,9 @@ billPlanList.item.add(billPlan);
                     if(cp.Parking__c.equalsIgnoreCase('Puzzle Car Park')) { //Added by Vinay 28-03-2025
                         allotmentCharges += pRec[0].Allotment_Charges_9__c;
                     }
+                    if(cp.Parking__c.equalsIgnoreCase('Stack')) { //Added by Vinay 13-02-2026
+                        allotmentCharges += pRec[0].Stack_Car_Park_Charges__c;
+                    }
                     count++;
                 }
                 // order condition for parking charges
@@ -822,7 +832,7 @@ billPlanList.item.add(billPlan);
            // SalesOrderLogger.TableOfZsdstCondition orderConditionsLogList = new SalesOrderLogger.TableOfZsdstCondition();
             //orderConditionsLogList.item = new List<SalesOrderLogger.ZsdstCondition>();
             SalesOrderSAPAPIMCS.TableOfZsdstBillPlan billPlanList = new SalesOrderSAPAPIMCS.TableOfZsdstBillPlan();
-            billPlanList.item = new List<   SalesOrderSAPAPIMCS.ZsdstBillPlan>();
+            billPlanList.item = new List<SalesOrderSAPAPIMCS.ZsdstBillPlan>();
             
             SalesOrderSAPAPIMCS.TableOfBapiret2 bapiRet2List = new SalesOrderSAPAPIMCS.TableOfBapiret2();
             bapiRet2List.item = new List<SalesOrderSAPAPIMCS.Bapiret2>();
@@ -863,7 +873,6 @@ billPlanList.item.add(billPlan);
                 system.debug(json.serialize(orderHeader));
                 
                 system.debug(json.serialize(partnerFunctionList));
-                
                 salesOrderResponse = salesorder1.ZsdSdfcSalesOrder(billPlanList,CustomerNumber, orderConditionsList, orderHeader, orderItemsList, partnerFunctionList, bapiRet2List);
                 system.debug(JSON.serialize(salesOrderResponse));
                 system.debug(salesOrderResponse.Salesdocument+'salesOrderResponse.Salesdocument;');

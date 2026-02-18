@@ -29,8 +29,8 @@ public class BatchtoAssignAddBrkaccruedDashboards implements Database.Batchable<
                 String cpId = b.BrokerIId__c;
                 String slabType = b.Brokerage_Scheme__r.Slab_Type__c;
                 Decimal AVforBrokers = b.Agreement_Value_for_brokers__c;
-                bsSlab = [Select Id,Name,From__c,To__c,Additional_Brokerage__c,Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,
-                          Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c from Brokerage_Slab__c where Brokerage_Scheme__c =: scheme order by Name];
+                bsSlab = [Select Id,Name,From__c,To__c,Additional_Brokerage__c,Additional_Brokerage_for_Local_Bookings__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c,
+                          Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_OS_NRI__c,Base_Brokerage_for_NRI__c from Brokerage_Slab__c where Brokerage_Scheme__c =: scheme order by Name];
                 blist1 = [Select id,Name,Agreement_Value_for_brokers__c from Booking__c where Source_of_Booking__c ='Channel Partner'and Status__c = 'Booking Confirmed'AND 
                           Brokerage_Scheme__c =: scheme and Opportunity__r.StageName = 'Unit Booked' and BrokerIId__c =: cpId order by Name ASC];
                 //system.debug('Booking count ->> '+blist1.size());
@@ -51,9 +51,12 @@ public class BatchtoAssignAddBrkaccruedDashboards implements Database.Batchable<
                             if(client == 'Local' && bs.Additional_Brokerage_for_Local_Bookings__c != null){
                                 system.debug('Additional Brokerage for Local Booking to be given ->>> '+bs.Additional_Brokerage_for_Local_Bookings__c);
                                 brokerage = bs.Additional_Brokerage_for_Local_Bookings__c;
-                            }else if(client == 'NRI' && bs.Additional_Brokerage_for_OS_NRI__c != null){
+                            }else if(client == 'Outstation' && bs.Additional_Brokerage_for_OS_NRI__c != null){
                                 system.debug('Additional Brokerage for NRI Booking to be given ->>> '+bs.Additional_Brokerage_for_OS_NRI__c);
                                 brokerage = bs.Additional_Brokerage_for_OS_NRI__c;
+                            }else if(client == 'NRI' && bs.Additional_Brokerage_for_NRI__c != null){
+                                system.debug('Additional Brokerage for NRI Booking to be given ->>> '+bs.Additional_Brokerage_for_NRI__c);
+                                brokerage = bs.Additional_Brokerage_for_NRI__c;
                             }
                             if(brokerage != 0 || brokerage != null){
                                 b.Additional_Brokerage_Accrued_Dashboards__c = (brokerage * AVforBrokers)/100;
@@ -70,9 +73,12 @@ public class BatchtoAssignAddBrkaccruedDashboards implements Database.Batchable<
                             if(client == 'Local' && bs.Additional_Brokerage_for_Local_Bookings__c != null){
                                 system.debug('Additional Brokerage for Local Booking to be given ->>> '+bs.Additional_Brokerage_for_Local_Bookings__c);
                                 brokerage = bs.Additional_Brokerage_for_Local_Bookings__c;
-                            }else if(client == 'NRI' && bs.Additional_Brokerage_for_OS_NRI__c != null){
+                            }else if(client == 'Outstation' && bs.Additional_Brokerage_for_OS_NRI__c != null){
                                 system.debug('Additional Brokerage for NRI Booking to be given ->>> '+bs.Additional_Brokerage_for_OS_NRI__c);
                                 brokerage = bs.Additional_Brokerage_for_OS_NRI__c;
+                            }else if(client == 'NRI' && bs.Additional_Brokerage_for_NRI__c != null){
+                                system.debug('Additional Brokerage for NRI Booking to be given ->>> '+bs.Additional_Brokerage_for_NRI__c);
+                                brokerage = bs.Additional_Brokerage_for_NRI__c;
                             }
                             if(brokerage != 0 || brokerage != null){
                                 b.Additional_Brokerage_Accrued_Dashboards__c = (brokerage * AVforBrokers)/100;

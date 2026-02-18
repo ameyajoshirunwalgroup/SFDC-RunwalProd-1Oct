@@ -6,7 +6,13 @@ public class SendWhatsAppLeadVisitConfirmed {
                     Project__r.RW_Address__c,Direction__c,CP_Name__c,Customer_Mobile_No__c FROM OTP__c where ID In: Ids Limit 1];
       system.debug('Process builder OTP whatsApp_______ '+ otp);
       if(!test.isRunningTest()){
-      	SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(otp.Customer_Name__c,otp.Project__r.ProjectName__c,otp.Customer_Site_Visit_On__c, otp.Generated_OTP__c,otp.Project__r.RW_Address__c,otp.Direction__c,null,otp.Customer_Mobile_No__c,System.Label.Lead_Visit_Confirmed_HSM);
+      	//SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(otp.Customer_Name__c,otp.Project__r.ProjectName__c,otp.Customer_Site_Visit_On__c, otp.Generated_OTP__c,otp.Project__r.RW_Address__c,otp.Direction__c,null,otp.Customer_Mobile_No__c,System.Label.Lead_Visit_Confirmed_HSM); //Commented by Vinay 13-10-2025
+        
+        if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
+            SendWhatsAppMsg.methodToSendWhatsAppMsgNew(otp.Customer_Name__c,otp.Project__r.ProjectName__c,otp.Customer_Site_Visit_On__c, otp.Generated_OTP__c,otp.Project__r.RW_Address__c,otp.Direction__c,null,null,null,'',otp.Customer_Mobile_No__c,System.Label.Lead_Visit_Confirmed_HSM);
+        }else{
+            SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(otp.Customer_Name__c,otp.Project__r.ProjectName__c,otp.Customer_Site_Visit_On__c, otp.Generated_OTP__c,otp.Project__r.RW_Address__c,otp.Direction__c,null,null,null,otp.Customer_Mobile_No__c,System.Label.Lead_Visit_Confirmed_HSM);
+        }
       }        
        
     }

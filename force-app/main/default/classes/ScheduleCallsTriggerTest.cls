@@ -8,7 +8,6 @@ public class ScheduleCallsTriggerTest {
         insert sc;
         
         sc.Schedule_Date__c = Date.today() + 1;
-        sc.Ozonetel_Row_Id__c = '12345';
         update sc;
     }
 

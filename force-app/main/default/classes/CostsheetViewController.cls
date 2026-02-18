@@ -160,7 +160,7 @@ public with sharing class CostsheetViewController {
             installment1 = installment;
             gst = gstAmount.setScale(0);
             
-            if( (AggrVal + othercharges) < 5000000)
+            if( (AggrVal /*+ othercharges*/) < 5000000)//Added by Prashant to remove other charges from the total, as per Business. 18-12-25.
             {  tds = 0; }
             else
             {  tds = (installment * 1 /100).setScale(0); }
@@ -270,7 +270,7 @@ public with sharing class CostsheetViewController {
               otherchargesTax = ((othercharges) * 18/100).setScale(0);  
            }
            
-          if( (agreementValuewithDiscount + othercharges)< 5000000){
+          if( (agreementValuewithDiscount /*+ othercharges*/)< 5000000){//Added by Prashant to remove other charges from the total, as per Business. 18-12-25.
             totalTDS = 0;
           }
        }
@@ -390,9 +390,9 @@ public with sharing class CostsheetViewController {
         }
         
        List <Quotation__c> lstq = new List <Quotation__c>();
-       lstq =[select id,Single_car_park_Earmarked__c,Tandem_car_park_Earmarked__c,Single_Open_Earmarked__c,Tandem_Open_Earmarked__c,Stack_Earmarked__c,
+       lstq =[select id,Single_car_park_Earmarked__c,Tandem_car_park_Earmarked__c,Single_Open_Earmarked__c,Tandem_Open_Earmarked__c,
               MLCP_Earmarked__c,MLCP_Additional__c,Stack_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Tandem_car_park_Additional__c,
-              Single_car_park_Additional__c,Basement_Additional__c,Podium__c, Puzzle_Car_Park__c from Quotation__c where id =: q.id];
+              Single_car_park_Additional__c,Basement_Additional__c,Podium__c, Puzzle_Car_Park__c,Stack_Additional_1__c from Quotation__c where id =: q.id];
               
               system.debug('lstq:' + lstq);
         
@@ -447,6 +447,12 @@ public with sharing class CostsheetViewController {
         if(lstq[0].Puzzle_Car_Park__c != null && lstq[0].Puzzle_Car_Park__c > 0){ //Added by Vinay 28-03-2025
             for(Integer i= 0;i<lstq[0].Puzzle_Car_Park__c;i++){
                 strq.add('Puzzle Car Park');
+            }
+            system.debug('STRQ8:'+ strq);
+        }
+        if(lstq[0].Stack_Additional_1__c != null && lstq[0].Stack_Additional_1__c > 0){ //Added by Vinay 19-11-2025
+            for(Integer i= 0;i<lstq[0].Stack_Additional_1__c;i++){
+                strq.add('Stack Car Park');
             }
             system.debug('STRQ8:'+ strq);
         }

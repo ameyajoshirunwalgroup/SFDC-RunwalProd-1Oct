@@ -92,6 +92,7 @@ public class TestCostSheetViewController {
         q.Single_Open_Additional__c = 1;
         q.Tandem_car_park_Additional__c = 1;
         q.Single_car_park_Additional__c = 1;
+        q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.Basement_Additional__c = 1;
         q.BCAM_Charges__c = 1;
         q.Infrastructure_charges__c = 1;

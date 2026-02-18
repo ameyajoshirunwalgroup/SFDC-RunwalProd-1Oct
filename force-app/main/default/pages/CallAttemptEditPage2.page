@@ -1,11 +1,9 @@
 <apex:page standardController="Task" extensions="CustomTaskControllerClass" showHeader="false" standardStylesheets="true" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">    
 
-    
-    
 <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
 
 <head>
-     <style>
+    <style>
 
         .spinnerBg {
                 position: fixed;
@@ -31,7 +29,6 @@
                 top: 0%;
                 }
     </style>
-    
   <title>Task Edit</title>
   <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -39,7 +36,7 @@
   <script src="/soap/ajax/9.0/connection.js"></script>
 </head>
 <body>    
-    <apex:actionstatus id="spinnerStatus">
+     <apex:actionstatus id="spinnerStatus">
                         <apex:facet name="start">
                             <div class="spinnerBg" />
                             <div class="Assigned" />
@@ -67,7 +64,12 @@
         <!-- BOXED AREA -->
         <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
           <legend id="newtaskform" class="slds-text-heading--medium slds-p-vertical--medium">Call Attempt</legend>
-    
+    <apex:outputPanel id="spinnerPanel">
+    <div id="spinner" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <img src="/img/loading.gif" alt="Loading..." />
+    </div>
+</apex:outputPanel>
+
           <!-- CREATE NEW TASK FORM -->
             <apex:form id="newtaskform" styleClass="slds-form--inline">
             <apex:PageMessages id="pageMsgs" /> 
@@ -91,7 +93,7 @@
                         </apex:pageBlockSectionItem>
                         <apex:pageBlockSectionItem >
                            <apex:outputPanel rendered="{!Task.whatId != null}"> 
-                            <apex:outputLabel >Opportunity Name</apex:outputLabel>
+                            <apex:outputLabel >Opportunity Name&nbsp;&nbsp;</apex:outputLabel>
                             <apex:outputField id="Opportunity" value="{!Task.whatId}" />
                           </apex:outputPanel>
                         </apex:pageBlockSectionItem>
@@ -110,13 +112,14 @@
                </apex:pageBlockSection>
                <apex:pageBlockSection id="pgBlockSectionCallAttempt" title="Call Attempt Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Presales Call',true,false)}">
                         <apex:inputField id="commType" value="{!Task.Communication_Type__c}" required="true"/>
+                  <!--    <apex:inputField id="Status" value="{!Task.Status}" />    -->
+
                         <apex:inputField id="SalescallAttemptedBy" value="{!Task.RW_Sales_Associate__c}" />    
                        <!-- <apex:inputField id="callSource" value="{!Task.Call_Source__c}" required="true"/> -->                                               
-                        <!--<apex:inputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/>-->
+                       <!--<apex:inputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/>-->
                         <!--<apex:inputField id="callStatus" value="{!Task.Call_Status__c}" required="true"/> -->
                         <apex:inputField id="callStatus1" value="{!Task.Call_Status__c}" required="true"/>
-                           <apex:inputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" required="true"/> 
-                           <apex:inputField id="lostJunkReason" value="{!Task.Reason_for_Lost_Junk__c}" required="true"/> 
+                           <apex:inputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" required="true" /> 
                         <!--<apex:inputField id="commTypeOut" value="{!Task.Reason_for_Outbound_Communication__c}"/> -->
                         
                        <!--  <apex:inputField id="otherReason" value="{!Task.Specify_Others__c}"/>   -->
@@ -162,13 +165,15 @@
                         <apex:outputField id="prevCallStatus" value="{!Task.Previous_Call_Attempt_Status__c}" />
                 </apex:pageBlockSection>
                 <apex:pageBlockSection id="pgBlockSectionNextCall" title="Next Action Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Presales Call',true,false)}">
-                        <apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}" />
+                        <apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}"   /> 
                    
                         <apex:pageBlockSectionItem >
                         <apex:outputLabel >Call Comments</apex:outputLabel>
                             <apex:inputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" required="true"/>
                         </apex:pageBlockSectionItem>
                 </apex:pageBlockSection>
+                            
+ <!-- 1  ---------------------------------------------------------------------------------------------------------------------------------------1    -->                    
                 
                 <apex:pageBlockSection id="pgBlockSectionCallAttempt2" title="Call Attempt Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call' || task.Task_Type__c='CRM Call',true,false)}">
                         <apex:inputField id="commType" value="{!Task.Communication_Type__c}" required="true"/>
@@ -176,38 +181,37 @@
                        <!-- <apex:inputField id="callSource" value="{!Task.Call_Source__c}" required="true"/>  -->                                              
                         <apex:inputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/>
                         <!--<apex:inputField id="callStatus" value="{!Task.Call_Status__c}" required="true"/> -->
-                            <apex:inputField id="callStatus1" value="{!Task.Call_Status__c}" />
+                            <apex:inputField id="callStatus1" value="{!Task.Call_Status__c}" required="true"/>
                            <apex:inputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" /> 
-                           <apex:inputField id="callStatus3" value="{!Task.Sub_Disposition_Type__c}" />
+                               <!-- <apex:inputField id="callStatus3" value="{!Task.Sub_Disposition_Type__c}" /> -->
                         <apex:inputField id="commTypeOut" value="{!Task.Reason_for_Outbound_Communication__c}"/>
                         
                         <!-- <apex:inputField id="otherReason" value="{!Task.Specify_Others__c}"/> -->  
-                        <!-- <apex:inputField id="campaignLookup" value="{!Task.Campaign_Lookup__c}" required="false"/> -->  
+                        <!-- <apex:inputField id="campaignLookup" value="{!Task.Campaign_Lookup__c}" required="false"/> -->
                             
-                      <!------- Added by UBSDigiclod For Sales Manager Lookup-------------> 
-                          <apex:pageBlockSectionItem rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}"> <!-- Added the rendered condition by Vinay 04-07-2025 -->
-                          <apex:outputLabel value="Sales Manager" for="salesManager"/>
-                          <!--<apex:selectList id="salesManager" value="{!selectedSalesManagerId}" size="1" style="width:60%;" required="true" > 
-                            <apex:selectOptions value="{!userOptions}" />
-                             </apex:selectList>--> <!-- Commented by Vinay 28-07-2025 -->
-                             <apex:inputField id="salesManager" value="{!task.Sales_Manager__c}" /> <!-- Added by Vinay 28-07-2025 -->
-                          </apex:pageBlockSectionItem>  
-                        <script>
-                          window.onload = function() { //Addedd by Vinay 28-07-2025 to hide the User lookup drop down values
-                              // Find the dropdown before the lookup icon and hide it
-                              var selects = document.querySelectorAll('select');
-                              selects.forEach(function(sel) {
-                              if (sel.options.length > 1 &&
-                              [...sel.options].some(o => o.text.includes("Partner User") || o.text.includes("Customer Portal"))
-                              ) {
-                              sel.style.display = 'none';
-                          }
-                                                    });
-                      }
-                      </script>
-                            
-                         <apex:inputField id="callAttemptedBy" value="{!Task.Sales_Manager__c}" rendered="false"/>
-                         <apex:inputField id="crmManager" label="CRM Manager" value="{!Task.RW_Sales_Associate__c}" rendered="{!IF(task.Task_Type__c='CRM Call',true,false)}"/>  <!-- Added by Vinay 04-07-2025 -->
+                            <apex:pageBlockSectionItem rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}"> <!-- Added the rendered condition by Vinay 04.07.2025 -->
+    <apex:outputLabel value="Sales Manager" for="salesManager"/>
+    <!--<apex:selectList id="salesManager" value="{!selectedSalesManagerId}" size="1" style="width:60%;" required="true" >
+        <apex:selectOptions value="{!userOptions}" />
+    </apex:selectList>-->
+    	<apex:inputField id="salesManager" value="{!task.Sales_Manager__c}" />
+</apex:pageBlockSectionItem>
+        <script>
+        window.onload = function() { //Addedd by Vinay 28-07-2025 to hide the User lookup drop down values
+            // Find the dropdown before the lookup icon and hide it
+            var selects = document.querySelectorAll('select');
+            selects.forEach(function(sel) {
+            if (sel.options.length > 1 &&
+            [...sel.options].some(o => o.text.includes("Partner User") || o.text.includes("Customer Portal"))
+            ) {
+            sel.style.display = 'none';
+        }
+                                 });
+    }
+    </script>
+        					
+                           	<apex:inputField id="crmManager" label="CRM Manager" value="{!Task.RW_Sales_Associate__c}" rendered="{!IF(task.Task_Type__c='CRM Call',true,false)}"/>  <!-- Added by Vinay 04-07-2025 -->
+                      <!--  <apex:inputField id="callAttemptedBy" value="{!Task.RW_Sales_Associate__c}" required="true"/> -->
                         <!-- <apex:inputField id="nameofTL" value="{!Task.Name_of_TL__c}" required="true"/> -->
                          <apex:pageBlockSectionItem >
                              <apex:outputLabel >Next Action</apex:outputLabel>
@@ -248,8 +252,7 @@
                 </apex:pageBlockSection>  -->
                 
                 <apex:pageBlockSection id="pgBlockSectionNextCall2" title="Next Action Details" collapsible="false" columns="2" rendered="{!IF(task.Task_Type__c='Sales Call' || task.Task_Type__c='CRM Call',true,false)}">
-                        <apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}" required="true" />
-                   
+                 <apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}"  />
                         <apex:pageBlockSectionItem >
                         <apex:outputLabel >Call Comments</apex:outputLabel>
                             <apex:inputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" required="true"/>
@@ -336,6 +339,7 @@
   <!-- / REQUIRED SLDS WRAPPER -->    
     <!-- JAVASCRIPT -->
     <script>
+         
       var j$ = jQuery.noConflict();
  
         j$(document).ready(function() {

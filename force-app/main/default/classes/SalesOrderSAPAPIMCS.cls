@@ -67,7 +67,7 @@ public class SalesOrderSAPAPIMCS {
         public SalesOrderSAPAPIMCS.TableOfZsdstBillPlan BillPlan;
         public String Customerno;
         public SalesOrderSAPAPIMCS.TableOfZsdstCondition OrderConditions;
-        public SalesOrderSAPAPIMCS.ZsdstOrderHeader OrderHeader;
+        public SalesOrderSAPAPIMCS.ZsdstOrderHeader OrderHeader; 
         public SalesOrderSAPAPIMCS.TableOfZsdstOrderItem OrderItems;
         public SalesOrderSAPAPIMCS.TableOfZsdstPartnerFunction PartnerFuntion;
         public SalesOrderSAPAPIMCS.TableOfBapiret2 Return_x;
@@ -102,6 +102,7 @@ public class SalesOrderSAPAPIMCS {
         public SalesOrderSAPAPIMCS.TableOfZsdstPartnerFunction PartnerFuntion;
         public SalesOrderSAPAPIMCS.TableOfBapiret2 Return_x;
         public String Salesdocument;
+        public String GstPerc;
         public String Status; //Added by Vinay 29-03-2025
         private String[] BillPlan_type_info = new String[]{'BillPlan','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] OrderConditions_type_info = new String[]{'OrderConditions','urn:sap-com:document:sap:soap:functions:mc-style',null,'0','1','false'};
@@ -109,9 +110,10 @@ public class SalesOrderSAPAPIMCS {
         private String[] PartnerFuntion_type_info = new String[]{'PartnerFuntion','urn:sap-com:document:sap:soap:functions:mc-style',null,'0','1','false'};
         private String[] Return_x_type_info = new String[]{'Return','urn:sap-com:document:sap:soap:functions:mc-style',null,'0','1','false'};
         private String[] Salesdocument_type_info = new String[]{'Salesdocument','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] GstPerc_type_info = new String[]{'GstPerc','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] Status_type_info = new String[]{'Status','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'}; //Added by Vinay 29-03-2025
         private String[] apex_schema_type_info = new String[]{'urn:sap-com:document:sap:soap:functions:mc-style','false','true'};
-        private String[] field_order_type_info = new String[]{'BillPlan','OrderConditions','OrderItems','PartnerFuntion','Return_x','Salesdocument','Status'};
+        private String[] field_order_type_info = new String[]{'BillPlan','OrderConditions','OrderItems','PartnerFuntion','Return_x','Salesdocument','Status','GstPerc'};
     }
     public class ZsdstPartnerFunction {
         public String PartnRole;
@@ -143,98 +145,99 @@ public class SalesOrderSAPAPIMCS {
         private String[] apex_schema_type_info = new String[]{'urn:sap-com:document:sap:soap:functions:mc-style','false','true'};
         private String[] field_order_type_info = new String[]{'item'};
     }
-    public class ZsdstOrderHeader {
-        public String DocType;
-        public String Plant;
-        public String DistrChan;
-        public String Division;
-        public String SalesGrp;
-        public String SalesOff;
-        public String PurchNoC;
-        public String PoDatS;
-        public String DocDate;
-        public String SalesOrdNo;
-        public String RejReason;
-        public String ZzbookDt;
-        public String ZzstmRegPd;
-        public String ZzregDt;
-        public String ZzregSrNo;
-        public String ZzregRecpNo;
-        public String ZzrocSt;
-        public String ZzrrocDt;
-        public String ZzagrmtDt;
-        public String ZzmktVal;
-        public String ZzalotLtrDt;
-        public String ZzagrPossDt;
-        public String ZzpossStrDt;
-        public String ZzpossEndDt;
-        public String ZzkeyHdovrDt;
-        public String ZzoccpCertDt;
-        public String ZzpayMode;
-        public String ZzloanBd;
-        public String ZzloanAmt;
-        public String ZzloanFileNo;
-        public String ZzloanPerAgrm;
-        public String ZzsanctionDt;
-        public String ZznocIssDt;
-        public String ZzcanlDt;
-        public String ZzcanlInitBy;
-        public String ZzdeedCanlReg;
-        public Integer ZzcarparkAlt;
-        public Integer ZzcarpartSlot;
-        public String ZzcarparkTp;
-        public String PaymentPlanType;
-        public String Nomini1;
-        public String Nomini2;
-        public String IntCalcFlag;
+    public class ZsdstOrderHeader { 
+  
+    public String DOC_TYPE;
+        public String PLANT;
+        public String DISTR_CHAN;
+        public String DIVISION;
+        public String SALES_GRP;
+        public String SALES_OFF;
+        public String PURCH_NO_C;
+        public String PO_DAT_S;
+        public String DOC_DATE;
+        public String SALES_ORD_NO;
+        public String REJ_REASON;
+        public String ZZBOOK_DT;
+        public String ZZSTM_REG_PD;
+        public String ZZREG_DT;
+        public String ZZREG_SR_NO;
+        public String ZZREG_RECP_NO;
+        public String ZZROC_ST;
+        public String ZZRROC_DT;
+        public String ZZAGRMT_DT;
+        public String ZZMKT_VAL;
+        public String ZZALOT_LTR_DT;
+        public String ZZAGR_POSS_DT;
+        public String ZZPOSS_STR_DT;
+        public String ZZPOSS_END_DT;
+        public String ZZKEY_HDOVR_DT;
+        public String ZZOCCP_CERT_DT;
+        public String ZZPAY_MODE;
+        public String ZZLOAN_BD;
+        public String ZZLOAN_AMT;
+        public String ZZLOAN_FILE_NO;
+        public String ZZLOAN_PER_AGRM;
+        public String ZZSANCTION_DT;
+        public String ZZNOC_ISS_DT;
+        public String ZZCANL_DT;
+        public String ZZCANL_INIT_BY;
+        public String ZZDEED_CANL_REG;
+        public Integer ZZCARPARK_ALT;
+        public Integer ZZCARPART_SLOT;
+        public String ZZCARPARK_TP;
+        public String PAYMENT_PLAN_TYPE;
+        public String NOMINI1;
+        public String NOMINI2;
+        public String INT_CALC_FLAG;
         public String ADF_OPTION; //added by digicloud team
-        private String[] DocType_type_info = new String[]{'DocType','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] Plant_type_info = new String[]{'Plant','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] DistrChan_type_info = new String[]{'DistrChan','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] Division_type_info = new String[]{'Division','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] SalesGrp_type_info = new String[]{'SalesGrp','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] SalesOff_type_info = new String[]{'SalesOff','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] PurchNoC_type_info = new String[]{'PurchNoC','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] PoDatS_type_info = new String[]{'PoDatS','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] DocDate_type_info = new String[]{'DocDate','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] SalesOrdNo_type_info = new String[]{'SalesOrdNo','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] RejReason_type_info = new String[]{'RejReason','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzbookDt_type_info = new String[]{'ZzbookDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzstmRegPd_type_info = new String[]{'ZzstmRegPd','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzregDt_type_info = new String[]{'ZzregDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzregSrNo_type_info = new String[]{'ZzregSrNo','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzregRecpNo_type_info = new String[]{'ZzregRecpNo','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzrocSt_type_info = new String[]{'ZzrocSt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzrrocDt_type_info = new String[]{'ZzrrocDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzagrmtDt_type_info = new String[]{'ZzagrmtDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzmktVal_type_info = new String[]{'ZzmktVal','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzalotLtrDt_type_info = new String[]{'ZzalotLtrDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzagrPossDt_type_info = new String[]{'ZzagrPossDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzpossStrDt_type_info = new String[]{'ZzpossStrDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzpossEndDt_type_info = new String[]{'ZzpossEndDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzkeyHdovrDt_type_info = new String[]{'ZzkeyHdovrDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzoccpCertDt_type_info = new String[]{'ZzoccpCertDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzpayMode_type_info = new String[]{'ZzpayMode','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzloanBd_type_info = new String[]{'ZzloanBd','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzloanAmt_type_info = new String[]{'ZzloanAmt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzloanFileNo_type_info = new String[]{'ZzloanFileNo','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzloanPerAgrm_type_info = new String[]{'ZzloanPerAgrm','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzsanctionDt_type_info = new String[]{'ZzsanctionDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZznocIssDt_type_info = new String[]{'ZznocIssDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzcanlDt_type_info = new String[]{'ZzcanlDt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzcanlInitBy_type_info = new String[]{'ZzcanlInitBy','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzdeedCanlReg_type_info = new String[]{'ZzdeedCanlReg','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzcarparkAlt_type_info = new String[]{'ZzcarparkAlt','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzcarpartSlot_type_info = new String[]{'ZzcarpartSlot','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] ZzcarparkTp_type_info = new String[]{'ZzcarparkTp','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] PaymentPlanType_type_info = new String[]{'PaymentPlanType','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] Nomini1_type_info = new String[]{'Nomini1','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] Nomini2_type_info = new String[]{'Nomini2','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-        private String[] IntCalcFlag_type_info = new String[]{'IntCalcFlag','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
-            // added by Digicloud team     
+        private String[] DOC_TYPE_type_info = new String[]{'DOC_TYPE','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] PLANT_type_info = new String[]{'PLANT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] DISTR_CHAN_type_info = new String[]{'DISTR_CHAN','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] DIVISION_type_info = new String[]{'DIVISION','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] SALES_GRP_type_info = new String[]{'SALES_GRP','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] SALES_OFF_type_info = new String[]{'SALES_OFF','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] PURCH_NO_C_type_info = new String[]{'PURCH_NO_C','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] PO_DAT_S_type_info = new String[]{'PO_DAT_S','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] DOC_DATE_type_info = new String[]{'DOC_DATE','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] SALES_ORD_NO_type_info = new String[]{'SALES_ORD_NO','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] REJ_REASON_type_info = new String[]{'REJ_REASON','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZBOOK_DT_type_info = new String[]{'ZZBOOK_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZSTM_REG_PD_type_info = new String[]{'ZZSTM_REG_PD','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZREG_DT_type_info = new String[]{'ZZREG_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZREG_SR_NO_type_info = new String[]{'ZZREG_SR_NO','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZREG_RECP_NO_type_info = new String[]{'ZZREG_RECP_NO','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZROC_ST_type_info = new String[]{'ZZROC_ST','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZRROC_DT_type_info = new String[]{'ZZRROC_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZAGRMT_DT_type_info = new String[]{'ZZAGRMT_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZMKT_VAL_type_info = new String[]{'ZZMKT_VAL','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZALOT_LTR_DT_type_info = new String[]{'ZZALOT_LTR_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZAGR_POSS_DT_type_info = new String[]{'ZZAGR_POSS_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZPOSS_STR_DT_type_info = new String[]{'ZZPOSS_STR_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZPOSS_END_DT_type_info = new String[]{'ZZPOSS_END_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZKEY_HDOVR_DT_type_info = new String[]{'ZZKEY_HDOVR_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZOCCP_CERT_DT_type_info = new String[]{'ZZOCCP_CERT_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZPAY_MODE_type_info = new String[]{'ZZPAY_MODE','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZLOAN_BD_type_info = new String[]{'ZZLOAN_BD','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZLOAN_AMT_type_info = new String[]{'ZZLOAN_AMT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZLOAN_FILE_NO_type_info = new String[]{'ZZLOAN_FILE_NO','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZLOAN_PER_AGRM_type_info = new String[]{'ZZLOAN_PER_AGRM','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZSANCTION_DT_type_info = new String[]{'ZZSANCTION_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZNOC_ISS_DT_type_info = new String[]{'ZZNOC_ISS_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZCANL_DT_type_info = new String[]{'ZZCANL_DT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZCANL_INIT_BY_type_info = new String[]{'ZZCANL_INIT_BY','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZDEED_CANL_REG_type_info = new String[]{'ZZDEED_CANL_REG','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZCARPARK_ALT_type_info = new String[]{'ZZCARPARK_ALT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZCARPART_SLOT_type_info = new String[]{'ZZCARPART_SLOT','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] ZZCARPARK_TP_type_info = new String[]{'ZZCARPARK_TP','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] PAYMENT_PLAN_TYPE_type_info = new String[]{'PAYMENT_PLAN_TYPE','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] NOMINI1_type_info = new String[]{'NOMINI1','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] NOMINI2_type_info = new String[]{'NOMINI2','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        private String[] INT_CALC_FLAG_type_info = new String[]{'INT_CALC_FLAG','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
+        // added by Digicloud team     
         private String[] ADF_OPTION_type_info = new String[]{'ADF_OPTION','urn:sap-com:document:sap:soap:functions:mc-style',null,'1','1','false'};
         private String[] apex_schema_type_info = new String[]{'urn:sap-com:document:sap:soap:functions:mc-style','false','true'};
-        private String[] field_order_type_info = new String[]{'DocType','Plant','DistrChan','Division','SalesGrp','SalesOff','PurchNoC','PoDatS','DocDate','SalesOrdNo','RejReason','ZzbookDt','ZzstmRegPd','ZzregDt','ZzregSrNo','ZzregRecpNo','ZzrocSt','ZzrrocDt','ZzagrmtDt','ZzmktVal','ZzalotLtrDt','ZzagrPossDt','ZzpossStrDt','ZzpossEndDt','ZzkeyHdovrDt','ZzoccpCertDt','ZzpayMode','ZzloanBd','ZzloanAmt','ZzloanFileNo','ZzloanPerAgrm','ZzsanctionDt','ZznocIssDt','ZzcanlDt','ZzcanlInitBy','ZzdeedCanlReg','ZzcarparkAlt','ZzcarpartSlot','ZzcarparkTp','PaymentPlanType','Nomini1','Nomini2','IntCalcFlag', 'ADF_OPTION'};
+        private String[] field_order_type_info = new String[]{'DOC_TYPE','PLANT','DISTR_CHAN','DIVISION','SALES_GRP','SALES_OFF','PURCH_NO_C','PO_DAT_S','DOC_DATE','SALES_ORD_NO','REJ_REASON','ZZBOOK_DT','ZZSTM_REG_PD','ZZREG_DT','ZZREG_SR_NO','ZZREG_RECP_NO','ZZROC_ST','ZZRROC_DT','ZZAGRMT_DT','ZZMKT_VAL','ZZALOT_LTR_DT','ZZAGR_POSS_DT','ZZPOSS_STR_DT','ZZPOSS_END_DT','ZZKEY_HDOVR_DT','ZZOCCP_CERT_DT','ZZPAY_MODE','ZZLOAN_BD','ZZLOAN_AMT','ZZLOAN_FILE_NO','ZZLOAN_PER_AGRM','ZZSANCTION_DT','ZZNOC_ISS_DT','ZZCANL_DT','ZZCANL_INIT_BY','ZZDEED_CANL_REG','ZZCARPARK_ALT','ZZCARPART_SLOT','ZZCARPARK_TP','PAYMENT_PLAN_TYPE','NOMINI1','NOMINI2','INT_CALC_FLAG','ADF_OPTION'};
     }
     public class TableOfZsdstPartnerFunction {
         public SalesOrderSAPAPIMCS.ZsdstPartnerFunction[] item;
@@ -243,9 +246,9 @@ public class SalesOrderSAPAPIMCS {
         private String[] field_order_type_info = new String[]{'item'};
     }
     public class ZSD_SFDC_SALES_ORDER {
-                public String endpoint_x = System.label.SAP_Salesorder_endpoint;//'http://123.108.44.40:8002/sap/bc/srt/rfc/sap/zsd_sfdc_sales_order/210/zsd_sfdc_sales_order/zsd_sfdc_sales_order';
+        public String endpoint_x = System.label.SAP_Salesorder_endpoint;//'http://123.108.44.40:8002/sap/bc/srt/rfc/sap/zsd_sfdc_sales_order/210/zsd_sfdc_sales_order/zsd_sfdc_sales_order';
 
- //       public String endpoint_x = 'http://RGQLTAPL.RUNWAL.COM:8002/sap/bc/srt/rfc/sap/zsd_sfdc_sales_order/210/zsd_sfdc_sales_order/zsd_sfdc_sales_order';
+ //     public String endpoint_x = 'http://RGQLTAPL.RUNWAL.COM:8002/sap/bc/srt/rfc/sap/zsd_sfdc_sales_order/210/zsd_sfdc_sales_order/zsd_sfdc_sales_order';
         public Map<String,String> inputHttpHeaders_x;
         public Map<String,String> outputHttpHeaders_x;
         public String clientCertName_x;
@@ -254,8 +257,8 @@ public class SalesOrderSAPAPIMCS {
         public Integer timeout_x;
         private String[] ns_map_type_info = new String[]{'urn:sap-com:document:sap:soap:functions:mc-style', 'SalesOrderSAPAPIMCS', 'urn:sap-com:document:sap:rfc:functions', 'SalesOrderSAPAPI'};
         public SalesOrderSAPAPIMCS.ZsdSdfcSalesOrderResponse_element ZsdSdfcSalesOrder(SalesOrderSAPAPIMCS.TableOfZsdstBillPlan BillPlan,String Customerno,SalesOrderSAPAPIMCS.TableOfZsdstCondition OrderConditions,SalesOrderSAPAPIMCS.ZsdstOrderHeader OrderHeader,SalesOrderSAPAPIMCS.TableOfZsdstOrderItem OrderItems,SalesOrderSAPAPIMCS.TableOfZsdstPartnerFunction PartnerFuntion,SalesOrderSAPAPIMCS.TableOfBapiret2 Return_x) {
-
-               String username = Label.SAP_Username;
+        
+            String username = Label.SAP_Username;
             String password = Label.SAP_Password;
             Blob headerValue = Blob.valueOf(username + ':' + password);
             String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
@@ -270,8 +273,8 @@ public class SalesOrderSAPAPIMCS {
             request_x.OrderItems = OrderItems;
             request_x.PartnerFuntion = PartnerFuntion;
             request_x.Return_x = Return_x;
-                        system.debug(json.serialize(request_x));
-
+            system.debug(json.serialize(request_x));
+            system.debug('JSON request >>>>' +json.serialize(request_x)); //added by digicloud
             SalesOrderSAPAPIMCS.ZsdSdfcSalesOrderResponse_element response_x;
             Map<String, SalesOrderSAPAPIMCS.ZsdSdfcSalesOrderResponse_element> response_map_x = new Map<String, SalesOrderSAPAPIMCS.ZsdSdfcSalesOrderResponse_element>();
             response_map_x.put('response_x', response_x);
@@ -288,7 +291,9 @@ public class SalesOrderSAPAPIMCS {
               'SalesOrderSAPAPIMCS.ZsdSdfcSalesOrderResponse_element'}
             );
             response_x = response_map_x.get('response_x');
-            system.debug('JSON request >>>>' +json.serialize(request_x)); //added by digicloud
+            system.debug('response check>>>>>>>' +response_x);
+            system.debug('response code>>>>>>>' +response_x.Status);
+
             return response_x;
         }
     }

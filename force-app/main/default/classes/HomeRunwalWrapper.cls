@@ -1,5 +1,4 @@
-public class HomeRunwalWrapper 
-{
+public class HomeRunwalWrapper{
     @AuraEnabled
     public List<Booking__c> Bookings{get;set;}
     
@@ -285,8 +284,7 @@ public class HomeRunwalWrapper
     
                
     
-    public HomeRunwalWrapper()
-    {
+    public HomeRunwalWrapper(){
         demandWrapperList = new List<DemandWrapper>();
         inspectionWrapperList = new List<inspectionWrapper>();
         appDetailsWrapperList = new List<appDetailsWrapper>();
@@ -323,8 +321,7 @@ public class HomeRunwalWrapper
         
     }*/
     
-    public class DemandWrapper
-    {
+    public class DemandWrapper{
         @AuraEnabled
         public String demandId{get;set;}
         
@@ -390,8 +387,7 @@ public class HomeRunwalWrapper
         
     }
     
-    public class receiptWrapper
-    {
+    public class receiptWrapper{
         @AuraEnabled
         public String AccountDocumentNumber{get;set;}
         
@@ -433,14 +429,10 @@ public class HomeRunwalWrapper
         
     }
     
-    public class inspectionWrapper
-    {
-        
-        
+    public class inspectionWrapper{
     }
     
-    public class loanWrapper
-    {
+    public class loanWrapper{
         @AuraEnabled
         public String loanId{get;set;}
         
@@ -464,8 +456,7 @@ public class HomeRunwalWrapper
         
     }
     
-    public class tdsWrapper
-    {
+    public class tdsWrapper{
         @AuraEnabled
         public String tdsId{get;set;}
         
@@ -480,8 +471,7 @@ public class HomeRunwalWrapper
         
     }
     
-    public class appDetailsWrapper
-    {
+    public class appDetailsWrapper{
         @AuraEnabled
         public String applicantId{get;set;}
         

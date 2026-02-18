@@ -181,7 +181,7 @@ h5{
                                 <td colspan="1">{!x.percentageval}%</td>
                                 <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.installment1}"/></apex:outputText></td>
                                 <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.gst}"/></apex:outputText></td>
-                                <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!IF(NOT(ISBLANK(totalTDS)) && totalTDS != 0, x.tds, 0)}"/></apex:outputText></td>
+                                <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.tds}"/></apex:outputText></td>
                                 <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!x.finalcheque}"/></apex:outputText></td>
                             </tr>
                         </apex:repeat>

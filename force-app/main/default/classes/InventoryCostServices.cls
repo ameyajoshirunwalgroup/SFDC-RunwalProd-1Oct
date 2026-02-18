@@ -1,10 +1,17 @@
 public with sharing class InventoryCostServices {
+    public static Boolean sdPaidByRunwalContext = false;//Added for SDR/ROC Mangement
+    public static Boolean regPaidByRunwalContext = false;//Added for SDR/ROC Mangement
     public static decimal baseRateVal;
     public static decimal premiumRateVal;
     public static decimal allotmentChargeVal;
+    public static Decimal fixedDiscounts = 0.0;
+    Public Static Decimal CP_DiscountInput;
+    public Map<String,String> referralDetailsVsValueMap = new Map<String,String>(); //Added by Prashant to get Referral Details. 23-12-25
+    public static list<Opportunity> opplist; //Added by Prashant to get Referral Details. 23-12-25
+    
     /** get all the charges, interest %, cancellation % and any other parameters defined at the project level for an unit **/
     /** also including the parameters like PLC values, saleable area, floor rise from the unit level **/
-    public static Map<String,Decimal> getProjectLevelCharges(Id UnitId) {
+    public static Map<String,Decimal> getProjectLevelCharges(Id UnitId) { 
         Map<String,Decimal> chargeRateMap = new Map<String,Decimal>();  
         List<Project_Unit__c> unit = [Select Id, RW_Project__c,RW_Project__r.Id, S_View1__c, S_View_2__c, S_View_3__c,
                                       PLC_Total__c,Legal_Entity__c,MLCP_Earmarked__c,Chargeable_Area__c,
@@ -185,13 +192,13 @@ public with sharing class InventoryCostServices {
         if(u.OC_Approved__c) {
             // no tax on basic
             for(String s: projChargeMap.keySet()) {
-                if(projChargeMap.get(s).S_Charge_Bucket__c != null && projChargeMap.get(s).S_Charge_Bucket__c == 'Agreement Value')
+                if(projChargeMap.get(s).S_Charge_Bucket__c == 'Agreement Value')
                     taxRateMap.put(s, taxSlabMap.get('GST 0%'));
             }
         } else if (u.Tax_Rate_Basic__c != null) {
             // this must be a below 50 sq.mt unit and hence has special tax rate, override the tax at unit level.
             for(String s: projChargeMap.keySet()) {
-                if(projChargeMap.get(s).S_Charge_Bucket__c != null && projChargeMap.get(s).S_Charge_Bucket__c == 'Agreement Value')
+                if(projChargeMap.get(s).S_Charge_Bucket__c == 'Agreement Value')
                     taxRateMap.put(s, taxSlabMap.get( u.Tax_Rate_Basic__c));
             }
         }
@@ -347,20 +354,27 @@ public with sharing class InventoryCostServices {
     
     /** returns all the charges based on the rateList, the
 ** tax slab for each slab and computed value after adding the tax slabs
-**/
+**/ 
     public static Map<String,Decimal> getAllCharges(Id unitId, Decimal allotmentCharges1, Decimal discountLumpsum, Id subPlanId){
+        System.debug('allotment charges ===>'+ allotmentCharges1);
         
-        List<Project_Unit__c> unit = [Select Id, RW_Project__r.Name, RW_Project__r.ClientLookup__r.Id, 
+        
+        List<Project_Unit__c> unit = [Select Id, RW_Project__r.Name, RW_Project__r.ClientLookup__r.Id,RW_Customer__c, 
                                       RW_Project__r.ClientLookup__r.Name, RW_Project__r.OC_Approved__c,New_Floor__c, // Old field -- RW_Floor__c
-                                      TowerName__r.OC_Approved__c,OC_Approved__c,S_Charge_Percentage__c,
+                                      TowerName__r.OC_Approved__c,OC_Approved__c,S_Charge_Percentage__c,RW_Project__r.S_Ready_Reckoner_Rate__c,SD_Paid_By_Runwal__c,//AddedSD_Paid_By_Runwal__c, RW_Project__r.S_Ready_Reckoner_Rate__cfor SDR/ROC Management
                                       RW_Project__r.Id from Project_Unit__c where Id = :unitId];
+        
+        Id projectId = unit[0].RW_Project__r.Id;
+        system.debug('projectId__'+ projectId);
         
         if(unit.size() ==1 ) {
             Map<String, Decimal> allChargesMap = new Map<String,Decimal>();
+            System.debug('Agreement Value  ===>'+ allChargesMap.get('AGREEMENTVALUE'));
             List<Payment_Plan__c> selectedSubventionPlan = new List<Payment_Plan__c>();
             Map<String,Decimal> rateListMap = new Map<String,Decimal>();
             if(subPlanId != null)
                 selectedSubventionPlan = [Select Subvention_Base_Rate__c  from Payment_Plan__c where Id =: subPlanId];
+            system.debug('selectedSubventionPlan : Vinit '+ selectedSubventionPlan);
             List<Project_Charges__c> projChargesList = getProjectChargesDefined(unit[0].RW_Project__r.Name);
             if(!selectedSubventionPlan.isEmpty())
                 rateListMap = getRateList(unitId,selectedSubventionPlan[0].Subvention_Base_Rate__c);
@@ -370,14 +384,7 @@ public with sharing class InventoryCostServices {
             Map<String,Decimal> projectLevelCharges = getProjectLevelCharges(unitId);
             
             Map<String,Decimal> flatCostMap = new Map<String,Decimal>();
-            // system.debug('projChargesList:::: '+projChargesList);
-            //system.debug('rateListMap :: '+rateListMap);
             system.debug('projectLevelCharges ::: '+projectLevelCharges);
-            //Query the plan to get the subvention base rate
-            //Pass the plan id from the page
-            
-            
-            
             
             // System.debug('RATE MAP:' + rateListMap);
             // Basic should always be a rate list. just in case it is defined as lumpsum.. that is fine too
@@ -446,68 +453,79 @@ public with sharing class InventoryCostServices {
             // calculate the charge value.
             // initially set it up as flat cost and then add the development charges etc.,
             Decimal agreementVal = allChargesMap.get('FLATCOST');
+            
+            system.debug('agreementVal===>'+ agreementVal);
+            
+            
+            
             agreementVal = 0;
             Decimal agreementValforBrokers = 0;   				// Added by Sheetal on 11/01/2022 
             Decimal agreementValNotforBrokers = 0;   				// Added by Sheetal on 12/09/2022 
-            
+            System.debug('projChargesList**'+projChargesList);
             for(Project_Charges__C pc : projChargesList) {
                 
                 Decimal percentageFactor = 0.0;
                 Decimal rrVal = 0.0;
                 Decimal flatCostVal = 0.0;
                 
-                // add all the values categorized under agreement value bucket to arrive at the
-                // agreement value except the basic since it already included in the flat cost calculation
-                /*if(pc.Active__c && pc.S_Charge_Bucket__c.equals('Agreement Value') ) { 
-// && !(pc.Charge_Code__r.Name.equals('Basic') || pc.Charge_Code__r.Name.contains('Premium')  || pc.Charge_Code__r.Name.equals('Floor Rise')) 
-if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
-agreementVal += rateListMap.get(pc.Charge_Code__r.Name);
-} else if(pc.S_Charge_Calculated_As__c.equals('Lumpsum at Project Level')) {
-agreementVal += pc.S_Lumpsum_Charge_Amount__c;
-} 
-else {
-// TODO throw exception
-}
-} */
-                
-                if(pc.Active__c && pc.S_Charge_Bucket__c.equals('Agreement Value')) {        // Added by Sheetal on 11/01/2022
-                    if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
-                        agreementVal   += rateListMap.get(pc.Charge_Code__r.Name);
-                        
-                        if(pc.brokerage_applicable_on_this_charge__c) {// change
-                            agreementValforBrokers += rateListMap.get(pc.Charge_Code__r.Name); // change
-                        }
-                        else{
-                            agreementValNotforBrokers += rateListMap.get(pc.Charge_Code__r.Name); // Added by Sheetal on 12/09/2022
-                        }
-                    }
-                    else if(pc.S_Charge_Calculated_As__c.equals('Lumpsum at Project Level')) {
-                        agreementVal  += pc.S_Lumpsum_Charge_Amount__c;
-                        
-                        if(pc.brokerage_applicable_on_this_charge__c ){
-                            agreementValforBrokers += pc.S_Lumpsum_Charge_Amount__c ; // change
-                            
-                        }
-                        else{
-                            agreementValNotforBrokers += pc.S_Lumpsum_Charge_Amount__c; // change
-                        }
-                    }
-                    else {
+                                        // add all the values categorized under agreement value bucket to arrive at the
+                                        // agreement value except the basic since it already included in the flat cost calculation
+                                        /*if(pc.Active__c && pc.S_Charge_Bucket__c.equals('Agreement Value') ) { 
+                        // && !(pc.Charge_Code__r.Name.equals('Basic') || pc.Charge_Code__r.Name.contains('Premium')  || pc.Charge_Code__r.Name.equals('Floor Rise')) 
+                        if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
+                        agreementVal += rateListMap.get(pc.Charge_Code__r.Name);
+                        } else if(pc.S_Charge_Calculated_As__c.equals('Lumpsum at Project Level')) {
+                        agreementVal += pc.S_Lumpsum_Charge_Amount__c;
+                        } 
+                        else {
                         // TODO throw exception
-                    }
+                        }
+                        } */
+                       System.debug('pc Name**'+pc.Name);
+                System.debug('pc.S_Charge_Bucket__c**'+pc.S_Charge_Bucket__c);
+                if(pc.Active__c && pc.S_Charge_Bucket__c.equals('Agreement Value')) {   // Added by Sheetal on 11/01/2022 
+                        if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
+                            agreementVal   += rateListMap.get(pc.Charge_Code__r.Name);
+                            if(pc.brokerage_applicable_on_this_charge__c) {// change
+                                agreementValforBrokers += rateListMap.get(pc.Charge_Code__r.Name); // change
+                            }
+                            else{
+                                agreementValNotforBrokers += rateListMap.get(pc.Charge_Code__r.Name); // Added by Sheetal on 12/09/2022
+                            }
+                        }
+                        else if(pc.S_Charge_Calculated_As__c.equals('Lumpsum at Project Level')) {
+                            agreementVal  += pc.S_Lumpsum_Charge_Amount__c;
+                            
+                            if(pc.brokerage_applicable_on_this_charge__c ){
+                                agreementValforBrokers += pc.S_Lumpsum_Charge_Amount__c ; // change
+                                
+                            }
+                            else{
+                                agreementValNotforBrokers += pc.S_Lumpsum_Charge_Amount__c; // change
+                            }
+                        }
+                        else {
+                            // TODO throw exception
+                        }
                 }
             }
             allChargesMap.put('AGREEMENTVALUEFORBROKERS',agreementValforBrokers.setscale(0,RoundingMode.HALF_UP));                              
             allChargesMap.put('AGREEMENTVALUENOTFORBROKERS',agreementValNotforBrokers.setscale(0,RoundingMode.HALF_UP));
             
             if(allotmentCharges1 != 0.0) {
+                System.debug('agreementVal1**'+agreementVal);
                 agreementVal = (agreementVal + allotmentCharges1).setscale(0,RoundingMode.HALF_UP);
-                if(allChargesMap.containsKey('Allotment Charges')) {
+                System.debug('agreementVal2**'+agreementVal);
+                if(allChargesMap.containsKey('Allotment Charges')) {  
+                    system.debug('Allotment Charges___'+ allotmentCharges1); 
                     allChargesMap.put('Allotment Charges' ,allChargesMap.get('Allotment Charges') + allotmentCharges1 );
                 }
             }
+            System.debug('STEP 1: discountLumpsum in Invetory cost==>'+ discountLumpsum);
             if(discountLumpsum != 0.0) {
+                System.debug('STEP 2: discountLumpsum in if cond Invetory cost==>'+ discountLumpsum);
                 agreementVal = (agreementVal - discountLumpsum).setscale(0,RoundingMode.HALF_UP); 
+                System.debug('STEP 3: agreementVal in Invetory cost==>'+ agreementVal);
                 if(allChargesMap.containsKey('BASERATE')) {
                     System.debug('BASE RATE BEFORE DISCOUNT:' + allChargesMap.get('BASERATE'));
                     allChargesMap.put('BASERATE' ,(allChargesMap.get('BASERATE') - discountLumpsum/allChargesMap.get('AREA')).setscale(0,RoundingMode.HALF_UP) );
@@ -517,7 +535,9 @@ else {
             List<AV_Round_Off_Project__c> ProjectlistCS = [select id, name,Round_Off__c, Project__c From AV_Round_Off_Project__c Where Project__c =: unit[0].RW_Project__r.Name];
             system.debug('ProjectlistCS::'+ProjectlistCS);
             
+            System.debug('STEP 4: agreementVal before null check==>'+ agreementVal);
             if(agreementVal != NULL){
+                System.debug('STEP 5: agreementVal after null check==>'+ agreementVal);
                 if(!ProjectlistCS.isempty() || ProjectlistCS.size()> 0){
                     system.debug('agreementVal1 ::'+agreementVal);
                     agreementVal = agreementVal /ProjectlistCS[0].Round_Off__c;
@@ -526,9 +546,8 @@ else {
                     allChargesMap.put('AGREEMENTVALUE',agreementVal.setscale(0,RoundingMode.HALF_UP));
                 } 
             }
-            allChargesMap.put('AGREEMENTVALUE',agreementVal.setscale(0,RoundingMode.HALF_UP));                                    
-            // rest of the charges
-            //system.debug('Inventoryclass projcharge::: '+projChargesList);
+            allChargesMap.put('AGREEMENTVALUE',agreementVal.setscale(0,RoundingMode.HALF_UP));
+            System.debug('STEP 6: allChargesMap in inventry cost==>'+ allChargesMap);
             for(Project_Charges__C pc : projChargesList) {
                 if(pc.Active__c) {
                     system.debug('pc.Charge_Code__r.Name::: '+pc.Charge_Code__r.Name);
@@ -537,7 +556,8 @@ else {
                     Decimal rrVal = 0.0;
                     Decimal avVal = 0.0;
                     Decimal flatCostVal = 0.0;    
-                    System.debug('Charge Details:' + pc);                
+                    Decimal agreementValue = 0.0; //Added for SDR/ROC Management
+                    Decimal basicRate  = 0.0; //Added for SDR/ROC Management
                     
                     if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
                         chargeVal = rateListMap.get(pc.Charge_Code__r.Name);
@@ -545,13 +565,19 @@ else {
                     } else if(pc.S_Charge_Calculated_As__c.equals('Lumpsum at Project Level')) {
                         chargeVal = pc.S_Lumpsum_Charge_Amount__c;
                         allChargesMap.put(pc.Charge_Code__r.Name, chargeVal);
+        
                     } else if(pc.S_Charge_Calculated_As__c.equals('Percentage of Agreement Value')) {
                         //Added by shailesh for rounding up stamp duty to next 500//
+                        System.debug('ADD SD in AV1****'+allChargesMap);
+                        System.debug('SD%****'+unit[0].S_Charge_Percentage__c);
                         if(pc.Charge_Code__r.Name == 'Stamp Duty') {
+                            
                             if(unit[0].S_Charge_Percentage__c == 0 || unit[0].S_Charge_Percentage__c > 0){		//Added by Sheetal on 17/03/2022 to solve Issue I0127 		
                                 pc.S_Charge_Percentage__c = unit[0].S_Charge_Percentage__c;
                             }
+                           
                             avVal = (pc.S_Charge_Percentage__c *  allChargesMap.get('AGREEMENTVALUE'))/100;
+
                             avVal = avVal.round(System.RoundingMode.UP);
                             Decimal StampDutyRemainder = math.mod((Integer)avVal,1000);//
                             If(StampDutyRemainder < 500 && StampDutyRemainder != 0) { 
@@ -568,45 +594,51 @@ else {
                                 avVal = avVal;
                             }
                             allChargesMap.put(pc.Charge_Code__r.Name, avVal.setscale(0,RoundingMode.HALF_UP));
-                            
                         }
                         else {
                             avVal = (pc.S_Charge_Percentage__c *  allChargesMap.get('AGREEMENTVALUE'))/100;
                             allChargesMap.put(pc.Charge_Code__r.Name, avVal.setscale(0,RoundingMode.HALF_UP));
                         }
-                        
                     } 
                 }
             }
+            /**Added for SDR Changes starts */
+                if(allChargesMap.containsKey('Add SD in AV') && (unit[0].S_Charge_Percentage__c == 0 || unit[0].S_Charge_Percentage__c == null)){
+                    System.debug('SD**'+allChargesMap);
+                    allChargesMap.put('Stamp Duty',allChargesMap.get('Add SD in AV'));
+                }
+            /**Added for SDR Changes starts */
+            
+            System.debug('FInal AV**'+allChargesMap.get('AGREEMENTVALUE'));
             
             Decimal charge2Sum = 0;
             Decimal charge3Sum = 0;
             // doing these summing of charges buckets here as MVAT charges is a percentage of consideration value + other charges and maintenance charges   
             for(Project_Charges__c pc : projChargesList) {
-                if(pc.S_Charge_Bucket__c.equals('Maintenance Charges') && pc.Active__c){
-                    charge2Sum = charge2Sum + allChargesMap.get(pc.Charge_Code__r.Name);
-                }
-                if(pc.S_Charge_Bucket__c.equals('Other Charges') && pc.Active__c){
-                    charge3Sum = charge3Sum + allChargesMap.get(pc.Charge_Code__r.Name);
-                }
+                    if(pc.S_Charge_Bucket__c.equals('Maintenance Charges') && pc.Active__c){
+                        charge2Sum = charge2Sum + allChargesMap.get(pc.Charge_Code__r.Name);
+                    }
+                    if(pc.S_Charge_Bucket__c.equals('Other Charges') && pc.Active__c){
+                        charge3Sum = charge3Sum + allChargesMap.get(pc.Charge_Code__r.Name);
+                    }
                 allChargesMap.put('Maintenance Charges', charge2Sum);
                 allChargesMap.put('Other Charges', charge3Sum);
             }
             
-            /*  Commented by Shailesh as we are not considering these charges anymore on 19.07.2018
-for(Project_Charges__c pc : projChargesList) {
-if(pc.Active__c && (pc.Charge_Code__r.Name.equalsIgnoreCase('MVAT') || pc.Charge_Code__r.Name.equalsIgnoreCase('Registration Charges'))) {
-if(pc.Charge_Code__r.Name.equalsIgnoreCase('MVAT') && pc.S_Charge_Calculated_As__c.equals('Fixed at Code Level')) {
-Decimal MVAT = calculateMVAT(unit[0].RW_Project__r.Id, pc.S_Charge_Percentage__c, allChargesMap);
-allChargesMap.put(pc.Charge_Code__r.Name, MVAT.setscale(0,RoundingMode.HALF_UP));
-}
-if(pc.Charge_Code__r.Name.equalsIgnoreCase('Registration Charges') && pc.S_Charge_Calculated_As__c.equals('Fixed at Code Level')) {
-Decimal Registration = calculateRegistrationCharges(unit[0].RW_Project__r.Id, pc.S_Charge_Percentage__c, allChargesMap.get('AGREEMENTVALUE'));
-allChargesMap.put(pc.Charge_Code__r.Name, Registration.setscale(0,RoundingMode.HALF_UP));
-}
-}
-}
-*/
+                            /*  Commented by Shailesh as we are not considering these charges anymore on 19.07.2018
+                for(Project_Charges__c pc : projChargesList) {
+                if(pc.Active__c && (pc.Charge_Code__r.Name.equalsIgnoreCase('MVAT') || pc.Charge_Code__r.Name.equalsIgnoreCase('Registration Charges'))) {
+                if(pc.Charge_Code__r.Name.equalsIgnoreCase('MVAT') && pc.S_Charge_Calculated_As__c.equals('Fixed at Code Level')) {
+                Decimal MVAT = calculateMVAT(unit[0].RW_Project__r.Id, pc.S_Charge_Percentage__c, allChargesMap);
+                allChargesMap.put(pc.Charge_Code__r.Name, MVAT.setscale(0,RoundingMode.HALF_UP));
+                }
+                if(pc.Charge_Code__r.Name.equalsIgnoreCase('Registration Charges') && pc.S_Charge_Calculated_As__c.equals('Fixed at Code Level')) {
+                Decimal Registration = calculateRegistrationCharges(unit[0].RW_Project__r.Id, pc.S_Charge_Percentage__c, allChargesMap.get('AGREEMENTVALUE'));
+                allChargesMap.put(pc.Charge_Code__r.Name, Registration.setscale(0,RoundingMode.HALF_UP));
+                }
+                }
+                }
+                */
             
             allChargesMap.putAll(rateListMap);
             allChargesMap.putAll(projectLevelCharges);
@@ -616,7 +648,7 @@ allChargesMap.put(pc.Charge_Code__r.Name, Registration.setscale(0,RoundingMode.H
             
             for(Project_Charges__c pc: projChargesList) {
                 Decimal totalTax = 0;
-                if (pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && taxSlabMap.get(pc.Name) != null && !pc.S_Charge_Bucket__c.equals('Agreement Value')) {
+                if (pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && taxSlabMap.get(pc.Name) != null && !pc.S_Charge_Bucket__c.equals('Agreement Value') ) {
                     if(taxSlabMap.containsKey(pc.Name)) {
                         for(tax_breakup__c tb : taxSlabMap.get(pc.Name)) {
                             //if(!unit[0].RW_Project__r.OC_Approved__c && !unit[0].Towername__r.OC_Approved__c && !unit[0].OC_Approved__c) {
@@ -624,21 +656,19 @@ allChargesMap.put(pc.Charge_Code__r.Name, Registration.setscale(0,RoundingMode.H
                             allChargesMap.put(pc.charge_code__r.Name + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get(pc.Charge_Code__r.Name)/100).setscale(0,RoundingMode.HALF_UP));
                             allChargesMap.put(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * allChargesMap.get(pc.Charge_Code__r.Name)/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
                             totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' TAX AMT');
-                            /* }
-else {
-allChargesMap.put(pc.charge_code__r.Name + ' '+ tb.tax_name__c +  ' TAX RATE' , 0);
-allChargesMap.put(pc.charge_code__r.Name + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get(pc.Charge_Code__r.Name)/100).setscale(0,RoundingMode.HALF_UP));
-allChargesMap.put(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' TAX AMT' , 0 );
-totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' TAX AMT');
-}
-*/
+                                                        /* }
+                            else {
+                            allChargesMap.put(pc.charge_code__r.Name + ' '+ tb.tax_name__c +  ' TAX RATE' , 0);
+                            allChargesMap.put(pc.charge_code__r.Name + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get(pc.Charge_Code__r.Name)/100).setscale(0,RoundingMode.HALF_UP));
+                            allChargesMap.put(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' TAX AMT' , 0 );
+                            totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' TAX AMT');
+                            }
+                            */
                         }
                         allChargesMap.put(pc.charge_code__r.Name + ' TOTAL TAX AMT', totalTax);
                     }
-                    
                 }
             }
-            system.debug('allChargesMap::' + allChargesMap);
             Decimal taxAmt = 0;
             Decimal taxAmtonAgreement = 0;
             for(Project_Charges__c pc: projChargesList) {
@@ -663,6 +693,7 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
                 } 
                 // here we are calculating the tax amount of agreement value on complete agreement value component [doesn't have the breakup]
                 if(pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && taxSlabMap.get(pc.Name) != null && pc.S_Charge_Bucket__c.equals('Agreement Value') && pc.Charge_Code__r.Name.equals('Basic')) {
+                    System.debug('allChargesMaptax**'+allChargesMap);
                     if(taxSlabMap.containsKey(pc.Name)) {
                         for(tax_breakup__c tb : taxSlabMap.get(pc.Name)) {
                             if(!unit[0].RW_Project__r.OC_Approved__c && !unit[0].Towername__r.OC_Approved__c && !unit[0].OC_Approved__c) {
@@ -680,9 +711,6 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
                                 taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
                                 System.debug('taxAmount:' + taxAmtonAgreement);
                             }
-                            
-                            
-                            
                             
                         }
                     }
@@ -715,6 +743,170 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
             for(String key : allChargesMap.keySet()) {
                 System.debug(key + ':' + allChargesMap.get(key));
             }
+            
+            System.debug('StampDuty in Get ALl changes ===>'+ allChargesMap.get('Stamp Duty'));
+            // Vinit : Changes by Digicloud Team
+            Decimal fixDiscounts = 0;
+            Decimal sreferralDiscount = 0;
+            Decimal sreferralDiscountAV = 0;
+            Decimal sRefDiscPassBack = 0;
+            Decimal sRefDiscPassBackAV = 0;
+            
+            //Vinit: CP Variables to calculate CP Discount
+            Decimal CP_Discount = 0;
+            Decimal CP_DiscountAV = 0;
+            Decimal CP_PassbackValue = 0;
+            Decimal CP_PassbackAV = 0;
+            
+            Decimal totalDiscounts = 0;
+            Decimal discountedAgreementVal = 0;
+            String Source = '';
+            
+            System.debug('vinit execute Agreement before 1 ===>' + agreementVal);
+            if (unit[0].RW_Customer__c != null) { 
+                System.debug('STEP 7: Inside line 738 in inventry cost==>' + unit[0].RW_Customer__c);
+                
+                FixedDiscountWrapper discountResult = calculateFixedDiscounts(projectId, unit[0].RW_Customer__c, unit[0].Id, allChargesMap.get('AGREEMENTVALUE'),CP_DiscountInput);
+                system.debug('discountMap__'+ discountResult);
+                
+                fixedDiscounts = discountResult.fixedDiscounts != null ? discountResult.fixedDiscounts : 0;
+                
+                sreferralDiscount = discountResult.refralDiscount != null ? discountResult.refralDiscount : 0;
+                sreferralDiscountAV = discountResult.refralDiscountAV != null ? discountResult.refralDiscountAV : 0;
+                sRefDiscPassBack = discountResult.RefDiscPassBack != null ? discountResult.RefDiscPassBack : 0;
+                sRefDiscPassBackAV= discountResult.RefDiscPassBackAV != null ? discountResult.RefDiscPassBackAV : 0;
+                CP_PassbackValue = discountResult.cpPassBack != null ? discountResult.cpPassBack : 0;
+                CP_PassbackAV = discountResult.cpPassBackAV  != null ? discountResult.cpPassBackAV : 0;
+                System.debug('CP Passback av in Controller==>'+ CP_PassbackAV);
+                system.debug('Walkin_Source__c processed ==>' + discountResult.Source);
+                Decimal totalAutoDiscounts = agreementVal - fixedDiscounts;
+                system.debug('totalAutoDiscounts processed ==>' + totalAutoDiscounts);
+                
+                System.debug('vinit execute Agreement before ===>' + agreementVal);
+                //Decimal agreementValue = allChargesMap.get('AGREEMENTVALUE');
+                Decimal referralDiscount = 0;
+                Decimal referralDiscountAV = 0 ;
+                Decimal RefDiscPassBack = 0;
+                Decimal RefDiscPassBackAV = 0; 
+                    if(agreementVal != null) {
+                         List<Opportunity> oppList = [Select id,Walkin_Source__c,Referral_Sub_Source__c,Opt_for_Referral__c,Lead_Sub_Source__c,Walkin_SubSource__c,LeadSource
+                                                      from opportunity Where id =: unit[0].RW_Customer__c];
+        
+                       /**Commented by Prakshi if(oppList[0].Walkin_Source__c == 'Referral' && 
+                           (oppList[0].Referral_Sub_Source__c == 'Existing client reference' || oppList[0].Walkin_SubSource__c == 'Existing client ref')) {
+                               // 0.5% standard referral discount
+                               referralDiscount = agreementVal * 0.005; 
+                               agreementVal -= referralDiscount;
+                               referralDiscountAV = agreementVal - referralDiscount;
+                               system.debug('AV after giving referral discount ==>' +agreementVal );
+                               system.debug('0.5% referral discount applied: ' + referralDiscount);
+                               //referralDetailsVsValueMap.put('FormattedRefDisc',QuotationManagementServices.INFormat(referralDiscount));
+                              // sreferralDiscount = QuotationManagementServices.INFormat(referralDiscount);  
+                               //FormattedRefDiscAV = QuotationManagementServices.INFormat(referralDiscountAV);  
+                               if(oppList[0].Opt_for_Referral__c == True) {
+                                   // 1% discount if opted out of referral
+                                   RefDiscPassBack = referralDiscountAV * 0.01;
+                                   system.debug('1.5% RefPassback applied: ' + RefDiscPassBack);
+                                   agreementVal -= RefDiscPassBack;
+                                   RefDiscPassBackAV = agreementVal - RefDiscPassBack;
+                                   system.debug('1.5% referral discount applied: ' + agreementVal);
+                                   //referralDetailsVsValueMap.put('FormattedRefDiscPassBack',QuotationManagementServices.INFormat(RefDiscPassBack));
+                                   //FormattedRefDiscPassBack = QuotationManagementServices.INFormat(RefDiscPassBack);      
+                                   //FormattedRefDiscPassBackAV = QuotationManagementServices.INFormat(RefDiscPassBackAV); 
+                               } 
+                           }
+                        else if((oppList[0].Walkin_Source__c == 'Loyalty' || oppList[0].LeadSource == 'Loyalty') && 
+                                (oppList[0].Referral_Sub_Source__c == 'Existing client reference' || oppList[0].Walkin_SubSource__c == 'Existing client reference' || oppList[0].Lead_Sub_Source__c == 'Existing client reference')){ 
+                                    referralDiscount = agreementVal *0.015;
+                                    agreementVal -= referralDiscount;
+                                    referralDiscountAV = agreementVal - referralDiscount;
+                                    system.debug('Discount for loyalty calculated__');
+                                    //referralDetailsVsValueMap.put('FormattedRefDisc',QuotationManagementServices.INFormat(referralDiscount));
+                                    //FormattedRefDisc = QuotationManagementServices.INFormat(referralDiscount);  
+                                    //FormattedRefDiscAV = QuotationManagementServices.INFormat(referralDiscountAV); 
+                                }**/
+                    }     
+                    //referralDetailsVsValueMap.put('agreementValue',String.valueOf(DiscountedAV));
+                    
+                
+                
+                
+               /* 
+                if(discountResult.Source == 'Referral'){
+                    if (discountLumpsum != 0.0) {
+                        // Scenario 2: Both fixed discount and discount lumpsum are present
+                        if (sRefDiscPassBackAV != 0 || sRefDiscPassBackAV > 0.0) {
+                            discountedAgreementVal = sRefDiscPassBackAV;
+                        } else if (sreferralDiscountAV != 0.0) {
+                            discountedAgreementVal = sreferralDiscountAV;
+                        } else {
+                            // Agreement value minus both fixed discount and discount lumpsum
+                            discountedAgreementVal = agreementVal - fixedDiscounts;
+                        }
+                    } else {
+                        // Scenario 1: Only fixed discount is present (no discount lumpsum)
+                        if (sRefDiscPassBackAV != 0 || sRefDiscPassBackAV > 0.0) {
+                            discountedAgreementVal = sRefDiscPassBackAV;
+                        } else if (sreferralDiscountAV != 0.0) {
+                            discountedAgreementVal = sreferralDiscountAV;
+                        } else {
+                            // Agreement value minus only fixed discount
+                            discountedAgreementVal = agreementVal - fixedDiscounts;
+                            System.debug('Jeevan execute');
+                        }
+                    }
+                }else {
+                    // Default case for other sources
+                    if (discountLumpsum != 0.0) {
+                        discountedAgreementVal = agreementVal - fixedDiscounts;
+                    } else {
+                        discountedAgreementVal = agreementVal - fixedDiscounts;
+                    }
+                }*/
+                /*
+                Opportunity o = getOpportunityDetails(unit[0].RW_Customer__c);
+                QuotationExtn q = new QuotationExtn();
+                Map<String,String> referralDetailsVsValueMap = q.fetchReferralDetails(o,allChargesMap.get('AGREEMENTVALUE'));
+                system.debug('referralDetailsVsValueMap -> '+referralDetailsVsValueMap);
+                if(Decimal.valueOf(referralDetailsVsValueMap.get('agreementValue')) != null){
+                    allChargesMap.put('AGREEMENTVALUE', Decimal.valueOf(referralDetailsVsValueMap.get('agreementValue')));
+                }*/
+                //allChargesMap.put('AGREEMENTVALUE', discountedAgreementVal);
+                allChargesMap.put('ORIGINALAGREEMENTVALUE', agreementVal);
+                allChargesMap.put('AGREEMENTVALUE', agreementVal);
+                System.debug('agreementVal!**'+agreementVal);
+                allChargesMap.put('FIXEDDISCOUNT', fixedDiscounts);
+                allChargesMap.put('NONMANDDISCOUNT', discountLumpsum);
+                allChargesMap.put('REFERRALDISCOUNT', sreferralDiscount);
+                allChargesMap.put('REFERRALPASSBACK', sRefDiscPassBack);
+            }
+			
+           
+
+            /**Added for SDR/ROC starts */
+            if(sdPaidByRunwalContext == true){//Added for SDR/ROC              
+                System.debug('SD AV**'+allChargesMap.get('AGREEMENTVALUE'));
+                System.debug('Add SD in AV**' +allChargesMap.get('Add SD in AV'));
+                System.debug('agreementVal9**'+agreementVal);
+                allChargesMap.put('AGREEMENTVALUE',allChargesMap.get('AGREEMENTVALUE') +allChargesMap.get('Stamp Duty'));
+                //allChargesMap.put('AGREEMENTVALUE',allChargesMap.get('AGREEMENTVALUE') +allChargesMap.get('Add SD in AV'));
+                System.debug('SD after AV**'+allChargesMap.get('AGREEMENTVALUE'));
+                allChargesMap.put('Stamp Duty',0);
+                System.debug('SD after**'+allChargesMap.get('Stamp Duty'));
+            }
+
+            if(regPaidByRunwalContext == true){
+                System.debug('Before after Reg'+allChargesMap.get('AGREEMENTVALUE'));
+                allChargesMap.put('AGREEMENTVALUE',allChargesMap.get('AGREEMENTVALUE') + allChargesMap.get('Registration Charges'));
+                allChargesMap.put('Registration Charges',0);
+                System.debug('AV after Reg'+allChargesMap.get('AGREEMENTVALUE'));
+                System.debug('Registration Cahregs**'+allChargesMap.get('Registration Charges'));
+            }
+
+            /**Added for SDR/ROC ends */
+
+            System.debug('Final AV'+allChargesMap.get('AGREEMENTVALUE'));
+            System.debug('Final RG**'+allChargesMap.get('Registration Charges'));
             return allChargesMap;
         } else {
             // throw exception
@@ -815,14 +1007,17 @@ registration = 39000;
 return registration;
 }
 */
+    //Modified by dolly
     public static Project_Unit__c  getUnitDetails(Id unitId){
         List<Project_Unit__c> unit = [Select Id, Name,RW_Project__r.Name,RW_Project__r.Id,RW_Project__r.ClientLookup__r.Id, RW_Project__r.ClientLookup__r.Name, TowerName__r.Name, TowerName__r.Zone_Name__r.Name, S_View1__c,S_View_2__c,S_View_3__c,PLC_Total__c,
                                       Project_Unit_Type__r.Name,New_Floor__c,Carpet_Area__c, Actual_Area_value__c, Saleable_Area__c,
                                       Single_car_park_Earmarked__c,Single_Open_Earmarked__c, Stack__c, Tandem_car_park_Earmarked__c, Tandem_Open_Earmarked__c,
+                                      Puzzle_Car_Park_Earmarked__c,Podium_Earmarked__c,MLCP_Earmarked__c,Basement_Earmarked__c,Covered_Stack_Earmarked__c,
+                                      Stack_Car_Park_Earmarked__c,
                                       TowerName__r.ProjectName__r.Allotment_Charges_1__c, TowerName__r.ProjectName__r.Allotment_Charges_2__c,
                                       TowerName__r.ProjectName__r.Allotment_Charges_3__c, TowerName__r.ProjectName__r.Allotment_Charges_4__c,
                                       TowerName__r.ProjectName__r.Allotment_Charges_5__c, TowerName__r.ProjectName__r.Allotment_Charges_8__c, TowerName__r.ProjectName__r.Allotment_Charges_9__c,RW_Project__r.OC_Approved__c,TowerName__r.OC_Approved__c,
-                                      OC_Approved__c, Tax_Rate_Basic__c,MLCP_Earmarked__c,S_Charge_Percentage__c
+                                      OC_Approved__c, Tax_Rate_Basic__c,S_Charge_Percentage__c,SD_Paid_by_Runwal__c,Registration_Charges_Paid_By_Runwal__c//Added Registration_Charges_Paid_By_Runwal__c and SD_Paid_by_Runwal__c for SDR/ROC Management
                                       from Project_Unit__c where Id = :unitId];
         if(unit.size() ==1) {
             return unit[0];
@@ -843,7 +1038,7 @@ return registration;
                                          Quotation_Validity__c, single_car_park_available__c, tandem_car_park_available__c,Edit_AllotmentCharge__c, 
                                          single_open_available__c, tandem_open_available__c, stack_available__c,Edit_Premium_Rate__c,
                                          Allotment_Charges_1__c, Allotment_Charges_2__c, Allotment_Charges_3__c, Allotment_Charges_4__c,Allotment_Charges_6__c,Allotment_Charges_7__c,
-                                         Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Stack_Available1__c,Basement_Available1__c, Puzzle_Car_Park_Available__c
+                                         Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Stack_Available1__c,Basement_Available1__c, Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c,Stack_Car_Park_Charges__c
                                          from Project__c where Id =: unit[0].RW_Project__r.Id ];
             if(projList.size() ==1) {
                 return projList[0];
@@ -856,6 +1051,24 @@ return registration;
         
     }
     
+    public static Opportunity getOpportunityDetails(Id oppId){
+        List<Opportunity> opplist = [Select Id, Name, Account.Name, StageName, Sales_Manager__c,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,Walkin_SubSource__c,
+                                      Referral_Sub_Source__c,Walkin_Source__c,Opt_for_Referral__c,LeadSource,Lead_Sub_Source__c                                
+                                      from Opportunity where Id = :oppId];
+        if(opplist.size() ==1) {                                                            
+            List<Opportunity> opplist1 = [Select Id, Name, Account.Name, StageName, Sales_Manager__c,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,Walkin_SubSource__c,
+                                         Referral_Sub_Source__c,Walkin_Source__c,Opt_for_Referral__c,LeadSource,Lead_Sub_Source__c                                  
+                                         from Opportunity where Id = :oppId ];
+            if(opplist.size() ==1) {
+                return opplist[0];
+            } else {
+                return null;
+            }
+        }else {
+            return null;
+        }
+    }
+    
     public static List<Payment_Plan__c> getPlanList(Id projId, Id tId, ID subPlanId) {
         // System.debug('PID:' + projId + 'Tower Id:' + tID);
         List<Payment_Plan__c> planList = new List<Payment_Plan__c>();
@@ -864,6 +1077,30 @@ return registration;
         }
         else{
             planList = [Select Id, Name, Bank_Loan_Self_Funded__c, Plan_Code__c,Sub_Vention__c from Payment_Plan__c where project__r.Id = : projId and tower__r.Id = :tId and Sub_Vention__c = false and Valid_Upto_check__c=True];
+        }
+        return planList;
+    }
+    public static List<Payment_Plan__c> getdefaultPlanList(Id projId, Id tId, ID subPlanId) {
+        List<Payment_Plan__c> planList = new List<Payment_Plan__c>();
+        
+        if(subPlanId != null){
+            planList = [SELECT Id, Name, Bank_Loan_Self_Funded__c, Plan_Code__c 
+                        FROM Payment_Plan__c 
+                        WHERE project__r.Id = :projId 
+                        AND tower__r.Id = :tId 
+                        AND ID = :subPlanId 
+                        AND Sub_Vention__c = True 
+                        AND Valid_Upto_check__c = True
+                        AND Default_Payment_Plan__c = true]; 
+        }
+        else{
+            planList = [SELECT Id, Name, Bank_Loan_Self_Funded__c, Plan_Code__c, Sub_Vention__c 
+                        FROM Payment_Plan__c 
+                        WHERE project__r.Id = :projId 
+                        AND tower__r.Id = :tId 
+                        AND Sub_Vention__c = false 
+                        AND Valid_Upto_check__c = True
+                        AND Default_Payment_Plan__c = true]; 
         }
         return planList;
     }
@@ -1087,6 +1324,7 @@ return registration;
             planDetailsWList.add(new PlanDetailWrapper(Amount.setscale(0,RoundingMode.HALF_UP),serviceTax.setscale(0,RoundingMode.HALF_UP), Amount+ServiceTax, pd,taxMap));
             count++;
         }
+        System.debug('total1**'+total);
         
         // gist of what is being achieved below
         // when the agreement value is being broken up in individual milestones based on % of each milestone and 
@@ -1120,7 +1358,7 @@ return registration;
                 // System.debug('updated total:' + total + 'pw.amount: ' + pw.amount + 'difference:' +  (total.setscale(0,RoundingMode.HALF_UP) - av) );
                 total = av;
             } 
-            
+            System.debug('total2**'+total);
             
             // service tax calculations for GST
             Map<String,Decimal> taxMap = new Map<String,Decimal>();
@@ -1157,13 +1395,16 @@ return registration;
             
             planDetailsWList.add(new PlanDetailWrapper(total.setscale(0,RoundingMode.HALF_UP),stTotal.setscale(0,RoundingMode.HALF_UP),total+stTotal,null,taxMap1));
         }
-        
+        System.debug('total**'+total);
+        System.debug('planDetailsWList****'+planDetailsWList);
         return  planDetailsWList;           
     }
     
     /** get the payment plan based on the edited schedule, which is stored in a wrapper class **/
     public static List<PlanDetailWrapper> calculateUpdatedPaymentSchedule(List<PlanDetailWrapper> pdList, Map<String,Decimal> allChargesMap, List<PlanDetailWrapper> po, Id unitId) {
-        
+        System.debug('Checking if plan detail is null'+ pdList);
+        System.debug('Checking if allChargesMap is null'+ allChargesMap);
+        System.debug('Checking if po is null'+ po);
         Project_Unit__c unit = [Select Id, RW_Project__r.Name, RW_Project__r.ClientLookup__r.Id, 
                                 RW_Project__r.ClientLookup__r.Name, RW_Project__r.OC_Approved__c,New_Floor__c, // RW_Floor__c
                                 TowerName__r.OC_Approved__c,OC_Approved__c,
@@ -1288,7 +1529,7 @@ return registration;
                     }
                 }
                 pd.payPlanRecord.Is_To_be__c = pd.payPlanRecord.Days_Months__c + ' ' +  pd.payPlanRecord.Days_Months_Value__c + ' ' + pd.payPlanRecord.Is_to_be_Paid__c;                        
-            } else if(pd.payPlanRecord.Is_to_be_Paid__c.equals('From Dt. of Registration')) {                
+            } else if(pd.payPlanRecord.Is_to_be_Paid__c.equals('From Dt. of Registration')) {
                 if(pd.payPlanRecord.Project__r.Days_from_Dt_of_Booking_for_NPV__c != null){
                     if(pd.payPlanRecord.Days_Months__c.equals('Month(s)')) {
                         pd.payPlanRecord.due_date__c = System.today().addMonths(Integer.valueOf(pd.payPlanRecord.Days_Months_Value__c)).addDays(Integer.valueOf(pd.payPlanRecord.Project__r.Days_from_Dt_of_Booking_for_NPV__c));
@@ -1414,6 +1655,7 @@ return registration;
                 planDetailsWList.add(new PlanDetailWrapper(total.setscale(0,RoundingMode.HALF_UP),sTaxTotal.setscale(0,RoundingMode.HALF_UP), total+sTaxTotal, null, new Map<String,Decimal>()));
             }
         } 
+        System.debug('planDetailsWList**'+planDetailsWList);
         
         return  planDetailsWList;           
     }
@@ -1482,6 +1724,7 @@ return registration;
         cpphBasic.Project_Unit__c = u.Id;
         cpphBasic.Effect_From_Date__c = system.today();
         cpphBasic.PlanDt__c = system.today();
+        System.debug('AV in inventort**'+allChargesMap.get('AGREEMENTVALUE'));
         cpphBasic.Amount__c = allChargesMap.get('AGREEMENTVALUE');
         if( allChargesMap.containsKey('AGREEMENTVALUE TAX AMT'))
             cpphBasic.Service_Tax_Amount_Q__c = allChargesMap.get('AGREEMENTVALUE TAX AMT');
@@ -1604,7 +1847,7 @@ return registration;
                 } else {
                     System.debug('### sc.Amount__c is NULL!! Skipping...');
                 }
-
+                
                 if(sc.Amount__c.equals('Percentage') && sc.Total_Charge_Value_Minus__c == null ) {
                     Amount = ((sc.Amount_Value__c * scpphCPPHMap.get(sc.Standard_Pay_Plan_Header__c).Amount__c)/100).setscale(0,RoundingMode.HALF_UP);
                     scNew.Value__c = String.valueOf(sc.Amount_Value__c);
@@ -1774,7 +2017,118 @@ return registration;
     }
     
     // calculate NPV of the money based on the payment plan
-    public static Decimal calculateNPV(List<planDetailWrapper> pwList , Id projId){
+    /*  public static Decimal calculateNPV(List<planDetailWrapper> pwList , Id projId, String discountOption){
+system.debug('Line 1676' + pwList);
+system.debug(projId);
+Decimal NPV = 0.0;
+Decimal NPVDayRate = 0;
+Integer daysBetween =0; 
+Decimal NPVofMoney = 0.0;
+Decimal TotalNPV = 0.0;
+List<Project__c> p = new list<Project__c>();
+
+Decimal discountRate = 0.0;
+if (discountOption == 'Advance') {
+discountRate = 9.0;
+} else if (discountOption == 'Deferred') {
+discountRate = 11.0;
+}
+
+if(!test.isRunningTest())
+p = [Select Id, RW_Address__c, Total_Max_Discount_Allowed__c, NPV__c , Name from Project__c where Id =: projId ];         
+if(p.size() == 1) {
+NPV = discountRate;
+NPVDayRate = (NPV/365/100).setscale(18, RoundingMode.HALF_UP) + 1;
+}
+// System.debug('NPV:' + NPV + NPVDayRate);
+if(NPV != 0) {
+for(PlanDetailWrapper pw : pwList) {
+NPVOfMoney =  0.0;
+//   System.debug('plan wrapper list:' + pw);
+if(pw.payPlanRecord.Due_Date__c != null) {
+daysBetween = system.today().DaysBetween(pw.payPlanRecord.Due_Date__c);
+system.debug('daysBetween' + daysBetween);
+/// System.debug('Days between:' + daysBetween);
+NPVofMoney = pw.amount/NPVDayRate.pow(daysBetween);
+system.debug('exponent' + NPVofMoney);
+//  System.debug('NPV of money:' + NPVOfMoney);
+TotalNPV = TotalNPV + NPVofMoney;
+system.debug('TotalNPV__c'+ TotalNPV);
+}
+}
+//  System.debug('Total NPV:' + TotalNPV);
+
+}  
+return (TotalNPV.setscale(0,RoundingMode.HALF_UP));
+}    */
+    // NPV Calculate method added by Anuj Start
+    public static Decimal calculateNPV(List<planDetailWrapper> pwList, Id projId, String discountOption) {
+        system.debug('Line 1676' + pwList);
+        system.debug(projId);
+        Decimal totalNPV = 0.0;
+        List<Project__c> p = new List<Project__c>();
+        
+        Decimal discountRate = 0.0;
+        if (discountOption == 'Advance') {
+            discountRate = 9.0;
+        } else if (discountOption == 'Deferred') {
+            discountRate = 11.0;
+        }
+        
+        if(!test.isRunningTest()) {
+            p = [Select Id, RW_Address__c, Total_Max_Discount_Allowed__c, NPV__c, Name from Project__c where Id =: projId];         
+        }
+        
+        Date referenceDate = null;
+        if(pwList != null && !pwList.isEmpty()) {
+            for(planDetailWrapper pw : pwList) {
+                if(pw.payPlanRecord.Due_Date__c != null) {
+                    if(referenceDate == null || pw.payPlanRecord.Due_Date__c < referenceDate) {
+                        referenceDate = pw.payPlanRecord.Due_Date__c;
+                    }
+                }
+            }
+        }
+        
+        if(referenceDate == null) {
+            referenceDate = Date.today();
+        }
+        
+        Decimal annualRateDecimal = discountRate / 100;
+        
+        system.debug('Reference Date (like Excel XNPV): ' + referenceDate);
+        system.debug('Discount Rate: ' + discountRate + '%');
+        system.debug('Annual Rate Decimal: ' + annualRateDecimal);
+        
+        if(discountRate != 0) {
+            for(planDetailWrapper pw : pwList) {
+                if(pw.payPlanRecord.Due_Date__c != null && pw.amount != null) {
+                    Integer daysBetween = referenceDate.daysBetween(pw.payPlanRecord.Due_Date__c);
+                    
+                    Decimal timeInYears = daysBetween / 365.0;
+                    
+                    Decimal discountFactor = calculatePower(1 + annualRateDecimal, timeInYears);
+                    Decimal npvOfMoney = pw.amount / discountFactor;
+                    
+                    system.debug('Amount: ' + pw.amount + ', Due Date: ' + pw.payPlanRecord.Due_Date__c + ', Days from reference: ' + daysBetween + ', Time in Years: ' + timeInYears);
+                    system.debug('Discount Factor: ' + discountFactor + ', NPV of payment: ' + npvOfMoney);
+                    
+                    totalNPV = totalNPV + npvOfMoney;
+                    System.debug('totalNPV**'+totalNPV);
+                }
+            }
+        }  
+        
+        system.debug('Total NPV: ' + totalNPV);
+        return totalNPV.setScale(2, RoundingMode.HALF_UP);
+    }
+    
+    private static Decimal calculatePower(Decimal base, Decimal exponent) {
+        if(base <= 0) return 0;
+        return Math.exp(exponent * Math.log(base));
+    }
+    // NPV Calculate method added by Anuj END
+    public static Decimal calculateNPV2(List<planDetailWrapper> pwList , Id projId){
         system.debug('Line 1676' + pwList);
         system.debug(projId);
         Decimal NPV = 0.0;
@@ -1783,6 +2137,7 @@ return registration;
         Decimal NPVofMoney = 0.0;
         Decimal TotalNPV = 0.0;
         List<Project__c> p = new list<Project__c>();
+        
         if(!test.isRunningTest())
             p = [Select Id, RW_Address__c, Total_Max_Discount_Allowed__c, NPV__c , Name from Project__c where Id =: projId ];         
         if(p.size() == 1) {
@@ -1802,15 +2157,28 @@ return registration;
                     system.debug('exponent' + NPVofMoney);
                     //  System.debug('NPV of money:' + NPVOfMoney);
                     TotalNPV = TotalNPV + NPVofMoney;
+                    system.debug('TotalNPV__c'+ TotalNPV);
                 }
             }
             //  System.debug('Total NPV:' + TotalNPV);
             
-        }
+        }  
         return (TotalNPV.setscale(0,RoundingMode.HALF_UP));
     }
+    
+    // Getting aggregateValue from QuotationExtn - added by Digicloud    
+    public static decimal aggrValue; 
+    public static decimal originalAgreementValue;
+    public static void passAgreementValue(decimal agreementVaue, decimal originalAgreementVal){
+        aggrValue = agreementVaue;
+        originalAgreementValue = originalAgreementVal;
+        system.debug('InventoryCostServices_aggrValue__'+ aggrValue);
+        system.debug('InventoryCostServices_originalAgreementValue__'+ originalAgreementValue);
+    }
+    
     // query the discounts defined at project level and put in a wrapper 
-    public static List<DiscountWrapper> getProjectLevelDiscounts(Id pId, Id uId,Id o) {
+    public static List<DiscountWrapper> getProjectLevelDiscounts3(Id pId, Id uId,Id o){  
+        System.debug('Inside getProjectLevelDiscounts3 ');
         /*  List<Project_Unit__c> pd = [Select Id, Actual_Area_value__c,
 Discount1_Type__c,Discount2_Type__c,Discount3_Type__c,Discount4_Type__c, 
 Discount5_Type__c,Discount6_Type__c,Discount7_Type__c,Discount8_Type__c, Discount9_Type__c,
@@ -1859,43 +2227,60 @@ from Project_Unit__c where Id = :uId]; */
                 Decimal psfVal = pd[0].Discount6_Per_Sq_Ft__c;
                 //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
                 Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
-                DiscountWrapper dw6 = new DiscountWrapper(pd[0].Discount6_Type__c,  psfVal, lumpsumVal, true, false, false, 'Customer Type');                 
+                DiscountWrapper dw6 = new DiscountWrapper(pd[0].Discount6_Type__c,  psfVal, lumpsumVal, true, false, true, 'Customer Type');                  
                 dwList.add(dw6);
             } 
-            List<opportunity> OList1 = [Select id,name,Walkin_Source__c,Referral_Sub_Source__c from opportunity Where id =: o]; 
+            // changing this method to include the calculation based on new Opt in Opt out logic
+            List<opportunity> OList1 = [Select id,name,Walkin_Source__c,Referral_Sub_Source__c, Opt_for_Referral__c from opportunity Where id =: o]; 
             system.debug('OList1 ::' +OList1);
-            if(/*pd[0].Discount7_Per_Sq_Ft__c != 0 &&*/ pd[0].Discount7_Per_Sq_Ft__c != null && OList1[0].Walkin_Source__c == 'Referral' && OList1[0].Referral_Sub_Source__c == 'Existing client reference') {
-                Decimal psfVal = pd[0].Discount7_Per_Sq_Ft__c;
-                //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+            
+            if(/*pd[0].Discount7_Per_Sq_Ft__c != 0 && pd[0].Discount7_Per_Sq_Ft__c != null && */ OList1[0].Walkin_Source__c == 'Referral' && OList1[0].Referral_Sub_Source__c == 'Existing client reference') {
+                //Decimal psfVal = pd[0].Discount7_Per_Sq_Ft__c;
+                Decimal psfVal = 0;
                 Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+                system.debug('lumpsumVal for referral__'+ lumpsumVal);
                 DiscountWrapper dw7 = new DiscountWrapper(pd[0].Discount7_Type__c,  psfVal, 0, true, false, false, 'Customer Type');
+                system.debug('dw7__'+ dw7);
                 dwList.add(dw7);
             } 
+            
+            /*      if(pd[0].Discount7_Per_Sq_Ft__c != null && OList1[0].Walkin_Source__c == 'Referral' && OList1[0].Referral_Sub_Source__c == 'Existing client reference') {
+Decimal psfVal = pd[0].Discount7_Per_Sq_Ft__c;
+//Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+Decimal lumpsumVal;
+if (aggrValue != null) {
+lumpsumVal = aggrValue * 0.005;
+}
+system.debug('lumpsumVal for referral__'+ lumpsumVal);
+DiscountWrapper dw7 = new DiscountWrapper(pd[0].Discount7_Type__c,  psfVal, 0, true, false, false, 'Customer Type');
+system.debug('dw7__'+ dw7);
+dwList.add(dw7);
+}  */
             
             if(pd[0].Discount3_Per_Sq_Ft__c != 0 && pd[0].Discount3_Per_Sq_Ft__c != null) {
                 Decimal psfVal = pd[0].Discount3_Per_Sq_Ft__c;
                 //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
                 Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
-                DiscountWrapper dw3 = new DiscountWrapper(pd[0].Discount3_Type__c,  psfVal, 0, true, true, false, 'Customer Type');
+                DiscountWrapper dw3 = new DiscountWrapper(pd[0].Discount3_Type__c,  psfVal, 0, true, true, true, 'Customer Type');
                 dwList.add(dw3);
             } 
             if(pd[0].Discount5_Per_Sq_Ft__c != 0 && pd[0].Discount5_Per_Sq_Ft__c != null) {
                 Decimal psfVal = pd[0].Discount5_Per_Sq_Ft__c;
                 //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
                 Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
-                DiscountWrapper dw5 = new DiscountWrapper(pd[0].Discount5_Type__c,  psfVal, 0, true, true, false, 'Customer Type');
+                DiscountWrapper dw5 = new DiscountWrapper(pd[0].Discount5_Type__c,  psfVal, 0, true, true, true, 'Customer Type');
                 dwList.add(dw5);
             } 
             
             
-            if(pd[0].Discount8_Per_Sq_Ft__c != 0 && pd[0].Discount8_Per_Sq_Ft__c != null) {
+            if(pd[0].Discount8_Per_Sq_Ft__c != 0 && pd[0].Discount8_Per_Sq_Ft__c != null) {  
                 Decimal psfVal = pd[0].Discount8_Per_Sq_Ft__c;
-                //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+                //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP); 
                 Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
                 DiscountWrapper dw8 = new DiscountWrapper( pd[0].Discount8_Description__c ,psfVal, 0, true, true, false, pd[0].Discount8_Type__c);
                 dwList.add(dw8);
             } 
-            List<opportunity> OList = [Select id,name,Walkin_Source__c,Referral_Sub_Source__c from opportunity Where id =: o]; 
+            List<opportunity> OList = [Select id,name,Walkin_Source__c,Referral_Sub_Source__c, Opt_for_Referral__c from opportunity Where id =: o]; 
             system.debug('OList ::' +OList);
             if(pd[0].Discount9_Per_Sq_Ft__c != 0 && pd[0].Discount9_Per_Sq_Ft__c != null && OList[0].Walkin_Source__c == 'Channel Partner' ) {
                 Decimal psfVal = pd[0].Discount9_Per_Sq_Ft__c;
@@ -1904,31 +2289,460 @@ from Project_Unit__c where Id = :uId]; */
                 DiscountWrapper dw9 = new DiscountWrapper( pd[0].Discount9_Description__c ,psfVal, lumpsumVal, false, false, false, pd[0].Discount9_Type__c);
                 dwList.add(dw9);
             } 
-            if(pd[0].Discount10Per_Sq_Ft__c != null && OList[0].Walkin_Source__c == 'Referral' && OList[0].Referral_Sub_Source__c == 'Existing client reference') {
-                Decimal psfVal = pd[0].Discount10Per_Sq_Ft__c;
-                //Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
-                Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
-                DiscountWrapper dw10 = new DiscountWrapper( pd[0].Discount10_Description__c ,psfVal, lumpsumVal, true, true, false, pd[0].Discount10_Type__c);
-                dwList.add(dw10);
+            // Adding another method to change referral passback calculation
+            /*if(pd[0].Discount10Per_Sq_Ft__c != null && OList[0].Walkin_Source__c == 'Referral' && OList[0].Referral_Sub_Source__c == 'Existing client reference') {
+Decimal psfVal = pd[0].Discount10Per_Sq_Ft__c;
+//Decimal lumpsumVal = (psfVal * pd[0].Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+system.debug('lumpsumVal__'+ lumpsumVal);
+DiscountWrapper dw10 = new DiscountWrapper( pd[0].Discount10_Description__c ,psfVal, lumpsumVal, true, true, false, pd[0].Discount10_Type__c);
+dwList.add(dw10);
+} */
+            
+            if(/*pd[0].Discount10Per_Sq_Ft__c != null &&*/ OList[0].Walkin_Source__c == 'Referral' && OList[0].Referral_Sub_Source__c == 'Existing client reference') {
+                //Decimal psfVal = pd[0].Discount10Per_Sq_Ft__c;
+                Decimal psfVal = 0;
+                //Decimal lumpsumVal = (psfVal * u.Actual_Area_value__c).setscale(0,RoundingMode.HALF_UP);
+                Decimal lumpsumVal;
+                if(aggrValue != null && OList[0].Opt_for_Referral__c == false){ 
+                    lumpsumVal = aggrValue * 0.01;  
+                    system.debug('lumpsumVal for passback referral__'+ lumpsumVal);
+                }else{
+                    lumpsumVal = 0; 
+                }   
+                DiscountWrapper dw10; 
+                if(pd[0].Discount10_Description__c != null && pd[0].Discount10_Type__c != null){
+                    dw10 = new DiscountWrapper( pd[0].Discount10_Description__c ,psfVal, lumpsumVal, true, true, false, pd[0].Discount10_Type__c);
+                } 
+                dwList.add(dw10);             
             } 
-            
-            
-            
-            
+            Id projectId =  pd[0].Id; 
             //dwList.add(new DiscountWrapper('SCUD',0.0, 0.0,true,true,false,'SCUD') );
             
             dwList.add(new DiscountWrapper('GST Discount',0.0, 0.0,true,true,false,'GST Discount') );
             //dwList.add(new DiscountWrapper('Special Discount',0.0, 0.0,true,true,false,'Special Discount') );
             dwList.add(new DiscountWrapper('Total Discount',0.0, 0.0,false,false,true,'Total') );
-            //   System.debug('Discount List:' + dwList);
+            //System.debug('Discount List:' + dwList); 
             
             
         } else {
             return null;
         }
+        for(DiscountWrapper obj :dwList){  
+            system.debug('Returning DW list__'+ obj);
+        }
+        return dwList;
+    }
+    
+    /// We have to retain all the applied discounts related to the quote - hence creating quote applied discounts records with details - Digicloud Team, Suraj S
+    //List<Quote_Applied_Discounts__c>  lstAppliedDiscounts = new List<Quote_Applied_Discounts__c>();  
+    public static List<Quote_Applied_Discounts__c> lstAppliedDiscounts = new List<Quote_Applied_Discounts__c>();  
+    
+    
+    // Another method to replace project dicounts withquo Offers - Digicloud
+    public static FixedDiscountWrapper calculateFixedDiscounts(Id projectId, Id OppId, Id unitId, decimal dAgreementValue, Decimal CP_DiscountInput){  
+        System.debug('Inside calculateFixedDiscounts unit Id__ '+ unitId);
+        system.debug('projectId calculateFixedDiscounts__'+ projectId);
+        system.debug('OppId calculateFixedDiscounts__'+ OppId);
+        system.debug('dAgreementValue__'+ dAgreementValue);
+        System.debug('CP % in inventory ===>'+ CP_DiscountInput);
+        System.debug('calculate fixed discount execure');
+        
+        
+        List<Opportunity> oppList = [Select id,RW_Project__c,RW_Project_Unit__r.TowerName__c,RW_Type_of_Client__c from opportunity Where id =: OppId];
+        
+        Quote_Applied_Discounts__c objAppliedDiscounts; 
+        Map<String, Decimal> allChargesMap = new Map<String,Decimal>();
+        System.debug('StampDuty in Calculate Discount ===>'+ allChargesMap.get('Stamp Duty'));
+        Decimal fixedDiscounts = 0;
+        Decimal referralDiscount = 0;
+        Decimal referralDiscountAV = 0;
+        Decimal RefDiscPassBack = 0;
+        Decimal RefDiscPassBackAV = 0;
+        
+        Decimal cpDiscount_For_Broker = 0;
+        Decimal cpDiscountAV = 0;
+        Decimal cpPassBack = 0;
+        Decimal cpPassBackAV = 0;
+        Decimal cpPassbackDiscount = 0;
+        
+        Decimal sSealableArea = 0;
+        Decimal agreementValue = dAgreementValue;
+        List<Project_Unit__c> lst_ProjectUnit;
+        
+        if(unitId!= null){
+            lst_ProjectUnit = [Select Id, RW_Project__c,RW_Project__r.Id, Saleable_Area__c from Project_Unit__c where Id = :unitId];
+        }
+        if (!lst_ProjectUnit.isEmpty()) { 
+            sSealableArea = lst_ProjectUnit[0].Saleable_Area__c != null ? lst_ProjectUnit[0].Saleable_Area__c : 0;
+        }
+        
+        List<Project__c> lstProject = [select id from Project__c where id =: projectId limit 1];
+        List<Opportunity> lstOpportunity = [select id, name, RW_Type_of_Client__c,Walkin_Source__c, Walkin_SubSource__c, Referral_Sub_Source__c, Opt_for_Referral__c, LeadSource, Lead_Sub_Source__c,Unit_Booked_Date__c, Blocked_Date__c 
+                                            from Opportunity where id =: OppId limit 1];  
+        system.debug('lstOpportunity__'+ lstOpportunity.size());
+        
+        // Calculate fixed discounts from mandatory offers
+        List<Offer_Master__C> lstOffers = [SELECT Id, Name, Project__c, Tower__c, Project_Unit__c, Offer_type__c, Offer_Value__c, Offer_calculation__c, 
+                                           Discount_Category__c, Start_Date__c, End_Date__c,Monetizable__c
+                                           FROM Offer_Master__C  
+                                           WHERE Project__c =: lstProject[0].Id and End_Date__c >=: system.today() and Offer_type__c = 'Mandatory'];
+        system.debug('lstOffers size__'+ lstOffers.size()); 
+        
+        //Vinit : Calculate Mandetory discounts here
+        Decimal mandetoryDiscount = 0;
+        Decimal offerAmount = 0;
+        Decimal psf = 0;
+        Decimal percent = 0;
+        String sSource = '';
+        if (!lstOffers.isEmpty()) {
+            for (Offer_Master__c objOffer : lstOffers) {
+                if (objOffer.Offer_type__c == 'Mandatory' && objOffer.Discount_Category__c == 'Monetary'){
+                    if (objOffer.Offer_calculation__c == 'Lumpsum' ) {
+                        if(objOffer.Offer_Value__c != null){
+                            offerAmount = objOffer.Offer_Value__c;
+                            
+                        }else{
+                            offerAmount = 0;
+                        }
+                        system.debug('offerAmount Lumpsump in inventory cost is ===>'+ offerAmount);
+                    } 
+                    else if (objOffer.Offer_calculation__c == 'PSF') {
+                        // PSF * Saleable Area
+                        if(objOffer.Offer_Value__c != null){
+                            psf = objOffer.Offer_Value__c;
+                        }else{
+                            psf = 0;
+                        }
+                        // now I am adding the psf value in offer amount
+                        offerAmount = psf * sSealableArea;
+                        system.debug('offerAmount PSF in inventory cost is ===>'+ offerAmount);
+                    } 
+                    //else if (objOffer.Offer_calculation__c == '%') {//Commented for Quotation Offer
+                    else if (objOffer.Offer_calculation__c == 'Percentage') {//Added for Quotation Offer
+                        // Percentage on Agreement Value
+                        if(objOffer.Offer_Value__c != null){
+                            percent = objOffer.Offer_Value__c;
+                        }else{
+                            percent = 0;
+                        }
+                        offerAmount = (agreementValue * percent) / 100;
+                        system.debug('offerAmount Discount in inventory cost is ===>'+ offerAmount);
+                    }
+                    // Here finally add the value in variable to show mandetory disocunt 
+                    mandetoryDiscount += offerAmount;
+                    system.debug('mandetoryDiscount in inventory cost is ===>'+ mandetoryDiscount);
+                    
+                }
+                //Vinit change : 24/09/2025 for create applied discount record once quote create
+                
+                Quote_Applied_Discounts__c qd = new Quote_Applied_Discounts__c();
+                qd.Name = objOffer.Name; 
+                qd.Applied_Offer__c = objOffer.Id;
+                qd.Offer_type__c = objOffer.Offer_type__c;
+                qd.Discount_Category__c = objOffer.Discount_Category__c;
+                qd.Offer_Value__c = offerAmount;
+                qd.Start_Date__c = objOffer.Start_Date__c;
+                qd.End_Date__c = objOffer.End_Date__c;
+                qd.Monetizable__c = objoffer.Monetizable__c;
+                qd.Project__c = objoffer.Project__c;
+                qd.Project_Unit__c = objoffer.Project_Unit__c;
+                qd.Tower__c = objoffer.Tower__c;
+                lstAppliedDiscounts.add(qd);
+                System.debug('Mandetory Discount List fill ===>'+ lstAppliedDiscounts);
+                System.debug('Mandetory Discount List fill ===>'+ lstAppliedDiscounts.size());
+                // lstAppliedDiscounts
+            }
+            
+            
+        }
+        if(!lstOpportunity.isEmpty()){
+            Opportunity o = lstOpportunity[0];
+            if(dAgreementValue != null) {
+                if(o.Walkin_Source__c == 'Referral' && 
+                   (o.Referral_Sub_Source__c == 'Existing client reference' || o.Walkin_SubSource__c == 'Existing client ref')) {
+                       // 0.5% standard referral discount
+                       referralDiscount = dAgreementValue * 0.005; 
+                       //DiscountedAV -= referralDiscount;
+                       referralDiscountAV = dAgreementValue - referralDiscount;
+                       system.debug('AV after giving referral discount ==>' +referralDiscountAV );
+                       system.debug('0.5% referral discount applied: ' + referralDiscount);
+                       /*referralDetailsVsValueMap.put('FormattedRefDisc',QuotationManagementServices.INFormat(referralDiscount));
+                       FormattedRefDisc = QuotationManagementServices.INFormat(referralDiscount);  
+                       FormattedRefDiscAV = QuotationManagementServices.INFormat(referralDiscountAV);  */
+                       if(o.Opt_for_Referral__c == True) {
+                           // 1% discount if opted out of referral
+                           RefDiscPassBack = referralDiscountAV * 0.01;
+                           system.debug('1.5% RefPassback applied: ' + RefDiscPassBack);
+                           //DiscountedAV -= RefDiscPassBack;
+                           RefDiscPassBackAV = dAgreementValue - RefDiscPassBack;
+                           system.debug('1.5% referral discount applied: ' + RefDiscPassBackAV);
+                          /* referralDetailsVsValueMap.put('FormattedRefDiscPassBack',QuotationManagementServices.INFormat(RefDiscPassBack));
+                           FormattedRefDiscPassBack = QuotationManagementServices.INFormat(RefDiscPassBack);      
+                           FormattedRefDiscPassBackAV = QuotationManagementServices.INFormat(RefDiscPassBackAV); */
+                       } 
+                   }
+                else if((o.Walkin_Source__c == 'Loyalty' || o.LeadSource == 'Loyalty') && 
+                        (o.Referral_Sub_Source__c == 'Existing client reference' || o.Walkin_SubSource__c == 'Existing client reference' || o.Lead_Sub_Source__c == 'Existing client reference')){ 
+                            referralDiscount = dAgreementValue *0.015;
+                            //DiscountedAV -= referralDiscount;
+                            referralDiscountAV = dAgreementValue - referralDiscount;
+                            system.debug('Discount for loyalty calculated__');
+                            system.debug('AV after giving referral discount ==>' +referralDiscountAV );
+                            system.debug('0.5% referral discount applied: ' + referralDiscount);
+                            /*referralDetailsVsValueMap.put('FormattedRefDisc',QuotationManagementServices.INFormat(referralDiscount));
+                            FormattedRefDisc = QuotationManagementServices.INFormat(referralDiscount);  
+                            FormattedRefDiscAV = QuotationManagementServices.INFormat(referralDiscountAV); */
+                        }
+            }  
+        }
+        
+        
+        if(!lstOpportunity.isEmpty()) {
+            Opportunity opp = lstOpportunity[0];
+            Decimal DiscountedAV = agreementValue - mandetoryDiscount;
+            system.debug('DiscountedAV++'+ DiscountedAV);
+            
+            if(opp.Walkin_Source__c == 'Referral' && 
+               (opp.Referral_Sub_Source__c == 'Existing client reference' || opp.Walkin_SubSource__c == 'Existing client ref')) { 
+                   //if(aggrValue != null) {
+                   
+                   if(DiscountedAV != null) {
+                       // 0.5% standard referral discount
+                       referralDiscount = DiscountedAV * 0.005; 
+                       referralDiscountAV = DiscountedAV - referralDiscount;
+                       system.debug('QAVR in source discount ==>' +referralDiscountAV );
+                       
+                       system.debug('0.5% referral discount applied: ' + referralDiscount);
+                       if(opp.Opt_for_Referral__c == True) {
+                           // 1% discount if opted out of referral
+                           
+                           RefDiscPassBack = referralDiscountAV * 0.01;
+                           system.debug('1.5% RefPassback applied: ' + RefDiscPassBack);
+                           RefDiscPassBackAV = referralDiscountAV - RefDiscPassBack;
+                           system.debug('1.5% referral discount applied: ' + RefDiscPassBackAV);
+                           
+                           
+                       } 
+                   }
+                   
+               } 
+            else if((opp.Walkin_Source__c == 'Loyalty' || opp.LeadSource == 'Loyalty') && 
+                    (opp.Referral_Sub_Source__c == 'Existing client reference' || opp.Walkin_SubSource__c == 'Existing client reference' || opp.Lead_Sub_Source__c == 'Existing client reference')){ 
+                        DiscountedAV = agreementValue - mandetoryDiscount;
+                        if(DiscountedAV != null){ 
+                            referralDiscount = DiscountedAV *0.015;
+                            system.debug('Discount for loyalty calculated__');
+                        }
+                    }else {
+                        
+                        /*if (opp.Walkin_Source__c == 'Channel Partner' && opp.Walkin_SubSource__c == 'Alternate Channel Partner') {
+system.debug('Inside Channel Partner Loop');
+system.debug('Inside Channel Partner Loop CP Value' + CP_DiscountInput);
+if(CP_DiscountInput != null && CP_DiscountInput > 0){
+cpPassBackAV = DiscountedAV - CP_DiscountInput;
+System.debug('new cpPassBackAV for cp passback===>'+ cpPassBackAV);
+}else{
+cpPassBackAV = DiscountedAV;
+}*/
+                        
+                        
+                    }
+            
+            
+            
+            
+            sSource = opp.Walkin_Source__c;
+            
+        }
+        
+        // At the end of your calculateFixedDiscounts method:
+        FixedDiscountWrapper result = new FixedDiscountWrapper();
+        
+        result.fixedDiscounts = mandetoryDiscount;
+        result.refralDiscount = referralDiscount;
+        result.refralDiscountAV = referralDiscountAV;
+        result.RefDiscPassBack = RefDiscPassBack;
+        result.RefDiscPassBackAV = RefDiscPassBackAV;
+        result.cpPassBack = cpPassBack;
+        result.cpPassBackAV = cpPassBackAV;
+        result.appliedDiscounts = lstAppliedDiscounts;
+        result.Source = sSource;
+        system.debug('Fixed discounts result__result' + result);
+        system.debug('Fixed discounts  result.cpPassBackAV' +  result.cpPassBackAV);
+        return result;
+    } 
+    
+    // To show non mandatory discount calculation on Quotation Discount Page- Digicloud
+    public static List<DiscountWrapper> getProjectLevelDiscounts(Id projectId, Id unitId, Id OppI){
+        System.debug('Inside getProjectLevelDiscounts__'+ unitId);
+        System.debug('get project discount execure');
+        Decimal sealableArea = 0;
+        List<Project_Unit__c> lstProjectUnit;
+        if(projectId != null){
+            List<Project__c> lstProject = [select id from Project__c where id =: projectId limit 1];
+        }
+        if(unitId!= null){
+            lstProjectUnit = [Select Id, RW_Project__c,RW_Project__r.Id, Saleable_Area__c,TowerName__c,New_Type__c from Project_Unit__c where Id = :unitId];//Added TowerName__c,New_Type__c for Quotation Offer
+        }
+        if (!lstProjectUnit.isEmpty()) {
+            sealableArea = lstProjectUnit[0].Saleable_Area__c != null ? lstProjectUnit[0].Saleable_Area__c : 0;
+        }
+        
+        List<DiscountWrapper> dwList = new List<DiscountWrapper>();
+        
+        system.debug('projectId__'+ projectId); 
+        
+        List<Project__c> lstProject = [select id from Project__c where id =: projectId limit 1];
+        
+        system.debug('lstProject__'+ lstProject); 
+        
+        // getting all offer discounts based on the offer master related to project - Digicloud
+        // List<Offer_Master__C> lstOffers = [SELECT Id, OwnerId, Name, Offer_type__c, Discount_Category__c, Start_Date__c, End_Date__c, Offer_calculation__c, 
+        //                                    Offer_Value__c, Project__c, Tower__c, Project_Unit__c, Monetizable__c
+        //                                    from Offer_Master__C where Project__c =: lstProject[0].Id and  End_Date__c >=: system.today() order by Offer_type__c];
+        /**Added for Quotation Offer */
+        List<Offer_Master__C> lstOffers = [SELECT Id, OwnerId, Name, Offer_type__c, Discount_Category__c, Start_Date__c, End_Date__c, Offer_calculation__c, 
+                                           Offer_Value__c, Project__c, Tower__c, Project_Unit__c, Monetizable__c,Typology__c
+                                           from Offer_Master__C where Project__c =: lstProject[0].Id  and  
+                                                                                    End_Date__c >=: system.today() 
+                                                                                    AND (Tower__c =:lstProjectUnit[0].TowerName__c 
+                                                                                          OR (Tower__c = NULL AND Typology__c = NULL)
+                                                                                        ) 
+                                                                                    order by Offer_type__c];
+                                                                                    
+        system.debug('List id offer master__'+ lstOffers);
+        for (Offer_Master__C objOffer : lstOffers) {
+            Decimal offerValue = objOffer.Offer_Value__c != null ? objOffer.Offer_Value__c : 0;
+            Decimal perSqFtVal = 0;
+            Decimal lumpsumVal = 0;
+            
+            
+            Boolean showMonetizable = (
+                (objOffer.Discount_Category__c == 'Non monetary') &&
+                (objOffer.Offer_type__c == 'Mandatory' || objOffer.Offer_type__c == 'Non Mandatory')
+            );
+            
+            Boolean showApply = (
+                (objOffer.Discount_Category__c == 'monetary') &&
+                (objOffer.Offer_type__c == 'Mandatory')
+            );
+            
+            if (objOffer.Offer_type__c == 'Non Mandatory') { 
+                
+                if (objOffer.Offer_calculation__c == 'Lumpsum') {
+                    lumpsumVal = offerValue;
+                    //perSqFtVal = (sealableArea > 0) ? (lumpsumVal / sealableArea).setScale(2) : 0;
+                    DiscountWrapper dw = new DiscountWrapper(objOffer.Name, perSqFtVal, lumpsumVal, false, true, false, 'Lumpsum');
+                    dw.showMonetizable = showMonetizable;
+                    dw.offerType = objOffer.Offer_type__c; 
+                    dw.discountCategory = objOffer.Discount_Category__c;
+                    dw.startDate = objOffer.Start_Date__c;
+                    dw.endDate = objOffer.End_Date__c;
+                    dwList.add(dw);
+                } 
+                
+                else if (objOffer.Offer_calculation__c == 'PSF') {
+                    perSqFtVal = offerValue;
+                    lumpsumVal = (sealableArea > 0) ? (perSqFtVal * sealableArea).setScale(2) : 0;
+                    DiscountWrapper dw = new DiscountWrapper(objOffer.Name, perSqFtVal, lumpsumVal, true, false, false, 'PSF');
+                    //dw.monetizable = isMonetizable;
+                    dw.showMonetizable = showMonetizable;
+                    dw.offerType = objOffer.Offer_type__c;
+                    dw.discountCategory = objOffer.Discount_Category__c;
+                    dw.startDate = objOffer.Start_Date__c;
+                    dw.endDate = objOffer.End_Date__c;
+                    dwList.add(dw);
+                } 
+                
+                else if (objOffer.Offer_calculation__c == 'Percentage' && originalAgreementValue != null && originalAgreementValue > 0) {
+                    Decimal dPercentageDiscount = (originalAgreementValue * offerValue) / 100;
+                    DiscountWrapper dw = new DiscountWrapper(objOffer.Name, 0.0, dPercentageDiscount, false, false, false, 'Percentage');
+                    dw.percentageVal = offerValue;
+                    //dw.monetizable = isMonetizable;
+                    dw.showMonetizable = showMonetizable;
+                    dw.offerType = objOffer.Offer_type__c;
+                    dw.discountCategory = objOffer.Discount_Category__c;
+                    dw.startDate = objOffer.Start_Date__c;
+                    dw.endDate = objOffer.End_Date__c;
+                    dwList.add(dw);
+                }
+                
+            } else {
+                
+            }
+            
+            if (objOffer.Offer_type__c == 'Mandatory') { 
+                if(objOffer.Discount_Category__c == 'Non monetary'|| objOffer.Discount_Category__c == 'monetary'){
+                    DiscountWrapper dw = new DiscountWrapper(objOffer.Name, perSqFtVal, lumpsumVal, true, false, false, 'Lumpsum');
+                    //dw.monetizable = isMonetizable; 
+                    //dw.applied = false;//commented for Quotation offer
+                    dw.applied = true;//Added for Quotation Offer
+                    dw.lumpsumVal = objOffer.Offer_Value__c;
+                    dw.SlumpsumVal = QuotationManagementServices.INFormat(dw.lumpsumVal);
+                    dw.discountCategory = objOffer.Discount_Category__c;
+                    //dw.showApply = false;//commented for Quotation offer
+                    dw.showApply = true;
+                    dw.offerType = objOffer.Offer_type__c;
+                    dw.startDate = objOffer.Start_Date__c;
+                    dw.endDate = objOffer.End_Date__c;
+                    
+                    dwList.add(dw);
+                }
+            } 
+            
+        }
         
         return dwList;
     }
+    
+    public class DiscountWrapper {
+        public String type {get;set;}
+        public String offerType {get;set;}
+        public String discountCategory {get;set;}
+        public Decimal perSqFtVal {get;set;}
+        public Decimal lumpsumVal {get;set;}
+        public String  SperSqFtVal {get;set;}
+        public String  SlumpsumVal {get;set;}
+        public Boolean psf {get;set;}
+        public Boolean lumpsum {get;set;}
+        public Boolean monetizable {get;set;}
+        public Boolean applied {get;set;}
+        public String discountType {get;set;}
+        public Boolean selected {get;set;}
+        public Decimal perSqFtMax {get;set;}
+        public Decimal percentageVal { get; set; }
+        public Boolean showMonetizable {get;set;}  // Controls visibility
+        public Boolean isMonetizableChecked {get;set;}
+        Public Boolean showApply {get; set;}
+        Public date startDate {get; set;}
+        Public date endDate {get; set;}
+        
+        public DiscountWrapper(String type, Decimal perSqFtVal, Decimal lumpsumVal, Boolean psf, Boolean lumpsum, Boolean Applied, String discountType) {
+            this.type = type;
+            this.perSqFtVal = perSqFtVal.setscale(0,RoundingMode.HALF_UP);
+            this.lumpsumVal = lumpsumVal.setscale(0,RoundingMode.HALF_UP);
+            system.debug('DiscountWrapper lumpsumVal___'+ lumpsumVal);
+            this.SperSqFtVal = QuotationManagementServices.INFormat(perSqFtVal);
+            this.SlumpsumVal = QuotationManagementServices.INFormat(lumpsumVal);
+            system.debug('DiscountWrapper SlumpsumVal___'+ SlumpsumVal);
+            system.debug('DiscountWrapper applied'+ applied);
+            this.psf = psf;
+            this.lumpsum = lumpsum;
+            this.applied = applied;          
+            this.discountType = discountType;
+            this.selected = True;
+            this.PerSqftMax = perSqFtVal;
+            this.percentageVal = 0;
+            this.showMonetizable = false; // Default hidden
+            this.isMonetizableChecked = false; // Always starts unchecked
+            this.showApply = True;
+            this.offerType = offerType;
+            this.discountCategory = discountCategory;
+        }
+    }
+    
+    
     
     public class PlanDetailWrapper {
         public Decimal amount  {get; set;}
@@ -1960,40 +2774,46 @@ from Project_Unit__c where Id = :uId]; */
             this.amount = amount.setscale(0,RoundingMode.HALF_UP);
             this.serviceTax  = serviceTax.setscale(0,RoundingMode.HALF_UP);
             if(totalPay != null)
-                this.totalPay = totalPay.setscale(0,RoundingMode.HALF_UP);
+                this.totalPay = totalPay.setscale(0,RoundingMode.HALF_UP); 
             this.PayPlanRecord = payPlanRecord;
             this.totalError = totalError;
         }
         
     }
-    public class DiscountWrapper {
-        public String type {get;set;}
-        public Decimal perSqFtVal {get;set;}
-        public Decimal lumpsumVal {get;set;}
-        public String  SperSqFtVal {get;set;}
-        public String  SlumpsumVal {get;set;}
-        public Boolean psf {get;set;}
-        public Boolean lumpsum {get;set;}
-        public Boolean applied {get;set;}
-        public String discountType {get;set;}
-        public Boolean selected {get;set;}
-        public Decimal perSqFtMax {get;set;}
+    
+    // Added by digicloud team - Suraj S
+    
+    public class FixedDiscountWrapper {
+        // Public variables (no get/set needed)
+        public Decimal fixedDiscounts;
+        //Referal Variable
+        public Decimal refralDiscount;
+        public Decimal refralDiscountAV;   	 
+        public Decimal RefDiscPassBack;
+        public Decimal RefDiscPassBackAV;
+        Public Decimal cpPassBack;    
+        public Decimal cpPassBackAV;
+        public Decimal totalDiscounts;
+        public List<Quote_Applied_Discounts__c> appliedDiscounts;
+        public Decimal mandetoryDiscount;
+        public string Source;    
         
-        public DiscountWrapper(String type, Decimal perSqFtVal, Decimal lumpsumVal, Boolean psf, Boolean lumpsum, Boolean Applied, String discountType) {
-            this.type = type;
-            this.perSqFtVal = perSqFtVal.setscale(0,RoundingMode.HALF_UP);
-            this.lumpsumVal = lumpsumVal.setscale(0,RoundingMode.HALF_UP);
-            this.SperSqFtVal = QuotationManagementServices.INFormat(perSqFtVal);
-            this.SlumpsumVal = QuotationManagementServices.INFormat(lumpsumVal);
-            this.psf = psf;
-            this.lumpsum = lumpsum;
-            this.applied = applied;          
-            this.discountType = discountType;
-            this.selected = false;
-            this.PerSqftMax = perSqFtVal;
+        // Optional constructor to initialize values
+        public FixedDiscountWrapper() {
+            fixedDiscounts = 0;
+            refralDiscount = 0;
+            refralDiscountAV = 0;
+            RefDiscPassBack = 0;
+            RefDiscPassBackAV = 0;
+            totalDiscounts = 0;
+            cpPassBack = 0;
+            cpPassBackAV = 0;
+            appliedDiscounts = new List<Quote_Applied_Discounts__c>();
+            mandetoryDiscount = 0;
+            Source = '';
         }
     }
-     public void dummyMethod(){
+    public void dummyMethod(){
         
         integer i;
         i=0;

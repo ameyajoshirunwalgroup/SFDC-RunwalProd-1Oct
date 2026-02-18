@@ -24,7 +24,7 @@ public class SAPCPReceiptAPICallOut {
             if(test.isRunningTest()){
                 String rec = '{   "apex_schema_type_info": "(urn:sap-com:document:sap:soap:functions:mc-style, false, true), field_order_type_info=(item), item=(ZstrInvSentLog:[AccDocNo=0010000635, AccDocNo_type_info=(AccDocNo, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Bukrs=1000, Bukrs_type_info=(Bukrs, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), ClrDocNo=0010000635, ClrDocNo_type_info=(ClrDocNo, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), DocDate=2022-10-12, DocDate_type_info=(DocDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), DocNo=, DocNo_type_info=(DocNo, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), DocType=KZ, DocType_type_info=(DocType, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Gjahr=2018, Gjahr_type_info=(Gjahr, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), InvAmt=          375354.00, InvAmt_type_info=(InvAmt, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), InvDate=2022-10-12, InvDate_type_info=(InvDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), PayDate=2019-06-12, PayDate_type_info=(PayDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), PayMode=, PayMode_type_info=(PayMode, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), PostDate=2022-10-12, PostDate_type_info=(PostDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Sapinvoiceno=0190000477, Sapinvoiceno_type_info=(Sapinvoiceno, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Sfdcinvoiceref=30023, Sfdcinvoiceref_type_info=(Sfdcinvoiceref, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), apex_schema_type_info=(urn:sap-com:document:sap:soap:functions:mc-style, false, true), field_order_type_info=(Sfdcinvoiceref, Sapinvoiceno, AccDocNo, ClrDocNo, DocNo, Bukrs, Gjahr, DocType, DocDate, InvDate, ...)], ZstrInvSentLog:[AccDocNo=0010000635, AccDocNo_type_info=(AccDocNo, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Bukrs=1000, Bukrs_type_info=(Bukrs, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), ClrDocNo=0010000635, ClrDocNo_type_info=(ClrDocNo, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), DocDate=2022-10-12, DocDate_type_info=(DocDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), DocNo=, DocNo_type_info=(DocNo, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), DocType=AB, DocType_type_info=(DocType, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Gjahr=2018, Gjahr_type_info=(Gjahr, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), InvAmt=          376353.33, InvAmt_type_info=(InvAmt, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), InvDate=2022-10-12, InvDate_type_info=(InvDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), PayDate=2019-06-12, PayDate_type_info=(PayDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), PayMode=, PayMode_type_info=(PayMode, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), PostDate=2022-10-12, PostDate_type_info=(PostDate, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Sapinvoiceno=0190000477, Sapinvoiceno_type_info=(Sapinvoiceno, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), Sfdcinvoiceref=30023, Sfdcinvoiceref_type_info=(Sfdcinvoiceref, urn:sap-com:document:sap:soap:functions:mc-style, null, 1, 1, false), apex_schema_type_info=(urn:sap-com:document:sap:soap:functions:mc-style, false, true), field_order_type_info=(Sfdcinvoiceref, Sapinvoiceno, AccDocNo, ClrDocNo, DocNo, Bukrs, Gjahr, DocType, DocDate, InvDate, ...)]), item_type_info=(item, urn:sap-com:document:sap:soap:functions:mc-style, null, 0, -1, false)"}';
                 //sfdcpayReceiptResponse =  (    sapCPPaymentInterface.ZttInvSentLog)JSON.deserialize(rec,SAPCPPaymentInterface.ZttInvSentLog.class);
-                dummy();
+                //dummy();
             }
             else{                                        
                 Datetime d = system.now()-1;
@@ -60,10 +60,10 @@ public class SAPCPReceiptAPICallOut {
                   InvoiceList1 = [Select Id,name from Brokerage_Invoice__c Where Id =: 'a2f5j000000Dkx5AAC' LIMIT 1];
                   system.debug('InvoiceList1 ::'+InvoiceList1);                         
                 System.debug('InvoiceDocNoList:::'+InvoiceDocNoList);
-                InvoiceList = [Select Id,Name,SAP_Document_No__c,Invoice_Number__c,SAP_Broker_code__c,Project__c from Brokerage_Invoice__c where SAP_Document_No__c IN:InvoiceDocNoList ];
+                InvoiceList = [Select Id,Name,SAP_Document_No__c,Invoice_Number__c,SAP_Broker_code__c,Booking__r.Project__r.Name from Brokerage_Invoice__c where SAP_Document_No__c IN:InvoiceDocNoList ];
                 List<String> projList = new List<String>();
                 for(Brokerage_Invoice__c br : InvoiceList){
-                    projList.add(br.Project__c);
+                    projList.add(br.Booking__r.Project__r.Name);
                 }
                  ProjectList = [Select Id,Name,RDS_Company_Code__c,RW_SAP_Company_Code__c from Project__c where Name=:projList and RW_SAP_Company_Code__c != Null ];
                 Map<String,String> companyCodeMap = new Map<String,String>();
@@ -186,6 +186,7 @@ public class SAPCPReceiptAPICallOut {
         
         
     }
+    
     public static void dummy(){
         Integer i = 0;
         i++;

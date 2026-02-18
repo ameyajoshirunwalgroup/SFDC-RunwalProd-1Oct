@@ -1,6 +1,6 @@
 public class SalesOrderErrorLogger {
     Public String CustomerNumber;
-    public        SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader ;
+    public        SalesOrderSAPAPIMCS.ZsdstOrderHeader orderHeader ; 
     public            SalesOrderSAPAPIMCS.TableOfZsdstOrderItem orderItemsList;
     public             SalesOrderSAPAPIMCS.TableOfZsdstCondition orderConditionsList ;
     public             SalesOrderSAPAPIMCS.TableOfZsdstPartnerFunction partnerFunctionList ;

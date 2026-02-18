@@ -26,7 +26,7 @@ public class createBookingFeedback
         if(!oppList.isEmpty())
         {
             system.debug('inside if**');
-            String PageLink = System.label.Site_Url_New+'/BookingSurveyPage?sid=';                    ///Link for Production
+            String PageLink = Label.siteURL+'/BookingSurveyPage?sid=';                    ///Link for Production
             system.debug('inside if***');
             booksurname = Schema.SObjectType.Survey__c.getRecordTypeInfosByName().get('Booking Survey').getRecordTypeId();
             //system.debug(+booksurname);

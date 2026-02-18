@@ -332,9 +332,10 @@
                     <p style="font-size:14px; font-family:Arial MT;">
                         I/We, the Applicant/s remit herewith a sum of 
                         <span style="border-bottom: 1px solid #000; padding-bottom: 3px; font-weight: bold; display: inline-block;">
-                            <apex:outputText value="₹ {0,number,###,##,##0.00}">
+                            <!--apex:outputText value="₹ {0,number,###,##,##0.00}">
                                 <apex:param value="{!grandTotalReceiptAmount}" />
-                            </apex:outputText>
+                            </apex:outputText-->
+                            {!formatedgrandTotalReceiptAmount}
                         </span> /- In Words 
                         <span style="font-weight: bold;">
                             <apex:outputText value="{!totalAmountinWords}" />
@@ -351,6 +352,7 @@
                                 <th style="font-size:13px; border: 1px solid #000; text-align: center;">
                                     Transaction / Cheque no / Draft no / NEFT No / UPI ID
                                 </th>
+                                <th style="font-size:13px; border: 1px solid #000; text-align: center;">Drawee Bank</th>
                                 <th style="font-size:13px; border: 1px solid #000; text-align: center;">Total Amount</th>
                             </tr>
                         </thead>
@@ -365,10 +367,12 @@
                                         </apex:outputText>
                                     </td>
                                     <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!wrap.chequeNo}</td>
+                                    <td style="border: 1px solid #000; font-size: 13px; text-align: center;">{!wrap.draweeBankName}</td>
                                     <td style="border: 1px solid #000; font-size: 13px; text-align: center;">
-                                        <apex:outputText value="₹ {0,number,###,##,##0.00}">
+                                        {!wrap.formatedTotalAmount}
+                                        <!--apex:outputText value="₹ {0,number,###,##,##0.00}">
                                             <apex:param value="{!wrap.totalAmount}" />
-                                        </apex:outputText> /-
+                                        </apex:outputText--> /-
                                     </td>
                                 </tr>
                             </apex:repeat>
@@ -429,9 +433,9 @@
                         <tr>
                             <td style="font-size:14px;border: 1px solid #000;">Agreement Value (Rs.)</td>
                             <td style="font-size:14px;border: 1px solid #000;">
-                                <apex:outputText value="₹ {0,number,###,##,##0.00}">
-                                    <apex:param value="{!bookingWrap.agreementValue}" /></apex:outputText>
-                                /-
+                                <!--apex:outputText value="₹ {0,number,###,##,##0.00}">
+                                    <apex:param value="{!bookingWrap.agreementValue}" /></apex:outputText-->
+                               {!bookingWrap.formatedagreementValue} /-
                             </td>
                            
                              <td style="font-size:14px;border: 1px solid #000;">Unit Type</td>
@@ -466,8 +470,12 @@
                 <table border="0" cellspacing="0" cellpadding="4" 
                        style="width: 100%; font-family:Arial MT; border-collapse:collapse; border: 1px solid #000;">
                     <tr>
-                        <td colspan="3" style="font-size:14px; border: none; text-align: left; width: 50%;">
+                        <!--td colspan="3" style="font-size:14px; border: none; text-align: left; width: 50%;">
                             <b>Details of Source:</b>&nbsp; {!bookingWrap.sourceOfBooking}
+                        </td-->
+                        <td colspan="3" style="font-size:14px; border: none; text-align: left; width: 50%;">
+                            <b>Details of Source:</b>&nbsp; 
+                            <apex:outputText value="{!IF(bookingWrap.sourceOfBooking == 'Channel Partner', 'CP', bookingWrap.sourceOfBooking)}"/>
                         </td>
                         <td style="font-size:14px; border: none; text-align: left; margin-left: 20px; width: 50%;">
                             <b>Type Of Client:</b>&nbsp; {!bookingWrap.TypeofClient}
@@ -484,7 +492,8 @@
                         <table border="1" cellspacing="0" cellpadding="4" 
                                style="width: 700px; font-family:Arial; border-collapse:collapse; border: 1px solid #000; width: 100%; table-layout: fixed;">
                             <tr>
-                                <td style="font-size:14px; border:1px solid #000;">Name of {!bookingWrap.sourceOfBooking}</td>
+                                <!--td style="font-size:14px; border:1px solid #000;">Name of {!bookingWrap.sourceOfBooking}</td-->
+                                 <td style="font-size:14px; border:1px solid #000;">Source Name</td>
                                 <td style="font-size:14px; border:1px solid #000; text-align:center;">
                                     <apex:outputText value="{!bookingWrap.nameOfCorporate}"/>
                                 </td>
@@ -619,6 +628,16 @@
                 </apex:outputPanel>
             </div><br/>
             <div Style ='page-break-after:always;'></div>
+            <!-- Added by Vinay 12/01/2026 Start -->
+            <div>
+                <apex:outputPanel rendered="{!bookingWrap.runwalWoodsProject}">
+                    <img src="{!URLFOR($Resource.Runwal_Woods_Annexure_A)}" style="margin-left: 2px; margin-top: 10px; margin-bottom: 0px; padding: 2px; width: 210mm; height: 260mm;
+                                                                                   overflow: hidden;"/>
+                    <img src="{!URLFOR($Resource.Runwal_Woods_Annexure_B)}" style="margin-left: 2px; margin-top: 10px; margin-bottom: 0px; padding: 2px; width: 210mm; height: 260mm;
+                                                                                   overflow: hidden;"/>
+                </apex:outputPanel>
+            </div>
+            <!-- Added by Vinay 12/01/2026 End -->
             <!-- Last page Image-->
             <div>
                 <img src="{!LastPageofProject}"

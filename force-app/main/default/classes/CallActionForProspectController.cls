@@ -82,7 +82,8 @@ global class CallActionForProspectController {
          
         String jsonString = generator.getAsString();
         System.debug('JSON:' + jsonString);
-        String endpoint = 'https://kpi.knowlarity.com/Basic/v1/account/call/makecall';
+        //String endpoint = 'https://kpi.knowlarity.com/Basic/v1/account/call/makecall';
+         String endpoint = 'https://kpi.knowlarity.com.invalid/Basic/v1/account/call/makecall';//added by prashant
         System.debug('click2call URL:' + endpoint);
         Http httpProtocol = new Http();
         // Create HTTP request to send.
@@ -130,7 +131,9 @@ global class CallActionForProspectController {
         String jsonString = generator.getAsString();
         System.debug('JSON:' + jsonString);
         String encodedJSON = EncodingUtil.urlEncode(jsonString, 'UTF-8');
-        String endpoint = 'http://202.149.220.187:8888/ameyowebaccess/command/?command=clickToDialWithToken&data='+encodedJSON;
+        //String endpoint = 'http://202.149.220.187:8888/ameyowebaccess/command/?command=clickToDialWithToken&data='+encodedJSON;
+         String endpoint = 'http://202.149.220.187:8888/ameyowebaccess/command/?command=clickToDialWithToken&data='+encodedJSON+'invalid';
+       
         System.debug('click2call URL:' + endpoint);
         Http httpProtocol = new Http();
         // Create HTTP request to send.

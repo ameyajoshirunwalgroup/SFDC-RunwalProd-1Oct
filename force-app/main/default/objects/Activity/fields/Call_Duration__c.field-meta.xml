@@ -15,6 +15,7 @@ TEXT(FLOOR( (CallDurationInSeconds)/60)) + &quot; Min: 0&quot; + TEXT( FLOOR(MOD
 
 
 ))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Call Duration</label>
     <required>false</required>
     <type>Text</type>

@@ -3,7 +3,7 @@
     <fullName>Pending_Reason__c</fullName>
     <label>Pending Reason</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>MultiselectPicklist</type>
     <valueSet>
@@ -58,6 +58,11 @@
                 <fullName>Others</fullName>
                 <default>false</default>
                 <label>Others</label>
+            </value>
+            <value>
+                <fullName>No Pending Reason</fullName>
+                <default>false</default>
+                <label>No Pending Reason</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -66,21 +66,21 @@ System.debug('Global Exception:' + ex.getErrorMsg() + ex.getClassDetails());
     List<String> lstLeadIds = new List<String>();
     //Added 2April2025 by digiCloud Team
     if(Trigger.isAfter && Trigger.isInsert){
-        List<Lead> leadList = new List<Lead>(); // Added by Vinay 29-09-2025
+        List<Lead> leadList = new List<Lead>();
         for(Lead objLead : Trigger.new){
             lstLeadIds.add(objLead.Id);
-            leadList.add(objLead); // Added by Vinay 29-09-2025
+            leadList.add(objLead);
         } 
         System.debug('lstLeadIds>>>' +lstLeadIds);
         if(!lstLeadIds.isEmpty() && lstLeadIds.size()>0){
            // WhatsAppMSGForNewLeadTriggerHandler.sendWelcomeWhatsAppMsg(lstLeadIds);
-              //system.enqueuejob(new WhatsAppMSGForNewLeadTriggerHandler(lstLeadIds)); // Commented by Vinay 29-09-2025 
-              system.enqueuejob(new LeadQueueable(leadList)); // Added by Vinay 29-09-2025 
+              //system.enqueuejob(new WhatsAppMSGForNewLeadTriggerHandler(lstLeadIds)); // Commented by Vinay 26-09-2025
+            system.enqueuejob(new LeadQueueable(leadList)); // Added by Vinay 26-09-2025
         }
     }
     if (Trigger.IsInsert) {
         if(Trigger.isBefore) {
-            LeadManagementServices.setSystemCampaignOnLead(Trigger.new);
+          //  LeadManagementServices.setSystemCampaignOnLead(Trigger.new);
             for(lead l : trigger.new){
                 if(l.RW_Broker__c != null){
                     if(l.LeadSource == 'Channel Partner'){
@@ -114,7 +114,7 @@ l.CP_Category__c = projectLocationList[0].CP_Category__c;
             }
             
         }
-        else if (Trigger.isAfter) {
+        /*else if (Trigger.isAfter) {
             
             try {
                 LeadManagementServices.AddCampaignToLead(Trigger.new);
@@ -126,7 +126,7 @@ l.CP_Category__c = projectLocationList[0].CP_Category__c;
             
             list<Lead> updateLeadDetails1 = new list<Lead>();
             list<Lead> updateLeadDetails2 = new list<Lead>();
-        }
+        }*/
         
         If(Trigger.isUpdate) {
             /*  if (Trigger.isBefore) {
@@ -173,13 +173,13 @@ Trigger.newMap.get(l.Id).CCUCampaignDetails__c != Trigger.oldMap.get(l.Id).CCUCa
         
     }
     
-    if (updateCMList != null && updateCMList.size() > 0) {
+   /* if (updateCMList != null && updateCMList.size() > 0) {
         try {
             LeadManagementServices.AddCampaignToLead(updateCMList);
         } catch (GlobalException ex) {
             System.debug('Global Exception:' + ex.getErrorMsg() + ex.getClassDetails());
         }
-    }
+    }*/
     
     /*   Map<Id,Lead> leadMap = new Map<Id,Lead>();
 for(lead l : trigger.new) {

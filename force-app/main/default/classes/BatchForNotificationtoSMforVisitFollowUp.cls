@@ -7,14 +7,15 @@ global class BatchForNotificationtoSMforVisitFollowUp implements Database.Batcha
     global Database.QueryLocator start(Database.BatchableContext bc){
         system.debug('Inside start method----');
         Date oneDaysBefore = Date.today().addDays(-1);
-        return Database.getQueryLocator([Select Id, Name, Date_Of_Visit__c, RW_Sales_Associate__c, RW_Project__c, OwnerId, StageName
+        return Database.getQueryLocator([Select Id, Name, Date_Of_Visit__c, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Project__c, OwnerId, StageName
                                          from Opportunity
                                          where Date_Of_Visit__c != null 
-                                         and RW_Sales_Associate__c != null 
+                                         and Sales_Manager_User__c != null 
                                          and StageName != 'Unit Blocked' 
                                          and StageName != 'Unit Booked' 
                                          and RW_CIF_form_number__c != null 
-                                         and Date_Of_Visit__c = :oneDaysBefore]);
+                                         and Date_Of_Visit__c = :oneDaysBefore]);  //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
+        																		   //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
     }
     
     global void execute(Database.BatchableContext bc, List<Opportunity> opplist){

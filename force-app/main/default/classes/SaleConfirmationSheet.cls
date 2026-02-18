@@ -63,7 +63,7 @@ public class SaleConfirmationSheet {
              Flat_No__c,Referred_By__c,BrokerIId__r.RW_RERA_Registration_Number__c,Project__r.Name,
              Primary_Applicant_Email__c,Unit_No__c,Sub_Source__c,Source_of_Booking__c,Broker_Name__c,Booking_Date__c,
              Wing__c,Token_Amount__c,Contact_No_of_Referer_Customer_Custome__c, Allotment_Premium__c,No_of_Parking__c,
-             Sales_Managers__c,Quotation__r.Project_Maintenance_Charges_Amount_1__c,Quotation__r.Other_Charges_Amount_9__c,
+             Company__c,Sales_Managers__c,Quotation__r.Project_Maintenance_Charges_Amount_1__c,Quotation__r.Other_Charges_Amount_9__c,
              Quotation__r.Total_No_of_Parking__c,Quotation__r.Other_Charges_Amount_1__c,Quotation__r.Modified_Allotment_Charge__c,Quotation__r.BCAM_Charges__c,Quotation__r.CAM_Charges__c,
              Quotation__r.Base_Rate_PSF_D__c,Quotation__r.Base_Rate_PSF__c,Quotation__r.Original_Allotment_Charge__c,Quotation__r.Agreement_Value_D__c,
              Quotation__r.Agreement_Value__c,Quotation__r.Total_Discount_PSF__c,Quotation__r.Other_Charges_Total__c ,
@@ -75,7 +75,7 @@ public class SaleConfirmationSheet {
              Project__r.allotment_charges_6__c ,Quotation__r.MLCP_Additional__c,
              Quotation__r.Premium_Charges_Amount_1__c ,Quotation__r.Premium_Charges_Amount_2__c,Quotation__r.Premium_Charges_Amount_3__c,
              Quotation__r.Premium_Charges_Amount_4__c
-             From Booking__c Where id =: BookingId]; // Removed the Company__c field from soql by Vinay 01-10-2025
+             From Booking__c Where id =: BookingId];
         
          
         //select unit details for perticuler unit no

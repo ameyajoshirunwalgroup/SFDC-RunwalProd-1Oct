@@ -3,31 +3,47 @@ trigger ChannelPartnerTrigger on Broker__c (Before Insert,Before Update, After I
     if(trigger.isbefore && trigger.isInsert){        
         //Added by Prashant to Assign Temp CP Unique No based on previous record created....///START.. 07-08-2025/////
         Id tempRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
+        Id cpRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        
+        
+        //Added by Prashant to check duplicate CP. START...////
+        ChannelPartnerTriggerHandler.checkDuplicateCPs(trigger.new);
+        Map<Id, String> dupMap = ChannelPartnerTriggerHandler.checkDuplicateCPs(Trigger.new);
+
+        //Added by Prashant to check duplicate CP. END...//
         
         for(Broker__c br : Trigger.New){
-            if(br.STREET__c != '' && br.STREET__c != null)
-                br.Address__c = br.STREET__c;
-            if(br.STR_SUPPL1__c != '' && br.STR_SUPPL1__c != null){
-                if(br.Address__c != ''  &&  br.Address__c != null ){
-                    br.Address__c = br.Address__c +' , '+br.STR_SUPPL1__c;
-                }else{
-                    br.Address__c = br.STR_SUPPL1__c;
+            if(!dupMap.isEmpty()){
+                if(dupMap.containsKey(br.Id)){
+                    br.addError(dupMap.get(br.Id));
                 }
-            }  
-            if(br.STR_SUPPL2__c != '' && br.STR_SUPPL2__c != null){
-                if(br.Address__c != ''  &&  br.Address__c != null ){
-                    br.Address__c = br.Address__c +' , '+br.STR_SUPPL2__c;
-                }else{
-                    br.Address__c = br.STR_SUPPL2__c;
-                }
-            }   
-            if(br.STR_SUPPL3__c != '' && br.STR_SUPPL3__c != null){
-                if(br.Address__c != '' &&  br.Address__c != null ){
-                    br.Address__c = br.Address__c +' , '+br.STR_SUPPL3__c;
-                }else{
-                    br.Address__c = br.STR_SUPPL3__c;
-                }
-            }   
+            }
+            if(br.RecordTypeId == cpRecordTypeId){
+                if(br.STREET__c != '' && br.STREET__c != null)
+                    br.Address__c = br.STREET__c;
+                if(br.STR_SUPPL1__c != '' && br.STR_SUPPL1__c != null){
+                    if(br.Address__c != ''  &&  br.Address__c != null ){
+                        br.Address__c = br.Address__c +' , '+br.STR_SUPPL1__c;
+                    }else{
+                        br.Address__c = br.STR_SUPPL1__c;
+                    }
+                }  
+                if(br.STR_SUPPL2__c != '' && br.STR_SUPPL2__c != null){
+                    if(br.Address__c != ''  &&  br.Address__c != null ){
+                        br.Address__c = br.Address__c +' , '+br.STR_SUPPL2__c;
+                    }else{
+                        br.Address__c = br.STR_SUPPL2__c;
+                    }
+                }   
+                if(br.STR_SUPPL3__c != '' && br.STR_SUPPL3__c != null){
+                    if(br.Address__c != '' &&  br.Address__c != null ){
+                        br.Address__c = br.Address__c +' , '+br.STR_SUPPL3__c;
+                    }else{
+                        br.Address__c = br.STR_SUPPL3__c;
+                    }
+                }  
+            }
+             
             
             
             //Added by Prashant to Assign Temp CP Unique No based on previous record created....///START.. 07-08-2025/////            
@@ -108,6 +124,7 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
         Map<Id,String> tempCPIdVsEmailMap = new Map<Id,String>();//Added by Prashant 25-08-25...///    
         List<String> cpIds = new List<String>(); //Added by coServe 14-02-2024
         List<String> cpIdsCPC = new List<String>();
+        list<Broker__c> tempCPList = new list<Broker__c>();//Added by Prashant 6-10-25.////
         for(Broker__c br : Trigger.New){
             if(br.RecordTypeId == ChannelPartnerId && br.Channel_Partner_From_CP_Portal__c == false && trigger.isInsert){//Added by Prashant to create account for only CP record type. //// 05-08-2025.
                 Account ac = new Account();
@@ -126,6 +143,7 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
             if(br.RecordTypeId == tempRecordTypeId){
                 system.debug('Inside Temp CP');
                 tempCPIdVsEmailMap.put(br.Id,br.RW_Email__c);
+                tempCPList.add(br);
             }
             //Added by Prashant to send temp cp creation mail... 25-08-25///END
         }
@@ -139,6 +157,11 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
             ChannelPartnerTriggerHandler.createCPCategory(cpIdsCPC);
         }
         //Added by Prashant 11-06-2025. End*
+        //Added by Prashant 06-10-2025. Start
+         if(tempCPList.size() > 0){ 
+            ChannelPartnerTriggerHandler.createTempCPTasks(tempCPList);
+        }
+        //Added by Prashant 06-10-2025. End
         //Added by Prashant 25-08-2025. Start
         if(tempCPIdVsEmailMap.size() > 0){
             system.debug('Inside tempCPIdVsEmailMap'+tempCPIdVsEmailMap);
@@ -152,10 +175,11 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
         List<String> cpIds = new List<String>();//Added by coServe 29-02-2024
         list<Id> brIds = new list<Id>();
         system.debug('Inside CP After update trigger');
+        Id cpRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
         
         for(Broker__c br : Trigger.New){
             Id ChannelPartnerId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
-            if(br.RecordTypeId == ChannelPartnerId){
+            if(br.RecordTypeId == ChannelPartnerId && trigger.oldMap.get(br.id).RecordTypeId==trigger.newMap.get(br.id).RecordTypeId){
                 if(trigger.oldMap.get(br.id).RW_GST_Number__c != trigger.newMap.get(br.id).RW_GST_Number__c && trigger.oldMap.get(br.id).Registration_Complete__c){
                     ChannelPartnerTriggerHandler.CPProfileUpdate(Trigger.new,Trigger.old,trigger.oldMap,trigger.newMap);
                 }
@@ -200,10 +224,44 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
             ChannelPartnerTriggerHandler.closeReminderTasks(brIds);
         }
         //Added by Prashant to Close Reminder Temp CP Registration Tasks.21-08-25.///End...
+           
         
+    }
+    
+    if(trigger.isBefore && trigger.isUpdate){
+        Id cpRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
         
-        
-        
+        for(Broker__c br : Trigger.New){
+            //Added by Prashant - Update the address if any dependent fields related to it is updated. 10-02-2026.////START..
+            if(br.RecordTypeId == cpRecordTypeId && (trigger.oldMap.get(br.Id).STREET__c != trigger.newMap.get(br.Id).STREET__c ||
+              trigger.oldMap.get(br.Id).STR_SUPPL1__c != trigger.newMap.get(br.Id).STR_SUPPL1__c || trigger.oldMap.get(br.Id).STR_SUPPL2__c != trigger.newMap.get(br.Id).STR_SUPPL2__c ||
+               trigger.oldMap.get(br.Id).STR_SUPPL3__c != trigger.newMap.get(br.Id).STR_SUPPL3__c)){
+                if(br.STREET__c != '' && br.STREET__c != null)
+                    br.Address__c = br.STREET__c;
+                if(br.STR_SUPPL1__c != '' && br.STR_SUPPL1__c != null){
+                    if(br.Address__c != ''  &&  br.Address__c != null ){
+                        br.Address__c = br.Address__c +' , '+br.STR_SUPPL1__c;
+                    }else{
+                        br.Address__c = br.STR_SUPPL1__c;
+                    }
+                }  
+                if(br.STR_SUPPL2__c != '' && br.STR_SUPPL2__c != null){
+                    if(br.Address__c != ''  &&  br.Address__c != null ){
+                        br.Address__c = br.Address__c +' , '+br.STR_SUPPL2__c;
+                    }else{
+                        br.Address__c = br.STR_SUPPL2__c;
+                    }
+                }   
+                if(br.STR_SUPPL3__c != '' && br.STR_SUPPL3__c != null){
+                    if(br.Address__c != '' &&  br.Address__c != null ){
+                        br.Address__c = br.Address__c +' , '+br.STR_SUPPL3__c;
+                    }else{
+                        br.Address__c = br.STR_SUPPL3__c;
+                    }
+                } 
+            }
+            //Added by Prashant - Update the address if any dependent fields related to it is updated. 10-02-2026.////END..
+        }
     }
     
 }

@@ -161,12 +161,18 @@
                 </lightning:layoutItem>
                 <lightning:layoutItem class="slds-p-around_xxx-small">
                 	<b><ui:inputselect label="Year: " aura:Id="year" class="slds-input" value="{!v.yearVal}" change="{!c.yearChange}" disabled="{!v.dateRange != 'Custom'}">
-                        <ui:inputselectoption text="" label="-Select-" />
+                        <!--<ui:inputselectoption text="" label="-Select-" />
                         <ui:inputselectoption text="2024" label="2024" />
                         <ui:inputselectoption text="2023" label="2023" />
                         <ui:inputselectoption text="2022" label="2022" />
                         <ui:inputselectoption text="2021" label="2021" />
-                        <ui:inputselectoption text="2020" label="2020" />
+                        <ui:inputselectoption text="2020" label="2020" />-->
+                        <ui:inputselectoption text="" label="-Select-" />
+                        <ui:inputselectoption text="0" label="{!v.year1}" />
+                        <ui:inputselectoption text="1" label="{!v.year2}" />
+                        <ui:inputselectoption text="2" label="{!v.year3}" />
+                        <ui:inputselectoption text="3" label="{!v.year4}" />
+                        <ui:inputselectoption text="4" label="{!v.year5}" />
                         </ui:inputselect></b>
                 </lightning:layoutItem>
                 <lightning:layoutItem class="slds-p-around_xxx-small">

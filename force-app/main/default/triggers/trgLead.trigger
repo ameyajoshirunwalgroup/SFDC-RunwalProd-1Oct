@@ -11,27 +11,27 @@ Trigger trgLead on Lead (before insert, after insert, before update, after updat
     }
     if(!byPassTriggerExceution)
     {
-
-    leadTriggerHandler objTrigger = new leadTriggerHandler();
- 
-    if(Trigger.isInsert && Trigger.isBefore)
-    {
-        objTrigger.BeforeInsert(trigger.new);
-    }
-    
-    if(Trigger.isInsert && Trigger.isAfter)
-    {
-        objTrigger.AfterInsert(trigger.new);
-    }
-    
-    if(Trigger.isUpdate && Trigger.isBefore)
-    {
-        objTrigger.BeforeUpdate(trigger.new, trigger.oldmap);
-    }
-
-    if(Trigger.isUpdate && Trigger.isAfter)
-    {
-        objTrigger.AfterUpdate(trigger.new, trigger.oldmap);
-    }
+        
+        leadTriggerHandler objTrigger = new leadTriggerHandler();
+        
+        if(Trigger.isInsert && Trigger.isBefore)
+        {
+            objTrigger.BeforeInsert(trigger.new);
+        }
+        
+        if(Trigger.isInsert && Trigger.isAfter)
+        {
+            objTrigger.AfterInsert(trigger.new);
+        }
+        
+        if(Trigger.isUpdate && Trigger.isBefore)
+        {
+            objTrigger.BeforeUpdate(trigger.new, trigger.oldmap);
+        }
+        
+        if(Trigger.isUpdate && Trigger.isAfter)
+        {
+            objTrigger.AfterUpdate(trigger.new, trigger.oldmap);
+        }
     }
 }

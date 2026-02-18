@@ -439,6 +439,7 @@ public class TestREST_CallbackCTI {
         objOpportunity.RW_Mobile_No__c = '9879976656';
         objOpportunity.StageName = 'Unit Booked'; 
         objOpportunity.RW_Sales_Associate__c = 'Test1 User Test';
+        objOpportunity.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         objOpportunity=RDSCommon.CreateOpportunity(objOpportunity);
         
         Project__c p = TestDataFactory.createProject('Xanadu_prj2','111');
@@ -549,6 +550,8 @@ public class TestREST_CallbackCTI {
         
         REST_CallbackCTI.CreateEnquiry();  
          REST_CallbackCTI.dummyMethod();
-        REST_CallbackCTI.createERPlog(json,'','','Test');
+        CallbackCTI_Queueable.dummyMethod();
+        CallbackCTI_Queueable.createERPlog(json,'','','Test');
+        //REST_CallbackCTI.createERPlog(json,'','','Test');
     }
 }

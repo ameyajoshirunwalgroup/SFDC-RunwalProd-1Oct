@@ -2,7 +2,7 @@ global class SendPaymentReminderReporttoRM {
     
     global static void SendPaymentReminderReporttoRM(){
         list<Booking__c> blist = [
-            SELECT Id, Name, Unit_No__r.Relationship_Manager__r.User__r.IsActive,
+            SELECT Id, Name, Unit_No__r.Relationship_Manager__r.User__r.IsActive,RW_Registration_Status__c,Funding_Status__c,
                    Unit_No__r.Relationship_Manager__r.User__c,Unit_No__r.Relationship_Manager__r.User__r.Name, Primary_Applicant_Name__c,
                    Flat_No__c, Unit_No__r.Relationship_Manager__r.RM_Email__c,
                    Unit_No__r.Relationship_Manager__r.TL_Email__c, SO_Release_Date_in_SAP__c,
@@ -11,10 +11,11 @@ global class SendPaymentReminderReporttoRM {
                    Opportunity__r.SAP_Customer_Number__c, Opportunity__r.SalesOrder_Number__c, RM_Name__c,
                    Payment_Received__c, X5_Received__c, X5_Received_Date__c, RW_X9_99_Received__c,
                    X9_90_Received_Date__c, Unit_No__r.Relationship_Manager__r.Name,
-                   RW_Total_Amount_Received_Without_GST__c, RW_Project_Name__c,
+                   RW_Total_Amount_Received_Without_GST__c, RW_Project_Name__c,Payment_Reminder_Email_Count__c,
                    Unit_No__r.Relationship_Manager__r.User__r.Manager.Id, Customer__r.StageName,
                    RW_BRL_Number__c, Status__c, RW_Registration_Date__c, Project__r.CRM_MIS_Head__c,
-                   Project__r.Overall_CRM_Head__c, Project__r.Home_Loan_Email__c, Project__r.CRMHead__c
+                   Project__r.Overall_CRM_Head__c, Project__r.Home_Loan_Email__c, Project__r.CRMHead__c,
+            	   Unit_No__r.Relationship_Manager__r.User__r.Manager.Name,Project__r.CRMHead__r.Name
             FROM Booking__c
             WHERE Unit_No__r.Relationship_Manager__r.User__r.IsActive = true
             AND Unit_No__r.Relationship_Manager__r.User__c != null
@@ -28,6 +29,7 @@ global class SendPaymentReminderReporttoRM {
             AND Project__r.CRM_MIS_Head__c != null
             AND Project__r.CRMHead__c != null
             AND Project__r.Home_Loan_Email__c != null
+            AND Id ='a0s9I000000QoKXQA0'
             ORDER BY Booking_Date__c DESC
         ];
         system.debug('bList'+bList);
@@ -54,6 +56,9 @@ global class SendPaymentReminderReporttoRM {
         Map<Id, List<Booking__c>> Mapof10percentBookingswithCRMHeads = new Map<Id, List<Booking__c>>();
         Map<String, List<Booking__c>> Mapof5percentBookingswithHomeLoanEmails = new Map<String, List<Booking__c>>();
         Map<String, List<Booking__c>> Mapof10percentBookingswithHomeLoanEmails = new Map<String, List<Booking__c>>();
+        Map<Id, List<Booking__c>> Mapof5percentBookingswithOverAllCRMHeads = new Map<Id, List<Booking__c>>();
+        Map<Id, List<Booking__c>> Mapof10percentBookingswithOverAllCRMHeads = new Map<Id, List<Booking__c>>();
+        
         
         
         for (Booking__c booking : bList) {
@@ -62,6 +67,7 @@ global class SendPaymentReminderReporttoRM {
             String CRMMisHead = booking.Project__r.CRM_MIS_Head__c;
             String CRMHead = booking.Project__r.CRMHead__c;
             String HomeLoanEmail = booking.Project__r.Home_Loan_Email__c;
+            String OverAllCRMHead = booking.Project__c!=null ? booking.Project__r.Overall_CRM_Head__c : null;
             
             if (booking.X5_Received__c == true && booking.RW_X9_99_Received__c == false) {
                 if (!Mapof5percentBookingswithRMs.containsKey(rmId)) {
@@ -84,7 +90,13 @@ global class SendPaymentReminderReporttoRM {
                     Mapof5percentBookingswithHomeLoanEmails.put(HomeLoanEmail,new list<Booking__c>());
                 }
                 Mapof5percentBookingswithHomeLoanEmails.get(HomeLoanEmail).add(booking);
-                
+                // Added by Adity For OverAll CRM Head
+                if(OverAllCRMHead!=null){
+                    if(!Mapof5percentBookingswithOverAllCRMHeads.containsKey(OverAllCRMHead)){
+                        Mapof5percentBookingswithOverAllCRMHeads.put(OverAllCRMHead,new list<Booking__c>());
+                    }
+                    Mapof5percentBookingswithOverAllCRMHeads.get(OverAllCRMHead).add(booking);
+                }
             }
             if (booking.RW_X9_99_Received__c == true && booking.X5_Received__c == true ) {
                 if (!Mapof10percentBookingswithRMs.containsKey(rmId)) {
@@ -107,6 +119,18 @@ global class SendPaymentReminderReporttoRM {
                     Mapof10percentBookingswithHomeLoanEmails.put(HomeLoanEmail,new list<Booking__c>());
                 }
                 Mapof10percentBookingswithHomeLoanEmails.get(HomeLoanEmail).add(booking);
+                // Added by Adity For OverAll CRM Head
+                if(OverAllCRMHead!=null){
+                    if(!Mapof10percentBookingswithOverAllCRMHeads.containsKey(OverAllCRMHead)){
+                        Mapof10percentBookingswithOverAllCRMHeads.put(OverAllCRMHead,new list<Booking__c>());
+                    }
+                    Mapof10percentBookingswithOverAllCRMHeads.get(OverAllCRMHead).add(booking);
+                }
+            }
+            if(booking.Payment_Reminder_Email_Count__c == null){
+                booking.Payment_Reminder_Email_Count__c = 1;
+            }else{
+                booking.Payment_Reminder_Email_Count__c ++;
             }
         }
         
@@ -122,19 +146,41 @@ global class SendPaymentReminderReporttoRM {
         emailList.addAll(sendEmailstoTL(Mapof10percentBookingswithCRMHeads,false));
         emailList.addAll(sendEmailstoHomeLoanTeam(Mapof5percentBookingswithHomeLoanEmails,true));
         emailList.addAll(sendEmailstoHomeLoanTeam(Mapof10percentBookingswithHomeLoanEmails,false));
+        //Added by Aditya For Over CRM Head
+        emailList.addAll(sendEmailstoTL(Mapof5percentBookingswithOverAllCRMHeads,true));
+        emailList.addAll(sendEmailstoTL(Mapof10percentBookingswithOverAllCRMHeads,false));
         
+       
         if (!emailList.isEmpty()) {
-             Messaging.sendEmail(emailList);
+            List<Messaging.SendEmailResult> results = Messaging.sendEmail(emailList);            
+            Boolean EmailSentSuccesfully = true;
+            for (Messaging.SendEmailResult result : results) {
+                if (!result.isSuccess()) {
+                    EmailSentSuccesfully = false;
+                }
+            }
+            if(EmailSentSuccesfully){
+                BookingTriggerHandler.byPass =true;
+                Database.SaveResult[] wiList = Database.update(bList, false);
+                BookingTriggerHandler.byPass =false;
+                
+                for(Database.SaveResult sr : wiList){
+                    if(!sr.isSuccess()){
+                        for(Database.Error err : sr.getErrors()){
+                            System.debug(err.getStatusCode() + ':' + err.getMessage());
+                        }
+                    }
+                }
+            }
         }
-        
     }
     
     global static String generateCSVContentforRM(List<Booking__c> bookings,Boolean isfivePercentTriggered) {
         String header = '';
         if(isfivePercentTriggered){
-            header = 'Name Of Customer,Booking Date,5% Payment Received Date,TAT of 5% Payment Received Date ,TAT from 5% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id\n';
+            header = 'RM Name,TL NAME,CRM PROJECT HEAD,Name Of Customer,Booking Date,5% Payment Received Date,TAT of 5% Payment Received Date ,TAT from 5% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id,Registration Status,Ageing from Book now,Funding Status\n';
         }else{
-            header = 'Name Of Customer,Booking Date,10% Payment Received Date,TAT of 10% Payment Received Date ,TAT from 10% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id\n';
+            header = 'RM Name,TL NAME,CRM PROJECT HEAD,Name Of Customer,Booking Date,10% Payment Received Date,TAT of 10% Payment Received Date ,TAT from 10% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id,Ageing from Book now,Funding Status\n';
         }
         String body = '';
         
@@ -143,9 +189,9 @@ global class SendPaymentReminderReporttoRM {
             String bookingDate = bookingDateTemp.format();
             System.debug('Booking Date: ' + bookingDate);
             //String paymentReceivedDate = b.SO_Release_Date_in_SAP__c != null ? b.SO_Release_Date_in_SAP__c.format() : '';
-            Integer daysBetweenbooking;
+            Integer daysBetweenbooking = 0;
             String recivedPercentDate;
-            Integer daysBetweenpercentRectillNow;
+            Integer daysBetweenpercentRectillNow = 0;
             if(isfivePercentTriggered){
                 if(b.SO_Release_Date_in_SAP__c != null){
                     daysBetweenpercentRectillNow = b.SO_Release_Date_in_SAP__c.daysBetween(system.today());
@@ -165,12 +211,17 @@ global class SendPaymentReminderReporttoRM {
                     daysBetweenbooking = b.Booking_Date__c.date().daysBetween(system.today());
                 }  
             }
+            Integer AgingFromBookNow=0;
+            if(b.Booking_Date__c!=null){
+               AgingFromBookNow  = b.Booking_Date__c.date().daysBetween(system.today());
+            }
             
             system.debug('daysBetweenpercentRectillNow ----->>>> '+daysBetweenpercentRectillNow);
             //Decimal percentagePaid = ((b.RW_Total_Amount_Received_Without_GST__c / b.Allotment_Premium__c) * 100).setScale(2, RoundingMode.HALF_UP);
             
-                String recordString = b.Primary_Applicant_Name__c+ ',' + bookingDate + ',' + recivedPercentDate + ',' + daysBetweenbooking + ',' + daysBetweenpercentRectillNow + ',' + b.Unit_Number__c + ',' + b.RW_Project_Name__c + ',' + Math.round(b.Allotment_Premium__c) + ',' + Math.round(b.RW_Total_Amount_Received_Without_GST__c) + ',' + b.Payment_Received__c + '%' + ',' + b.Opportunity__r.SAP_Customer_Number__c + ',' + b.Opportunity__r.SalesOrder_Number__c 
-                +'\n';
+                String recordString =b.Unit_No__r.Relationship_Manager__r.User__r.Name + ',' + b.Unit_No__r.Relationship_Manager__r.User__r.Manager.Name + ',' + b.Project__r.CRMHead__r.Name + ',' +
+                    b.Primary_Applicant_Name__c+ ',' + bookingDate + ',' + recivedPercentDate + ',' + daysBetweenbooking + ',' + daysBetweenpercentRectillNow + ',' + b.Unit_Number__c + ',' + b.RW_Project_Name__c + ',' + Math.round(b.Allotment_Premium__c) + ',' + Math.round(b.RW_Total_Amount_Received_Without_GST__c) + ',' + b.Payment_Received__c + '%' + ',' + b.Opportunity__r.SAP_Customer_Number__c + ',' + b.Opportunity__r.SalesOrder_Number__c 
+                + ',' + b.RW_Registration_Status__c + ',' + AgingFromBookNow + ',' + b.Funding_Status__c + '\n';
             body += recordString;
             System.debug('Booking Name: ' + b.Name + ', Flat: ' + b.Flat_No__c + ', RM Name: ' + b.Unit_No__r.Relationship_Manager__r.Name +', RM Id: '+b.Unit_No__r.Relationship_Manager__c);
             
@@ -182,9 +233,9 @@ global class SendPaymentReminderReporttoRM {
     global static String generateCSVContentforTL(List<Booking__c> bookings,Boolean isfivePercentTriggered) {
         String header = '';
         if(isfivePercentTriggered){
-            header = 'RM Name,Name Of Customer,Booking Date,5% Payment Received Date,TAT of 5% Payment Received Date ,TAT from 5% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id\n';
+            header = 'RM Name,TL NAME,CRM PROJECT HEAD,Name Of Customer,Booking Date,5% Payment Received Date,TAT of 5% Payment Received Date ,TAT from 5% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id,Registration Status,Ageing from Book now,Funding Status\n';
         }else{
-            header = 'RM Name,Name Of Customer,Booking Date,10% Payment Received Date,TAT of 10% Payment Received Date ,TAT from 10% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id\n';
+            header = 'RM Name,TL NAME,CRM PROJECT HEAD,Name Of Customer,Booking Date,10% Payment Received Date,TAT of 10% Payment Received Date ,TAT from 10% payment received date till date ,Unit Number,Project Name,AV Value,Received Value,Percentage Paid,SAP Customer Number,SAP Salesorder Id,Registration Status,Ageing from Book now,Funding Status\n';
         }
         String body = '';
         
@@ -192,9 +243,9 @@ global class SendPaymentReminderReporttoRM {
             Date bookingDateTemp = b.Booking_Date__c.date();
             String bookingDate = bookingDateTemp.format();
             //String paymentReceivedDate = b.SO_Release_Date_in_SAP__c != null ? b.SO_Release_Date_in_SAP__c.format() : '';
-            Integer daysBetweenbooking;
+            Integer daysBetweenbooking = 0;
             String recivedPercentDate;
-            Integer daysBetweenpercentRectillNow;
+            Integer daysBetweenpercentRectillNow = 0;
             if(isfivePercentTriggered){
                 if(b.SO_Release_Date_in_SAP__c != null){
                     daysBetweenpercentRectillNow = b.SO_Release_Date_in_SAP__c.daysBetween(system.today());
@@ -214,10 +265,14 @@ global class SendPaymentReminderReporttoRM {
                     daysBetweenbooking = b.Booking_Date__c.date().daysBetween(system.today());
                 }  
             }
+            Integer AgingFromBookNow=0;
+            if(b.Booking_Date__c!=null){
+               AgingFromBookNow  = b.Booking_Date__c.date().daysBetween(system.today());
+            }
             //Decimal percentagePaid = ((b.RW_Total_Amount_Received_Without_GST__c / b.Allotment_Premium__c) * 100).setScale(2, RoundingMode.HALF_UP);
             
-            String recordString = b.RM_Name__c + ',' + b.Primary_Applicant_Name__c+ ',' + bookingDate + ',' + recivedPercentDate + ',' + daysBetweenbooking + ',' + daysBetweenpercentRectillNow + ',' + b.Unit_Number__c + ',' + b.RW_Project_Name__c + ',' + Math.round(b.Allotment_Premium__c) + ',' + Math.round(b.RW_Total_Amount_Received_Without_GST__c) + ',' + b.Payment_Received__c + '%' + ',' + b.Opportunity__r.SAP_Customer_Number__c + ',' + b.Opportunity__r.SalesOrder_Number__c 
-                +'\n';
+            String recordString = b.RM_Name__c + ','  + b.Unit_No__r.Relationship_Manager__r.User__r.Manager.Name + ',' + b.Project__r.CRMHead__r.Name + ',' + b.Primary_Applicant_Name__c+ ',' + bookingDate + ',' + recivedPercentDate + ',' + daysBetweenbooking + ',' + daysBetweenpercentRectillNow + ',' + b.Unit_Number__c + ',' + b.RW_Project_Name__c + ',' + Math.round(b.Allotment_Premium__c) + ',' + Math.round(b.RW_Total_Amount_Received_Without_GST__c) + ',' + b.Payment_Received__c + '%' + ',' + b.Opportunity__r.SAP_Customer_Number__c + ',' + b.Opportunity__r.SalesOrder_Number__c 
+                + ',' + b.RW_Registration_Status__c + ',' + AgingFromBookNow + ',' + b.Funding_Status__c +'\n';
             body += recordString;
             System.debug('Booking Name: ' + b.Name + ', Flat: ' + b.Flat_No__c + ', RM Name: ' + b.Unit_No__r.Relationship_Manager__r.Name +', RM Id: '+b.Unit_No__r.Relationship_Manager__c);
             
@@ -242,10 +297,10 @@ global class SendPaymentReminderReporttoRM {
             String nbody = '';
             String title = '';
             if(paymentReceivedX5){
-                title = 'PAYMENT MILESTONE RECD 5%.';
+                title = 'Testing Please Avoid PAYMENT MILESTONE RECD 5%.';
                 nbody = 'Please check your email for the attached list of customers who have completed 5% of their payment, but their registration remains pending. Kindly prioritize and proceed with the required follow-up.';
             }else{
-                title = 'PAYMENT MILESTONE RECD 10%.';
+                title = 'Testing Please Avoid PAYMENT MILESTONE RECD 10%.';
                 nbody = 'Please check your email for the attached list of customers who have completed 10% of their payment, but their registration remains pending. Kindly prioritize and proceed with the required follow-up.';
             }
             
@@ -259,7 +314,9 @@ global class SendPaymentReminderReporttoRM {
             }
             Blob csvBlob = Blob.valueOf(csvContent);
             system.debug('csvBlob'+csvBlob);
-            if (rm_tlMap.get(rmId).Email != null){              
+            if (rm_tlMap.get(rmId).Email != null){  
+                //toAddress.add('prashant.chaurasia.os@runwalgroup.in');//Added to keep track of the emails triggered.
+                //toAddress.add('shraddha.shahari@runwalgroup.in');//Added to keep track of the emails triggered.
                 toAddress.add(rm_tlMap.get(rmId).Email);
                 //For testing purpose
                 /*if (tlu.Email.endsWith('.invalid') && (tlu.Email == 'tejal.punjabi@runwalgroup.in.invalid' || tlu.Email == 'hiren.bhadra@runwalgroup.in.invalid')) {
@@ -293,10 +350,10 @@ toAddress.add(tlu.Email);
             String subject = '';
             String body = '';
             if(paymentReceivedX5){
-                subject = 'NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
+                subject = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
                 body = 'Dear Team,\n\nPlease find the attached details of the customers whose 5% payment is completed and Registration is not done.\n\nRegards,';
             }else{
-                subject = 'NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
+                subject = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
                 body = 'Dear Team,\n\nPlease find the attached details of the customers whose 10% payment is completed and Registration is not done.\n\nRegards,';
             }
             email.setSubject(subject);
@@ -355,10 +412,10 @@ toAddress.add(tlu.Email);
             String nbody = '';
             String title = '';
             if(paymentReceivedX5){
-                title = 'NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
+                title = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
                 nbody = 'Please check your email for the attached list of customers who have completed 5% of their payment, but their registration remains pending. Kindly prioritize and proceed with the required follow-up.';
             }else{
-                title = 'NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
+                title = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
                 nbody = 'Please check your email for the attached list of customers who have completed 10% of their payment, but their registration remains pending. Kindly prioritize and proceed with the required follow-up.';
             }
             
@@ -373,7 +430,8 @@ toAddress.add(tlu.Email);
             }
             Blob csvBlob = Blob.valueOf(csvContent);            
             
-            if (rm_tlMap.get(tlId).Email != null){                
+            if (rm_tlMap.get(tlId).Email != null){  
+                //toAddress.add('prashant.chaurasia.os@runwalgroup.in');
                 toAddress.add(rm_tlMap.get(tlId).Email);
                 
                 //For testing purpose
@@ -409,10 +467,10 @@ toAddress.add(tlu.Email);
                 email.setOrgWideEmailAddressId(utility.getOrgWideEmailAddress());
                 
                 if (paymentReceivedX5) {
-                    subject = 'NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
+                    subject = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
                     body = 'Dear Team,\n\nPlease find the attached details of the customers whose 5% payment is completed and Registration is not done.\n\nRegards,';
                 } else {
-                    subject = 'NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
+                    subject = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
                     body = 'Dear Team,\n\nPlease find the attached details of the customers whose 10% payment is completed and Registration is not done.\n\nRegards,';
                 }
                 
@@ -476,10 +534,10 @@ toAddress.add(tlu.Email);
             String nbody = '';
             String title = '';
             if(paymentReceivedX5){
-                title = 'NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
+                title = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 5%.';
                 nbody = 'Please check your email for the attached list of customers who have completed 5% of their payment, but their registration remains pending. Kindly prioritize and proceed with the required follow-up.';
             }else{
-                title = 'NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
+                title = 'Testing Please Avoid NOTIFICATION : PAYMENT MILESTONE RECD 10%.';
                 nbody = 'Please check your email for the attached list of customers who have completed 10% of their payment, but their registration remains pending. Kindly prioritize and proceed with the required follow-up.';
             }
             

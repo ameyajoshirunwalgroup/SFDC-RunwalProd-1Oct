@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_to_Disbursement_Days__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+NOT(ISBLANK(RW_First_Disbursement_Date__c)),
+RW_First_Disbursement_Date__c - RW_Booking__r.RW_Registration_Date__c,
+TODAY() - RW_Booking__r.RW_Registration_Date__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Registration to Disbursement Days</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

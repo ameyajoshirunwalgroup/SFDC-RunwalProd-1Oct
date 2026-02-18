@@ -10,9 +10,11 @@ public class SendWhatsAppOnNewLeadCreation {
                     RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c, Referral_Batch_Lead__c FROM Lead Where ID In: Ids  Limit 1];
         
         //query on template object
-        EmailTemplate et=[Select id,Name from EmailTemplate where name=:'Send Project Details on Lead Create'];
-        OrgWideEmailAddress owa = [select id, Address, DisplayName from OrgWideEmailAddress where DisplayName = 'Runwal Cares'];
-        
+        EmailTemplate et=[Select id,Name from EmailTemplate where name=:'Lead welcome email notification to customer'];
+     //commented on 9-5-25 
+     //   OrgWideEmailAddress owa = [select id, Address, DisplayName from OrgWideEmailAddress where DisplayName = 'Runwal Cares'];
+          OrgWideEmailAddress owa = [select id, Address, DisplayName from OrgWideEmailAddress where DisplayName = 'Runwal  Homes'];
+
         //list of emails
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();   
         RW_Presales_Communication__c preComm = New RW_Presales_Communication__c();

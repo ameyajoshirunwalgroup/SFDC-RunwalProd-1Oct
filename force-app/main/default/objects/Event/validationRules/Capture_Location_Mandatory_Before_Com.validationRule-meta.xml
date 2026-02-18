@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Capture_Location_Mandatory_Before_Com</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+TEXT(Event_Status__c)=&apos;Completed&apos;,
+RecordType.DeveloperName = &quot;Channel_Partner_Corporates_Event&quot;,
+OR(
+ISBLANK(CP_Meeting_Address__Latitude__s),
+ISBLANK(CP_Meeting_Address__Longitude__s)
+)
+)</errorConditionFormula>
+    <errorMessage>Capture Location Mandatory Before Completing The Event!!</errorMessage>
+</ValidationRule>

@@ -3,7 +3,7 @@ private  Class TestBookingClass {
  
  
  @isTest
-    private static void BookingTest() {
+    private static void BookingTest() { 
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Booking__c objBooking;

@@ -81,9 +81,8 @@ chnPatner.team_size = 5;*/
         
         system.debug('_____objJson  '+objJson);
         string str = System.JSON.serialize(objJson);
-          //very badcoding as uncommited dml error, this is workaroungt o increase code coverage;
-            String codecoverageby ='true';
-            string codercoverage='yes';
+            //String codecoverageby ='true'; //Commented by Vinay 03-06-2025
+            //string codercoverage='yes'; //Commented by Vinay 03-06-2025
         system.debug('____JsonStr  '+str);
         
         log.Request__c=str;

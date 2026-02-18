@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PTP_Amount_not_more_than_demand_amount</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND (RecordType.DeveloperName = &quot;Collection_Task&quot;,  PTP_Amount__c &gt;  Demand__r.RW_Total_Demand_Amount__c )</errorConditionFormula>
+    <errorDisplayField>PTP_Amount__c</errorDisplayField>
+    <errorMessage>PTP Amount Can not be greater than Demand Amount</errorMessage>
+</ValidationRule>

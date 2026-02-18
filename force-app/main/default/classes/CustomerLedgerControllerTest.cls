@@ -76,6 +76,7 @@ public class CustomerLedgerControllerTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -84,6 +85,7 @@ public class CustomerLedgerControllerTest {
         oppRec.Booking_Feedback_Link__c='654864524';
         oppRec.Portal_Possession_Survey_Link_Id__c='6423874';
         oppRec.RW_Sourcing_Manager__c='Rohit Sharma';
+        oppRec.Sourcing_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         insert oppRec;
         
         Relationship_Manager__c ObjRm = new Relationship_Manager__c();
@@ -243,7 +245,7 @@ public class CustomerLedgerControllerTest {
             CustomerLedgerController.getCheckProjectTotalAmount(5000,0); 
         }
         
-        Map<String,String> DetailMap=new Map<String,String>();         
+        /*Map<String,String> DetailMap=new Map<String,String>();         
         DetailMap.put('bookingId', objBking.Id);
         DetailMap.put('OpportunityId', oppRec.Id);
         DetailMap.put('towerId', objTower.Id);
@@ -251,8 +253,10 @@ public class CustomerLedgerControllerTest {
         DetailMap.put('TypeOfAmount','Normal');
         DetailMap.put('ProjectUnit',objPUU.id);
         DetailMap.put('ButtonType','SinglePayment'); 
-       CustomerLedgerController.getBillDeskData(DetailMap);
+        CustomerLedgerController.getBillDeskData(DetailMap);
         
+        
+        List<Receipt__c> recList = new List<Receipt__c>();
         Receipt__c r1 = new Receipt__c();
         r1.Cheque_DD_Amount_Rs__c = 200000;
         r1.Cheque_DD__c = '908888';
@@ -269,13 +273,222 @@ public class CustomerLedgerControllerTest {
         r1.Total_Amount__c = 200000;
         r1.Currency__c = 'Indian Rupee';
         r1.Booking__c=objBking.Id;
-        insert r1;
+        //insert r1;
+        recList.add(r1);
         
         String name=r1.Name;
 		Map<String,String>  SaveDetailMap=new Map<String,String>();
         SaveDetailMap.put('towerId',objTower.id);
         SaveDetailMap.put('msg','BDSKUATY|'+name +'|U1230002035462|1|02471247.00|123|NA|01|INR|DIRECT|NA|NA|00.00|22-07-2021 14:22:30|0300|NA|NA|NA|NA|NA|NA|NA|NA|NA|NA|8E2A7079253D64E1954BED58D6CB089BBD85CFA138FE7E83A08C1328C4706F28' );
  		CustomerLedgerController.saveBillDeskData(SaveDetailMap); 
+        
+        Receipt__c r = new Receipt__c();
+        r.Billdesk_Order_Id__c = 'a0sIp000000LIgCIAW_20241230160507';
+        recList.add(r);
+        insert recList;
+        
+        CustomerLedgerController.paymentForMahalaxmi(DetailMap); //Added by Vinay 08-09-2025
+        BilldeskPayPageController page = new BilldeskPayPageController();
+        page.successPage();*/
     }
+    
+    @isTest
+    private static void testCustomerLedgerController2(){
+        String recordTypeId  = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Person Account').getRecordTypeId();  
+        //Inserting account
+        Account objAcc = new Account();
+        objAcc.FirstName ='TestAccount11';
+        objAcc.RecordTypeID=recordTypeId ;
+        objAcc.LastName ='TestAccount22';
+        objAcc.PersonEmail = 'wc@email.com';
+        objAcc.City__c='TestCity';
+        objAcc.RW_Zip_Code__c = '9999999';
+        objAcc.State__c ='Karnataka';
+        objAcc.Country__c ='India';
+        objAcc.Mobile_No__c = '9876543212';
+        objAcc.Alternate_Email__c = 'wc1@email.com';
+        objAcc.Gender__c='Male';
+        objAcc.Salutation = 'Mr.';
+        objAcc.Birth_Date__c = System.today().addYears(-20); 
+        //objAcc.OwnerId = tuser1.Id;
+        insert objAcc;
+        
+        Account acc = [Select Id,PersonEmail,PersonContactId From Account Where Id = :objAcc.Id];
+        
+        Profile p = [Select Id, Name from Profile where Name = 'Runwal Customer Portal'];
+        String orgId = UserInfo.getOrganizationId();
+        String dateString = String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomInt = Integer.valueOf(math.rint(math.random()*1000000));
+        String uniqueName = orgId + dateString + randomInt;
+        User tuser = new User(  firstname = 'TestUser1',
+                              lastName = 'TestUser2',
+                              email = uniqueName + '@gmail' +'.com',
+                              contactId=acc.PersonContactId,
+                              Username = uniqueName + '@test' + orgId + '.org',
+                              EmailEncodingKey = 'ISO-8859-1',
+                              Alias = uniqueName.substring(18, 23),
+                              TimeZoneSidKey = 'America/Los_Angeles',
+                              LocaleSidKey = 'en_US',
+                              LanguageLocaleKey = 'en_US',
+                              ProfileId = p.id
+                             );
+        insert tuser;
+        
+        Project__c objpr = new Project__c();
+        objpr.RW_Project_Code__c = 'T31';
+        objpr.Name = 'Runwal Bliss';
+        objpr.RDS_Short_Name__c = 'T';
+        objpr.Start_Date__c = System.today().addDays(-5);
+        objpr.RDS_Interest_Rate__c = 12;
+        objpr.Sales_Site_Head__c = tuser.Id;
+        objpr.SAPMaterial_Code__c = '1211';
+        objpr.Project_CRM_Lead__c = tuser.Id;
+        objpr.RW_Project_Location_Videos_Link__c='test';
+        objpr.RW_Project_Brochure_PublicUrl__c='test1';
+        objpr.RW_SAP_Company_Code__c='5245';
+        insert objpr;
+        
+        Tower__c objTower = new Tower__c();
+        objTower.ProjectName__c = objpr.id;
+        objTower.Name = 'A';
+        objTower.SAP_Plant_Code__c = '111';
+        objTower.RW_Terms_And_Conditions__c ='TC';
+        insert objTower;
+        
+        Opportunity oppRec= new Opportunity();
+        oppRec.RW_Project__c=objpr.id;
+        oppRec.name='Test 1';
+        oppRec.RW_Email__c=acc.PersonEmail;
+        //oppRec.StageName='Qualification';
+        oppRec.StageName='Unit Booked';
+        oppRec.CloseDate=system.today();
+        oppRec.Status__c ='Active';
+        oppRec.AccountId = acc.Id;
+        oppRec.Sales_Manager__c = 'SM2@g.com';
+        oppRec.Sourcing_Manager__c='Aniket Sapre';
+        oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
+        oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
+        oppRec.RW_Closing_Head__c='Karthik Chettiar';
+        oppRec.Walkin_Source__c='Direct';
+        oppRec.SAP_CUstomer_Number__c='0020009875';
+        oppRec.SalesOrder_Number__c ='3262627';
+        oppRec.RW_Agreement_Value__c=13425663;
+        oppRec.Booking_Feedback_Link__c='654864524';
+        oppRec.Portal_Possession_Survey_Link_Id__c='6423874';
+        oppRec.RW_Sourcing_Manager__c='Rohit Sharma';
+        oppRec.Sourcing_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
+        insert oppRec;
+        
+        Relationship_Manager__c ObjRm = new Relationship_Manager__c();
+        ObjRm.Tower__c = objTower.Id;
+        ObjRm.Project__c = objpr.Id;
+        ObjRm.User__c = tuser.Id;
+        ObjRm.Contact_Number__c='9987654323';
+        insert ObjRm; 
+        
+        Project_Unit_Type__c objPUT = new Project_Unit_Type__c();
+        objPUT.RDS_Code__c = '101';
+        objPUT.RDS_Project__c = objpr.id;
+        insert objPUT;
+        
+        Project_Unit__c objPUU = new Project_Unit__c();  
+        objPUU.Project_Unit_Type__c = objPUT.id; 
+        objPUU.TowerName__c = objTower.Id;
+        objPUU.Name = 'TestUnit';      
+        objPUU.RW_Project__c = objpr.Id;
+        objPUU.RW_Param1__c = '5';
+        objPUU.UnitNo__c ='9';
+        objPUU.RW_Unit_Status__c ='Available';
+        objPUU.RW_Customer__c = oppRec.Id;
+        objPUU.RW_Base_Rate__c = 3000;
+        objPUU.Floor_Rise__c = 0;
+        objPUU.RW_PLC__c = 200;
+        objPUU.Unit_SAP_Code__c = '1000';
+        objPUU.Relationship_Manager__c = ObjRm.Id;
+        objPUU.Carpet_Area__c = 786;
+        insert objPUU;
+        
+        Booking__c objBking = new Booking__c();
+        objBking.Customer__c = oppRec.Id;
+        objBking.Project__c = objpr.Id;
+        objBking.Opportunity__c = oppRec.Id;
+        objBking.Customer__c =oppRec.Id;
+        objBking.Unit_No__c = objPUU.id;
+        //objBking.Quotation__c = q.Id;
+        //objBking.Receipts__c = r1.Id;
+        objBking.Booking_Date__c = Date.today().addDays(-1);
+        objBking.Sales_Manager__c= tuser.Id;
+        objBking.Status__c ='Booking Confirmed';
+        objBking.RW_Total_Interest_Amount_Waived__c=6736;
+        objBking.RW_Total_Collectable_Interest__c=6757;
+        objBking.RW_Total_Amount_Collected__c=75757;
+        objBking.RW_Total_Amount_Balance__c=75757;
+        objBking.RW_Total_TDS_Due__c=56565;
+        objBking.Floor__c=3;
+        objBking.RW_Agreement_Status__c='Approved';
+        objBking.RW_Signed_Agreement_Document_Id__c ='00690000454';
+        objBking.Token_Amount__c=2000;
+        objBking.Allotment_Premium__c=3000;
+        objBking.Source_of_Booking__c='Direct';
+        objBking.Carpet_Area__c=23;
+        objBking.RW_Registration_Date__c=System.today();
+        insert objBking;
+        
+        //List<User> u = [Select id from User where firstname='TestUser1'];
+        system.runAs(tuser){
+            /*CustomerLedgerController.getPortalHomeData();
+            CustomerLedgerController.getPrincipalPayableAmount(1000000, 5000, 500000, 50000, 0);
+            CustomerLedgerController.getGstPayableAmount(500000,500000,5000,0,550000);
+            CustomerLedgerController.getCheckProjectTotalAmount(5000,0); */
+        }
+        
+        Map<String,String> DetailMap=new Map<String,String>();         
+        DetailMap.put('bookingId', objBking.Id);
+        DetailMap.put('OpportunityId', oppRec.Id);
+        DetailMap.put('towerId', objTower.Id);
+        DetailMap.put('Amount', '100000');
+        DetailMap.put('TypeOfAmount','Normal');
+        DetailMap.put('ProjectUnit',objPUU.id);
+        DetailMap.put('ButtonType','SinglePayment'); 
+        CustomerLedgerController.getBillDeskData(DetailMap);
+        
+        
+        List<Receipt__c> recList = new List<Receipt__c>();
+        Receipt__c r1 = new Receipt__c();
+        r1.Cheque_DD_Amount_Rs__c = 200000;
+        r1.Cheque_DD__c = '908888';
+        r1.Cheque_DD_Date__c = system.today();
+        r1.Project__c = objpr.Id;
+        r1.Project_Unit__c = objPUU.Id;
+        r1.Opportunity__c = oppRec.Id;
+        r1.CheckReceipt__c = true;
+        r1.Token_Amount_Receipt__c = true;
+        r1.Physically_Cheque_Received__c = true;
+        r1.Approval_Status__c = 'Approved';
+        r1.Receipt_Date__c = system.today();
+        r1.DraweeBank__c = 'Axis Bank';
+        r1.Total_Amount__c = 200000;
+        r1.Currency__c = 'Indian Rupee';
+        r1.Booking__c=objBking.Id;
+        //insert r1;
+        recList.add(r1);
+        
+        String name=r1.Name;
+		Map<String,String>  SaveDetailMap=new Map<String,String>();
+        SaveDetailMap.put('towerId',objTower.id);
+        SaveDetailMap.put('msg','BDSKUATY|'+name +'|U1230002035462|1|02471247.00|123|NA|01|INR|DIRECT|NA|NA|00.00|22-07-2021 14:22:30|0300|NA|NA|NA|NA|NA|NA|NA|NA|NA|NA|8E2A7079253D64E1954BED58D6CB089BBD85CFA138FE7E83A08C1328C4706F28' );
+ 		CustomerLedgerController.saveBillDeskData(SaveDetailMap); 
+        
+        Receipt__c r = new Receipt__c();
+        r.Billdesk_Order_Id__c = 'a0sIp000000LIgCIAW_20241230160507';
+        recList.add(r);
+        insert recList;
+        
+        CustomerLedgerController.paymentForMahalaxmi(DetailMap); //Added by Vinay 08-09-2025
+        BilldeskPayPageController page = new BilldeskPayPageController();
+        page.successPage();
+    }
+
 
 }

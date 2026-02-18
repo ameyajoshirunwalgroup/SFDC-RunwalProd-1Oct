@@ -59,7 +59,7 @@ public class BrokerageInvoiceReportControllerTest {
         b.Brokerage_Scheme__c = null;
         b.Allotment_Premium__c = 10000000;
         b.Brokerage_Scheme__c = bscheme.Id;
-        b.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
+        //b.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
         b.Base_Brokerage__c = 2;
         b.Project__c = objpr.Id;
         b.Is_AOP_CP_Applicable__c = true;
@@ -190,7 +190,7 @@ public class BrokerageInvoiceReportControllerTest {
         b.Brokerage_Scheme__c = null;
         b.Allotment_Premium__c = 10000000;
         b.Brokerage_Scheme__c = bscheme.Id;
-        b.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
+        //b.CP_Invoice_Clearing_L1__c = UserInfo.getUserId();
         b.Base_Brokerage__c = 2;
         b.Project__c = objpr.Id;
         b.Is_AOP_CP_Applicable__c = false;

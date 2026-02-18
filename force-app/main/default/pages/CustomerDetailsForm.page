@@ -64,7 +64,7 @@
                             <div class="char-box-wrapper">
                                 <apex:repeat value="{!charIndexes}" var="i">
                                     <input type="text" name="lastNameChar{!i}" maxlength="1" class="char-box"
-                                           value="{!IF(LEN(cif.LastName__c) > i, MID(cif.LastName__c, i+1, 1), '')}" />
+                                           value="{!IF(LEN(lastName) > i, MID(lastName, i+1, 1), '')}" />
                                 </apex:repeat>
                             </div>
                         </td>

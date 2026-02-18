@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ROC_Raised</fullName>
+    <columns>NAME</columns>
+    <columns>ROC_Status__c</columns>
+    <columns>ROC_Submitted_Date__c</columns>
+    <columns>ROC_Received_Date__c</columns>
+    <columns>ROC_Processing_Time__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ROC_Status__c</field>
+        <operation>equals</operation>
+        <value>ROC Raised</value>
+    </filters>
+    <label>ROC Raised</label>
+</ListView>

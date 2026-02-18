@@ -4,7 +4,6 @@ public class ScheduleOzonetelCalls {
         List<Scheduled_Call__c> schedulesToCreate = new List<Scheduled_Call__c>();
         Set<Id> relatedIds = new Set<id>();
         Set<Id> ownerIds = new Set<Id>();
-        List<Task> taskListToProcess = new List<Task>();
         for(Task tsk : taskList){
             if(tsk.Next_Action_Date__c > Datetime.now()){
                 if(tsk.WhatId != null)
@@ -12,7 +11,6 @@ public class ScheduleOzonetelCalls {
                 else if(tsk.WhoId != null)
                 	relatedIds.add(tsk.WhoId);
                 ownerIds.add(tsk.OwnerId);
-                taskListToProcess.add(tsk);
             }
         }
         Map<Id, User> userMap;
@@ -33,8 +31,7 @@ public class ScheduleOzonetelCalls {
         }
         System.debug('relatedIdVsSchedule: ' + relatedIdVsSchedule);
         List<Scheduled_Call__c> schedulesToUpdate = new List<Scheduled_Call__c>();
-        
-        for(Task tsk : taskListToProcess){
+        for(Task tsk : taskList){
             if(Test.isRunningTest() || (tsk.WhatId != null || tsk.WhoId != null)){
                 if(relatedIdVsSchedule.containskey(tsk.WhatId)){
                     relatedIdVsSchedule.get(tsk.WhatId).Schedule_Date__c = tsk.Next_Action_Date__c;

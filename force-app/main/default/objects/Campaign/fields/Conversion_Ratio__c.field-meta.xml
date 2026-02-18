@@ -6,7 +6,7 @@
 AND(NumberOfOpportunities &lt;&gt; 0, NOT(ISNULL(NumberOfOpportunities))),
 (NumberOfWonOpportunities /  NumberOfOpportunities )*100, 0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Conversion Ratio</label>
+    <label>Opportunity Conversion Rate (%)</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

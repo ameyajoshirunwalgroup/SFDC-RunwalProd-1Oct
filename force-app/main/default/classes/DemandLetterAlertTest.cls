@@ -83,5 +83,12 @@ public class DemandLetterAlertTest {
         ApexPages.currentPage().getParameters().put('doc','acs');
         CRMBotDocumentController acs = new CRMBotDocumentController();
         
+        // Added by Vinay 08-12-2025 Start
+        PageReference ncfPdf = Page.CRMBotDocument;
+        Test.setCurrentPage(ncfPdf);
+        ApexPages.currentPage().getParameters().put('id',bkg.Id);
+        ApexPages.currentPage().getParameters().put('doc','ncf');
+        CRMBotDocumentController ncf = new CRMBotDocumentController();
+        // Added by Vinay 08-12-2025 End
     }
 }

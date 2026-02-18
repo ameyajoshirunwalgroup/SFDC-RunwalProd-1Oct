@@ -1,7 +1,7 @@
 public class OppTriggerHandler
 {
     
-      //  Added by UBSDigicloud 07-04-2025
+    //  Added by Digicloud 07-04-2025
     private static final Set<String> scoringFields = loadScoringFields();
 
     private static Set<String> loadScoringFields() {
@@ -13,204 +13,201 @@ public class OppTriggerHandler
         }
         return fields;
     }
-           
-    
-    
-    public void BeforeInsert(List<Opportunity> lstOpp)
-    {
-         //  Added by UBSDigicloud 07-04-2025
-         OpportunityScoringHandler.calculateOpportunityScores(lstOpp); 
-        
-        Set<Id> setIdofProjUnit = new Set<Id>();
-        if(lstOpp.size() > 0)
-        {
-            for(Opportunity eachOpp : lstOpp)
+                
+                public void BeforeInsert(List<Opportunity> lstOpp)
             {
-                //Added by coServe 28-02-2024
-                Map<String, Opp_Close_Date__c> oppClsDateMap = Opp_Close_Date__c.getall();
-                if(oppClsDateMap.keySet().size() > 0){
-                   eachOpp.CloseDate = System.today().addDays(Integer.valueOf(oppClsDateMap.get(eachOpp.RW_project__c).No_of_Days__c)); 
-                }
                 
-                // Commented by coServe 28-02-2024
-                /*if(eachOpp.RW_project__c == 'a005j00000E1098' || eachOpp.RW_project__c == 'a005j00000E1098AAB'){ // Added by coServe 22-05-2023
-                    eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.OppCloseDate_MyCity));
-                }else{
-                    eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.OppCloseDate));
-                }
-                //eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.OppCloseDate));
-                
-                if(eachOpp.Walkin_Source__c!=null || eachOpp.Walkin_Source__c!='') //added by Rasika
+                OpportunityScoringHandler.calculateOpportunityScores(lstOpp); // Added by Digicloud 07-04-2025
+                Set<Id> setIdofProjUnit = new Set<Id>();
+                if(lstOpp.size() > 0)
                 {
-                    if(eachOpp.Walkin_Source__c=='Channel Partner')
-                    {    
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.CP_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Channel_Partner));
-                    }   
-                    else if(eachOpp.Walkin_Source__c=='Corporate')
+                    for(Opportunity eachOpp : lstOpp)
                     {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Corporate_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Corporate));   
-                    }           
-                    else if(eachOpp.Walkin_Source__c=='Loyalty')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Loyalty_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Loyalty));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Referral')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Referral_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Referral));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='PreSales')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Presales_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Presales));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Direct')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Direct_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Direct));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='NRI')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.NRI_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.NRI));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Digital')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Digital_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Digital));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Emp / Mgmt Reference')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.EmpMgmt_Reference_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Employee_Management_Reference));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Events')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Events_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Events));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Exhibitions')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Exhibitions_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Exhibition));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Hoarding')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Hoarding_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Hoarding));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Individual calling')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Individual_calling_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Individual_Calling));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Magazines')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Magazines_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Magazines));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Newspapers')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Newspapers_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Newspaper));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Outstation')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Outstation_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Outstation));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Paper Inserts')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Paper_Inserts_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Paper_Inserts));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Property Portals')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Property_Portals_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Property_Portals));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Radio')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Radio_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Radio));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='Surround Marketing')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Surround_Marketing_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Surround_marketing));
-                    }
-                    else if(eachOpp.Walkin_Source__c=='TV')
-                    {
-                        if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.TV_Gardens));
-                        else
-                            eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.TV));
-                    }
-                    
-                    
-                } */  
-                
-                if(eachOpp.RW_Project_Unit__c != null)
-                {
-                    setIdofProjUnit.add(eachOpp.RW_Project_Unit__c);
-                }
-                /**    if(eachOpp.LeadSource != null)
+                        //Added by coServe 28-02-2024
+                        Map<String, Opp_Close_Date__c> oppClsDateMap = Opp_Close_Date__c.getall();
+                        if(oppClsDateMap.keySet().size() > 0){
+                       //    eachOpp.CloseDate = System.today().addDays(Integer.valueOf(oppClsDateMap.get(eachOpp.RW_project__c).No_of_Days__c)); 
+                        }
+                        
+                        // Commented by coServe 28-02-2024
+                        /*if(eachOpp.RW_project__c == 'a005j00000E1098' || eachOpp.RW_project__c == 'a005j00000E1098AAB'){ // Added by coServe 22-05-2023
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.OppCloseDate_MyCity));
+}else{
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.OppCloseDate));
+}
+//eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.OppCloseDate));
+
+if(eachOpp.Walkin_Source__c!=null || eachOpp.Walkin_Source__c!='') //added by Rasika
+{
+if(eachOpp.Walkin_Source__c=='Channel Partner')
+{    
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.CP_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Channel_Partner));
+}   
+else if(eachOpp.Walkin_Source__c=='Corporate')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Corporate_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Corporate));   
+}           
+else if(eachOpp.Walkin_Source__c=='Loyalty')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Loyalty_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Loyalty));
+}
+else if(eachOpp.Walkin_Source__c=='Referral')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Referral_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Referral));
+}
+else if(eachOpp.Walkin_Source__c=='PreSales')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Presales_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Presales));
+}
+else if(eachOpp.Walkin_Source__c=='Direct')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Direct_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Direct));
+}
+else if(eachOpp.Walkin_Source__c=='NRI')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.NRI_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.NRI));
+}
+else if(eachOpp.Walkin_Source__c=='Digital')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Digital_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Digital));
+}
+else if(eachOpp.Walkin_Source__c=='Emp / Mgmt Reference')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.EmpMgmt_Reference_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Employee_Management_Reference));
+}
+else if(eachOpp.Walkin_Source__c=='Events')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Events_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Events));
+}
+else if(eachOpp.Walkin_Source__c=='Exhibitions')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Exhibitions_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Exhibition));
+}
+else if(eachOpp.Walkin_Source__c=='Hoarding')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Hoarding_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Hoarding));
+}
+else if(eachOpp.Walkin_Source__c=='Individual calling')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Individual_calling_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Individual_Calling));
+}
+else if(eachOpp.Walkin_Source__c=='Magazines')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Magazines_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Magazines));
+}
+else if(eachOpp.Walkin_Source__c=='Newspapers')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Newspapers_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Newspaper));
+}
+else if(eachOpp.Walkin_Source__c=='Outstation')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Outstation_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Outstation));
+}
+else if(eachOpp.Walkin_Source__c=='Paper Inserts')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Paper_Inserts_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Paper_Inserts));
+}
+else if(eachOpp.Walkin_Source__c=='Property Portals')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Property_Portals_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Property_Portals));
+}
+else if(eachOpp.Walkin_Source__c=='Radio')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Radio_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Radio));
+}
+else if(eachOpp.Walkin_Source__c=='Surround Marketing')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Surround_Marketing_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.Surround_marketing));
+}
+else if(eachOpp.Walkin_Source__c=='TV')
+{
+if(eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a000I00001xus6CQAQ' || eachOpp.RW_project__c == 'a000I00001xus6C' || eachOpp.RW_project__c == 'a005j00000E1098AAB')
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.TV_Gardens));
+else
+eachOpp.CloseDate = System.today().addDays(Integer.valueOf(Label.TV));
+}
+
+
+} */  
+                        
+                        if(eachOpp.RW_Project_Unit__c != null)
+                        {
+                            setIdofProjUnit.add(eachOpp.RW_Project_Unit__c);
+                        }
+                        /**    if(eachOpp.LeadSource != null)
 eachOpp.Walkin_Source__c = eachOpp.LeadSource;
 
 if(eachOpp.Lead_Sub_Source__c != null)
 eachOpp.Walkin_SubSource__c = eachOpp.Lead_Sub_Source__c; **/
-                
-                if(eachOpp.NameofUnregisteredCorporate_LeadSource__c != null)
-                    eachOpp.Name_of_Unregistered_Corporate__c = eachOpp.NameofUnregisteredCorporate_LeadSource__c ;   
-                
-                /**   else if(eachOpp.RW_Reference_Source__c != null)
+                        
+                        if(eachOpp.NameofUnregisteredCorporate_LeadSource__c != null)
+                            eachOpp.Name_of_Unregistered_Corporate__c = eachOpp.NameofUnregisteredCorporate_LeadSource__c ;   
+                        
+                        /**   else if(eachOpp.RW_Reference_Source__c != null)
 eachOpp.Walkin_SubSource__c = eachOpp.RW_Reference_Source__c;   **/
-                
-                
-                /* if(eachOpp.Walkin_Source__c == 'Referral' && eachOpp.RW_Walkin_Customer_Reference__c != ''){
+                        
+                        
+                        /* if(eachOpp.Walkin_Source__c == 'Referral' && eachOpp.RW_Walkin_Customer_Reference__c != ''){
 List<OTP__c> lstotp = [Select id,Generated_OTP__c,Project__c,OTP_Expired__c, OTP_Generate_For__c,Prospect__c,Customer_Reference_Lookup__c,OTP_Generated_on__c,Customer_reference_SAP_Code__c,Customer_reference_Booked_Unit__c From OTP__c Where Customer_Reference_Lookup__c =: eachOpp.RW_Walkin_Customer_Reference__c AND  OTP_Expired__c = false];  
 system.debug('lstotp' + lstotp);
 if(lstotp.size()>0){
@@ -218,31 +215,31 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
 // eachOpp.Customer_reference_Booked_Unit__c =  lstotp[0].Customer_reference_Booked_Unit__c;
 }
 }*/
-            }
-        }
-        if(setIdofProjUnit.size() > 0)
-        {
-            List<Project_Unit__c> lstProjUnit = [Select Id, RW_Customer__c, RW_Unit_Status__c from Project_Unit__c Where Id IN : setIdofProjUnit];
-            if(lstProjUnit.size() > 0)
-            {           
-                for(Opportunity eachOpp : lstOpp)
+                    }
+                }
+                if(setIdofProjUnit.size() > 0)
                 {
-                    for(Project_Unit__c eachProjUnit : lstProjUnit)
-                    {
-                        if(eachOpp.RW_Project_Unit__c == eachProjUnit.Id && eachProjUnit.RW_Unit_Status__c != null)
+                    List<Project_Unit__c> lstProjUnit = [Select Id, RW_Customer__c, RW_Unit_Status__c from Project_Unit__c Where Id IN : setIdofProjUnit];
+                    if(lstProjUnit.size() > 0)
+                    {           
+                        for(Opportunity eachOpp : lstOpp)
                         {
-                            if(eachOpp.RW_Project_Unit__c == eachProjUnit.Id && eachProjUnit.RW_Unit_Status__c != 'Available')
+                            for(Project_Unit__c eachProjUnit : lstProjUnit)
                             {
-                                eachOpp.RW_Project_Unit__c.addError('This Project Unit is not Vacant, please choose other one. Before Insert.');
+                                if(eachOpp.RW_Project_Unit__c == eachProjUnit.Id && eachProjUnit.RW_Unit_Status__c != null)
+                                {
+                                    if(eachOpp.RW_Project_Unit__c == eachProjUnit.Id && eachProjUnit.RW_Unit_Status__c != 'Available')
+                                    {
+                                        eachOpp.RW_Project_Unit__c.addError('This Project Unit is not Vacant, please choose other one. Before Insert.');
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                
+                updateRatingValue(lstOpp);
             }
-        }
-        
-        updateRatingValue(lstOpp);
-    }
     public void AfterInsert(List<Opportunity> lstOpp)
     {
         Set<Id> setIdofProjUnit = new Set<Id>();
@@ -250,6 +247,7 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
         Set<Id> retentionOppIds = new Set<Id>(); // Added by coServe 20-01-2023
         list<Event> lstEventInsert = new list<Event>();  
         List<String> oppIds = new List<String>(); // Added by coServe 27-06-2024
+        List<Opportunity> referralOpps = new List<Opportunity>(); //Added by Vinay 15-10-2025
         if(lstOpp.size() > 0)
         {
             for(Opportunity eachOpp : lstOpp)
@@ -266,16 +264,25 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
                 }
                 // Added by coServe 20-01-2023 End
                 
+                if(eachOpp.StageName == 'Site Visit' && eachOpp.LeadSource == 'Referral' && eachOpp.Customer_Reference__c != null){ //Added by Vinay 15-10-2025
+                    referralOpps.add(eachOpp);
+                }
                 
             }
+            system.debug('setIdofProjUnit>>>>'+setIdofProjUnit);
             if(oppIds.size() > 0){ // Added by coServe 27-06-2024
                 //sendProspectDay1WhatsApp(oppIds);
+            }
+            if(referralOpps.size() > 0){ //Added by Vinay 15-10-2025
+                //ReferralPointsModule.referralSiteVisits(referralOpps);
+                LockatedApp_LoyaltyEngine.referralSiteVisits(referralOpps); //Added by Vinay 21-01-2026
+                LockatedApp_Notifications.referralVisitDoneNotification(referralOpps); //Added by Vinay 20-01-2026
             }
         }
         if(setofOppId.size() > 0)
         {
             List<Project_Unit__c> lstProjUnittoUpdate = [Select Id, RW_Unit_Status__c, RW_Customer__c from Project_Unit__c Where ID IN : setIdofProjUnit AND (RW_Unit_Status__c = NULL OR RW_Unit_Status__c = 'Available')]; 
-            
+            system.debug('lstProjUnittoUpdate>>>>' +lstProjUnittoUpdate);
             List<Opportunity> lstOpptoUpdate = new List<Opportunity>();             
             if(lstProjUnittoUpdate.size()>0)
             {
@@ -415,11 +422,10 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
     //Added by coServe 20-01-2023 End
     public void BeforeUpdate(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId)
     {
-        
-        
-         //  added By UBSDigicloud
+        System.debug('lstOpp1**'+lstOpp);
+        //  added By UBSDigicloud
        Boolean shouldScore = false;
-
+        System.debug('lstOpp4**'+lstOpp);
         for (Opportunity newOpp : lstOpp) {
             Opportunity oldOpp = mapOldOppId.get(newOpp.Id);
 		
@@ -445,6 +451,7 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
         //system.debug('xyz------'+lstOpp);
         if(lstOpp.size() > 0)
         {
+            System.debug('lstOpp5**'+lstOpp);
             for(Opportunity eachOpp : lstOpp)
             {
                 if(eachOpp.RW_Project_Unit__c != null)
@@ -458,6 +465,7 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
             List<Project_Unit__c> lstProjUnit = [Select Id, RW_Unit_Status__c, RW_Customer__c from Project_Unit__c Where ID IN : setIdofProjUnit];
             system.debug('@lstProjUnit-------'+lstProjUnit);
             //system.debug('@lstOpp-------'+lstOpp);
+            System.debug('lstOpp6**'+lstOpp);
             for(Opportunity eachOpp : lstOpp)
             {
                 for(Project_Unit__c eachProjUnit : lstProjUnit)
@@ -475,6 +483,7 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
         }
         if(checkRecursion.isFirstRun()) 
         {
+            System.debug('lstOpp2**'+lstOpp);
             updateCancellation(lstOpp, mapOldOppId);}
         updateRatingValue(lstOpp);
     }
@@ -517,13 +526,13 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
                 // Added by coServe 08-03-2024
                 if(eachOpp.StageName == 'Unit Booked' && eachOpp.SAP_Customer_Number__c != null && eachOpp.SalesOrder_Number__c != null && 
                    (mapOldOppId.get(eachOpp.Id).SAP_Customer_Number__c == null || mapOldOppId.get(eachOpp.Id).SalesOrder_Number__c == null ||
-                   mapOldOppId.get(eachOpp.Id).StageName != 'Unit Booked') && System.label.Send_Sales_Experience_Whatsapp_on_booking == 'true' && 
+                    mapOldOppId.get(eachOpp.Id).StageName != 'Unit Booked') && System.label.Send_Sales_Experience_Whatsapp_on_booking == 'true' && 
                    eachOpp.Send_Sales_Experience_Whatsapp_Message__c == false){
                        if(!Test.isRunningTest()){
                            //SendWhatsAppMsg.methodToSendWhatsAppMsgBatch(eachOpp.Id, eachOpp.Name, eachOpp.RW_Sales_Associate__c, null, null, null, null, null, null, eachOpp.Booking__r.RW_Country_Phone_Code__c, eachOpp.RW_Mobile_No__c, 'Sales Experience');
                        }
                        oppIdsToUpdate.add(eachOpp.Id);
-                }
+                   }
                 
                 if(eachOpp.SalesOrder_Number__c != null && mapOldOppId.get(eachOpp.Id).SalesOrder_Number__c == null && eachOpp.StageName == 'Unit Booked'){ // Added by coServe 15-07-2024
                     oppIdsToSendWhatsApp.add(eachOpp.Id);
@@ -544,7 +553,7 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
                 Opportunity opp = new Opportunity();
                 opp.Id = oppId;
                 //opp.Send_Sales_Experience_Whatsapp_Message__c = true;
-				opp.Unit_Booked_Date__c = Datetime.now();
+                opp.Unit_Booked_Date__c = Datetime.now();
                 oppListToUpdate.add(opp);
             }
             update oppListToUpdate;
@@ -636,7 +645,8 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
     
     public void afterUpdateSAP(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId) {
         set<Id> lstOppBookedIds = new set<Id>();
-        system.debug(lstOpp);
+        set<Id> lstBlockedOppIds = new set<Id>();/*Added for unidentified payments starts */
+        system.debug('lstOpp@@'+lstOpp);
         system.debug(lstOpp.size() );
         if(lstOpp.size() > 0)
         {
@@ -649,13 +659,56 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
                 {
                     lstOppBookedIds.add(objOpportunity.Id);
                 }
+                /*Added for unidentified payments starts */
+                if((objOpportunity.StageName == 'Unit Blocked' || objOpportunity.StageName =='Negotiation') && 
+                   (mapOldOppId.get(objOpportunity.id).StageName != 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName =='Site Visit' 
+                   || (objOpportunity.Data_Error_Fixed__c == true && mapOldOppId.get(objOpportunity.id).Data_Error_Fixed__c != true) ))
+                {
+                    lstBlockedOppIds.add(objOpportunity.Id);
+                }
+                /*Added for unidentified payments ends */
+           
             }
         }
         
         system.debug('objOpportunity=====' + lstOppBookedIds);
         if(lstOppBookedIds.size() > 0)
-        {   
+        {       
+            // SAPIntegrationServices.createCustomer(lstOppBookedIds);
             //SAPIntegrationServices.createSO(lstOppBookedIds);
+        }
+        /*Added for unidentified payments starts */
+        if(lstBlockedOppIds.size() > 0)
+        {       
+            OpportunityCustomerCreation.createOppCustomer(lstBlockedOppIds);
+        }
+        /*Added for unidentified payments ends */
+    }
+    
+    //Added by Prashant to populate Referral customer details.
+    public static void updateReferralCustDetails(List<Opportunity> refOppList){
+        system.debug('Inside updateReferralCustDetails');
+        Set<String> custRefs = new Set<String>();
+        for(Opportunity opp : refOppList){
+            custRefs.add(opp.RW_Walkin_Customer_Reference__c);
+        }
+        
+        List<Opportunity> lstOpp = [Select Id,StageName,RW_Booking_Date_Opp__c, Name,SAP_Customer_Number__c,AccountId,RW_Project_Unit__c /*Customer_Reference_Opportunity__c*/ From Opportunity Where AccountId=: custRefs AND StageName =:'Unit Booked'  ORDER BY RW_Booking_Date_Opp__c DESC limit 1 ];
+        if(!lstOpp.isEmpty()){
+            Map<String, Opportunity> refOppMap = new Map<String, Opportunity>();
+            if(custRefs.size() > 0){
+                for(Opportunity opp : lstOpp){
+                    refOppMap.put(opp.AccountId, opp);
+                }
+            }
+            
+            for(Opportunity opp : refOppList){
+                if(refOppMap.get(opp.RW_Walkin_Customer_Reference__c) != null){
+                    opp.Customer_reference_SAP_Code__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).SAP_Customer_Number__c;
+                    opp.Customer_reference_Booked_Unit__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).RW_Project_Unit__c;
+                    opp.Customer_Reference_Opportunity__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).Id;
+                }
+            }
         }
     }
     
@@ -716,6 +769,7 @@ insert lstEventInsert;
 **/
     private void updateCancellation(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId)
     {system.debug('mk');
+    System.debug('lstOpp3**'+lstOpp);
      if(lstOpp != null && lstOpp.size() > 0)
      {system.debug('mk');
       set<String> setOfUnit = new set<String>();
@@ -765,49 +819,49 @@ insert lstEventInsert;
       Set<Id> InactivatePortalAccountIds = new Set<Id>();   
       Set<Id> unitTransferOpportunityIds = new Set<Id>();
       if(setOfOpportunity.size() > 0){ //Added if condition by Vinay 31-01-2025
-        for(Opportunity opp : [Select id,accountId,(select Status__c,Project__c,Cancellation_Reason__c FROM Booking__r) from opportunity where Id IN :setOfOpportunity])
-        {
-            AccountIds.add(opp.accountId);
-            for(Booking__c bk : opp.Booking__r)
-            {
-                if(bk.Cancellation_Reason__c == 'Unit transfer')
-                {
-                    unitTransferOpportunityIds.add(opp.Id);
-                }
-            }
-        }
-    }
+          for(Opportunity opp : [Select id,accountId,(select Status__c,Project__c,Cancellation_Reason__c FROM Booking__r) from opportunity where Id IN :setOfOpportunity])
+          {
+              AccountIds.add(opp.accountId);
+              for(Booking__c bk : opp.Booking__r)
+              {
+                  if(bk.Cancellation_Reason__c == 'Unit transfer')
+                  {
+                      unitTransferOpportunityIds.add(opp.Id);
+                  }
+              }
+          }
+      }
       
-    if(AccountIds.size() > 0){ //Added if condition by Vinay 31-01-2025
-        for(Account ao:[Select Id,name,(select Id,name from opportunities) from account       
-                        where Id in:AccountIds]) 
-        {
-            if(ao.opportunities.size() > 1)
-            {
-                accountOppMap.put(ao.Id,ao.opportunities);
-                for(Opportunity oppor : ao.opportunities)
-                {
-                    AllOpportunities.add(oppor.Id);
-                }
-            }
-            
-            else if(ao.opportunities.size() == 1)
-            {
-                if(!unitTransferOpportunityIds.contains(ao.opportunities[0].Id))
-                    InactivatePortalAccountIds.add(ao.Id);
-            }
-        }
-    }
+      if(AccountIds.size() > 0){ //Added if condition by Vinay 31-01-2025
+          for(Account ao:[Select Id,name,(select Id,name from opportunities) from account       
+                          where Id in:AccountIds]) 
+          {
+              if(ao.opportunities.size() > 1)
+              {
+                  accountOppMap.put(ao.Id,ao.opportunities);
+                  for(Opportunity oppor : ao.opportunities)
+                  {
+                      AllOpportunities.add(oppor.Id);
+                  }
+              }
+              
+              else if(ao.opportunities.size() == 1)
+              {
+                  if(!unitTransferOpportunityIds.contains(ao.opportunities[0].Id))
+                      InactivatePortalAccountIds.add(ao.Id);
+              }
+          }
+      }
       
       
       
-    if(AllOpportunities.size() > 0){ //Added if condition by Vinay 31-01-2025
-        for(Opportunity opp : [Select id,accountId,(select Status__c,Project__c FROM Booking__r where Status__c IN :status) from opportunity where Id IN :AllOpportunities])
-        {
-            if(opp.Booking__r.size() >0)
-                OppBookingMap.put(opp.Id,opp.Booking__r[0]);
-        }
-    }
+      if(AllOpportunities.size() > 0){ //Added if condition by Vinay 31-01-2025
+          for(Opportunity opp : [Select id,accountId,(select Status__c,Project__c FROM Booking__r where Status__c IN :status) from opportunity where Id IN :AllOpportunities])
+          {
+              if(opp.Booking__r.size() >0)
+                  OppBookingMap.put(opp.Id,opp.Booking__r[0]);
+          }
+      }
       
       
       for(Id accountId : accountOppMap.keyset())
@@ -853,18 +907,18 @@ insert lstEventInsert;
       List<Id> userIds = new List<Id>();
       List<User> userRecords = new List<User>();
       if(personContactMap.size() > 0){ //Added if condition by Vinay 31-01-2025
-        for(User u : [Select Id, IsActive, IsPortalEnabled,Email from User  where ContactId in :personContactMap.Values()])
-        {
-            if(u.IsActive || u.IsPortalEnabled )
-            {
-                //u.IsActive = false;
-                //u.IsPortalEnabled = false;
-                //usersToUpdate.add(u);
-                userIds.add(u.Id);
-                userRecords.add(u);
-            }
-        }
-    }
+          for(User u : [Select Id, IsActive, IsPortalEnabled,Email from User  where ContactId in :personContactMap.Values()])
+          {
+              if(u.IsActive || u.IsPortalEnabled )
+              {
+                  //u.IsActive = false;
+                  //u.IsPortalEnabled = false;
+                  //usersToUpdate.add(u);
+                  userIds.add(u.Id);
+                  userRecords.add(u);
+              }
+          }
+      }
       
       if (userIds.size()>0)
       {
@@ -874,23 +928,23 @@ insert lstEventInsert;
       }
       
       if(userRecords.size() > 0){ //Added if condition by Vinay 31-01-2025
-        EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='Community_User_Deactivation']; //Added by Vinay 31-01-2025
-        for(User u : userRecords)
-        {
-            String htmlBody = template.HtmlValue; 
-            //htmlBody = htmlBody.replace('{!RW_EOI__c.Name}', eoiRec.Name);
-            String plainTextBody = template.Body; 
-            //plainTextBody = plainTextBody.replace('{!RW_EOI__c.Name}', eoiRec.Name);
-            Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
-            message.toAddresses = new List<String>{u.email};
-                message.subject = template.Subject;
-            message.setTemplateId(template.Id);
-            message.setHtmlBody(htmlBody);   
-            message.setPlainTextBody(plainTextBody);
-            message.setOrgWideEmailAddressId(Utility.getOrgWideEmailAddress());
-            messages.add(message);
-        }
-    }
+          EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='Community_User_Deactivation']; //Added by Vinay 31-01-2025
+          for(User u : userRecords)
+          {
+              String htmlBody = template.HtmlValue; 
+              //htmlBody = htmlBody.replace('{!RW_EOI__c.Name}', eoiRec.Name);
+              String plainTextBody = template.Body; 
+              //plainTextBody = plainTextBody.replace('{!RW_EOI__c.Name}', eoiRec.Name);
+              Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
+              message.toAddresses = new List<String>{u.email};
+                  message.subject = template.Subject;
+              message.setTemplateId(template.Id);
+              message.setHtmlBody(htmlBody);   
+              message.setPlainTextBody(plainTextBody);
+              message.setOrgWideEmailAddressId(Utility.getOrgWideEmailAddress());
+              messages.add(message);
+          }
+      }
       
       if(messages.size() >0)
           Messaging.sendEmail(messages);
@@ -944,7 +998,7 @@ insert lstEventInsert;
     
     // Added by Shailesh//
     //@future
-    public static void updatebudgetonOpty(Set<Id> oSet) {
+  /*  public static void updatebudgetonOpty(Set<Id> oSet) {
         List<Opportunity> oList = new List<Opportunity>();
         olIst = [Select Id, Name,Budget_In_Cr__C,RW_Budget__c from Opportunity where Id IN :oSet];
         if(oList != null && oList.size() > 0)
@@ -1059,7 +1113,7 @@ insert lstEventInsert;
             if(!optyListToUpdate.isEmpty())
                 update optyListToUpdate;
         }
-    }
+    } */
     Public void UpdateCPAccount(List<Opportunity> lstOpp){
         Set<Id> setIdofCP = new Set<Id>();
         Set<Id> setIdofAccount = new Set<Id>();
@@ -1091,7 +1145,7 @@ insert lstEventInsert;
                      OppUpdateList.add(opp);
                  }
              }
-        }
+        } 
         if(OppUpdateList.size() > 0){
             /*  Map<Id, Opportunity> OppMap = new Map<Id, Opportunity>(OppUpdateList);
 update OppMap.values();*/
@@ -1100,10 +1154,10 @@ update OppMap.values();*/
             for(Opportunity OpptyToUpdate : OppUpdateList){
                 mapIdOpportunityToUpdate.put(OpptyToUpdate.Id, OpptyToUpdate);         
             }
-             update mapIdOpportunityToUpdate.values();
+            update mapIdOpportunityToUpdate.values();
         }
     }
-    Public void InsertCPAccount(List<Opportunity> lstOpp){
+    Public void InsertCPAccount(List<Opportunity> lstOpp){ 
         Set<Id> setIdofCP = new Set<Id>();
         List<Opportunity> OppUpdateList = new List<Opportunity>();
         List <Broker__c> lstCP = new List <Broker__c>();
@@ -1118,7 +1172,7 @@ update OppMap.values();*/
             }
         }
         if(setIdofCP.size() > 0) //Added if condition by Vinay 31-01-2025
-        	lstCP = [Select Id,Name, Account__c from Broker__c where Id IN: setIdofCP];
+            lstCP = [Select Id,Name, Account__c from Broker__c where Id IN: setIdofCP];
         for(Opportunity Eachopp : lstOpp){
             for(Broker__c b :lstCP){
                 if(b.Account__c != NULL){
@@ -1137,20 +1191,20 @@ update OppMap.values();*/
     public static void sendWhatsApp(List<String> oppIds){
         List<Opportunity> opps = [SELECT Id, Primary_Name__c, RW_Mobile_No__c, Booking__r.RW_Country_Phone_Code__c, Booking__r.Source_of_Booking__c, Booking__r.Quotation__c FROM Opportunity WHERE Id =: oppIds];
         /*String fileURL = System.label.Home_Loan_pdf_link;
-        List<String> quoteIds = new List<String>();
-        
-        for(Opportunity eachOpp : opps){
-            String costSheetLink = 'id='+ eachOpp.Booking__r.Quotation__c + '&doc=costsheet';
-            if(!Test.isRunningTest()){
-                SendWhatsAppMsg.methodToSendWhatsAppMsg(null,eachOpp.Primary_Name__c,eachOpp.Booking__r.Source_of_Booking__c,null,null,null,null,null,costSheetLink,eachOpp.Booking__r.RW_Country_Phone_Code__c,eachOpp.RW_Mobile_No__c,'Booking Details');
-            	SendWhatsAppMsg.methodToSendWhatsAppMsg(null,eachOpp.Primary_Name__c,null,null,null,null,null,fileURL,'Home Loan',eachOpp.Booking__r.RW_Country_Phone_Code__c,eachOpp.RW_Mobile_No__c,'Bank Funding Requirements Documents');
-            }
-            
-            quoteIds.add(eachOpp.Booking__r.Quotation__c);
-        }
-        if(quoteIds.size() > 0){
-            //costSheetPdfDataUpdate(quoteIds);
-        }*/
+List<String> quoteIds = new List<String>();
+
+for(Opportunity eachOpp : opps){
+String costSheetLink = 'id='+ eachOpp.Booking__r.Quotation__c + '&doc=costsheet';
+if(!Test.isRunningTest()){
+SendWhatsAppMsg.methodToSendWhatsAppMsg(null,eachOpp.Primary_Name__c,eachOpp.Booking__r.Source_of_Booking__c,null,null,null,null,null,costSheetLink,eachOpp.Booking__r.RW_Country_Phone_Code__c,eachOpp.RW_Mobile_No__c,'Booking Details');
+SendWhatsAppMsg.methodToSendWhatsAppMsg(null,eachOpp.Primary_Name__c,null,null,null,null,null,fileURL,'Home Loan',eachOpp.Booking__r.RW_Country_Phone_Code__c,eachOpp.RW_Mobile_No__c,'Bank Funding Requirements Documents');
+}
+
+quoteIds.add(eachOpp.Booking__r.Quotation__c);
+}
+if(quoteIds.size() > 0){
+//costSheetPdfDataUpdate(quoteIds);
+}*/
         
         Id JobId = System.enqueueJob(new SendWhatsAppOnSOCreationQueueable(oppIds));
     }
@@ -1173,8 +1227,13 @@ update OppMap.values();*/
             for(String oppId : oppMap.keySet()){
                 if(oppVsCifMap.get(oppId) != null && !Test.isRunningTest()){
                     //SendWhatsAppMsg.methodToSendWhatsAppMsg(null, oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
-                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Commented by Vinay 11-09-2025
-                    //SendWhatsAppMsg.methodToSendWhatsAppMsgNew(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Added by Vinay 11-09-2025
+                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Commented by Vinay 13-10-2025
+                    
+                    if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
+                        SendWhatsAppMsg.methodToSendWhatsAppMsgNew(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
+                    }else{
+                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
+                    }
                 }
             }
         }
@@ -1182,18 +1241,18 @@ update OppMap.values();*/
     }
     
     /*@future(callout=true)
-    public static void costSheetPdfDataUpdate(List<String> quoteIds){
-        List<Quotation__c> quotes = [SELECT Id FROM Quotation__c WHERE Id =: quoteIds];
-        for(Quotation__c q : quotes){
-            PageReference pdf = Page.quotationattachment;
-            pdf.getParameters().put('id',q.Id);
-            Blob body= pdf.getContent();
-            String pdfData = EncodingUtil.base64encode(body);
-            q.Cost_Sheet_pdf_data__c = pdfData;
-        }
-        update quotes;
-    }*/
-    public static void dummyMethod()  {
+public static void costSheetPdfDataUpdate(List<String> quoteIds){
+List<Quotation__c> quotes = [SELECT Id FROM Quotation__c WHERE Id =: quoteIds];
+for(Quotation__c q : quotes){
+PageReference pdf = Page.quotationattachment;
+pdf.getParameters().put('id',q.Id);
+Blob body= pdf.getContent();
+String pdfData = EncodingUtil.base64encode(body);
+q.Cost_Sheet_pdf_data__c = pdfData;
+}
+update quotes;
+}*/
+public static void dummyMethod()  {
         decimal a =1;
         decimal b= 2;
         decimal c= 0;
@@ -1767,6 +1826,7 @@ update OppMap.values();*/
         c = a+b;
         c = a+b;
         c = a+b;
-    }
+    }   
+    
     
 }

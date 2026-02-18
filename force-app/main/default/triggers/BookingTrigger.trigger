@@ -1,5 +1,5 @@
 trigger BookingTrigger on Booking__c (after Insert, after update,before update) {
-    
+   
     ByPassTriggers__mdt[] byPasstrigMappings = [SELECT Id,Label, ByPassTrigger__c,Object_Name__c FROM ByPassTriggers__mdt];
     Boolean byPassTriggerExceution = false;
     for(ByPassTriggers__mdt bypass : byPasstrigMappings)
@@ -9,11 +9,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             byPassTriggerExceution = true;
         }
     }
-    
+   
     if(!byPassTriggerExceution)
     {
         BookingTriggerHandler handler = new BookingTriggerHandler();
-        
+       
         Set<id> pid = new set<id>();
         List<RW_Welcome_Call__c> listOfWelcomcalls = new List<RW_Welcome_Call__c>();
         List<Booking__c> loansToCreate = new List<Booking__c>();
@@ -23,8 +23,9 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         Set<Id> bidsbrok = new Set<Id>(); //Added by Prashant 04-06-2025 Start..///// Update Agreeement value for broker calculation.
         Map<Id,Decimal> oppIdVsAVMap = new Map<Id,Decimal>();//Added by Prashant to update Agreement value on Opportunity if allotment premium is updated on Booking. ////27-06-2025.
         List<Booking__c> soReleasedBkgs = new List<Booking__c>();
+        List<Id> referralBookingIds = new List<Id>(); //Added by Vinay 20-01-2026
        // List<Id> bkIds = new List<Id>();
-        
+       
         if(trigger.isAfter){
             System.debug('trigger.isAfter____');
             if(trigger.isInsert || trigger.isUpdate){
@@ -32,23 +33,23 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                 for(Booking__c bkg: trigger.newMap.values()){
                     ////Added by Prashant 30-05-2025 Start..///// Update booking date on Opportunity based on booking date on booking.
                     if((trigger.oldMap != null && trigger.oldMap.get(bkg.id).Booking_Date__c != trigger.newMap.get(bkg.id).Booking_Date__c) || (trigger.oldMap == null && bkg.Booking_Date__c != null)){
-                        bids.add(bkg);     
+                        bids.add(bkg);    
                     }
                     //Added by Prashant 30-05-2025 End..///// Update booking date on Opportunity based on booking date on booking.
                     /*
                     ////Added by Prashant 04-06-2025 Start..///// Update Total Amount Received on Opp based on Total Amount Received on booking.
                     if((trigger.oldMap != null && trigger.oldMap.get(bkg.id).RW_Total_Receipt_Amount_Received__c != trigger.newMap.get(bkg.id).RW_Total_Receipt_Amount_Received__c) || (trigger.oldMap == null && bkg.RW_Total_Receipt_Amount_Received__c != null)){
-                        blist.add(bkg);     
+                        blist.add(bkg);    
                     }
                     //Added by Prashant 04-06-2025 End..///// Update Total Amount Received on Opp based on Total Amount Received on booking.
                     //
                     ////Added by Prashant 04-06-2025 Start..//// Update Agreeement value for broker calculation.
-                    if((trigger.oldMap != null && 
-                        (trigger.oldMap.get(bkg.id).Stamp_duty_Paid2__c != trigger.newMap.get(bkg.id).Stamp_duty_Paid2__c || 
-                         trigger.oldMap.get(bkg.id).Stamp_duty_payable_by_Runwal__c != trigger.newMap.get(bkg.id).Stamp_duty_payable_by_Runwal__c)) || 
+                    if((trigger.oldMap != null &&
+                        (trigger.oldMap.get(bkg.id).Stamp_duty_Paid2__c != trigger.newMap.get(bkg.id).Stamp_duty_Paid2__c ||
+                         trigger.oldMap.get(bkg.id).Stamp_duty_payable_by_Runwal__c != trigger.newMap.get(bkg.id).Stamp_duty_payable_by_Runwal__c)) ||
                        (trigger.oldMap == null && (bkg.Stamp_duty_Paid2__c != null || bkg.Stamp_duty_payable_by_Runwal__c != null)))
                     {
-                        bidsbrok.add(bkg.Id);     
+                        bidsbrok.add(bkg.Id);    
                     }
                     //Added by Prashant 04-06-2025 End..///// Update Agreeement value for broker calculation.
                     */
@@ -61,14 +62,18 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                         wc.RW_Welcome_Call_Status__c = 'Due';
                         listOfWelcomcalls.add(wc);*/
                     }
-                    
+                   
                     //Added by coServe 10-10-2022 start
                     if(trigger.isInsert){
                         updateCAMandDevChrgDetails.add(bkg.Id);
+                        BookingTriggerHandler.tagReceiptsFromOpportunity(Trigger.New);//Added for unidentified payments
                         //updateDvlpmentCharge.add(bkg.Id);  
+                        if(bkg.Customer_Reference__c != null){ //Added by Vinay 20-01-2026
+                            referralBookingIds.add(bkg.Id);
+                        }
                     }
                     //Added by coServe 10-10-2022 end
-                    
+                   
                    
                     if(trigger.isupdate){
                         /*if((bkg.Status__c == 'Sent for Approval' && (trigger.oldMap.get(bkg.id).Status__c!= bkg.Status__c)) && (bkg.Booking_Form_Id__c == null || (bkg.Booking_Form_Id__c != null && bkg.Booking_Form_Uploaded__c == false))){
@@ -78,11 +83,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                             List<RW_Welcome_Call__c> welcomeCalls = [SELECT Id, RW_Booking__c FROM RW_Welcome_Call__c WHERE RW_Booking__c =: bkg.Id];
                             if(welcomeCalls.size() > 0){
                                 if(bkg.Status__c != 'Cancelled' && bkg.Status__c != 'Cancellation Initiated'){
-                                    bkg.addError('Can not change the status of Confirmed Booking');
+                                    //bkg.addError('Can not change the status of Confirmed Booking');
                                 }
                             }
                         }
-                        
+                       
                         if(bkg.Status__c == 'Booking Confirmed' && (trigger.oldMap.get(bkg.id).Status__c!= bkg.Status__c )){
                             System.debug('trigger Line 10 Booking Confirmed___');
                             RW_Welcome_Call__c wc = new RW_Welcome_Call__c();
@@ -91,13 +96,13 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                             wc.RW_Welcome_Call_Status__c = 'Due';
                             listOfWelcomcalls.add(wc);
                         }
-                        
+                       
                         //Added by vinay 16-02-2022 start
                         if(bkg.Funding_Status__c == 'Loan Bank' && trigger.oldMap.get(bkg.id).Funding_Status__c == 'Self Funded'){
                             loansToCreate.add(bkg);
                         }
                         //Added by vinay 16-02-2022 end
-                        
+                       
                         //Added by coServe 20-09-2024 start
                         /*if(bkg.SO_Release_Date_in_SAP__c != null && trigger.oldMap.get(bkg.id).SO_Release_Date_in_SAP__c == null && bkg.X4_5_Received__c == true && bkg.Do_Not_Create_Welcome_Call__c == false){
                             soReleasedBkgs.add(bkg);
@@ -109,14 +114,14 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                         //
                         //Added by Prashant to update Agreement value on Opportunity if allotment premium is updated on Booking.////27-06-2025.START
                         if(bkg.Allotment_Premium__c != trigger.oldMap.get(bkg.Id).Allotment_Premium__c && bkg.Opportunity__c != null){
-                            oppIdVsAVMap.put(bkg.Opportunity__c,bkg.Allotment_Premium__c);                   
+                            oppIdVsAVMap.put(bkg.Opportunity__c,bkg.Allotment_Premium__c);                  
                         }
                         //Added by Prashant to update Agreement value on Opportunity if allotment premium is updated on Booking.////27-06-2025.END\
                        
-                        
+                       
                     }      
-                    
-                    
+                   
+                   
                  }
                 /*if(!bkIds.isEmpty()){
                     BookingTriggerHandler.assignBaseBrokerageAccruedDashboards(bkIds,trigger.oldmap);
@@ -126,7 +131,7 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                     BookingTriggerHandler.updateAVonOpportunity(oppIdVsAVMap);
                 }
                 //Added by Prashant to update Agreement value on Opportunity if allotment premium is updated on Booking.////27-06-2025.END
-                
+               
                 if(listOfWelcomcalls.size()>0){
                     system.debug(listOfWelcomcalls);
                     //upsert listOfWelcomcalls Booking_Id__c; //Commented by coServe 20-09-2024
@@ -166,20 +171,22 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                 }
                 //Added by Prashant 04-06-2025 End..///// Update Agreeement value for broker calculation.
                 */
-                
-                
-            } 
+                if(referralBookingIds.size() > 0){ //Added by Vinay 20-01-2026
+                    LockatedApp_Notifications.referralBookingNotification(referralBookingIds);
+                }
+               
+            }
             if( trigger.isUpdate&& BookingTriggerHandler.firstrun){
                 system.debug('MK');
                 BookingTriggerHandler.firstrun=false;
                 handler.processRecords(trigger.new, trigger.newMap, trigger.oldMap);
-                
+               
             }
-            
+           
         }
-        
-        
-        
+       
+       
+       
         if(trigger.isbefore && (trigger.isupdate || Trigger.isinsert)){
             for(Booking__c b: trigger.new){
                 if(b.Brokerage_Summary__c != NULL){
@@ -187,11 +194,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                 }
             }
         }
-            
+           
            
         }
-        
-        
+       
+       
     //Added by Prashant - Assigning 5% & 9% received date after payment completion.
     // Deployment date to be the difference factore before that date all the booking will be treated as legacy data.
     /*if(Trigger.isBefore && Trigger.isUpdate){
@@ -204,8 +211,8 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             }
         }
     }*/
-    
-    
+   
+   
     /*if(Trigger.isbefore && Trigger.isupdate){ //Added by coServe 01-03-2024
         for(Booking__c bk: trigger.new){
             if(bk.Received__c >= 95 && trigger.oldMap.get(bk.Id).Received__c < 95){
@@ -214,7 +221,7 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             }
         }
     }*/
-    
+   
     if(Trigger.isafter && Trigger.isupdate){
         Set<id> bid = new set<id>();
         Set<id> BookId = new set<id>();
@@ -231,12 +238,22 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         List<Brokerage_Summary__c> BrokerSummaryList = new List<Brokerage_Summary__c>();
         List<Brokerage__c> BrokerageList = new List<Brokerage__c>();
         list<id> bidsonSchUpdate = new list<id>();//Added by Prashant .... 20-05-2025..
+        Date yesterDay = Date.today() - 1; //Added by Vinay 15-10-2025
+        List<Booking__c> closedRefs = new List<Booking__c>(); //Added by Vinay 15-10-2025
+        List<Booking__c> iwBlist = new List<Booking__c>();//Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+        List<Booking__c> bklistforNotif = new List<Booking__c>();//Added by Prashant to send notifications to approvers.//18-12-25 STart.
+        List<Id> apprRejWaiverBIds = new List<Id>();//Added by Prashant to update waiver records and send mail.09-12-25
+        List<Id> inProcessApproval = new List<Id>();
+        List<Id> iwBIds = new List<Id>();//Added by Prashant to submit record for approval.//17-12-25.
+        List<Id> appEnrollmentBookingIds = new List<Id>(); //Added by Vinay 16-01-2026
+        List<Booking__c> brlUpdatedBookings = new List<Booking__c>(); //Added by Vinay 20-01-2026
+        List<Booking__c> possessionGuideLinesBkgs = new List<Booking__c>(); //Added by Vinay 20-01-2026
         for(Booking__c bk: trigger.new){
-            if(( trigger.newMap.get(bk.id).RW_Registration_Done__c == 'Yes' 
+            if(( trigger.newMap.get(bk.id).RW_Registration_Done__c == 'Yes'
                && bk.Brokerage_Scheme__c != null && bk.BrokerIId__c != null && bk.RW_X9_99_Received__c == true )){
                    SummaryId.add(bk.Id);
                }  
-            
+           
             if(trigger.oldMap.get(bk.id).CP_Invoice_Approval_Status__c != trigger.newMap.get(bk.id).CP_Invoice_Approval_Status__c && trigger.newMap.get(bk.id).CP_Invoice_Approval_Status__c != null
                && trigger.newMap.get(bk.id).CP_Invoice_Approval_Status__c == 'Approved By L2'){
                    Invoicebid.add(bk.Brokerage_Summary__c);
@@ -254,30 +271,30 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                    System.debug('BrokerageCalculationForInactiveScheme');
                    BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(bk.Id,bk.Brokerage_Scheme__c);
                }
-            
+           
             // Added by coServe 15-11-2022 Start
             if(trigger.oldMap.get(bk.id).Booking_Date__c != trigger.newMap.get(bk.id).Booking_Date__c){
-                bkgs.add(bk);     
+                bkgs.add(bk);    
             }
             // Added by coServe 15-11-2022 End
             // Added by coServe 24-04-2024 Start
             if(trigger.oldMap.get(bk.Id).RW_Registration_Date__c == null && bk.RW_Registration_Date__c != null){
-                dayOfRegBkgs.add(bk.Id);     
+                dayOfRegBkgs.add(bk.Id);    
             }
             if(trigger.oldMap.get(bk.Id).RW_Key_handover_date__c == null && bk.RW_Key_handover_date__c != null){
-                dayOfKeyHandBkgs.add(bk.Id);     
+                dayOfKeyHandBkgs.add(bk.Id);    
             }
             // Added by coServe 24-04-2024 End
             if(trigger.oldMap.get(bk.Id).Send_Account_Statement__c == false && bk.Send_Account_Statement__c == true){ // Added by coServe 19-09-2024
-                sendAccStatementBkgs.add(bk.Id);     
+                sendAccStatementBkgs.add(bk.Id);    
             }
             if(trigger.oldMap.get(bk.Id).Interest_to_be_Applied__c=='No' && trigger.newMap.get(bk.id).Interest_to_be_Applied__c=='Yes' && bk.Interest_to_be_Applied__c!=null)
             {
                 BookingTriggerHandler.submitForApproval(Trigger.new, Trigger.oldMap);
             }
-            
+           
             if(trigger.oldMap.get(bk.Id).Status__c != 'Booking Confirmed' && bk.Status__c == 'Booking Confirmed'){ // Added by Vinay 13-12-2024
-                confirmedBkgIds.add(bk.Id);     
+                confirmedBkgIds.add(bk.Id);    
             }
 
             if(bk.Cancellation_in_SAP__c == 'Sent to SAP' && bk.Cancellation_in_SAP__c != trigger.oldMap.get(bk.Id).Cancellation_in_SAP__c){ //Added by Vinay 29-03-2025
@@ -285,15 +302,67 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                 cancelledBkgs.add(bk);
             }
             //Added by Prashant to update brokerage % whenever scheme is updated ///Added by Prashant. 20-05-2025..//Start/////
-            if( trigger.oldMap.get(bk.Id).Brokerage_Scheme__c != bk.Brokerage_Scheme__c && bk.Brokerage_Scheme__c != null && bk.BrokerIId__c != null && bk.Source_of_Booking__c == 'Channel Partner'){                
+            if( trigger.oldMap.get(bk.Id).Brokerage_Scheme__c != bk.Brokerage_Scheme__c && bk.Brokerage_Scheme__c != null && bk.BrokerIId__c != null && (bk.Source_of_Booking__c == 'Channel Partner' || bk.Source_of_Booking__c == 'Temp Channel Partner')){                
                 bidsonSchUpdate.add(bk.Id);
             }
             //Added by Prashant to update brokerage % whenever scheme is updated ///Added by Prashant. 20-05-2025..//End/////
             //
+            if(bk.Customer_Reference__c != null && trigger.oldMap.get(bk.Id).X20_Received_Date__c != bk.X20_Received_Date__c && bk.X20_Received_Date__c == yesterDay){
+                closedRefs.add(bk);
+            }
+           
+            //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.            
+            if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && bk.Interest_Waiver_Approval_Status__c == 'Approved' && bk.Total_Waiver_Amount_to_be_Approved__c != null && bk.Total_Approved_Interest_Amount_Waived__c != null ){                
+                apprRejWaiverBIds.add(bk.Id);
+            }
+            else if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && (bk.Interest_Waiver_Approval_Status__c == 'Rejected' ) ){                
+                apprRejWaiverBIds.add(bk.Id);
+            }else if(trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && bk.Interest_Waiver_Approval_Status__c != 'Approved' && bk.Interest_Waiver_Approval_Status__c != 'Rejected' && bk.Interest_Waiver_Approval_Status__c != 'Submitted for Approval'){
+                inProcessApproval.add(bk.Id);
+            }
+            if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null && bk.Interest_Waiver_Approval_Status__c == 'Submitted for Approval' && bk.Total_Waiver_Amount_to_be_Approved__c != null ){                
+                iwBIds.add(bk.Id);
+            }
+            if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null ){                
+                bklistforNotif.add(bk);
+            }
+            //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
+            if(bk.Lockated_User_Device_ID__c != null && trigger.oldMap.get(bk.Id).Lockated_User_Device_ID__c == null){ //Added by Vinay 16-01-2026              
+                appEnrollmentBookingIds.add(bk.Id);
+            }
+            if(bk.RW_BRL_Number__c != null && trigger.oldMap.get(bk.Id).RW_BRL_Number__c == null && bk.Funding_Status__c == 'Self Funded'){ //Added by Vinay 20-01-2026              
+                brlUpdatedBookings.add(bk);
+            }
+            if(bk.Possession_Guidelines_Sent_Date__c == Date.today() && trigger.oldMap.get(bk.Id).Possession_Guidelines_Sent_Date__c != bk.Possession_Guidelines_Sent_Date__c){ //Added by Vinay 22-01-2026              
+                possessionGuideLinesBkgs.add(bk);
+            }
         }
+       
+        if(appEnrollmentBookingIds.size() > 0){ //Added by Vinay 16-01-2026
+            LockatedApp_LoyaltyEngine.appEnrollment(appEnrollmentBookingIds);
+        }
+       
+        if(possessionGuideLinesBkgs.size() > 0){ //Added by Vinay 22-01-2026
+            LockatedApp_Notifications.possessionGuidelinesNotification(possessionGuideLinesBkgs);
+        }
+       
         if(!bidsonSchUpdate.isEmpty()){
             BookingTriggerHandler.updateBrokerageonSchemeChange(bidsonSchUpdate);//Added by Prashant to update brokerage % whenever scheme is updated ///Added by Prashant. 20-05-2025..///////
         }
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+        if(!apprRejWaiverBIds.isEmpty()){
+            BookingTriggerHandler.processWaivers(apprRejWaiverBIds);
+        }
+        if(!inProcessApproval.isEmpty()){
+            BookingTriggerHandler.processWaiversInProcess(inProcessApproval);
+        }
+        if(!bklistforNotif.isEmpty()){
+            //BookingTriggerHandler.sendWaiverNotifications(bklistforNotif);
+        }
+        if(!iwBIds.isEmpty()){
+            BookingTriggerHandler.submitBookingforWaiverApproval(iwBIds);
+        }
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
         if(!bid.isEmpty()){
             BrokerageManagementService.BookingSourceChange(bid);
         }
@@ -319,9 +388,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         // Added by coServe 24-04-2024 Start
         if(dayOfRegBkgs.size() > 0){
             BookingTriggerHandler.sendDayOfRegWhatsAppFBLink(dayOfRegBkgs);
+            LockatedApp_Notifications.registrationCongratulatoryNotification(dayOfRegBkgs); // Added by Vinay 14-01-2026
         }
         if(dayOfKeyHandBkgs.size() > 0){
             BookingTriggerHandler.sendDayOfKeyHandWhatsAppFBLink(dayOfKeyHandBkgs);
+            LockatedApp_Notifications.keyHandoverNotification(dayOfKeyHandBkgs); //Added by Vinay 20-01-2026
         }
         // Added by coServe 24-04-2024 End
         if(sendAccStatementBkgs.size() > 0){ // Added by coServe 19-09-2024
@@ -329,14 +400,25 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         }
         if(confirmedBkgIds.size() > 0){ // Added by coServe 13-12-2024
             //BookingTriggerHandler.sendNotificationToCustomer(confirmedBkgIds); // Commented by Vinay 10-02-2025
+            LockatedApp_Notifications.bookingConfirmedNotification(confirmedBkgIds); // Added by Vinay 14-01-2026
+            LockatedApp_Notifications.homeLoanNotification(confirmedBkgIds); // Added by Vinay 14-01-2026
+            CreateUserWhenUnitBooked.createUserWhenBookingConfirmed(confirmedBkgIds); //Added by Vinay 17-02-2026
         }
 
         if(cancelledOppIds.size() > 0){ // Added by coServe 29-03-2025
             SalesorderUpdateCallout.cancelsalesorder(cancelledOppIds);
         }
-        
+       
+        if(closedRefs.size() > 0){ //Added by Vinay 15-10-2025
+            //ReferralPointsModule.closedReferrals(closedRefs);
+        }
+       
+        if(brlUpdatedBookings.size() > 0){ //Added by Vinay 20-01-2026
+            LockatedApp_Notifications.agreementReceivedNotification(brlUpdatedBookings); //Added by Vinay 20-01-2026
+        }
+        //makeCommentMandatory(Trigger.new, Trigger.oldMap);
     }
-    
+   
      
 
     /*if(Trigger.isbefore && Trigger.isupdate){
@@ -357,24 +439,42 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             }
         }
     }*/
-    
-    
+   
+   
    // trigger BookingTrigger on Booking__c (before update) {
     if (Trigger.isBefore && Trigger.isUpdate) {
+        BookingTriggerHandler.validateIOMBeforeApproval(
+            Trigger.new,
+            Trigger.oldMap
+        );
         List<Booking__c> changedBookings = new List<Booking__c>();
+        List<Booking__c> iwBlist = new List<Booking__c>();//Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
         for (Integer i = 0; i < Trigger.new.size(); i++) {
             Booking__c newRec = Trigger.new[i];
             Booking__c oldRec = Trigger.old[i];
 
             if (newRec.Quotation__c != oldRec.Quotation__c && newRec.Quotation__c != null) {
                 changedBookings.add(newRec);
+            }            
+            //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+            if( oldRec.Interest_Waiver_Approval_Status__c != newRec.Interest_Waiver_Approval_Status__c && newRec.Interest_Waiver_Approval_Status__c != null && newRec.Interest_Waiver_Approval_Status__c == 'Approved' && newRec.Total_Waiver_Amount_to_be_Approved__c != null && newRec.RW_Total_Interest_Amount_Waived__c != null ){                
+                iwBlist.add(newRec);
             }
+            if( oldRec.Interest_Waiver_Approval_Status__c != newRec.Interest_Waiver_Approval_Status__c && newRec.Interest_Waiver_Approval_Status__c != null && (newRec.Interest_Waiver_Approval_Status__c == 'Rejected' ) ){                
+                newRec.Total_Waiver_Amount_to_be_Approved__c = 0;              
+            }
+            //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
         }
         if (!changedBookings.isEmpty()) {
             BookingTriggerHandler.processQuoteAndRelatedUpdates(changedBookings);
         }
-        
+       
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+        if(!iwBlist.isEmpty()){
+            BookingTriggerHandler.updateWaiverApprovedtillNow(iwBlist);
+        }
+        //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
+       
     }
-
 
 }

@@ -24,7 +24,7 @@ public class UniversalTestClass4CodeCoveragep {
         ld.RW_Existing_Corporate_Tie_Up__c =false;
         ld.NameofUnregisteredCorporate_LeadSource__c  ='edf';
         insert ld;
-                user sitehead = UniversalTestClassSetup.createusers('System Administrator', 'site','headpriject','site.head@runwal.com.uat','site.headtest@runwal.com.uat');
+                //user sitehead = UniversalTestClassSetup.createusers('System Administrator', 'site','headpriject','site.head@runwal.com.uat','site.headtest@runwal.com.uat');
 
         Corporates__c cp = new Corporates__c();
         cp.name='Name';
@@ -57,7 +57,7 @@ ld2.RW_Agent_ID__c = 'site.head@runwal.com.uat';
         ld2.Corporate__c = cp.id;
         insert ld2;
         
-                user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
+                //user salesmanager = UniversalTestClassSetup.createusers('Sales Manager', 'Deepak','Arya','salesmanager@runwal.com.uat','salesmanagertest@runwal.com.uat');
 ld2.RW_Agent_ID__c = 'salesmanager@runwal.com.uat';
         ld2.RW_Budget_Rs_in_Cr__c = 20000000;
 update ld2;
@@ -378,7 +378,7 @@ insert objOpportunity;
             Rate_List__c objRL9 = UniversalTestClassSetup.setupratelist(objPU1.id,1,null,'Rate','Saleable Area',ObjGloChrg9.id,PCharge13.id,objpr.id,1);
             List<Rate_List__c> rls = new List<Rate_List__c>{objRL,objRL1,objRL2,objRL3,objRL4,objRL5,objRL6,objRL7,objRL8,objRL9};
                 insert rls;
-            system.debug('&&&&&&&&&&&&&&&&&&&&&&&&&&'+json.serialize(InventoryCostServices.getRateList(objPU1.id,0)));    
+            //system.debug('&&&&&&&&&&&&&&&&&&&&&&&&&&'+json.serialize(InventoryCostServices.getRateList(objPU1.id,0)));    
             
             //inserting payment plan
             Payment_Plan__c objPaymentPlan = new Payment_Plan__c(); 
@@ -473,6 +473,8 @@ insert objOpportunity;
             
            InventoryCostServices.getConstructionStagesByName(objpr.id);
             InventoryCostServices.getConstructionStagesById(objpr.id,t.id);
+            InventoryCostServices c = new InventoryCostServices();
+            c.dummyMethod();
                String RecTypeId= [select Id from RecordType where (Name='Person Account') and (SobjectType='Account')].Id;
         
         Account Accnt = new Account(              

@@ -51,24 +51,19 @@ public class LocobuzzCaseAssignment {
                             cs.Tower__c = accIdVsTower.get(cs.AccountId);
                             cs.Locobuzz_Owner_Assigned__c = true;
                             ownerAssigned = true; //Added by Vinay 10-04-2025
-                            System.debug('SPOC: ' + userMap.get(spoc.L1_Spoc_Name__c));
                         }
                     }else{
                         if(cs.Department__c == spoc.Department__c && cs.RW_Project_Text__c == spoc.Project_Name__c){
-                            System.debug('SPOC Det: ' + spoc);
                             cs.OwnerId = (userMap.get(spoc.L1_Spoc_Email__c) != null)? userMap.get(spoc.L1_Spoc_Email__c) : lstQueue[0].Id;
                             cs.Locobuzz_Owner_Assigned__c = true;
                             ownerAssigned = true; //Added by Vinay 10-04-2025
                             //cs.Escalation_Level__c = 'New';
-                            System.debug('SPOC Email: ' + spoc.L1_Spoc_Email__c);
-                            System.debug('SPOC: ' + userMap.get(spoc.L1_Spoc_Email__c));
                         }
                     }
                     if(ownerAssigned == false){
                        cs.OwnerId = System.label.General_Queue_Id;
                     }
                 }
-                System.debug('Locobuzz Owner: ' + cs.OwnerId);
             }
             update locoBuzzCasese;
         }
@@ -158,7 +153,6 @@ public class LocobuzzCaseAssignment {
         for(User usr : users){
             userMap.put(usr.Email, usr.Id);
         }
-        System.debug('userMap: ' + userMap);
         return userMap;
     }
 

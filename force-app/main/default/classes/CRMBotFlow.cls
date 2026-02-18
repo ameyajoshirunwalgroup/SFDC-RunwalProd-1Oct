@@ -136,7 +136,6 @@ global without sharing class CRMBotFlow {
     
     @HttpPost
     global static Details doPost(String crn, String customer, String option, String companyCode, String project, String booking, String rmId, String customer_email, String send_mail){
-        System.debug('--option--:' + option);
         //Added by coServe 08-01-2024 Start
         Id recId = booking;
         String sObjName = recId.getSObjectType().getDescribe().getName();
@@ -174,7 +173,6 @@ global without sharing class CRMBotFlow {
         }else if(option == 'Interest Statement'){
             interestStatement(crn, customer, companyCode, project, booking, rmId, customer_email);
         }
-        System.debug('det: ' + det);
         return det;
     }
        
@@ -232,7 +230,6 @@ global without sharing class CRMBotFlow {
             
             tsk.Status = 'Completed';
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             tsk.Description = 'Error: ' + e.getMessage();
             update tsk;
         }
@@ -327,7 +324,6 @@ global without sharing class CRMBotFlow {
                 body = 'Test';
             }
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             isError = true;
             tsk.Description = 'Error: ' + e.getMessage(); 
         }
@@ -348,12 +344,10 @@ global without sharing class CRMBotFlow {
             messages.add(message);
             try{
                 Messaging.SendEmailResult[] result = Messaging.sendEmail(messages);
-                System.debug('--result--: ' + result);
                 if(result[0].isSuccess()){
                     tsk.Status = 'Completed';
                 }
             }catch(Exception e){
-                System.debug('--Error--'+e.getMessage());
                 tsk.Description = 'Error: ' + e.getMessage();
             }
             update tsk;
@@ -393,7 +387,6 @@ global without sharing class CRMBotFlow {
             //}   
             tsk.Status = 'Completed';
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             tsk.Description = 'Error: ' + e.getMessage();
         }
         update tsk;
@@ -422,10 +415,8 @@ global without sharing class CRMBotFlow {
         Integer index = 0;
         if(demands.size() > 0){
             do {
-                System.debug('demands[index]: ' + demands[index].Id);
                 Boolean otherChargeDem = false;
                 for(RW_Demand_Item__c item : demands[index].Demand_Items__r){
-                    System.debug('RW_Usage_Code__c: ' + item.RW_Usage_Code__c);
                     if(item.RW_Usage_Code__c == null || item.RW_Usage_Code__c == ''){
                         otherChargeDem = true;
                     }
@@ -435,7 +426,6 @@ global without sharing class CRMBotFlow {
                 }
                 index++;
             } while (demId == null && demands.size() > index);
-            System.debug('demId: ' + demId);
         }
         
         //Added by coServe 15-10-2024 End
@@ -450,7 +440,6 @@ global without sharing class CRMBotFlow {
                 body = 'Test';
             }
         }catch(Exception e){
-           System.debug('--Error--'+e.getMessage());
            isError = true;
            tsk.Description = 'Error: ' + e.getMessage();
         }
@@ -476,7 +465,6 @@ global without sharing class CRMBotFlow {
             //}
             tsk.Status = 'Completed';
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             tsk.Description = 'Error: ' + e.getMessage();
         }
         update tsk;
@@ -511,7 +499,6 @@ global without sharing class CRMBotFlow {
         Integer index = 0;
         if(demands.size() > 0){
             do {
-                System.debug('demands[index]: ' + demands[index].Id);
                 Boolean otherChargeDem = false;
                 for(RW_Demand_Item__c item : demands[index].Demand_Items__r){
                     System.debug('RW_Usage_Code__c: ' + item.RW_Usage_Code__c);
@@ -519,13 +506,11 @@ global without sharing class CRMBotFlow {
                         otherChargeDem = true;
                     }
                 }
-                System.debug('otherChargeDem: ' + otherChargeDem);
                 if(otherChargeDem == false){
                     demandsToSend.add(demands[index]);
                 }
                 index++;
             } while (demandsToSend.size() < 3 && demands.size() > index);
-            System.debug('demandsToSend: ' + demandsToSend);
         }
         
         //Added by coServe 15-10-2024 End
@@ -534,7 +519,6 @@ global without sharing class CRMBotFlow {
         try{
             //for(RW_Demand__c dem : demands){ //Commented by coServe 15-10-2024
             for(RW_Demand__c dem : demandsToSend){
-                System.debug('dem: ' + dem.Name);
                 String body1;
                 if(!Test.isRunningTest() && demandsToSend.size() > 0){
                     body1 = PDFController.getdemandPdf(dem.Id);
@@ -548,7 +532,6 @@ global without sharing class CRMBotFlow {
                 atts.add(att1);  
             }
         }catch(Exception e){
-           System.debug('--Error--'+e.getMessage());
            isError = true;
            tsk.Description = 'Error: ' + e.getMessage();
         }
@@ -572,7 +555,6 @@ global without sharing class CRMBotFlow {
             //}
             tsk.Status = 'Completed';
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             tsk.Description = 'Error: ' + e.getMessage();
         }
         
@@ -594,9 +576,7 @@ global without sharing class CRMBotFlow {
         tsk.Project__c = (project != null && project != '') ? project : null;
         tsk.WhatId = booking;
         tsk.OwnerId = (rmId != null && rmId != '') ? rmId : UserInfo.getUserId();*/
-        
         List<RW_Payment_Details__c> recps = [SELECT Id, Name FROM RW_Payment_Details__c WHERE RW_Booking__r.Opportunity__r.SAP_Customer_Number__c =: crn AND RW_Document_Type__c IN ('DZ','DT','DF') AND Status__c != 'Reversed' ORDER BY CreatedDate Desc LIMIT 1];
-        
         /*String body;
         Boolean isError = false;
         try{
@@ -646,74 +626,74 @@ global without sharing class CRMBotFlow {
         return det;
     }
     
-    public static Details lastThreeReceipts(String crn, String customer, String project, String booking, String rmId, String email, String send_mail){
+    // public static Details lastThreeReceipts(String crn, String customer, String project, String booking, String rmId, String email, String send_mail){
         
-        /*Id recordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId();
-        Task tsk = new Task();
-        tsk.RecordTypeId = recordTypeId;
-        tsk.Subject = 'Last 3 Payment Receipts';
-        tsk.Priority = 'Normal';
-        tsk.Status = 'Not Started';
-        tsk.Project__c = (project != null && project != '') ? project : null;
-        tsk.WhatId = booking;
-        tsk.OwnerId = (rmId != null && rmId != '') ? rmId : UserInfo.getUserId();*/
+    //     /*Id recordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Service Task').getRecordTypeId();
+    //     Task tsk = new Task();
+    //     tsk.RecordTypeId = recordTypeId;
+    //     tsk.Subject = 'Last 3 Payment Receipts';
+    //     tsk.Priority = 'Normal';
+    //     tsk.Status = 'Not Started';
+    //     tsk.Project__c = (project != null && project != '') ? project : null;
+    //     tsk.WhatId = booking;
+    //     tsk.OwnerId = (rmId != null && rmId != '') ? rmId : UserInfo.getUserId();*/
         
-        List<RW_Payment_Details__c> recps = [SELECT Id, Name FROM RW_Payment_Details__c WHERE RW_Booking__r.Opportunity__r.SAP_Customer_Number__c =: crn AND RW_Document_Type__c IN ('DZ','DT','DF') AND Status__c != 'Reversed' ORDER BY CreatedDate Desc LIMIT 3];
-        for(RW_Payment_Details__c rec : recps){
-            rec.Send_Receipt_Letter__c = true;
-        }
-        update recps;
-        /*List<Messaging.EmailFileAttachment> atts = new List<Messaging.EmailFileAttachment>();
-        Boolean isError = false;
-        List<String> recpLinks = new List<String>();
-        try{
-            for(RW_Payment_Details__c rec : recps){
-                String body1;
-                if(!Test.isRunningTest() && recps.size() > 0){
-                    body1 = PDFController.getreceiptPdf(rec.Id);
-                    recpLinks.add('https://runwal.my.salesforce-sites.com/crmbotdoc?id='+rec.Id+'&doc=recp');
-                }else if(Test.isRunningTest()){
-                    body1 = 'Test';
-                }
-                Messaging.EmailFileAttachment att1 = new Messaging.EmailFileAttachment();
-                att1.setFileName(rec.Name+'.pdf');
-                att1.setBody(EncodingUtil.base64Decode(body1));
-                atts.add(att1);  
-            }
-        }catch(Exception e){
-           System.debug('--Error--'+e.getMessage());
-           isError = true;
-           tsk.Description = 'Error: ' + e.getMessage();
-        }
+    //     List<RW_Payment_Details__c> recps = [SELECT Id, Name FROM RW_Payment_Details__c WHERE RW_Booking__r.Opportunity__r.SAP_Customer_Number__c =: crn AND RW_Document_Type__c IN ('DZ','DT','DF') AND Status__c != 'Reversed' ORDER BY CreatedDate Desc LIMIT 3];
+    //     for(RW_Payment_Details__c rec : recps){
+    //         rec.Send_Receipt_Letter__c = true;
+    //     }
+    //     update recps;
+    //     /*List<Messaging.EmailFileAttachment> atts = new List<Messaging.EmailFileAttachment>();
+    //     Boolean isError = false;
+    //     List<String> recpLinks = new List<String>();
+    //     try{
+    //         for(RW_Payment_Details__c rec : recps){
+    //             String body1;
+    //             if(!Test.isRunningTest() && recps.size() > 0){
+    //                 body1 = PDFController.getreceiptPdf(rec.Id);
+    //                 recpLinks.add('https://runwal.my.salesforce-sites.com/crmbotdoc?id='+rec.Id+'&doc=recp');
+    //             }else if(Test.isRunningTest()){
+    //                 body1 = 'Test';
+    //             }
+    //             Messaging.EmailFileAttachment att1 = new Messaging.EmailFileAttachment();
+    //             att1.setFileName(rec.Name+'.pdf');
+    //             att1.setBody(EncodingUtil.base64Decode(body1));
+    //             atts.add(att1);  
+    //         }
+    //     }catch(Exception e){
+    //        System.debug('--Error--'+e.getMessage());
+    //        isError = true;
+    //        tsk.Description = 'Error: ' + e.getMessage();
+    //     }
         
-        insert tsk;
-        try{
-            //if(send_mail == 'yes' || send_mail == 'YES' || send_mail == 'Yes'){
-                if(atts != null && atts.size() > 0 && !isError){
-                    list<Messaging.SingleEmailMessage> messages = new list<Messaging.SingleEmailMessage>();
-                    Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
-                    message.toAddresses = new List<String>{email};
-                        message.subject = 'Last 3 Payment Receipts';
-                    String htmlBody = 'Dear ' + customer + ',<br/><br/>  Please find the last three Receipt Letters as requested.';
-                    htmlBody += '<br/><br/>Regards,<br/>Customer Care Team.';
-                    message.setHtmlBody(htmlBody);  
-                    message.setFileAttachments(atts);
-                    message.setOrgWideEmailAddressId(Utility.getOrgWideEmailAddress());
-                    messages.add(message);
-                    Messaging.SendEmailResult[] result = Messaging.sendEmail(messages);
-                }
-            //}
-            tsk.Status = 'Completed';
-        }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
-            tsk.Description = 'Error: ' + e.getMessage();
-        }
-        update tsk;*/
-        Details det = new Details();
-        //det.last3ReceiptLinks = recpLinks;
-        det.last3ReceiptLinks = new List<String>{'Please check your registered email for Receipt Letters'};
-        return det;
-    }
+    //     insert tsk;
+    //     try{
+    //         //if(send_mail == 'yes' || send_mail == 'YES' || send_mail == 'Yes'){
+    //             if(atts != null && atts.size() > 0 && !isError){
+    //                 list<Messaging.SingleEmailMessage> messages = new list<Messaging.SingleEmailMessage>();
+    //                 Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
+    //                 message.toAddresses = new List<String>{email};
+    //                     message.subject = 'Last 3 Payment Receipts';
+    //                 String htmlBody = 'Dear ' + customer + ',<br/><br/>  Please find the last three Receipt Letters as requested.';
+    //                 htmlBody += '<br/><br/>Regards,<br/>Customer Care Team.';
+    //                 message.setHtmlBody(htmlBody);  
+    //                 message.setFileAttachments(atts);
+    //                 message.setOrgWideEmailAddressId(Utility.getOrgWideEmailAddress());
+    //                 messages.add(message);
+    //                 Messaging.SendEmailResult[] result = Messaging.sendEmail(messages);
+    //             }
+    //         //}
+    //         tsk.Status = 'Completed';
+    //     }catch(Exception e){
+    //         System.debug('--Error--'+e.getMessage());
+    //         tsk.Description = 'Error: ' + e.getMessage();
+    //     }
+    //     update tsk;*/
+    //     Details det = new Details();
+    //     //det.last3ReceiptLinks = recpLinks;
+    //     det.last3ReceiptLinks = new List<String>{'Please check your registered email for Receipt Letters'};
+    //     return det;
+    // }
     
     global class Details{
         global String accountStatementLink;

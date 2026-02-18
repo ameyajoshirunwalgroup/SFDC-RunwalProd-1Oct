@@ -11,9 +11,9 @@ public without sharing class ConvertTempCpToOriginalCpController {
         }
         
         String errorMessage;
-        if(tempCp.PAN_No__c == null){
+        /*if(tempCp.PAN_No__c == null){
             errorMessage = 'PAN number';
-        }
+        }*/
         if(tempCp.Mobile_No__c == null){
             if(errorMessage != null && errorMessage != ''){
                 errorMessage += ', Mobile';
@@ -98,25 +98,5 @@ public without sharing class ConvertTempCpToOriginalCpController {
         } 
     }
     
-    Public static void dummy(){
-        Integer i = 0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-    }
+    
 }

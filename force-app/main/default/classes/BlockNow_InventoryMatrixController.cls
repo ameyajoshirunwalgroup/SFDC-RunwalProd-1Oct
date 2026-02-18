@@ -524,6 +524,7 @@ public with sharing class BlockNow_InventoryMatrixController {
         return '';
     }
     
+
     public PageReference checkOpportunityStatus()
     {
         
@@ -562,6 +563,11 @@ public with sharing class BlockNow_InventoryMatrixController {
              return null;
         }
     }
+    
+    public PageReference cancelButton() {
+    return new PageReference('/' + oppId);
+}
+
               
     
 }

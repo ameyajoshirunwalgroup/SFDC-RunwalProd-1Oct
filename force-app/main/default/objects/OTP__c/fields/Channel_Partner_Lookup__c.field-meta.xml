@@ -5,11 +5,32 @@
     <label>Channel Partner Lookup</label>
     <lookupFilter>
         <active>true</active>
+        <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5))</booleanFilter>
         <errorMessage>Please select an active Channel Partner</errorMessage>
         <filterItems>
             <field>Broker__c.Deactivated__c</field>
             <operation>equals</operation>
             <value>False</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.OTP_Generate_For__c</field>
+            <operation>equals</operation>
+            <value>Temp Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>Broker__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Temp Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.OTP_Generate_For__c</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </filterItems>
+        <filterItems>
+            <field>Broker__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>

@@ -3,6 +3,8 @@
     <fullName>Case_Status_is_Open</fullName>
     <active>true</active>
     <errorConditionFormula>AND( ISNEW() , !ISPICKVAL( Status , &apos;Open&apos;), ISBLANK(locobuzz__Locobuzz_ID__c) ,
-$Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+$Label.Disable_all_validations_from_case == &quot;false&quot;, /*Added by Prashant to control disabling all validations together*/
+ NOT(CONTAINS( Subject , &apos;Undeliverable:&apos;)) /*Added by Vinay 23-05-2025 */
+)</errorConditionFormula>
     <errorMessage>On case Creation Status should be open.</errorMessage>
 </ValidationRule>

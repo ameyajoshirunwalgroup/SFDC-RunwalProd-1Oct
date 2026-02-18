@@ -4,13 +4,13 @@
     <active>false</active>
     <description>Added by Prashant - 01-08-2025 - According to Maruti, these fields to be filled by Maruti/SM.</description>
     <errorConditionFormula>AND(
-ISPICKVAL(Walkin_Source__c, &apos;Referral&apos;),
-ISPICKVAL(Walkin_SubSource__c, &apos;Existing client reference&apos;),
-ISPICKVAL(Referral_Sub_Source__c, &apos;Existing client reference&apos;),
-OR(
-ISBLANK(Customer_reference_SAP_Code__c),
-ISBLANK(Customer_reference_Booked_Unit__c)
-)
+    ISPICKVAL(Walkin_Source__c, &apos;Referral&apos;),
+    ISPICKVAL(Walkin_SubSource__c, &apos;Existing client reference&apos;),
+    ISPICKVAL(Referral_Sub_Source__c, &apos;Existing client reference&apos;),
+    OR(
+        ISBLANK(Customer_reference_SAP_Code__c),
+        ISBLANK(Customer_reference_Booked_Unit__c)
+    )
 )</errorConditionFormula>
-    <errorMessage>Please update the referee&apos;s booked unit &amp; customer number.</errorMessage>
+    <errorMessage>Please Update Referee&apos;s Booked Unit &amp; Customer Number</errorMessage>
 </ValidationRule>

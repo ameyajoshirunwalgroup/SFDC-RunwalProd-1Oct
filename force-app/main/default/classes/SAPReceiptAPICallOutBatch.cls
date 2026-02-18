@@ -63,6 +63,8 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
         //System.debug('*after call*'+JSON.serialize( sfdcpayReceiptResponse));
         //   system.debug(sfdcpayReceiptResponse.item.size());
         //loop through the response 
+        System.debug('sfdcpayReceiptResponse**'+sfdcpayReceiptResponse);
+        System.debug('sfdcpayReceiptResponse.item**'+sfdcpayReceiptResponse.item);
         try{
             if(sfdcpayReceiptResponse != null && sfdcpayReceiptResponse.item != null && sfdcpayReceiptResponse.item.size() >0)
             {
@@ -147,26 +149,34 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
         
         
         
-        String soqlQuery = 'Select Id, Name,SAP_Customer_Number__c,Booking__c, (Select id,Name FROM EOI__r) from Opportunity where SAP_Customer_Number__c IN:cutomerIds and stagename in (\'Unit Booked\',\'EOI Received\') ';
-        
+        String soqlQuery = 'Select Id, Name,SAP_Customer_Number__c,Booking__c, (Select id,Name FROM EOI__r) from Opportunity where SAP_Customer_Number__c IN:cutomerIds and stagename in (\'Unit Booked\',\'EOI Received\',\'Unit Blocked\') ';//Added Unit Blocked for unidentified Payments
+        System.debug('soqlQuery**'+soqlQuery);
         return Database.getQueryLocator(soqlQuery);
         
     }
     
     global void execute( Database.BatchableContext BC,     List<Opportunity> scope)
     {
+        System.debug('scope**'+scope);
         Map<String,receiptWrapper> mapOfReceiptWrapper = new Map<String,receiptWrapper>();
         Map<String,Opportunity> customerOppMap = new Map<String,Opportunity>();
         Map<String,Id> MapOfBookingCustomerId = new Map<String,Id>(); 
         
         for(Opportunity oppRecord : scope)
         {
-            //If EOI is present we will tag the Payment Reciept to the Opportunity else it will be in tagged to booking record
-            if(oppRecord.EOI__r.size() >0 && oppRecord.Booking__c ==null)
-            {
-                //   System.debug('*added in map**');
-                customerOppMap.put(oppRecord.SAP_Customer_Number__c, oppRecord);
+            //Commented for unidentified payments
+            // //If EOI is present we will tag the Payment Reciept to the Opportunity else it will be in tagged to booking record
+            // if(oppRecord.EOI__r.size() >0 && oppRecord.Booking__c ==null)
+            // {
+            //     //   System.debug('*added in map**');
+            //     customerOppMap.put(oppRecord.SAP_Customer_Number__c, oppRecord);
+            // }
+
+            /*Added for unidentified Payment starts */
+            if(oppRecord.Booking__c ==null){
+              customerOppMap.put(oppRecord.SAP_Customer_Number__c, oppRecord);
             }
+            /*Added for unidentified Payment ends */
             
             else{
                 if(oppRecord.Booking__c != null){
@@ -216,6 +226,8 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
                           receiptWrapper.paymentDetails.RW_ODN_Number__c = responseRec.Zodn;
                           receiptWrapper.paymentDetails.RW_Payment_Item_Number__c = responseRec.Buzei;
                           receiptWrapper.paymentDetails.RW_Demand_Number__c =responseRec.Zdemand;
+                          if(MapofDemandNumWithDemand.get(responseRec.Zdemand) != null) //Added by Vinay 30-07-2025
+                          	receiptWrapper.paymentDetails.RW_Demand__c = MapofDemandNumWithDemand.get(responseRec.Zdemand).Id; //Added by Vinay 30-07-2025
                           receiptWrapper.paymentDetails.RW_Usage_Description__c = responseRec.Sgtxt;
                           receiptWrapper.paymentDetails.RW_Usage_Code__c = responseRec.Xref1;
                           system.debug('$$$$$$$$$');

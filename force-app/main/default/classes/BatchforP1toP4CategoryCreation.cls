@@ -38,7 +38,15 @@ global class BatchforP1toP4CategoryCreation implements Database.Batchable<sObjec
         }
 		
         if(!cpCategoryList.isEmpty()){
-            Database.insert(cpCategoryList,false);
+            Database.SaveResult[] wiList = Database.insert(cpCategoryList, false);
+
+            for(Database.SaveResult sr : wiList){
+                if(!sr.isSuccess()){
+                    for(Database.Error err : sr.getErrors()){
+                        System.debug(err.getStatusCode() + ':' + err.getMessage());
+                    }
+                }
+            }
         }
         
          /*if (!cpCategoryList.isEmpty()) {

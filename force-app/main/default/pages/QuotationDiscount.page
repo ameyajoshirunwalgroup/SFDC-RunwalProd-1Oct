@@ -1,22 +1,22 @@
-<apex:page docType="html-5.0"  renderAs="{!if($CurrentPage.parameters.isPdf == null, null, 'pdf')}" showHeader="false" Controller="QuotationExtn" sidebar="false" standardStylesheets="false" >
-    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+<apex:page docType="html-5.0" renderAs="{!if($CurrentPage.parameters.isPdf == null, null, 'pdf')}" showHeader="false" Controller="QuotationExtn" sidebar="false" standardStylesheets="false">
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
     <head>
-     <title>Apply Discounts</title>
-            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-      <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
-      <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
-      <script src="/soap/ajax/54.0/connection.js"></script>
+        <title>Apply Discounts</title>
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+        <script src="/soap/ajax/54.0/connection.js"></script>
     </head>
     <style>
-    .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th, .slds td {
-        font-family: 'Lato';
+        .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th, .slds td {
+            font-family: 'Lato';
         }
         .slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th {
-        text-align: center;
+            text-align: center;
         }
         .slds .slds-theme--shade {
-        background-color: aliceblue;
+            background-color: aliceblue;
         }
         .slds .slds-button {
             background-color:orange;
@@ -28,492 +28,444 @@
             padding-left: 5px;
             padding-right: 5px;
         }
-    table {
-        font-family: Lato,verdana, arial, sans-serif;
-        font-size: 12px;
-        color: #333333;
-        border-width: 3px;
-        border-color: #3A3A3A;
-        border-collapse: collapse;
-        empty-cells:show;
-    }
-
-    table th {
-        border-width: 1px;
-        padding: 1px;
-        border: 1px solid #517994;
+        table {
+            font-family: Lato,verdana, arial, sans-serif;
+            font-size: 12px;
+            color: #333333;
+            border-width: 3px;
+            border-color: #3A3A3A;
+            border-collapse: collapse;
+            empty-cells:show;
         }
- 
-    table td {
-        border-width: 1px;
-        padding: 1px;
-        border: 1px solid #CAD1C3;
-    }
-
-    .bold, .aval, .avalDisc {
-        font-weight:700;
-    }
-    .bright {
-        border-width: 1px;
-        padding: 2px;
-        border-style: dotted solid dotted solid;
-        border-color: #EDC951;
-        background-color:#FFCDB8;
-        font-weight:700;
-    }
-    .dull {
-        border-width: 1px;
-        padding: 2px;
-        border-style: dotted solid dotted solid;
-        border-color: #00A0B0;
-        background-color: #D0ECEA;
-    }
-    input[type="text"] {
-      border: solid 1px #DF9496;
-      box-shadow: 0 0 5px 1px #969696;
-    }
-    input[type="checkbox"] {
-      border: solid 1px #DF9496;
-      box-shadow: 0 0 5px 1px #969696;
-    }
-    
-    .header {
-        border-width: 1px;
-        padding: 5px;
-        background-color:#B9D7D9;
-    }
-    
-    .header1 {
-        border-width: 1px;
-        padding: 5px;
-        background-color:#E2DDD9;
-    }
-    .readOnly {
-        border-color: #727B84;
-        background-color:  #9BDDFF;
-    }
-    .Edit {
-        border-color: #727B84;
-        background-color: #DF9496;
-    }
-    .zoomin {
-        border-color: #727B84 !important;
-        background-color: #DF9496 !important;
-    }
-    .projectStyle {
-        border-width: 1px;
-        font-weight:700;
-        text-align:center;
-        border-style: solid;
-    }
-    div.fadeMe {
-      opacity:    0.5; 
-      background: #D9E9FF; 
-      width:      100%;
-      height:     100%; 
-      z-index:    1000;
-      top:        0; 
-      left:       0; 
-      position:   fixed; 
-    }
-    .blackout {
-        background-color: #ffffff;
-        color:#ffffff;
-    }
-    .button {
-        background-color:orange;
-        background-image:none;
-    }
-    .messageTable {
-        font-family: Lato,verdana, arial, sans-serif;
-        font-weight:700;
-        color: #BE2625;
-        width:100%;
-        background-color:#EEB4B4; !important
-    }
-    .messageTable td{
-        height:15px;
-    }
-    .messageCell td{
-        height:0px;
-    }
-    
+        
+        table th {
+            border-width: 1px;
+            padding: 1px;
+            border: 1px solid #517994;
+        }
+        
+        table td {
+            border-width: 1px;
+            padding: 1px;
+            border: 1px solid #CAD1C3;
+        }
+        
+        .bold, .aval, .avalDisc {
+            font-weight:700;
+        }
+        .bright {
+            border-width: 1px;
+            padding: 2px;
+            border-style: dotted solid dotted solid;
+            border-color: #EDC951;
+            background-color:#FFCDB8;
+            font-weight:700;
+        }
+        .dull {
+            border-width: 1px;
+            padding: 2px;
+            border-style: dotted solid dotted solid;
+            border-color: #00A0B0;
+            background-color: #D0ECEA;
+        }
+        input[type="text"] {
+            border: solid 1px #DF9496;
+            box-shadow: 0 0 5px 1px #969696;
+        }
+        input[type="checkbox"] {
+            border: solid 1px #DF9496;
+            box-shadow: 0 0 5px 1px #969696;
+        }
+        
+        .header {
+            border-width: 1px;
+            padding: 5px;
+            background-color:#B9D7D9;
+        }
+        
+        .header1 {
+            border-width: 1px;
+            padding: 5px;
+            background-color:#E2DDD9;
+        }
+        .readOnly {
+            border-color: #727B84;
+            background-color:  #9BDDFF;
+        }
+        .Edit {
+            border-color: #727B84;
+            background-color: #DF9496;
+        }
+        .zoomin {
+            border-color: #727B84 !important;
+            background-color: #DF9496 !important;
+        }
+        .projectStyle {
+            border-width: 1px;
+            font-weight:700;
+            text-align:center;
+            border-style: solid;
+        }
+        div.fadeMe {
+            opacity:    0.5; 
+            background: #D9E9FF; 
+            width:      100%;
+            height:     100%; 
+            z-index:    1000;
+            top:        0; 
+            left:       0; 
+            position:   fixed; 
+        }
+        .blackout {
+            background-color: #ffffff;
+            color:#ffffff;
+        }
+        .button {
+            background-color:orange;
+            background-image:none;
+        }
+        .messageTable {
+            font-family: Lato,verdana, arial, sans-serif;
+            font-weight:700;
+            color: #BE2625;
+            width:100%;
+            background-color:#EEB4B4; !important
+        }
+        .messageTable td{
+            height:15px;
+        }
+        .messageCell td{
+            height:0px;
+        }
     </style>
     <body>    
-    <div class="slds">    
-  <!-- PRIMARY CONTENT WRAPPER -->
-    <div class="myapp">   
-        <!-- SEARCH DEMANDS-->
-      <div aria-labelledby="DSform">
-        <!-- BOXED AREA -->
-        <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
-          <legend id="dsForm" class="slds-text-heading--medium slds-p-vertical--medium">Apply Discounts</legend>
-    
-          <!-- DISCOUNT PAGE FORM-->
-<apex:form id="newDiscountform">
-    <apex:PageMessages id="pageMsgs" />
-    <apex:actionFunction name="refreshAppliedColumn" action="{!MathForAppliedDiscount}" oncomplete="postDiscountRefresh()" rerender="appliedArea,pageMsgs" status="status" />
-    <apex:actionFunction name="backtoQuoteAction" action="{!backtoQuotePage}" status="status" />
-    
-    <apex:actionStatus id="status">
-    <apex:facet name="start">
-    <div class="fadeMe">
-        &nbsp;
-    </div>
-    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
-        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
-            <img src="/img/loading.gif" style="float: left; margin: 8px;" />
-            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
-        </div>
-    </div>
-    </apex:facet>
-    </apex:actionStatus>
-    
-    
-     <table id="projectAddress" width='75%' align="center">
-    <!--  <tr>
-            <td class="projectStyle">
-                
-                    <td class="projectStyle">
-                        <h2>{!proj.Name}</h2>
-                        <br>{!proj.Address__c}</br></td>
-                    
-        </tr> -->   
-    </table>
-    <table width="75%"  align="center" border-style="solid">
-        <tr width="75%" align="center">
-            <td>
-                <apex:dataTable value="{!quoteUIMap['LEFTTOP']}" var="rows"  id="left1" width="100%">
-                    <apex:column width="50%" styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
-                    <apex:column width="50%"    styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
-                </apex:dataTable>
-            </td>
-        </tr>
-    </table>
-    <apex:outputPanel id="editAreaGST" rendered="{!discountPageMode == 'edit'}">
-        <table width="75%" border-style="solid" align="center">
-            <tr>
-                <th colspan="3" class="header">GST Calculator</th>
-            </tr>
-            <tr>
-                <th class="header1">Enter PSF Discount</th>
-                <th class="header1">Enter Lumpsum Discount</th>
-                <th class="header1"></th>
-            </tr>
-            <tr>
-                <td width="33%">
-                    <apex:input style="width:75%" value="{!GstPsfRate}"></apex:input>
-                </td>
-                <td width="33%">
-                    <apex:input style="width:75%" value="{!GstLumpsumRate}"></apex:input>
-                </td>
-                <th rowspan="2" align="center" class="header">
-                    <apex:commandButton style="align:center;" styleClass="slds-button slds-button--brand slds-button--small" value="Calculate GST Discount" action="{!calculateGSTpercenatgeDisc}" status="status" reRender="editAreaGST"/>
-                </th>
-            </tr>
-            <tr id="gstTotal">
-                <th colspan="1" class="header1">Total GST Discount(PSF)&nbsp;&nbsp;&nbsp;&nbsp;{!TotalGSTDiscountPSF}</th>
-                <th colspan="1" class="header1">Total GST Discount(Lumpsum)&nbsp;&nbsp;&nbsp;&nbsp;{!TotalGSTDiscount}</th>
-            </tr>
-         </table>
-    </apex:outputpanel> 
-    <apex:outputPanel id="editArea" rendered="{!discountPageMode == 'edit'}">
-        <table width="75%" border-style="solid" align="center">
-            <tr>
-                <th colspan="3" class="header">Discount Calculation</th>
-            </tr>
-            <tr>
-                <th colspan="1" class="header">Discount Approval Status</th>
-                 <th colspan="2" class="header">{!quoteApprovalMsg}</th>
-            </tr>
-            <tr>
-                <th class="header1">--</th>
-                <th class="header1">Per Sq Ft</th>
-                <th class="header1">Lumpsum</th>
-            </tr>
-            <tr>
-                <td width="33%">Total Card Rate</td>
-                <td width="33%">{!StotalRateCardPSF}</td>
-                <td width="33%">{!StotalRateCardLumspum}</td>
-            </tr>
-            <tr width="100%">
-                <td colspan="3">
-                    <apex:dataTable value="{!FinalCustomerDiscount}" var="d" width="100%">
-                        <apex:column width="33%">{!d.type}</apex:column>
-                        <apex:column width="33%">{!d.SperSqFtVal}</apex:column>
-                        <apex:column width="33%">{!d.SlumpsumVal}</apex:column>
-                    </apex:dataTable>
-                </td>
-            </tr>
-        </table>
-        <apex:outputPanel id="appliedArea">
-            <table width="75%" align="center">
-                <tr>
-                    <th colspan="4" align="center" class="header">Discount Categories Available</th>
-                    <th colspan="4" align="center" class="header">Discount Categories Applied</th>
-                </tr>
-                <tr>
-                    <th colspan="3" align="center" class="header">
-                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Apply Discount"  action="{!getUpdatedCharges}"  oncomplete="bindEvents()" rerender="editArea" status="status" />
-                    </th>
-                    <th colspan="3"  align="center" class="header">
-                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Clear Discount" action="{!clearDiscount}" status="status" />
-                    </th>
-                    <th colspan="2"  align="center" class="header">
-                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Close" oncomplete="BacktoQuotePage()" status="status" />
-                    </th> 
-                </tr>
-                <tr>
-                    <table width="75%" align="center">
-                        <tr>
-                            <th width="20%" class="header1">Type</th>
-                            <th width="10%" class="header1">Per Sq.Ft</th>
-                            <th width="10%" class="header1">Lumpsum</th>
-                            <th width="10%" class="header1">Apply</th>
-                            <th width="20%" class="header1">Type</th>
-                            <th width="15%" class="header1">Per Sq.Ft</th>
-                            <th width="15%" class="header1">Lumpsum</th>
-                        </tr>
-                        <tr>
-                         <td width="50%" colspan="4" align="center">
-                                <apex:dataTable id="discountLeft" value="{!pDisc}" var="d" width="100%">
-                                    <apex:column width="40%">{!d.type}</apex:column>
-                                    <apex:column width="20%" rendered="{!NOT(d.psf)}">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="20%" rendered="{!d.psf}">
-                                        <apex:input style="width:95%" title="Enter Per Sq Ft Discount Value" value="{!d.perSqFtVal}"></apex:input>
-                                    </apex:column>
-                                    <apex:column width="20%" rendered="{!NOT(d.lumpsum)}">{!d.SlumpsumVal}</apex:column>
-                                    <apex:column width="20%" rendered="{!d.lumpsum}">
-                                        <apex:input style="width:95%" value="{!d.lumpsumVal}"></apex:input>
-                                    </apex:column>
-                                    <apex:column width="20%">
-                                        <apex:inputCheckbox title="check to select this discount" value="{!d.applied}" onclick="refreshAppliedColumn()"/>
-                                    </apex:column>
-                                </apex:dataTable>
-                            </td>
-                            <td width="50%" colspan="4" align="center">
-                                <apex:dataTable id="appliedTable" value="{!pDisc}" var="d" width="100%">
-                                    <apex:column width="20%" rendered="{!d.applied}" styleClass="bright">{!d.type}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
-                                    <apex:column width="20%" rendered="{!NOT(d.applied)}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied)}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied)}" styleClass="dull">--</apex:column>
-                                </apex:dataTable>
-                            </td>
+        <div class="slds">    
+            <!-- PRIMARY CONTENT WRAPPER -->
+            <div class="myapp">   
+                <!-- SEARCH DEMANDS-->
+                <div aria-labelledby="DSform">
+                    <!-- BOXED AREA -->
+                    <fieldset class="slds-box slds-theme--shade slds-container--large slds-container--center slds-grid--align-spread">
+                        <legend id="dsForm" class="slds-text-heading--medium slds-p-vertical--medium">Apply Discounts</legend>
                         
-                        
-                        
-                             <!-- <td width="50%" colspan="4" align="center">
-                                <apex:dataTable id="discountLeft" value="{!pDisc}" var="d" width="100%">
-                                        <apex:column width="40%" rendered="{!d.discountType == 'Customer Type'}">{!d.type}</apex:column>
-                                        <apex:column width="20%" rendered="{!NOT(d.psf) && d.discountType == 'Customer Type'}">{!d.SperSqFtVal}</apex:column>
-                                        <apex:column width="20%" rendered="{!d.psf && d.discountType == 'Customer Type'}">
-                                            <apex:input style="width:95%" title="Enter Per Sq Ft Discount Value" value="{!d.perSqFtVal}"></apex:input>
-                                        </apex:column>
-                                        <apex:column width="20%" rendered="{!NOT(d.lumpsum) && d.discountType == 'Customer Type'}">{!d.SlumpsumVal}</apex:column>
-                                        <apex:column width="20%" rendered="{!d.lumpsum && d.discountType == 'Customer Type'}">
-                                            <apex:input style="width:95%" value="{!d.lumpsumVal}"></apex:input>
-                                        </apex:column>
-                                      <apex:column width="20%" rendered="{!d.discountType == 'Customer Type'}">
-                                            <apex:outputText value="{!d.applied}" />
-                                        </apex:column> 
-                                         <apex:column width="20%" rendered="{!d.discountType == 'Customer Type' && d.applied}">
-                                            <input type="radio" name="chosen"  id="chosen" checked="checked"/>
-                                        </apex:column>
-                                        <apex:column width="20%" rendered="{!d.discountType == 'Customer Type' && NOT(d.applied)}">
-                                            <input type="radio" name="chosen"  id="chosen" VALUE="true"  onclick="changeValue(this,'{!$Component.RadioButtonValue}'); refreshAppliedColumn();"/>                                         
-                                            <apex:inputHidden value="{!d.selected}" id="RadioButtonValue" />
-                                        </apex:column> 
-                                        <apex:column width="20%">
-                                        <apex:inputCheckbox title="check to select this discount" value="{!d.applied}" onclick="refreshAppliedColumn()"/>
-                                    </apex:column> 
-                                </apex:dataTable>   
-                                
-                                  <!-- <apex:dataTable id="discountLeft1" value="{!pDisc1}" var="d" width="100%">
-                                        <apex:column width="40%" rendered="{!(d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}">{!d.type}</apex:column>
-                                        <apex:column width="20%" rendered="{!NOT(d.psf) && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}">{!d.SperSqFtVal}</apex:column>
-                                        <apex:column width="20%" rendered="{!d.psf && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}">
-                                            <apex:input style="width:95%" title="Enter Per Sq Ft Discount Value" value="{!d.perSqFtVal}"></apex:input>
-                                        </apex:column>
-                                        <apex:column width="20%" rendered="{!NOT(d.lumpsum) && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}">{!d.SlumpsumVal}</apex:column>
-                                        <apex:column width="20%" rendered="{!d.lumpsum && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}">
-                                            <apex:input style="width:95%" value="{!d.lumpsumVal}"></apex:input>
-                                        </apex:column>
-                                       <apex:column width="20%" rendered="{!(d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}">
-                                            <apex:outputText value="{!d.applied}" />
-                                        </apex:column> 
-                                       <apex:column width="20%" rendered="{!(d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer') && d.applied}">
-                                            <input type="radio" name="chosen1" id="chosen1" checked="checked"/>
-                                        </apex:column>
-                                        <apex:column width="20%" rendered="{!(d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer') && NOT(d.applied)}">
-                                            <input type="radio" name="chosen1"  id="chosen1" VALUE="true"  onclick="changeValue(this,'{!$Component.RadioButtonValue1}'); refreshAppliedColumn();"/>
-                                            <apex:inputHidden value="{!d.selected}" id="RadioButtonValue1" />
-                                        </apex:column>
-                                       <apex:column width="20%">
-                                        <apex:inputCheckbox title="check to select this discount" value="{!d.applied}" onclick="refreshAppliedColumn()"/>
-                                    </apex:column> 
+                        <!-- DISCOUNT PAGE FORM-->
+                        <apex:form id="newDiscountform">
+                            <apex:PageMessages id="pageMsgs" />
+                            <apex:actionFunction name="refreshAppliedColumn" action="{!MathForAppliedDiscount}" oncomplete="postDiscountRefresh()" rerender="appliedArea,pageMsgs" status="status" />
+                            <apex:actionFunction name="backtoQuoteAction" action="{!backtoQuotePage}" status="status"/>
+                            <!--<apex:actionFunction name="recalcLumpsumFromPSF" action="{!recalculateLumpsumFromPSF}" rerender="appliedArea,editArea"status="status"/><!Added by Prakshi-->
+                            
+                            <apex:actionStatus id="status">
+                                <apex:facet name="start">
+                                    <div class="fadeMe">&nbsp;</div>
+                                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                                        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                                            <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                                            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                                        </div>
+                                    </div>
+                                </apex:facet>
+                            </apex:actionStatus>
+                            
+                            <table id="projectAddress" width='75%' align="center">
+                                <!--  
+                                <tr>
+                                    <td class="projectStyle">
+                                        <td class="projectStyle">
+                                            <h2>{!proj.Name}</h2>
+                                            <br>{!proj.Address__c}</br>
+                                        </td>
+                                    </tr> 
+                                -->   
+                            </table>
+                            <table width="75%"  align="center" border-style="solid">
+                                <tr width="75%" align="center">
+                                    <td>
+                                        <apex:dataTable value="{!quoteUIMap['LEFTTOP']}" var="rows"  id="left1" width="100%">
+                                            <apex:column width="50%" styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
+                                            <apex:column width="50%" styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
+                                        </apex:dataTable>
+                                    </td>
+                                </tr>
+                            </table>
+                            <apex:outputPanel id="editAreaGST" rendered="{!discountPageMode == 'edit'}">
+                                <table width="75%" border-style="solid" align="center">
+                                    <tr>
+                                        <th colspan="3" class="header">GST Calculator</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="header1">Enter PSF Discount</th>
+                                        <th class="header1">Enter Lumpsum Discount</th>
+                                        <th class="header1"></th>
+                                    </tr>
+                                    <tr>
+                                        <td width="33%">
+                                            <apex:input style="width:75%" value="{!GstPsfRate}"></apex:input>
+                                        </td>
+                                        <td width="33%">
+                                            <apex:input style="width:75%" value="{!GstLumpsumRate}"></apex:input>
+                                        </td>
+                                        <th rowspan="2" align="center" class="header">
+                                            <apex:commandButton style="align:center;" styleClass="slds-button slds-button--brand slds-button--small" value="Calculate GST Discount" action="{!calculateGSTpercenatgeDisc}" status="status" reRender="editAreaGST"/>
+                                        </th>
+                                    </tr>
+                                    <tr id="gstTotal">
+                                        <th colspan="1" class="header1">Total GST Discount(PSF)&nbsp;&nbsp;&nbsp;&nbsp;{!TotalGSTDiscountPSF}</th>
+                                        <th colspan="1" class="header1">Total GST Discount(Lumpsum)&nbsp;&nbsp;&nbsp;&nbsp;{!TotalGSTDiscount}</th>
+                                    </tr>
+                                </table>
+                            </apex:outputpanel> 
+                            <apex:outputPanel id="editArea" rendered="{!discountPageMode == 'edit'}">
+                                <table width="75%" border-style="solid" align="center">
+                                    <tr>
+                                        <th colspan="3" class="header">Discount Calculation</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="1" class="header">Discount Approval Status</th>
+                                        <th colspan="2" class="header">{!quoteApprovalMsg}</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="header1">--</th>
+                                        <th class="header1">Per Sq Ft</th>
+                                        <th class="header1">Lumpsum</th>
+                                    </tr>
+                                    <tr>
+                                        <td width="33%">Total Card Rate</td>
+                                        <td width="33%">{!StotalRateCardPSF}</td>
+                                        <td width="33%">{!StotalRateCardLumspum}</td>
+                                    </tr>
+                                    <tr width="100%">
+                                        <td colspan="3">
+                                            <apex:dataTable value="{!FinalCustomerDiscount}" var="d" width="100%">
+                                                <apex:column width="33%">{!d.type}</apex:column>
+                                                <apex:column width="33%">{!d.SperSqFtVal}</apex:column>
+                                                <apex:column width="33%">{!d.SlumpsumVal}</apex:column>
+                                            </apex:dataTable>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <apex:outputPanel id="appliedArea">
+                                    <table width="75%" align="center">
+                                        <tr>
+                                            <th colspan="6" align="center" class="header">Discount Categories Available</th>
+                                            <th colspan="4" align="center" class="header">Discount Categories Applied</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="3" align="center" class="header">
+                                                    <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Apply Discount"  action="{!getUpdatedCharges}"  oncomplete="bindEvents()" rerender="editArea, pageMsgs" status="status" />
+                                            </th>
+                                            <!--Added nonMonetaryOfferCheckbox for Quotation Offer starts-->
+                                            <th>
+                                                <label>Non Monetory Discounts Not Applicable</label>&nbsp;&nbsp;
+                                                <apex:inputCheckbox value="{!nonMonetaryOfferCheckbox}">
+                                                    <apex:actionSupport event="onclick" action="{!handleNonMonetaryNotApplicable}"/>
+                                                </apex:inputCheckbox>
+                                            </th>
+                                            <!--Added nonMonetaryOfferCheckbox for Quotation Offer ends-->
+                                            <th colspan="3"  align="center" class="header">
+                                                <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Clear Discount" action="{!clearDiscount}" status="status" />
+                                            </th>
+                                            <th colspan="2"  align="center" class="header">
+                                                <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Close" oncomplete="BacktoQuotePage()" status="status" />
+                                            </th> 
+                                        </tr>
                                         
-                                </apex:dataTable> -->
-                                <!-- <apex:dataTable id="discountLeft3" value="{!pDisc}" var="d" width="100%">
-                                        <apex:column width="40%" rendered="{!(d.discountType == 'NPV' || d.discountType == 'Total')}">{!d.type}</apex:column>
-                                        <apex:column width="20%" rendered="{!NOT(d.psf) && (d.discountType == 'NPV' || d.discountType == 'Total')}">{!d.SperSqFtVal}</apex:column>
-                                        <apex:column width="20%" rendered="{!d.psf && (d.discountType == 'NPV' || d.discountType == 'Total')}">
-                                            <apex:input style="width:95%" title="Enter Per Sq Ft Discount Value" value="{!d.perSqFtVal}"></apex:input>
-                                        </apex:column>
-                                        <apex:column width="20%" rendered="{!NOT(d.lumpsum) && (d.discountType == 'NPV' || d.discountType == 'Total')}">{!d.SlumpsumVal}</apex:column>
-                                        <apex:column width="20%" rendered="{!d.lumpsum && (d.discountType == 'NPV' || d.discountType == 'Total')}">
-                                            <apex:input style="width:95%" value="{!d.lumpsumVal}"></apex:input>
-                                        </apex:column>
-                                        <apex:column width="20%" rendered="(!d.discountType == 'NPV' || d.discountType == 'Total')">
-                                            <apex:outputText value="{!d.applied}" />
-                                        </apex:column> 
-                                </apex:dataTable>                       
-                            </td>
-                            <td width="50%" colspan="4" align="center">
-                                <apex:dataTable id="appliedTable" value="{!pDisc}" var="d" width="100%">
-                                    <apex:column width="20%" rendered="{!d.applied && d.discountType == 'Customer Type'}" styleClass="bright">{!d.type}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied && d.discountType == 'Customer Type'}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied && d.discountType == 'Customer Type'}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
-                                    <apex:column width="20%" rendered="{!NOT(d.applied) && d.discountType == 'Customer Type'}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied) && d.discountType == 'Customer Type'}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied) && d.discountType == 'Customer Type'}" styleClass="dull">--</apex:column>
-                                </apex:dataTable>
-                                <!-- <apex:dataTable id="appliedTable1" value="{!pDisc1}" var="d" width="100%">
-                                    <apex:column width="20%" rendered="{!d.applied && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}" styleClass="bright">{!d.type}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
-                                    <apex:column width="20%" rendered="{!NOT(d.applied) && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied) && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied) && (d.discountType == 'GST Discount' || d.discountType == 'SCUD' || d.discountType == 'DAM' || d.discountType == 'Special Offer')}" styleClass="dull">--</apex:column>
-                                </apex:dataTable>
-                                <apex:dataTable id="appliedTable2" value="{!pDisc}" var="d" width="100%">
-                                    <apex:column width="20%" rendered="{!d.applied && (d.discountType == 'Total' || d.discountType == 'NPV')}" styleClass="bright">{!d.type}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied && (d.discountType == 'Total' || d.discountType == 'NPV')}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="15%" rendered="{!d.applied && (d.discountType == 'Total' || d.discountType == 'NPV')}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
-                                    <apex:column width="20%" rendered="{!NOT(d.applied) && (d.discountType == 'Total' || d.discountType == 'NPV')}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied) && (d.discountType == 'Total' || d.discountType == 'NPV')}" styleClass="dull">--</apex:column>
-                                    <apex:column width="15%" rendered="{!NOT(d.applied) && (d.discountType == 'Total' || d.discountType == 'NPV')}" styleClass="dull">--</apex:column>
-                                </apex:dataTable> 
-                            </td>-->
-                        </tr>
-                    </table>
-                </tr>
-            </table>
-        </apex:outputPanel>
-    </apex:outputPanel>
-    <!-- copy of the top section except that everything is read-only in the view mode -->
-    <apex:outputPanel rendered="{!discountPageMode == 'view'}">
-        <table width="75%" border-style="solid" align="center">
-            <tr>
-                <th colspan="1" class="header">Discount Approval Status</th>
-                <th colspan="2" class="header">{!quoteApprovalMsg}</th>
-            </tr>
-            <tr>
-                <th colspan="3" class="header">Discount Calculation</th>
-            </tr>
-            <tr>
-                <th class="header">--</th>
-                <th class="header">Per Sq Ft</th>
-                <th class="header">Lumpsum</th>
-            </tr>
-            <tr>
-                <td  width="51%">Total Card Rate</td>
-                <td  width="24%">{!StotalRateCardPSF}</td>
-                <td  width="25%">{!StotalRateCardLumspum}</td>
-            </tr>
-            <tr width="100%">
-                <td colspan="3">
-                    <apex:dataTable value="{!FinalCustomerDiscount}" var="d" width="100%">
-                        <apex:column width="51%">{!d.type}</apex:column>
-                        <apex:column width="24%">{!d.SperSqFtVal}</apex:column>
-                        <apex:column width="25%">{!d.SlumpsumVal}</apex:column>
-                    </apex:dataTable>
-                </td>
-            </tr>
-        </table>
-        <apex:outputPanel id="appliedAreaView">
-            <table width="75%" align="center">
-            
-                <tr>
-                    <th colspan="3" align="center" class="header" >Discount Categories Applied</th>
-                </tr>
-                <tr>
-                    <th colspan="3" align="center" class="header">
-                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Close" onclick="javascript:window.close();return false;" />
-                    </th>
-                </tr>
-                <tr>
-                    <table width="75%" align="center">
-                        <tr>
-                            <th width="33%" class="header1">Type</th>
-                            <th width="33%" class="header1">Per Sq.Ft</th>
-                            <th width="34%" class="header1">Lumpsum</th>
-                        </tr>
-                        <tr>
-                            <td width="100%" colspan="3" align="center">
-                                <!-- <apex:dataTable id="appliedTableView1" value="{!pDisc1}" var="d" width="100%">
-                                    <apex:column width="33%" rendered="{!d.applied}" styleClass="bright">{!d.type}</apex:column>
-                                    <apex:column width="33%" rendered="{!d.applied}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="34%" rendered="{!d.applied}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
-                                </apex:dataTable> -->
-                                <apex:dataTable id="appliedTableView" value="{!pDisc}" var="d" width="100%">
-                                    <apex:column width="33%" rendered="{!d.applied}" styleClass="bright">{!d.type}</apex:column>
-                                    <apex:column width="33%" rendered="{!d.applied}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
-                                    <apex:column width="34%" rendered="{!d.applied}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
-                                </apex:dataTable>
-                            </td>
-                        </tr>
-                    </table>
-                </tr>
-            </table>
-        </apex:outputPanel>
-    </apex:outputPanel>
-</apex:form>    
- <!-- DEMAND SEARCH FORM -->
-    
-        </fieldset>
-        <!-- / BOXED AREA -->
-      </div>
-  <!-- / SEARCH DEMANDS -->
-    </div>
-    <!-- / PRIMARY CONTENT WRAPPER -->
-  </div>
-  <!-- / REQUIRED SLDS WRAPPER -->  
-     <!-- JAVASCRIPT -->
+                                        <!-- Quotation change : vinit : 09-07-2025-->        
+                                        <tr>
+                                            <table width="75%" align="center">
+                                                <tr>
+                                                    <th colspan="6" width="50%" class="header1" style="text-align: center;">Apply Discount</th>
+                                                    <th  rowspan="2" width="13%" class="header1">Type</th>
+                                                    <th  rowspan="2" width="10%" class="header1">Per Sq.Ft</th>
+                                                    <th  rowspan="2" width="10%" class="header1">Lumpsum</th>
+                                                </tr>
+                                                <tr>
+                                                    <!-- Sub-columns under Apply Discount -->
+                                                        <th width="160">Discount Type</th>
+                                                        <th width="80">PSF</th>
+                                                        <th width="120">Lumpsum</th>
+                                                        <th width="100">Percentage</th>
+                                                        <th width="100">Monetizable</th>
+                                                        <th width="90">Apply</th>
+                                                </tr>
+                                                <tr>
+                                                    <td width="100%" colspan="6" align="center">   
+                                                        <apex:dataTable id="discountLeft" value="{!pDisc}" var="d" width="680px">
+                                                
+                                                            <!-- Discount Type -->
+                                                            <apex:column width="160">
+                                                                <apex:outputText value="{!d.type}" style="width:100%" />
+                                                            </apex:column>
+                                                
+                                                            <!-- PSF Column -->
+                                                            <apex:column width="80">
+                                                                <apex:outputText value="{!d.SperSqFtVal}" rendered="{!d.discountType != 'PSF'}" style="width:100%" />
+                                                                <apex:input value="{!d.perSqFtVal}" rendered="{!d.discountType == 'PSF'}" disabled="{!d.applied}" style="width:100%">
+                                                               <apex:actionSupport event="onchange" action="{!recalculateLumpsumFromPSF}" rerender="appliedArea,editArea" status="status"/> <!--Added for Quotation offer-->    
+                                                               </apex:input> 
+
+                                                            </apex:column>
+                                                
+                                                            <!-- Lumpsum Column -->
+                                                            <apex:column width="120">
+                                                                <apex:outputText value="{!d.SlumpsumVal}" rendered="{!d.discountType != 'Lumpsum' || d.offerType == 'Mandatory'}" style="width:100%" />
+                                                                <apex:input value="{!d.lumpsumVal}" rendered="{!d.discountType == 'Lumpsum' && d.offerType != 'Mandatory'}" disabled="{!d.applied}" style="width:100%"/>
+                                                                <!-- <apex:outputText value="{!d.SlumpsumVal}" style="width:100%" /> -->
+                    
+                                                            </apex:column>
+                                                
+                                                            <!-- Percentage Column -->
+                                                            <apex:column width="100">
+                                                                <apex:outputText value="{!d.percentageVal}" rendered="{!d.discountType != 'Percentage'}" style="width:100%" />
+                                                                <apex:input value="{!d.percentageVal}" rendered="{!d.discountType == 'Percentage'}" disabled="{!d.applied}" style="width:100%">
+                                                                    <apex:actionSupport event="onchange" action="{!recalculateLumpsumFromPSF}" rerender="appliedArea,editArea" status="status"/> <!--Added for Quotation offer-->  
+                                                                </apex:input>
+
+                                                            </apex:column>
+                                                
+                                                            <!-- Monetizable Checkbox -->
+                                                                <apex:column width="100" style="text-align:center;">
+                                                                    <apex:inputCheckbox value="{!d.isMonetizableChecked}"
+                                                                    rendered="{!d.showMonetizable}" 
+                                                                    disabled="{!d.applied}"
+                                                                    style="width:100%"
+                                                                    onchange="toggleApplyCheckbox(this);"/>
+                                                                        </apex:column>
+                                                                    <apex:column width="90" style="text-align:center;">
+                                                                    <apex:inputCheckbox value="{!d.applied}"
+                                                                        styleClass="applyCheckbox"
+                                                                        style="width:100%"
+                                                                        onclick="refreshAppliedColumn()"
+                                                                        rendered="{!d.showApply}"/>
+                                                                </apex:column>
+                                                                        </apex:datatable>                      
+                                                    
+                                                    </td>
+                                                    <td width="50%" colspan="4" align="center">
+                                                        <apex:dataTable id="appliedTable" value="{!pDisc}" var="d" width="100%">
+                                                            <apex:column width="20%" rendered="{!d.applied}" styleClass="bright">{!d.type}</apex:column>
+                                                            <apex:column width="15%" rendered="{!d.applied}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
+                                                            <apex:column width="15%" rendered="{!d.applied}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
+                                                            <apex:column width="20%" rendered="{!NOT(d.applied)}" styleClass="dull">--</apex:column>
+                                                            <apex:column width="15%" rendered="{!NOT(d.applied)}" styleClass="dull">--</apex:column>
+                                                            <apex:column width="15%" rendered="{!NOT(d.applied)}" styleClass="dull">--</apex:column>
+                                                        </apex:dataTable>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </tr>
+                                    </table>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            <!-- copy of the top section except that everything is read-only in the view mode -->
+                            <apex:outputPanel rendered="{!discountPageMode == 'view'}">
+                                <table width="75%" border-style="solid" align="center">
+                                    <tr>
+                                        <th colspan="1" class="header">Discount Approval Status</th>
+                                        <th colspan="2" class="header">{!quoteApprovalMsg}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3" class="header">Discount Calculation</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="header">--</th>
+                                        <th class="header">Per Sq Ft</th>
+                                        <th class="header">Lumpsum</th>
+                                    </tr>
+                                    <tr>
+                                        <td  width="51%">Total Card Rate</td>
+                                        <td  width="24%">{!StotalRateCardPSF}</td>
+                                        <td  width="25%">{!StotalRateCardLumspum}</td>
+                                    </tr>
+                                    <tr width="100%">
+                                        <td colspan="3">
+                                            <apex:dataTable value="{!FinalCustomerDiscount}" var="d" width="100%">
+                                                <apex:column width="51%">{!d.type}</apex:column>
+                                                <apex:column width="24%">{!d.SperSqFtVal}</apex:column>
+                                                <apex:column width="25%">{!d.SlumpsumVal}</apex:column>
+                                            </apex:dataTable>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <apex:outputPanel id="appliedAreaView">
+                                    <table width="75%" align="center">
+                                        <tr>
+                                            <th colspan="3" align="center" class="header" >Discount Categories Applied</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="3" align="center" class="header">
+                                                <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Close" onclick="javascript:window.close();return false;" />
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <table width="75%" align="center">
+                                                <tr>
+                                                    <th width="33%" class="header1">Type</th>
+                                                    <th width="33%" class="header1">Per Sq.Ft</th>
+                                                    <th width="34%" class="header1">Lumpsum</th>
+                                                </tr>
+                                                <tr>
+                                                    <td width="100%" colspan="3" align="center">
+                                                        <apex:dataTable id="appliedTableView" value="{!pDisc}" var="d" width="100%">
+                                                            <apex:column width="33%" rendered="{!d.applied}" styleClass="bright">{!d.type}</apex:column>
+                                                            <apex:column width="33%" rendered="{!d.applied}" styleClass="bright">{!d.SperSqFtVal}</apex:column>
+                                                            <apex:column width="34%" rendered="{!d.applied}" styleClass="bright">{!d.SlumpsumVal}</apex:column>
+                                                        </apex:dataTable>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </tr>
+                                    </table>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:form>    
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <!-- JAVASCRIPT -->
         <script>
-          var j$ = jQuery.noConflict();
-     
+            var j$ = jQuery.noConflict();
+            
             j$(document).ready(function() {
                 bindEvents();
             });
+        
+        
+            function toggleApplyCheckbox(monetizableCheckbox) {
+            // Traverse to parent row
+            var row = monetizableCheckbox.closest('tr');
+            
+            // Find Apply checkbox in the same row
+            var applyCheckbox = row.querySelector('.applyCheckbox');
+            
+            
+        }
+            
+            
+            
             
             // events are not bound if partial refresh happens. we need to bind it again
             // hence keeping bindevents separately and call them when needed
             
             function bindEvents() {
                 j$("[id$='discountLeft'] tr").last().find('td').each (function() {
-                    j$(this).find('input[type="checkbox"]').prop('disabled',true);
+                    j$(this).find('input[type="checkbox"]').prop('disabled',false);
                 });
             }
             function changeValue(input, textid) {
-                //alert(document.getElementById(textid).value);
-               // alert(input.value);
                 document.getElementById(textid).value = input.value;
             }
             function postDiscountRefresh() {
                 bindEvents();
             }
             function BacktoQuotePage() {
-                //console.log('in reload parent');
-                //window.opener.close();
-               // backtoQuoteAction();
                 setTimeout(function() {
                     backtoQuoteAction();
                 }, 1500); 
             }
-    </script>
-     <!-- / JAVASCRIPT -->
+        </script>
+        <!-- / JAVASCRIPT -->
     </body>
 </html>
 </apex:page>

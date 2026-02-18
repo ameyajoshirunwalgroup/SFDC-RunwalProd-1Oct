@@ -131,6 +131,7 @@ public class SendWhatsAppMsgOnVisitDay {
         System.debug('res!!! getBody '+res.getBody());
         System.debug('res!!! getStatusCode '+res.getStatusCode());
     }
+    
     public static void dummyMethod(){
         
         integer i;

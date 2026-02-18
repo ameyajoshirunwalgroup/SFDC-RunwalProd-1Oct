@@ -8,51 +8,21 @@
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
-            <sorted>false</sorted>
+            <sorted>true</sorted>
             <value>
-                <fullName>Sales Order</fullName>
+                <fullName>ADF Calculation</fullName>
                 <default>false</default>
-                <label>Sales Order</label>
+                <label>ADF Calculation</label>
             </value>
             <value>
-                <fullName>Customer Creation</fullName>
+                <fullName>ADF Credit Note</fullName>
                 <default>false</default>
-                <label>Customer Creation</label>
+                <label>ADF Credit Note</label>
             </value>
             <value>
-                <fullName>Salesorder Edit</fullName>
+                <fullName>BillDesk</fullName>
                 <default>false</default>
-                <label>Salesorder Edit</label>
-            </value>
-            <value>
-                <fullName>Customer Name Change</fullName>
-                <default>false</default>
-                <label>Customer Name Change</label>
-            </value>
-            <value>
-                <fullName>Customer Address Change</fullName>
-                <default>false</default>
-                <label>Customer Address Change</label>
-            </value>
-            <value>
-                <fullName>Unit Creation</fullName>
-                <default>false</default>
-                <label>Unit Creation</label>
-            </value>
-            <value>
-                <fullName>Unit Change</fullName>
-                <default>false</default>
-                <label>Unit Change</label>
-            </value>
-            <value>
-                <fullName>Price Create</fullName>
-                <default>false</default>
-                <label>Price Create</label>
-            </value>
-            <value>
-                <fullName>Price Change</fullName>
-                <default>false</default>
-                <label>Price Change</label>
+                <label>BillDesk</label>
             </value>
             <value>
                 <fullName>Cancellation Request Poll</fullName>
@@ -60,29 +30,9 @@
                 <label>Cancellation Request Poll</label>
             </value>
             <value>
-                <fullName>Payment Interface</fullName>
-                <default>false</default>
-                <label>Payment Interface</label>
-            </value>
-            <value>
-                <fullName>Unit Inventory</fullName>
-                <default>false</default>
-                <label>Unit Inventory</label>
-            </value>
-            <value>
                 <fullName>Car Parking Inventory</fullName>
                 <default>false</default>
                 <label>Car Parking Inventory</label>
-            </value>
-            <value>
-                <fullName>Unit Ratelist</fullName>
-                <default>false</default>
-                <label>Unit Ratelist</label>
-            </value>
-            <value>
-                <fullName>IRIS Channel Partner</fullName>
-                <default>false</default>
-                <label>IRIS Channel Partner</label>
             </value>
             <value>
                 <fullName>Channel Partner</fullName>
@@ -90,44 +40,9 @@
                 <label>Channel Partner</label>
             </value>
             <value>
-                <fullName>Receipts API</fullName>
+                <fullName>CP Brokerage Creation API</fullName>
                 <default>false</default>
-                <label>Receipts API</label>
-            </value>
-            <value>
-                <fullName>Customer Creation/Update</fullName>
-                <default>false</default>
-                <label>Customer Creation/Update</label>
-            </value>
-            <value>
-                <fullName>Demand API</fullName>
-                <default>false</default>
-                <label>Demand API</label>
-            </value>
-            <value>
-                <fullName>Interest Ledger</fullName>
-                <default>false</default>
-                <label>Interest Ledger</label>
-            </value>
-            <value>
-                <fullName>IRIS Booking</fullName>
-                <default>false</default>
-                <label>IRIS Booking</label>
-            </value>
-            <value>
-                <fullName>IRIS Lead</fullName>
-                <default>false</default>
-                <label>IRIS Lead</label>
-            </value>
-            <value>
-                <fullName>IRIS Payment</fullName>
-                <default>false</default>
-                <label>IRIS Payment</label>
-            </value>
-            <value>
-                <fullName>SAP BillDesk</fullName>
-                <default>false</default>
-                <label>SAP BillDesk</label>
+                <label>CP Brokerage Creation API</label>
             </value>
             <value>
                 <fullName>CP Invoice Creation API</fullName>
@@ -140,29 +55,69 @@
                 <label>CP Receipt API</label>
             </value>
             <value>
-                <fullName>Outstanding API</fullName>
+                <fullName>Customer Address Change</fullName>
                 <default>false</default>
-                <label>Outstanding API</label>
+                <label>Customer Address Change</label>
             </value>
             <value>
-                <fullName>User Creation/Delete</fullName>
+                <fullName>Customer Creation</fullName>
                 <default>false</default>
-                <label>User Creation/Delete</label>
+                <label>Customer Creation</label>
             </value>
             <value>
-                <fullName>BillDesk</fullName>
+                <fullName>Customer Creation/Update</fullName>
                 <default>false</default>
-                <label>BillDesk</label>
+                <label>Customer Creation/Update</label>
             </value>
             <value>
-                <fullName>Tata Webhook</fullName>
+                <fullName>Customer Name Change</fullName>
                 <default>false</default>
-                <label>Tata Webhook</label>
+                <label>Customer Name Change</label>
             </value>
             <value>
-                <fullName>Ozonetel</fullName>
+                <fullName>Demand API</fullName>
                 <default>false</default>
-                <label>Ozonetel</label>
+                <label>Demand API</label>
+            </value>
+            <value>
+                <fullName>Demand Interest</fullName>
+                <default>false</default>
+                <label>Demand Interest</label>
+            </value>
+            <value>
+                <fullName>Full Copy</fullName>
+                <default>false</default>
+                <label>Full Copy</label>
+            </value>
+            <value>
+                <fullName>Interest Ledger</fullName>
+                <default>false</default>
+                <label>Interest Ledger</label>
+            </value>
+            <value>
+                <fullName>Interest Waiver</fullName>
+                <default>false</default>
+                <label>Interest Waiver</label>
+            </value>
+            <value>
+                <fullName>IRIS Booking</fullName>
+                <default>false</default>
+                <label>IRIS Booking</label>
+            </value>
+            <value>
+                <fullName>IRIS Channel Partner</fullName>
+                <default>false</default>
+                <label>IRIS Channel Partner</label>
+            </value>
+            <value>
+                <fullName>IRIS Lead</fullName>
+                <default>false</default>
+                <label>IRIS Lead</label>
+            </value>
+            <value>
+                <fullName>IRIS Payment</fullName>
+                <default>false</default>
+                <label>IRIS Payment</label>
             </value>
             <value>
                 <fullName>IVR</fullName>
@@ -175,29 +130,99 @@
                 <label>Lead Creation Error</label>
             </value>
             <value>
-                <fullName>Demand Interest</fullName>
+                <fullName>Opportunity Customer Creation/Update</fullName>
                 <default>false</default>
-                <label>Demand Interest</label>
+                <label>Opportunity Customer Creation/Update</label>
             </value>
             <value>
-                <fullName>Interest Waiver</fullName>
+                <fullName>Outstanding API</fullName>
                 <default>false</default>
-                <label>Interest Waiver</label>
+                <label>Outstanding API</label>
             </value>
             <value>
-                <fullName>ADF Credit Note</fullName>
+                <fullName>Ozonetel</fullName>
                 <default>false</default>
-                <label>ADF Credit Note</label>
+                <label>Ozonetel</label>
             </value>
             <value>
-                <fullName>ADF Calculation</fullName>
+                <fullName>Payment Interface</fullName>
                 <default>false</default>
-                <label>ADF Calculation</label>
+                <label>Payment Interface</label>
+            </value>
+            <value>
+                <fullName>Price Change</fullName>
+                <default>false</default>
+                <label>Price Change</label>
+            </value>
+            <value>
+                <fullName>Price Create</fullName>
+                <default>false</default>
+                <label>Price Create</label>
+            </value>
+            <value>
+                <fullName>Receipts API</fullName>
+                <default>false</default>
+                <label>Receipts API</label>
             </value>
             <value>
                 <fullName>Referral Credit API</fullName>
                 <default>false</default>
                 <label>Referral Credit API</label>
+            </value>
+            <value>
+                <fullName>Referral Credit Posting</fullName>
+                <default>false</default>
+                <label>Referral Credit Posting</label>
+            </value>
+            <value>
+                <fullName>Sales Order</fullName>
+                <default>false</default>
+                <label>Sales Order</label>
+            </value>
+            <value>
+                <fullName>Salesorder Edit</fullName>
+                <default>false</default>
+                <label>Salesorder Edit</label>
+            </value>
+            <value>
+                <fullName>SAP BillDesk</fullName>
+                <default>false</default>
+                <label>SAP BillDesk</label>
+            </value>
+            <value>
+                <fullName>Tata Webhook</fullName>
+                <default>false</default>
+                <label>Tata Webhook</label>
+            </value>
+            <value>
+                <fullName>Unit Change</fullName>
+                <default>false</default>
+                <label>Unit Change</label>
+            </value>
+            <value>
+                <fullName>Unit Creation</fullName>
+                <default>false</default>
+                <label>Unit Creation</label>
+            </value>
+            <value>
+                <fullName>Unit Inventory</fullName>
+                <default>false</default>
+                <label>Unit Inventory</label>
+            </value>
+            <value>
+                <fullName>Unit Ratelist</fullName>
+                <default>false</default>
+                <label>Unit Ratelist</label>
+            </value>
+            <value>
+                <fullName>User Creation/Delete</fullName>
+                <default>false</default>
+                <label>User Creation/Delete</label>
+            </value>
+            <value>
+                <fullName>User Update</fullName>
+                <default>false</default>
+                <label>User Update</label>
             </value>
         </valueSetDefinition>
     </valueSet>

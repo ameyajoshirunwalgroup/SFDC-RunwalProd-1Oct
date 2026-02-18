@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Prospect_Lead__c</fullName>
     <externalId>false</externalId>
-    <formula>IF(Prospect__c &lt;&gt; null , Prospect__r.Lead__c , null)</formula>
+    <formula>IF(Prospect__c &lt;&gt; null , CASESAFEID(Prospect__r.Lead__c) , null)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Prospect Lead</label>
     <required>false</required>

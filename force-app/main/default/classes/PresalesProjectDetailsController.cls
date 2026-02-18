@@ -1,7 +1,6 @@
 public without sharing class PresalesProjectDetailsController {      
     @AuraEnabled  
     public static RW_Presales_Communication__c sendProjectDetailsAsEmail(String strLeadIdOROppIdORProspectID, String strSObjectType, List<string> ltsSelectedCheckBoxValueIs, List<Id> selectedProjectIds){  
-        System.debug('strLeadIdOROppIdORProspectID____ ' + strLeadIdOROppIdORProspectID + 'strSObjectType____ '+ strSObjectType + 'ltsSelectedCheckBoxValueIs____ '+ ltsSelectedCheckBoxValueIs + 'selectedProjectIds==>'+ selectedProjectIds);  
         
         Lead objLead;  
         Opportunity objOpp;   
@@ -9,28 +8,18 @@ public without sharing class PresalesProjectDetailsController {
         Set<string> setOfselectcheckVal = new Set<String>(); 
         RW_Presales_Communication__c preComm = New RW_Presales_Communication__c();  
         setOfselectcheckVal.addAll(ltsSelectedCheckBoxValueIs);
-        System.debug('setOfselectcheckVal____'+setOfselectcheckVal);
         
         If(strSObjectType == 'Lead'){   
-            objLead = [SELECT Id,Email,LeadSource,Name,Project_Name__c,RW_Project__r.Id,RW_Project__r.RW_Project_Brochure_ID__c,RW_Project__r.RW_LocalityName__c, RW_Project__r.RW_Project_Brochure_PublicUrl__c,RW_Project__r.RW_Project_Location_Videos_Link__c,  
-                       RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c FROM Lead WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
+            objLead = [SELECT Id,Email,LeadSource,Name,Project_Name__c,RW_Project__r.Id,RW_Project__r.RW_Project_Brochure_ID__c,RW_Project__r.RW_LocalityName__c, RW_Project__r.RW_Project_Brochure_PublicUrl__c,RW_Project__r.RW_Project_Location_Videos_Link__c,RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c,RDS_Country_Code__c FROM Lead WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
         }
         If(strSObjectType == 'Opportunity'){  
-            objOpp = [SELECT Id,RW_Email__c,LeadSource,Name,Project_Name__c,RW_Project__r.Id,RW_Project__r.RW_Project_Brochure_ID__c,RW_Project__r.RW_LocalityName__c,  RW_Project__r.RW_Project_Brochure_PublicUrl__c,RW_Project__r.RW_Project_Location_Videos_Link__c,  
-                      RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c FROM Opportunity WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
+            objOpp = [SELECT Id,RW_Email__c,LeadSource,Name,Project_Name__c,RW_Project__r.Id,RW_Project__r.RW_Project_Brochure_ID__c,RW_Project__r.RW_LocalityName__c,  RW_Project__r.RW_Project_Brochure_PublicUrl__c,RW_Project__r.RW_Project_Location_Videos_Link__c,RW_Project__r.Site_Address_Map_Link__c,RW_Mobile_No__c,Account.Country_Code__c FROM Opportunity WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
         }
         If(strSObjectType == 'Prospect__c'){  
-            System.debug('strSObjectType____'+strSObjectType); 
-            System.debug('strLeadIdOROppIdORProspectID____'+strLeadIdOROppIdORProspectID); 
-            objPrspct = [SELECT Id,Project__r.Name,Lead__r.Email,Lead__r.RW_Mobile_No__c,Lead__r.LeadSource,Opportunity__r.LeadSource,Opportunity__r.RW_Email__c, Opportunity__r.RW_Mobile_No__c,Lead__r.IsConverted,Lead__r.ConvertedOpportunityId,
-                         Project__c,Name,Project__r.RW_Project_Brochure_ID__c,Project__r.RW_LocalityName__c,  
-                         Project__r.RW_Project_Brochure_PublicUrl__c,Project__r.RW_Project_Location_Videos_Link__c,  
-                         Project__r.Site_Address_Map_Link__c,Lead_Source__c FROM Prospect__c WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
-            System.debug('objPrspct____'+objPrspct);    
+            objPrspct = [SELECT Id,Project__r.Name,Lead__r.Email,Lead__r.RW_Mobile_No__c,Lead__r.LeadSource,Opportunity__r.LeadSource,Opportunity__r.RW_Email__c, Opportunity__r.RW_Mobile_No__c,Lead__r.IsConverted,Lead__r.ConvertedOpportunityId,Project__c,Name,Project__r.RW_Project_Brochure_ID__c,Project__r.RW_LocalityName__c,Project__r.RW_Project_Brochure_PublicUrl__c,Project__r.RW_Project_Location_Videos_Link__c,Project__r.Site_Address_Map_Link__c,Lead_Source__c,Lead__r.RDS_Country_Code__c,Opportunity__r.Account.Country_Code__c FROM Prospect__c WHERE Id =: strLeadIdOROppIdORProspectID Limit 1];  
         }
         
         if(setOfselectcheckVal.contains('Email')){  
-            System.debug('In Side Email____');
             List<Messaging.SingleEmailMessage> ltsEmail = new List<Messaging.SingleEmailMessage>(); 
             Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
             ContentVersion objContentVersion;
@@ -41,10 +30,10 @@ public without sharing class PresalesProjectDetailsController {
             String strtrgtObjId;
             string sObjId;
             EmailTemplate EmailTemplateId;
-            OrgWideEmailAddress owa = [select Id, Address, DisplayName FROM OrgWideEmailAddress where DisplayName = 'Runwal Cares'];
+            OrgWideEmailAddress owa = [select Id,Address,DisplayName FROM OrgWideEmailAddress where DisplayName = 'Runwal Cares'];
             
             //query on template object
-            If(strSObjectType == 'Lead' ){
+            If(strSObjectType == 'Lead'){
                 strEmailTemplateName = 'Send Project Details on Lead Create';
                 strProjectId  = objLead.RW_Project__r.Id;
                 strObjId = objLead.Id;
@@ -53,7 +42,7 @@ public without sharing class PresalesProjectDetailsController {
                 sObjId = objLead.Id;
                 
             }
-            if(strSObjectType == 'Opportunity' ){ 
+            if(strSObjectType == 'Opportunity'){ 
                 strEmailTemplateName = 'Send Project Details on Opportunity';
                 strProjectId  = objOpp.RW_Project__r.Id;
                 strObjId = objOpp.Id;
@@ -68,17 +57,13 @@ public without sharing class PresalesProjectDetailsController {
                 strObjId = objPrspct.Id;
                 strtrgtObjId = userinfo.getuserid();
                 sObjId = objPrspct.Id; 
-                if(objPrspct.Lead__r.IsConverted == false && String.isBlank(objPrspct.Lead__r.ConvertedOpportunityId)
-                   && String.isNotBlank(objPrspct.Lead__r.Email) ){
-                       strEmailId = objPrspct.Lead__r.Email;
-                       System.debug('in IF ____ ' +strEmailId);
-                   }else if(String.isNotBlank(objPrspct.Opportunity__r.RW_Email__c)){
-                       strEmailId = objPrspct.Opportunity__r.RW_Email__c;
-                       System.debug('in else ____ ' +strEmailId);
-                   }
+                if(objPrspct.Lead__r.IsConverted == false && String.isBlank(objPrspct.Lead__r.ConvertedOpportunityId) && String.isNotBlank(objPrspct.Lead__r.Email) ){
+                    strEmailId = objPrspct.Lead__r.Email;
+                }else if(String.isNotBlank(objPrspct.Opportunity__r.RW_Email__c)){
+                    strEmailId = objPrspct.Opportunity__r.RW_Email__c;
+                }
                 
             }
-            System.debug('strEmailTemplateName____ ' + strEmailTemplateName + ' strProjectId____ '+ strProjectId + ' strObjId____ '+ strObjId + ' strtrgtObjId_____ '+ strtrgtObjId + ' strEmailId______' +strEmailId );  
             
             // Added bu Unicops team
             List<ContentVersion> lstContentVersion = new List<ContentVersion>();
@@ -87,14 +72,11 @@ public without sharing class PresalesProjectDetailsController {
             if(String.isNotBlank(strEmailTemplateName) && selectedProjectIds.size() == 0){
                 EmailTemplateId =[Select Id,Name FROM EmailTemplate where name=: strEmailTemplateName];
                 if(!Test.isRunningTest()){
-                    try {
+                    try{
                         
                         if(String.isNotBlank(strProjectId)){                    
-                            objContentVersion = [SELECT Id, Title,ContentBodyId, VersionData, isLatest,FileExtension, FileType, ContentDocumentId 
-                                                 FROM ContentVersion WHERE isLatest = true AND FirstPublishLocationId =: strProjectId];//AND FileExtension = 'pdf'  
-                            System.debug('objContentVersion____' +objContentVersion); 
+                            objContentVersion = [SELECT Id, Title,ContentBodyId, VersionData, isLatest,FileExtension, FileType, ContentDocumentId FROM ContentVersion WHERE isLatest = true AND FirstPublishLocationId =: strProjectId];//AND FileExtension = 'pdf'  
                         }} catch(Exception e) {
-                            System.debug('The following exception has occurred: ' + e.getMessage());
                             throw new CommonException('Provide the Project Brochure access to current user');
                         }
                 }
@@ -129,7 +111,6 @@ public without sharing class PresalesProjectDetailsController {
             } 
             // To send email when multiple projects are selected - Digicloud Team
             else if (selectedProjectIds.size() > 0) {
-                system.debug('Inside else for multiple project ids ==>');
                 
                 String sObjectPrefix = String.valueOf(sObjId).substring(0, 3); 
                 String customerName;
@@ -142,25 +123,19 @@ public without sharing class PresalesProjectDetailsController {
                     customerEmail = leadRecord.Email;
                     Mob_Number = leadRecord.RW_Mobile_No__c;
                     
-                    System.debug('Lead Record ==> ' + customerEmail);
-                } 
-                else if (sObjectPrefix == Opportunity.SObjectType.getDescribe().getKeyPrefix()) {
+                }else if(sObjectPrefix == Opportunity.SObjectType.getDescribe().getKeyPrefix()) {
                     Opportunity oppRecord = [SELECT Name, RW_Email__c FROM Opportunity WHERE Id = :sObjId LIMIT 1];
                     customerName = oppRecord.Name;
                     customerEmail = oppRecord.RW_Email__c;
                     Mob_Number = null;
                     
-                    System.debug('Opportunity Record ==> ' + customerEmail);
-                } 
-                else if (sObjectPrefix == Prospect__c.SObjectType.getDescribe().getKeyPrefix()) {
+                }else if(sObjectPrefix == Prospect__c.SObjectType.getDescribe().getKeyPrefix()) {
                     Prospect__c prospectRecord = [SELECT Name, Lead__r.Email FROM Prospect__c WHERE Id = :sObjId LIMIT 1];
                     customerName = prospectRecord.Name;
                     customerEmail = prospectRecord.Lead__r.Email;
                     Mob_Number = null;
                     
-                    System.debug('Prospect Record ==> ' + customerEmail); 
-                }
-                else {
+                }else{
                     System.debug('Unknown object type for ID: ' + sObjId);
                 }
                 
@@ -168,9 +143,7 @@ public without sharing class PresalesProjectDetailsController {
                 List<Project__c> projectList = [SELECT Id, Name, RW_Project_Brochure_PublicUrl__c,RW_Project_Location_Videos_Link__c FROM Project__c WHERE Id IN :selectedProjectIds];
                 
                 // Get ContentDocumentLinks related to those projects
-                List<ContentDocumentLink> cdlList = [SELECT ContentDocumentId, LinkedEntityId 
-                                                     FROM ContentDocumentLink 
-                                                     WHERE LinkedEntityId IN :selectedProjectIds];
+                List<ContentDocumentLink> cdlList = [SELECT ContentDocumentId, LinkedEntityId FROM ContentDocumentLink WHERE LinkedEntityId IN :selectedProjectIds];
                 
                 // Collect ContentDocumentIds
                 Set<Id> contentDocIds = new Set<Id>();
@@ -186,9 +159,7 @@ public without sharing class PresalesProjectDetailsController {
                 }
                 
                 // Query latest ContentVersions using ContentDocumentIds
-                List<ContentVersion> contentVersions = [SELECT Id, Title, ContentBodyId, VersionData, IsLatest, FileExtension, FileType, ContentDocumentId 
-                                                        FROM ContentVersion 
-                                                        WHERE IsLatest = true AND ContentDocumentId IN :contentDocIds];
+                List<ContentVersion> contentVersions = [SELECT Id, Title, ContentBodyId, VersionData, IsLatest, FileExtension, FileType, ContentDocumentId FROM ContentVersion WHERE IsLatest = true AND ContentDocumentId IN :contentDocIds];
                 
                 // Map attachments to their related Project__c records
                 Map<Id, List<ContentVersion>> projectAttachmentsMap = new Map<Id, List<ContentVersion>>();
@@ -204,14 +175,12 @@ public without sharing class PresalesProjectDetailsController {
                     }
                 }
                 
-                system.debug('projectAttachmentsMap==>'+  projectAttachmentsMap);
                 
                 string strSubject;
                 string emailBody;
                 // Send separate emails for each project
                 for (Project__c proj : projectList) { 
                     List<ContentVersion> projectFiles = projectAttachmentsMap.get(proj.Id);
-                    system.debug('projectFiles==>' + projectFiles); 
                     List<Messaging.EmailFileAttachment> email_Attachments = new List<Messaging.EmailFileAttachment>();
                     
                     strSubject = 'Project Details - '+proj.Name;
@@ -227,8 +196,6 @@ public without sharing class PresalesProjectDetailsController {
                             email_Attachments.add(file_attachment);
                         }
                         
-                        system.debug('proj.Brochure_Link__c==>'+ proj.RW_Project_Brochure_PublicUrl__c);
-                        system.debug('proj.E_Brochure_URL__c==>'+ proj.RW_Project_Location_Videos_Link__c); 
                         
                         // Generate email body using the given method
                         if(proj.RW_Project_Brochure_PublicUrl__c != null || proj.RW_Project_Location_Videos_Link__c != null){
@@ -253,7 +220,6 @@ public without sharing class PresalesProjectDetailsController {
                             email.setFileAttachments(email_Attachments);
                         }
                         
-                        system.debug('Sending Email for Project: ' + proj.Name + ' to ' + customerEmail);
                         ltsEmail.add(email);
                            
                         preComm.RW_ProjectDetails_Sent__c= (String.isBlank(preComm.RW_ProjectDetails_Sent__c)) ? proj.Name : preComm.RW_ProjectDetails_Sent__c + ', ' + proj.Name;
@@ -268,30 +234,24 @@ public without sharing class PresalesProjectDetailsController {
             
             if(!Test.isRunningTest()){
                 Messaging.SendEmailResult[] results = Messaging.sendEmail(ltsEmail);  
-                system.debug('Messaging ' + results[0]);  
                 
-                if (results[0].success)   
-                {  
+                if (results[0].success){  
                     preComm.RW_ProjectDetails_Email_Sent_Date__c = system.now();
                     preComm.RW_Project_Details_Mode_of_Communication__c  = 'Email';  
-                    System.debug('The email was sent successfully.');  
-                } else   
-                {   
+                }else{   
                     System.debug('The email failed to send: ' + results[0].errors[0].message);  
                 }   
             }
         }
         
         if(setOfselectcheckVal.contains('WhatsApp')){  
-            System.debug('In Project deatils WhatsApp');  
             
             String Signature;
             String ContactNumber;
             List<Project__c> lstProject = new List<Project__c>();
             
-            If(strSObjectType == 'Lead' ){
-                if( selectedProjectIds.size() == 0){ 
-                    System.debug('In Project deatils WhatsApp____Lead1');
+            If(strSObjectType == 'Lead'){
+                if(selectedProjectIds.size() == 0){ 
                     if(String.isNotBlank(objLead.LeadSource)){
                         if(objLead.LeadSource == 'Channel Partner'){
                             Signature = System.Label.RW_CPSignature;
@@ -307,11 +267,12 @@ public without sharing class PresalesProjectDetailsController {
                             String mobileNumber = String.isNotBlank(objLead.RW_Mobile_No__c) ? objLead.RW_Mobile_No__c : null;
                             
                             if(objLead.RW_Project__r.Site_Address_Map_Link__c != null && objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c != null && objLead.RW_Project__r.RW_Project_Location_Videos_Link__c != null ){
-                                SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(leadName, projectName, localityName,
-                                                                               objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c, 
-                                                                               objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,
-                                                                               objLead.RW_Mobile_No__c,'Lead Project Content 2');
-                                system.debug('Send Whatsapp Method for single projects called__');
+                                //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(leadName, projectName, localityName,objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RW_Mobile_No__c,'Lead Project Content 2'); //Commented by Vinay 29-08-2025
+                                if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                                    SendWhatsAppMsg.methodToSendWhatsAppMsgNew(leadName, projectName, localityName,objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RDS_Country_Code__c,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                }else{
+                                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(leadName, projectName, localityName,objLead.RW_Project__r.Site_Address_Map_Link__c, objLead.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objLead.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                }
                             }
                             
                             preComm.RW_ProjectDetails_WhatsApp_Sent_Date__c  = system.now();
@@ -321,10 +282,8 @@ public without sharing class PresalesProjectDetailsController {
                     }    
                     //to send whatsapp message to customer when multiple projects are selected
                 }else if(selectedProjectIds.size() >= 1){
-                    lstProject = [SELECT Id, Name, ProjectName__c, RW_LocalityName__c, Site_Address_Map_Link__c, RW_Project_Brochure_PublicUrl__c,  
-                                  RW_Project_Location_Videos_Link__c from Project__c WHERE Id IN: selectedProjectIds];
+                    lstProject = [SELECT Id, Name, ProjectName__c, RW_LocalityName__c, Site_Address_Map_Link__c, RW_Project_Brochure_PublicUrl__c,RW_Project_Location_Videos_Link__c from Project__c WHERE Id IN: selectedProjectIds];
                     
-                    System.debug('In Project deatils WhatsApp____Lead2');
                     if(String.isNotBlank(objLead.LeadSource)){
                         if(objLead.LeadSource == 'Channel Partner'){
                             Signature = System.Label.RW_CPSignature;
@@ -336,12 +295,12 @@ public without sharing class PresalesProjectDetailsController {
                             for(Project__c objProject : lstProject){
                                 
                                 if(objProject.Site_Address_Map_Link__c != null && objProject.RW_Project_Brochure_PublicUrl__c != null && objProject.RW_Project_Location_Videos_Link__c != null ){
-                                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,
-                                                                                   objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c, 
-                                                                                   objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,
-                                                                                   objLead.RW_Mobile_No__c,'Lead Project Content 2');
-                                    
-                                    system.debug('Send Whatsapp Method for multiple projects called__');
+                                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c,objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RW_Mobile_No__c,'Lead Project Content 2'); // Commented by Vinay 29-08-2025
+                                    if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                                        SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c,objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RDS_Country_Code__c,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                    }else{
+                                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objLead.Name, objProject.ProjectName__c, objProject.RW_LocalityName__c,objProject.Site_Address_Map_Link__c, objProject.RW_Project_Brochure_PublicUrl__c,objProject.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objLead.RW_Mobile_No__c,'Lead Project Content 2');
+                                    }
                                     preComm.RW_ProjectDetails_WhatsApp_Sent_Date__c  = system.now();
                                     preComm.RW_Project_Details_Mode_of_Communication__c += ',WhatsApp';
                                     preComm.RW_ProjectDetails_Sent__c= (String.isBlank(preComm.RW_ProjectDetails_Sent__c)) ? objProject.Name : preComm.RW_ProjectDetails_Sent__c + ', ' + objProject.Name;
@@ -356,7 +315,6 @@ public without sharing class PresalesProjectDetailsController {
                 }
             }  
             if(strSObjectType == 'Opportunity'){  
-                System.debug('In Project deatils WhatsApp____Opportunity');  
                 if(String.isNotBlank(objOpp.LeadSource)){
                     if(objOpp.LeadSource == 'Channel Partner'){
                         Signature = System.Label.RW_CPSignature;
@@ -365,20 +323,20 @@ public without sharing class PresalesProjectDetailsController {
                         Signature = System.Label.RW_NotCPSignature;
                         ContactNumber = System.Label.RW_NotCPContactNumber;
                         
-                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,
-                                                                       objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,
-                                                                       objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature, 
-                                                                       objOpp.RW_Mobile_No__c,'Lead Project Content 2');  
+                        //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objOpp.RW_Mobile_No__c,'Lead Project Content 2');  //Commented by Vinay 29-08-2025
+                        if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                        	   SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objOpp.Account.Country_Code__c,objOpp.RW_Mobile_No__c,'Lead Project Content 2');
+                        }else{
+                            SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objOpp.Name, objOpp.Project_Name__c, objOpp.RW_Project__r.RW_LocalityName__c,objOpp.RW_Project__r.Site_Address_Map_Link__c, objOpp.RW_Project__r.RW_Project_Brochure_PublicUrl__c,objOpp.RW_Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ContactNumber,Signature,objOpp.RW_Mobile_No__c,'Lead Project Content 2');
+                        }
                         preComm.RW_ProjectDetails_WhatsApp_Sent_Date__c  = system.now();  
                         preComm.RW_Project_Details_Mode_of_Communication__c += ',WhatsApp';
                     }
                 } 
             }
             if(strSObjectType == 'Prospect__c'){
-                System.debug('In Project deatils WhatsApp____Prospect__c');
                 
-                if(objPrspct.Lead__r.IsConverted == false && String.isBlank(objPrspct.Lead__r.ConvertedOpportunityId) && 
-                   String.isNotBlank(objPrspct.Lead__r.RW_Mobile_No__c) && String.isNotBlank(objPrspct.Lead__r.LeadSource)){
+                if(objPrspct.Lead__r.IsConverted == false && String.isBlank(objPrspct.Lead__r.ConvertedOpportunityId) && String.isNotBlank(objPrspct.Lead__r.RW_Mobile_No__c) && String.isNotBlank(objPrspct.Lead__r.LeadSource)){
                        String ProsLeadSignature;
                        String ProsLeadContactNumber;
                        
@@ -389,10 +347,12 @@ public without sharing class PresalesProjectDetailsController {
                            ProsLeadSignature = System.Label.RW_NotCPSignature;
                            ProsLeadContactNumber = System.Label.RW_NotCPContactNumber;
                            
-                           SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,
-                                                                          objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,
-                                                                          objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,
-                                                                          ProsLeadSignature,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');
+                           //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,ProsLeadSignature,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2'); //Commented by Vinay 29-08-2025
+                           if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                               SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,ProsLeadSignature,objPrspct.Lead__r.RDS_Country_Code__c,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');
+                           }else{
+                               SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsLeadContactNumber,ProsLeadSignature,objPrspct.Lead__r.RW_Mobile_No__c,'Lead Project Content 2');
+                           }
                        }
                        
                    }else if(String.isNotBlank(objPrspct.Opportunity__r.RW_Mobile_No__c) && String.isNotBlank(objPrspct.Opportunity__r.LeadSource) ){
@@ -406,10 +366,12 @@ public without sharing class PresalesProjectDetailsController {
                            ProsOppSignature = System.Label.RW_NotCPSignature;
                            ProsOppContactNumber = System.Label.RW_NotCPContactNumber;
                            
-                           SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,
-                                                                          objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,
-                                                                          objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature, 
-                                                                          objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');
+                           //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature,objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2'); //Commented by Vinay 29-08-2025
+                           if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+                               SendWhatsAppMsg.methodToSendWhatsAppMsgNew(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature,objPrspct.Opportunity__r.Account.Country_Code__c,objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');
+                           }else{
+                               SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(objPrspct.Name, objPrspct.Project__r.Name, objPrspct.Project__r.RW_LocalityName__c,objPrspct.Project__r.Site_Address_Map_Link__c, objPrspct.Project__r.RW_Project_Brochure_PublicUrl__c,objPrspct.Project__r.RW_Project_Location_Videos_Link__c,System.Label.Website_URL,ProsOppContactNumber,ProsOppSignature,objPrspct.Opportunity__r.RW_Mobile_No__c,'Lead Project Content 2');
+                           }
                        }
                    }
                 
@@ -431,7 +393,6 @@ public without sharing class PresalesProjectDetailsController {
         
         preComm.RW_Project_Details_Type__c = 'Brochure,Location Videos,Location maps';  
         insert preComm;  
-        System.debug('RW_Presales_Communication__c Record inserted______ ' +preComm);  
         
         return preComm; //RW_Presales_Communication__c;  
     }
@@ -442,26 +403,26 @@ public without sharing class PresalesProjectDetailsController {
     public static List<Project__c> getProjectList(Id recordId) {
         Id associatedProjectId;
         
-        if (recordId != null) {
+        if(recordId != null){
             String sobjectPrefix = String.valueOf(recordId).substring(0, 3);
             
             // Determine the object type by prefix
-            if (sobjectPrefix == Lead.SObjectType.getDescribe().getKeyPrefix()) {
+            if(sobjectPrefix == Lead.SObjectType.getDescribe().getKeyPrefix()){
                 Lead lead = [SELECT RW_Project__c FROM Lead WHERE Id = :recordId LIMIT 1];
                 associatedProjectId = lead.RW_Project__c;
-            } else if (sobjectPrefix == Opportunity.SObjectType.getDescribe().getKeyPrefix()) {
+            }else if(sobjectPrefix == Opportunity.SObjectType.getDescribe().getKeyPrefix()){
                 Opportunity opp = [SELECT RW_Project__c FROM Opportunity WHERE Id = :recordId LIMIT 1];
                 associatedProjectId = opp.RW_Project__c;
-            } else if (sobjectPrefix == Prospect__c.SObjectType.getDescribe().getKeyPrefix()) {
+            }else if(sobjectPrefix == Prospect__c.SObjectType.getDescribe().getKeyPrefix()){
                 Prospect__c prospect = [SELECT Project__c FROM Prospect__c WHERE Id = :recordId LIMIT 1];
                 associatedProjectId = prospect.Project__c; 
             }
         }
         
         // Return active projects excluding the associated one
-        if (associatedProjectId != null) {
-            return [ SELECT Id, Name, RW_Status__c FROM Project__c WHERE RW_Status__c = 'Active' AND Id != :associatedProjectId ];
-        } else {
+        if(associatedProjectId != null){
+            return [ SELECT Id,Name,RW_Status__c FROM Project__c WHERE RW_Status__c = 'Active' AND Id != :associatedProjectId ];
+        }else{
             return new List<Project__c>();
         }
     }
@@ -470,9 +431,8 @@ public without sharing class PresalesProjectDetailsController {
     @AuraEnabled
     public static String getSObjectTypeById(String url) {
         
-        system.debug('Inside getSObjectTypeById ==>'); 
         
-        if (String.isBlank(url)) {
+        if(String.isBlank(url)){
             return 'Invalid URL';
         }
         
@@ -513,7 +473,6 @@ public without sharing class PresalesProjectDetailsController {
         smsName + ' (' + smsNumber + ')<br/>' +
         'Runwal Enterprises';
 
-    System.debug('Inside generateEmailBody ==> ' + emailBody);  
     return emailBody;
 }
 

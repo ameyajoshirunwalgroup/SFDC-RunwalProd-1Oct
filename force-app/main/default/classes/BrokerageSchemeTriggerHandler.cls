@@ -3,7 +3,7 @@ public class BrokerageSchemeTriggerHandler {
 	public static void BrokerageSchemeTagging(List<Id> bsIds){
         system.debug('brokerage scheme ids -->'+bsIds);
         List<Booking__c> bookingListtoUpdate = new List<Booking__c>();
-        list<Brokerage_Scheme__c> brokerageScheme = [Select Id,Start_Date__c,End_Date__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Name,Base_Brokerage_for_OS_NRI__c from Brokerage_Scheme__c where Id IN: bsIds and Approval_Status__c = 'Approved by Level 2' ];
+        list<Brokerage_Scheme__c> brokerageScheme = [Select Id,Start_Date__c,End_Date__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Name,Base_Brokerage_for_OS_NRI__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where Id IN: bsIds and Approval_Status__c = 'Approved by Level 2' ];
         list<Scheme_Configuration__c> schemeConfigurations = [Select Id,Project__r.Id,Tower__r.Id,Type__c from Scheme_Configuration__c where Brokerage_Scheme__c IN: bsIds ];
         List<String> schemeTowers = new List<String>();
         List<String> schemeProjects = new List<String>();
@@ -31,7 +31,6 @@ public class BrokerageSchemeTriggerHandler {
             
             system.debug('Inside brokerageScheme');
             
-            if(!Test.isRunningTest()){
             dynamicQuery = 'SELECT Id, Name, Opportunity__c, BrokerIId__c, Agreement_Value_for_brokers__c, Project__c, Booking_Date__c, Tower__c, X5_Received__c, Type_of_Client__c, '+
                 'RW_X9_99_Received__c, RW_Registration_Done__c, Brokerage_Scheme__c, Is_Special_Brokerage_Scheme__c, Type_Of_Client_Formula__c,Project__r.Name,Quotation__r.Brokerage_Agreement_Value__c,Passback_Amount__c '+
                 'FROM Booking__c WHERE '+
@@ -44,11 +43,10 @@ public class BrokerageSchemeTriggerHandler {
                 'AND Brokerage_Scheme__c = NULL '+
                 'AND Booking_Date__c >=: startDate '+
                 'AND Booking_Date__c <=: endDate ';                 
-                
-            }
+
             if(typeofScheme == 'Both'){
-                dynamicQuery += 'AND (Type_Of_Client_Formula__c =\'Local\' OR  Type_Of_Client_Formula__c =\'NRI\') ';
-            }else if(typeofScheme == 'Local' || typeofScheme == 'NRI'){
+                dynamicQuery += 'AND (Type_Of_Client_Formula__c =\'Local\' OR  Type_Of_Client_Formula__c =\'NRI\' OR Type_Of_Client_Formula__c =\'Outstation\') ';
+            }else if(typeofScheme == 'Local' || typeofScheme == 'NRI' || typeofScheme == 'Outstation'){
                 dynamicQuery += 'AND Type_Of_Client_Formula__c =: typeofScheme ';
             }
             if (!schemeTowers.isEmpty()) {
@@ -60,51 +58,77 @@ public class BrokerageSchemeTriggerHandler {
             dynamicQuery += ' ORDER BY Booking_Date__c ASC';
             system.debug('dynamicQuery'+dynamicQuery);
              list<Booking__c> bookingList = new list<Booking__c>();
-            if(!Test.isRunningTest()){
            
-                bookingList= Database.query(dynamicQuery);
+            bookingList= Database.query(dynamicQuery);
             system.debug('bookingList'+bookingList);
             system.debug('bookingList size'+bookingList.size());
-            }
             Date bookingDate2 = Date.ValueOf('2024-04-1T06:00:00.000Z');
             if(!bookingList.isEmpty()){
                 for(Booking__c bk : bookingList){
                      Date bookingDate = Date.ValueOf(bk.Booking_Date__c);
                     system.debug('Bookings to be Tagged --- > '+bk.Name + 'Project - ' + bk.Project__r.name);
-                    if(brokerageScheme[0].Type__c == 'Local'  ){
+                   /* if(brokerageScheme[0].Type__c == 'Local'  ){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }else if( brokerageScheme[0].Type__c == 'NRI' && bookingDate < bookingDate2){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }
                     else if( brokerageScheme[0].Type__c == 'NRI' && bookingDate >= bookingDate2){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }
                     else if( brokerageScheme[0].Type__c == 'Both' && (bk.Type_of_Client__c == 'Local' || bk.Type_of_Client__c == 'Corporate' )){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }else if( brokerageScheme[0].Type__c == 'Both' && (bk.Type_of_Client__c == 'NRI' || bk.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }
                     else if(brokerageScheme[0].Type__c == 'Both' && (bk.Type_of_Client__c == 'NRI' || bk.Type_of_Client__c == 'Outstation') && bookingDate >= bookingDate2){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                    }  
+                    }  */
+                    
+                    //Added by Prashant to Handle base brokerage for NRI differently// 22-10-25. START
+                    if(!brokerageScheme.isEmpty() && (brokerageScheme[0].Type__c == 'Both' || brokerageScheme[0].Type__c == 'Local') && (bk.Type_of_Client__c == 'Local' || bk.Type_of_Client__c == 'Corporate' )){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                        bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
+                        bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
+                        bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
+                        bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    }else if(!brokerageScheme.isEmpty() && (brokerageScheme[0].Type__c == 'Both' || brokerageScheme[0].Type__c == 'NRI') && (bk.Type_of_Client__c == 'NRI') /*|| bk.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2*/){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                        bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_NRI__c;
+                        bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
+                        bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
+                        bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    } else if(!brokerageScheme.isEmpty() && (brokerageScheme[0].Type__c == 'Both' || brokerageScheme[0].Type__c == 'Outstation') && (bk.Type_of_Client__c == 'Outstation') /*&& bookingDate < bookingDate2*/){
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                        bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
+                        bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
+                        bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
+                        bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    }
+                     //Added by Prashant to Handle base brokerage for NRI differently// 22-10-25. END
                 }
             }
             
@@ -128,262 +152,5 @@ public class BrokerageSchemeTriggerHandler {
             }
     }
 }
-        Public static void Dummy(){
-        integer i=0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-          i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-         i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-         i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-         i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-
- i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-
-
-       
         
-        
-        
-    }
 }

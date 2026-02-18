@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Manadatory_Employee_reference</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL(LeadSource, &apos;Referred by employee&apos;) , ISBLANK( RW_Employee_Reference__c ))</errorConditionFormula>
+    <errorMessage>Please update the Employee reference field</errorMessage>
+</ValidationRule>

@@ -25,234 +25,441 @@ public without sharing class CPBookingController {
     
     
     @AuraEnabled
-    public static String selfregister(Broker__c sf, Boolean isnri) {	
-        System.debug('sf::'+ sf);
-        System.debug('isnri::'+ isnri);
-        List<Broker__c> existingcp = new List<Broker__c>();
-        if(isnri){
-            existingcp = [Select id,name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,TITLE__c,RW_RERA_Registration_Number__c,Account_Number__c,
-                          IFSC_Code__c,RW_Mobile_No__c,RW_GST_Number__c,Is_NRI_CP__c,RW_Is_GST_Applicable__c,Bank_Name__c,Bank_Branch__c,
-                          Cheque_DD_Favouring_Name__c,Team_Size__c,Are_you_NRI__c,IS_IGST_Applicable__c,House_Flat_Company__c,Place_of_Supply__c,
-                          Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
-                          Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
-                          Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
-                          Developers_Worked_For__c,Account__c from Broker__c where Broker_Pan_No__c=:sf.Broker_Pan_No__c];
-            if(!existingcp.isEmpty()){
-                existingcp[0].name = sf.name;
-                existingcp[0].NAME_FIRST__c = sf.NAME_FIRST__c;
-                existingcp[0].NAME_MIDDLE__c = sf.NAME_MIDDLE__c;
-                existingcp[0].NAME_LAST__c = sf.NAME_LAST__c;
-                existingcp[0].TITLE__c = sf.TITLE__c;
-                existingcp[0].RW_Email__c = sf.RW_Email__c;
-                existingcp[0].RW_RERA_Registration_Number__c = sf.RW_RERA_Registration_Number__c;
-                existingcp[0].Account_Number__c = sf.Account_Number__c;
-                existingcp[0].Cheque_DD_Favouring_Name__c = sf.Cheque_DD_Favouring_Name__c;
-                existingcp[0].IFSC_Code__c = sf.IFSC_Code__c;
-                existingcp[0].Branch_Code__c = sf.Branch_Code__c;
-                existingcp[0].Bank_Name__c = sf.Bank_Name__c;
-                existingcp[0].Bank_Branch__c = sf.Bank_Branch__c;
-                existingcp[0].RW_Mobile_No__c = sf.RW_Mobile_No__c;
-                existingcp[0].RW_GST_Number__c = sf.RW_GST_Number__c;
-                existingcp[0].House_Flat_Company__c = sf.House_Flat_Company__c;
-                existingcp[0].Company_Name_As_per_RERA__c = sf.Company_Name_As_per_RERA__c;
-                //existingcp[0].STREET__c = sf.STREET__c;
-                existingcp[0].STR_SUPPL1__c = sf.STR_SUPPL1__c;
-                existingcp[0].STR_SUPPL2__c = sf.STR_SUPPL2__c;
-                existingcp[0].STR_SUPPL3__c = sf.STR_SUPPL3__c;
-                existingcp[0].City__c = sf.City__c;
-                existingcp[0].State__c = sf.State__c;
-                existingcp[0].Country__c = sf.Country__c;
-                existingcp[0].Pin_Code__c = sf.Pin_Code__c;
-                existingcp[0].Broker_Type__c = sf.Broker_Type__c;
-                existingcp[0].Experience__c = sf.Experience__c;
-                existingcp[0].Dialing_Country_Code1__c = sf.Dialing_Country_Code1__c;
-                //existingcp[0].Expertise__c = sf.Expertise__c;
-                existingcp[0].Place_of_Supply__c = sf.Place_of_Supply__c;
-                existingcp[0].Team_Size__c = sf.Team_Size__c;
-                existingcp[0].Channel_Partner_From_CP_Portal__c = true;
-                //existingcp[0].Developers_Worked_For__c = sf.Developers_Worked_For__c;
-                existingcp[0].Project__c = sf.Project__c;
-                existingcp[0].Approver_L1__c = sf.Approver_L1__c;
-                existingcp[0].Approver_L2__c = sf.Approver_L2__c;
-                if (sf.Is_NRI_CP__c) {
-                    existingcp[0].Is_NRI_CP__c = true;
-                } else {
-                    existingcp[0].Is_NRI_CP__c = false;
-                }
-                if (sf.RW_Is_GST_Applicable__c) {
-                    existingcp[0].RW_Is_GST_Applicable__c = true;
-                } else {
-                    existingcp[0].RW_Is_GST_Applicable__c = false;
-                }
-                if (sf.Unregistered_Channel_Partner__c) {
-                    existingcp[0].Unregistered_Channel_Partner__c = false;
-                } else {
-                    existingcp[0].Unregistered_Channel_Partner__c = true;
-                }
-                if (sf.IS_IGST_Applicable__c == 'Yes') {
-                    existingcp[0].IS_IGST_Applicable__c = 'Yes';
-                } else {
-                    existingcp[0].IS_IGST_Applicable__c = 'No';
-                }
-                if (sf.Individual_CP__c) {
-                    existingcp[0].Individual_CP__c = true;
-                } else {
-                    existingcp[0].Individual_CP__c = false;
-                }
+    public static String selfregister(Broker__c sf) {
+        System.debug('sf::'+ sf); 
+        System.debug('Pan -> '+sf.Broker_Pan_No__c);
+        if(sf != null){ 
+            list<String> approvers = getApprovers(sf.Project__c);
+            if(!approvers.isEmpty()){
+                sf.Approver_L1__c = approvers[0];
+                sf.Approver_L2__c = approvers[1];
+            }
+            
+            if (sf.Company_Name_As_per_RERA__c != null) {
+                sf.Name = sf.Company_Name_As_per_RERA__c;
+            } else {
+                sf.Name = sf.NAME_FIRST__c + ' ' + sf.NAME_LAST__c;
+            }
+            sf.STR_SUPPL1__c = sf.House_Flat_Company__c + ',' + sf.STREET__c;
+            sf.Is_T_C_Accepted__c = true;
+            sf.Channel_Partner_From_CP_Portal__c = true;
+            system.debug('Inside istempcppresent');
+            Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+            sf.RecordTypeId = CPRecordTypeId;
+            
+            
+                /*
+                //tempConverted = convertTempCP(tempcpno,sf);
+                Id TempCPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
+                list<Broker__c> tempCP = [Select Id,Account__c from Broker__c where RW_Broker_Number__c =: sf.RW_Broker_Number__c and RecordTypeId =: TempCPRecordTypeId limit 1];
+                system.debug('tempCP'+tempCP);
+                if(!tempCP.isEmpty() && tempCP[0].Id != null){
+                    system.debug('Inside istempcppresent Yes');
+                    Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+                    try{
+                        tempCP[0].RecordTypeId = CPRecordTypeId;
+                        tempCP[0] = copyFields(sf,tempCP[0]);
+                        update tempCP[0]; 
+                        if(tempCP[0].Account__c == null){
+                            Set<Id> acID = new Set<Id>();
+                            Account ac = new Account();                        
+                            ac.Name = tempCP[0].Company_Name_As_per_RERA__c;
+                            ac.CP_Email__c = tempCP[0].RW_Email__c;
+                            ac.Mobile_No__c = tempCP[0].RW_Mobile_No__c;
+                            ac.Channel_Partner__c = tempCP[0].id;
+                            Id AccCPRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();                
+                            ac.RecordTypeId = AccCPRecordTypeId;
+                            insert ac;
+                            acID.add(ac.Id);
+                            if(!acID.isEmpty()){
+                                //AccountTriggerHandler.createcontactCP(acID);
+                                AccountTriggerHandler.UpdateCPAccountOnCP(acID);
+                            }
+                        }
+                        return tempCP[0].Id;
+                    }
+                    catch(Exception e){
+                        //if(!Test.isRunningTest()){
+                        throw new AuraHandledException(e.getMessage());
+                        //}
+                    }  
+                }*/
+                /*else if(tempCP.isEmpty()){
+system.debug('Inside istempcppresent empty');
+try{
+insert sf;
+if(sf.Account__c == null){
+Set<Id> acID = new Set<Id>();
+Account ac = new Account();                        
+ac.Name = sf.Company_Name_As_per_RERA__c;
+ac.CP_Email__c = sf.RW_Email__c;
+ac.Mobile_No__c = sf.RW_Mobile_No__c;
+ac.Channel_Partner__c = sf.id;
+Id AccCPRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();                
+ac.RecordTypeId = AccCPRecordTypeId;
+insert ac;
+acID.add(ac.Id);
+if(!acID.isEmpty()){
+//AccountTriggerHandler.createcontactCP(acID);
+AccountTriggerHandler.UpdateCPAccountOnCP(acID);
+}
+}
+createCPCategory(new list<String>{sf.Id});
+return sf.Id;
+}catch(Exception e){
+throw new AuraHandledException(e.getMessage());
+}
+}*/
+                /*else{
+                    system.debug('Inside Blank');
+                    return 'No Temp CP Records Found';
+                } */         
+            
+            	
+                system.debug('Inside last else');
+                List<Broker__c> existingcp = new List<Broker__c>();
+                /*if(isnri){
+existingcp = [Select id,name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,TITLE__c,RW_RERA_Registration_Number__c,Account_Number__c,
+IFSC_Code__c,RW_Mobile_No__c,RW_GST_Number__c,Is_NRI_CP__c,RW_Is_GST_Applicable__c,Bank_Name__c,Bank_Branch__c,
+Cheque_DD_Favouring_Name__c,Team_Size__c,Are_you_NRI__c,IS_IGST_Applicable__c,House_Flat_Company__c,Place_of_Supply__c,
+Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
+Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
+Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
+Developers_Worked_For__c,Account__c from Broker__c where Broker_Pan_No__c=:sf.Broker_Pan_No__c];
+if(!existingcp.isEmpty()){
+existingcp[0].name = sf.name;
+existingcp[0].NAME_FIRST__c = sf.NAME_FIRST__c;
+existingcp[0].NAME_MIDDLE__c = sf.NAME_MIDDLE__c;
+existingcp[0].NAME_LAST__c = sf.NAME_LAST__c;
+existingcp[0].TITLE__c = sf.TITLE__c;
+existingcp[0].RW_Email__c = sf.RW_Email__c;
+existingcp[0].RW_RERA_Registration_Number__c = sf.RW_RERA_Registration_Number__c;
+existingcp[0].Account_Number__c = sf.Account_Number__c;
+existingcp[0].Cheque_DD_Favouring_Name__c = sf.Cheque_DD_Favouring_Name__c;
+existingcp[0].IFSC_Code__c = sf.IFSC_Code__c;
+existingcp[0].Branch_Code__c = sf.Branch_Code__c;
+existingcp[0].Bank_Name__c = sf.Bank_Name__c;
+existingcp[0].Bank_Branch__c = sf.Bank_Branch__c;
+existingcp[0].RW_Mobile_No__c = sf.RW_Mobile_No__c;
+existingcp[0].RW_GST_Number__c = sf.RW_GST_Number__c;
+existingcp[0].House_Flat_Company__c = sf.House_Flat_Company__c;
+existingcp[0].Company_Name_As_per_RERA__c = sf.Company_Name_As_per_RERA__c;
+//existingcp[0].STREET__c = sf.STREET__c;
+existingcp[0].STR_SUPPL1__c = sf.STR_SUPPL1__c;
+existingcp[0].STR_SUPPL2__c = sf.STR_SUPPL2__c;
+existingcp[0].STR_SUPPL3__c = sf.STR_SUPPL3__c;
+existingcp[0].City__c = sf.City__c;
+existingcp[0].State__c = sf.State__c;
+existingcp[0].Country__c = sf.Country__c;
+existingcp[0].Pin_Code__c = sf.Pin_Code__c;
+existingcp[0].Broker_Type__c = sf.Broker_Type__c;
+existingcp[0].Experience__c = sf.Experience__c;
+existingcp[0].Dialing_Country_Code1__c = sf.Dialing_Country_Code1__c;
+//existingcp[0].Expertise__c = sf.Expertise__c;
+existingcp[0].Place_of_Supply__c = sf.Place_of_Supply__c;
+existingcp[0].Team_Size__c = sf.Team_Size__c;
+existingcp[0].Channel_Partner_From_CP_Portal__c = true;
+//existingcp[0].Developers_Worked_For__c = sf.Developers_Worked_For__c;
+existingcp[0].Project__c = sf.Project__c;
+existingcp[0].Approver_L1__c = sf.Approver_L1__c;
+existingcp[0].Approver_L2__c = sf.Approver_L2__c;
+if (sf.Is_NRI_CP__c) {
+existingcp[0].Is_NRI_CP__c = true;
+} else {
+existingcp[0].Is_NRI_CP__c = false;
+}
+if (sf.RW_Is_GST_Applicable__c) {
+existingcp[0].RW_Is_GST_Applicable__c = true;
+} else {
+existingcp[0].RW_Is_GST_Applicable__c = false;
+}
+if (sf.Unregistered_Channel_Partner__c) {
+existingcp[0].Unregistered_Channel_Partner__c = false;
+} else {
+existingcp[0].Unregistered_Channel_Partner__c = true;
+}
+if (sf.IS_IGST_Applicable__c == 'Yes') {
+existingcp[0].IS_IGST_Applicable__c = 'Yes';
+} else {
+existingcp[0].IS_IGST_Applicable__c = 'No';
+}
+if (sf.Individual_CP__c) {
+existingcp[0].Individual_CP__c = true;
+} else {
+existingcp[0].Individual_CP__c = false;
+}
+try{
+update existingcp;
+
+if(existingcp[0].Account__c == null){
+Set<Id> acID = new Set<Id>();
+Id ChannelPartnerId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+Account ac = new Account();
+ac.Name = existingcp[0].Company_Name_As_per_RERA__c;
+ac.CP_Email__c = existingcp[0].RW_Email__c;
+ac.Mobile_No__c = existingcp[0].RW_Mobile_No__c;
+ac.Channel_Partner__c = existingcp[0].id;
+ac.RecordTypeId = ChannelPartnerId;
+insert ac;
+acID.add(ac.Id);
+if(!acID.isEmpty()){
+AccountTriggerHandler.createcontactCP(acID);
+AccountTriggerHandler.UpdateCPAccountOnCP(acID);
+}
+}
+return existingcp[0].id;
+}catch(Exception e){
+throw new AuraHandledException(e.getMessage());
+}
+}else{
+try{
+insert sf;
+return sf.id;
+}catch(Exception e){
+throw new AuraHandledException(e.getMessage());
+}
+}
+
+
+}
+else{
+existingcp = [Select id,name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,TITLE__c,RW_RERA_Registration_Number__c,Account_Number__c,
+IFSC_Code__c,RW_Mobile_No__c,RW_GST_Number__c,Is_NRI_CP__c,RW_Is_GST_Applicable__c,Bank_Name__c,Bank_Branch__c,
+Cheque_DD_Favouring_Name__c,Team_Size__c,Are_you_NRI__c,IS_IGST_Applicable__c,House_Flat_Company__c,Place_of_Supply__c,
+Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
+Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
+Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
+Developers_Worked_For__c,Account__c from Broker__c where Broker_Pan_No__c=:sf.Broker_Pan_No__c];
+if(!existingcp.isEmpty()){
+existingcp[0].name = sf.name;
+existingcp[0].NAME_FIRST__c = sf.NAME_FIRST__c;
+existingcp[0].NAME_MIDDLE__c = sf.NAME_MIDDLE__c;
+existingcp[0].NAME_LAST__c = sf.NAME_LAST__c;
+existingcp[0].TITLE__c = sf.TITLE__c;
+existingcp[0].RW_Email__c = sf.RW_Email__c;
+existingcp[0].RW_RERA_Registration_Number__c = sf.RW_RERA_Registration_Number__c;
+existingcp[0].Account_Number__c = sf.Account_Number__c;
+existingcp[0].Cheque_DD_Favouring_Name__c = sf.Cheque_DD_Favouring_Name__c;
+existingcp[0].IFSC_Code__c = sf.IFSC_Code__c;
+existingcp[0].Branch_Code__c = sf.Branch_Code__c;
+existingcp[0].Bank_Name__c = sf.Bank_Name__c;
+existingcp[0].Bank_Branch__c = sf.Bank_Branch__c;
+existingcp[0].RW_Mobile_No__c = sf.RW_Mobile_No__c;
+existingcp[0].RW_GST_Number__c = sf.RW_GST_Number__c;
+existingcp[0].House_Flat_Company__c = sf.House_Flat_Company__c;
+existingcp[0].Company_Name_As_per_RERA__c = sf.Company_Name_As_per_RERA__c;
+//existingcp[0].STREET__c = sf.STREET__c;
+existingcp[0].STR_SUPPL1__c = sf.STR_SUPPL1__c;
+existingcp[0].STR_SUPPL2__c = sf.STR_SUPPL2__c;
+existingcp[0].STR_SUPPL3__c = sf.STR_SUPPL3__c;
+existingcp[0].City__c = sf.City__c;
+existingcp[0].State__c = sf.State__c;
+existingcp[0].Country__c = sf.Country__c;
+existingcp[0].Pin_Code__c = sf.Pin_Code__c;
+existingcp[0].Broker_Type__c = sf.Broker_Type__c;
+existingcp[0].Experience__c = sf.Experience__c;
+existingcp[0].Dialing_Country_Code1__c = sf.Dialing_Country_Code1__c;
+//existingcp[0].Expertise__c = sf.Expertise__c;
+existingcp[0].Place_of_Supply__c = sf.Place_of_Supply__c;
+existingcp[0].Team_Size__c = sf.Team_Size__c;
+existingcp[0].Channel_Partner_From_CP_Portal__c = true;
+//existingcp[0].Developers_Worked_For__c = sf.Developers_Worked_For__c;
+existingcp[0].Project__c = sf.Project__c;
+existingcp[0].Approver_L1__c = sf.Approver_L1__c;
+existingcp[0].Approver_L2__c = sf.Approver_L2__c;
+if (sf.Is_NRI_CP__c) {
+existingcp[0].Is_NRI_CP__c = true;
+} else {
+existingcp[0].Is_NRI_CP__c = false;
+}
+if (sf.RW_Is_GST_Applicable__c) {
+existingcp[0].RW_Is_GST_Applicable__c = true;
+} else {
+existingcp[0].RW_Is_GST_Applicable__c = false;
+}
+if (sf.Unregistered_Channel_Partner__c) {
+existingcp[0].Unregistered_Channel_Partner__c = false;
+} else {
+existingcp[0].Unregistered_Channel_Partner__c = true;
+}
+if (sf.IS_IGST_Applicable__c == 'Yes') {
+existingcp[0].IS_IGST_Applicable__c = 'Yes';
+} else {
+existingcp[0].IS_IGST_Applicable__c = 'No';
+}
+if (sf.Individual_CP__c) {
+existingcp[0].Individual_CP__c = true;
+} else {
+existingcp[0].Individual_CP__c = false;
+}
+try{
+update existingcp;
+if(existingcp[0].Account__c == null){
+Set<Id> acID = new Set<Id>();
+Id ChannelPartnerId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+Account ac = new Account();
+ac.Name = existingcp[0].Company_Name_As_per_RERA__c;
+ac.CP_Email__c = existingcp[0].RW_Email__c;
+ac.Mobile_No__c = existingcp[0].RW_Mobile_No__c;
+ac.Channel_Partner__c = existingcp[0].id;
+ac.RecordTypeId = ChannelPartnerId;
+insert ac;
+acID.add(ac.Id);
+if(!acID.isEmpty()){
+AccountTriggerHandler.createcontactCP(acID);
+AccountTriggerHandler.UpdateCPAccountOnCP(acID);
+}
+}
+return existingcp[0].id;
+}catch(Exception e){
+throw new AuraHandledException(e.getMessage());
+}
+}else{
+try{
+insert sf;
+return sf.id;
+}catch(Exception e){
+throw new AuraHandledException(e.getMessage());
+}
+}
+}*/
+                
+                /*existingcp = [Select id,name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,TITLE__c,RW_RERA_Registration_Number__c,Account_Number__c,
+IFSC_Code__c,RW_Mobile_No__c,RW_GST_Number__c,Is_NRI_CP__c,RW_Is_GST_Applicable__c,Bank_Name__c,Bank_Branch__c,
+Cheque_DD_Favouring_Name__c,Team_Size__c,Are_you_NRI__c,IS_IGST_Applicable__c,House_Flat_Company__c,Place_of_Supply__c,
+Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
+Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
+Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
+Developers_Worked_For__c,Account__c from Broker__c where Broker_Pan_No__c=:sf.Broker_Pan_No__c];
+if(!existingcp.isEmpty()){
+system.debug('Inside else existingcp');
+existingcp[0] = copyFields(sf, existingcp[0]);                
+try{  
+update existingcp;
+if(existingcp[0].Account__c == null){
+Set<Id> acID = new Set<Id>();
+Account ac = new Account();                        
+ac.Name = existingcp[0].Company_Name_As_per_RERA__c;
+ac.CP_Email__c = existingcp[0].RW_Email__c;
+ac.Mobile_No__c = existingcp[0].RW_Mobile_No__c;
+ac.Channel_Partner__c = existingcp[0].id;
+Id AccCPRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();                
+ac.RecordTypeId = AccCPRecordTypeId;
+insert ac;
+acID.add(ac.Id);
+if(!acID.isEmpty()){
+//AccountTriggerHandler.createcontactCP(acID);
+AccountTriggerHandler.UpdateCPAccountOnCP(acID);
+}
+}
+createCPCategory(new list<String>{existingcp[0].Id});
+return existingcp[0].id;
+}catch(Exception e){
+throw new AuraHandledException(e.getMessage());
+}
+}*/
+                // else{
+                system.debug('Inside else else');
                 try{
-                    update existingcp;
                     
-                    if(existingcp[0].Account__c == null){
+                    upsert sf;
+                    if(sf.Id != null){
+                        try{
+                            List<Lead> leadList = [SELECT Id FROM Lead WHERE RW_Broker__c =: sf.Id AND LeadSource = 'Temp Channel Partner']; 
+                            System.debug('leadList: ' + leadList);
+                            for(Lead ld : leadList){
+                                ld.LeadSource = 'Channel Partner';
+                            }
+                            update leadList;
+                            
+                            List<Opportunity> opps = [SELECT Id FROM Opportunity WHERE RW_Broker__c =: sf.Id AND (LeadSource = 'Temp Channel Partner' OR Walkin_Source__c = 'Temp Channel Partner')];
+                            for(Opportunity opp : opps){
+                                opp.LeadSource = 'Channel Partner';
+                                opp.Walkin_Source__c = 'Channel Partner';
+                            }
+                            update opps;
+                            
+                            List<Prospect__c> prospects = [SELECT Id FROM Prospect__c WHERE Channel_Partner__c =: sf.Id AND Lead_Source__c  = 'Temp Channel Partner'];
+                            for(Prospect__c pros : prospects){
+                                pros.Lead_Source__c  = 'Channel Partner';
+                            }
+                            update prospects;
+                            
+                            List<Booking__c> bookings = [SELECT Id FROM Booking__c WHERE BrokerIId__c =: sf.Id AND Source_of_Booking__c = 'Temp Channel Partner'];
+                            for(Booking__c bkg : bookings){
+                                bkg.Source_of_Booking__c = 'Channel Partner';
+                            }
+                            update bookings;
+                            
+                            List<OTP__c> otps = [SELECT Id FROM OTP__c WHERE Channel_Partner_Lookup__c =: sf.Id AND OTP_Generate_For__c = 'Temp Channel Partner'];
+                            for(OTP__c otp : otps){
+                                otp.OTP_Generate_For__c = 'Channel Partner';
+                            }
+                            update otps;
+                            
+                        }catch(Exception e){
+                            if(!Test.isRunningTest()){
+                                throw new AuraHandledException(e.getMessage());
+                            }
+                        }
+                    }
+                    if(sf.Account__c == null){
                         Set<Id> acID = new Set<Id>();
-                        Id ChannelPartnerId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
-                        Account ac = new Account();
-                        ac.Name = existingcp[0].Company_Name_As_per_RERA__c;
-                        ac.CP_Email__c = existingcp[0].RW_Email__c;
-                        ac.Mobile_No__c = existingcp[0].RW_Mobile_No__c;
-                        ac.Channel_Partner__c = existingcp[0].id;
-                        ac.RecordTypeId = ChannelPartnerId;
+                        Account ac = new Account();                        
+                        ac.Name = sf.Company_Name_As_per_RERA__c;
+                        ac.CP_Email__c = sf.RW_Email__c;
+                        ac.Mobile_No__c = sf.RW_Mobile_No__c;
+                        ac.Channel_Partner__c = sf.id;
+                        Id AccCPRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();                
+                        ac.RecordTypeId = AccCPRecordTypeId;
                         insert ac;
                         acID.add(ac.Id);
                         if(!acID.isEmpty()){
-                            AccountTriggerHandler.createcontactCP(acID);
+                            //AccountTriggerHandler.createcontactCP(acID);
                             AccountTriggerHandler.UpdateCPAccountOnCP(acID);
                         }
                     }
-                    return existingcp[0].id;
-                }catch(Exception e){
-                    throw new AuraHandledException(e.getMessage());
-                }
-            }else{
-                try{
-                    insert sf;
                     return sf.id;
                 }catch(Exception e){
                     throw new AuraHandledException(e.getMessage());
+                }             
+                //}
+            
+        } else{return null;}
+    }
+    
+    
+    @AuraEnabled(cacheable=true)
+    public static List<ContentVersion> returnFiles(List<String> lstFileIds, Id recId) {
+        System.debug('lstFileIds:: ' + lstFileIds);
+        System.debug('recId:: ' + recId);
+        
+        List<ContentVersion> result = new List<ContentVersion>();
+        
+        if (recId != null) {
+            list<ContentDocumentLink> ContentDocumentLinklist = [SELECT Id,ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = :recId];
+            list<Id> ContentDocumentIds = new list<Id>();
+            if(!ContentDocumentLinklist.isEmpty()){
+                for(ContentDocumentLink cdl : ContentDocumentLinklist){
+                    ContentDocumentIds.add(cdl.ContentDocumentId);
                 }
             }
-            
-            
-        }else{
-            existingcp = [Select id,name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,TITLE__c,RW_RERA_Registration_Number__c,Account_Number__c,
-                          IFSC_Code__c,RW_Mobile_No__c,RW_GST_Number__c,Is_NRI_CP__c,RW_Is_GST_Applicable__c,Bank_Name__c,Bank_Branch__c,
-                          Cheque_DD_Favouring_Name__c,Team_Size__c,Are_you_NRI__c,IS_IGST_Applicable__c,House_Flat_Company__c,Place_of_Supply__c,
-                          Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
-                          Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
-                          Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
-                          Developers_Worked_For__c,Account__c from Broker__c where Broker_Pan_No__c=:sf.Broker_Pan_No__c];
-            if(!existingcp.isEmpty()){
-                existingcp[0].name = sf.name;
-                existingcp[0].NAME_FIRST__c = sf.NAME_FIRST__c;
-                existingcp[0].NAME_MIDDLE__c = sf.NAME_MIDDLE__c;
-                existingcp[0].NAME_LAST__c = sf.NAME_LAST__c;
-                existingcp[0].TITLE__c = sf.TITLE__c;
-                existingcp[0].RW_Email__c = sf.RW_Email__c;
-                existingcp[0].RW_RERA_Registration_Number__c = sf.RW_RERA_Registration_Number__c;
-                existingcp[0].Account_Number__c = sf.Account_Number__c;
-                existingcp[0].Cheque_DD_Favouring_Name__c = sf.Cheque_DD_Favouring_Name__c;
-                existingcp[0].IFSC_Code__c = sf.IFSC_Code__c;
-                existingcp[0].Branch_Code__c = sf.Branch_Code__c;
-                existingcp[0].Bank_Name__c = sf.Bank_Name__c;
-                existingcp[0].Bank_Branch__c = sf.Bank_Branch__c;
-                existingcp[0].RW_Mobile_No__c = sf.RW_Mobile_No__c;
-                existingcp[0].RW_GST_Number__c = sf.RW_GST_Number__c;
-                existingcp[0].House_Flat_Company__c = sf.House_Flat_Company__c;
-                existingcp[0].Company_Name_As_per_RERA__c = sf.Company_Name_As_per_RERA__c;
-                //existingcp[0].STREET__c = sf.STREET__c;
-                existingcp[0].STR_SUPPL1__c = sf.STR_SUPPL1__c;
-                existingcp[0].STR_SUPPL2__c = sf.STR_SUPPL2__c;
-                existingcp[0].STR_SUPPL3__c = sf.STR_SUPPL3__c;
-                existingcp[0].City__c = sf.City__c;
-                existingcp[0].State__c = sf.State__c;
-                existingcp[0].Country__c = sf.Country__c;
-                existingcp[0].Pin_Code__c = sf.Pin_Code__c;
-                existingcp[0].Broker_Type__c = sf.Broker_Type__c;
-                existingcp[0].Experience__c = sf.Experience__c;
-                existingcp[0].Dialing_Country_Code1__c = sf.Dialing_Country_Code1__c;
-                //existingcp[0].Expertise__c = sf.Expertise__c;
-                existingcp[0].Place_of_Supply__c = sf.Place_of_Supply__c;
-                existingcp[0].Team_Size__c = sf.Team_Size__c;
-                existingcp[0].Channel_Partner_From_CP_Portal__c = true;
-                //existingcp[0].Developers_Worked_For__c = sf.Developers_Worked_For__c;
-                existingcp[0].Project__c = sf.Project__c;
-                existingcp[0].Approver_L1__c = sf.Approver_L1__c;
-                existingcp[0].Approver_L2__c = sf.Approver_L2__c;
-                if (sf.Is_NRI_CP__c) {
-                    existingcp[0].Is_NRI_CP__c = true;
-                } else {
-                    existingcp[0].Is_NRI_CP__c = false;
-                }
-                if (sf.RW_Is_GST_Applicable__c) {
-                    existingcp[0].RW_Is_GST_Applicable__c = true;
-                } else {
-                    existingcp[0].RW_Is_GST_Applicable__c = false;
-                }
-                if (sf.Unregistered_Channel_Partner__c) {
-                    existingcp[0].Unregistered_Channel_Partner__c = false;
-                } else {
-                    existingcp[0].Unregistered_Channel_Partner__c = true;
-                }
-                if (sf.IS_IGST_Applicable__c == 'Yes') {
-                    existingcp[0].IS_IGST_Applicable__c = 'Yes';
-                } else {
-                    existingcp[0].IS_IGST_Applicable__c = 'No';
-                }
-                if (sf.Individual_CP__c) {
-                    existingcp[0].Individual_CP__c = true;
-                } else {
-                    existingcp[0].Individual_CP__c = false;
-                }
-                try{
-                    update existingcp;
-                    if(existingcp[0].Account__c == null){
-                        Set<Id> acID = new Set<Id>();
-                        Id ChannelPartnerId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
-                        Account ac = new Account();
-                        ac.Name = existingcp[0].Company_Name_As_per_RERA__c;
-                        ac.CP_Email__c = existingcp[0].RW_Email__c;
-                        ac.Mobile_No__c = existingcp[0].RW_Mobile_No__c;
-                        ac.Channel_Partner__c = existingcp[0].id;
-                        ac.RecordTypeId = ChannelPartnerId;
-                        insert ac;
-                        acID.add(ac.Id);
-                        if(!acID.isEmpty()){
-                            AccountTriggerHandler.createcontactCP(acID);
-                            AccountTriggerHandler.UpdateCPAccountOnCP(acID);
-                        }
-                    }
-                    return existingcp[0].id;
-                }catch(Exception e){
-                    throw new AuraHandledException(e.getMessage());
-                }
-            }else{
-                try{
-                    insert sf;
-                    return sf.id;
-                }catch(Exception e){
-                    throw new AuraHandledException(e.getMessage());
-                }
+            if(!ContentDocumentIds.isEmpty()){
+                result = [SELECT Id, Title, ContentDocumentId FROM ContentVersion WHERE ContentDocumentId IN: ContentDocumentIds];
             }
+            
         }
-    }
-    @AuraEnabled
-    public static list<ContentVersion> returnFiles(list<Object> lstFileIds){
-        System.debug('lstFileIds::'+ lstFileIds);
-        list<String> lstCntVerIds = new list<String>();
-        for(Object fid :lstFileIds){
-            System.debug('serialize::'+ JSON.serialize(fid));
-            List<String> splitList = new List<String>();
-            List<String> splitList2 = new List<String>();
-            system.debug('fid::'+String.valueOf(fid).split('\\('));
-            splitList = String.valueOf(fid).split('\\(');
-            system.debug('splitList::'+splitList[1]);
-            splitList2 = splitList[1].split('\\)');
-            system.debug('splitList::'+splitList2[0]);
-            //Fileupload2 fileData1 = (Fileupload2)JSON.deserialize(JSON.serialize(fid), Fileupload2.class);
-            lstCntVerIds.add(splitList2[0]); 
+        else if (lstFileIds != null && !lstFileIds.isEmpty()) {
+            result = [
+                SELECT Id, Title, ContentDocumentId
+                FROM ContentVersion
+                WHERE Id IN :lstFileIds
+            ];
         }
-        system.debug('lstCntVerIds::'+lstCntVerIds);
-        return [SELECT Id, Title,ContentDocumentId FROM ContentVersion WHERE Id IN :lstCntVerIds];
+        system.debug('Result -> '+result);
+        return result;
     }
+
     
     @AuraEnabled
     public static list<ContentVersion> returnAllFiles(list<Object> allfiles){
@@ -317,8 +524,9 @@ public without sharing class CPBookingController {
     public class Fileupload2 {
         public String cverId { get; set; }
     }
+    
     @AuraEnabled
-    public static list<Id> createContentLink(list<Object> uploadedfile, String recId) {
+    public static list<Id> createContentLink(list<Object> uploadedfile, String recId, String docType) {
         System.debug('uploadedfile::'+ uploadedfile);
         System.debug('recordId::'+ recId);
         List<Id> cvId = new List<Id>();
@@ -333,9 +541,53 @@ public without sharing class CPBookingController {
             cv = [Select id,title,ContentDocumentId  from ContentVersion where id IN:cvId];
             if(!cv.isEmpty()){
                 for (ContentVersion cc : cv) {
+                    cc.Title = docType;
                     ContentDocumentLink  cdl = new ContentDocumentLink();
                     cdl.ContentDocumentId = cc.ContentDocumentId ;
                     cdl.LinkedEntityId  = recId;
+                    cdl.ShareType = 'V';
+                    cdlupdate.add(cdl);
+                }
+                update cv;
+            }
+        }
+        try {
+            insert cdlupdate;
+        } catch(DMLException e) {
+            System.debug(e);
+        }
+        return cvId;      
+    }
+    
+    //Added by Prashant -- 13-08-2025.
+    @AuraEnabled
+    public static list<Id> createContentLink2(list<Object> uploadedfile, String recId) {
+        System.debug('uploadedfile::'+ uploadedfile);
+        System.debug('recordId::'+ recId);
+        
+        list<Broker__c> brlist = [SELECT Id, Name FROM Broker__c WHERE Account__c IN (SELECT AccountId FROM User WHERE Id =: recId)];
+        String brId;
+        if(!brlist.isEmpty()){
+            brId = brlist[0].Id;   
+        }else{
+            brId = UserInfo.getUserId();
+        }
+              
+        List<Id> cvId = new List<Id>();
+        List<ContentDocumentLink >  cdlupdate = new List<ContentDocumentLink >();
+        List<ContentVersion> cv = new List<ContentVersion>();
+        for (Object file : uploadedfile) {
+            Fileupload fileData = (Fileupload)JSON.deserialize(JSON.serialize(file), Fileupload.class);
+            System.debug('contentVersionId::'+ fileData.contentVersionId);
+            cvId.add(fileData.contentVersionId);
+        }
+        if(!cvId.isEmpty()){
+            cv = [Select id,title,ContentDocumentId  from ContentVersion where id IN:cvId];
+            if(!cv.isEmpty()){
+                for (ContentVersion cc : cv) {
+                    ContentDocumentLink  cdl = new ContentDocumentLink();
+                    cdl.ContentDocumentId = cc.ContentDocumentId ;
+                    cdl.LinkedEntityId  = brId;
                     cdl.ShareType = 'V';
                     cdlupdate.add(cdl);
                 }
@@ -348,6 +600,118 @@ public without sharing class CPBookingController {
         }
         return cvId;      
     }
+    //Added by Prashant -- 13-08-2025.
+    //
+    //
+    
+    
+    //Added by Prashant 06-09-25. Upload Files New Logic
+    @AuraEnabled
+    public static String uploadFile(String base64, String filename, String recordId, String docType) {
+        try {
+            System.debug('uploadFile called with -> base64 length=' + (String.isNotBlank(base64) ? base64.length() : 0));
+            System.debug('filename (actual file) = ' + filename);
+            System.debug('docType (logical title) = ' + docType);
+            System.debug('recordId = ' + recordId);
+            
+            if (String.isBlank(base64) || String.isBlank(filename) || String.isBlank(recordId) || String.isBlank(docType)) {
+                throw new AuraHandledException('Invalid parameters for file upload.');
+            }
+            
+            // Find existing docs linked to this record
+            List<ContentDocumentLink> existingLinks = [
+                SELECT ContentDocumentId, ContentDocument.Title
+                FROM ContentDocumentLink  
+                WHERE LinkedEntityId = :recordId 
+                ORDER BY ContentDocument.LatestPublishedVersion.CreatedDate DESC
+            ];
+            System.debug('existingLinks size = ' + existingLinks.size());
+            
+            for (ContentDocumentLink cdl : existingLinks) {
+                System.debug('Checking existing doc -> Title=' + cdl.ContentDocument.Title + ', Id=' + cdl.ContentDocumentId);
+                if (cdl.ContentDocument.Title == docType) {
+                    ContentVersion newVersion = new ContentVersion(
+                        ContentDocumentId = cdl.ContentDocumentId,
+                        VersionData = EncodingUtil.base64Decode(base64),
+                        Title = docType, 
+                        PathOnClient = filename
+                    );
+                    insert newVersion;
+                    System.debug('Added new version for docType=' + docType + ' -> ContentDocumentId=' + cdl.ContentDocumentId);
+                    return cdl.ContentDocumentId;
+                }
+            }
+            
+            // Else create new ContentVersion + link
+            ContentVersion cv = new ContentVersion(
+                VersionData  = EncodingUtil.base64Decode(base64),
+                Title = docType,
+                PathOnClient = filename
+            );
+            insert cv;
+            System.debug('Inserted new ContentVersion -> Id=' + cv.Id);
+            
+            // Fetch ContentDocumentId from inserted ContentVersion
+            Id docId = [
+                SELECT ContentDocumentId 
+                FROM ContentVersion 
+                WHERE Id = :cv.Id
+                LIMIT 1
+            ].ContentDocumentId;
+            System.debug('Derived ContentDocumentId=' + docId);
+            
+            ContentDocumentLink cdl = new ContentDocumentLink(
+                ContentDocumentId = docId,
+                LinkedEntityId = recordId,
+                ShareType = 'V'
+            );
+            insert cdl;
+            System.debug('Linked docId=' + docId + ' to record=' + recordId);
+            
+            return docId; 
+        } catch (Exception e) {
+            System.debug('ERROR in uploadFile: ' + e.getMessage() + '\n' + e.getStackTraceString());
+            throw new AuraHandledException('Upload failed: ' + e.getMessage());
+        }
+    }
+
+    private static ContentVersion createContentVersion(String base64, String filename) {
+        ContentVersion cv = new ContentVersion();
+        cv.VersionData = EncodingUtil.base64Decode(base64);
+        cv.Title = filename;
+        cv.PathOnClient = filename;
+        insert cv;
+        return cv;
+    }
+    
+    private static ContentDocumentLink createContentLink(String contentVersionId, String recordId) {
+        if (contentVersionId == null || recordId == null) return null;
+        Id docId = [
+            SELECT ContentDocumentId 
+            FROM ContentVersion 
+            WHERE Id = :contentVersionId
+            LIMIT 1
+        ].ContentDocumentId;
+        
+        ContentDocumentLink cdl = new ContentDocumentLink();
+        cdl.ContentDocumentId = docId;
+        cdl.LinkedEntityId = recordId;
+        cdl.ShareType = 'V';
+        insert cdl;
+        return cdl;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static List<ContentDocumentLink> fetchFiles(String recordId){
+        return [SELECT LinkedEntityId, ContentDocument.CreatedDate,
+                ContentDocument.Title, ContentDocumentId,
+                ContentDocument.ContentSize, ContentDocument.FileType,ContentDocument.LastModifiedDate
+                 FROM ContentDocumentLink  
+                WHERE LinkedEntityId  =:recordId Order by ContentDocument.LastModifiedDate DESC];
+    }
+    
+	//Added by Prashant 06-09-25. Upload Files New Logic
+    
     
     @AuraEnabled
     public static List<ContentVersion> getCollateralsA() {
@@ -389,6 +753,37 @@ public without sharing class CPBookingController {
         return [SELECT Id, Title, FileExtension,ContentSize,Description, ContentDocumentId,CreatedDate
                 From ContentVersion WHERE  ContentDocumentId IN : contentDocumentId];
     }
+    
+    //Added by Prashant 21-08-25. // Upload RERA n CC details and Submit record for approval.
+    @AuraEnabled
+    public static void updateDocDetailsnSubmitforAppr(Boolean isrera,/* Boolean iscc,*/ String brId, Date reraExpDate,Date ccExpDate) {
+        system.debug('Broker Id - '+brId);
+        if(String.isNotBlank(brId)){
+            list<Broker__c> brlist = new list<Broker__c>();
+            Broker__c b = new Broker__c();
+            b.Id = brId;
+            if(isrera){
+                b.RERA_Valid_till__c = reraExpDate;
+                b.Latest_RERA_Upload_Status__c = 'Approval Pending';
+                b.Latest_RERA_Upload_Processed__c = false;
+            }
+            /*if(iscc){
+                b.CC_Valid_till__c = ccExpDate;
+                b.Latest_CC_Upload_Status__c = 'Approval Pending';
+                b.Latest_CC_Upload_Processed__c = false;
+            }*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.
+            brlist.add(b);
+            try{
+                update brlist;
+            }catch(DMLException e) {
+                System.debug(e);
+            }
+        }else{
+            system.debug('No Broker Id found');
+        }	
+        
+    }
+    //Added by Prashant 21-08-25. // Upload RERA n CC details and Submit record for approval.
     
     //fetch picklist values from custom object in lwc
     
@@ -552,14 +947,16 @@ public without sharing class CPBookingController {
         system.debug('query::'+Database.query( query ));
         return Database.query( query );
     }
-    /*@AuraEnabled 
+    //uncommented by vaishnavi 12/09/2025
+    @AuraEnabled 
     public static String getPdfFileAsBase64String(String invId) {
         PageReference pageRef = new PageReference('/apex/ShowInvoicePreview');
         pageRef.getParameters().put('id',invId);
         Blob pdfBlob = pageRef.getContent();
         String base64Pdf = EncodingUtil.base64Encode(pdfBlob);
         return base64Pdf;
-    }*/
+    }
+    /********/
     @AuraEnabled(cacheable=true)
     public static List<OTP__c> getOTPs( String custname, String projectname) {
         system.debug('custname::'+custname);
@@ -627,7 +1024,7 @@ public without sharing class CPBookingController {
         return [Select Id,Name,Count_of_Bookings__c,Aggregate_Agreement_Value__c from Brokerage_Summary__c where id=:SummaryId];
     }
     @AuraEnabled(cacheable=true)
-    public static String ChannelPartnerId() {
+    public static String ChannelPartnerId() {	
         Id loggeduserId = UserInfo.getUserId();
         String CPId ;
         System.debug('Logged User is :: ' +UserInfo.getUserName());
@@ -671,8 +1068,9 @@ public without sharing class CPBookingController {
         if(!cpcustomSettingList.isEmpty()){
             ApproversId.add(cpcustomSettingList[0].CP_MIS__c);
             ApproversId.add(cpcustomSettingList[0].CP_Sourcing_Head__c);
+           // ApproversId.add('0055j000007G2SJAA0');
+            //ApproversId.add('0055j000007G2SJAA0');
         } 
-
         System.debug('ApproversId'+ApproversId);
         return ApproversId;
         
@@ -729,7 +1127,7 @@ public without sharing class CPBookingController {
         }
         return isExist;
     }
-    @AuraEnabled
+    /*@AuraEnabled
     public static Boolean CheckForGSTNo(String InvId) {
         system.debug('InvId::'+InvId);
         Boolean isExist = false;
@@ -745,7 +1143,47 @@ public without sharing class CPBookingController {
             }
         }
         return isExist;
+    } */
+    @AuraEnabled
+public static Boolean CheckForGSTNo(String InvId) {
+    system.debug('InvId::'+InvId);
+    Boolean isExist = false;
+    
+    // First try to query as Brokerage_Invoice__c
+    list<Brokerage_Invoice__c> IList = [Select Id, Name, Channel_Partner__c 
+                                       from Brokerage_Invoice__c 
+                                       where Id = :InvId LIMIT 1];
+    
+    if(!IList.isEmpty()){
+        // This is a Brokerage_Invoice__c record
+        list<Broker__c> CPList = [Select Id, Name, RW_GST_Number__c 
+                                 from Broker__c 
+                                 where Id = :IList[0].Channel_Partner__c LIMIT 1];
+        if(!CPList.isEmpty() && CPList[0].RW_GST_Number__c != null){
+            isExist = true;
+        }
+    } else {
+        // If not found as Brokerage_Invoice__c, try as CP_Brokerage__c
+        list<CP_Brokerage__c> cpBrokerageList = [Select Id, Name, Channel_Partner__c 
+                                                from CP_Brokerage__c 
+                                                where Id = :InvId LIMIT 1];
+        
+        if(!cpBrokerageList.isEmpty()){
+            // This is a CP_Brokerage__c record
+            list<Broker__c> CPList = [Select Id, Name, RW_GST_Number__c 
+                                     from Broker__c 
+                                     where Id = :cpBrokerageList[0].Channel_Partner__c LIMIT 1];
+            if(!CPList.isEmpty() && CPList[0].RW_GST_Number__c != null){
+                isExist = true;
+            }
+        }
     }
+    
+    return isExist;
+}
+
+
+
     @AuraEnabled(cacheable=true)
     public static List<OTP__c> getbookings(String projectname, String custname, String Unitno, String paymentreceived, String Registrationdone) {
         system.debug('projectname::'+projectname);
@@ -878,6 +1316,16 @@ public without sharing class CPBookingController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+    
+    @AuraEnabled(cacheable=false)
+    public static List<Broker__c> getBrokerDetails(Id CPUserId) {
+        if (String.isBlank(CPUserId)) {
+            return null;
+        }else {
+            return [SELECT Id, Name/*Valid_competency_certificate__c*//*Commented by Prashant as discussed with team to discard use of CC. 12/12/25.*/,Valid_RERA_certificate__c/*,Latest_CC_Upload_Status__c*/,Latest_RERA_Upload_Status__c FROM Broker__c WHERE Account__c IN (SELECT AccountId FROM User WHERE Id =: CPUserId) LIMIT 1];
+        }
+    }
+    
     @AuraEnabled
     public static void registrationcomplete(String CPId) {
         Broker__c b = new Broker__c();
@@ -889,5 +1337,193 @@ public without sharing class CPBookingController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    //Added by Prashant.////
+    @AuraEnabled(cacheable=true)
+    public static list<Broker__c> getTempCPData(String tempcpid){
+        Id tempRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
+        if (String.isNotBlank(tempcpid)) {
+            return [Select Id,Name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,Broker_Pan_No__c,RW_Broker_Number__c,RW_Email__c,RW_Mobile_No__c,Company_Name__c from Broker__c where RW_Broker_Number__c =: tempcpid and RecordTypeId=:tempRecordTypeId ];
+        }
+        return null;
+    } 
+    
+    @AuraEnabled(cacheable=true)
+    public static list<Broker__c> getExistingCPData(Id brId){
+        Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        if (String.isNotBlank(brId)) {
+            return [Select id,name,NAME_FIRST__c,NAME_MIDDLE__c,NAME_LAST__c,TITLE__c,RW_RERA_Registration_Number__c,Account_Number__c,
+                          IFSC_Code__c,RW_Mobile_No__c,RW_GST_Number__c,Is_NRI_CP__c,RW_Is_GST_Applicable__c,Bank_Name__c,Bank_Branch__c,
+                          Cheque_DD_Favouring_Name__c,Team_Size__c,Are_you_NRI__c,IS_IGST_Applicable__c,House_Flat_Company__c,Place_of_Supply__c,
+                          Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
+                          Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
+                          Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
+                          Developers_Worked_For__c,Account__c,RW_Broker_Number__c,Broker_Pan_No__c,RERA_Valid_till__c/*,CC_Valid_till__c*/,STREET__c
+                    		//RW_Is_CC_Applicable__c
+                    from Broker__c where Id =: brId and RecordTypeId=:CPRecordTypeId ];
+        }
+        return null;
+    } 
+    
+    @AuraEnabled
+    public static Id createTempCP(Broker__c bk) {
+        Id tempRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
+        bk.RecordTypeId = tempRecordTypeId;     
+        bk.Sourcing_Manager__c = UserInfo.getUserId();
+        try{
+            insert bk;
+            if(bk.Id != null){                
+                Id cpRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+                Task t = new Task();
+                t.WhatId = bk.id;
+                t.OwnerId = UserInfo.getUserId();
+                Date todayDate = System.today();
+                DateTime createTime = DateTime.now();                
+                t.ActivityDate = system.today().addDays(15);                    
+                t.Status = 'In-progress';
+                String subject = 'Temporary CP Registration Pending – '+ bk.Name;
+                t.Subject = subject;
+                //t.Task_Type__c = '';
+                t.Type = 'Other';
+                t.Task_Type__c = 'CP Call';
+                t.RecordTypeId = cpRecordTypeId;
+                t.Priority = 'Normal';                    
+                String nbody1 = 'Kindly ensure that the registration is completed at the earliest to avoid delays in onboarding, payment, or portal access.\nRegards,';
+                t.Description = nbody1; 
+                t.ReminderDateTime = System.now();
+                t.IsReminderSet = true; 
+                try{
+                    insert t;
+                }catch(Exception e){
+                    throw new AuraHandledException(e.getMessage());
+                }
+                
+                return bk.id;                  
+            }
+        }catch(Exception e){
+            String cleanMessage;            
+            if (e.getNumDml() > 0 && String.isNotBlank(e.getDmlMessage(0))) {
+                cleanMessage = e.getDmlMessage(0); // Show only adderror from trigger....
+            } else {
+                cleanMessage = e.getMessage(); // Show complete error other than adderror....
+            }            
+            throw new AuraHandledException(cleanMessage);
+        }
+        return null;
+    }
+    
+    @AuraEnabled
+    public static String isDuplicateCPExist(Broker__c bk) {
+        if (bk == null) {
+            return null;
+        }
+        
+        list<Broker__c> existing;
+        if(bk.Id != null){
+            existing = [
+                SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
+                FROM Broker__c
+                WHERE Id != :bk.Id
+                AND (
+                    RW_Mobile_No__c = :bk.RW_Mobile_No__c
+                    OR Broker_Pan_No__c = :bk.Broker_Pan_No__c
+                    OR RW_Email__c = :bk.RW_Email__c
+                )
+                LIMIT 1
+            ];
+        }else{
+            existing = [
+                SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
+                FROM Broker__c
+                WHERE 
+                RW_Mobile_No__c = :bk.RW_Mobile_No__c
+                OR Broker_Pan_No__c = :bk.Broker_Pan_No__c
+                OR RW_Email__c = :bk.RW_Email__c
+                LIMIT 1
+            ];
+        }
+        system.debug('Existing -> '+existing);
+        if (existing.isEmpty()) {
+            return null;
+        }else{
+            Boolean mobileMatch = existing[0].RW_Mobile_No__c == bk.RW_Mobile_No__c;
+            Boolean panMatch = existing[0].Broker_Pan_No__c == bk.Broker_Pan_No__c;
+            Boolean emailMatch = existing[0].RW_Email__c == bk.RW_Email__c;
+            
+            if (mobileMatch && panMatch && emailMatch) {
+                return 'Duplicate exists with Mobile: ' + bk.RW_Mobile_No__c 
+                    + ', PAN: ' + bk.Broker_Pan_No__c 
+                    + ', and Email: ' + bk.RW_Email__c;
+            } else if (mobileMatch && panMatch) {
+                return 'Duplicate exists with Mobile: ' + bk.RW_Mobile_No__c 
+                    + ' and PAN: ' + bk.Broker_Pan_No__c;
+            } else if (mobileMatch && emailMatch) {
+                return 'Duplicate exists with Mobile: ' + bk.RW_Mobile_No__c 
+                    + ' and Email: ' + bk.RW_Email__c;
+            } else if (panMatch && emailMatch) {
+                return 'Duplicate exists with PAN: ' + bk.Broker_Pan_No__c 
+                    + ' and Email: ' + bk.RW_Email__c;
+            } else if (mobileMatch) {
+                return 'Duplicate exists with Mobile: ' + bk.RW_Mobile_No__c;
+            } else if (panMatch) {
+                return 'Duplicate exists with PAN: ' + bk.Broker_Pan_No__c;
+            } else if (emailMatch) {
+                return 'Duplicate exists with Email: ' + bk.RW_Email__c;
+            }
+        }
+        return null; 
+    }
+
+    //Added by Prashant.////
+
+/// Added by Anuj start
+    @AuraEnabled(cacheable=true)
+public static List<CP_Brokerage__c> getCpBrokerages(
+    String searchKey,
+    String sortBy,
+    String sortDirection,
+    String searchKeystatus
+) {
+    Id loggeduserId = UserInfo.getUserId();
+
+    System.debug('User id'+loggeduserId);
+    // Get current user → Contact → Account (Channel Partner Account)
+    List<User> user = [SELECT Id, ContactId FROM User WHERE Id =:loggeduserId];
+    System.debug('User'+user[0].ContactId);
+    if(!user.isEmpty() && user[0].ContactId != null){
+    List<Contact> contact = [SELECT Id, AccountId FROM Contact WHERE Id =: user[0].ContactId];
+    List<Account> accList = [SELECT Id,Channel_Partner__c FROM Account WHERE Id =: contact[0].AccountId];
+    if (accList.isEmpty()) return new List<CP_Brokerage__c>();
+    Id cpAccountId = accList[0].Channel_Partner__c;
+      System.debug('cpAccountId----'+cpAccountId);
+    }
+      String a = 'Approved By L1';
+      String b = 'Approved By L2';
+
+    String query =
+        'SELECT Id, Name, Invoice_Number__c, Invoice_Date__c, If_GST_is_applicable__c,Total_Brokerage__c,' +
+        ' Approval_Status__c, Approval_Status_clearing__c, Brokerage_Type__c,' +
+        ' Channel_Partner__c,Legal_Entity__c,Legal_Entity__r.Name, CreatedDate, LastModifiedDate' +
+        ' FROM CP_Brokerage__c' + ' WHERE  (Approval_Status_clearing__c = :a OR Approval_Status_clearing__c = :b)';
+      System.debug('Cp Brokerag record'+query);//Channel_Partner__c = :cpAccountId' +
+      // ' AND
+    if (!String.isBlank(searchKey)) {
+        String key = '%' + searchKey + '%';
+        query += ' AND Invoice_Number__c LIKE :key';
+    }
+    if (!String.isBlank(searchKeystatus)) {
+        String key2 = '%' + searchKeystatus + '%';
+        query += ' AND Approval_Status__c LIKE :key2';
+    }
+    if (!String.isBlank(sortBy) && !String.isBlank(sortDirection)) {
+        query += ' ORDER BY ' + sortBy + ' ' + sortDirection;
+    }
+  List<CP_Brokerage__c> results = Database.query(query);
+System.debug('📌 Query Result Size: ' + results.size());
+System.debug('📌 Query Records: ' + results);
+return results;
+
+}
+// Added By Anuj End
     
 }

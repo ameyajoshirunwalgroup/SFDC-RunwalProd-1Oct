@@ -7,6 +7,7 @@ public without sharing class CustomerDetailsFormController {
     public String selectedPurchaseReason { get; set; }
     public String selectedFourWheeler { get; set; }
     public String selectedNoOfvehicles { get; set; }
+    public String lastName { get; set; }
     public Id oppId { get; set; }
     public Opportunity opp { get; set; }
     public CIF__c cif { get; set; }
@@ -27,22 +28,34 @@ public without sharing class CustomerDetailsFormController {
                              No_of_Family_Members__c, Occupation__c, Designation__c, Industry__c, CompanyNameOther__c
                              FROM CIF__c WHERE Opportunity__c =: opp.Id];
         cif = (cifs.size() > 0) ? cifs[0] : new CIF__c();
+        List<String> salutations = new List<String>{'Mr.','Ms.','Mrs.'};
         if(cif != null){	
-                if(cif.Salutation__c != null)
-                    selectedSalutation = cif.Salutation__c;
-                if(String.isNotBlank(cif.Occupation__c))
-                    selectedOccupation = cif.Occupation__c;
-                if(String.isNotBlank(cif.Distance_To_Office__c))
-                    selectedDistanceToOfc = cif.Distance_To_Office__c;
-                if(String.isNotBlank(cif.Family_Income__c))
-                    selectedFamilyIncome = cif.Family_Income__c;
-                if(String.isNotBlank(cif.Purpose__c))
-                    selectedPurchaseReason = cif.Purpose__c;
-                if(String.isNotBlank(cif.Four_Wheeler__c))
-                    selectedFourWheeler = cif.Four_Wheeler__c;
-                if(String.isNotBlank(cif.No_of_Vehicles__c))
-                    selectedNoOfvehicles = cif.No_of_Vehicles__c;
+            if(cif.Salutation__c != null)
+                selectedSalutation = cif.Salutation__c;
+            if(String.isNotBlank(cif.Occupation__c))
+                selectedOccupation = cif.Occupation__c;
+            if(String.isNotBlank(cif.Distance_To_Office__c))
+                selectedDistanceToOfc = cif.Distance_To_Office__c;
+            if(String.isNotBlank(cif.Family_Income__c))
+                selectedFamilyIncome = cif.Family_Income__c;
+            if(String.isNotBlank(cif.Purpose__c))
+                selectedPurchaseReason = cif.Purpose__c;
+            if(String.isNotBlank(cif.Four_Wheeler__c))
+                selectedFourWheeler = cif.Four_Wheeler__c;
+            if(String.isNotBlank(cif.No_of_Vehicles__c))
+                selectedNoOfvehicles = cif.No_of_Vehicles__c;
+            if(String.isNotBlank(cif.LastName__c)){
+                for(String sal : salutations){
+                    if(cif.LastName__c.contains(sal)){
+                        lastName = cif.LastName__c.subString(sal.length());
+                        lastName = lastName.trim();
+                        break;
+                    }else{
+                        lastName = cif.LastName__c;
+                    }
+                }
             }
+        }
 
         charIndexes = new List<Integer>();
         for (Integer i = 0; i < 6; i++) {
@@ -82,7 +95,13 @@ public without sharing class CustomerDetailsFormController {
             cif.Four_Wheeler__c = selectedFourWheeler;
             cif.No_of_Vehicles__c = selectedNoOfvehicles;
             cif.FirstName__c = extractField('firstNameChar');
-            cif.LastName__c = extractField('lastNameChar');
+            System.debug('lastName: ' + lastName);
+            System.debug('extractField(lastNameChar): ' + extractField('lastNameChar'));
+            if(lastName != extractField('lastNameChar')){
+                System.debug('---');
+                cif.LastName__c = extractField('lastNameChar');
+            }
+            //cif.LastName__c = extractField('lastNameChar');
             cif.MiddleName__c = extractField('midNameChar');
 
             String familyCount = extractField('familyChar').replaceAll('[^0-9]', '');

@@ -25,13 +25,13 @@ public class Opportunity_ReallocationLogicHelper {
         
         //Query Sales Teams from Projects and their members
         List<Team__c> lstSalesTeam = [ SELECT Id, Name, Project__c, (SELECT Id, User__c FROM Team_Members__r)
-                                      FROM Team__c WHERE Project__c IN :projectIds AND Name = 'Sales Team' ];  
+                                      FROM Team__c WHERE Project__c IN :projectIds  ];  //AND Name = 'Sales Team'
         
         system.debug('Inside assignSecondarySM lstSalesTeam list==>' + lstSalesTeam.size());
         
         //Build Project → List<User Ids> map
         Map<Id, List<Id>> map_projectIdAndUserIds = new Map<Id, List<Id>>();
-        for (Team__c team : lstSalesTeam) { 
+        for (Team__c team : lstSalesTeam) {
             List<Id> userIds = new List<Id>();
             for (Team_Members__c member : team.Team_Members__r) {
                 if (member.User__c != null) {
@@ -48,7 +48,7 @@ public class Opportunity_ReallocationLogicHelper {
         Map<Id, Map<Id, Integer>> map_projectIdToUserIdAndOppCount = new Map<Id, Map<Id, Integer>>();
         List<Opportunity> lstExistingOpps = [ SELECT Id, RW_Project__c, Secondary_Sales_Manager__c, Sales_Manager_User__c, StageName FROM Opportunity
                                              WHERE RW_Project__c IN :projectIds AND Secondary_Sales_Manager__c != null AND Sales_Manager_User__c != null
-                                             AND StageName IN ('Site Visit', 'Negotiation', 'Unit Blocked')];
+                                             AND StageName IN ('Visit Done', 'Negotiation', 'Quote Confirmation', 'Unit Blocked')];
         
         for (Opportunity opp : lstExistingOpps) {
             if (!map_projectIdToUserIdAndOppCount.containsKey(opp.RW_Project__c)) {

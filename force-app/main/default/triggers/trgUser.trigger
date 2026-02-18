@@ -18,7 +18,8 @@ trigger trgUser on User (after insert, after update) {
             update updateAcc;
         }
         if(!Test.isRunningTest() && usrIds.size() > 0){
-            CreateUserWhenUnitBooked.createuser(new List<Id>(accIds));
+            //CreateUserWhenUnitBooked.createuser(new List<Id>(accIds)); // Commented by Vinay 13-01-2026
+            CreateUserWhenUnitBooked.createuserWithApplicants(new List<Id>(accIds)); // Added by Vinay 13-01-2026
         }
         
         

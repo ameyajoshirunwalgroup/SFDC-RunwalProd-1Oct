@@ -26,7 +26,9 @@ global class Batch_UpdateLeadStatus Implements Database.Batchable<sobject> {
                     leadsToUpdate.add(LeadObj); //Added by Vinay 28-08-2025
                 }
                 
-                else if(LeadObj.Project_Name__c == 'Runwal Bliss' ||LeadObj.Project_Name__c == 'Runwal Forests' || LeadObj.Project_Name__c== 'Runwal Pinnacle' || LeadObj.Project_Name__c == 'Runwal Greens'|| LeadObj.Project_Name__c == 'Runwal Avenue' || LeadObj.Project_Name__c == '5th Avenue - Runwal Avenue' && LeadObj.CPI_Lead_Access__c >= 90){
+                else if(LeadObj.Project_Name__c == 'Runwal Bliss' ||LeadObj.Project_Name__c == 'Runwal Forests' || LeadObj.Project_Name__c== 'Runwal Pinnacle' || 
+                        LeadObj.Project_Name__c == 'Runwal Greens'|| LeadObj.Project_Name__c == 'Runwal Avenue' || LeadObj.Project_Name__c == '5th Avenue - Runwal Avenue' && 
+                        LeadObj.CPI_Lead_Access__c >= 90){
                     LeadObj.CP_Lead_Status__c = 'Inactive';
                     leadsToUpdate.add(LeadObj); //Added by Vinay 28-08-2025
                 }
@@ -52,7 +54,7 @@ global class Batch_UpdateLeadStatus Implements Database.Batchable<sobject> {
         //update scope; //Commented by Vinay 28-08-2025
         if(leadsToUpdate.size() > 0){ //Added by Vinay 28-08-2025
             update leadsToUpdate;
-        }        
+        }
     }  
     global void finish(Database.BatchableContext bc) {}   
 }

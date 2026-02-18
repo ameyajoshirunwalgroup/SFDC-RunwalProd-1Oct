@@ -53,7 +53,7 @@
             details['towerId'] = component.get("v.towerId");
             details['Amount'] = component.get("v.Amount");
             details['ProjectUnit'] = component.get("v.ProjectUnit");
-            details['TypeOfAmount'] = component.get("v.TypeOfAmount");
+            //details['TypeOfAmount'] = component.get("v.TypeOfAmount");
             
             console.log('--bookingId--', component.get("v.bookingId"));
             
@@ -105,7 +105,7 @@
         
         window.setTimeout(
             $A.getCallback(function() {
-                window.open('https://uat-runwal.cs111.force.com/customer/s/customerledger','_top');
+                window.open('https://fullcopy-runwal.cs111.force.com/customer/s/customerledger','_top');
             }), 5000
         );
            
@@ -121,7 +121,7 @@
             
             window.setTimeout(
                 $A.getCallback(function() {
-                    window.open('https://uat-runwal.cs111.force.com/customer/s/customerledger','_top');
+                    window.open('https://fullcopy-runwal.cs111.force.com/customer/s/customerledger','_top');
                 }), 5000
             );
     }

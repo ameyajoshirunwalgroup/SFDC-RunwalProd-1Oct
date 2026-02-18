@@ -158,6 +158,7 @@ private class TestSAPIntegrationServices {
         objcustomer.Lead_Sub_Source__c = 'Digital';
         objcustomer.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer.Walk_in_Source__c = 'Referral';
         objcustomer.Referral_Sub_Source__c = 'Existing client reference';
 		//objcustomer.Walk_in_Source__c = 'Channel Partner';
@@ -543,6 +544,7 @@ private class TestSAPIntegrationServices {
         objcustomer1.Lead_Sub_Source__c = 'Digital';
         objcustomer1.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer1.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer1.SAP_Customer_Number__c = '213456782134';
         insert objcustomer1;
         
@@ -826,6 +828,7 @@ private class TestSAPIntegrationServices {
         objcustomer1.Lead_Sub_Source__c = 'Digital';
         objcustomer1.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer1.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer1.SAP_Customer_Number__c = '213456782134';
         objcustomer1.SalesOrder_Number__c = '213245467';
         insert objcustomer1;
@@ -1507,6 +1510,7 @@ private class TestSAPIntegrationServices {
         objcustomer1.Lead_Sub_Source__c = 'Digital';
         objcustomer1.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer1.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer1.SAP_Customer_Number__c = '213456782134';
         insert objcustomer1;
         
@@ -1898,6 +1902,7 @@ private class TestSAPIntegrationServices {
         objcustomer1.Lead_Sub_Source__c = 'Digital';
         objcustomer1.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer1.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer1.SAP_Customer_Number__c = '213456782134';
         insert objcustomer1;
         
@@ -2281,6 +2286,7 @@ private class TestSAPIntegrationServices {
         objcustomer1.Lead_Sub_Source__c = 'Digital';
         objcustomer1.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer1.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer1.SAP_Customer_Number__c = '213456782134';
         insert objcustomer1;
         
@@ -2684,6 +2690,7 @@ private class TestSAPIntegrationServices {
         objcustomer1.Lead_Sub_Source__c = 'Digital';
         objcustomer1.Sourcing_Manager__c = 'Aniket Sapre';
         objcustomer1.RW_Sales_Associate__c = 'DIRECT';
+        objcustomer1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objcustomer1.SAP_Customer_Number__c = '213456782134';
         objcustomer1.Walkin_Source__c = 'Referral';
         objcustomer1.Referral_Sub_Source__c = 'Existing client reference';

@@ -10,6 +10,7 @@ ISPICKVAL(Remarks_by_RM__c ,&apos;&apos;)
 AND(ISPICKVAL(Status, &apos;Case Closed&apos;),
 ISPICKVAL(Remarks_by_RM__c ,&apos;&apos;),
 ISBLANK(locobuzz__Locobuzz_ID__c),
+NOT(CONTAINS( Subject , &apos;Undeliverable:&apos;)), /*Added by Vinay 23-05-2025 */
 $Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
 )
 

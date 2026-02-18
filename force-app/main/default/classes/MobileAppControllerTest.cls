@@ -141,6 +141,7 @@ public class MobileAppControllerTest {
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_Customer_Number__c='0020006618';
@@ -159,6 +160,7 @@ public class MobileAppControllerTest {
             oppRec1.Sourcing_Manager__c='Aniket Sapre';
             oppRec1.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec1.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
             oppRec1.RW_Closing_Head__c='Karthik Chettiar';
             oppRec1.Walkin_Source__c='Direct';
             oppRec1.SAP_Customer_Number__c='0020006619';

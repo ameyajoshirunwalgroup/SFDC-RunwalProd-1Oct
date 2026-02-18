@@ -82,7 +82,7 @@ public static void TaskTest() {
          surobj.Account_Phone_for_Opportunity__c = opp.Account.PersonMobilePhone;
          surobj.Account_Name_for_Opportunity__c = opp.Account.Name;
          surobj.Mode__c = 'Email';
-         String PageLink = System.label.Site_Url_New + '/SurveyPage?sid='; //Updated the link by Vinay 23-06-2025
+         String PageLink = System.label.Site_Url_New + '/SurveyPage?sid=';
          surobj.Survey_Link__c = PageLink + surobj.id;
          insert surobj;
                         
@@ -95,7 +95,7 @@ public static void TaskTest() {
          ques.Type_of_Question__c =  'SITE EXPERIENCE';
          insert ques;
     
-         Booking__c bkg = new Booking__c();
+    	Booking__c bkg = new Booking__c();
         bkg.Opportunity__c = opp.Id;
         bkg.Customer__c = opp.Id;
         bkg.Status__c = 'Booking Received';
@@ -105,7 +105,6 @@ public static void TaskTest() {
         bkg.Status__c = 'Booking Confirmed';
         bkg.RW_Booking_Confirmed_Date__c = Date.today();
         update bkg;
-   		  
  
   }
  

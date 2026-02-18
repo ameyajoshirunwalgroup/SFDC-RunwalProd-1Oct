@@ -325,14 +325,20 @@ public class CustomerCreation {
                 
             CustomerCreation.ZsdSfdcCustomer_element request_x = new CustomerCreation.ZsdSfdcCustomer_element();
             request_x.CustomerAddress = CustomerAddress;
+            System.debug('request_x.CustomerAddress'+CustomerAddress);
             request_x.CustomerComm = CustomerComm;
+            System.debug('request_x.CustomerComm'+CustomerComm);
             request_x.CustomerContact = CustomerContact;
+            System.debug('request_x.CustomerContact'+CustomerContact);
             request_x.CustomerHeader = CustomerHeader;
+            System.debug('request_x.CustomerHeader'+CustomerHeader);
             request_x.CustomerTax = CustomerTax;
+            System.debug('request_x.CustomerTax'+CustomerTax);
             request_x.Return_x = Return_x;
             CustomerCreation.ZsdSfdcCustomerResponse_element response_x;
             Map<String, CustomerCreation.ZsdSfdcCustomerResponse_element> response_map_x = new Map<String, CustomerCreation.ZsdSfdcCustomerResponse_element>();
             response_map_x.put('response_x', response_x);
+            System.debug('request_x**'+request_x);
             WebServiceCallout.invoke(
               this,
               request_x,

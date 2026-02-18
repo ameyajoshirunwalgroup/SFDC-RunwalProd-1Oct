@@ -159,7 +159,7 @@ public class CallOzonetelSchedulerAPI{
       }
         //endpointURL  = 'https://api1.getkookoo.com/CAServices/scheduleCampaignData/scheduleCampaignData.php?';
        // endpointURL  = '';//https://api1.cloudagent.in/CAServices/scheduleCampaignData/scheduleCampaignData.php?
-       endpointURL  = 'https://in1-ccaas-api.ozonetel.com/CAServices/scheduleCampaignData/scheduleCampaignData.php?';
+       endpointURL  = 'https://in1-ccaas-api.ozonetel.com.invalid/CAServices/scheduleCampaignData/scheduleCampaignData.php?';//(.invalid) Added by Prashant
 
           System.debug('After Endpoint Url ::');
         if(tlist.size() > 0){

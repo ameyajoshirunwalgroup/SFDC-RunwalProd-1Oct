@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Referral Lead Creation</label>
+    <protected>false</protected>
+    <values>
+        <field>Message_Content__c</field>
+        <value xsi:type="xsd:string">Dear {{1}},
+
+We sincerely appreciate you referring your friends/family to Runwal Enterprises. Your trust means the world to us, and we look forward to delivering the same quality and service to your referrals as you have experienced.</value>
+    </values>
+    <values>
+        <field>RW_Type__c</field>
+        <value xsi:type="xsd:string">hsm</value>
+    </values>
+    <values>
+        <field>RW_element_name__c</field>
+        <value xsi:type="xsd:string">referral_lead_creation</value>
+    </values>
+    <values>
+        <field>RW_namespace__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

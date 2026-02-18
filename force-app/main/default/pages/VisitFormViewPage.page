@@ -26,6 +26,7 @@
                                 </div>
                                 <apex:pageBlock id="pgBlock" mode="edit">
                                     <apex:pageBlockButtons location="both" styleClass="slds-button-group">
+                                      <!--  <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Save" action="{!save}" disabled="{!(error)}"/> -->
                                         <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate"/>
                                     </apex:pageBlockButtons>
                                     <apex:pageBlockSection id="pgBlockSectionCallInfo" title="System Details" collapsible="false" columns="2">
@@ -59,7 +60,7 @@
                                         <apex:outputField id="reasonsForLost" value="{!Task.Reason_For_Lost__c}"/>
                                         <apex:outputField id="contri" value="{!Task.Own_Contribution__c}"/>
                                         <apex:outputField id="loanEligiblity" value="{!Task.Loan_Eligibility__c}"/>
-                                        <apex:outputField id="config" value="{!Task.Configuration__c}"/>
+     
                                        <!-- <apex:outputField id="visitstatus" value="{!Task.Event_Status__c}"/>-->
                                         <apex:pageBlockSectionItem rendered="{!NOT(task.Revisit__c)}">
                                             <apex:outputLabel >Tentative Revisit Date</apex:outputLabel>
@@ -67,19 +68,17 @@
                                         </apex:pageBlockSectionItem>
                                         <!-- <apex:outputField id="BudgetinLacs" value="{!Task.Budget_Site_Visit_In_Lacs__c}"/><apex:outputField id="Budget" value="{!Task.Budget_Range__c}"/> -->
                                         <apex:outputField id="visitedwith" value="{!Task.Visited_With__c}"/>
+                                        
+                                     <apex:outputField id="Budget" value="{!Task.Budget_In_Lakh__c}" />
+                                                 <apex:outputField id="timeline" value="{!Task.Time_Line__c}" />
+                                                     <apex:outputField id="PreferredLocation" value="{!Task.Preferred_Location__c}" />
+                                                         <apex:outputField id="Urgency" value="{!Task.Urgency__c}" />
+                                                             <apex:outputField id="FamilyStakeholderBuyIn" value="{!Task.Family_Stakeholder_Buy_In__c}" />
+                                                                 <apex:outputField id="InventoryPreference" value="{!Task.Inventory_Preference__c}" />
+                                                                     <apex:outputField id="AmenitiesCompliance" value="{!Task.Amenities_Compliance_with_Customer_Prefe__c}"/>
+                                                                         <apex:outputField id="EngagedwithCompetition" value="{!Task.Engaged_with_Competition__c}" />
+                                                                             <apex:outputField id="LoanPreApproval" value="{!Task.Loan_Pre_Approval__c}" />                                                
                                             
-                                            <!----------------Added BY UBSdigicloud start ------------------------------------>
-                                               <apex:outputField id="BudgetinLakh" value="{!Task.Budget_In_Lakh__c}" />
-                                               <apex:outputField id="timeline" value="{!Task.Time_Line__c}" />
-                                               <apex:outputField id="PreferredLocation" value="{!Task.Preferred_Location__c}" />
-                                               <apex:outputField id="Urgency" value="{!Task.Urgency__c}" />
-                                               <apex:outputField id="FamilyStakeholderBuyIn" value="{!Task.Family_Stakeholder_Buy_In__c}" />
-                                               <apex:outputField id="InventoryPreference" value="{!Task.Inventory_Preference__c}" />
-                                               <apex:outputField id="AmenitiesCompliance" value="{!Task.Amenities_Compliance_with_Customer_Prefe__c}"/>
-                                               <apex:outputField id="EngagedwithCompetition" value="{!Task.Engaged_with_Competition__c}" />
-                                               <apex:outputField id="LoanPreApproval" value="{!Task.Loan_Pre_Approval__c}" />
-                                             <!----------------Added By UBSdigicloud End ------------------------------->
-                                        <apex:outputField id="Budget" value="{!Task.Budget__c}"/>
                                         <apex:outputField id="floorChoice" value="{!Task.Floor_Choices__c}"/>
                                         <apex:outputField id="vaastu" value="{!Task.Vaastu_Entry_Towards__c}"/>
                                         <apex:outputField id="facing" value="{!Task.Facing__c}"/>
@@ -90,10 +89,13 @@
                                         <apex:pageBlockSectionItem >
                                             <apex:outputLabel >Other Requirements</apex:outputLabel>
                                             <apex:outputField id="comments" value="{!Task.Registraion_Status__c}"/>
+                                                
                                         </apex:pageBlockSectionItem>
                                         <apex:pageBlockSectionItem >
                                             <apex:outputLabel >Visit Remarks</apex:outputLabel>
                                             <apex:outputField styleClass="slds-textarea" id="comments" value="{!Task.Description}" />
+                                                
+                                              
                                         </apex:pageBlockSectionItem>
                                         <!-- <apex:pageBlockSectionItem ><apex:outputLabel >Prospect</apex:outputLabel><apex:outputField id="propct" value="{!Task.Prospect__c}" /></apex:pageBlockSectionItem> -->
                                     </apex:pageBlockSection>

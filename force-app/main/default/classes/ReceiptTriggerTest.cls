@@ -31,6 +31,7 @@ public class ReceiptTriggerTest {
         opp.Primary_Name__c='ABC';
         opp.Applicant_Name__c='XYZ';
         opp.RW_Sales_Associate__c='A Aastha Tripathi';
+        opp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         insert opp;
         
         Tower__c towerRec = new Tower__c();
@@ -165,6 +166,7 @@ public class ReceiptTriggerTest {
         opp.Primary_Name__c='ABC';
         opp.Applicant_Name__c='XYZ';
         opp.RW_Sales_Associate__c='A Aastha Tripathi';
+        opp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         insert opp;
         
         Tower__c towerRec = new Tower__c();

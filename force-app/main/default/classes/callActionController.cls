@@ -175,7 +175,7 @@ global class callActionController {
         System.debug('JSON:' + jsonString);
         String encodedJSON = EncodingUtil.urlEncode(jsonString, 'UTF-8');
         //String endpoint = 'http://203.115.114.90:8888/ameyowebaccess/command/?command=clickToDialWithToken&data='+encodedJSON;
-        String endpoint = 'http://202.149.220.187:8888/ameyowebaccess/command/?command=clickToDialWithToken&data='+encodedJSON;
+        String endpoint = 'http://202.149.220.187:8888/ameyowebaccess/command/?command=clickToDialWithToken&data='+encodedJSON+'invalid';
         System.debug('click2call URL:' + endpoint);
         Http httpProtocol = new Http();
         // Create HTTP request to send.

@@ -22,7 +22,7 @@ CalloutException e = new CalloutException();
 throw e;
                 }
             }else{
-                sfdcLedgerResponse = sapinterestLedgerBND.ZSD_SFDC_WS_INT_LDG_TDS(timestamp);}
+                sfdcLedgerResponse = sapinterestLedgerBND.ZSD_SFDC_WS_INT_LDG_TDS(timestamp,'');}
         }catch(exception ex){
             if(!bypassErrorLog){
                 ERP_Integration_Log__c erp = new ERP_Integration_Log__c();

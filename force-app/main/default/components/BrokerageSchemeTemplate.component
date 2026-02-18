@@ -60,7 +60,8 @@
                                 <th Width ="30%" style="text-align:center;"> From </th>
                                 <th Width ="10%" style="text-align:center;font-size:13px">To</th>
                                 <th Width ="20%" style="text-align:center;font-size:13px">Additional Brokerage for Local Bookings</th>
-                                <th Width ="20%" style="text-align:center;font-size:13px">Additional Brokerage  for OS / NRI</th>
+                                <th Width ="20%" style="text-align:center;font-size:13px">Additional Brokerage  for OS</th>
+                                <th Width ="20%" style="text-align:center;font-size:13px">Additional Brokerage  for NRI</th>
                                 
                             </tr>
                             <apex:repeat value="{!SlabList}" var="slab">
@@ -70,7 +71,7 @@
                                     <td Width ="10%"  style="text-align:center;font-size:13px">{!slab.To__c}</td>
                                     <td Width ="20%"  style="text-align:center;font-size:13px">{!slab.Additional_Brokerage_for_Local_Bookings__c}</td>
                                     <td Width ="20%" style="text-align:center;font-size:13px">{!slab.Additional_Brokerage_for_OS_NRI__c}</td>
-                                    
+                                    <td Width ="20%" style="text-align:center;font-size:13px">{!slab.Additional_Brokerage_for_NRI__c}</td>
                                 </tr>
                                 
                             </apex:repeat>

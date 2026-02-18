@@ -86,8 +86,8 @@
                             
                             
                             <tr>
-                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!CPInv[0].Invoice_Number__c} </td>
-                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!CPInv[0].Invoice_Date__c}" /> </apex:outputText>&nbsp;</td>
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!invoiceNumber} </td>
+                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!invoiceDate}" /> </apex:outputText>&nbsp;</td>
                             </tr>
                             <tr >
                                 <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Place of Supply: {!pos[0].Name}</td>
@@ -295,8 +295,8 @@
                             
                             
                             <tr>
-                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!CPInv[0].Invoice_Number__c} </td>
-                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!CPInv[0].Invoice_Date__c}" /> </apex:outputText>&nbsp;</td>
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!invoiceNumber} </td>
+                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!invoiceDate}" /> </apex:outputText>&nbsp;</td>
                             </tr>
                             <tr >
                                 <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Place of Supply: {!pos[0].Name}</td>
@@ -505,8 +505,8 @@
                             
                             
                             <tr>
-                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!CPInv[0].Invoice_Number__c} </td>
-                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!CPInv[0].Invoice_Date__c}" /> </apex:outputText>&nbsp;</td>
+                                <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice No:{!invoiceNumber} </td>
+                                <td Style="text-align:right;border-right:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Invoice Date: <apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!invoiceDate}" /> </apex:outputText>&nbsp;</td>
                             </tr>
                             <tr >
                                 <td Style="text-align:left;border-left:1px solid black;width:50%;height:25px;font-size:13px" colspan="2">&nbsp;Place of Supply: {!pos[0].Name}</td>

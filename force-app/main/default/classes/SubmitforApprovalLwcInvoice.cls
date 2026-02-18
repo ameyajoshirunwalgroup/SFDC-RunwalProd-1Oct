@@ -16,52 +16,5 @@ public static Boolean SendForApproval(String comment, Id recId){
             throw new AuraHandledException(e.getMessage());
         }
     }
-    public void dummyMethod(){
-        
-        integer i;
-        i=0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-      i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-      
-
-}
+    
 }

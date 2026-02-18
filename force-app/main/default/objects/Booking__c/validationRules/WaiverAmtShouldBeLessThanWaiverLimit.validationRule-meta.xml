@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WaiverAmtShouldBeLessThanWaiverLimit</fullName>
+    <active>false</active>
+    <errorConditionFormula>Total_Waiver_Amount__c  &gt;  Project_Waived_Limit__c</errorConditionFormula>
+    <errorDisplayField>RW_Total_Interest_Amount_Waived__c</errorDisplayField>
+    <errorMessage>The total waiver amount cannot exceed the project&apos;s waived limit.</errorMessage>
+</ValidationRule>

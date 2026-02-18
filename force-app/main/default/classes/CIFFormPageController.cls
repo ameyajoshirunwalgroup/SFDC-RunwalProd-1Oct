@@ -174,7 +174,7 @@ public without sharing class CIFFormPageController {
         
         
         if (strLeadId != null) {
-            objLead = [SELECT Id, FirstName, LastName, RW_Mobile_No__c, Walkin_Source__c, Generated_OTP_On_Lead__c
+            objLead = [SELECT Id, FirstName, LastName, RW_Mobile_No__c, Walkin_Source__c, Generated_OTP_On_Lead__c,LeadSource
                        FROM Lead WHERE Id = :strLeadId];
             
             if (objLead.Generated_OTP_On_Lead__c != null || leadOTP != null ) {
@@ -194,7 +194,7 @@ LIMIT 1
                 system.debug('lead id-  '+ strLeadId); 
                 system.debug('project id-  '+ strprojectId); 
                 List<OTP__c> matchedOtps1 = [SELECT Id, Generated_OTP__c, Channel_Partner_Lookup__c, Sourcing_Manager__c,
-                                             Customer_Reference_Lookup__c, OTP_Generate_For__c, Referral_Sub_Source__c
+                                             Customer_Reference_Lookup__c, OTP_Generate_For__c, Referral_Sub_Source__c,Sourcing_Manager_LU__c
                                              FROM OTP__c
                                              WHERE 
                                              (Generated_OTP__c = :leadOTP AND 
@@ -238,12 +238,12 @@ LIMIT 1
                        RW_Number_of_Cars__c, RW_With_Balcony__c, RW_With_Servant_Room__c, RW_Neighbourhood_Places__c, RW_Date_of_Birth__c, RW_Customer_Type__c,
                        RW_Other_Company_Name__c, RW_Location__c, RW_Ethnicity__c, RW_Referral_Details__c,Broker_Type__c,Marital_Status__c,Cars_Owned__c,
                        Walkin_Sub_Sub_Source__c,Walkin_SubSource__c,Walkin_Channel_Partner__c,Walkin_Apply_Unregistered_ChannelPartner__c,Name_of_Unregistered_Corporate__c,
-                       Unregistered_broker_type__c,Pre_Sales_User__c,RW_Sourcing_Manager__c,Event_Description__C,Lead_Sub_Sub_Source__c,
+                       Unregistered_broker_type__c,Pre_Sales_User__c,Pre_Sales_User_LU__c,RW_Sourcing_Manager__c,Event_Description__C,Lead_Sub_Sub_Source__c,
                        Walkin_Unregistered_ChannelPartner_Email__c,Walkin_UnregisteredChannelPartner_Mobile__c,Walkin_Unregistered_ChannelPartner_Name__c,
                        Education__c,Client_Type__c,Purpose__c,Name_Of_Walkin_Referee__c,Walk_in_Corporate__c,Spouse_DOB__c,RW_Budget__c,
                        Spouse_Name__c,No_of_Children__c,Age_of_Child_1__c,Age_of_Child_2__c,Age_of_Child_3__c,Age_of_Child_4__c,Spouse_Occupation__c,Spouse_Company_Name__c,Spouse_Designation__c,
                        Locality__C,Zone__c,Religion__c,Walk_In_Details__c,Employee_Reference__c,Walkin_Employee_Reference__c,RW_Type_of_Client__c,Lead_Sourcing_Manager__c
-                       from Lead where id = : strLeadId];   
+                       from Lead where id = : strLeadId];    
             
             System.debug('inside lead loop up');
             leadSourcingManager = objLead.Lead_Sourcing_Manager__c; //Added by Vinay 04-08-2025
@@ -269,16 +269,31 @@ LIMIT 1
                     lstLeadSource.add(objWrap);
                 }
                 if(directLead){ //Added by coServe 17-06-2024
-                    List<String> sources = System.label.Editable_walkin_Sources_for_CIF.split(',');
-                    if(sources.contains(f.getLabel())){
+                    List<String> nonEditableSources =System.label.Editable_walkin_Sources_for_CIF.split(',');
+
+                    // List<String> sources = System.label.Editable_walkin_Sources_for_CIF.split(',');
+                    // if(sources.contains(f.getLabel())){
+                    //     objWrap.disable = false;
+                    //     objWrap.strLabel = f.getLabel();
+                    //     objWrap.strLeadSource = f.getValue();
+                    //}else{
+                    if(f.getLabel() == 'Direct') {
+                        objWrap.isSelected = true;           //checked
                         objWrap.disable = false;
-                        objWrap.strLabel = f.getLabel();
-                        objWrap.strLeadSource = f.getValue();
-                    }else{
-                        objWrap.disable = true;
-                        objWrap.strLabel = f.getLabel();
-                        objWrap.strLeadSource = f.getValue();
                     }
+                    else if(nonEditableSources.contains(f.getLabel())){
+                        objWrap.isSelected = false;
+        				objWrap.disable = true;
+                    }
+                    else{
+                        //objWrap.isSelected = false;
+        				objWrap.disable = false; 
+                    }
+                    system.debug('getLabel()------>'+f.getLabel());
+                       
+                    objWrap.strLabel = f.getLabel();
+                    objWrap.strLeadSource = f.getValue();
+                    //}
                 }
                 
             }
@@ -364,7 +379,8 @@ LIMIT 1
             //CIFObj.CorporateCompany__c = objLead.Corporate_Company__c;
             CIFObj.Broker_Type__c = objLead.Broker_Type__c;
             CIFObj.Unregistered_broker_type__c = objLead.Unregistered_broker_type__c;
-            CIFObj.Pre_Sales_User__c = objLead.Pre_Sales_User__c; 
+            //CIFObj.Pre_Sales_User__c = objLead.Pre_Sales_User__c;  // Commented by Vinay 25-11-2025
+            CIFObj.Pre_Sales_User_LU__c = objLead.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
             
             //CIFObj.Sales_manager__c = objLead.RW_Sourcing_Manager__c; //** taking this from OTP now  //commented by Sheetal on 07/07/2022 to solve issue (I02006) taking sourcing manager from OTP
             
@@ -663,8 +679,10 @@ lstLeadSource.add(objWrap);
             if (otpobj.Channel_Partner_Lookup__c != null)
                 CIFObj.Broker__c = otpobj.Channel_Partner_Lookup__c;
             system.debug('Broker================'+CIFObj.Broker__c);
-            if (otpobj.Sourcing_Manager__c != null)
-                CIFObj.Sales_manager__c = otpobj.Sourcing_Manager__c;
+            /*if (otpobj.Sourcing_Manager__c != null)
+                CIFObj.Sales_manager__c = otpobj.Sourcing_Manager__c;*/ //Commented by Vinay 25-11-2025
+            if (otpobj.Sourcing_Manager_LU__c != null)  //Added by Vinay 25-11-2025
+                CIFObj.Sales_manager_LU__c = otpobj.Sourcing_Manager_LU__c;
             
             // Referral info
             if (
@@ -988,8 +1006,10 @@ return null;
                 //objLead.Corporate_Company__c = CIFObj.CorporateCompany__c;
                 objLead.Broker_Type__c = CIFObj.Broker_Type__c;
                 objLead.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
-                objLead.Pre_Sales_User__c = CIFObj.Pre_Sales_User__c;
-                objLead.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c;
+                //objLead.Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; //Commented by Vinay 25-11-2025
+                objLead.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; //Added by Vinay 25-11-2025
+                //objLead.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; //Commented by Vinay 25-11-2025
+                objLead.Lead_Sourcing_Manager__c = CIFObj.Sales_manager_LU__c; //Added by Vinay 25-11-2025
                 objLead.Event_Description__C = CIFObj.Event_Description__C;
                 objLead.Education__c = CIFObj.Education__c;
                 objLead.Client_Type__c = CIFObj.Client_Type__c;
@@ -1338,8 +1358,9 @@ insert p;
                 objOptyToInsert.AccountId = objAcc.Id;
                 objOptyToInsert.Broker_Type__c = CIFObj.Broker_Type__c;
                 objOptyToInsert.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
-                objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c;
-                objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; 
+                //objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; // Commented by Vinay 25-11-2025
+                objOptyToInsert.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
+                //objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; // Commented by Vinay 25-11-2025
                 objOptyToInsert.Sourcing_Manager_User__c = leadSourcingManager; //Added by Vinay 04-08-2025
                 objOptyToInsert.Event_Description__C = CIFObj.Event_Description__C;
                 //objOptyToInsert.Lead_Sub_Sub_Source__c = CIFObj.Lead_Sub_Sub_Source__c;
@@ -1791,6 +1812,13 @@ return null;
                 System.debug('Exception while converting Lead ' + myLead.Id + ': ' + ex.getMessage());
             }
         }
+    }
+     public List<String> getTimelinePicklist() {
+        List<String> pickVals = new List<String>();
+        for (Schema.PicklistEntry p : Lead.RW_Time_line__c.getDescribe().getPicklistValues()) {
+            pickVals.add(p.getValue());
+        }
+        return pickVals;
     }
      public static void dummyMethod(){
 

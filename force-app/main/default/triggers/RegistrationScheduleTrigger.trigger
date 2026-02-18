@@ -27,6 +27,8 @@ trigger RegistrationScheduleTrigger on Registration_Schedule__c (before insert, 
                         }*/
                         if(rs.Venue__c == addr.Location__c){
                             rs.Address__c = addr.Address__c;
+                            rs.Google_Map_Coordinates__c = addr.Map_Link__c; //Added by Vinay 05-12-2025
+                            rs.Google_Map_Link__c = GoogleMapUtil.generateMapLinkFromDMS(addr.Map_Link__c); //Added by Vinay 12-02-2026
                         }
                     }
                     if(bkgsMap.get(rs.Booking__c).RW_Registration_Status__c == 'Registration Completed'){
@@ -81,9 +83,16 @@ trigger RegistrationScheduleTrigger on Registration_Schedule__c (before insert, 
     
     if(Trigger.isBefore && Trigger.isUpdate){
         Set<Id> bkgIds = new Set<Id>();
+        Map<String, Project_Location_Address__c> addressMap = Project_Location_Address__c.getall();
         for(Registration_Schedule__c rs : Trigger.new){
             bkgIds.add(rs.Booking__c);
-            
+            if(rs.Venue__c != null && rs.Venue__c != trigger.oldMap.get(rs.Id).Venue__c){
+                for(Project_Location_Address__c addr : addressMap.values()){
+                    if(rs.Venue__c == addr.Location__c){
+                        rs.Address__c = addr.Address__c;
+                    } 
+                }
+            }
         }
         if(bkgIds.size() > 0){
             Map<Id, Booking__c> bkgMap = new Map<Id, Booking__c>([SELECT Id, RW_Registration_Status__c FROM Booking__c WHERE Id =: bkgIds]);

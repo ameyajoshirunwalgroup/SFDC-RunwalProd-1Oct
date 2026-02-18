@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Payment Reminder Before Due Date</label>
+    <protected>false</protected>
+    <values>
+        <field>Message_Content__c</field>
+        <value xsi:type="xsd:string">Dear {{1}},
+
+This is a gentle reminder that ₹ {{2}} is due in {{3}} days on {{4}}. Please ensure timely payment to avoid interest. Ignore if already paid.</value>
+    </values>
+    <values>
+        <field>RW_Type__c</field>
+        <value xsi:type="xsd:string">hsm</value>
+    </values>
+    <values>
+        <field>RW_element_name__c</field>
+        <value xsi:type="xsd:string">payment_reminder_before_due_date</value>
+    </values>
+    <values>
+        <field>RW_namespace__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

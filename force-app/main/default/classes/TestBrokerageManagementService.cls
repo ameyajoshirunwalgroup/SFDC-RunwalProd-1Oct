@@ -6,7 +6,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -344,9 +344,6 @@ public class TestBrokerageManagementService {
         insert apt1;
         
         Test.startTest();
-        BrokerageManagementService.dummy();
-        BrokerageManagementServicesV2.dummy();
-        BrokerageManagementServicesV2.dummy1();
 
         BatchForBrokerageCalculation  bb = new BatchForBrokerageCalculation();
         Database.executeBatch(bb,2);
@@ -361,7 +358,7 @@ public class TestBrokerageManagementService {
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Opportunity objcustomer2;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -701,9 +698,9 @@ public class TestBrokerageManagementService {
         
         
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b.Id, bscheme.Id);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
                 
         BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b.Id, bscheme.Id);
         BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
@@ -719,7 +716,7 @@ public class TestBrokerageManagementService {
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Opportunity objcustomer2;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -1066,12 +1063,12 @@ public class TestBrokerageManagementService {
         
         Test.startTest();
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
-        BrokerageManagementService.BookingSourceChange(BIds);
-        BrokerageManagementService.KickerCalulation(ki.Id);
-        BrokerageManagementServicesV2.brokerageCalculation(BIds);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BookingSourceChange(BIds);
         //BrokerageManagementServicesV2.KickerCalulation(ki.Id);
+        BrokerageManagementServicesV2.brokerageCalculation(BIds);
+        BrokerageManagementServicesV2.KickerCalulation(ki.Id);
         Test.stopTest();
 }
     
@@ -1081,7 +1078,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -1391,7 +1388,7 @@ public class TestBrokerageManagementService {
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Opportunity objcustomer2;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -1732,10 +1729,15 @@ public class TestBrokerageManagementService {
         
         Test.startTest();
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
-        BrokerageManagementService.BookingSourceChange(BIds);
-        BrokerageManagementService.KickerCalulation(ki.Id);
+       // BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BookingSourceChange(BIds);
+        //BrokerageManagementServicesV2.KickerCalulation(ki.Id);
+        //
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BookingSourceChange(BIds);
+        BrokerageManagementServicesV2.KickerCalulation(ki.Id);
         Test.stopTest();
         
     }
@@ -1747,7 +1749,7 @@ public class TestBrokerageManagementService {
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Opportunity objcustomer2;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -2081,10 +2083,15 @@ public class TestBrokerageManagementService {
         
         Test.startTest();
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
-        BrokerageManagementService.BookingSourceChange(BIds);
-        BrokerageManagementService.KickerCalulation(ki.Id);
+       // BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
+        //BrokerageManagementServicesV2.BookingSourceChange(BIds);
+        //BrokerageManagementServicesV2.KickerCalulation(ki.Id);
+        
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b3.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b4.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BookingSourceChange(BIds);
+        BrokerageManagementServicesV2.KickerCalulation(ki.Id);
         Test.stopTest();
     }
     
@@ -2094,7 +2101,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -2382,7 +2389,8 @@ public class TestBrokerageManagementService {
         insert apt1;
         
         Test.startTest();
-        BrokerageManagementService.KickerCalulation(ki.Id);
+        //BrokerageManagementServicesV2.KickerCalulation(ki.Id);
+        BrokerageManagementServicesV2.KickerCalulation(ki.Id);
         Test.stopTest();
     }
     
@@ -2392,7 +2400,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -2705,7 +2713,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -3028,7 +3036,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -3385,7 +3393,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -3743,7 +3751,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -4067,7 +4075,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -4329,7 +4337,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer1.Id;
         b2.Project__c = objpr.Id;
@@ -4369,7 +4377,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+b2.RW_X9_99_Received__c);
+        //system.debug('9.99 b2::'+b2.RW_X9_99_Received__c);
         
         
         
@@ -4404,7 +4412,7 @@ public class TestBrokerageManagementService {
         
         Opportunity objcustomer;
         Opportunity objcustomer1;
-        Booking__c objBooking;
+        //Booking__c objBooking;
         Project__c objpr;
         Project_Unit__c objPUU;
         Project_Unit__c objPUU1;
@@ -4676,7 +4684,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -4716,7 +4724,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -4784,7 +4792,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -4804,8 +4812,8 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;
         
-      //  BrokerageManagementService.brokerageCalculation(BIds);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+      //  BrokerageManagementServicesV2.brokerageCalculation(BIds);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
        
         Test.stopTest();
     }
@@ -5078,7 +5086,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -5118,7 +5126,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -5186,7 +5194,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -5207,8 +5215,8 @@ public class TestBrokerageManagementService {
         insert apt1;
         
         
-       // BrokerageManagementService.brokerageCalculation(BIds);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+       // BrokerageManagementServicesV2.brokerageCalculation(BIds);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
        
         Test.stopTest();
     }
@@ -5482,7 +5490,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -5523,7 +5531,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -5591,7 +5599,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -5611,8 +5619,8 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;
         
-        BrokerageManagementService.brokerageCalculation(BIds);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        BrokerageManagementServicesV2.brokerageCalculation(BIds);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
        
         Test.stopTest();
     }
@@ -5886,7 +5894,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -5926,7 +5934,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -5994,7 +6002,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -6015,7 +6023,7 @@ public class TestBrokerageManagementService {
         insert apt1;
         
 
-		BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);        
+		BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);        
        
         Test.stopTest();
     }
@@ -6304,7 +6312,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -6346,7 +6354,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -6415,7 +6423,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         /*Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -6435,9 +6443,9 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;*/
         
-      //  BrokerageManagementService.brokerageCalculation(BIds);
-    //    BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
-        BrokerageManagementService.KickerCalulation(ki.Id);
+      //  BrokerageManagementServicesV2.brokerageCalculation(BIds);
+    //    BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        BrokerageManagementServicesV2.KickerCalulation(ki.Id);
         Test.stopTest();
     }
     
@@ -6735,7 +6743,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -6776,7 +6784,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -6844,7 +6852,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
                 Test.startTest();
 
        /* Applicant_Details__c apt1 = new Applicant_Details__c();
@@ -6865,9 +6873,9 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;*/
         
-      //  BrokerageManagementService.brokerageCalculation(BIds);
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
-       	BrokerageManagementService.KickerCalulation(ki.Id);
+      //  BrokerageManagementServicesV2.brokerageCalculation(BIds);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+       	BrokerageManagementServicesV2.KickerCalulation(ki.Id);
         Test.stopTest();
     }
     
@@ -7211,7 +7219,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,1);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
         BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
 
         Test.stopTest();
@@ -7537,7 +7545,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,1);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -7860,7 +7868,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,1);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -8183,7 +8191,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,1);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -8550,7 +8558,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,2);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -8898,7 +8906,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,2);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -9247,7 +9255,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,2);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -9596,7 +9604,7 @@ public class TestBrokerageManagementService {
         Test.startTest();
         BatchForCancelledBrokerage  cc = new BatchForCancelledBrokerage();
         Database.executeBatch(cc,2);
-        BrokerageManagementService.BookingSourceChange(sourceBIds);
+        BrokerageManagementServicesV2.BookingSourceChange(sourceBIds);
        
         Test.stopTest();
     }
@@ -12574,7 +12582,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -12614,7 +12622,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -12682,7 +12690,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -12702,7 +12710,7 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
        
         Test.stopTest();
     }
@@ -12984,7 +12992,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -13024,7 +13032,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -13092,7 +13100,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -13112,7 +13120,7 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
        
         Test.stopTest();
     }
@@ -13395,7 +13403,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -13435,7 +13443,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -13503,7 +13511,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
 
         Applicant_Details__c apt1 = new Applicant_Details__c();
@@ -13524,7 +13532,7 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
        
         Test.stopTest();
     }
@@ -13807,7 +13815,7 @@ public class TestBrokerageManagementService {
         dmid.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid;
         
-        system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
+        //system.debug('9.99::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b.Id]);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer.Id;
         b2.Project__c = objpr.Id;
@@ -13847,7 +13855,7 @@ public class TestBrokerageManagementService {
         dmid2.RW_Legacy_Demand__c = true;
         dmid2.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid2;
-        system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
+        //system.debug('9.99 b2::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b2.Id]);
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;
@@ -13915,7 +13923,7 @@ public class TestBrokerageManagementService {
         dmid3.RW_Legacy_Demand__c = true;
         dmid3.Total_Demand_Item_Amount_Paid__c = 200000;
         insert dmid3;
-        system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
+        //system.debug('9.99 b3::'+[select id,name,RW_X9_99_Received__c from booking__c where id =: b3.Id]);
         Test.startTest();
         Applicant_Details__c apt1 = new Applicant_Details__c();
         apt1.Name = 'Applicant 1';
@@ -13935,7 +13943,7 @@ public class TestBrokerageManagementService {
         apt1.PancardNo__c = 'abc213456';
         insert apt1;
         
-        BrokerageManagementService.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
+        BrokerageManagementServicesV2.BrokerageCalculationForInactiveScheme(b2.Id, bscheme.Id);
         Set<Id> CPId = New Set<Id>();
         Set<Id> BSId = New Set<Id>();
         CPId.add(cp.id);

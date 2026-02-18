@@ -10,10 +10,10 @@ public without sharing class LeadRatingQualificationServiceTest {
         // Create Qualification Criteria for the Project
         Qualification_Criteria__c testCriteria = new Qualification_Criteria__c(
             Project__c = testProject.Id,
-            MAX_Budget_In_Lakh__c= 140.00,
-            MIN_Budget_In_Lakh__c= 80.00,
+            Budget_QC__c = '1.30 Cr – 1.40 Cr',
             Location_QC__c = 'Dombivali',
             Configuration_QC__c = '3 BHK',
+            Project_Type__c = 'Residential',
             Possession_QC__c = '1 to 2 year'
         );
         insert testCriteria;
@@ -42,11 +42,11 @@ public without sharing class LeadRatingQualificationServiceTest {
         // Create a request matching the Qualification Criteria
         LeadRatingQualificationService.LeadRatingRequest request = new LeadRatingQualificationService.LeadRatingRequest();
         request.leadId = [SELECT Id FROM Lead LIMIT 1].Id;
-        request.budget = 120.00;
+        request.budget = '1.30 Cr – 1.40 Cr';
         request.location = 'Dombivali';
         request.possession = '1 to 2 year';
         request.configuration = '3 BHK';
-    //    request.projectType = 'Residential';
+        request.projectType = 'Residential';
 
         List<LeadRatingQualificationService.LeadRatingResponse> responses = 
             LeadRatingQualificationService.evaluateLeadRating(new List<LeadRatingQualificationService.LeadRatingRequest>{request});
@@ -65,11 +65,11 @@ public without sharing class LeadRatingQualificationServiceTest {
         // Create a request with no matches
         LeadRatingQualificationService.LeadRatingRequest request = new LeadRatingQualificationService.LeadRatingRequest();
         request.leadId = [SELECT Id FROM Lead LIMIT 1].Id;
-        request.budget = 120.00;
+        request.budget = 'Low';
         request.location = 'Chicago';
         request.possession = '2027';
         request.configuration = '1 BHK';
-      //  request.projectType = 'Commercial'; // Mismatch on Project Type should result in Cold rating
+        request.projectType = 'Commercial'; // Mismatch on Project Type should result in Cold rating
 
         List<LeadRatingQualificationService.LeadRatingResponse> responses = 
             LeadRatingQualificationService.evaluateLeadRating(new List<LeadRatingQualificationService.LeadRatingRequest>{request});
@@ -88,11 +88,11 @@ public without sharing class LeadRatingQualificationServiceTest {
         // Create a request partially matching the Qualification Criteria
         LeadRatingQualificationService.LeadRatingRequest request = new LeadRatingQualificationService.LeadRatingRequest();
         request.leadId = [SELECT Id FROM Lead LIMIT 1].Id;
-        request.budget = 120.00;
+        request.budget = 'High';
         request.location = 'Chicago'; // Mismatch
         request.possession = '2025';
         request.configuration = '3 BHK';
-    //    request.projectType = 'Residential';
+        request.projectType = 'Residential';
 
         List<LeadRatingQualificationService.LeadRatingResponse> responses = 
             LeadRatingQualificationService.evaluateLeadRating(new List<LeadRatingQualificationService.LeadRatingRequest>{request});
@@ -125,11 +125,11 @@ public without sharing class LeadRatingQualificationServiceTest {
 
         LeadRatingQualificationService.LeadRatingRequest request = new LeadRatingQualificationService.LeadRatingRequest();
         request.leadId = testLead.Id;
-        request.budget = 120.00;
+        request.budget = 'Medium';
         request.location = 'Los Angeles';
         request.possession = '2026';
         request.configuration = '2 BHK';
-     //   request.projectType = 'Residential';
+        request.projectType = 'Residential';
 
         List<LeadRatingQualificationService.LeadRatingResponse> responses = 
             LeadRatingQualificationService.evaluateLeadRating(new List<LeadRatingQualificationService.LeadRatingRequest>{request});

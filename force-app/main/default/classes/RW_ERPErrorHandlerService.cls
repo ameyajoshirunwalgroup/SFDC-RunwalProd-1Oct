@@ -108,8 +108,11 @@ Map<String,	List<ERP_Integration_Log__c>> errMap = new    Map<String,	List<ERP_I
                                                 erp.Status__c = 'Reprocessed';
                                                 if(erp.Booking__c != null && op.SalesOrder_Number__c == null && op.Booking__r.status__c=='Booking Confirmed'){
                                                     String so=     SAPIntegrationServices.generateSalesOrder(new Set<id>{op.id},op.SAP_Customer_Number__c );
-                                                    if(SO!= null)
-                                                        opt.SalesOrder_Number__c = so;
+                                                    if(SO!= null){
+                                                        //opt.SalesOrder_Number__c = so; //Commented by Vinay 13-02-2026
+                                                        List<String> soWithGst = so.split(','); //Added by Vinay 13-02-2026
+                                                        opt.SalesOrder_Number__c = soWithGst[0]; //Added by Vinay 13-02-2026
+                                                    }
                                                     newLogs.addALl(SAPIntegrationServices.erpLogList);
                                                 }
                                                 optyList.add(opt);

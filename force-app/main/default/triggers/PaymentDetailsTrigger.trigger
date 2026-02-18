@@ -45,6 +45,24 @@ trigger PaymentDetailsTrigger on RW_Payment_Details__c (after insert,after Updat
             }
             
         }
+        
+        if(trigger.isInsert && trigger.isAfter){  //Added by Vinay 14-01-2026
+            List<Id> allCreatedReceiptIds = new List<Id>();
+            List<Id> creditNoteIds = new List<Id>();
+            for(RW_Payment_Details__c rec : trigger.new){
+                allCreatedReceiptIds.add(rec.Id);
+                if(rec.RW_Document_Type__c == 'DS'){
+                    creditNoteIds.add(rec.Id);
+                }
+                
+            }
+            if(allCreatedReceiptIds.size() > 0){
+                LockatedApp_Notifications.paymentDetailsNotification(allCreatedReceiptIds); 
+            }
+            if(creditNoteIds.size() > 0){
+                LockatedApp_Notifications.creditNoteNotification(creditNoteIds); 
+            }
+        }
     }
     
     

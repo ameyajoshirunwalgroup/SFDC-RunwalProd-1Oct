@@ -19,7 +19,8 @@ public class SAP_IntegrationHelper {
         }
         else if(sAPI == 'Interest Waiver'){
             log.Interest_Waiver__c = sRefObj;
-            log.Demand__c = sParentId;
+            //log.Demand__c = sParentId;
+            log.Booking__c = sParentId;
         }
         else if(sAPI == 'Demand Interest' && sBatchId != null){
             log.Demand__c = sRefObj;

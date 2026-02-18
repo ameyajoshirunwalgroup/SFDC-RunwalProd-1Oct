@@ -186,6 +186,7 @@ public class CustomerLedgerController {
                 BillDeskInputMap.put('CurrencyType','INR');
                 BillDeskInputMap.put('TypeField1', 'R');
                 BillDeskInputMap.put('TypeField2', 'F');
+                BillDeskInputMap.put('AdditionalInfo7',BillDeskDetails[0].Bill_Desk_Pay_Category__c);
                 //Added by Vinay 30-04-2025 Start
                 BillDeskInputMap.put('AdditionalInfo2',receiptRecord[0].Opportunity__r.SalesOrder_Number__c);
                 BillDeskInputMap.put('AdditionalInfo3',receiptRecord[0].Opportunity__r.SAP_Customer_Number__c);
@@ -193,7 +194,6 @@ public class CustomerLedgerController {
                 BillDeskInputMap.put('AdditionalInfo5',receiptRecord[0].Opportunity__r.RW_Email__c);
                 BillDeskInputMap.put('AdditionalInfo6',receiptRecord[0].Opportunity__r.RW_Mobile_No__c);
                 //Added by Vinay 30-04-2025 End
-                BillDeskInputMap.put('AdditionalInfo7',BillDeskDetails[0].Bill_Desk_Pay_Category__c);
                 if(DetailMap.get('TypeOfAmount')=='Normal' || (DetailMap.containsKey('ButtonType') && DetailMap.get('ButtonType') == 'SinglePayment'))
                  billDeskChecksumKey = BillDeskDetails[0].Bill_Desk_Checksum_Key__c;
                 else if(DetailMap.get('TypeOfAmount')=='GST')
@@ -1440,6 +1440,12 @@ public class CustomerLedgerController {
         public String value;
         public String validFor;
         
+    }
+    
+    @AuraEnabled
+    public static String paymentForMahalaxmi(Map<String,String> DetailMap){ //Added by Vinay 02-05-2025
+        System.debug('--paymentForMahalaxmi--');
+        return BilldeskPaymentAPI.billdeskPayment(DetailMap);
     }
     
 

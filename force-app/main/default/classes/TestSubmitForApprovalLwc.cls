@@ -489,7 +489,7 @@ public class TestSubmitForApprovalLwc {
      @isTest
     public Static void SubmitForApproval3(){
         SubmitforApprovalLwcInvoice subI = New SubmitforApprovalLwcInvoice();
-      subI.dummyMethod();
+      //subI.dummyMethod();
 
         
     }

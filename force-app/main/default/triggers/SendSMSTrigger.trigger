@@ -5,7 +5,7 @@ trigger SendSMSTrigger on SMS_Schedule_SMS_c__c (after Insert)
        system.debug('trigger execution begins');
       for(SMS_Schedule_SMS_c__c smsList : trigger.new)
       {
-                if(smsList.Id != null && smsList.Sender_Mobile__c != null &&  smsList.Name != 'Birthday Wishes')
+                if(smsList.Id != null && smsList.Sender_Mobile__c != null &&  smsList.Name != 'Birthday Wishes' && smsList.Message_Sent_from_SFMC__c == false)  // Added smsList.Message_Sent_from_SFMC__c == false by Vinay 24-11-2025
                 {
                         smsIds.add(smsList.Id);   
                         system.debug('sms list id >>>' +smsList.Id);  

@@ -65,5 +65,4 @@ trigger TrgBrokerageInvoice on Brokerage_Invoice__c (before update, after insert
         return error;
     } 
    
-    
 }

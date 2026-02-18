@@ -291,6 +291,16 @@ public class DigitalBookingCtrlTest {
             cp2.Parking__c = 'Stilt';
             cp2.SAP_Material_Code__c = 'abc2';
             cps.add(cp2);
+            
+            //Added by Vinay 20-11-2025 Start
+            Car_Parking_Charge__c objCP3 = new Car_Parking_Charge__c();
+            objCP3.Status__c = 'Vacant';
+            objCP3.Category__c = 'Additional';
+            objCP3.Parking__c = 'Stack Car Park';
+            objCP3.Project__c = objpr.Id;
+            cps.add(objCP3);
+            //Added by Vinay 20-11-2025 End
+            
             insert cps; 
             
             Test.stopTest();
@@ -445,6 +455,7 @@ public static void testInventory(){
         q.Single_car_park_Additional__c= 1;
         q.Single_Open_Additional__c = 1;
         q.Stack_Additional__c = 1;
+       	q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.MLCP_Additional__c = null;
         insert q;
        
@@ -783,6 +794,7 @@ public static void testInventory(){
         q.Single_car_park_Additional__c= 1;
         q.Single_Open_Additional__c = 1;
         q.Stack_Additional__c = 1;
+       	q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.MLCP_Additional__c = null;
         insert q;
        
@@ -1103,6 +1115,7 @@ public static void testInventory(){
         q.Single_car_park_Additional__c= 1;
         q.Single_Open_Additional__c = 1;
         q.Stack_Additional__c = 1;
+        q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.MLCP_Additional__c = null;
         insert q;
 
@@ -1321,6 +1334,7 @@ public static void testInventory(){
         q.Single_car_park_Additional__c= 0;
         q.Single_Open_Additional__c = 0;
         q.Stack_Additional__c = 0;
+        q.Stack_Additional_1__c = 0; //Added by Vinay 20-11-2025
         q.MLCP_Additional__c = null;
         insert q;
         
@@ -1428,6 +1442,7 @@ public static void testInventory(){
             objOpportunity.Primary_Name__c='Test123';
             objOpportunity.RW_Sourcing_Head__c='Adrian Dsouza';
             objOpportunity.RW_Sales_Associate__c='Karthik Chettiar';
+            objOpportunity.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
             objOpportunity.RW_Closing_Head__c='Karthik Chettiar';
             objOpportunity.Walkin_Source__c='Direct';
             insert objOpportunity;
@@ -1525,6 +1540,8 @@ public static void testInventory(){
         
         
         user u = [select id,name from user where username ='salesmanagertest@runwal.com.uat'];
+        // Id currentUserId = UserInfo.getUserId();
+        // user u = [select id,name from user where Id =:currentUserId];
         Test.setMock(HttpCalloutMock.class, new UniversalHttpMockClass());
          project_unit__c pu = [select id,name from project_unit__c where Unit_SAP_Code__c ='1R000333'];
         Payment_Plan__c pp = [select id,name,Project__c,Tower__c from Payment_Plan__c where name='10-20-30-40 plan'];   
@@ -1557,6 +1574,7 @@ public static void testInventory(){
         objOpportunity.Name = 'Test';
         objOpportunity.Sales_Manager__c = 'Deepak Arya';
         objOpportunity.Sourcing_Manager__c = 'Deepak Arya';
+        objOpportunity.Sales_Manager_User__c =UserInfo.getUserId();
         objOpportunity.CloseDate = System.today();
         objOpportunity.AccountId = Accnt.Id; 
         objOpportunity.Status__c = 'Active'; 
@@ -1564,6 +1582,7 @@ public static void testInventory(){
         objOpportunity.RW_Email__c = 'm@m.com';
         objOpportunity.RW_Project__c = pp.Project__c; 
         objOpportunity.RW_Sales_Associate__c='Karthik Chettiar';
+        objOpportunity.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         //objOpportunity.Walkin_Source__c = 'Channel Partner';
         //objOpportunity.RW_Walkin_Channel_Partner__c = br.Id;
         objOpportunity=RDSCommon.CreateOpportunity(objOpportunity);
@@ -1617,6 +1636,7 @@ public static void testInventory(){
         q.Single_car_park_Additional__c= 1;
         q.Single_Open_Additional__c = 1;
         q.Stack_Additional__c = 1;
+        q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.MLCP_Additional__c = null;
         insert q;
         
@@ -1696,7 +1716,9 @@ public static void testInventory(){
             String encryptedData =   DigitalBookingController.sendBookingLink(objOpportunity.id,60000,offermap,setStr1,'Bill Desk');
             
             DigitalBookingController.onlineBookingWrapper bk = DigitalBookingController.getDetails(EncodingUtil.urlDecode(encryptedData,'UTF-8'));
-             
+             System.debug('bk Email'+bk.bookingDetails.booking);
+             System.debug('bk Email'+bk.bookingDetails.booking.Customer__c);
+             System.debug('bk Email'+bk.bookingDetails.booking.customer__r.Sales_Manager_User__c);
             map<string,string> pay =new map<string,string>();
             pay.put('bankReferenceNumber','wertyu');
             pay.put('paymentTrackingId','3456yh');
@@ -1759,6 +1781,7 @@ public static void testInventory(){
         objOpportunity.RW_Email__c = 'm@m.com';
         objOpportunity.RW_Project__c = pp.Project__c; 
         objOpportunity.RW_Sales_Associate__c='Karthik Chettiar';
+        objOpportunity.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         //objOpportunity.Walkin_Source__c = 'Channel Partner';
         //objOpportunity.RW_Walkin_Channel_Partner__c = br.Id;
         objOpportunity=RDSCommon.CreateOpportunity(objOpportunity);
@@ -1812,6 +1835,7 @@ public static void testInventory(){
         q.Single_car_park_Additional__c= 1;
         q.Single_Open_Additional__c = 1;
         q.Stack_Additional__c = 1;
+        q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.MLCP_Additional__c = null;
         insert q;
         

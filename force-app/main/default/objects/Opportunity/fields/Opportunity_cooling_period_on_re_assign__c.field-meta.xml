@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_cooling_period_on_re_assign__c</fullName>
+    <formula>DATETIMEVALUE(
+DATEVALUE(Reassignment_DateTime__c) +
+RW_Project__r.Opportunity_cooling_period_on_re_assign__c
+) +
+(Reassignment_DateTime__c - DATETIMEVALUE(DATEVALUE(Reassignment_DateTime__c)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Opportunity cooling period -re assign</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>DateTime</type>
+</CustomField>

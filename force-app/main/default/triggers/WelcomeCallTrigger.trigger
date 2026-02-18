@@ -15,8 +15,8 @@ trigger WelcomeCallTrigger on RW_Welcome_Call__c (before update,after update) {
       List<Task> taskListToInsert = new List<Task>();
         
        //Getting task recordId
-	 RecordType rt = [SELECT Id FROM RecordType WHERE SObjectType = 'Task' AND Name = 'Welcome Call' LIMIT 1];
-	 Map<Id, RW_Welcome_Call__c> welcomMap = new Map<Id, RW_Welcome_Call__c>();
+     RecordType rt = [SELECT Id FROM RecordType WHERE SObjectType = 'Task' AND Name = 'Welcome Call' LIMIT 1];
+     Map<Id, RW_Welcome_Call__c> welcomMap = new Map<Id, RW_Welcome_Call__c>();
      Map<Id, Id> bkgidMap = new Map<Id, Id>();
         List<RW_Welcome_Call__c> calls = new List<RW_Welcome_Call__c>();
         for( RW_Welcome_Call__c WC: [select id,RW_Booking__r.Id,RW_Booking__r.Unit_No__r.Relationship_Manager__r.User__c,RW_Welcome_Call_Status__c,
@@ -32,7 +32,7 @@ trigger WelcomeCallTrigger on RW_Welcome_Call__c (before update,after update) {
                  bkgidMap.put(WC.Id, WC.RW_Booking__c);
              }
              if(WC.RW_Welcome_Call_Status__c == 'Accept' && Trigger.OldMap.get(WC.Id).RW_Welcome_Call_Status__c != 'Accept'){
-                 calls.add(WC);                            
+                 calls.add(WC); 
              }
                                          
             if(WC.RW_Welcome_Call_Status__c == 'Reinitiate'){
@@ -166,15 +166,20 @@ trigger WelcomeCallTrigger on RW_Welcome_Call__c (before update,after update) {
                 SendWhatsAppMsg.methodToSendWhatsAppMsg(call.RW_Booking__r.Primary_Applicant_Name__c, null, null, null, null, null, null, null, null, call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Applicant1_Mobile_No__c, 'welcome_call');
             }
         }*/
+        List<String> bkgIds = new List<String>(); //Added by Vinay 12-02-2026
         for(RW_Welcome_Call__c call : calls){
             if(!Test.isRunningTest()){
                 //SendWhatsAppMsg.methodToSendWhatsAppMsg(call.RW_Booking__r.Opportunity__c,call.RW_Booking__r.Primary_Applicant_Name__c, null, null, null, null, null, null, null, call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Applicant1_Mobile_No__c, System.label.Welcome_call_WhatsApp);
                 SendWhatsAppMsg.methodToSendWhatsAppMsg(call.RW_Booking__r.Opportunity__c,call.RW_Booking__r.Primary_Applicant_Name__c, null, null, null, null, null, null, null, call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Applicant1_Mobile_No__c, 'welcome_call_ov');
                 SendWhatsAppMsg.methodToSendWhatsAppMsg(null,call.RW_Booking__r.Primary_Applicant_Name__c,System.label.Booking_to_Registration_Link,System.label.Home_loan_brochure_Link,System.label.TDS_Tutorial_Link,null,null,null,null,call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Booking__r.Opportunity__r.RW_Mobile_No__c,'Welcome Call Accepted'); // Added by coServe 09-07-2024
             }
-            
+            bkgIds.add(call.RW_Booking__c); //Added by Vinay 12-02-2026
         }
-     
+        if(bkgIds.size() > 0){ //Added by Vinay 12-02-2026
+            LockatedApp_Notifications.bookingConfirmedNotification(bkgIds);
+            LockatedApp_Notifications.homeLoanNotification(bkgIds);
+            LockatedApp_Notifications.ncfNotification(bkgIds);
+        }
     }
     
   }
