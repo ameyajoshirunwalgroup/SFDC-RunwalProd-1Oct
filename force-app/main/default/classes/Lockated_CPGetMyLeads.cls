@@ -31,13 +31,13 @@ global without sharing class Lockated_CPGetMyLeads {
                     list<Opportunity> opplist = [Select Id,Name,StageName,RW_Mobile_No__c,RW_Email__c,RW_Project__r.Name,Date_Of_Visit__c,Walkin_Source__c,Account.PersonEmail FROM Opportunity where
                                                  RW_Walkin_Channel_Partner__c  = : cpId 
                                                  AND (Walkin_Source__c  = 'Channel Partner'  OR Walkin_Source__c  = 'Temp Channel Partner')
-                                                 AND StageName = 'Site Visit'  order by createddate desc];
+                                                 AND StageName = 'Site Visit'  order by Date_Of_Visit__c desc];
                     
                     list<Booking__c> blist = [SELECT Id,Name,Booking_Date__c,Source_of_Booking__c,Status__c,Project__r.Name,Opportunity__r.Name,
                                               Additional_Brokerage_Accrued_Dashboards__c,Base_Brokerage_Accrued_Dashboards__c,Agreement_Value_for_brokers__c, 
                                               Project_Name__c,Unit_No__r.Name,Brokerage_Scheme__r.End_Date__c,Payment_Received__c,Registration_date_status__c 
                                               FROM Booking__c where 
-                                              (Source_of_Booking__c ='Channel Partner' OR Source_of_Booking__c ='Temp Channel Partner' )  and BrokerIId__c =: cpId Order by CreatedDate Desc];
+                                              (Source_of_Booking__c ='Channel Partner' OR Source_of_Booking__c ='Temp Channel Partner' )  and BrokerIId__c =: cpId Order by Booking_Date__c Desc];
                     list<Applicant_Details__c> aplist = [Select Id,Booking__c,Mobile_Number__c,Email_Address__c,Applicant_Number__c,Name,Booking__r.Source_of_Booking__c from Applicant_Details__c
                                                          where Booking__c != null and (Booking__r.Source_of_Booking__c ='Channel Partner' OR Booking__r.Source_of_Booking__c ='Temp Channel Partner' )  and Booking__r.BrokerIId__c =: cpId  order by createddate desc];
                     
@@ -604,6 +604,8 @@ global without sharing class Lockated_CPGetMyLeads {
             return wr;
         }
     }
+    
+    
     
     global class ResponseWrapper {
         public list<LeadDetails> activeLeadDetails;
