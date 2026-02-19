@@ -50,7 +50,7 @@ global without sharing class Lockated_CPGetLadderProgress {
                 }
                 list<Brokerage_scheme__c> bschlist = [Select Id,Name,Start_Date__c,End_Date__c,Slab_Type__c,Type__c,(Select id,Name,Slab_No__c,To__c,From__c,
                                                       Total_Brokerage_for_Local_Bookings__c,Total_Brokerage_for_OS_NRI__c,Total_Brokerage_for_NRI__c,Additional_Brokerage_for_OS_NRI__c,Additional_Brokerage_for_NRI__c,Additional_Brokerage_for_Local_Bookings__c from Brokerage_Slabs__r Order by Slab_No__c) 
-                                                      from Brokerage_Scheme__c where /*For Testing Id = 'a2a5j000000UcNjAAK'*/ Id In : schemeVsBkMap.keySet()];
+                                                      from Brokerage_Scheme__c where /*For Testing Id = 'a2a5j000000UcNjAAK'*/ Id In : schemeVsBkMap.keySet() ORDER BY Start_Date__c desc];
                 if(!bschlist.isEmpty()){
                     for(Brokerage_scheme__c bs : bschlist){
                         Map<Id,list<Brokerage_Slab__c>> schemeVsSlabMap = new Map<Id,list<Brokerage_Slab__c>>();
