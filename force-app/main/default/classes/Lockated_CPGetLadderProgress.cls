@@ -129,7 +129,11 @@ global without sharing class Lockated_CPGetLadderProgress {
                                 if (i == slabNoVsDetailsMap.size() - 1) {
                                     ld.isLastSlab = true;
                                 }
-                            }                            
+                            }            
+                            
+                            if(ld.isCurrentSlab == true && ld.isLastSlab == true){
+                                ld.isNextSlab = true;
+                            }
                             
                             mp.ladderDetails.add(ld);
                         }
