@@ -184,7 +184,7 @@ this.totalWithTaxStr = INFormat(this.totalWithTax);
             System.debug('fetchInvoices - Starting with ID: ' + cpBrokerageId);
             
             cpBrokerage = [
-                SELECT Id, If_GST_is_applicable__c, Invoice_Number__c, Channel_Partner__c,Invoice_Date__c,Place_of_Supply__c,AOP__c,Brokerage_Type__c,
+                SELECT Id, If_GST_is_applicable__c, Invoice_Number__c, Invoice_Status__c, Channel_Partner__c,Invoice_Date__c,Place_of_Supply__c,AOP__c,Brokerage_Type__c,
                 Channel_Partner__r.State__c,CGST__c, SGST__c, IGST__c
                 
                 FROM CP_Brokerage__c
@@ -524,7 +524,9 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
             
             // Update individual invoices with THEIR OWN tax amounts and totals
             for(Brokerage_Invoice__c inv : CPInv) {
+                if(String.isBlank(inv.Invoice_Status__c)){
                 inv.Invoice_Status__c = 'Invoice Downloaded';
+                }
                 
                 // Get the individual wrapper for this invoice
                 InvoiceWrapper wrapper = invoiceWrapperMap.get(inv.Id);
@@ -552,7 +554,9 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
                 
                 // Also update total amount on CP_Brokerage
                 cpBrokerage.Total_Invoice_Amount__c = grandTotal; // Total of all invoice amounts
+                if(String.isBlank(cpBrokerage.Invoice_Status__c)){
                 cpBrokerage.Invoice_Status__c = 'Invoice Downloaded';
+                }
                 
                 update cpBrokerage;
             }
