@@ -180,9 +180,11 @@ public class InvoicePreview {
     }
     
     public void dmlOperation() {
-        //CPInv[0].Invoice_Status__c = 'Invoice Downloaded';
         try{
             if(!CPInv.isEmpty()){
+        if(String.isBlank(CPInv[0].Invoice_Status__c)){
+        	CPInv[0].Invoice_Status__c = 'Invoice Downloaded';
+        }
                 if(showgst){
                     if(istaxapplicable){
                         CPInv[0].CGST__c = String.valueOf(Cgst);
