@@ -34,6 +34,7 @@ public class InvoicePreview {
     public String invoiceNumber {get;set;}
     public String invoiceDateString {get;set;}
     public Date invoiceDate {get;set;}
+    public String renderType {get; set;}
     public InvoicePreview(){
         Id cpId = ApexPages.currentPage().getParameters().get('id');
         urlGstApp = ApexPages.currentPage().getParameters().get('gstApp');
@@ -41,6 +42,13 @@ public class InvoicePreview {
         invoiceDateString = ApexPages.currentPage().getParameters().get('invoiceDate');
         if(String.isNotBlank(invoiceDateString)){
             invoiceDate = Date.valueOf(invoiceDateString);
+        }
+        String mode = ApexPages.currentPage().getParameters().get('renderMode');
+        
+        if(mode == 'view') {
+            renderType = null;
+        } else {
+            renderType = 'pdf'; // This will render as HTML
         }
         System.debug('Check Gst---->'+urlGstApp);
         System.debug('Check Invoice Number From APPS----->'+invoiceNumber);

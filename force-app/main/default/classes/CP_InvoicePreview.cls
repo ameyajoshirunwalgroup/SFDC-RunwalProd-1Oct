@@ -46,7 +46,7 @@ public class CP_InvoicePreview {
     public String invoiceNumber {get;set;}
     public String invoiceDateString {get;set;}
     public Date invoiceDate {get;set;}
-    
+    public String renderType {get; set;}
     public class InvoiceWrapper {
         public Brokerage_Invoice__c invoice {get;set;}
         public String brokerageAmtStr {get;set;}
@@ -159,6 +159,13 @@ this.totalWithTaxStr = INFormat(this.totalWithTax);
         
         if(String.isNotBlank(urlGstApp)) {
             this.istaxapplicable = (urlGstApp == 'Yes');
+        }
+        String mode = ApexPages.currentPage().getParameters().get('renderMode');
+        
+        if(mode == 'view') {
+            renderType = null;
+        } else {
+            renderType = 'pdf'; // This will render as HTML
         }
         
         if(cpBrokerageId != null) {
