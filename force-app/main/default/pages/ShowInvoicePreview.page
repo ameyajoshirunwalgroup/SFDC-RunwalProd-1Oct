@@ -1,4 +1,4 @@
-<apex:page controller="InvoicePreview" renderAs="PDF" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" action="{!dmlOperation}">
+<apex:page controller="InvoicePreview" renderAs="{!renderType}" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" action="{!dmlOperation}">
     <html>
         <head>
             <style type="text/css" media="print">

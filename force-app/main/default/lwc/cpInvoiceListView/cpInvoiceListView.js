@@ -265,7 +265,7 @@ export default class CpInvoiceListView extends NavigationMixin(LightningElement)
             this[NavigationMixin.Navigate]({
                 "type": "standard__webPage",
                 "attributes": {
-                    "url": 'https://cpdesk.runwalgroup.in/apex/ShowInvoicePreview?id=' + this.BIId
+                    "url": window.location.origin + '/apex/ShowInvoicePreview?id=' + this.BIId + '&renderMode=view'
                 }
             });
 

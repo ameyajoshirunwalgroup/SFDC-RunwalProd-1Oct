@@ -228,7 +228,7 @@ export default class CpBrokerageListView extends NavigationMixin(LightningElemen
              this[NavigationMixin.Navigate]({
     type: "standard__webPage",
     attributes: {
-        url: window.location.origin + '/apex/ShowCP_InvoicePreview?id=' + this.CPBIId
+        url: window.location.origin + '/apex/ShowCP_InvoicePreview?id=' + this.CPBIId + '&renderMode=view'
     }
 });
         }
