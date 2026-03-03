@@ -545,7 +545,7 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
                     // SET INDIVIDUAL TAX AMOUNTS FOR EACH INVOICE
                     inv.CGST__c = String.valueOf(wrapper.cgstAmount);
                     inv.SGST__c = String.valueOf(wrapper.sgstAmount);
-                   // inv.IGST__c = String.valueOf(wrapper.igstAmount);
+                    inv.IGST__c = String.valueOf(wrapper.igstAmount);
                 }
             }
             
@@ -557,7 +557,7 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
                 // Set TOTALS on CP_Brokerage (sum of all child invoice amounts)
                 cpBrokerage.CGST__c = String.valueOf(totalCGST);  // Total of all CGST
                 cpBrokerage.SGST__c = String.valueOf(totalSGST);  // Total of all SGST  
-              //  cpBrokerage.IGST__c = String.valueOf(totalIGST);  // Total of all IGST
+                cpBrokerage.IGST__c = String.valueOf(totalIGST);  // Total of all IGST
                 
                 // Also update total amount on CP_Brokerage
                 cpBrokerage.Total_Invoice_Amount__c = grandTotal; // Total of all invoice amounts
