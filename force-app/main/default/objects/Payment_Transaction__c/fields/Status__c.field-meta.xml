@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Approval_Status__c</fullName>
-    <label>Approval Status</label>
+    <fullName>Status__c</fullName>
+    <label>Status</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
@@ -10,34 +10,34 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Draft</fullName>
-                <default>true</default>
-                <label>Draft</label>
+                <fullName>ACTIVE</fullName>
+                <default>false</default>
+                <label>ACTIVE</label>
             </value>
             <value>
-                <fullName>Submitted for Approval</fullName>
+                <fullName>PENDING</fullName>
                 <default>false</default>
-                <label>Submitted for Approval</label>
+                <label>PENDING</label>
             </value>
             <value>
-                <fullName>Approved</fullName>
+                <fullName>CANCELLED</fullName>
                 <default>false</default>
-                <label>Approved</label>
+                <label>CANCELLED</label>
             </value>
             <value>
-                <fullName>Rejected</fullName>
+                <fullName>INITIATED</fullName>
                 <default>false</default>
-                <label>Rejected</label>
+                <label>INITIATED</label>
             </value>
             <value>
-                <fullName>Pending at CRM Head</fullName>
+                <fullName>SUCCESSFUL</fullName>
                 <default>false</default>
-                <label>Pending at CRM Head</label>
+                <label>SUCCESSFUL</label>
             </value>
             <value>
-                <fullName>Pending at CEO</fullName>
+                <fullName>FAILED</fullName>
                 <default>false</default>
-                <label>Pending at CEO</label>
+                <label>FAILED</label>
             </value>
         </valueSetDefinition>
     </valueSet>

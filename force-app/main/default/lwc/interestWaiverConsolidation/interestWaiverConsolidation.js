@@ -9,6 +9,7 @@ import submitSelectedWaivers from '@salesforce/apex/interestWaiverConsolidation.
 import createInterestWaiver from '@salesforce/apex/interestWaiverConsolidation.createInterestWaiver';
 import interestWaiverAmtLimit from '@salesforce/apex/interestWaiverConsolidation.interestWaiverAmtLimit';
 import fetchFiles from '@salesforce/apex/interestWaiverConsolidation.fetchFiles';
+import { CloseActionScreenEvent } from 'lightning/actions';
 
 import {
     getPicklistValues,
@@ -69,6 +70,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
     @track totalNetAmount = 0;
      @track totalSAPWaivedAmount = 0;
     @track projectWaiverLimit = 0;
+    totalCollectedAmount = 0;
     // @track closePage = false;
     selectedDemandforIW = [];
     interestWaiver = {
@@ -143,7 +145,9 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
                     totalIWRequested += demand.Total_Interest_Waiver_Amount__c
                     totalNetAmount += demand.Net_Interest_Amount__c;
                     totalSAPWaivedAmount += demand.Previously_Waived_Amount_SAP__c;
+                    totalCollectedAmount = demand.Booking__r.RW_Total_Amount_Collected__c;
                 })
+                
                 console.log('totalWaiverLevied → ', totalWaiverLevied);
                 console.log('totalWaiverRequested → ', totalWaiverRequested);
             })
@@ -236,6 +240,29 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
             //         waiverRecordId
             //     };
             // });
+            // First store data
+                let rawDemands = result.data;
+
+                // Get booking level value
+                this.totalApprovedButNotSapWaivedAmount =
+                    rawDemands[0].Booking__r.Interest_Waiver_Approved_but_not_Waived__c;
+
+                // 🚨 BLOCK COMPONENT IF APPROVED BUT NOT WAIVED EXISTS
+                if (this.totalApprovedButNotSapWaivedAmount > 0) {
+
+                    this.showIWCreationPage = false;
+                    this.showIWSubmissionPage = false;
+                    this.showModal = false;
+
+                    this.showToast(
+                        'Error',
+                        'Interest Waiver is already approved but not yet waived in SAP. Please wait until SAP processes the waiver.',
+                        'error'
+                    );
+                    // ✅ Close Quick Action modal
+                    this.dispatchEvent(new CloseActionScreenEvent());
+                    return;
+                }
             this.allIwList = [];
 
             // Step 1: map data to temp array
@@ -303,6 +330,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
             this.totalWaiverLevied = 0;
             this.totalWaiverRequested = 0;
             this.balanceWaiverLevied = 0;
+            this.totalNetAmount = 0;
             this.demands.forEach(demand => {
                 console.log('Demand Id:', demand.Id);
                 console.log('Total_Interest_Amount__c → ', demand.Total_Interest_Amount__c);
@@ -826,6 +854,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
         console.log('this.totalSapApprovedAmount----->',this.totalSapApprovedAmount);
         console.log('this.totalRequestedAmount----->',this.totalRequestedAmount);
         if (this.totalRequestedAmount > this.projectWaiverLimit) {
+            
             this.showSpinner = true;
             this.showIomMessage = true;
             this.showIWSubmissionPage = false;
