@@ -577,6 +577,10 @@ insert cv;*/
         ];
 
         for (ContentVersion cv : versions) {
+            if (Limits.getHeapSize() > 5000000) { 
+                System.debug('⚠️ Heap limit approaching. Skipping remaining files.');
+                break; 
+            }
             Attachment att = new Attachment();
             att.attachmentName = cv.Title;
             att.attachmentType = cv.FileType;
