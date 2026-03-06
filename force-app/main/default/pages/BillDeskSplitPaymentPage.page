@@ -1,0 +1,96 @@
+<!--<apex:page controller="BillDeskSplitPaymentVFController"
+           showHeader="false"
+           sidebar="false"
+           standardStylesheets="false">
+    <html>
+        <head></head>
+        <body>
+            <form name="sdklaunch" id="sdklaunch" action="{!paymentUrl}" method="POST">
+                <input type="hidden" id="merchantid" name="merchantid" value="{!merchantId}" />
+                <input type="hidden" id="bdorderid" name="bdorderid" value="{!bdOrderId}" />
+                  <input type="hidden" id="rdata" name="rdata" value="{!rdata}" />
+                <input name="submit" type="submit" value="Complete your Payment" />
+            </form>
+        </body>
+    </html>
+</apex:page>
+-->
+<apex:page controller="BillDeskSplitPaymentVFController"
+           showHeader="false"
+           sidebar="false"
+           standardStylesheets="false"
+           cache="false"
+           docType="html-5.0">
+    
+    <html>
+        
+        <head>
+            
+            <title>Secure Payment Redirect</title>
+            
+            <script>
+            function launchBillDesk() {
+                var form = document.getElementById("paymentForm");
+                if(form){
+                    form.submit();
+                }
+            }
+            
+            window.onload = function () {
+                // slight delay for reliability on Sites
+                setTimeout(function(){
+                    launchBillDesk();
+                }, 300);
+            };
+            </script>
+            
+            <style>
+                body{
+                font-family: Arial, Helvetica, sans-serif;
+                text-align:center;
+                margin-top:120px;
+                }
+                .loader{
+                border:6px solid #f3f3f3;
+                border-top:6px solid #3498db;
+                border-radius:50%;
+                width:40px;
+                height:40px;
+                animation:spin 1s linear infinite;
+                margin:auto;
+                }
+                
+                @keyframes spin{
+                0%{ transform:rotate(0deg); }
+                100%{ transform:rotate(360deg); }
+                }
+            </style>
+            
+        </head>
+        
+        <body>
+            
+            <h2>Redirecting to Secure Payment Gateway</h2>
+            
+            <div class="loader"></div>
+            
+            <p>Please wait while we connect you to the BillDesk payment page.</p>
+            
+            <form id="paymentForm" action="{!paymentUrl}" method="POST">
+                
+                <input type="hidden" name="merchantid" value="{!merchantId}" />
+                <input type="hidden" name="bdorderid" value="{!bdOrderId}" />
+                <input type="hidden" name="rdata" value="{!rdata}" />
+                
+                <noscript>
+                <br/><br/>
+                    <input type="submit" value="Click here to proceed to payment" />
+                </noscript>
+                    
+                    </form>
+                    
+                    </body>
+                    
+                    </html>
+                    
+                    </apex:page>
