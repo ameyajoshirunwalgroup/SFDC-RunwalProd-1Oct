@@ -1,4 +1,5 @@
 <template>
+    <template if:true={showModal}>
     <template if:true={showSpinner}>
         <div class="spinner-backdrop">
             <lightning-spinner alternative-text="Submitting..." size="medium"></lightning-spinner>
@@ -19,13 +20,14 @@
 
                 <div class="slds-modal__content slds-p-around_medium">
                     <div class="totals-container">
+                        <span><strong>Total Collected Amount: </strong> {totalCollectedAmount}</span>
                         <span><strong>Total Interest Levied:</strong> {totalWaiverLevied}</span>
                         <span><strong>IWR Requested:</strong> {totalWaiverRequested}</span>
-                        <span><strong>Balance Interest Levied:</strong> {totalNetAmount}</span>
-                        <span><strong>Total SAP Waived Amount:</strong> {totalSAPWaivedAmount}</span>
+                        <span><strong>Balance Interest:</strong> {totalNetAmount}</span>
+                        <span><strong>Total Interest Waived:</strong> {totalSAPWaivedAmount}</span>
                     </div>
                     <table class="slds-table slds-table_cell-buffer slds-table_bordered"
-                        style="table-layout: fixed; width: 100%;">
+                        >
                         <thead>
                             <tr class="slds-text-title_caps  small-header-font">
                                 <!-- <th style="width: 40%;" scope="col">Id</th> -->
@@ -35,8 +37,10 @@
                                 <th style="width: 23%;" scope="col">Demand Amnt Payable</th>
                                 <th style="width: 23%;" scope="col">Interest Levied</th>
                                 <th style="width: 23%;" scope="col">SAP Waived</th>
+                                <th style="width: 23%;" scope="col">Balance interest</th>
+                                
                                 <th style="width: 23%;" scope="col">Waiver Req</th>
-                                <th style="width: 40%;" scope="col">Generate IWR</th>
+                                <th style="width: 50%;" scope="col">Generate IWR</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,9 +61,11 @@
                                     </td>
                                     <td>{demand.RW_Demand_Status__c}</td>
                                     <td>{demand.Demand_Amount__c}</td>
+                                    <td>{demand.Total_Interest_Amount__c}</td> <!--Added-->
+                                    <td>{demand.Previously_Waived_Amount_SAP__c}</td>
                                     <td>{demand.Net_Interest_Amount__c}</td>
                                     <!-- <td>{demand.Total_Interest_Amount__c}</td> -->
-                                    <td>{demand.Previously_Waived_Amount_SAP__c}</td>
+                                    
                                     <td>{demand.Interest_Waiver_Requested__c}</td>
 
                                     <!-- <td>
@@ -401,10 +407,10 @@
                         <lightning-button style="margin-right:6px" variant="neutral" label="Previous"
                             onclick={switchtoPage2}>
                         </lightning-button>
-                       
+                       <template if:true={iomUploaded}>
                             <lightning-button variant="brand" label="Submit" onclick={submitSelectedWaiverswithIOM} class="slds-m-left_x-small">
                             </lightning-button>
-                       
+                       </template>
                     </footer>
                 </lightning-card>
             </div>
@@ -414,4 +420,5 @@
     <!-- File Upload -->
 
     <!-- <div class="slds-backdrop slds-backdrop_open"></div> -->
+    </template>
 </template>
