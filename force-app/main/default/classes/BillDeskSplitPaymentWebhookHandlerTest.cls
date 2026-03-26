@@ -55,6 +55,12 @@ public class BillDeskSplitPaymentWebhookHandlerTest {
     // ==================================================
     @IsTest
     static void testSuccessWebhook(){
+         Payment_Transaction__c payment = new Payment_Transaction__c(
+            Order_Id__c = 'ORD900',
+            Merchant_Id__c = 'RNLSPLTUAT',
+            Status__c = 'INITIATED'
+        );
+        insert payment;
 
         String payload = JSON.serialize(new Map<String,Object>{
             'orderid' => 'ORD900',
@@ -80,7 +86,13 @@ public class BillDeskSplitPaymentWebhookHandlerTest {
     // ==================================================
     @IsTest
     static void testErrorPayload(){
-
+		 Payment_Transaction__c payment = new Payment_Transaction__c(
+            Order_Id__c = 'ORD900',
+            Merchant_Id__c = 'RNLSPLTUAT',
+            Status__c = 'INITIATED'
+        );
+        insert payment;
+        
         String payload = JSON.serialize(new Map<String,Object>{
             'error_type' => 'some_error',
             'message' => 'Invalid transaction'

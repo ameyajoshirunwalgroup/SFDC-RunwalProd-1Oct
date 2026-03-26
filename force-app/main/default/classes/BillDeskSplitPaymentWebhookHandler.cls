@@ -24,15 +24,16 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
                 throw new CalloutException('Empty webhook payload');
             }
 
-            //Verify signature
-            verifyJoseSignature(rawBody);
-            System.debug('Signature Verified Successfully');
-
-            //Decode JOSE payload
+            // Decode JOSE payload
             decodedJson = decodeJosePayload(rawBody);
-            System.debug('✅ Decoded BillDesk Payload => ' + decodedJson);
+            System.debug('Decoded Payload => ' + decodedJson);
 
-            Map<String,Object> rawMap =(Map<String,Object>) JSON.deserializeUntyped(decodedJson);
+            if(String.isBlank(decodedJson)){
+                throw new CalloutException('Decoded payload empty');
+            }
+
+            Map<String,Object> rawMap =
+                (Map<String,Object>)JSON.deserializeUntyped(decodedJson);
 
             //If error response
             if(rawMap.containsKey('error_type')){
@@ -59,6 +60,16 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
 
             orderId = payload.orderid;
 
+             // Verify signature
+            if(orderId!=null){
+                // Fetch secret key from metadata
+                String secretKey = getSecretKey(orderId);
+                if(!String.isBlank(secretKey)){
+                    verifyJoseSignature(rawBody,secretKey);
+                    System.debug('Signature Verified Successfully');
+                }    
+            }
+
             //Map Status
             status = mapStatus(payload.auth_status);
              System.debug('Mapped Status => ' + status);
@@ -70,7 +81,10 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
                 payload.bank_ref_no,
                 payload.auth_status,
                 decodedJson,
-                payload.transaction_date
+                payload.transaction_date,
+                payload.transaction_error_type,
+                payload.transaction_error_code,
+                payload.transaction_error_desc
             );
 
             //LOG WEBHOOK
@@ -133,7 +147,7 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
     // =========================
     // 🔐 VERIFY JOSE SIGNATURE
     // =========================
-    private static void verifyJoseSignature(String jose) {
+    private static void verifyJoseSignature(String jose, String secretKey) {
 
         List<String> parts = jose.split('\\.');
         if (parts.size() != 3)
@@ -145,7 +159,7 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
         Blob mac = Crypto.generateMac(
             'HmacSHA256',
             Blob.valueOf(headerPayload),
-            Blob.valueOf(System.label.Billdesk_Secret_Key)
+            Blob.valueOf(secretKey)
         );
 
         String expectedSignature = base64URLencode(mac);
@@ -271,7 +285,7 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
         public String amount;
     }
 
-    public static void updatePaymentRecord( String orderId, String status, String txnId, String bankRef, String authStatus, String rawResponse , String transactionDate ){
+    public static void updatePaymentRecord( String orderId, String status, String txnId, String bankRef, String authStatus, String rawResponse , String transactionDate ,String errorCode, String errorType, String errorDesc ){
         try{
             if(String.isBlank(orderId)){
                 System.debug('OrderId is blank. Skipping update.');
@@ -286,6 +300,11 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
                 Transaction_Date__c = parseBillDeskDate(transactionDate),
                 Raw_Response__c = rawResponse
             );
+            if(authStatus != '0300'){
+                payment.Error_Code__c = errorCode;
+                payment.Error_Type__c = errorType;
+                payment.Error_Desc__c = errorDesc;
+            }
 
             upsert payment Order_Id__c;
 
@@ -304,5 +323,35 @@ global without sharing class BillDeskSplitPaymentWebhookHandler {
         }
 
         return Datetime.valueOf(input.replace('T', ' '));
+    }
+
+    private static String getSecretKey(String orderId){
+        if(String.isBlank(orderId)){
+            return null;
+        }
+
+        List<Payment_Transaction__c> paymentList = [
+            SELECT Merchant_Id__c
+            FROM Payment_Transaction__c
+            WHERE Order_Id__c = :orderId
+            LIMIT 1
+        ];
+
+        if(paymentList.isEmpty()){
+            return null;
+        }
+
+        List<Payment_Gateway__mdt> gatewayList = [
+            SELECT Secret_Key__c
+            FROM Payment_Gateway__mdt
+            WHERE Parent_Merchant_Id__c = :paymentList[0].Merchant_Id__c
+            LIMIT 1
+        ];
+
+        if(gatewayList.isEmpty()){
+            return null;
+        }
+
+        return gatewayList[0].Secret_Key__c;
     }
 }

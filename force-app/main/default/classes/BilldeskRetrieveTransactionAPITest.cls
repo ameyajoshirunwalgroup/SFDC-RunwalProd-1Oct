@@ -61,10 +61,14 @@ public class BilldeskRetrieveTransactionAPITest {
     // ======================================================
     @IsTest
     static void testBatchSuccess() {
+        Payment_Gateway__mdt gateway =
+        [SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
+         FROM Payment_Gateway__mdt where DeveloperName='Runwal_Bliss_Tower_1Test'
+         LIMIT 1];
 
         Payment_Transaction__c payment = new Payment_Transaction__c(
             Order_Id__c = 'ORD123',
-            Merchant_Id__c = 'MER123',
+            Merchant_Id__c = 'RNLSPLTUAT',
             Status__c = 'INITIATED'
         );
         insert payment;
@@ -82,10 +86,14 @@ public class BilldeskRetrieveTransactionAPITest {
     // ======================================================
     @IsTest
     static void testBatchFailure() {
+        Payment_Gateway__mdt gateway =
+        [SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
+         FROM Payment_Gateway__mdt where DeveloperName='Runwal_Bliss_Tower_1Test'
+         LIMIT 1];
 
         Payment_Transaction__c payment = new Payment_Transaction__c(
             Order_Id__c = 'ORD456',
-            Merchant_Id__c = 'MER456',
+            Merchant_Id__c = 'RNLSPLTUAT',
             Status__c = 'PENDING'
         );
         insert payment;

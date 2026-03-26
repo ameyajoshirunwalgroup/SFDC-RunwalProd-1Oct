@@ -8,8 +8,9 @@ import getIWRecords from '@salesforce/apex/interestWaiverConsolidation.getIWReco
 import submitSelectedWaivers from '@salesforce/apex/interestWaiverConsolidation.submitSelectedWaivers';
 import createInterestWaiver from '@salesforce/apex/interestWaiverConsolidation.createInterestWaiver';
 import interestWaiverAmtLimit from '@salesforce/apex/interestWaiverConsolidation.interestWaiverAmtLimit';
-import fetchFiles from '@salesforce/apex/interestWaiverConsolidation.fetchFiles';
+// import fetchFiles from '@salesforce/apex/interestWaiverConsolidation.fetchFiles';
 import { CloseActionScreenEvent } from 'lightning/actions';
+import uploadMultipleIOMFiles from '@salesforce/apex/interestWaiverConsolidation.uploadMultipleIOMFiles';
 
 import {
     getPicklistValues,
@@ -23,17 +24,24 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 const columns = [
     {
         label: 'File Name',
-        fieldName: 'fileUrl',
-        type: 'url',
-        typeAttributes: {
-            label: { fieldName: 'Title' },
-            target: '_blank'
-        }
+        fieldName: 'Title',
+        type: 'text'
     },
     { label: 'Type', fieldName: 'FileType', type: 'text' },
     // { label: 'Size (KB)', fieldName: 'ContentSizeKB', type: 'number' },
     { label: 'Created Date', fieldName: 'CreatedDate', type: 'date' },
-    { label: 'Last Modified Date', fieldName: 'LastModifiedDate', type: 'date' }
+    { label: 'Last Modified Date', fieldName: 'LastModifiedDate', type: 'date' },
+    {
+        type: 'button-icon',
+        fixedWidth: 60,
+        typeAttributes: {
+            iconName: 'utility:delete',
+            name: 'delete',
+            variant: 'bare',
+            alternativeText: 'Delete',
+            title: 'Delete'
+        }
+    }
 ];
 
 export default class InterestWaiverConsolidation extends NavigationMixin(LightningElement) {
@@ -68,7 +76,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
     @track totalIWRequested = 0;
     @track balanceWaiverLevied = 0;
     @track totalNetAmount = 0;
-     @track totalSAPWaivedAmount = 0;
+    @track totalSAPWaivedAmount = 0;
     @track projectWaiverLimit = 0;
     totalCollectedAmount = 0;
     // @track closePage = false;
@@ -83,7 +91,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
     showIomFileUpload = false;
     iomMessage = '';
     iomMessageClass = '';
-    acceptedFormats = ['.pdf', '.png', '.jpg'];
+    acceptedFormats = ['.pdf'];
 
     @track showSubmit = false;
     @track totalWaiverAmount;
@@ -91,6 +99,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
     @track totalApprovedButNotSapWaivedAmount;
     @track totalRequestedAmount;
     _recordId;
+    @track uploadedFiles = [];
 
 
 
@@ -147,7 +156,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
                     totalSAPWaivedAmount += demand.Previously_Waived_Amount_SAP__c;
                     totalCollectedAmount = demand.Booking__r.RW_Total_Amount_Collected__c;
                 })
-                
+
                 console.log('totalWaiverLevied → ', totalWaiverLevied);
                 console.log('totalWaiverRequested → ', totalWaiverRequested);
             })
@@ -241,28 +250,28 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
             //     };
             // });
             // First store data
-                let rawDemands = result.data;
+            let rawDemands = result.data;
 
-                // Get booking level value
-                this.totalApprovedButNotSapWaivedAmount =
-                    rawDemands[0].Booking__r.Interest_Waiver_Approved_but_not_Waived__c;
+            // Get booking level value
+            this.totalApprovedButNotSapWaivedAmount =
+                rawDemands[0].Booking__r.Interest_Waiver_Approved_but_not_Waived__c;
 
-                // 🚨 BLOCK COMPONENT IF APPROVED BUT NOT WAIVED EXISTS
-                if (this.totalApprovedButNotSapWaivedAmount > 0) {
+            // 🚨 BLOCK COMPONENT IF APPROVED BUT NOT WAIVED EXISTS
+            if (this.totalApprovedButNotSapWaivedAmount > 0) {
 
-                    this.showIWCreationPage = false;
-                    this.showIWSubmissionPage = false;
-                    this.showModal = false;
+                this.showIWCreationPage = false;
+                this.showIWSubmissionPage = false;
+                this.showModal = false;
 
-                    this.showToast(
-                        'Error',
-                        'Interest Waiver is already approved but not yet waived in SAP. Please wait until SAP processes the waiver.',
-                        'error'
-                    );
-                    // ✅ Close Quick Action modal
-                    this.dispatchEvent(new CloseActionScreenEvent());
-                    return;
-                }
+                this.showToast(
+                    'Error',
+                    'Interest Waiver is already approved but not yet waived in SAP. Please wait until SAP processes the waiver.',
+                    'error'
+                );
+                // ✅ Close Quick Action modal
+                this.dispatchEvent(new CloseActionScreenEvent());
+                return;
+            }
             this.allIwList = [];
 
             // Step 1: map data to temp array
@@ -749,7 +758,7 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
     @wire(getIWRecords, { bookingId: '$recordId' })
     wiredIWResult({ data, error }) {
         if (data) {
-           this.interestWaivers = result.data.map(iw => ({
+            this.interestWaivers = data.map(iw => ({
                 ...iw,
                 isSelected: true
             }));
@@ -795,45 +804,45 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
 
     async switchtoNextPage() {
 
-    try {
+        try {
 
-        // 🔹 Fetch IW records first
-        const result = await getIWRecords({ bookingId: this.recordId });
+            // 🔹 Fetch IW records first
+            const result = await getIWRecords({ bookingId: this.recordId });
 
-        // ❌ If no IW created → stop here
-        if (!result || result.length === 0) {
-            this.showToast(
-                'Action Required',
-                'Please generate at least one Interest Waiver to proceed.',
-                'error'
-            );
-            return;
+            // ❌ If no IW created → stop here
+            if (!result || result.length === 0) {
+                this.showToast(
+                    'Action Required',
+                    'Please generate at least one Interest Waiver to proceed.',
+                    'error'
+                );
+                return;
+            }
+
+            // ✅ If IW exists → move to next page
+            this.showIWSubmissionPage = true;
+            this.showIWCreationPage = false;
+            this.showIomMessage = false;
+
+            // Prepare data for page 2
+            this.interestWaivers = result.map(iw => ({
+                ...iw,
+                isSelected: true
+            }));
+
+            this.selectedInterestWaivers = this.interestWaivers.map(iw => iw.Id);
+
+            this.totalWaiverAmount = this.interestWaivers
+                .reduce((sum, iw) => sum + (iw.Waiver_Amount__c || 0), 0);
+
+            if (this.interestWaivers.length > 0) {
+                this.showSubmit = true;
+            }
+
+        } catch (error) {
+            this.showToast('Error', error.body.message, 'error');
         }
-
-        // ✅ If IW exists → move to next page
-        this.showIWSubmissionPage = true;
-        this.showIWCreationPage = false;
-        this.showIomMessage = false;
-
-        // Prepare data for page 2
-        this.interestWaivers = result.map(iw => ({
-            ...iw,
-            isSelected: true
-        }));
-
-        this.selectedInterestWaivers = this.interestWaivers.map(iw => iw.Id);
-
-        this.totalWaiverAmount = this.interestWaivers
-            .reduce((sum, iw) => sum + (iw.Waiver_Amount__c || 0), 0);
-
-        if (this.interestWaivers.length > 0) {
-            this.showSubmit = true;
-        }
-
-    } catch (error) {
-        this.showToast('Error', error.body.message, 'error');
     }
-}
 
 
 
@@ -849,12 +858,12 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
         console.log('this.totalWaiverAmount  - ', this.totalWaiverAmount);
         console.log('this.projectWaiverLimit  - ', this.projectWaiverLimit);
         this.totalRequestedAmount = this.totalWaiverAmount + this.totalApprovedButNotSapWaivedAmount + this.totalSapApprovedAmount;
-        console.log('this.totalWaiverAmount----->',this.totalWaiverAmount);
-        console.log('this.totalApprovedButNotSapWaivedAmount----->',this.totalApprovedButNotSapWaivedAmount);
-        console.log('this.totalSapApprovedAmount----->',this.totalSapApprovedAmount);
-        console.log('this.totalRequestedAmount----->',this.totalRequestedAmount);
+        console.log('this.totalWaiverAmount----->', this.totalWaiverAmount);
+        console.log('this.totalApprovedButNotSapWaivedAmount----->', this.totalApprovedButNotSapWaivedAmount);
+        console.log('this.totalSapApprovedAmount----->', this.totalSapApprovedAmount);
+        console.log('this.totalRequestedAmount----->', this.totalRequestedAmount);
         if (this.totalRequestedAmount > this.projectWaiverLimit) {
-            
+
             this.showSpinner = true;
             this.showIomMessage = true;
             this.showIWSubmissionPage = false;
@@ -895,29 +904,44 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
     }
 
     submitSelectedWaiverswithIOM() {
+
         this.showSpinner = true;
+
         const selectedIds = Array.from(this.selectedInterestWaivers);
-        this.submitBookingforApproval(selectedIds, this.iomUploaded);
-    }
 
+        uploadMultipleIOMFiles({
+            files: this.uploadedFiles,
+            bookingId: this.recordId
+        })
+            .then(() => {
 
+                this.submitBookingforApproval(selectedIds, true);
 
-    async getFilesData(bookingId) {
-        const result = await fetchFiles({ recordId: bookingId });
-        this.lstAllFiles = result.map(row => ({
-            Id: row.ContentDocumentId,
-            Title: row.ContentDocument.Title,
-            FileType: row.ContentDocument.FileType,
-            CreatedDate: row.ContentDocument.CreatedDate,
-            LastModifiedDate: row.ContentDocument.LastModifiedDate,
-            fileUrl: `/sfc/servlet.shepherd/document/download/${row.ContentDocumentId}`
-        }));
-        console.log('lstAllFiles -> ', JSON.stringify(this.lstAllFiles));
+            })
+            .catch(error => {
+                this.showToast('Error', error.body.message, 'error');
+                this.showSpinner = false;
+            });
 
     }
+
+
+    // async getFilesData(bookingId) {
+    //     const result = await fetchFiles({ recordId: bookingId });
+    //     this.lstAllFiles = result.map(row => ({
+    //         Id: row.ContentDocumentId,
+    //         Title: row.ContentDocument.Title,
+    //         FileType: row.ContentDocument.FileType,
+    //         CreatedDate: row.ContentDocument.CreatedDate,
+    //         LastModifiedDate: row.ContentDocument.LastModifiedDate,
+    //         fileUrl: `/sfc/servlet.shepherd/document/download/${row.ContentDocumentId}`
+    //     }));
+    //     console.log('lstAllFiles -> ', JSON.stringify(this.lstAllFiles));
+
+    // }
 
     submitBookingforApproval(selectedIds, iomUploaded) {
-        submitSelectedWaivers({ bookingId: this.recordId, waivers: selectedIds, iomUploaded: iomUploaded,totalWaiverRequested: this.totalIWRequested })
+        submitSelectedWaivers({ bookingId: this.recordId, waivers: selectedIds, iomUploaded: iomUploaded, totalWaiverRequested: this.totalIWRequested })
             .then(result => {
                 console.log('result: ', result);
                 if (result == true) {
@@ -958,24 +982,6 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
             });
     }
 
-
-    handleUploadFinished(event) {
-        const files = event.detail.files;
-        console.log('Uploaded files:', files);
-
-        if (files != null) {
-            this.iomUploaded = true;
-        }
-        this.getFilesData(this.recordId);
-
-        // this[NavigationMixin.Navigate]({
-        //     type: 'standard__recordPage',
-        //     attributes: {
-        //         recordId: this.recordId,
-        //         actionName: 'view'
-        //     }
-        // });
-    }
 
     // submitapproval(){
     //     sendapproval({comment:this.cmnt,recId : this.bId}).then(result=>{
@@ -1028,4 +1034,96 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
         );
     }
 
+    handleRowAction(event) {
+
+        const row = event.detail.row;
+
+        this.uploadedFiles.splice(row.Id, 1);
+
+        this.lstAllFiles = this.uploadedFiles.map((f, index) => ({
+            Id: index,
+            Title: f.fileName,
+            FileType: f.fileType,
+            CreatedDate: new Date(),
+            LastModifiedDate: new Date()
+        }));
+
+        if (this.uploadedFiles.length === 0) {
+            this.iomUploaded = false;
+        }
+    }
+
+    handleFileChange(event) {
+
+        const files = event.target.files;
+
+        for (const file of files) {
+
+            // ✅ File Size Validation
+            if (file.size > 4500000) {
+                this.showToast('Error', 'File size must be below 4.5MB', 'error');
+                return;
+            }
+
+            // ✅ File Type Validation
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+
+            if (!this.acceptedFormats.includes('.' + fileExtension)) {
+                this.showToast('Error', 'Only .pdf files are allowed', 'error');
+                return;
+            }
+
+            //VALIDATION: Must contain "IWR" and "IOM" (flexible format)
+            const fileNameLower = file.name.toLowerCase();
+
+            // normalize name → remove special chars for flexible matching
+            const normalizedName = fileNameLower.replace(/[^a-z]/g, '');
+
+            // check both words exist
+            //if (!(normalizedName.includes('iwr') && normalizedName.includes('iom'))) {
+            if (!(normalizedName.includes('iwr'))) {
+                this.showToast(
+                    'Invalid File Name',
+                    'File name must contain "IWR"',
+                    'error'
+                );
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+
+                const base64 = reader.result.split(',')[1];
+                const fileNameWithoutExtension = file.name.substring(0, file.name.lastIndexOf('.'));
+                console.log('fileNameWithoutExtensionenteringgg--->');
+
+                console.log('fileNameWithoutExtension--->',fileNameWithoutExtension);
+
+                // ✅ Important: Use spread operator instead of push
+                this.uploadedFiles = [
+                    ...this.uploadedFiles,
+                    {
+                        fileName:fileNameWithoutExtension,
+                        base64: base64,
+                        fileType: fileExtension.toUpperCase()
+                    }
+                ];
+            
+                // Update table
+                this.lstAllFiles = this.uploadedFiles.map((f, index) => ({
+                    Id: index,
+                    Title: f.fileName,
+                    FileType: f.fileType,
+                    CreatedDate: new Date(),
+                    LastModifiedDate: new Date()
+                }));
+
+                this.iomUploaded = true;
+
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
 }

@@ -15,12 +15,15 @@ public with sharing class BillDeskService {
 
             Booking__c booking = getBooking(data.bookingId);
 
+            // Fetch metadata
+            Payment_Gateway__mdt gateway = getPaymentGateway(booking.Project__r.Name, booking.Unit_No__r.TowerName__r.Name);
+
             PaymentSplit split = calculatePaymentSplit( data.totalAmount, data.paymentType, booking );
 
-            requestBody = buildRequestBody(data, orderId, split, booking);
+            requestBody = buildRequestBody(data, orderId, split, booking,gateway);
             System.debug('BillDesk ECOM Request Body => ' + requestBody);
             
-            String jwtToken = generateJoseToken(requestBody);
+            String jwtToken = generateJoseToken(requestBody,gateway);
             System.debug('Generated JWT Token => ' + jwtToken);
 
             String timestamp = System.now().format('yyyyMMddHHmmss');
@@ -56,7 +59,8 @@ public with sharing class BillDeskService {
             // 🔹 STEP 3 — CALL CREATE ORDER API (New Class)
             BilldeskLockatedOrderAPI.ResponseBody orderResp = BilldeskLockatedOrderAPI.createBilldeskOrder(
                     ecomOrderId, // Use the ID returned from the Ecom API
-                    data.totalAmount
+                    data.totalAmount,
+                    gateway
                 );
 
             System.debug('Lockated Order API Response => ' + JSON.serialize(orderResp));
@@ -66,7 +70,7 @@ public with sharing class BillDeskService {
             System.debug('Final Response Sent To UI => ' + finalResponse);
 
             //Create Transaction Response Record
-            createPaymentRecord(orderResp.orderid,orderResp.bdorderid,data.bookingId,orderResp.mercid,Decimal.valueOf(orderResp.amount),orderResp.links[1].parameters.rdata,orderResp.links[1].href, data.paymentType, split.principal, split.gst);
+            createPaymentRecord(orderResp.orderid,orderResp.bdorderid,data.bookingId,orderResp.mercid,Decimal.valueOf(orderResp.amount),orderResp.links[1].parameters.rdata,orderResp.links[1].href, data.paymentType, split.principal, split.gst, gateway);
 
             // 🔹 STEP 5 — Save final success log
             ERPIntegrationLogger.log(
@@ -144,12 +148,15 @@ public with sharing class BillDeskService {
     // =====================================================
     // BUILD ECOM REQUEST BODY
     // =====================================================
-    public static String buildRequestBody(Lockated_paymentApi.LockatedRequest data, String orderId, PaymentSplit split, Booking__c booking) {
+    public static String buildRequestBody(Lockated_paymentApi.LockatedRequest data, String orderId, PaymentSplit split, Booking__c booking,Payment_Gateway__mdt gateway) {
 
-        Payment_Gateway__mdt gateway = getPaymentGateway( booking.Project__r.Name, booking.Unit_No__r.TowerName__r.Name );
+        //Payment_Gateway__mdt gateway = getPaymentGateway( booking.Project__r.Name, booking.Unit_No__r.TowerName__r.Name );
+        if(String.isBlank(gateway.Parent_Merchant_Id__c)){
+            throw new CalloutException('BillDesk Parent Merchant Id missing in metadata');
+        }
 
-        String principalMerchantId = 'RNL1';  //for now static for uat testing
-        String gstMerchantId       = 'RNL2';  //for now static for uat testing
+        String principalMerchantId = gateway.Bill_Desk_Split_Principal_Merchant_ID__c;  
+        String gstMerchantId       = gateway.Bill_Desk_Split_GST_Merchant_ID__c;  
 
         if(String.isBlank(principalMerchantId))
             throw new CalloutException('Principal Merchant ID missing');
@@ -157,11 +164,14 @@ public with sharing class BillDeskService {
         if(split.gst > 0 && String.isBlank(gstMerchantId))
             throw new CalloutException('GST Merchant ID missing');
 
+        
+
         Map<String,Object> body = new Map<String,Object>();
 
         String CURRENCY_KEY = 'currency';
 
-        body.put('mercid', 'RNLSPLTUAT');
+        //body.put('mercid', 'RNLSPLTUAT');
+        body.put('mercid', gateway.Parent_Merchant_Id__c);
         body.put('amount', String.valueOf(data.totalAmount.setScale(2)));
         body.put('order_ref_no', orderId);
         body.put('ecom_order_date', DateTime.now().format('yyyy-MM-dd\'T\'HH:mm:ss') + '+05:30');
@@ -173,11 +183,30 @@ public with sharing class BillDeskService {
         // SPLIT PAYMENT (MANDATORY)
         List<Object> splitList = new List<Object>();
 
-        if(split.principal > 0)
-            splitList.add(createSplitMerchant(principalMerchantId, split.principal, booking.Name + '_P'));
+        // 🔹 CASE 1 — Same merchant for Principal + GST
+        if(principalMerchantId == gstMerchantId){
 
-        if(split.gst > 0)
-            splitList.add(createSplitMerchant(gstMerchantId, split.gst, booking.Name + '_G'));
+            Decimal totalAmount = split.principal + split.gst;
+
+            splitList.add(
+                createSplitMerchant(
+                    principalMerchantId,
+                    totalAmount,
+                    booking.Name + '_PG'
+                )
+            );
+
+        }
+        else{
+
+            // 🔹 CASE 2 — Different merchants (existing logic)
+
+            if(split.principal > 0)
+                splitList.add(createSplitMerchant(principalMerchantId, split.principal, booking.Name + '_P'));
+
+            if(split.gst > 0)
+                splitList.add(createSplitMerchant(gstMerchantId, split.gst, booking.Name + '_G'));
+        }
 
         body.put('split_payment', splitList);
 
@@ -202,12 +231,21 @@ public with sharing class BillDeskService {
     // =====================================================
     // JWT GENERATION
     // =====================================================
-    public static String generateJoseToken(String requestBody) {
+    public static String generateJoseToken(String requestBody,Payment_Gateway__mdt gateway) {
+        if(String.isBlank(gateway.Client_Id__c)){
+            throw new CalloutException('BillDesk Client Id missing in Payment Gateway Metadata');
+        }
+
+        if(String.isBlank(gateway.Secret_Key__c)){
+            throw new CalloutException('BillDesk Secret Key missing in Payment Gateway Metadata');
+        }
 
         JSONGenerator header = JSON.createGenerator(false);
         header.writeStartObject();
         header.writeStringField('alg', 'HS256');
-        header.writeStringField('clientid', 'rreplmuat');    //for testing 
+        //header.writeStringField('clientid', 'rreplmuat');    //for testing 
+        header.writeStringField('clientid', gateway.Client_Id__c);    //for testing 
+
         header.writeEndObject();
 
         String encodedHeader = base64URLencode(Blob.valueOf(header.getAsString()));
@@ -218,7 +256,7 @@ public with sharing class BillDeskService {
         Blob signature = Crypto.generateMac(
             'hmacSHA256',
             Blob.valueOf(jwt),
-            Blob.valueOf(System.label.Billdesk_Secret_Key)   // client id for now static as it will be different for different merchants
+            Blob.valueOf(gateway.Secret_Key__c)   
         );
 
         return jwt + '.' + base64URLencode(signature);
@@ -228,7 +266,7 @@ public with sharing class BillDeskService {
 
         HttpRequest req = new HttpRequest();
         req.setMethod('POST');
-        req.setEndpoint('callout:BillDesk_API/u2/payments/ve1_2/ecomorders/create');
+        req.setEndpoint('callout:BillDesk_API' + System.Label.BillDesk_Split_Create_Order_Path);
 
         req.setHeader('Content-Type', 'application/jose');
         req.setHeader('Accept', 'application/jose');
@@ -274,33 +312,34 @@ public with sharing class BillDeskService {
     // }
     public static String decodeBillDeskResponse(String joseResponse) {
 
-    if(String.isBlank(joseResponse))
-        throw new CalloutException('Empty BillDesk response');
+        if(String.isBlank(joseResponse))
+            throw new CalloutException('Empty BillDesk response');
 
-    Integer firstDot  = joseResponse.indexOf('.');
-    Integer secondDot = joseResponse.lastIndexOf('.');
+        Integer firstDot  = joseResponse.indexOf('.');
+        Integer secondDot = joseResponse.lastIndexOf('.');
 
-    if(firstDot <= 0 || secondDot <= 0)
-        throw new CalloutException('Invalid JOSE format received');
+        if(firstDot <= 0 || secondDot <= 0)
+            throw new CalloutException('Invalid JOSE format received');
 
-    String payload = joseResponse.substring(firstDot + 1, secondDot);
+        String payload = joseResponse.substring(firstDot + 1, secondDot);
 
-    return decodeBase64Url(payload);
-}
-    public static String decodeBase64Url(String value){
-
-    if(String.isBlank(value)) return null;
-
-    value = value.replace('-', '+').replace('_', '/');
-
-    Integer remainder = Math.mod(value.length(), 4);
-    while(remainder != 0){
-        value += '=';
-        remainder = Math.mod(value.length(), 4);
+        return decodeBase64Url(payload);
     }
 
-    return EncodingUtil.base64Decode(value).toString();
-}
+    public static String decodeBase64Url(String value){
+
+        if(String.isBlank(value)) return null;
+
+        value = value.replace('-', '+').replace('_', '/');
+
+        Integer remainder = Math.mod(value.length(), 4);
+        while(remainder != 0){
+            value += '=';
+            remainder = Math.mod(value.length(), 4);
+        }
+
+        return EncodingUtil.base64Decode(value).toString();
+    }
 
     public static String base64URLencode(Blob input) {
         String output = EncodingUtil.base64Encode(input);
@@ -326,13 +365,22 @@ public with sharing class BillDeskService {
     }
 
     public static Payment_Gateway__mdt getPaymentGateway(String projectName, String towerName) {
-        return [
-            SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c
+        List<Payment_Gateway__mdt> gatewayList = [
+            SELECT Bill_Desk_Split_Principal_Merchant_ID__c, Bill_Desk_Split_GST_Merchant_ID__c ,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
             FROM Payment_Gateway__mdt
             WHERE Project_Name__c = :projectName
             AND Project_Tower__c = :towerName
             LIMIT 1
         ];
+
+        if(gatewayList.isEmpty()){
+            throw new CalloutException(
+                'BillDesk configuration missing for Project: ' +
+                projectName + ' Tower: ' + towerName
+            );
+        }
+
+        return gatewayList[0];
     }
 
     public static String generateUniqueOrderId(Lockated_paymentApi.LockatedRequest data) {
@@ -424,7 +472,7 @@ public with sharing class BillDeskService {
         return gen.getAsString();
     }
 
-    public static void createPaymentRecord( String orderId, String bdOrderId, String bookingId, String mercId, Decimal amount, String rdata, String paymentUrl ,String paymentType, Decimal principalAmount, Decimal gstAmount){
+    public static void createPaymentRecord( String orderId, String bdOrderId, String bookingId, String mercId, Decimal amount, String rdata, String paymentUrl ,String paymentType, Decimal principalAmount, Decimal gstAmount, Payment_Gateway__mdt gateway){
         try{
             Payment_Transaction__c payment = new Payment_Transaction__c(
                 Order_Id__c = orderId,
@@ -433,11 +481,12 @@ public with sharing class BillDeskService {
                 Merchant_Id__c = mercId,
                 Amount__c = amount,
                 Status__c = 'INITIATED',
-                RData__c = rdata,
+                RData__c = rdata, 
                 Payment_Url__c = paymentUrl,
                 Payment_Type__c = paymentType,
                 Principal_Amount__c = principalAmount,
-                GST_Amount__c = gstAmount
+                GST_Amount__c = gstAmount,
+                Parent_Merchant_Id__c=gateway.Parent_Merchant_Id__c
             );
 
             insert payment;

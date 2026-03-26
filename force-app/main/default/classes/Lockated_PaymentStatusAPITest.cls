@@ -70,6 +70,30 @@ public class Lockated_PaymentStatusAPITest {
         Test.stopTest();
 
     }
+    
+        // --------------------------------------------
+    // 3️⃣ Test Order Found
+    // --------------------------------------------
+    @IsTest
+    static void testOrderFound1() {
+
+        // Insert Payment Transaction record
+        Payment_Transaction__c payment = new Payment_Transaction__c(
+            Order_Id__c = 'ORDER123',
+            Status__c = 'PENDING',
+            Amount__c = 500,
+            Transaction_Id__c = 'TXN123',
+            Bank_Ref_No__c = 'BANK123'
+        );
+        insert payment;
+
+        setupRestContext('ORDER123');
+
+        Test.startTest();
+        Lockated_PaymentStatusAPI.getPaymentStatus();
+        Test.stopTest();
+
+    }
 
 
     // --------------------------------------------
@@ -106,4 +130,53 @@ public class Lockated_PaymentStatusAPITest {
         Test.stopTest();
     
     }
+
+
+    // ============================================
+    // 🔹 Test getValue()
+    // ============================================
+    @IsTest
+    static void testGetValue_AllCases() {
+
+        Map<String,Object> testMap = new Map<String,Object>{
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'nullKey' => null
+        };
+
+        // Case 1: Primary key present
+        String result1 = Lockated_PaymentStatusAPI.getValue(testMap, 'key1', 'key2');
+
+        // Case 2: Primary null, fallback present
+        String result2 = Lockated_PaymentStatusAPI.getValue(testMap, 'nullKey', 'key2');
+
+        // Case 3: Both keys missing
+        String result3 = Lockated_PaymentStatusAPI.getValue(testMap, 'x', 'y');
+
+        // Case 4: Primary missing, fallback present
+        String result4 = Lockated_PaymentStatusAPI.getValue(testMap, 'x', 'key2');
+    }
+
+    // ============================================
+    // 🔹 Test resolveStatus()
+    // ============================================
+    @IsTest
+    static void testResolveStatus_AllCases() {
+
+        // Case 1: Null
+       
+            Lockated_PaymentStatusAPI.resolveStatus(null);
+
+        // Case 2: Success
+        
+            Lockated_PaymentStatusAPI.resolveStatus('success');
+
+        // Case 3: Failure
+       
+            Lockated_PaymentStatusAPI.resolveStatus('failure');
+		  Lockated_PaymentStatusAPI.resolveStatus('pending');
+          Lockated_PaymentStatusAPI.resolveStatus('cancel');
+        
+    }
+
 }
