@@ -8,7 +8,7 @@ global with sharing class Lockated_paymentApi {
         RestResponse res = RestContext.response;
         res.addHeader('Content-Type', 'application/json');
 
-        String rawBody = '';
+        String rawBody = ''; 
         String billDeskResponse = '';
         String errorMsg = '';
 

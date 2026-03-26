@@ -8,10 +8,14 @@ public class BilldeskLockatedOrderAPITest {
     static void testCreateOrderSuccess(){
 
         Test.setMock(HttpCalloutMock.class, new SuccessMock());
+        Payment_Gateway__mdt gateway =
+        [SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
+         FROM Payment_Gateway__mdt where DeveloperName='Runwal_Bliss_Tower_1Test'
+         LIMIT 1];
 
         Test.startTest();
         BilldeskLockatedOrderAPI.ResponseBody resp =
-            BilldeskLockatedOrderAPI.createBilldeskOrder('ORD111', 100);
+            BilldeskLockatedOrderAPI.createBilldeskOrder('ORD111', 100, gateway);
         Test.stopTest();
 
     }
@@ -23,12 +27,17 @@ public class BilldeskLockatedOrderAPITest {
     static void testCreateOrderError(){
 
         Test.setMock(HttpCalloutMock.class, new ErrorMock());
+        
+        Payment_Gateway__mdt gateway =
+        [SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
+         FROM Payment_Gateway__mdt where DeveloperName='Runwal_Bliss_Tower_1Test'
+         LIMIT 1];
 
         Boolean exceptionThrown = false;
 
         Test.startTest();
         try{
-            BilldeskLockatedOrderAPI.createBilldeskOrder('ORD222', 200);
+            BilldeskLockatedOrderAPI.createBilldeskOrder('ORD222', 200,gateway);
         }catch(Exception e){
             exceptionThrown = true;
         }

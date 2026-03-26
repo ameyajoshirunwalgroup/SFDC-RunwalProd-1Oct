@@ -3,7 +3,7 @@ public with sharing class BilldeskLockatedOrderAPI {
     // =====================================================
     // MAIN ENTRY METHOD
     // =====================================================
-    public static ResponseBody createBilldeskOrder(String ecomOrderId, Decimal amount){
+    public static ResponseBody createBilldeskOrder(String ecomOrderId, Decimal amount, Payment_Gateway__mdt gateway){
         String requestBody;
         String decodedJson;
         String orderId = ecomOrderId;
@@ -11,9 +11,9 @@ public with sharing class BilldeskLockatedOrderAPI {
 
         String timestamp = getTimestamp();
 
-        String header    = buildHeader();
-        requestBody      = buildRequestBody(orderId, amount);
-        String jwtToken  = generateJWT(header, requestBody);
+        String header    = buildHeader(gateway.Client_Id__c);
+        requestBody      = buildRequestBody(orderId, amount, gateway.Parent_Merchant_Id__c);
+        String jwtToken  = generateJWT(header, requestBody, gateway.Secret_Key__c);
 
         String joseResponse = callBilldesk(jwtToken, orderId, timestamp);
         decodedJson  = decodeJose(joseResponse);
@@ -61,11 +61,11 @@ public with sharing class BilldeskLockatedOrderAPI {
     // =====================================================
     // STEP 1 — BUILD HEADER JSON
     // =====================================================
-    private static String buildHeader(){
+    private static String buildHeader(String clientId){
         JSONGenerator header = JSON.createGenerator(false);
         header.writeStartObject();
         header.writeStringField('alg','HS256');
-        header.writeStringField('clientid', 'rreplmuat');
+        header.writeStringField('clientid', clientId);
         header.writeEndObject();
         return header.getAsString();
     }
@@ -92,11 +92,11 @@ public with sharing class BilldeskLockatedOrderAPI {
     // =====================================================
     // STEP 3 — BUILD REQUEST BODY
     // =====================================================
-    private static String buildRequestBody(String orderId, Decimal amount){
+    private static String buildRequestBody(String orderId, Decimal amount, String parentMerchant){
 
         JSONGenerator body = JSON.createGenerator(false);
         body.writeStartObject();
-        body.writeStringField('mercid', 'RNLSPLTUAT');
+        body.writeStringField('mercid', parentMerchant);
         body.writeStringField('orderid', orderId);
         body.writeStringField('amount', String.valueOf(amount.setScale(2)));
         body.writeStringField('order_date', DateTime.now().format('yyyy-MM-dd\'T\'HH:mm:ssXXX'));
@@ -114,7 +114,7 @@ public with sharing class BilldeskLockatedOrderAPI {
     // =====================================================
     // STEP 4 — GENERATE JWT TOKEN
     // =====================================================
-    public static String generateJWT(String headerJson, String bodyJson){
+    public static String generateJWT(String headerJson, String bodyJson, String secretKey){
 
         String encodedHeader = base64URLencode(Blob.valueOf(headerJson));
         String encodedBody   = base64URLencode(Blob.valueOf(bodyJson));
@@ -124,7 +124,7 @@ public with sharing class BilldeskLockatedOrderAPI {
         Blob signature = Crypto.generateMac(
             'hmacSHA256',
             Blob.valueOf(jwt),
-            Blob.valueOf(System.label.Billdesk_Secret_Key)
+            Blob.valueOf(secretKey)
         );
 
         return jwt + '.' + base64URLencode(signature);
@@ -162,38 +162,39 @@ public with sharing class BilldeskLockatedOrderAPI {
 
         return res.getBody();
     }
+
     public static String decodeJose(String jose){
 
-    if(String.isBlank(jose)){
-        throw new CalloutException('Empty JOSE response from BillDesk');
+        if(String.isBlank(jose)){
+            throw new CalloutException('Empty JOSE response from BillDesk');
+        }
+
+        Integer firstDot  = jose.indexOf('.');
+        Integer secondDot = jose.lastIndexOf('.');
+
+        if(firstDot <= 0 || secondDot <= 0){
+            throw new CalloutException('Invalid JOSE format received');
+        }
+
+        String payload = jose.substring(firstDot + 1, secondDot);
+
+        return decodeBase64Url(payload);
     }
-
-    Integer firstDot  = jose.indexOf('.');
-    Integer secondDot = jose.lastIndexOf('.');
-
-    if(firstDot <= 0 || secondDot <= 0){
-        throw new CalloutException('Invalid JOSE format received');
-    }
-
-    String payload = jose.substring(firstDot + 1, secondDot);
-
-    return decodeBase64Url(payload);
-}
 
     private static String decodeBase64Url(String value){
 
-    if(String.isBlank(value)) return null;
+        if(String.isBlank(value)) return null;
 
-    value = value.replace('-', '+').replace('_', '/');
+        value = value.replace('-', '+').replace('_', '/');
 
-    Integer remainder = Math.mod(value.length(), 4);
-    while(remainder != 0){
-        value += '=';
-        remainder = Math.mod(value.length(), 4);
+        Integer remainder = Math.mod(value.length(), 4);
+        while(remainder != 0){
+            value += '=';
+            remainder = Math.mod(value.length(), 4);
+        }
+
+        return EncodingUtil.base64Decode(value).toString();
     }
-
-    return EncodingUtil.base64Decode(value).toString();
-}
 
     private static String getTimestamp(){
         return System.now().format('yyyyMMddHHmmss');
@@ -272,19 +273,5 @@ public with sharing class BilldeskLockatedOrderAPI {
         public String browser_javascript_enabled;
     }
     
-	private static void logStep(String step, String request, String response, String status, String errorMsg, String extId){
-    try{
-        insert new ERP_Integration_Log__c(
-            API_Name__c = step,
-            Request__c = request,
-            Response__c = response,
-            Status__c = status,
-            Error_Reason__c = errorMsg,
-            External_Id__c = extId
-        );
-    }catch(Exception e){
-        System.debug('Log Failed '+e.getMessage());
-    }
-}
 
 }

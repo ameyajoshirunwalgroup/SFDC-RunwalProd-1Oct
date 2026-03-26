@@ -19,56 +19,51 @@ global with sharing class BilldeskRetrieveTransactionAPI implements Database.Bat
         List<Payment_Transaction__c> updates = new List<Payment_Transaction__c>();
         List<ERP_Integration_Log__c> logList = new List<ERP_Integration_Log__c>();
 
+        Map<String, Payment_Gateway__mdt> gatewayMap = getGatewayMap(scope);
+
         for (Payment_Transaction__c payment : scope) {
             String requestPayload;
             String rawJoseResponse;
             String decodedResponse;
             
             try {   
-                // 🔹 Step 1 – Header
-                String headerJson =
-                    '{"alg":"HS256","clientid":"rreplmuat"}';   //for uat
+                Payment_Gateway__mdt gateway = gatewayMap.get(payment.Merchant_Id__c);
 
-                // 🔹 Step 2 – Payload
-                requestPayload = JSON.serialize(new Map<String,Object>{
-                    'mercid'         => payment.Merchant_Id__c,
-                    'orderid'        => payment.Order_Id__c,
-                    'refund_details' => 'true'
-                });
+                if(gateway == null){
+                    payment.Status__c = 'FAILED';
+                    payment.Error_Desc__c = 'BillDesk metadata configuration missing';
+                    updates.add(payment);
+                    continue;
+                }
+                
+                // ==============================
+                // 🔹 Call Common Service
+                // ==============================
+                BillDeskCommonService.ResponseWrapper resWrap =
+                    BillDeskCommonService.hitRetrieveAPI(
+                        payment.Order_Id__c,
+                        payment.Merchant_Id__c,
+                        gateway.Client_Id__c,
+                        gateway.Secret_Key__c
+                    );
 
-                // 🔹 Step 3 – Generate JWT
-                String jwtToken =
-                    BilldeskLockatedOrderAPI.generateJWT(headerJson, requestPayload);
+                rawJoseResponse = resWrap.rawResponse;
+                decodedResponse = resWrap.decodedResponse;
 
-                // 🔹 Step 4 – Prepare headers
-                String timestamp =
-                    System.now().format('yyyyMMddHHmmss');
-
-                String traceId =
-                    payment.Order_Id__c + '_' +
-                    String.valueOf(System.currentTimeMillis());
-
-                HttpRequest req = new HttpRequest();
-                req.setEndpoint(System.label.BillDesk_Retrieve_Transaction_API_Endpoint);
-                req.setMethod('POST');
-
-                req.setHeader('Content-Type', 'application/jose');
-                req.setHeader('Accept', 'application/jose');
-                req.setHeader('BD-Timestamp', timestamp);
-                req.setHeader('BD-Traceid', traceId);
-                //req.setHeader('Authorization', 'Bearer ' + jwtToken);
-                req.setBody(jwtToken);
-
-                Http http = new Http();
-                HttpResponse res = http.send(req);
-
-                // 🔹 Store raw JOSE always
-                rawJoseResponse = res.getBody();
-				decodedResponse = BilldeskLockatedOrderAPI.decodeJose(rawJoseResponse);
+                HttpResponse res = new HttpResponse();
+                res.setStatusCode(resWrap.statusCode);
 	
                 payment.Retrieve_API_Response__c = decodedResponse;
 
                 Map<String,Object> responseMap = (Map<String,Object>) JSON.deserializeUntyped(decodedResponse);
+
+                String errorType  = getValue(responseMap,'transaction_error_type','error_type');
+                String errorDesc  = getValue(responseMap,'transaction_error_desc','message');
+                String errorCode  = getValue(responseMap,'transaction_error_code','error_code');
+
+                String statusValue = responseMap.containsKey('status')
+                    ? String.valueOf(responseMap.get('status'))
+                    : null;
 
                 if (res.getStatusCode() == 200) {
                     // 🔥 Update core fields
@@ -94,79 +89,23 @@ global with sharing class BilldeskRetrieveTransactionAPI implements Database.Bat
                             );
                     }
 
-                    // 🔥 Final Status Logic
-                    String errorType = (String) responseMap.get('transaction_error_type');
-
-                    if (errorType == 'success') {
-                        payment.Status__c = 'SUCCESSFULL';
-                        
-                    } else if (errorType == 'failure'){
-                        payment.Status__c = 'FAILED';
-                        
-                    }else if (errorType == 'PENDING') {
-						payment.Status__c = 'PENDING';
-						
-					}
-					else if (errorType == 'CANCELLED') {
-						payment.Status__c = 'CANCELLED';
-					}
-					else{
-						payment.Status__c = 'CANCELLED';
-					}
+                    payment.Status__c = resolveStatus(errorType);
                     payment.Retrieve_API_Status__c = errorType;
                 } else{
 
-                    // 🔥 Not found – keep INITIATED
-                    payment.Error_Status__c = String.valueOf(responseMap.get('status'));
+                    payment.Error_Status__c = statusValue;
 
-					payment.Error_Code__c = (String) responseMap.get('error_code');
+					payment.Error_Code__c = errorCode;
 
-                    payment.Error_Desc__c = (String) responseMap.get('message') + ' ' + 'HTTP Error: ' + res.getStatusCode();
+                    payment.Error_Desc__c = errorDesc + ' ' + 'HTTP Error: ' + res.getStatusCode();
 
-                    payment.Error_Type__c = (String) responseMap.get('error_type');
+                    payment.Error_Type__c = errorType;
 
-					String errorType = (String) responseMap.get('transaction_error_type');
-
-                    if (errorType == 'success') {
-                        payment.Status__c = 'SUCCESSFULL';
-                        
-                    } else if (errorType == 'failure'){
-                        payment.Status__c = 'FAILED';
-                        
-                    }else if (errorType == 'pending') {
-						payment.Status__c = 'PENDING';
-						
-					}
-					else if (errorType == 'cancel') {
-						payment.Status__c = 'CANCELLED';
-					}
-					else{
-						payment.Status__c = 'CANCELLED';
-					}
+					//String errorType = (String) responseMap.get('transaction_error_type');
+                    payment.Status__c = resolveStatus(errorType);
                     payment.Error_Status__c = errorType;
 
                 } 
-
-                String errorType = responseMap.containsKey('transaction_error_type') &&
-                   responseMap.get('transaction_error_type') != null
-                    ? String.valueOf(responseMap.get('transaction_error_type'))
-                    : String.valueOf(responseMap.get('error_type'));
-
-                String errorDesc = responseMap.containsKey('transaction_error_desc') &&
-                                responseMap.get('transaction_error_desc') != null
-                    ? String.valueOf(responseMap.get('transaction_error_desc'))
-                    : String.valueOf(responseMap.get('message'));
-
-                String errorCode = responseMap.containsKey('transaction_error_code') &&
-                                responseMap.get('transaction_error_code') != null
-                    ? String.valueOf(responseMap.get('transaction_error_code'))
-                    : String.valueOf(responseMap.get('error_code'));
-
-                String statusValue = responseMap.containsKey('status')
-                    ? String.valueOf(responseMap.get('status'))
-                    : '';
-
-
                 logList.add(new ERP_Integration_Log__c(
                     API_Name__c = 'BilldeskRetrieveTransactionAPI',
                     StatusTxt__c= 'execute' + 'BillDesk Retrieve API' + ' ' + String.valueOf(responseMap.get('status')),
@@ -212,5 +151,81 @@ global with sharing class BilldeskRetrieveTransactionAPI implements Database.Bat
 
     global void finish(Database.BatchableContext bc) {
         System.debug('BillDesk Retrieve Batch Completed');
+    }
+
+    //====================================================
+    // Helper Method: Get Value with Fallback
+    //====================================================
+
+    private static String getValue(
+        Map<String,Object> responseMap,
+        String primaryKey,
+        String fallbackKey){
+
+        if(responseMap.containsKey(primaryKey) &&
+           responseMap.get(primaryKey) != null){
+
+            return String.valueOf(responseMap.get(primaryKey));
+        }
+
+        if(responseMap.containsKey(fallbackKey) &&
+           responseMap.get(fallbackKey) != null){
+
+            return String.valueOf(responseMap.get(fallbackKey));
+        }
+
+        return null;
+    }
+
+    //====================================================
+    // Helper Method: Resolve Status
+    //====================================================
+
+    private static String resolveStatus(String errorType){
+        system.debug('errorType------------------------>'+errorType);
+        if(errorType == null) return 'PENDING';
+
+        errorType = errorType.toLowerCase();
+
+        if(errorType.contains('success'))
+            return 'SUCCESSFUL';
+
+        if(errorType.contains('failure'))
+            return 'FAILED';
+
+        if(errorType.contains('pending'))
+            return 'PENDING';
+
+        if(errorType.contains('cancel'))
+            return 'CANCELLED';
+
+        return 'PENDING';
+    }
+
+    private static Map<String, Payment_Gateway__mdt> getGatewayMap(List<Payment_Transaction__c> scope){
+
+        Set<String> merchantIds = new Set<String>();
+
+        for (Payment_Transaction__c payment : scope) {
+            if (payment.Merchant_Id__c != null) {
+                merchantIds.add(payment.Merchant_Id__c);
+            }
+        }
+
+        Map<String, Payment_Gateway__mdt> gatewayMap = new Map<String, Payment_Gateway__mdt>();
+
+        if (!merchantIds.isEmpty()) {
+
+            for (Payment_Gateway__mdt gatewayRec : [
+                SELECT Parent_Merchant_Id__c, Client_Id__c,Secret_Key__c
+                FROM Payment_Gateway__mdt
+                WHERE Parent_Merchant_Id__c IN :merchantIds
+            ]) { 
+
+                gatewayMap.put(gatewayRec.Parent_Merchant_Id__c, gatewayRec);
+            }
+        }
+
+        return gatewayMap;
     }
 }

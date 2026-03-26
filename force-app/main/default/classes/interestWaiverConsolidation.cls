@@ -10,7 +10,7 @@ public class interestWaiverConsolidation {
                      Booking__r.Id,Interest_Days__c,Net_Interest_Amount__c,Previously_Waived_Amount_SAP__c,Project_Code__c,SAP_Customer_Number__c,SAP_Slab_Code__c,RW_Demand_Milestone__c,
                     SAP_Slab_Description__c,Total_Interest_Amount__c,RW_Demand_Status__c,Interest_Waiver_Requested__c,Demand_Amount__c,Demand_Date__c,
                     Booking__r.Interest_Waiver_Approved_but_not_Waived__c,Booking__r.RW_Total_Interest_Amount_Waived__c,
-                    Booking__r.Total_Approved_Interest_Amount_Waived__c,Booking__r.Project_Waived_Limit__c,
+                    Booking__r.Total_Approved_Interest_Amount_Waived__c,Booking__r.Project_Waived_Limit__c,Booking__r.RW_Total_Amount_Collected__c,
                     (Select id,Name,Sent_for_Approval__c,Approval_Status__c,Sub_Reason__c,Waiver_Reason__c,Waiver_Amount__c,Remarks__c from Interest_Waivers__r where Approval_Status__c != 'Rejected'  /*where Sent_for_Approval__c = true or Approval_Status__c = 'Approved' limit 1*/)
                     FROM RW_Demand__c WHERE Booking__c = :blist[0].id and Net_Interest_Amount__c!= null and RW_Demand_Status__c = 'Paid' and Payment_Date_Formula__c =false order by Demand_Date__c desc  /*and RW_Demand_Status__c ='Paid' and Count_IW__c > 0 and Payment_Date_Formula__c = false */];
         }else{
@@ -81,6 +81,9 @@ public class interestWaiverConsolidation {
                 totalIWAmttobeApproved += iw.Waiver_Amount__c;
                 iw.Sent_for_Approval__c = true;
                 iw.Approval_Status__c = 'Submitted for Approval';
+                if(iomUploaded){
+                    iw.IOM_Uploaded__c = true;
+                }
             }
             
             try {
@@ -102,6 +105,11 @@ public class interestWaiverConsolidation {
                 b.Total_Waiver_Amount_to_be_Approved__c = totalIWAmttobeApproved;
                 b.Interest_Waiver_Approval_Status__c = 'Submitted for Approval'; 
                 b.is_IOM_Uploaded__c = iomUploaded;
+                if(iomUploaded){
+                    // keep link (already set in upload method)
+                }else{
+                    b.Latest_IOM_Link__c = null; // clear link
+                }
                 b.Id = bookingId;
                 if(!Test.isRunningTest()){
                 update b;
@@ -127,7 +135,7 @@ public class interestWaiverConsolidation {
                 ContentDocument.Title, ContentDocumentId,
                 ContentDocument.ContentSize, ContentDocument.FileType,ContentDocument.LastModifiedDate
                  FROM ContentDocumentLink  
-                WHERE LinkedEntityId  =:recordId Order by ContentDocument.LastModifiedDate DESC limit 5];
+                WHERE LinkedEntityId  =:recordId Order by ContentDocument.LastModifiedDate DESC limit 1];
     }
     
     
@@ -148,4 +156,79 @@ public class interestWaiverConsolidation {
             throw new AuraHandledException(e.getMessage());
         }
     }*/
+    // @AuraEnabled
+    // public static void deleteFile(Id contentDocumentId){
+
+    //     List<ContentDocument> docs = [
+    //         SELECT Id
+    //         FROM ContentDocument
+    //         WHERE Id = :contentDocumentId
+    //     ];
+
+    //     if(!docs.isEmpty()){
+    //         delete docs;
+    //     }
+    // }
+
+    @AuraEnabled
+    public static void uploadMultipleIOMFiles(List<Map<String,String>> files, Id bookingId){
+
+        List<ContentVersion> versions = new List<ContentVersion>();
+
+        for(Map<String,String> f : files){
+
+            ContentVersion cv = new ContentVersion();
+            cv.Title = f.get('fileName');
+            cv.PathOnClient = f.get('fileName') + '.' + f.get('fileType').toLowerCase();
+            cv.VersionData = EncodingUtil.base64Decode(f.get('base64'));
+
+            versions.add(cv);
+        }
+
+        insert versions;
+
+        List<ContentDocumentLink> links = new List<ContentDocumentLink>();
+
+        for(ContentVersion v : [
+            SELECT Id, ContentDocumentId
+            FROM ContentVersion
+            WHERE Id IN :versions
+        ]){
+
+            ContentDocumentLink link = new ContentDocumentLink();
+            link.ContentDocumentId = v.ContentDocumentId;
+            link.LinkedEntityId = bookingId;
+            link.ShareType = 'V';
+
+            links.add(link);
+        }
+
+        insert links;
+
+        // STEP 3: GET LATEST FILE (last uploaded)
+        ContentVersion latestFile = [
+            SELECT ContentDocumentId,Title
+            FROM ContentVersion
+            WHERE Id = :versions[versions.size()-1].Id
+            LIMIT 1
+        ];
+        // Validate in Apex (IWR + IOM)
+        String fileName = latestFile.Title != null ? latestFile.Title.toLowerCase() : '';
+        String normalized = fileName.replaceAll('[^a-z]', '');
+
+        if (!(normalized.contains('iwr'))) {
+            if (!Test.isRunningTest())  throw new AuraHandledException('Uploaded file must contain "IWR" in file name.');
+        }
+        // STEP 4: GENERATE URL
+        String fileUrl = URL.getOrgDomainUrl().toExternalForm() +
+            '/lightning/r/ContentDocument/' + latestFile.ContentDocumentId + '/view';
+
+        // STEP 5: UPDATE BOOKING FIELD
+        Booking__c bk = new Booking__c(
+            Id = bookingId,
+            Latest_IOM_Link__c = fileUrl   // 👈 YOUR URL FIELD
+        );
+
+        update bk;
+    }
 }

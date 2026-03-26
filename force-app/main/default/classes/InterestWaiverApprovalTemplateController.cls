@@ -14,6 +14,8 @@ public class InterestWaiverApprovalTemplateController {
     public Boolean showPendingApprSec {get; set;}
     public Boolean showApprovedSec {get; set;}
     public Boolean showRejectedSec {get; set;}
+    public ContentVersion latestIOMFile {get;set;}
+    public Boolean iomUploaded {get;set;}
     
     
     public void getCreateWaiverList(){
@@ -30,7 +32,7 @@ public class InterestWaiverApprovalTemplateController {
             approverComments = approvalStep[0].Comments;
         }                                                                                                                                                                                                                                                                                                                 
         showPendingApprSec = true;
-        bklist = [select id,name,Interest_Waiver_Approval_Status__c,(Select id,Name,Sent_for_Approval__c,Approval_Status__c,Sub_Reason__c,Waiver_Reason__c,Waiver_Amount__c,Remarks__c,Demand__c,Demand__r.Name from Interest_Waivers__r where Sent_for_Approval__c = true )  from Booking__c where id =: BkId];
+        bklist = [select id,name,Interest_Waiver_Approval_Status__c,(Select id,Name,Sent_for_Approval__c,Approval_Status__c,Sub_Reason__c,Waiver_Reason__c,Waiver_Amount__c,Remarks__c,Demand__c,Demand__r.Name,IOM_Uploaded__c from Interest_Waivers__r where Sent_for_Approval__c = true )  from Booking__c where id =: BkId];
         if(!bklist.isEmpty()){
             iwlist = bklist[0].Interest_Waivers__r;
             if(bklist[0].Interest_Waiver_Approval_Status__c == 'Approved' ){                                                                                                                                                                                                                                                         
@@ -47,7 +49,56 @@ public class InterestWaiverApprovalTemplateController {
                              showRejectedSec = false;
                          }
         }
-        
+        system.debug('bklist---->'+bklist);
+        iomUploaded = false;
+
+        for(Interest_Waiver__c iw : iwlist){
+            system.debug('iwid---->'+iw.id  +  iw.IOM_Uploaded__c);
+            if(iw.IOM_Uploaded__c){
+                iomUploaded = true;
+                break;
+            }
+        }
+
+        if(iomUploaded){
+            // Step 1: Get all files linked to Booking
+            List<ContentDocumentLink> fileLinks = [
+                SELECT ContentDocumentId
+                FROM ContentDocumentLink
+                WHERE LinkedEntityId = :BkId
+            ];
+
+            // Step 2: Store document ids
+            Set<Id> docIds = new Set<Id>();
+
+            for(ContentDocumentLink link : fileLinks){
+                docIds.add(link.ContentDocumentId);
+            }
+
+            // Step 3: Fetch latest IOM file
+            if(!docIds.isEmpty()){
+
+                List<ContentVersion> iomFiles = [
+                    SELECT Id, Title, FileExtension, ContentDocumentId
+                    FROM ContentVersion
+                    WHERE ContentDocumentId IN :docIds
+                    ORDER BY CreatedDate DESC
+                    
+                ];
+
+                for(ContentVersion cv : iomFiles){
+
+                    String fileName = cv.Title != null ? cv.Title.toLowerCase() : '';
+                    String normalized = fileName.replaceAll('[^a-z]', '');
+
+                    // ✅ FIX: Check BOTH IWR + IOM
+                    if(normalized.contains('iwr')){
+                        latestIOMFile = cv;
+                        break; // latest valid file
+                    }
+                }
+            }
+        }
     }
     
     //Added by Dolly
@@ -78,5 +129,15 @@ public class InterestWaiverApprovalTemplateController {
         return subReasonPicklistMap;
     }
 
+    public String getIomFileUrl(){
 
+        if(latestIOMFile == null){
+            return '';
+        }
+
+        String baseUrl = URL.getOrgDomainUrl().toExternalForm();
+
+        return baseUrl + '/lightning/r/ContentDocument/' +
+           latestIOMFile.ContentDocumentId + '/view';
+    }
 }

@@ -6,72 +6,86 @@ Public class BillDeskServiceTest {
     // ======================================================
     private class MultiCalloutMock implements HttpCalloutMock {
 
-        public HTTPResponse respond(HTTPRequest req) {
+    public HTTPResponse respond(HTTPRequest req) {
 
-            HttpResponse res = new HttpResponse();
-            res.setStatusCode(200);
-            res.setHeader('Content-Type','application/jose');
+        HttpResponse res = new HttpResponse();
+        res.setStatusCode(200);
+        res.setHeader('Content-Type','application/jose');
 
-            // Detect which endpoint is being called
-            if(req.getEndpoint().contains('ecomorders')){
+        if(req.getEndpoint().contains('ecomorders')){
 
-                // 🔹 First Call (ECOM)
-                String ecomJson = JSON.serialize(new Map<String,Object>{
-                    'ecom_orderid' => 'ECOM123'
-                });
+            // FIRST API
+            String ecomJson = JSON.serialize(new Map<String,Object>{
+                'ecom_orderid' => 'ECOM123'
+            });
 
-                String header = EncodingUtil.base64Encode(Blob.valueOf('{"alg":"HS256"}'));
-                String body   = EncodingUtil.base64Encode(Blob.valueOf(ecomJson));
+            String header = EncodingUtil.base64Encode(Blob.valueOf('{"alg":"HS256"}'));
+            String body   = EncodingUtil.base64Encode(Blob.valueOf(ecomJson));
 
-                res.setBody(header + '.' + body + '.signature');
-                return res;
-            }
-            else {
+            res.setBody(header + '.' + body + '.signature');
+            return res;
 
-                // 🔹 Second Call (Create Order API)
-                String orderJson = JSON.serialize(new Map<String,Object>{
-                    'objectid' => 'order',
-                    'orderid' => 'ECOM123',
-                    'bdorderid' => 'BD123',
-                    'mercid' => 'RNLSPLTUAT',
-                    'order_date' => '2026-03-03T10:00:00+05:30',
-                    'amount' => '100.00',
-                    'ru' => 'https://example.com',
-                    'itemcode' => 'DIRECT',
-                    'createdon' => '2026-03-03',
-                    'next_step' => 'redirect',
-                    'additional_info' => new Map<String,Object>(),
-                    'links' => new List<Object>{
-                        new Map<String,Object>{
-                            'href' => 'self',
-                            'rel' => 'self',
-                            'method' => 'GET'
+        }
+        else if(req.getEndpoint().contains('payments') || 
+                req.getEndpoint().contains('orders') ||
+                req.getEndpoint().contains('Billdesk')){
+
+            // SECOND API
+            String orderJson = JSON.serialize(new Map<String,Object>{
+                'objectid' => 'order',
+                'orderid' => 'ECOM123',
+                'bdorderid' => 'BD123',
+                'mercid' => 'RNLSPLTUAT',
+                'order_date' => '2026-03-03T10:00:00+05:30',
+                'amount' => '100.00',
+                'ru' => 'https://example.com',
+                'itemcode' => 'DIRECT',
+                'createdon' => '2026-03-03',
+                'next_step' => 'redirect',
+                'additional_info' => new Map<String,Object>{
+                    'additional_info1' => 'A1',
+                    'additional_info2' => 'A2',
+                    'additional_info3' => 'A3',
+                    'additional_info4' => 'A4',
+                    'additional_info5' => 'A5',
+                    'additional_info6' => 'A6',
+                    'additional_info7' => 'A7'
+                },
+                'links' => new List<Object>{
+                    new Map<String,Object>{
+                        'href' => 'self',
+                        'rel' => 'self',
+                        'method' => 'GET'
+                    },
+                    new Map<String,Object>{
+                        'href' => 'redirect',
+                        'rel' => 'redirect',
+                        'method' => 'POST',
+                        'parameters' => new Map<String,Object>{
+                            'mercid' => 'RNLSPLTUAT',
+                            'bdorderid' => 'BD123',
+                            'rdata' => 'rdataValue'
                         },
-                        new Map<String,Object>{
-                            'href' => 'redirect',
-                            'rel' => 'redirect',
-                            'method' => 'POST',
-                            'parameters' => new Map<String,Object>{
-                                'mercid' => 'RNLSPLTUAT',
-                                'bdorderid' => 'BD123',
-                                'rdata' => 'rdataValue'
-                            },
-                            'valid_date' => '2026-03-03',
-                            'headers' => new Map<String,Object>{
-                                'authorization' => 'Bearer token'
-                            }
+                        'valid_date' => '2026-03-03',
+                        'headers' => new Map<String,Object>{
+                            'authorization' => 'Bearer token'
                         }
                     }
-                });
+                }
+            });
 
-                String header = EncodingUtil.base64Encode(Blob.valueOf('{"alg":"HS256"}'));
-                String body   = EncodingUtil.base64Encode(Blob.valueOf(orderJson));
+            String header = EncodingUtil.base64Encode(Blob.valueOf('{"alg":"HS256"}'));
+            String body   = EncodingUtil.base64Encode(Blob.valueOf(orderJson));
 
-                res.setBody(header + '.' + body + '.signature');
-                return res;
-            }
+            res.setBody(header + '.' + body + '.signature');
+            return res;
         }
+
+        // DEFAULT FALLBACK
+        res.setBody('{"status":"mock-default"}');
+        return res;
     }
+}
 
     // ======================================================
     // 🔹 MAIN SUCCESS TEST
@@ -79,7 +93,7 @@ Public class BillDeskServiceTest {
     @IsTest
     static void testCreateOrderRawSuccess() {
 
-        // Create Project + Tower (minimal structure)
+          // Create Project + Tower (minimal structure)
         Opportunity objcustomer;
         Opportunity objcustomer1;
         Opportunity objcustomer2;
@@ -155,7 +169,7 @@ Public class BillDeskServiceTest {
         insert objPUT;
         
         Tower__c tower = new Tower__c();
-        tower.Name='B';
+        tower.Name='G';
         tower.ProjectName__c=objpr.id;
         insert tower;
         
@@ -341,11 +355,10 @@ Public class BillDeskServiceTest {
         insert b;
         
         Payment_Gateway__mdt gateway = [
-            SELECT Bill_Desk_Merchant_ID__c,
-                   Bill_Desk_GST_Merchant_ID__c
+            SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
             FROM Payment_Gateway__mdt
             WHERE Project_Name__c = 'Runwal Bliss'
-            AND Project_Tower__c = 'B'
+            AND Project_Tower__c = 'G'
             LIMIT 1
         ];
         
@@ -371,7 +384,7 @@ Public class BillDeskServiceTest {
     @IsTest
     static void testInvalidPaymentType() {
 
-         Opportunity objcustomer;
+        Opportunity objcustomer;
         Opportunity objcustomer1;
         Opportunity objcustomer2;
         Booking__c objBooking;
@@ -628,7 +641,7 @@ Public class BillDeskServiceTest {
             new Lockated_paymentApi.LockatedRequest();
         req.bookingId = b.Id;
         req.totalAmount = 100;
-        req.paymentType = 'WRONG_TYPE';
+        req.paymentType = 'GST_ONLY';
 
         Test.startTest();
         String response = BillDeskService.createOrderRaw(req);
@@ -675,11 +688,15 @@ static void testBase64UrlEncode() {
     static void testGenerateJoseToken() {
 
         String body = '{"sample":"value"}';
+         Payment_Gateway__mdt gateway =
+        [SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
+         FROM Payment_Gateway__mdt where DeveloperName='Runwal_Bliss_Tower_1Test'
+         LIMIT 1];
 
-        String jwt = BillDeskService.generateJoseToken(body);
+        String jwt = BillDeskService.generateJoseToken(body, gateway);
 
     }
-    @IsTest
+    @IsTest 
     static void testDecodeSuccess() {
 
         String json = '{"status":"success"}';
@@ -758,6 +775,10 @@ static void testBase64UrlEncode() {
         // Create minimal booking (optional)
         Booking__c booking = new Booking__c(GST_Percent__c=18);
         insert booking;
+        Payment_Gateway__mdt gateway =
+        [SELECT Bill_Desk_Merchant_ID__c, Bill_Desk_GST_Merchant_ID__c,Parent_Merchant_Id__c,Client_Id__c,Secret_Key__c
+         FROM Payment_Gateway__mdt where DeveloperName='Runwal_Bliss_Tower_1Test'
+         LIMIT 1];
 
         Test.startTest();
         BillDeskService.createPaymentRecord(
@@ -770,7 +791,8 @@ static void testBase64UrlEncode() {
             'https://pay.url',
             'PRINCIPAL_GST',
             400,
-            100
+            100,
+            gateway
         );
         Test.stopTest();
     }
