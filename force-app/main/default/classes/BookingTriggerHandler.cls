@@ -925,25 +925,35 @@ update bkgs;
     
     //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
     public static void processWaivers(list<Id> Bids){
-        list<Booking__c> blist = [Select id,Name,RM_Name__c,Interest_Waiver_Approval_Status__c,(Select id from Interest_Waivers__r where Sent_for_Approval__c = true),(SELECT Actor.Name,Comments,StepStatus
+        list<Booking__c> blist = [Select id,Name,RM_Name__c,Interest_Waiver_Approval_Status__c,Process_Instance_Id__c, (Select id,Process_Instance_Id__c from Interest_Waivers__r where Sent_for_Approval__c = true),(SELECT Actor.Name,Comments,StepStatus
                                   FROM ProcessSteps order by CreatedDate desc limit 1) from Booking__c where Id in: bids ];
         list<Interest_Waiver__c> waiversToUpdate = new list<Interest_Waiver__c>();
+        List<Booking__c> bookingsToUpdate = new List<Booking__c>();
         List<Id> waiversToSendtoSAP = new List<Id>();     
         List<Id> waiverIds = new List<Id>(); 
         if(!blist.isEmpty()){             
             for (Booking__c bk : blist) {
+                Boolean bookingUpdated = false; 
                 if(bk.Interest_Waivers__r != null && !bk.Interest_Waivers__r.isEmpty()){
                     for (Interest_Waiver__c iw : bk.Interest_Waivers__r) {
                         if(bk.Interest_Waiver_Approval_Status__c == 'Approved'){
                             iw.Approval_Status__c = 'Approved';
+                            iw.Process_Instance_Id__c = bk.Process_Instance_Id__c ;
+                            bookingUpdated = true;
                             //waiversToSendtoSAP.add(iw.Id);
                         } else if(bk.Interest_Waiver_Approval_Status__c == 'Rejected'){
                             iw.Approval_Status__c = 'Rejected';
+                            iw.Process_Instance_Id__c = bk.Process_Instance_Id__c ;
+                            bookingUpdated = true;
                         }
                         iw.Sent_for_Approval__c = false;
                         waiversToUpdate.add(iw);
                         waiverIds.add(iw.Id);
                     }
+                }
+                if(bookingUpdated){
+                    bk.Process_Instance_Id__c = null;
+                    bookingsToUpdate.add(bk);
                 }
             }
             
@@ -951,7 +961,11 @@ update bkgs;
                 update waiversToUpdate;
                 sendWaiverEmailApex(Bids,waiverIds);
             }
-            if(!waiversToSendtoSAP.isEmpty()){
+            if(!bookingsToUpdate.isEmpty()){
+                update bookingsToUpdate;
+            }
+
+            if(!waiversToSendtoSAP.isEmpty()){  
                 //Id JobId = System.enqueueJob(new SAPInterestWaiverAPICallOutNew(waiversToSendtoSAP));
             }
         }
@@ -983,7 +997,7 @@ update bkgs;
         
         List<Booking__c> bookingList = [
             SELECT Id, Name, Owner.Email, RM_Name__c, Interest_Waiver_Approval_Status__c,
-            (SELECT Id, Name, Waiver_Reason__c, Sub_Reason__c, Waiver_Amount__c, Remarks__c, Approval_Status__c,Demand__c,Demand__r.Name
+            (SELECT Id, Name, Waiver_Reason__c, Sub_Reason__c, Waiver_Amount__c, Remarks__c, Approval_Status__c,Demand__c,Demand__r.Name,IOM_Uploaded__c
              FROM Interest_Waivers__r 
              WHERE Id in:waiversIds),
             (SELECT Comments, StepStatus, Actor.Name 
@@ -1007,6 +1021,57 @@ update bkgs;
             LIMIT 1
         ];
         
+       Map<Id, ContentVersion> latestFilePerBooking = new Map<Id, ContentVersion>();
+
+        List<ContentDocumentLink> docLinks = [
+            SELECT LinkedEntityId, ContentDocumentId
+            FROM ContentDocumentLink
+            WHERE LinkedEntityId IN :bids
+        ];
+
+        Set<Id> docIds = new Set<Id>();
+        Map<Id, Id> docToBooking = new Map<Id, Id>();
+
+        for(ContentDocumentLink cdl : docLinks){
+            docIds.add(cdl.ContentDocumentId);
+            docToBooking.put(cdl.ContentDocumentId, cdl.LinkedEntityId);
+        }
+
+        List<ContentVersion> versions = [
+            SELECT Title, FileExtension, VersionData, ContentDocumentId
+            FROM ContentVersion
+            WHERE ContentDocumentId IN :docIds
+            AND IsLatest = true
+            ORDER BY CreatedDate DESC
+        ];
+
+        // for(ContentVersion cv : versions){
+
+        //     Id bookingId = docToBooking.get(cv.ContentDocumentId);
+
+        //     if(!bookingFileMap.containsKey(bookingId)){
+        //         bookingFileMap.put(bookingId, new List<ContentVersion>());
+        //     }
+
+        //     bookingFileMap.get(bookingId).add(cv);
+        // }
+        for(ContentVersion cv : versions){
+
+            String fileName = cv.Title != null ? cv.Title.toLowerCase() : '';
+            String normalized = fileName.replaceAll('[^a-z]', '');
+
+            // ✅ Check IWR + IOM
+            if(normalized.contains('iwr')){
+
+                Id bookingId = docToBooking.get(cv.ContentDocumentId);
+
+                // ✅ pick ONLY latest
+                if(!latestFilePerBooking.containsKey(bookingId)){
+                    latestFilePerBooking.put(bookingId, cv);
+                }
+            }
+        }
+
         for (Booking__c b : bookingList) {
             String initiatorName = '';
             String initiatorEmail = '';
@@ -1110,7 +1175,28 @@ update bkgs;
             email.setSaveAsActivity(true);
             email.setWhatId(b.Id);
 
-            
+            Boolean iomUploaded = false;
+
+            for(Interest_Waiver__c iw : b.Interest_Waivers__r){
+                if(iw.IOM_Uploaded__c){
+                    iomUploaded = true;
+                    break;
+                }
+            }
+            List<Messaging.EmailFileAttachment> attachments = new List<Messaging.EmailFileAttachment>();
+
+            if(iomUploaded && latestFilePerBooking.containsKey(b.Id)){
+
+                ContentVersion cv = latestFilePerBooking.get(b.Id);
+
+                Messaging.EmailFileAttachment efa = new Messaging.EmailFileAttachment();
+                efa.setFileName(cv.Title + '.' + cv.FileExtension);
+                efa.setBody(cv.VersionData);
+
+                attachments.add(efa);
+            }
+
+            email.setFileAttachments(attachments);
             Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
         }
     }
