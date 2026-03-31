@@ -132,8 +132,8 @@
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
     </actionCalls>
-    <actionCalls>
-        <name>Send_Email_To_Customers</name>
+    <!-- <actionCalls>
+        <name>Send_Email_To_Customers </name>
         <label>Send Email To Customers</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
@@ -145,17 +145,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Opportunity__r.Account.PersonEmail</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -175,6 +181,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailBodyForCustomer</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -187,6 +194,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Opportunity__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -198,8 +206,8 @@
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
         <versionString>2.0.1</versionString>
-    </actionCalls>
-    <actionCalls>
+    </actionCalls> -->
+    <!-- <actionCalls>
         <name>Send_Email_To_RM_and_SM</name>
         <label>Send Email To RM and SM</label>
         <locationX>0</locationX>
@@ -212,17 +220,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmailAddresses</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -242,6 +256,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailBodyTemplates</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -254,6 +269,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Opportunity__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -265,8 +281,8 @@
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
         <versionString>2.0.1</versionString>
-    </actionCalls>
-    <actionCalls>
+    </actionCalls> -->
+    <!-- <actionCalls>
         <name>Send_Email_To_RM_and_SM_Reinitiated</name>
         <label>Send Email To RM and SM Reinitiated</label>
         <locationX>0</locationX>
@@ -279,17 +295,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmailAddresses</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -309,6 +331,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailBodyReinitiated</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -321,6 +344,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Opportunity__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -332,8 +356,8 @@
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
         <versionString>2.0.1</versionString>
-    </actionCalls>
-    <actionCalls>
+    </actionCalls> -->
+    <!-- <actionCalls>
         <name>Send_Email_To_SM_And_RM</name>
         <label>Send Email To SM And RM</label>
         <locationX>0</locationX>
@@ -343,7 +367,11 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmailAddresses</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -361,6 +389,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailTemplateForTAT</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -373,6 +402,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Opportunity__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -384,8 +414,8 @@
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
         <versionString>2.0.1</versionString>
-    </actionCalls>
-    <actionCalls>
+    </actionCalls> -->
+    <!-- <actionCalls>
         <name>Send_Email_To_SM_and_TL</name>
         <label>Send Email To SM and TL</label>
         <locationX>0</locationX>
@@ -398,17 +428,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmailAddresses</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -428,6 +464,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailBodyForSMAndTL</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -440,6 +477,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Opportunity__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -451,8 +489,8 @@
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
         <versionString>2.0.1</versionString>
-    </actionCalls>
-    <actionCalls>
+    </actionCalls> -->
+    <!-- <actionCalls>
         <name>Send_Notification_To_RM_and_SM</name>
         <label>Send Notification To RM and SM</label>
         <locationX>0</locationX>
@@ -495,7 +533,7 @@
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
-    </actionCalls>
+    </actionCalls> -->
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
@@ -726,9 +764,9 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
-            <connector>
+            <!-- <connector>
                 <targetReference>Send_Email_To_Customers</targetReference>
-            </connector>
+            </connector> -->
             <label>Customer Emails</label>
         </rules>
     </decisions>
@@ -901,9 +939,9 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
-            <connector>
+            <!-- <connector>
                 <targetReference>Send_Email_To_RM_and_SM</targetReference>
-            </connector>
+            </connector> -->
             <label>New With Email Address Present</label>
         </rules>
         <rules>
@@ -923,9 +961,9 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
-            <connector>
+            <!-- <connector>
                 <targetReference>Send_Email_To_RM_and_SM_Reinitiated</targetReference>
-            </connector>
+            </connector> -->
             <label>Reinitiated with Email Address Present</label>
         </rules>
     </decisions>
@@ -973,9 +1011,9 @@
         <label>Check Notification</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
+        <!-- <defaultConnector>
             <targetReference>Send_Email_To_SM_And_RM</targetReference>
-        </defaultConnector>
+        </defaultConnector> -->
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Notification_Types_Present</name>
@@ -994,9 +1032,9 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
-            <connector>
+            <!-- <connector>
                 <targetReference>Send_Notification_To_RM_and_SM</targetReference>
-            </connector>
+            </connector> -->
             <label>Notification Types Present</label>
         </rules>
     </decisions>

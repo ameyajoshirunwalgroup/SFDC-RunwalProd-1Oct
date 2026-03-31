@@ -102,9 +102,9 @@
                 <elementReference>$Record.Sales_Manager_User__r.Manager.Email</elementReference>
             </value>
         </assignmentItems>
-        <connector>
-            <!-- <targetReference>Send_Email_To_SM_And_TL</targetReference> -->
-        </connector>
+        <!-- <connector>
+            <targetReference>Send_Email_To_SM_And_TL</targetReference>
+        </connector> -->
     </assignments>
     <decisions>
         <name>Check_Get_Greeting_Call_Record</name>
@@ -172,9 +172,9 @@
         <label>Check SM TL Present Or Not</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <!-- <targetReference>Send_Email_To_SM_And_TL</targetReference> -->
-        </defaultConnector>
+        <!-- <defaultConnector>
+            <targetReference>Send_Email_To_SM_And_TL</targetReference>
+        </defaultConnector> -->
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>SM_TL_Is_Present</name>
