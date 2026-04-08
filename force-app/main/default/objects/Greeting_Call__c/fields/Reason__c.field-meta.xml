@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason__c</fullName>
+    <label>Reason</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CLARITY OF BOOKING FROM SM</fullName>
+                <default>false</default>
+                <label>CLARITY OF BOOKING FROM SM</label>
+            </value>
+            <value>
+                <fullName>PRICING RELATED</fullName>
+                <default>false</default>
+                <label>PRICING RELATED</label>
+            </value>
+            <value>
+                <fullName>CANCELLATION</fullName>
+                <default>false</default>
+                <label>CANCELLATION</label>
+            </value>
+            <value>
+                <fullName>OTHERS</fullName>
+                <default>false</default>
+                <label>OTHERS</label>
+            </value>
+            <value>
+                <fullName>LOOKING FOR OTHER PROPERTY / BUDGET</fullName>
+                <default>false</default>
+                <label>LOOKING FOR OTHER PROPERTY / BUDGET</label>
+            </value>
+            <value>
+                <fullName>CUSTOMER NOT CONNECTED</fullName>
+                <default>false</default>
+                <label>CUSTOMER NOT CONNECTED</label>
+            </value>
+            <value>
+                <fullName>CUSTOMER ASKED TO CALL BACK LATER</fullName>
+                <default>false</default>
+                <label>CUSTOMER ASKED TO CALL BACK LATER</label>
+            </value>
+            <value>
+                <fullName>INVALID NUMBER</fullName>
+                <default>false</default>
+                <label>INVALID NUMBER</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>CUSTOMER NOT CONNECTED</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>CUSTOMER ASKED TO CALL BACK LATER</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Hold</controllingFieldValue>
+            <valueName>INVALID NUMBER</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Rejected</controllingFieldValue>
+            <valueName>CLARITY OF BOOKING FROM SM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Rejected</controllingFieldValue>
+            <valueName>PRICING RELATED</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Rejected</controllingFieldValue>
+            <valueName>CANCELLATION</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Rejected</controllingFieldValue>
+            <valueName>OTHERS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Rejected</controllingFieldValue>
+            <valueName>LOOKING FOR OTHER PROPERTY / BUDGET</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,109 @@
+<template>
+    <lightning-card title="Greeting Call Checklist" icon-name="standard:call">
+        <div class="slds-p-around_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alt="Loading" size="large"></lightning-spinner>
+            </template>
+            <template for:each={sections} for:item="section">
+                <div key={section.label} class="slds-m-bottom_large">
+                    
+                    <div class="slds-section-title--divider slds-theme_shade">
+                        <strong>{section.label}</strong>
+                    </div>
+                    <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col" style="width: 25%;">Field Name</th>
+                                <th scope="col" style="width: 35%;">System Value</th>
+                                <th scope="col" style="width: 15%;">Verified</th>
+                                <th scope="col" style="width: 25%;">Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={section.fields} for:item="row">
+                                <template if:true={row.isVisible}>
+                                    <tr key={row.fieldName}>
+                                        <td><b>{row.label}</b></td>
+                                        <td>
+                                            <template if:true={row.isText}>
+                                                {row.val}
+                                            </template>
+
+                                            <template if:true={row.isPicklist}>
+                                                <lightning-combobox
+                                                    name={row.fieldName}
+                                                    variant="label-hidden"
+                                                    value={row.val}
+                                                    options={row.options} 
+                                                    onchange={handleValueChange}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                            <template if:true={row.isInput}>
+                                                <lightning-input
+                                                    name={row.fieldName}
+                                                    variant="label-hidden"
+                                                    value={row.val}
+                                                    onchange={handleValueChange}>
+                                                </lightning-input>
+                                            </template>
+                                        </td>
+                                        <td>
+                                            <lightning-combobox
+                                                name={row.fieldName}
+                                                value={row.status}
+                                                options={verifyOptions}
+                                                onchange={handleStatusChange}
+                                                variant="label-hidden">
+                                            </lightning-combobox>
+                                        </td>
+                                        <td>
+                                            <lightning-input 
+                                                type="text" 
+                                                name={row.fieldName}
+                                                value={row.remark} 
+                                                onchange={handleRemarkChange}
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+
+            <template if:true={isReasonRequired}>
+                <div class="slds-box slds-theme_shade slds-m-bottom_small">
+                    <lightning-combobox
+                        label="Reason"
+                        placeholder="-- Select Reason --"
+                        value={reasonValue}
+                        options={reasonOptions}
+                        onchange={handleReasonChange}
+                        required>
+                    </lightning-combobox>
+                    <br>
+                    <lightning-button 
+                        label="Confirm & Save" 
+                        variant="brand" 
+                        onclick={handleFinalSubmit}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button 
+                        label="Cancel" 
+                        variant="neutral" 
+                        onclick={handleCancel}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <div class="slds-modal__footer slds-m-top_medium slds-align_absolute-center">
+                <lightning-button variant="success" label="Accept" icon-name="utility:check" onclick={handleAccept} disabled={isButtonsDisabled} class="slds-m-horizontal_x-small"></lightning-button>
+                <lightning-button variant="warning" label="Hold" icon-name="utility:pause" onclick={handleHold} disabled={isButtonsDisabled} class="slds-m-horizontal_x-small"></lightning-button>
+                <lightning-button variant="destructive" label="Reject" icon-name="utility:close" onclick={handleReject} disabled={isButtonsDisabled} class="slds-m-horizontal_x-small"></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
