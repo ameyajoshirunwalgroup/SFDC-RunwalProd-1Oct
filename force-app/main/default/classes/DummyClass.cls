@@ -1,5 +1,6 @@
 public with sharing class DummyClass {
 public string a;
+public string a1;
     public string b;
     public string c;
     public string d;
