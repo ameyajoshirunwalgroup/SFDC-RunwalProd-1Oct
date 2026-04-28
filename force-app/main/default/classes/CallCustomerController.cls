@@ -162,6 +162,7 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
             return resp;
         }else{
             //Added by coServe 22-08-2024 Start
+            
             ReqData rd = new ReqData();
             rd.userName = userName;
             rd.agentID = agentId;
@@ -192,6 +193,25 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
                 res.setBody('{"status" : "queued successfully", "UCID" : "", "message" : ""}');
             }
             System.debug(res.getBody());
+
+            //Added by Vinay 20-03-2026 Start
+            Id objId = recId;
+            String objName = objId.getSObjectType().getDescribe().getName();
+            Task tsk = new Task();
+            if(objName == 'Lead'){
+                tsk.WhoId = objId;
+                tsk.Task_Type__c = 'Presales Call';
+                tsk.Subject = 'Presales Call';
+            }else{
+                tsk.WhatId = objId;
+                tsk.Task_Type__c = 'CRM Call';
+                tsk.Subject = 'CRM Call';
+            }
+            tsk.Communication_Type__c = 'Outbound Call';
+            tsk.Campaign_Name_from_CTI__c = campaignName;
+            tsk.Status = 'In-Progress';
+            insert tsk;
+            //Added by Vinay 20-03-2026 End
             
             RespData resp = new RespData();
             resp = (RespData)JSON.deserialize(res.getBody(), RespData.class);

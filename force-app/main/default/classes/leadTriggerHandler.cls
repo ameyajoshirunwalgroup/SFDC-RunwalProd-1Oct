@@ -108,6 +108,8 @@ eachLead.RW_Customer_Mobile_Number__c = eachLead.RW_Mobile_No__c;
         List<Id> leadIds = new List<Id>();
         List<String> digitalLeadIds = new List<String>(); //Added by Vinay 23-09-2025
         //List<Id> loyaltyLeadIds= new List<Id>();  // Commented by Vinay 28-05-2025 to stop round robin auto assignment
+        List<Lead> referralLeads = new List<Lead>(); //Added by Vinay 28-02-2026
+        List<Id> referralLeadIds = new List<Id>(); //Added by Vinay 28-02-2026
         for(Lead ld : lstLead){
             if(ld.LeadSource == 'Retention' && (ld.Retention_RM_Name__c != null || ld.Retention_Closing_Head_Name__c!= null || ld.Retention_Presales_User__c != null || ld.Retention_Sales_Manager__c != null)){
                 leadIds.add(ld.Id);
@@ -120,10 +122,21 @@ eachLead.RW_Customer_Mobile_Number__c = eachLead.RW_Mobile_No__c;
 if(loyaltyLeadSources.contains(ld.LeadSource)){ //Added by coServe 26-07-2024
 loyaltyLeadIds.add(ld.Id);
 }*/
+            if(ld.LeadSource == 'Referral' && ld.Customer_Reference__c != null){ //Added by Vinay 28-02-2026
+                referralLeads.add(ld);
+                referralLeadIds.add(ld.Id);
+            }
             
         }
         if(digitalLeadIds.size() > 0){ //Added by Vinay 23-09-2025
             //system.enqueuejob(new DigitalLeadAssignment(digitalLeadIds));
+        }
+        System.debug('referralLeads: ' + referralLeads);
+        if(referralLeads.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.referralLeadCreatedNotification(referralLeads); //Added by Vinay 28-02-2026
+        }
+        if(referralLeadIds.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_LoyaltyEngine.referralFreshLeads(referralLeadIds); 
         }
         if(leadIds.size()>0){
             List<Lead> leadList = [SELECT Id, Name, LeadSource, Retention_RM_Name__c,Retention_RM_Name__r.FirstName, Retention_RM_Name__r.LastName,
@@ -666,7 +679,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
         ];
         System.debug('Duplicate lead list'+lstAllLead);
         List<Opportunity> lstAllOpp = [
-            SELECT Id, Development__c, Account.Primary_Mobile_No_with_code__c, Account.Secondary_Mobile_No_with_code__c
+            SELECT Id, Development__c, Account.Primary_Mobile_No_with_code__c, Account.Secondary_Mobile_No_with_code__c,RW_Project__c
             FROM Opportunity
             WHERE (Account.Primary_Mobile_No_with_code__c IN :setOfMobileNumbers OR Account.Secondary_Mobile_No_with_code__c IN :setOfMobileNumbers)
             AND Development__c IN :setOfDevelopmentNames

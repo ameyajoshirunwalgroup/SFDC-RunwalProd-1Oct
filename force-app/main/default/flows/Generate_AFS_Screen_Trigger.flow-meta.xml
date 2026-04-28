@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Generate_Document_in_Docupilot</name>
-        <label>Generate Document in Docupilot</label>
+        <name>generateAFS</name>
+        <label>Generate AGS from Docupilot</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>DocumentGenerationinDocupilot.Doc Gen in Docupilot</actionName>
-        <actionType>externalService</actionType>
+        <actionName>DocupilotDataCaptureAction</actionName>
+        <actionType>apex</actionType>
         <connector>
-            <targetReference>Upload_Generated_AFS</targetReference>
+            <targetReference>uploadGeneratedAFSToRecord</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
-            <name>download</name>
+            <name>dataCapturePath</name>
             <value>
-                <stringValue>true</stringValue>
+                <stringValue>/dashboard/documents/create/9780d9f9/{!template_id}</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>body</name>
+            <name>payload</name>
             <value>
-                <elementReference>DocGenBodyForAFSMaha</elementReference>
+                <elementReference>varDocupilotPayload</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>DocumentGenerationinDocupilot.Doc Gen in Docupilot</nameSegment>
+        <nameSegment>DocupilotDataCaptureAction</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
-        <name>Upload_Generated_AFS</name>
-        <label>Upload Generated AFS</label>
+        <name>uploadGeneratedAFSToRecord</name>
+        <label>Upload AFS To Notes &amp; Attachments</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>AttachGeneratedDocumentToNotes</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Update_Booking</targetReference>
+            <targetReference>updateBookingRecord</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>fileName</name>
             <value>
-                <elementReference>Generate_Document_in_Docupilot.2XX.data.filex5fname</elementReference>
+                <elementReference>generateAFS.fileName</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>fileUrl</name>
             <value>
-                <elementReference>Generate_Document_in_Docupilot.2XX.data.filex5furl</elementReference>
+                <elementReference>generateAFS.fileUrl</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -62,383 +62,364 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Add_Applicant_Details</name>
-        <label>Add Applicant Details</label>
+        <name>addApplicantDetailsToCollection</name>
+        <label>Add Applicant Details to List</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>ApplicantDetailsCollection</assignToReference>
+            <assignToReference>varApplicantDetailsCollection</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>ApplicantDetails</elementReference>
+                <elementReference>varApplicantDetailsItem</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Applicant_Details_Loop</targetReference>
+            <targetReference>loopApplicantDetails</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Add_Car_Parking</name>
-        <label>Add Car Parking</label>
+        <name>addCarParkingsToList</name>
+        <label>addCarParkingsToList</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>CarParkingCollection</assignToReference>
+            <assignToReference>varCarParkingCollection</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>CarParking</elementReference>
+                <elementReference>varCarParkingItem</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Car_Parkings_Loop</targetReference>
+            <targetReference>loopCarParkings</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Applicant_Details_Mapping</name>
-        <label>Applicant Details Mapping</label>
+        <name>addPaymentsToCollection</name>
+        <label>Add Payment to Collection</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>ApplicantDetails.Applicantx5fName</assignToReference>
-            <operator>Assign</operator>
+            <assignToReference>varPayPlanCollection</assignToReference>
+            <operator>Add</operator>
             <value>
-                <elementReference>Applicant_Details_Loop.Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ApplicantDetails.Applicantx5fPAN</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Applicant_Details_Loop.PancardNo__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Customerx5fAddress</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Applicant_Details_Loop.Permanent_Address__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ApplicantDetails.Applicantx5fName</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>AppName</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Customerx5fAddress</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>AppAddress</elementReference>
+                <elementReference>varPayPlanItem</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Add_Applicant_Details</targetReference>
+            <targetReference>loopStandardCustomerPayPlanDetails</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Field_Values</name>
-        <label>Assign Field Values</label>
+        <name>assignApplicantDetails</name>
+        <label>Assign Applicant Details</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Applicantsx20Details</assignToReference>
+            <assignToReference>varApplicantDetailsItem.applicantName</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>ApplicantDetailsCollection</elementReference>
+                <elementReference>varApplicantName</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Tower</assignToReference>
+            <assignToReference>varApplicantDetailsItem.applicantPan</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopApplicantDetails.PancardNo__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varDocupilotPayload.customerAddress</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varApplicantAddress</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>addApplicantDetailsToCollection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assignCarParking</name>
+        <label>Assign Car Parking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varCarParkingItem.heightCarpark</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopCarParkings.Height_of_Car_Park_in_ft__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCarParkingItem.lengthCarpark</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopCarParkings.Length_of_Car_Park_in_ft__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCarParkingItem.widthCarpark</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopCarParkings.Width_of_Car_Park_in_ft__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCarParkingItem.parkingType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopCarParkings.Parking__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCarParkingItem.podiumNo</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopCarParkings.Floor_Podium_No__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>addCarParkingsToList</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assignPaymentValues</name>
+        <label>Assign Payment Values</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varPayPlanItem.paymentDescription</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopStandardCustomerPayPlanDetails.Payment_Milestone__r.Description__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varPayPlanItem.paymentMilestone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopStandardCustomerPayPlanDetails.Amount_Value__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>addPaymentsToCollection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AssignValuesDogGenTest</name>
+        <label>AssignValuesDogGenTest</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varDocupilotPayload.applicantsDetails</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varApplicantDetailsCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varDocupilotPayload.tower</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Wing__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Isx5fBarex5fShell</assignToReference>
+            <assignToReference>varDocupilotPayload.isBareShell</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Bare_Shell__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Unitx5fNo</assignToReference>
+            <assignToReference>varDocupilotPayload.unitNo</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Unit_Number__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Floor</assignToReference>
+            <assignToReference>varDocupilotPayload.floor</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Floor__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Totalx5fRERAx5fAreax5finx5fSqFt</assignToReference>
+            <assignToReference>varDocupilotPayload.totalReraAreaInSqft</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Unit_No__r.Total_RERA_Carpet_Area__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Deckx5fAreax5finx5fSqFt</assignToReference>
+            <assignToReference>varDocupilotPayload.deckAreaInSqft</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Unit_No__r.Deck_Area__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Utilityx5fAreax5finx5fSqFt</assignToReference>
+            <assignToReference>varDocupilotPayload.utilityAreaInSqft</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Unit_No__r.Utility_Area__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Agreementx5fValue</assignToReference>
+            <assignToReference>varDocupilotPayload.agreementValue</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_booking.Allotment_Premium__c</elementReference>
+                <elementReference>AgreementValue</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Emailx5fAddress</assignToReference>
+            <assignToReference>varDocupilotPayload.emailAddress</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Primary_Applicant_Email__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Amountx5fReceived</assignToReference>
+            <assignToReference>varDocupilotPayload.amountReceived</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.RW_Total_Amount_Received_Without_GST__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Electricx5fReceivingx5fSubstation</assignToReference>
+            <assignToReference>varDocupilotPayload.electricReceivingSubstation</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_3__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Legalx5fCharges</assignToReference>
+            <assignToReference>varDocupilotPayload.legalCharges</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_2__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Electricx5fWaterx5fConnectionx5fMGLx5fConnection</assignToReference>
+            <assignToReference>varDocupilotPayload.electricWaterConnectionMglConnection</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_13__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Societyx5fFormation</assignToReference>
+            <assignToReference>varDocupilotPayload.societyFormation</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_9__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Sharex5fMoneyx5fApplication</assignToReference>
+            <assignToReference>varDocupilotPayload.bcamChargesRate</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_8__c</elementReference>
+                <elementReference>getTowerDetails.BCAM_Rate__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.BCAMx5fChargesx5fRate</assignToReference>
+            <assignToReference>varDocupilotPayload.ccamChargesRate</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_booking.Quotation__r.Other_Charges_FCAM__c</elementReference>
+                <elementReference>getTowerDetails.FCAM_Rate__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.CCAMx5fChargesx5fRate</assignToReference>
+            <assignToReference>varDocupilotPayload.corpusFund</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_15__c</elementReference>
+                <elementReference>getTowerDetails.Corpus_Funds__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Corpusx5fFund</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Get_booking.Quotation__r.Other_Charges_Amount_11__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.z0Type</assignToReference>
+            <assignToReference>varDocupilotPayload.type</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Unit_No__r.Bed_Rooms__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Nomineex5fName</assignToReference>
+            <assignToReference>varDocupilotPayload.nomineeName</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.RW_Nominee_Name__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Paymentx5fDetails</assignToReference>
+            <assignToReference>varDocupilotPayload.paymentDetails</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CustomerPayPlanCollection</elementReference>
+                <elementReference>varPayPlanCollection</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Carx5fParking</assignToReference>
+            <assignToReference>varDocupilotPayload.carParking</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CarParkingCollection</elementReference>
+                <elementReference>varCarParkingCollection</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Carpetx5fAreax5finx5fSqFt</assignToReference>
+            <assignToReference>varDocupilotPayload.carpetAreaInSqft</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_booking.Unit_No__r.Carpet_Area__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varDocupilotPayload.wing</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_booking.Wing__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varDocupilotPayload.towerName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_booking.Project_Name__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>Get_Project_Unit</targetReference>
+            <targetReference>validateDocupilotPayload</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>BCAM_FCAM_Corpus_Funds</name>
-        <label>BCAM FCAM Corpus Funds</label>
+        <name>avenue_template_id</name>
+        <label>avenue template id</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.BCAMx5fChargesx5fRate</assignToReference>
+            <assignToReference>template_id</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>GetTower.BCAM_Rate__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.CCAMx5fChargesx5fRate</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>GetTower.FCAM_Rate__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>DocGenBodyForAFSMaha.Corpusx5fFund</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>GetTower.Corpus_Funds__c</elementReference>
+                <stringValue>bf47f9c9</stringValue>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>validate_payload</targetReference>
+            <targetReference>generateAFS</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Car_Parkings_Mapping</name>
-        <label>Car Parkings Mapping</label>
+        <name>mahalakshmi_template_id</name>
+        <label>mahalakshmi template id</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>CarParking.Heightx5fCarPark</assignToReference>
+            <assignToReference>template_id</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Car_Parkings_Loop.Height_of_Car_Park_in_ft__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CarParking.Lengthx5fCarPark</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Car_Parkings_Loop.Length_of_Car_Park_in_ft__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CarParking.Widthx5fCarPark</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Car_Parkings_Loop.Width_of_Car_Park_in_ft__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CarParking.Parkingx5fType</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Car_Parkings_Loop.Parking__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CarParking.Podiumx5fNo</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Car_Parkings_Loop.Car_Park_Level__c</elementReference>
+                <stringValue>2a58e6b1</stringValue>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Add_Car_Parking</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>MappingPaymentvalues</name>
-        <label>Mapping Payment values</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>CustomerPayPlanDetails.Paymentx5fDescription</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Standard_Customer_Pay_Plan_details_loop.Payment_Milestone__r.Description__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CustomerPayPlanDetails.Paymentx5fMilestone</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Standard_Customer_Pay_Plan_details_loop.Amount_Value__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CustomerPayPlanDetails.Paymentx5fFC</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Standard_Customer_Pay_Plan_details_loop.Installment__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CustomerPayPlanDetails.Paymentx5fFC</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>InstallmentAmount</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>PaymentValuestotokens</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>PaymentValuestotokens</name>
-        <label>Add Payment Details</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>CustomerPayPlanCollection</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>CustomerPayPlanDetails</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Standard_Customer_Pay_Plan_details_loop</targetReference>
+            <targetReference>generateAFS</targetReference>
         </connector>
     </assignments>
     <customProperties>
@@ -448,101 +429,138 @@
         </value>
     </customProperties>
     <decisions>
-        <description>Validates if all required fields in the json created</description>
-        <name>validate_payload</name>
-        <label>Validate Payload</label>
+        <name>selectProjectTemplateDecisionTree</name>
+        <label>Select Project Template</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Generate_Document_in_Docupilot</targetReference>
+            <targetReference>generateAFS</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>No Errors</defaultConnectorLabel>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Show_Errors_bcam_ccam</name>
-            <conditionLogic>or</conditionLogic>
+            <name>Mahalakshmi</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>DocGenBodyForAFSMaha.BCAMx5fChargesx5fRate</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>Get_booking.Project_Name__c</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>DocGenBodyForAFSMaha.CCAMx5fChargesx5fRate</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <stringValue>7 Mahalaxmi</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>ValidationErrors</targetReference>
+                <targetReference>mahalakshmi_template_id</targetReference>
+            </connector>
+            <label>Mahalakshmi</label>
+        </rules>
+        <rules>
+            <name>Avenue</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_booking.Project_Name__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Runwal Avenue</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>avenue_template_id</targetReference>
+            </connector>
+            <label>Avenue</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Validates if all required fields in the json created</description>
+        <name>validateDocupilotPayload</name>
+        <label>Validate Docupilot Payload</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>selectProjectTemplateDecisionTree</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Errors</defaultConnectorLabel>
+        <rules>
+            <name>showValidationErrors</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varDocupilotPayload.bcamChargesRate</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>XXXX</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varDocupilotPayload.ccamChargesRate</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>XXXX</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>showDocupilotPayloadValidationErrors</targetReference>
             </connector>
             <label>Show Errors</label>
         </rules>
     </decisions>
+    <description>cleaned up unwanted paths</description>
     <environments>Default</environments>
     <formulas>
-        <name>AppAddress</name>
+        <name>AgreementValue</name>
         <dataType>String</dataType>
-        <expression>{!Applicant_Details_Loop.Permanent_Address_Line_1__c} + &apos; &apos; + {!Applicant_Details_Loop.Permanent_Address_Line_2__c} + &apos; &apos; + {!Applicant_Details_Loop.Permanent_Address_Line_3__c} + &apos; &apos; + TEXT({!Applicant_Details_Loop.City__c}) + &apos; - &apos; + TEXT({!Applicant_Details_Loop.Pincode__c})</expression>
+        <expression>SUBSTITUTE(TEXT(ROUND({!Get_booking.Allotment_Premium__c}, 2)), &quot;,&quot;, &quot;&quot;)</expression>
     </formulas>
     <formulas>
-        <name>AppName</name>
+        <name>varApplicantAddress</name>
         <dataType>String</dataType>
-        <expression>TEXT({!Applicant_Details_Loop.Salutation__c}) + &apos; &apos; + {!Applicant_Details_Loop.Name}</expression>
+        <expression>{!loopApplicantDetails.Permanent_Address_Line_1__c} + &apos; &apos; + {!loopApplicantDetails.Permanent_Address_Line_2__c} + &apos; &apos; + {!loopApplicantDetails.Permanent_Address_Line_3__c} + &apos; &apos; + TEXT({!loopApplicantDetails.City__c}) + &apos; - &apos; + TEXT({!loopApplicantDetails.Pincode__c})</expression>
     </formulas>
     <formulas>
-        <name>InstallmentAmount</name>
+        <name>varApplicantName</name>
         <dataType>String</dataType>
-        <expression>SUBSTITUTE(
-   TEXT({!Standard_Customer_Pay_Plan_details_loop.Installment__c}),
-   &quot;,&quot;,
-   &quot;&quot;
-)</expression>
+        <expression>TEXT({!loopApplicantDetails.Salutation__c}) + &apos; &apos; + {!loopApplicantDetails.Name}</expression>
     </formulas>
     <interviewLabel>Generate AFS Screen Trigger {!$Flow.CurrentDateTime}</interviewLabel>
     <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
-    <label>Generate AFS Screen Trigger Charges updated</label>
+    <label>Generate AFS Screen Trigger Maha + Avenue Res</label>
     <loops>
-        <name>Applicant_Details_Loop</name>
-        <label>Applicant Details Loop</label>
+        <name>loopApplicantDetails</name>
+        <label>Loop Applicant Details</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <collectionReference>get_Applicant_Details</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Applicant_Details_Mapping</targetReference>
+            <targetReference>assignApplicantDetails</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Fetch_Customer_Pay_Plan_Header</targetReference>
+            <targetReference>fetchCustomerPayPalnHeader</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>Car_Parkings_Loop</name>
-        <label>Car Parkings Loop</label>
+        <name>loopCarParkings</name>
+        <label>Loop Car Parkings</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <collectionReference>Car_Parking_details</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Car_Parkings_Mapping</targetReference>
+            <targetReference>assignCarParking</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Applicant_Details_Loop</targetReference>
+            <targetReference>get_Applicant_Details</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>Standard_Customer_Pay_Plan_details_loop</name>
-        <label>Standard Customer Pay Plan details loop</label>
+        <name>loopStandardCustomerPayPlanDetails</name>
+        <label>Loop Standard Customer Pay Plan details</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <collectionReference>Standard_Customer_Pay_Plan_details</collectionReference>
+        <collectionReference>Copy_1_of_Standard_Customer_Pay_Plan_details</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>MappingPaymentvalues</targetReference>
+            <targetReference>assignPaymentValues</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Assign_Field_Values</targetReference>
+            <targetReference>getProjectUnit</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -571,7 +589,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Car_Parkings_Loop</targetReference>
+            <targetReference>loopCarParkings</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -586,13 +604,36 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Fetch_Customer_Pay_Plan_Header</name>
+        <name>Copy_1_of_Standard_Customer_Pay_Plan_details</name>
+        <label>Standard Customer Pay Plan details</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loopStandardCustomerPayPlanDetails</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Customer_Pay_Plan_Header__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>fetchCustomerPayPalnHeader.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Standard_Customer_Pay_Plan_Detail__c</object>
+        <sortField>Name</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>fetchCustomerPayPalnHeader</name>
         <label>Fetch Customer Pay Plan Header</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Standard_Customer_Pay_Plan_details</targetReference>
+            <targetReference>Copy_1_of_Standard_Customer_Pay_Plan_details</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -620,7 +661,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Car_Parking_details</targetReference>
+            <targetReference>loopApplicantDetails</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -641,7 +682,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>get_Applicant_Details</targetReference>
+            <targetReference>Car_Parking_details</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -656,13 +697,13 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Project_Unit</name>
+        <name>getProjectUnit</name>
         <label>Get Project Unit</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>GetTower</targetReference>
+            <targetReference>getTowerDetails</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -677,13 +718,13 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>GetTower</name>
-        <label>GetTower</label>
+        <name>getTowerDetails</name>
+        <label>Get Tower Details</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>BCAM_FCAM_Corpus_Funds</targetReference>
+            <targetReference>AssignValuesDogGenTest</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -697,32 +738,9 @@
         <object>Tower__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <name>Standard_Customer_Pay_Plan_details</name>
-        <label>Standard Customer Pay Plan details</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Standard_Customer_Pay_Plan_details_loop</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Customer_Pay_Plan_Header__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Fetch_Customer_Pay_Plan_Header.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Standard_Customer_Pay_Plan_Detail__c</object>
-        <sortField>Name</sortField>
-        <sortOrder>Asc</sortOrder>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <recordUpdates>
-        <name>Update_Booking</name>
-        <label>Update Booking</label>
+        <name>updateBookingRecord</name>
+        <label>Update Generated Field on Booking</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
@@ -791,15 +809,18 @@
         <showHeader>false</showHeader>
     </screens>
     <screens>
-        <name>ValidationErrors</name>
-        <label>ValidationErrors</label>
+        <name>showDocupilotPayloadValidationErrors</name>
+        <label>Show Validation Errors</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Finish</targetReference>
+        </connector>
         <fields>
-            <name>ShowErrorMessage</name>
+            <name>Copy_2_of_ShowErrorMessage</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px; color: rgb(215, 34, 34);&quot;&gt;BCAM or CCAM charges are blank&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
@@ -821,7 +842,7 @@
             <targetReference>Get_booking</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>ApplicantDetails</name>
         <apexClass>ExternalService__DocumentGenerationinDocupilot_Docx20Genx20inx20Docupilot_IN_body_Applicantsx20Details</apexClass>
@@ -835,6 +856,30 @@
         <apexClass>ExternalService__DocumentGenerationinDocupilot_Docx20Genx20inx20Docupilot_IN_body_Applicantsx20Details</apexClass>
         <dataType>Apex</dataType>
         <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Avenue_Residential_Schema_body</name>
+        <apexClass>ExternalService__GenerateAvenueAFSdoc_Avenuex20Schemax20Callx20Out_IN_body</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>AvenueApplicantDetailsCollection</name>
+        <apexClass>ExternalService__GenerateAvenueAFSdoc_Avenuex20Schemax20Callx20Out_IN_body_Applicantsx20Details</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>AvenueApplicantDetailsVariable</name>
+        <apexClass>ExternalService__GenerateAvenueAFSdoc_Avenuex20Schemax20Callx20Out_IN_body_Applicantsx20Details</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
@@ -883,6 +928,69 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>template_id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varApplicantDetailsCollection</name>
+        <apexClass>DocupilotPayloadApplicantsDetailsItem</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varApplicantDetailsItem</name>
+        <apexClass>DocupilotPayloadApplicantsDetailsItem</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varCarParkingCollection</name>
+        <apexClass>DocupilotPayloadCarParkingItem</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varCarParkingItem</name>
+        <apexClass>DocupilotPayloadCarParkingItem</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varDocupilotPayload</name>
+        <apexClass>DocupilotPayload</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varPayPlanCollection</name>
+        <apexClass>DocupilotPayloadPaymentDetailsItem</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varPayPlanItem</name>
+        <apexClass>DocupilotPayloadPaymentDetailsItem</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>

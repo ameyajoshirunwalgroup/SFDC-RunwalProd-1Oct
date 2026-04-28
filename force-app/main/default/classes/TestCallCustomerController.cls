@@ -8,12 +8,30 @@ public class TestCallCustomerController {
                           LocaleSidKey='en_US', ProfileId = p.Id, 
                           TimeZoneSidKey='America/Los_Angeles', UserName='pranay2@stetig.in', Department='',CTI_Agent_ID__c= 'Test', Campaign_name__c='Testing', api_key__c='KK37f7a89c616b3150169a5542ac1d97df',Ozontel_UserName__c='Test123');
         insert u;
+
+        Account Accnt = new Account(              
+            FirstName='TestFName',                
+            LastName='TestLName',                
+            PersonMailingStreet='test@yahoo.com',                
+            PersonMailingPostalCode='12345',                
+            PersonMailingCity='SFO',                
+            PersonEmail='test@yahoo.com',                
+            PersonHomePhone='1234567',                
+            PersonMobilePhone='12345678',
+            Mobile_No__c = '1324235436',
+            RM_Name__c = 'Testing2'
+        );   
+        insert Accnt;  
         
         system.runAs(u){
-            CallCustomerController.callAPI('1234567890', '+91', 'Testing');
+            /*CallCustomerController.callAPI('1234567890', '+91', 'Testing');
             CallCustomerController.callAPI('12345678', '+71', 'Testing');
             CallCustomerOfflineController.callAPI('1234567890', '+91','Testing');
-            CallCustomerOfflineController.callAPI('12345678', '+71','Testing');
+            CallCustomerOfflineController.callAPI('12345678', '+71','Testing');*/
+            CallCustomerController.callAPI('1324235431', '+91', Accnt.Id);
+            CallCustomerController.callAPI('1324235431', '+71', Accnt.Id);
+            CallCustomerOfflineController.callAPI('1324235431','+91', Accnt.Id);
+            CallCustomerOfflineController.callAPI('1324235431', '+71', Accnt.Id);
         }
         
     }
@@ -147,6 +165,7 @@ public class TestCallCustomerController {
         Rest_getAgentdetails.Rest_getAgentdetails('1324235436', 'CampaignName', 'DID');
         Rest_getAgentdetails.Rest_getAgentdetails('1324235430', 'CampaignName', 'DID');
         Rest_getAgentdetails.Rest_getAgentdetails('1324235431', 'CampaignName', 'DID');
+        
         Test.stopTest();
     }
     

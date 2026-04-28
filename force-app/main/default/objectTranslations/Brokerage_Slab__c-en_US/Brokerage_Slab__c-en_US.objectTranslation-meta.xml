@@ -8,26 +8,17 @@
         <plural>true</plural>
         <value>Brokerage Slabs</value>
     </caseValues>
-    <layouts>
-        <layout>Brokerage Slab Layout</layout>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>Brokerage Slab Layout - CP Billing Access</layout>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>Channel Partner Portal Layout</layout>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-    </layouts>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- You cannot edit slab details. --></errorMessage>
+        <name>Cannot_Edit_slab_Details</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Additional Brokerage for Local Bookings Should not be blank --></errorMessage>
+        <name>If_Both_then_NRI_fields_should_not_be_bl</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Additional Brokerage For OS/NRI should not be blank --></errorMessage>
+        <name>If_both_then_NRI_field_not_blank</name>
+    </validationRules>
 </CustomObjectTranslation>

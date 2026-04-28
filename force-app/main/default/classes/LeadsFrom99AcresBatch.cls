@@ -110,7 +110,7 @@ global class LeadsFrom99AcresBatch implements Database.Batchable <sObject>, Sche
             HttpResponse response = httpProtocol.send(request);
             System.debug('RESPONSE:' + response.getBody());
             XmlStreamReader reader = new XmlStreamReader(response.getBody());
-            Task t = new Task();
+            /*Task t = new Task();  //Commented by Vinay 18-03-2026
             t.activityDate = System.today();
             //t.Call_Time__c = formatTime(system.now()); 
             t.Task_Type__c = 'Debug 99 Acres';
@@ -121,7 +121,7 @@ global class LeadsFrom99AcresBatch implements Database.Batchable <sObject>, Sche
             }
             t.status = 'Done';
             t.Subject = 'Debug 99 Acres';
-            insert t;
+            insert t;*/
             leadList = readResponse(reader);
         }
         if(Test.isRunningTest()) { // simulation of response for test methods

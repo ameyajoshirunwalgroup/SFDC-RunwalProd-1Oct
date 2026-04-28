@@ -10,23 +10,17 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <collectionElements>
-                    <elementReference>recipientIds</elementReference>
-                </collectionElements>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -45,7 +39,6 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Hi,&lt;/p&gt;&lt;p&gt;The loan for &lt;strong&gt;{!$Record.Account_Name__c}&lt;/strong&gt; was registered on &lt;strong&gt;{!$Record.RW_Booking__r.RW_Registration_Date__c}&lt;/strong&gt;, but the First Disbursement is still not done.&lt;/p&gt;&lt;p&gt;It has been &lt;strong&gt;{!$Record.Registration_to_Disbursement_Days__c}&lt;/strong&gt; days since registration.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Loan Record URL:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://runwal.lightning.force.com/{!$Record.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;https://runwal.lightning.force.com/{!$Record.Id}&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Runwal&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -58,7 +51,6 @@
         <inputParameters>
             <name>attachmentId</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue></stringValue>
             </value>
         </inputParameters>
@@ -66,7 +58,6 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
-                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>

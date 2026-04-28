@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Primary Mobile update on Booking {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Primary Mobile update on Booking</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Mobile_on_Booking</name>
+        <label>Update Mobile on Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Booking__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Primary_Applicant_Mobile__c</field>
+            <value>
+                <elementReference>$Record.Mobile_Number__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Booking__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Mobile_on_Booking</targetReference>
+        </connector>
+        <filterFormula>{!$Record.Mobile_Number__c} != null &amp;&amp; ISPICKVAL({!$Record.Applicant_Number__c}, &apos;Primary Applicant&apos; ) &amp;&amp; (ISNEW() || ISCHANGED({!$Record.Mobile_Number__c}))</filterFormula>
+        <object>Applicant_Details__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -8,79 +8,65 @@
         <plural>true</plural>
         <value>Loans</value>
     </caseValues>
-    <layouts>
-        <layout>Loan Layout</layout>
-        <sections>
-            <label><!-- Bank Details --></label>
-            <section>Bank Details</section>
-        </sections>
-        <sections>
-            <label><!-- Banker Details --></label>
-            <section>Banker Details</section>
-        </sections>
-        <sections>
-            <label><!-- Call Details --></label>
-            <section>Call Details</section>
-        </sections>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-        <sections>
-            <label><!-- Customer Interaction --></label>
-            <section>Customer Interaction</section>
-        </sections>
-        <sections>
-            <label><!-- Disbursement Details --></label>
-            <section>Disbursement Details</section>
-        </sections>
-        <sections>
-            <label><!-- First Disbursement details --></label>
-            <section>First Disbursement details</section>
-        </sections>
-        <sections>
-            <label><!-- Home Loan RM &amp; TL Details --></label>
-            <section>Home Loan RM &amp; TL Details</section>
-        </sections>
-        <sections>
-            <label><!-- Loan Details --></label>
-            <section>Loan Details</section>
-        </sections>
-        <sections>
-            <label><!-- Sanction Details --></label>
-            <section>Sanction Details</section>
-        </sections>
-        <sections>
-            <label><!-- Third Party Agreement --></label>
-            <section>Third Party Agreement</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>NewLoan Layout</layout>
-        <sections>
-            <label><!-- Bank Details --></label>
-            <section>Bank Details</section>
-        </sections>
-        <sections>
-            <label><!-- Banker Details --></label>
-            <section>Banker Details</section>
-        </sections>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-    </layouts>
-    <quickActions>
-        <label><!-- Create Task For Home Loan --></label>
-        <name>Create_Task</name>
-    </quickActions>
-    <quickActions>
-        <label><!-- Log a Call --></label>
-        <name>Log_a_Call_For_Home_Loan</name>
-    </quickActions>
-    <quickActions>
-        <label><!-- Select Connector Code --></label>
-        <name>Select_Connector_Code</name>
-    </quickActions>
+    <recordTypes>
+        <label><!-- DefaultLoan --></label>
+        <name>DefaultLoan</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- NewLoan --></label>
+        <name>NewLoan</name>
+    </recordTypes>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please add Banker Name &amp; Banker Number --></errorMessage>
+        <name>Bank_Name_and_Number</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please select Bank Preference 1 --></errorMessage>
+        <name>Bank_Preference_1_mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Add Condition Remarks!! --></errorMessage>
+        <name>Conditional_Sanction</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- From the First Disbursement Details Section: Please fill in all First Disbursement details (Date, Amount, Status, Sub-Status, Received, Remarks) before updating the status. --></errorMessage>
+        <name>Loan_Disbursement_Required_Fields</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Either of Sanction Date, Sanction Status, Loan Account Number OR Sanction Amount is blank. --></errorMessage>
+        <name>Loan_sacntion_check_point</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter Logged In Date --></errorMessage>
+        <name>Logged_In_date_validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter NOC generated date --></errorMessage>
+        <name>NOC_Generated_Date_mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter NOC Handover Date --></errorMessage>
+        <name>NOC_Handover_is_mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- From the Sanction Details Section: Please fill in Sanction Amount, Sanction Date, and Sanction Status before marking the loan as Sanctioned. --></errorMessage>
+        <name>Require_Sanction_Details</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Upload the Sanction Letter First before making a Loan Sanctioned! --></errorMessage>
+        <name>Sanction_Letter_Mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please fill up Sanction Amount, Sanction Date &amp; loan account number --></errorMessage>
+        <name>Sanction_fields_mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please upload the TPA Letter as required! --></errorMessage>
+        <name>TPA_Upload_required_if_TPA_Case</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Generate_NOC --></label>
+        <name>Generate_NOC</name>
+    </webLinks>
 </CustomObjectTranslation>

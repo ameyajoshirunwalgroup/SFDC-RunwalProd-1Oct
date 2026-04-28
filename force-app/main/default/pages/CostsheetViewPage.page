@@ -127,7 +127,7 @@ h5{
                         <tr>
                             <td colspan="1"> Original Agreement Value</td> <!-- <apex:outputLabel rendered="{!Quotation__c.Discount_1_Type__c != null && Quotation__c.Discount_1_Type__c == 'GST Discount'}">(After Passing GST Credit of&nbsp; <apex:outputText value="{!IF(Quotation__c.Project_Unit__r.Tax_Rate_Basic__c=='GST 8%','2.5','6.5')}"/>% of Agreement Value)**</apex:outputLabel> -->
                             <td colspan="1">
-                            <apex:outputText value="{!Quotation__c.Agreement_Value_D__c }" style="display:none;"></apex:outputText></td>
+                            <!-- <apex:outputText value="{!Quotation__c.Agreement_Value_D__c }" style="display:none;"></apex:outputText> --></td>
                             <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!Quotation__c.Agreement_Value__c}"/></apex:outputText></td>
                             <td colspan="1"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!scGST}"/></apex:outputText></td>
                             <td colspan="1"></td>
@@ -174,8 +174,8 @@ h5{
                         </tr>
                         <tr>
                             <td colspan="4">STAMP DUTY (APPROX)</td>
-                            <apex:outputText value="{!Quotation__c.Stamp_Duty_D__c}" style="display:none;"/>
-                            <apex:outputText value="{!Quotation__c.Stamp_Duty__c}" style="display:none;"/>
+                            <!--<apex:outputText value="{!Quotation__c.Stamp_Duty_D__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Stamp_Duty__c}" style="display:none;"/>-->
                             <td colspan="2">
                                <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!stampDuty}"/></apex:outputText>
                             </td>
@@ -188,7 +188,7 @@ h5{
                         </tr>
                         <tr>
                             <td colspan="4">Other Charges</td>
-                            <apex:outputText value="{!Quotation__c.Other_Charges_Amount_1__c }" style="display:none;"/>
+                            <!--<apex:outputText value="{!Quotation__c.Other_Charges_Amount_1__c }" style="display:none;"/>
                             <apex:outputText value="{!Quotation__c.Other_Charges_Amount_2__c }" style="display:none;"/>
                             <apex:outputText value="{!Quotation__c.Other_Charges_Amount_3__c }" style="display:none;"/>
                             <apex:outputText value="{!Quotation__c.Other_Charges_Amount_4__c  }" style="display:none;"/>
@@ -205,7 +205,7 @@ h5{
                              <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Apply_5_Additional_Discount__c}" style="display:none;"/>
                              <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Exclude_GST_Passback__c}" style="display:none;"/>
 
-                              <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Name }" style="display:none;"/>
+                              <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Name }" style="display:none;"/>-->
 
                             <td colspan="2"><apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!othercharges}"/></apex:outputText></td>
                         </tr>
@@ -228,11 +228,11 @@ h5{
                             </td>
                         </tr>
                         <tr>
-                            <apex:outputText value="{!Quotation__c.Project_Unit__r.Tax_Rate_Basic__c}" style="display:none;"></apex:outputText>
+                            <!--<apex:outputText value="{!Quotation__c.Project_Unit__r.Tax_Rate_Basic__c}" style="display:none;"></apex:outputText>-->
                             <td colspan="4">CGST + SGST @ {!gst1Percenatge}%*  ON AGREEMENT VALUE</td>
-                            <apex:outputText value="{!Quotation__c.Agreement_Value_ST_D__c}" style="display:none;"/>
+                            <!--<apex:outputText value="{!Quotation__c.Agreement_Value_ST_D__c}" style="display:none;"/>
                             <apex:outputText value="{!Quotation__c.Agreement_Value_ST__c}" style="display:none;"/>
-                            <apex:outputText value="{!Quotation__c.OC_Approved__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.OC_Approved__c}" style="display:none;"/>-->
                             <td colspan="2">
                                 <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!scGST}"/></apex:outputText>
                               </td>
@@ -243,8 +243,8 @@ h5{
                         </tr>
                         <tr style="font-weight:Bold;background:#9CA1A1;">
                             <td colspan="4">GRAND TOTAL</td>
-                            <apex:outputText value="{!Quotation__c.Grand_Total_D__c}" style="display:none;"/>
-                            <apex:outputText value="{!Quotation__c.Grand_Total__c}" style="display:none;"/>
+                            <!--<apex:outputText value="{!Quotation__c.Grand_Total_D__c}" style="display:none;"/>
+                            <apex:outputText value="{!Quotation__c.Grand_Total__c}" style="display:none;"/> -->
 
                             <td colspan="2">
                                 <apex:outputText value="{0,number,###,###,###,###}"> <apex:param value="{!grandTotal}"/></apex:outputText>
@@ -336,6 +336,32 @@ h5{
                           </apex:outputpanel>  -->          
 
                     </table>
+                    <apex:outputText value="{!Quotation__c.Agreement_Value_D__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Stamp_Duty_D__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Stamp_Duty__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_1__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_2__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_3__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_4__c  }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_6__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_7__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_8__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_9__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_11__c }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_14__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Other_Charges_Amount_13__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Development_Charges_L__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.CreatedDate}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Apply_3_Additional_Discount__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Apply_5_Additional_Discount__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Exclude_GST_Passback__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Project_Unit__r.TowerName__r.Name }" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Project_Unit__r.Tax_Rate_Basic__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Agreement_Value_ST_D__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Agreement_Value_ST__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.OC_Approved__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Grand_Total_D__c}" style="display:none;"/>
+                        <apex:outputText value="{!Quotation__c.Grand_Total__c}" style="display:none;"/>
                 </apex:outputPanel>
             </div>
         </apex:form>

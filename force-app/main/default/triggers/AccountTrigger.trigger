@@ -50,7 +50,7 @@ trigger AccountTrigger on Account(before Insert, after Insert, before update, af
         if(Trigger.isAfter) {
           List < Account > updateCMList = new List < Account > ();
           List<Id> accIds = new List<Id>();
-          List<LockatedApp_UserDetailUpdate.AccountUpdateWrap> accUpdateWrapperList = new List<LockatedApp_UserDetailUpdate.AccountUpdateWrap>(); //Added by Vinay 30-12-2025
+          //List<LockatedApp_UserDetailUpdate.AccountUpdateWrap> accUpdateWrapperList = new List<LockatedApp_UserDetailUpdate.AccountUpdateWrap>(); //Added by Vinay 30-12-2025
       for (account a: trigger.new) {
       //  if (Trigger.newMap.get(a.Id).Campaign_Code__C != Trigger.oldMap.get(a.Id).Campaign_Code__C || Trigger.newMap.get(a.Id).TollFree_Number__C != Trigger.oldMap.get(a.Id).TollFree_Number__C)
           if (Trigger.newMap.get(a.Id).Campaign_Code__C != Trigger.oldMap.get(a.Id).Campaign_Code__C )  
@@ -59,7 +59,7 @@ trigger AccountTrigger on Account(before Insert, after Insert, before update, af
         if(a.Send_to_Lockated__c == true && (a.Send_to_Lockated__c != Trigger.oldMap.get(a.Id).Send_to_Lockated__c)){
             accIds.add(a.Id);
         }
-        LockatedApp_UserDetailUpdate.AccountUpdateWrap accUpdateWrapper = new LockatedApp_UserDetailUpdate.AccountUpdateWrap();
+        /*LockatedApp_UserDetailUpdate.AccountUpdateWrap accUpdateWrapper = new LockatedApp_UserDetailUpdate.AccountUpdateWrap();
         accUpdateWrapper.acc = a;
         if(a.Mobile_No__c != null && (a.Mobile_No__c != Trigger.oldMap.get(a.Id).Mobile_No__c)){ // Added by Vinay 30-12-2025
             accUpdateWrapper.primaryMobileChanged = true;
@@ -91,15 +91,16 @@ trigger AccountTrigger on Account(before Insert, after Insert, before update, af
             accUpdateWrapper.oldSecondaryEmail = Trigger.oldMap.get(a.Id).RW_Secondary_Email__pc;
             accUpdateWrapper.newSecondaryEmail = a.RW_Secondary_Email__pc;
         }
-        accUpdateWrapperList.add(accUpdateWrapper);
+        accUpdateWrapperList.add(accUpdateWrapper);*/
       }
       //Added by coServe 07-12-2023
       if(accIds.size() > 0){
-          CreateUserWhenUnitBooked.createuser(accIds);
+          //CreateUserWhenUnitBooked.createuser(accIds);
+          CreateUserWhenUnitBooked.createuserWithApplicants(accIds); // Added by Vinay28-02-2026
       }
-      if(accUpdateWrapperList.size() > 0){ //Added by Vinay 30-12-2025
+      /*if(accUpdateWrapperList.size() > 0){ //Added by Vinay 30-12-2025
           //system.enqueuejob(new LockatedApp_UserDetailUpdate(accUpdateWrapperList)); //Commented by Vinay 03-01-2026
-      }
+      }*/
       if (updateCMList != null && updateCMList.size() > 0) {
         try {
           PersonAccountManagementServices.AddCampaignToAccount(updateCMList);

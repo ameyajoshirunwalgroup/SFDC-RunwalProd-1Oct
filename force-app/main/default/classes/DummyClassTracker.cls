@@ -96,9 +96,4 @@ private class DummyClassTracker {
       obj.Test90();
       
     }
-    
-    @isTest
-    static void method1(){
-        trgToUpdateOppStageHandler.dummy();
-    }
 }

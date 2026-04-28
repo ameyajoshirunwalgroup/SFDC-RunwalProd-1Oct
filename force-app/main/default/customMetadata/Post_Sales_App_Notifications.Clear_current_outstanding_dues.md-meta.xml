@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Clear current outstanding dues</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Dear {1},
+
+The outstanding amount towards your purchased unit {1} is Rs {3}. Kindly clear your dues before the due date to avoid any additional late payment charges. Please ignore this message if you already have paid the dues.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">payments_due</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Clear current outstanding dues</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Payment Due Alert WhatsApp</value>
+    </values>
+</CustomMetadata>

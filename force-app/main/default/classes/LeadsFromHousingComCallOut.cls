@@ -73,7 +73,7 @@ public class LeadsFromHousingComCallOut {
         String city;
         
         //XmlStreamReader reader = new XmlStreamReader(response.getBody());
-        Task t = new Task();
+        /*Task t = new Task();  //Commented by Vinay 18-03-2026
         t.activityDate = System.today();
         t.Call_Time__c = formatTime(system.now()); 
         t.Task_Type__c = 'Debug Housing.com';
@@ -81,7 +81,7 @@ public class LeadsFromHousingComCallOut {
         t.description += '\n \n' + response.getBody();
         t.status = 'Done';
         t.Subject = 'Housing.com';
-        insert t;
+        insert t;*/
         
         List<HousingJSONParser.HousingJSONWrapper> housingLeadList =  new List<HousingJSONParser.HousingJSONWrapper>();
         housingLeadList = HousingJSONParser.parse(response.getBody());

@@ -24,6 +24,7 @@ public class DemandLetterAlertTest {
         bkg.Date_of_Occupation_Certificate__c = Date.today();
         bkg.Project__c = proj.Id;
         bkg.FBL5N__c = 100000;
+        bkg.GST_Percent__c = 5;
         insert bkg;
         
         RW_Demand__c dem = new RW_Demand__c();
@@ -46,6 +47,9 @@ public class DemandLetterAlertTest {
         rec2.RW_Document_Type__c = 'DS';
         rec2.RW_Booking__c = bkg.Id;
         insert rec2;
+        
+        rec2.RW_Status_Code__c = '123';
+        update rec2;
         
         Applicant_Details__c app = new Applicant_Details__c();
         app.Applicant_Number__c = 'Primary Applicant';

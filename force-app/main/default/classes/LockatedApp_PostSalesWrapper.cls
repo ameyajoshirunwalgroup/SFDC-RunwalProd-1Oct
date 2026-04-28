@@ -78,6 +78,16 @@ global class LockatedApp_PostSalesWrapper {
         public String homeLoanRmName;
         public String homeLoanRmContact;
         public String homeloan_brochure;
+		public Decimal previous_milestone_principal;
+        public Decimal previous_milestone_gst;
+        public Decimal current_milestone_principal;
+        public Decimal current_milestone_gst;
+        public Decimal billed_principal;
+        public Decimal billed_gst;
+        public Decimal total_principal_with_gst;
+        public Decimal gst_for_av;
+        public Decimal tds_outstanding;
+        public String payment_schedule;
 		public List<other_applicants> other_applicants;
 		public stages stages;
 		public List<payment_receipt> payment_receipt;
@@ -190,6 +200,7 @@ global class LockatedApp_PostSalesWrapper {
 		public String base_amount;
 		public String billed_tds;
 		public String tds_received;
+		public String tds_outstanding;
 		public String payment_received;
 		public String total_amount_billed;
 		public String total_amount_received;

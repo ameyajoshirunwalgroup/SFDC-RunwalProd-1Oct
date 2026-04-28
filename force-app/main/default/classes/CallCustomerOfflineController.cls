@@ -146,6 +146,7 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
             return resp;
         }else{
             //Commented by coServe 22-08-2024 
+            
             String queryString = 'apiKey='+apiKey+'&userName='+username+'&custNumber='+customerPh+'&phoneName='+PhoneName+'&did='+DID+'&uui='+RecordId;
             
             //String endpoint = 'https://api1.cloudagent.in/CAServices/PhoneManualDial.php?'+queryString;
@@ -168,6 +169,24 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
                 response.setBody('DUMMY');
             }
             System.debug(response.getBody());
+            //Added by Vinay 20-03-2026 Start
+            Id objId = RecordId;
+            String objName = objId.getSObjectType().getDescribe().getName();
+            Task tsk = new Task();
+            if(objName == 'Lead'){
+                tsk.WhoId = objId;
+                tsk.Task_Type__c = 'Presales Call';
+                tsk.Subject = 'Presales Call';
+            }else{
+                tsk.WhatId = objId;
+                tsk.Task_Type__c = 'CRM Call';
+                tsk.Subject = 'CRM Call';
+            }
+            tsk.Communication_Type__c = 'Outbound Call';
+            tsk.Campaign_Name_from_CTI__c = campaignName;
+            tsk.Status = 'In-Progress';
+            insert tsk;
+            //Added by Vinay 20-03-2026 End
             string tempResponse = response.getBody();
             return tempResponse; 
         }

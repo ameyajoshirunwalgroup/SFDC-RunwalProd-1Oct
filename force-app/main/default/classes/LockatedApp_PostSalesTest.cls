@@ -32,6 +32,7 @@ public class LockatedApp_PostSalesTest {
         objpr.RW_Project_Brochure_PublicUrl__c='test1';
         objpr.RW_SAP_Company_Code__c='5245';
         objpr.WhatsApp_Bot_Project_Image_File_Id__c = System.label.Possession_Guidelines_Doc_Id;
+        objpr.Costsheet_Format__c = 'CostsheetViewPage';
         insert objpr;
         
         Tower__c t = UniversalTestClassSetup.setuptower(objpr.Id,'A','Residential');
@@ -74,7 +75,7 @@ public class LockatedApp_PostSalesTest {
         oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
-        oppRec.SAP_Customer_Number__c='0020006618';
+        //oppRec.SAP_Customer_Number__c='0020006618';
         oppRec.SalesOrder_Number__c='3010005457';
         oppRec.RW_Mobile_No__c = '1234567890';
         oppRec.Sales_Manager_User__c = UserInfo.getUserId();
@@ -149,6 +150,19 @@ public class LockatedApp_PostSalesTest {
         objBking.Primary_Applicant_Email__c = 'test@mail.com';
         objBking.RW_Signed_Agreement_Document_Id__c = System.label.Possession_Guidelines_Doc_Id;
         insert objBking;
+
+        Name_Confirmation_Form__c ncfRec = new Name_Confirmation_Form__c();
+        ncfRec.Booking__c = objBking.Id;
+        ncfRec.RW_Active_NCF__c = true;
+        ncfRec.PancardNo__c = 'DCFRT5455G';
+        ncfRec.RW_Primary_Country__c = 'India';
+        ncfRec.RW_Primary_DOB__c = Date.valueOf('1990-01-01');
+        ncfRec.RW_Primary_Email__c = 'test@mail.com';
+        ncfRec.RW_Primary_First_Name__c = 'Test First';
+        ncfRec.RW_Primary_Last_Name__c = 'Test Last';
+        ncfRec.RW_Primary_Mobile_Number__c = '5145789658';
+        ncfRec.RW_Primary_Permanent_Address_Line_1__c = 'Test';
+        insert ncfRec;
         
         List<Applicant_Details__c> appList = new List<Applicant_Details__c>();
         Applicant_Details__c app1 = new Applicant_Details__c();
@@ -236,10 +250,10 @@ public class LockatedApp_PostSalesTest {
         insert sch;*/
         
         Test.startTest();
-        
+        Test.setMock(HttpCalloutMock.class, new CalloutMockClass());
         RestRequest req1 = new RestRequest(); 
         RestResponse res1 = new RestResponse();
-        req1.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/customerDetails/'+objBking.Id; 
+        req1.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/customerDetails/'+objBking.Id; 
         req1.httpMethod = 'Get';
         req1.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req1;
@@ -254,7 +268,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req2 = new RestRequest(); 
         RestResponse res2 = new RestResponse();
-        req2.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/documents/'+objBking.Id; 
+        req2.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/documents/'+objBking.Id; 
         req2.httpMethod = 'Get';
         req2.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req2;
@@ -264,7 +278,7 @@ public class LockatedApp_PostSalesTest {
         /*String jsonStr = '{"loanRequest": {"booking" : "' + refBkg.Id + '","projectName": "Runwal Bliss","requiredLoanAmount": 1000,"loanTenureYears": "2","preferredBank": "Bank of India","comments": "Test"}}';
         RestRequest req3 = new RestRequest(); 
         RestResponse res3 = new RestResponse();
-        req3.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/loans/'; 
+        req3.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/loans/'; 
         req3.httpMethod = 'Post';
         req3.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req3;
@@ -275,7 +289,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr4 = '{"booking" : "' + refBkg.Id + '","ncf_status": "Completed"}';
         RestRequest req4 = new RestRequest(); 
         RestResponse res4 = new RestResponse();
-        req4.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/ncf/'; 
+        req4.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/ncf/'; 
         req4.httpMethod = 'Post';
         req4.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req4;
@@ -283,10 +297,10 @@ public class LockatedApp_PostSalesTest {
         req4.requestBody = Blob.valueOf(jsonStr4);
         LockatedApp_NCFConfirmation.doPost();
         
-        String jsonStr5 = '{"customerProfileDetails": {"booking": "' + objBking.Id + '","PrimaryApplicants": [{"fullName": "Vinay","birthDate": "","panCard": "","gstinNumber": "","companyName": "","designation": "","permanentAddress": "","correspondenceAddress": "Test","emailId": "","mobileNumber": ""}]}}';
+        String jsonStr5 = '{"customerProfileDetails": {"booking": "' + objBking.Id + '","PrimaryApplicants": [{"fullName": "Vinay","birthDate": "1990-01-01","panCard": "ASFER5665H","gstinNumber": "123654","companyName": "Test","designation": "","permanentAddress": "","correspondenceAddress": "Test","emailId": "","mobileNumber": ""}],"CoApplicants":[{"fullName": "Vinay","birthDate": "2000-01-01","panCard": "ASFER5665G","gstinNumber": "","companyName": "","designation": "","permanentAddress": "Test Address Test DOB","correspondenceAddress": "","emailId": "","mobileNumber": ""}]}}';
         RestRequest req5 = new RestRequest(); 
         RestResponse res5 = new RestResponse();
-        req5.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/primaryApplicant/'; 
+        req5.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/primaryApplicant/'; 
         req5.httpMethod = 'Post';
         req5.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req5;
@@ -297,13 +311,22 @@ public class LockatedApp_PostSalesTest {
         String jsonStr7 = '{"customerProfileDetails": {"booking": "' + refBkg.Id + '","PrimaryApplicants": [{"fullName": "Vinay","birthDate": "","panCard": "","gstinNumber": "","companyName": "","designation": "","permanentAddress": "Test","correspondenceAddress": "Test","emailId": "","mobileNumber": ""}]}}';
         RestRequest req7 = new RestRequest(); 
         RestResponse res7 = new RestResponse();
-        req7.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/primaryApplicant/'; 
+        req7.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/primaryApplicant/'; 
         req7.httpMethod = 'Post';
         req7.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req7;
         RestContext.response = res7;
         req7.requestBody = Blob.valueOf(jsonStr7);
         LockatedApp_PrimaryApplicant.doPost();
+
+        RestRequest req8 = new RestRequest(); 
+        RestResponse res8 = new RestResponse();
+        req8.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/ncf/'+objBking.Id; 
+        req8.httpMethod = 'Get';
+        req8.addHeader('Content-Type', 'application/json'); 
+        RestContext.request = req8;
+        RestContext.response = res8;
+        LockatedApp_NCFConfirmation.doGet();
         
         PageReference ncfPdf = Page.CRMBotDocument;
         Test.setCurrentPage(ncfPdf);
@@ -319,7 +342,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req1 = new RestRequest(); 
         RestResponse res1 = new RestResponse();
-        req1.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/customerDetails/'; 
+        req1.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/customerDetails/'; 
         req1.httpMethod = 'Get';
         req1.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req1;
@@ -329,7 +352,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req2 = new RestRequest(); 
         RestResponse res2 = new RestResponse();
-        req2.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/documents/'; 
+        req2.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/documents/'; 
         req2.httpMethod = 'Get';
         req2.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req2;
@@ -345,7 +368,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req3 = new RestRequest(); 
         RestResponse res3 = new RestResponse();
-        req3.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/loans/'+refBkg.Id; 
+        req3.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/loans/'+refBkg.Id; 
         req3.httpMethod = 'Get';
         req3.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req3;
@@ -354,7 +377,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req4 = new RestRequest(); 
         RestResponse res4 = new RestResponse();
-        req4.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/loyalty/'; 
+        req4.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/loyalty/'; 
         req4.httpMethod = 'Get';
         req4.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req4;
@@ -363,7 +386,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req5 = new RestRequest(); 
         RestResponse res5 = new RestResponse();
-        req5.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/loyalty/1234'; 
+        req5.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/loyalty/1234'; 
         req5.httpMethod = 'Get';
         req5.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req5;
@@ -375,7 +398,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr6 = '{"booking" : "","ncf_status": "Completed"}';
         RestRequest req6 = new RestRequest(); 
         RestResponse res6 = new RestResponse();
-        req6.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/ncf/'; 
+        req6.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/ncf/'; 
         req6.httpMethod = 'Post';
         req6.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req6;
@@ -388,7 +411,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr7 = '{"customerProfileDetails": {"booking": "","PrimaryApplicants": [{"fullName": "Vinay","birthDate": "","panCard": "","gstinNumber": "","companyName": "","designation": "","permanentAddress": "Test","correspondenceAddress": "Test","emailId": "","mobileNumber": ""}]}}';
         RestRequest req7 = new RestRequest(); 
         RestResponse res7 = new RestResponse();
-        req7.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/primaryApplicant/'; 
+        req7.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/primaryApplicant/'; 
         req7.httpMethod = 'Post';
         req7.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req7;
@@ -398,10 +421,10 @@ public class LockatedApp_PostSalesTest {
         
         LockatedApp_ServiceRequests.doGet();
         
-        String jsonStr8 = '{"App_Version" : "","Source" : "","OS_Version" : "","Model" : "","Type_A_I" : "","Custom_Device_ID" : "","Customer" : "","FCM_ID_Action" : ""}';
+        String jsonStr8 = '{"deviceToken" : "1234", "bookingNumber" : "", "addOrDelete" : "Add"}';
         RestRequest req8 = new RestRequest(); 
         RestResponse res8 = new RestResponse();
-        req8.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
+        req8.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
         req8.httpMethod = 'Post';
         req8.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req8;
@@ -538,10 +561,12 @@ public class LockatedApp_PostSalesTest {
         insert faq;
         
         Test.startTest();
+
+        Test.setMock(HttpCalloutMock.class, new CalloutMockClass());
         
         RestRequest req1 = new RestRequest(); 
         RestResponse res1 = new RestResponse();
-        req1.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/'+objBking.Id; 
+        req1.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/'+objBking.Id; 
         req1.httpMethod = 'Get';
         req1.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req1;
@@ -551,7 +576,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr2 = '{"caseType" : "Complaint","categorType" : "Cancellation Related","categoryName" : "Cancellation Related","sub_category" : "","description" : "Test","booking_id" :"' + objBking.Id + '","attachment" : ""}';
         RestRequest req2 = new RestRequest(); 
         RestResponse res2 = new RestResponse();
-        req2.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/case'; 
+        req2.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/case'; 
         req2.httpMethod = 'Post';
         req2.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req2;
@@ -562,7 +587,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr3 = '{"description" : "Test for file attchment","case_id" : "' + cs.Id + '","fileType" : "jpeg","fileName" : "Test Att","attachment" : ""}';
         RestRequest req3 = new RestRequest(); 
         RestResponse res3 = new RestResponse();
-        req3.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/caseComment'; 
+        req3.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/caseComment'; 
         req3.httpMethod = 'Post';
         req3.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req3;
@@ -572,7 +597,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req4 = new RestRequest(); 
         RestResponse res4 = new RestResponse();
-        req4.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/1234'; 
+        req4.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/1234'; 
         req4.httpMethod = 'Get';
         req4.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req4;
@@ -582,7 +607,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr5 = '{"caseType" : "Complaint","categorType" : "Cancellation Related","categoryName" : "Cancellation Related","sub_category" : "","description" : "Test","booking_id" :"1234","attachment" : ""}';
         RestRequest req5 = new RestRequest(); 
         RestResponse res5 = new RestResponse();
-        req5.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/case'; 
+        req5.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/case'; 
         req5.httpMethod = 'Post';
         req5.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req5;
@@ -590,10 +615,10 @@ public class LockatedApp_PostSalesTest {
         req5.requestBody = Blob.valueOf(jsonStr5);
         LockatedApp_ServiceRequests.doPost();
         
-        String jsonStr6 = '{"App_Version" : "","Source" : "","OS_Version" : "","Model" : "","Type_A_I" : "","Custom_Device_ID" : "","Customer" : "0020006618","FCM_ID_Action" : ""}';
+        String jsonStr6 = '{"deviceToken" : "1234", "bookingNumber" : "' + objBking.Id + '", "addOrDelete" : "Add"}';
         RestRequest req6 = new RestRequest(); 
         RestResponse res6 = new RestResponse();
-        req6.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
+        req6.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
         req6.httpMethod = 'Post';
         req6.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req6;
@@ -601,10 +626,10 @@ public class LockatedApp_PostSalesTest {
         req6.requestBody = Blob.valueOf(jsonStr6);
         LockatedApp_UserDeviceDetails.doPost();
         
-        String jsonStr7 = '{"App_Version" : "","Source" : "","OS_Version" : "","Model" : "","Type_A_I" : "","Custom_Device_ID" : "","Customer" : "134","FCM_ID_Action" : ""}';
+        String jsonStr7 = '{"deviceToken" : "1234", "bookingNumber" : "' + objBking.Id + '", "addOrDelete" : "Delete"}';
         RestRequest req7 = new RestRequest(); 
         RestResponse res7 = new RestResponse();
-        req7.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
+        req7.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
         req7.httpMethod = 'Post';
         req7.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req7;
@@ -615,7 +640,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr8 = '{"booking" : "'+ objBking.Id +'","utrNumber" : "1234","fileType" : "pdf","fileContent" : ""}';
         RestRequest req8 = new RestRequest(); 
         RestResponse res8 = new RestResponse();
-        req8.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/utrUpload/StampDuty'; 
+        req8.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/utrUpload/StampDuty'; 
         req8.httpMethod = 'Post';
         req8.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req8;
@@ -626,7 +651,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr9 = '{"booking" : "","utrNumber" : "1234","fileType" : "pdf","fileContent" : ""}';
         RestRequest req9 = new RestRequest(); 
         RestResponse res9 = new RestResponse();
-        req9.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/utrUpload/StampDuty'; 
+        req9.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/utrUpload/StampDuty'; 
         req9.httpMethod = 'Post';
         req9.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req9;
@@ -637,7 +662,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr10 = '{"booking" : "'+ objBking.Id +'","utrNumber" : "","fileType" : "pdf","fileContent" : ""}';
         RestRequest req10 = new RestRequest(); 
         RestResponse res10 = new RestResponse();
-        req10.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/utrUpload/StampDuty'; 
+        req10.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/utrUpload/StampDuty'; 
         req10.httpMethod = 'Post';
         req10.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req10;
@@ -647,7 +672,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req11 = new RestRequest(); 
         RestResponse res11 = new RestResponse();
-        req11.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/faqs'; 
+        req11.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/faqs'; 
         req11.httpMethod = 'Get';
         req11.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req11;
@@ -657,7 +682,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr12 = '{"reqType" : "Enquiry","booking" : "'+ objBking.Id +'","firstName" : "Vinay","lastName" : "V","phone" : "1246676356","email" : "test@mail.com","project" : "Runwal Bliss","description" : ""}';
         RestRequest req12 = new RestRequest(); 
         RestResponse res12 = new RestResponse();
-        req12.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/referralEnquiry'; 
+        req12.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/referralEnquiry'; 
         req12.httpMethod = 'Post';
         req12.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req12;
@@ -668,7 +693,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr13 = '{"reqType" : "Referral","booking" : "'+ objBking.Id +'","firstName" : "Vinay","lastName" : "V","phone" : "1246676356","email" : "test@mail.com","project" : "Runwal Bliss","description" : ""}';
         RestRequest req13 = new RestRequest(); 
         RestResponse res13 = new RestResponse();
-        req13.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/referralEnquiry'; 
+        req13.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/referralEnquiry'; 
         req13.httpMethod = 'Post';
         req13.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req13;
@@ -679,7 +704,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr14 = '{"booking" : "'+ objBking.Id +'","fileType" : "pdf","fileContent" : "12145265"}';
         RestRequest req14 = new RestRequest(); 
         RestResponse res14 = new RestResponse();
-        req14.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/sanctionLetter'; 
+        req14.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/sanctionLetter'; 
         req14.httpMethod = 'Post';
         req14.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req14;
@@ -687,6 +712,16 @@ public class LockatedApp_PostSalesTest {
         req14.requestBody = Blob.valueOf(jsonStr14);
         LockatedApp_UploadSanctionLetter.doPost();
         
+        String jsonStr15 = '{"deviceToken" : "1234", "bookingNumber" : "12344", "addOrDelete" : "Add"}';
+        RestRequest req15 = new RestRequest(); 
+        RestResponse res15 = new RestResponse();
+        req15.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
+        req15.httpMethod = 'Post';
+        req15.addHeader('Content-Type', 'application/json'); 
+        RestContext.request = req15;
+        RestContext.response = res15;
+        req6.requestBody = Blob.valueOf(jsonStr15);
+        LockatedApp_UserDeviceDetails.doPost();
         Test.stopTest();
     }
     
@@ -737,7 +772,7 @@ public class LockatedApp_PostSalesTest {
         
 		RestRequest req1 = new RestRequest(); 
         RestResponse res1 = new RestResponse();
-        req1.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/faqs'; 
+        req1.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/faqs'; 
         req1.httpMethod = 'Get';
         req1.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req1;
@@ -746,7 +781,7 @@ public class LockatedApp_PostSalesTest {
         
         RestRequest req2 = new RestRequest(); 
         RestResponse res2 = new RestResponse();
-        req2.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/holidays'; 
+        req2.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/holidays'; 
         req2.httpMethod = 'Get';
         req2.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req2;
@@ -756,7 +791,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr3 = '{"reqType" : "Referral","booking" : "","firstName" : "Vinay","lastName" : "V","phone" : "1246676356","email" : "test@mail.com","project" : "Runwal Bliss","description" : ""}';
         RestRequest req3 = new RestRequest(); 
         RestResponse res3 = new RestResponse();
-        req3.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/referralEnquiry'; 
+        req3.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/referralEnquiry'; 
         req3.httpMethod = 'Post';
         req3.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req3;
@@ -767,7 +802,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr4 = '{"reqType" : "Referral","booking" : "1234","firstName" : "Vinay","lastName" : "V","phone" : "1246676356","email" : "test@mail.com","project" : "Runwal Bliss","description" : ""}';
         RestRequest req4 = new RestRequest(); 
         RestResponse res4 = new RestResponse();
-        req4.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/referralEnquiry'; 
+        req4.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/referralEnquiry'; 
         req4.httpMethod = 'Post';
         req4.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req4;
@@ -778,7 +813,7 @@ public class LockatedApp_PostSalesTest {
         String jsonStr5 = '{"booking" : "","fileType" : "pdf","fileContent" : ""}';
         RestRequest req5 = new RestRequest(); 
         RestResponse res5 = new RestResponse();
-        req5.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/sanctionLetter'; 
+        req5.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/sanctionLetter'; 
         req5.httpMethod = 'Post';
         req5.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req5;
@@ -936,6 +971,7 @@ public class LockatedApp_PostSalesTest {
         objBking.RW_Total_Receipt_Discount_Recieved__c = 0;
         objBking.Primary_Applicant_Email__c = 'test@mail.com';
         objBking.RW_Signed_Agreement_Document_Id__c = System.label.Possession_Guidelines_Doc_Id;
+        objBking.Lockated_User_Device_ID__c = '12340';
         insert objBking;
         
         
@@ -944,24 +980,67 @@ public class LockatedApp_PostSalesTest {
         ln.RW_Bank_Preference_1__c = 'Axis Bank ltd';
         insert ln;
         
+        ContentVersion version = new ContentVersion();
+        version.ContentDocumentId = System.label.Possession_Guidelines_Doc_Id;
+        version.PathOnClient = 'Possession GuideLines.pdf';
+        version.VersionData = Blob.valueOf('Test Content');
+        insert version;
         
         Registration_Schedule__c sch = new Registration_Schedule__c();
         sch.Booking__c = objBking.Id;
         sch.Active__c = true;
         insert sch;
+
+        App_Notification__c ntf = new App_Notification__c();
+        ntf.Title__c = 'Test';
+        insert ntf;
         
         Test.startTest();
         
         String jsonStr = '{"loanRequest": {"booking" : "' + objBking.Id + '","projectName": "Runwal Bliss","requiredLoanAmount": 1000,"loanTenureYears": "2","preferredBank": "Bank of India","comments": "Test"}}';
+        RestRequest req = new RestRequest(); 
+        RestResponse res = new RestResponse();
+        req.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/loans/'; 
+        req.httpMethod = 'Post';
+        req.addHeader('Content-Type', 'application/json'); 
+        RestContext.request = req;
+        RestContext.response = res;
+        req.requestBody = Blob.valueOf(jsonStr);
+        LockatedApp_LoanDetails.doPost();
+
+        String jsonStr1 = '{"deviceToken" : "1234", "bookingNumber" : "' + objBking.Id + '", "addOrDelete" : "Add"}';
+        RestRequest req1 = new RestRequest(); 
+        RestResponse res1 = new RestResponse();
+        req1.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
+        req1.httpMethod = 'Post';
+        req1.addHeader('Content-Type', 'application/json'); 
+        RestContext.request = req1;
+        RestContext.response = res1;
+        req1.requestBody = Blob.valueOf(jsonStr1);
+        LockatedApp_UserDeviceDetails.doPost();
+
+        String jsonStr2 = '{"deviceToken" : "1234", "bookingNumber" : "' + objBking.Id + '", "addOrDelete" : "Delete"}';
+        RestRequest req2 = new RestRequest(); 
+        RestResponse res2 = new RestResponse();
+        req2.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/userDeviceDetails'; 
+        req2.httpMethod = 'Post';
+        req2.addHeader('Content-Type', 'application/json'); 
+        RestContext.request = req2;
+        RestContext.response = res2;
+        req2.requestBody = Blob.valueOf(jsonStr2);
+        LockatedApp_UserDeviceDetails.doPost();
+
+
         RestRequest req3 = new RestRequest(); 
         RestResponse res3 = new RestResponse();
-        req3.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/loans/'; 
+        req3.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/serviceRequests/readNotification'+ntf.Id; 
         req3.httpMethod = 'Post';
         req3.addHeader('Content-Type', 'application/json'); 
         RestContext.request = req3;
         RestContext.response = res3;
-        req3.requestBody = Blob.valueOf(jsonStr);
-        LockatedApp_LoanDetails.doPost();
+        Lockatedapp_ReadNotifications.doPost();
+
+
         
         Test.stopTest();
     }

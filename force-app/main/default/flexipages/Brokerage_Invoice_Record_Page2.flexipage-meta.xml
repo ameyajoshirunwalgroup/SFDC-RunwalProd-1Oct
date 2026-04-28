@@ -136,9 +136,9 @@
                                     <rightValue>System Administrator</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.Created_Date_Formula__c}</leftValue>
+                                    <leftValue>{!Record.Brokerage_Summary__r.Brokerage_Scheme__r.Ladder_Creation_Manual__c}</leftValue>
                                     <operator>EQUAL</operator>
-                                    <rightValue>false</rightValue>
+                                    <rightValue>true</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>

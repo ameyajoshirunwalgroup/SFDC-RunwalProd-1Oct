@@ -2,8 +2,10 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
     <externalId>false</externalId>
-    <formula>IF(AND(Total_Amount_Balance__c &lt;= 1,Total_Amount_Balance__c != null), &apos;Paid&apos;, &apos;Unpaid&apos;)
-/*IF(AND(Total_Amount_Balance__c &lt;= 1), &apos;Paid&apos;, &apos;Unpaid&apos;)Added by Snehal 20-1-2026*/</formula>
+    <formula>/*IF(AND(Total_Amount_Balance__c &lt;= 1,Total_Amount_Balance__c != null), &apos;Paid&apos;, &apos;Unpaid&apos;) Commented by Prashant 27-03-26 */
+/*IF(AND(Total_Amount_Balance__c &lt;= 1), &apos;Paid&apos;, &apos;Unpaid&apos;)Added by Snehal 20-1-2026*/
+
+IF(AND( Total_Amount_Balance__c &lt;= 1, NOT(ISBLANK(Total_Amount_Balance__c))), &apos;Paid&apos;, &apos;Unpaid&apos;)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Status</label>
     <required>false</required>

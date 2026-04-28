@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- PersonalInfo_EPIM --></label>
+        <name>PersonalInfo_EPIM</name>
+    </fieldSets>
+    <validationRules>
+        <errorMessage><!-- Reason for Deactivation is blank or the Role value is still updated --></errorMessage>
+        <name>Reason_for_Inactive_to_be_updated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Cannot change the data, please contact your representative. --></errorMessage>
+        <name>Validate_Portal_User</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -28,11 +28,11 @@ public class RWCaseTriggerHandler
             
         }
         
-        if (Trigger.isAfter && Trigger.isUpdate) 
+        /*if (Trigger.isAfter && Trigger.isUpdate) 
         {
             onAfterUpdate((list<Case>) trigger.new, (map<id, Case>) trigger.OldMap);
             
-        }
+        }*/
         
     }
     public void onBeforeInsert(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
@@ -1613,6 +1613,12 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 for(group EachGrp : lstQueue){
                     mapOfQueue.put(EachGrp.name, EachGrp.id);
                 }
+                //Added by Vinay 02-03-2026 Start. To suppress standard "Case transferred to you" email when assigning to Queue
+                Database.DMLOptions dmo = new Database.DMLOptions();
+                dmo.EmailHeader.triggerUserEmail = false;          
+                dmo.EmailHeader.triggerAutoResponseEmail = false;   
+                dmo.assignmentRuleHeader.useDefaultRule = false;  
+                //Added by Vinay 02-03-2026 End
                 for(Case cs : cases){
                     if(cs.RW_Project__c != null && mapOfQueue.containsKey(mapOfProj.get(cs.RW_Project__c).name+'-Queue')){
                         cs.ownerid = mapOfQueue.get(mapOfProj.get(cs.RW_Project__c).name+'-Queue');
@@ -1620,6 +1626,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                     else{
                         cs.ownerid = mapofQueue.get(label.Generic_Queue_Name);  
                     }
+                    cs.setOptions(dmo); //Added by Vinay 02-03-2026
                 }
             }
         }

@@ -26,6 +26,8 @@ public class BatchRunFromButton {
     }
     public void BatchRunLadderBrokerage(){
         system.debug('LadderCreationManual -> '+LadderCreationManual);
+        String cutOffString = System.Label.CP_Billing_Checklist_Cut_off_date;
+        Date cpBillingcutOffDate = Date.valueOf(cutOffString);
         if(LadderCreationManual == '1'){
              Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();//Added by Prashant 12-09-25
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Batch run started'));
@@ -34,8 +36,9 @@ public class BatchRunFromButton {
                       and  RW_Registration_Done__c = 'Yes' and BrokerIId__c != null and Opportunity__c != null and Exclude_From_Brokerage_Batch__c = false and
                       Type_of_Client__c != null and Brokerage_Summary__c != null and Booking_Date__c > 2022-09-29T23:01:01Z and RW_Registration_Date__c != null 
                       AND BrokerIId__r.RecordTypeId =: CPRecordTypeId //Added by Prashant to Stop billing creation until cp is Registered. 12-09-25. 
-                      AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....xxx
-                      AND BrokerIId__r.Valid_RERA_certificate__c = true /*AND BrokerIId__r.Valid_competency_certificate__c = true*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.//Added by Prashant to update th condition to restrict billing creation for the cps who dont have valid RERA & CC.11-09-25.				
+                      //AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....xxx
+                      AND (DAY_ONLY(Brokerage_Summary__r.CreatedDate) < :cpBillingcutOffDate OR Checklist_Approved__c = true)//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation only for summary created after 11 november,2025 )//06-03-2026....xxx
+                      AND BrokerIId__r.Valid_RERA_certificate__c = true /*AND BrokerIId__r.Valid_competency_certificate__c = true*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.//Added by Prashant to update th condition to restrict billing creation for the cps who dont have valid RERA & CC.11-09-25.	
                       and /*Brokerage_Scheme__c ='a2a5j000000YiBiAAK' and BrokerIId__c = 'a010I00001ao4UpQAI' and*/ RW_X9_99_Received__c = true And Source_of_Booking__c = 'Channel Partner' ORDER BY Booking_Date__c ASC];
             for(Booking__c b:bkList){
                 CPIds.add(b.BrokerIId__c);

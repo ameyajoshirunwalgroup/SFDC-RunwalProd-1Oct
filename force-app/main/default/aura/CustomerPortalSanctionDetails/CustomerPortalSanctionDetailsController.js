@@ -21,6 +21,7 @@
     } ,
     
     previewfile :   function(component, event, helper) {
+        console.log('file Id: ', event.getSource().get('v.name'));
     $A.get('e.lightning:openFiles').fire({ 
                      recordIds: [event.getSource().get('v.name')]
                  }); 

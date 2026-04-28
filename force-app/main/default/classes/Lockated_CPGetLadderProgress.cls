@@ -17,7 +17,8 @@ global without sharing class Lockated_CPGetLadderProgress {
                 Response response = new Response();
                 response.responselist = new list<MyLadderProgress>();
                 Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();//Added by Prashant 12-09-25
-                
+                String cutOffString = System.Label.CP_Billing_Checklist_Cut_off_date;
+                Date cpBillingcutOffDate = Date.valueOf(cutOffString);
                 list<Booking__c> blist = [select Id,Name,Opportunity__c,BrokerIId__c,Agreement_Value_for_brokers__c,Project__c,Tower__c,Status__c,Additional_Brokerage_Accrued_Dashboards__c,
                                           Base_Brokerage_Accrued_Dashboards__c,Project_Name__c,Unit_No__r.Name,Brokerage_Scheme__r.End_Date__c,Booking_Date__c,Payment_Received__c,Registration_date_status__c,
                                           RW_X9_99_Received__c,RW_Registration_Done__c,Brokerage_Scheme__c from Booking__c where 
@@ -36,7 +37,8 @@ global without sharing class Lockated_CPGetLadderProgress {
                                           and  Brokerage_Scheme__c != null 
                                           AND BrokerIId__r.RecordTypeId =: CPRecordTypeId //Added by Prashant to Stop billing creation until cp is Registered. 12-09-25. 
                                           /*Commented this for testing.. *...*/ 
-                                          AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....
+                                          //AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....
+                                          AND (DAY_ONLY(Brokerage_Summary__r.CreatedDate) < :cpBillingcutOffDate OR Checklist_Approved__c = true)//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation only for summary created after 11 november,2025 )//06-03-2026....xxx
                                           AND BrokerIId__r.Valid_RERA_certificate__c = true /*AND BrokerIId__r.Valid_competency_certificate__c = true*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.//Added by Prashant to update th condition to restrict billing creation for the cps who dont have valid RERA & CC.11-09-25.	
                                           ORDER BY Booking_Date__c DESC];
                 Map<Id,list<Booking__c>> schemeVsBkMap = new Map<Id,list<Booking__c>>();

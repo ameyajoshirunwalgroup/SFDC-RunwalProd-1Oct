@@ -166,15 +166,20 @@ trigger WelcomeCallTrigger on RW_Welcome_Call__c (before update,after update) {
                 SendWhatsAppMsg.methodToSendWhatsAppMsg(call.RW_Booking__r.Primary_Applicant_Name__c, null, null, null, null, null, null, null, null, call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Applicant1_Mobile_No__c, 'welcome_call');
             }
         }*/
+        List<String> bkgIds = new List<String>(); //Added by Vinay 28-02-2026
         for(RW_Welcome_Call__c call : calls){
             if(!Test.isRunningTest()){
                 //SendWhatsAppMsg.methodToSendWhatsAppMsg(call.RW_Booking__r.Opportunity__c,call.RW_Booking__r.Primary_Applicant_Name__c, null, null, null, null, null, null, null, call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Applicant1_Mobile_No__c, System.label.Welcome_call_WhatsApp);
                 SendWhatsAppMsg.methodToSendWhatsAppMsg(call.RW_Booking__r.Opportunity__c,call.RW_Booking__r.Primary_Applicant_Name__c, null, null, null, null, null, null, null, call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Applicant1_Mobile_No__c, 'welcome_call_ov');
                 SendWhatsAppMsg.methodToSendWhatsAppMsg(null,call.RW_Booking__r.Primary_Applicant_Name__c,System.label.Booking_to_Registration_Link,System.label.Home_loan_brochure_Link,System.label.TDS_Tutorial_Link,null,null,null,null,call.RW_Booking__r.RW_Country_Phone_Code__c, call.RW_Booking__r.Opportunity__r.RW_Mobile_No__c,'Welcome Call Accepted'); // Added by coServe 09-07-2024
             }
-            
+            bkgIds.add(call.RW_Booking__c); //Added by Vinay 28-02-2026
         }
-     
+        if(bkgIds.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.bookingConfirmedNotification(bkgIds);
+            LockatedApp_Notifications.homeLoanNotification(bkgIds);
+            LockatedApp_Notifications.ncfNotification(bkgIds);
+        }
     }
     
   }

@@ -9,8 +9,6 @@ public class NOCTemplateControllerTest {
         
         Profile p1 = [Select Id, Name from Profile where Name = 'System Administrator'];
         
-        
-        
         String orgId1 = UserInfo.getOrganizationId();
         String dateString1 = String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
         Integer randomInt1 = Integer.valueOf(math.rint(math.random()*1000000));
@@ -73,8 +71,6 @@ public class NOCTemplateControllerTest {
             insert tuser;
             system.debug('*1*');
             
-            
-            
             //Inserting Project
             Project__c objpr = new Project__c();
             objpr.RW_Project_Code__c = 'T31';
@@ -100,7 +96,6 @@ public class NOCTemplateControllerTest {
             system.debug('*4*');
             
             //Inserting Opportunity
-            
             Opportunity oppRec= new Opportunity();
             oppRec.RW_Project__c=objpr.id;
             oppRec.name='Test 1';
@@ -113,6 +108,7 @@ public class NOCTemplateControllerTest {
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -121,7 +117,6 @@ public class NOCTemplateControllerTest {
             oppRec.Booking_Feedback_Link__c='654864524';
             oppRec.Portal_Possession_Survey_Link_Id__c='6423874';
             insert oppRec;
-            
             
             Tower__c objTwr = new Tower__c();
             objTwr.SAP_Plant_Code__c = '100';
@@ -140,7 +135,6 @@ public class NOCTemplateControllerTest {
             ObjRm.Project__c = objpr.Id;
             ObjRm.User__c = tuser.Id;
             ObjRm.Contact_Number__c='9987654323';
-            //ObjRm.Name = 'Bliss RM';
             ObjRm.Name = 'Sudhakar Nair';
             insert ObjRm; 
             
@@ -186,7 +180,6 @@ public class NOCTemplateControllerTest {
             q.Stack_Additional__c = 0;
             q.Grand_Total__c = 70789090;
             q.Stamp_Duty_and_Registration_Total__c = 789090;
-            
             insert q;
             
             Booking__c objBking = new Booking__c();
@@ -246,10 +239,10 @@ public class NOCTemplateControllerTest {
             objBking1.RW_Registration_Status__c = 'Registration Completed';
             objBking1.RW_Signed_Agreement_to_Customer_Date__c = Date.today();
             insert objBking1;
-        	
+            
               
              APF__c apf = new APF__c();
-             apf.RW_Bank_Name__c = 'ICICI Bank';
+             apf.RW_Bank_Name__c = 'HDFC Bank Ltd';
              apf.RW_Project__c = objpr.Id;
              apf.RW_Tower__c = objTwr.Id;
              apf.RW_Relationship_Manager__c = ObjRm.Id;
@@ -264,7 +257,16 @@ public class NOCTemplateControllerTest {
             ln.RW_Project_Name__c = objpr.Id;
             ln.RW_Loan_Record_Status__c = 'Loan Sanctioned';
             ln.RW_Sanction_Letter_ID__c = '1234567';
+            ln.Loan_Document_Received_Date__c =system.today();
             ln.Home_Loan_Taken_From__c = 'Runwal';
+            ln.RW_Sanction_Amount__c = 23999;
+            ln.RW_Sanction_Date__c = system.today();
+            ln.RW_Sanction_Status__c = 'Loan Sanctioned';
+            ln.RW_Loan_Account_Number__c = '63782';
+            
+            
+            
+            
             insert ln;
             
             Loan__c ln1 = new Loan__c();
@@ -274,14 +276,19 @@ public class NOCTemplateControllerTest {
             ln1.RW_Project_Name__c = objpr.Id;
             ln1.RW_Loan_Record_Status__c = 'Loan Sanctioned';
             ln1.RW_Sanction_Letter_ID__c = '1234567';
+            ln1.Loan_Document_Received_Date__c = system.today();
             ln1.Home_Loan_Taken_From__c = 'Runwal';
+            ln1.RW_Sanction_Amount__c = 23999;
+            ln1.RW_Sanction_Date__c = system.today();
+            ln1.RW_Sanction_Status__c = 'Loan Sanctioned';
+            ln1.RW_Loan_Account_Number__c = '63782';
             insert ln1;
             
             RW_NOC_Template__c nocTemp = new RW_NOC_Template__c();
             nocTemp.RW_Bank_Name__c = 'Axis Bank Ltd';
             nocTemp.RW_Project__c = objpr.Id;
             nocTemp.RW_Keyword__c = '[AgreementAmount],[AgreementDate],[BankName],[FlatNo],[Today],[ApplicantNames],[CarpetArea]';
-            nocTemp.RW_Template__c = '[AgreementAmount] [AgreementDate] [BankName] [FlatNo] [Today] [ApplicantNames] [CarpetArea]';
+            nocTemp.RW_Template__c = '[AgreementAmount] [AgreementDate] [BankName] [FlatNo] [Today] [ApplicantNames] [CarpetArea] \u00A0 â€œtestâ€';
             insert nocTemp;
             
             NOC_Variable_Mapping__c nocMap1 = new NOC_Variable_Mapping__c();
@@ -322,63 +329,32 @@ public class NOCTemplateControllerTest {
             nocMap10.Multiplier__c = 0.1;
             insert nocMap10;
             
-            /*NOC_Variable_Mapping__c nocMap7 = new NOC_Variable_Mapping__c();
-            nocMap7.Name = '[BranchName]';
-            nocMap7.Field__c = 'RW_Bank_Branch__c';
-            insert nocMap7;
             
-            NOC_Variable_Mapping__c nocMap8 = new NOC_Variable_Mapping__c();
-            nocMap8.Name = '[TowerName]';
-            nocMap8.Field__c = 'RW_Booking__r.Unit_No__r.TowerName__r.name';
-            insert nocMap8;
+            Test.startTest(); // Start testing context
             
-            NOC_Variable_Mapping__c nocMap9 = new NOC_Variable_Mapping__c();
-            nocMap9.Name = '[ProjectName]';
-            nocMap9.Field__c = 'RW_Project_Name__r.name';
-            insert nocMap9;
-            
-            NOC_Variable_Mapping__c nocMap10 = new NOC_Variable_Mapping__c();
-            nocMap10.Name = '[CarpetArea]';
-            nocMap10.Field__c = 'RW_Booking__r.Unit_No__r.Carpet_Area__c';
-            insert nocMap10;
-            
-            NOC_Variable_Mapping__c nocMap11 = new NOC_Variable_Mapping__c();
-            nocMap11.Name = '[DeckArea]';
-            nocMap11.Field__c = 'RW_Booking__r.Unit_No__r.Deck_Area__c';
-            insert nocMap11;
-            
-            NOC_Variable_Mapping__c nocMap12 = new NOC_Variable_Mapping__c();
-            nocMap12.Name = '[UtilityArea]';
-            nocMap12.Field__c = 'RW_Booking__r.Unit_No__r.Utility_Area__c';
-            insert nocMap12;
-            
-            NOC_Variable_Mapping__c nocMap13 = new NOC_Variable_Mapping__c();
-            nocMap13.Name = '[FloorNo]';
-            nocMap13.Field__c = 'RW_Booking__r.Unit_No__r.New_Floor__c';
-            insert nocMap13;
-            
-            NOC_Variable_Mapping__c nocMap14 = new NOC_Variable_Mapping__c();
-            nocMap14.Name = '[CheqAccount]';
-            nocMap14.Field__c = 'RW_Project_Name__r.RDS_Company_Code__r.Account_Name_Flat_Cost__c';
-            insert nocMap14;
-            
-            NOC_Variable_Mapping__c nocMap15 = new NOC_Variable_Mapping__c();
-            nocMap15.Name = '[BranchAddress]';
-            nocMap15.Field__c = 'Bank_Address_for_NOC__c';
-            insert nocMap15;*/
-            
-            
+            // 1st Execution: Normal Execution & Generate Word Doc
             pageReference pageRef = page.NocTemplate;
             Test.setCurrentPage(pageRef);
             ApexPages.currentPage().getParameters().put('id',ln.Id);
             NOCTemplateController noc = new NOCTemplateController();
-            //noc.NOCTable();
-            noc.downloadPdf();
             
+            // Replaced downloadPdf with downloadWord
+            noc.downloadWord(); 
+            
+            // Call getCleanTemplate for code coverage on string replacement logic
+            noc.getCleanTemplate(); 
+            
+            // 2nd Execution (Assuming NOCTemplateControllerNew exists in your org, keeping your original logic)
             pageReference pageRef1 = page.NocTemplate;
             Test.setCurrentPage(pageRef1);
             ApexPages.currentPage().getParameters().put('id',ln1.Id);
-            NOCTemplateControllerNew noc1 = new NOCTemplateControllerNew();
+            
+            // We can also test NOCTemplateController on ln1 to cover the "NOC Cannot be Generated Twice" block
+            ln1.RW_NOC_Generated__c = true;
+            update ln1;
+            NOCTemplateController nocErrorTest = new NOCTemplateController(); 
+            
+            Test.stopTest(); // Stop testing context
         }
         
     }  

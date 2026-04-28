@@ -31,30 +31,52 @@ global class LockatedApp_PrimaryApplicant {
                     system.debug('fullName: ' + resData.customerProfileDetails.PrimaryApplicants[0].fullName);
                     List<Applicant_Details__c> apps = [SELECT Id,Name,DOB__c,PancardNo__c,GSTIN_Number__c,Organization_Name__c,Designation__c,Permanent_Address__c,Email_Address__c,Mobile_Number__c,Correspondence_Address__c FROM Applicant_Details__c WHERE Booking__c =: resData.customerProfileDetails.booking AND Applicant_Number__c = 'Primary Applicant'];
                     if(apps.size() > 0){
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].fullName) && apps[0].Name != resData.customerProfileDetails.PrimaryApplicants[0].fullName)
+                        Boolean updateApplicant = false;
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].fullName) && apps[0].Name != resData.customerProfileDetails.PrimaryApplicants[0].fullName){
                             apps[0].Name = resData.customerProfileDetails.PrimaryApplicants[0].fullName;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].birthDate) && apps[0].DOB__c != Date.valueOf(resData.customerProfileDetails.PrimaryApplicants[0].birthDate))
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].birthDate) && apps[0].DOB__c != Date.valueOf(resData.customerProfileDetails.PrimaryApplicants[0].birthDate)){
                             apps[0].DOB__c = Date.valueOf(resData.customerProfileDetails.PrimaryApplicants[0].birthDate);
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].panCard) && apps[0].PancardNo__c != resData.customerProfileDetails.PrimaryApplicants[0].panCard)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].panCard) && apps[0].PancardNo__c != resData.customerProfileDetails.PrimaryApplicants[0].panCard){
                             apps[0].PancardNo__c = resData.customerProfileDetails.PrimaryApplicants[0].panCard;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].gstinNumber) && apps[0].GSTIN_Number__c != resData.customerProfileDetails.PrimaryApplicants[0].gstinNumber)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].gstinNumber) && apps[0].GSTIN_Number__c != resData.customerProfileDetails.PrimaryApplicants[0].gstinNumber){
                             apps[0].GSTIN_Number__c = resData.customerProfileDetails.PrimaryApplicants[0].gstinNumber;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].companyName) && apps[0].Organization_Name__c != resData.customerProfileDetails.PrimaryApplicants[0].companyName)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].companyName) && apps[0].Organization_Name__c != resData.customerProfileDetails.PrimaryApplicants[0].companyName){
                             apps[0].Organization_Name__c = resData.customerProfileDetails.PrimaryApplicants[0].companyName;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].designation) && apps[0].Designation__c != resData.customerProfileDetails.PrimaryApplicants[0].designation)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].designation) && apps[0].Designation__c != resData.customerProfileDetails.PrimaryApplicants[0].designation){
                             apps[0].Designation__c = resData.customerProfileDetails.PrimaryApplicants[0].designation;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].permanentAddress) && apps[0].Permanent_Address__c != resData.customerProfileDetails.PrimaryApplicants[0].permanentAddress)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].permanentAddress) && apps[0].Permanent_Address__c != resData.customerProfileDetails.PrimaryApplicants[0].permanentAddress){
                             apps[0].Permanent_Address__c = resData.customerProfileDetails.PrimaryApplicants[0].permanentAddress;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].emailId) && apps[0].Email_Address__c != resData.customerProfileDetails.PrimaryApplicants[0].emailId)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].emailId) && apps[0].Email_Address__c != resData.customerProfileDetails.PrimaryApplicants[0].emailId){
                             apps[0].Email_Address__c = resData.customerProfileDetails.PrimaryApplicants[0].emailId;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].mobileNumber) && apps[0].Mobile_Number__c != resData.customerProfileDetails.PrimaryApplicants[0].mobileNumber)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].mobileNumber) && apps[0].Mobile_Number__c != resData.customerProfileDetails.PrimaryApplicants[0].mobileNumber){
                             apps[0].Mobile_Number__c = resData.customerProfileDetails.PrimaryApplicants[0].mobileNumber;
-                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].correspondenceAddress) && apps[0].Correspondence_Address__c != resData.customerProfileDetails.PrimaryApplicants[0].correspondenceAddress)
+                            updateApplicant = true;
+                        }
+                        if(!String.isBlank(resData.customerProfileDetails.PrimaryApplicants[0].correspondenceAddress) && apps[0].Correspondence_Address__c != resData.customerProfileDetails.PrimaryApplicants[0].correspondenceAddress){
                             apps[0].Correspondence_Address__c = resData.customerProfileDetails.PrimaryApplicants[0].correspondenceAddress;
-                        
-                        update apps[0];
-                        res.responseBody = Blob.valueOf('Details updated successfully');
-                		res.statusCode = 200;
+                            updateApplicant = true;
+                        }
+                        if(updateApplicant == true){
+                            update apps[0];
+                            res.responseBody = Blob.valueOf('Details updated successfully');
+                            res.statusCode = 200;
+                        }
                     }else if(apps.size() == 0){
                         Applicant_Details__c app = new Applicant_Details__c();
                         app.Name = resData.customerProfileDetails.PrimaryApplicants[0].fullName;
@@ -71,7 +93,34 @@ global class LockatedApp_PrimaryApplicant {
                         res.responseBody = Blob.valueOf('Details updated successfully');
                 		res.statusCode = 200;
                         insert app;
-                        
+                    }
+                    if(resData.customerProfileDetails.coApplicants != null && resData.customerProfileDetails.coApplicants.size() > 0){
+                        List<Applicant_Details__c> coApps = [SELECT Id,Name,DOB__c,PancardNo__c,GSTIN_Number__c,Organization_Name__c,Designation__c,Permanent_Address__c,Email_Address__c,Mobile_Number__c,Correspondence_Address__c FROM Applicant_Details__c WHERE Booking__c =: resData.customerProfileDetails.booking AND Applicant_Number__c != 'Primary Applicant'];
+                        if(coApps.size() > 0){
+                            List<Applicant_Details__c> coAppsToUpdate = new List<Applicant_Details__c>();
+                            for(CoApplicant resp : resData.customerProfileDetails.coApplicants){
+                                for(Applicant_Details__c coApp : coApps){
+                                    if((resp.panCard != null && resp.panCard == coApp.PancardNo__c) || (resp.birthDate != null && resp.birthDate == String.valueOf(coApp.DOB__c))){
+                                        coApp.Name = (!String.isBlank(resp.fullName) && coApp.Name != resp.fullName)? resp.fullName : coApp.Name;
+                                        coApp.DOB__c = (resp.birthDate != null && resp.birthDate != '' && String.valueOf(coApp.DOB__c) != resp.birthDate)? Date.valueOf(resp.birthDate) : coApp.DOB__c;
+                                        coApp.PancardNo__c = (!String.isBlank(resp.panCard) && coApp.PancardNo__c != resp.panCard)? resp.panCard : coApp.PancardNo__c;
+                                        coApp.GSTIN_Number__c = (!String.isBlank(resp.gstinNumber) && coApp.GSTIN_Number__c != resp.gstinNumber)? resp.gstinNumber : coApp.GSTIN_Number__c;
+                                        coApp.Organization_Name__c = (!String.isBlank(resp.companyName) && coApp.Organization_Name__c != resp.companyName)? resp.companyName : coApp.Organization_Name__c;
+                                        coApp.Designation__c = (!String.isBlank(resp.designation) && coApp.Designation__c != resp.designation)? resp.designation : coApp.Designation__c;
+                                        coApp.Permanent_Address__c = (!String.isBlank(resp.permanentAddress) && coApp.Permanent_Address__c != resp.permanentAddress)? resp.permanentAddress : coApp.Permanent_Address__c;
+                                        coApp.Correspondence_Address__c = (!String.isBlank(resp.correspondenceAddress) && coApp.Correspondence_Address__c != resp.correspondenceAddress)? resp.correspondenceAddress : coApp.Correspondence_Address__c;
+                                        coApp.Email_Address__c = (!String.isBlank(resp.emailId) && coApp.Email_Address__c != resp.emailId)? resp.emailId : coApp.Email_Address__c;
+                                        coApp.Mobile_Number__c = (!String.isBlank(resp.mobileNumber) && coApp.Mobile_Number__c != resp.mobileNumber)? resp.mobileNumber : coApp.Mobile_Number__c;
+                                        coAppsToUpdate.add(coApp);
+                                    }
+                                }
+                            }
+                            if(coAppsToUpdate.size() > 0){
+                                update coAppsToUpdate;
+                                res.responseBody = Blob.valueOf('Details updated successfully');
+                				res.statusCode = 200;
+                            }
+                        }
                     }
                 }
             }
@@ -92,9 +141,23 @@ global class LockatedApp_PrimaryApplicant {
     public class CustomerProfileDetails{
         public String booking;
         public List<PrimaryApplicant> PrimaryApplicants;
+        public List<CoApplicant> coApplicants;
     }
     
     public class PrimaryApplicant{
+        public String fullName;
+        public String birthDate;
+        public String panCard;
+        public String gstinNumber;
+        public String companyName;
+        public String designation;
+        public String permanentAddress;
+        public String correspondenceAddress;
+        public String emailId;
+        public String mobileNumber;
+    }
+    
+    public class CoApplicant{
         public String fullName;
         public String birthDate;
         public String panCard;

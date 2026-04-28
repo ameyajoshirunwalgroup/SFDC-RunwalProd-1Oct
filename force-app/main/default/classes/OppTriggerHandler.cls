@@ -250,6 +250,7 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
         Set<Id> retentionOppIds = new Set<Id>(); // Added by coServe 20-01-2023
         list<Event> lstEventInsert = new list<Event>();  
         List<String> oppIds = new List<String>(); // Added by coServe 27-06-2024
+        List<Opportunity> referralOpps = new List<Opportunity>(); //Added by Vinay 28-02-2026
         if(lstOpp.size() > 0)
         {
             for(Opportunity eachOpp : lstOpp)
@@ -265,11 +266,17 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
                     retentionOppIds.add(eachOpp.Id);
                 }
                 // Added by coServe 20-01-2023 End
-                
+                if(eachOpp.StageName == 'Site Visit' && eachOpp.LeadSource == 'Referral' && eachOpp.Customer_Reference__c != null){ //Added by Vinay 28-02-2026
+                    referralOpps.add(eachOpp);
+                }
                 
             }
             if(oppIds.size() > 0){ // Added by coServe 27-06-2024
                 //sendProspectDay1WhatsApp(oppIds);
+            }
+            if(referralOpps.size() > 0){ //Added by Vinay 28-02-2026
+                LockatedApp_LoyaltyEngine.referralSiteVisits(referralOpps); 
+                LockatedApp_Notifications.referralVisitDoneNotification(referralOpps); 
             }
         }
         if(setofOppId.size() > 0)

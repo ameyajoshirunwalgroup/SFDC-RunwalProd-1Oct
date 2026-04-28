@@ -2,7 +2,17 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Amount_Balance__c</fullName>
     <externalId>false</externalId>
-    <formula>(Total_Brokerage__c + Value(CGST__c) + Value(SGST__c) + Value(IGST__c) )- (Total_Amount_Paid__c + SAP_TDS__c )</formula>
+    <formula>(
+  BLANKVALUE(Total_Brokerage__c, 0) + 
+  IF(ISBLANK(CGST__c), 0, VALUE(CGST__c)) + 
+  IF(ISBLANK(SGST__c), 0, VALUE(SGST__c)) + 
+  IF(ISBLANK(IGST__c), 0, VALUE(IGST__c))
+) 
+- 
+(
+  BLANKVALUE(Total_Amount_Paid__c, 0) + 
+  BLANKVALUE(SAP_TDS__c, 0)
+)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Amount Balance</label>
     <precision>18</precision>

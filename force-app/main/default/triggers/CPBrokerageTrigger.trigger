@@ -25,8 +25,10 @@ trigger CPBrokerageTrigger on CP_Brokerage__c (before update, after insert, afte
         set<Id> InvoiceIds = new set<Id>();
         set<Id> InvoiceEmailIds = new set<Id>();
         set<Id> bIds = new set<Id>();
+        set<Id> cpbIds = new set<Id>();//Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26..
         
         for(CP_Brokerage__c cpl : trigger.new){
+            
             // Check for SAP Integration status change
             if((trigger.oldMap.get(cpl.id).Approval_Status__c != null && trigger.oldMap.get(cpl.id).Approval_Status__c != trigger.newMap.get(cpl.id).Approval_Status__c && trigger.newMap.get(cpl.id).Approval_Status__c == 'Approved By L3 - Accounts')){
                 system.debug('Inside if::');
@@ -44,6 +46,15 @@ trigger CPBrokerageTrigger on CP_Brokerage__c (before update, after insert, afte
                 system.debug('Inside if:: TDS change');
                 bIds.add(cpl.Id);
             }
+            
+            //Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26..START
+            if((trigger.oldMap.get(cpl.id).SAP_Clearing_Date__c != trigger.newMap.get(cpl.id).SAP_Clearing_Date__c && trigger.oldMap.get(cpl.id).SAP_Clearing_Date__c != null && trigger.newMap.get(cpl.id).SAP_Clearing_Date__c != null)){
+                system.debug('Inside if:: Brokerage Receipt Creation on Clearing Date Population ');
+                cpbIds.add(cpl.Id);
+            }
+            //Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26.. END
+            
+            
         }
         
         // Enqueue SAP Job
@@ -64,6 +75,12 @@ trigger CPBrokerageTrigger on CP_Brokerage__c (before update, after insert, afte
             system.debug('Invoice TDS population Triggered');
             CPBrokerageTriggerHandler.updateTDSonChildInvoices(bIds);
         }
+        
+        //Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26..START
+        if(!cpbIds.isEmpty()){
+            CPBrokerageTriggerHandler.createBrkReceiptonClearing(cpbIds);
+        }
+        //Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26..END
     }
     
     // Helper Method: Duplicate Check

@@ -3,7 +3,7 @@
     <fullName>Case_Resolution_field_mandatory</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-ISPICKVAL(Status , &apos;Resolved&apos;) ,
+OR(ISPICKVAL(Status , &apos;Resolved&apos;) , ISPICKVAL(Functional_Status__c,&apos;Resolved&apos;) ),
 ISBLANK(RW_Resolution_comments__c),
 $Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/ 
 )</errorConditionFormula>

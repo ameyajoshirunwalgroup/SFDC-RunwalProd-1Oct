@@ -483,7 +483,7 @@ public class BrokerageLadderCreation {
                     }else if(brokerageScheme1[0].Type__c == 'Both'){
                         bkList2 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                    RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed'  and RW_Registration_Done__c = 'Yes' and
-                                   (Type_Of_Client_Formula__c =:'Local' OR Type_Of_Client_Formula__c =:'NRI') and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
+                                   (Type_Of_Client_Formula__c =:'Local' OR Type_Of_Client_Formula__c =:'NRI' /*Added by Prashant to add type of client as Outstation-12-03-26*/ OR Type_of_Client__c =:'Outstation') and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
                                    RW_Registration_Date__c != null and RW_X9_99_Received__c = true and Brokerage_Summary__c != null and
                                    DAY_ONLY(Booking_Date__c) <=:endDate and BrokerIId__c =: cp ORDER BY Booking_Date__c ASC];
                     }
@@ -503,7 +503,7 @@ public class BrokerageLadderCreation {
                     }else if(brokerageScheme1[0].Type__c == 'Both'){
                         bkList2 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                    RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
-                                   and (Type_Of_Client_Formula__c =:'Local' OR Type_Of_Client_Formula__c =:'NRI') and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and 
+                                   and (Type_Of_Client_Formula__c =:'Local' OR Type_Of_Client_Formula__c =:'NRI' /*Added by Prashant to add type of client as Outstation-12-03-26*/ OR Type_of_Client__c =:'Outstation') and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and 
                                    RW_Registration_Date__c != null and RW_X9_99_Received__c = true and Brokerage_Summary__c != null and RW_Registration_Done__c = 'Yes' and
                                    DAY_ONLY(Booking_Date__c) <=:endDate and BrokerIId__c =: cp ORDER BY Booking_Date__c ASC];
                     }

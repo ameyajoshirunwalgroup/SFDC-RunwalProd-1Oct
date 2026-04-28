@@ -10,7 +10,14 @@ global class REST_CallbackCTI {
         data = RestContext.request.params.get('data');
         system.debug('DATA::'+data);
         try{
-            System.enqueueJob(new CallbackCTI_Queueable(data));
+            CallbackParse cb = CallbackParse.Parse(data);
+            List<String> campaignNames = new List<String>{'Presales_GSM','Inbound_912250164017','Inbound_912250164021'};
+            if(campaignNames.contains(cb.CampaignName)){
+                CallbackCTI_Queueable.createEnquiry(data);
+            }else{
+                System.enqueueJob(new CallbackCTI_Queueable(data));
+            }
+            //System.enqueueJob(new CallbackCTI_Queueable(data));
         }catch(Exception ex){
             CallbackCTI_Queueable.createERPlog(data, '', '', ex.getMessage()); //Added by Vinay 23-05-2025
         }

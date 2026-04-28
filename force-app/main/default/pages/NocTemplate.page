@@ -125,7 +125,7 @@
             <div class="content">
                 <apex:pageMessages ></apex:pageMessages>
                 <div style="text-align:right;">
-                    <apex:commandButton id="btn" value="Download" action="{!downloadPdf}" rendered="{!isError == false}" oncomplete="openAtt({!link});"/>
+                    <apex:commandButton id="btn" value="Download" action="{!downloadword}" rendered="{!isError == false}" oncomplete="openAtt({!link});"/>
                 </div><br/>
                 <p>
                     <apex:outputText style="font-size:14px;font-family:sans-serif;" escape="false" value="{!noc.RW_Template__c}"  ></apex:outputText>

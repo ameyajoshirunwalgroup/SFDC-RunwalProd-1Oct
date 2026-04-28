@@ -79,6 +79,7 @@ public class TestAccountTrigger {
         a.Alternate_Email__c = 'test@mail.com';
        	a.RW_Secondary_Mobile_No__pc = '253654';
         a.RW_Secondary_Email__pc = 'test1@mail.com';
+        a.Campaign_Code__C = '123';
         update a;
         
     }

@@ -8,12 +8,13 @@
         <plural>true</plural>
         <value>Scheme Configurations</value>
     </caseValues>
-    <layouts>
-        <layout>Scheme Configuration Layout</layout>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-    </layouts>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- You cannot edit Scheme Configuration details. --></errorMessage>
+        <name>Cannot_Edit_Scheme_Configuration</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Include_All_Towers --></label>
+        <name>Include_All_Towers</name>
+    </webLinks>
 </CustomObjectTranslation>

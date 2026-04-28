@@ -3,12 +3,13 @@
 * @Description :
 * @Author :
 * @Last Modified By :
-* @Last Modified On : September 2, 2025
+* @Last Modified On : March 03, 2026
 * @Modification Log :
 *==============================================================================
 * Ver | Date | Author | Modification
 *==============================================================================
 * 1.0 | September 2, 2025 |   | Initial Version
+* 1.1 | March 3, 2026 |   | Version 1
 **/
 
 public with sharing class CPBillingChecklistController {
@@ -17,6 +18,7 @@ public with sharing class CPBillingChecklistController {
         return [
             SELECT Id, Checklist_Item__c, Status__c, Remark__c, Final_Approval_Date_Time__c, Booking__c,
             Booking__r.Original_Agreement_Value__c,
+            Booking__r.Allotment_Premium__c,//Added by Prashant to add AV value as an alternative to the Original Agreement value.//06-03-2026...
                Booking__r.Booking_Date__c,
                Booking__r.BrokerIId__r.Name,
                //Booking__r.BrokerIId__r.Valid_competency_certificate__c,//Commented by Prashant as discussed with team to discard use of CC. 12/12/25.

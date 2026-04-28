@@ -1843,7 +1843,7 @@ public class TestBookingTrigger {
         hlrm.Reporting_2_Email__c = 'rep2@mail.com';
         hlrm1.TL_Name__c = 'Apeksha Sathe';
         hlrm1.TL_Email__c = 'apeksha@mail.com';
-        insert hlrm1;
+        //insert hlrm1;
         
         Bank_with_RM__c bankRM = new Bank_with_RM__c();
         bankRM.Name = 'Axis Bank';

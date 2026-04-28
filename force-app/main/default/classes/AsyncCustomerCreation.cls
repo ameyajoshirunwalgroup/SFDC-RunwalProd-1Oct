@@ -11,7 +11,7 @@ public class AsyncCustomerCreation {
         // this is test env of SAP
         // public String endpoint_x = 'http://123.108.44.41:8001/sap/bc/srt/rfc/sap/zsd_sfdc_customer/120/zsd_sfdc_customer/zsd_sfdc_customer';
         // this is prod URL of SAP
-        public String endpoint_x = 'http://123.108.44.39:8000/sap/bc/srt/rfc/sap/zsd_sfdc_customer/300/zsd_sfdc_customer/zsd_sfdc_customer';
+        public String endpoint_x = 'http://123.108.44.39:8000/sap/bc/srt/rfc/sap/zsd_sfdc_customer/300/zsd_sfdc_customer/zsd_sfdc_customers';
         public Map<String,String> inputHttpHeaders_x;
         public String clientCertName_x;
         public Integer timeout_x;

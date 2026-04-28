@@ -69,6 +69,7 @@ public class CreateUserWhenUnitBookedTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_Customer_Number__c='0020006618';
@@ -87,6 +88,7 @@ public class CreateUserWhenUnitBookedTest {
         oppRec1.Sourcing_Manager__c='Aniket Sapre';
         oppRec1.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec1.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec1.RW_Closing_Head__c='Karthik Chettiar';
         oppRec1.Walkin_Source__c='Direct';
         oppRec1.SAP_Customer_Number__c='0020006618';
@@ -96,20 +98,52 @@ public class CreateUserWhenUnitBookedTest {
         Booking__c booking=new Booking__c();
         booking.Status__c='Cancellation Initiated';
         booking.Opportunity__c=oppRec1.id;
+        booking.Customer__c=oppRec1.id;
         insert booking;
         
-        oppRec1.Booking__c = booking.Id;
+        Booking__c booking1 =new Booking__c();
+        booking1.Status__c='Cancellation Initiated';
+        booking1.Opportunity__c=oppRec.id;
+        booking1.Customer__c=oppRec.id;
+        insert booking1;
+        
+        oppRec.Booking__c = booking.Id;
         update oppRec1;
+        
+        booking1.Status__c='Booking Confirmed';
+        update booking1;
+        
+        Applicant_Details__c app = new Applicant_Details__c();
+        app.First_Name__c = 'Test';
+        app.Last_Name__c = 'Applicant';
+        app.Booking__c = booking1.Id;
+        app.Email_Address__c = 'test@mail.com';
+        app.Mobile_Number__c = '2314578965';
+        app.Applicant_Number__c = 'Primary Applicant';
+        app.PancardNo__c = 'DERGR5445G';
+        app.Permanent_Address_Line_1__c = 'Test1';
+        app.DOB__c = Date.valueOf('1992-01-01');
+        app.Country__c = 'India';
+        insert app;
         
         Country_Codes__c code = new Country_Codes__c();
         code.Name = 'India';
         code.Code__c = 'IN';
         insert code;
+        
+        a.Send_to_Lockated__c = true;
+        update a;
+        
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new CreateUserWhenUnitBookedMock());  
         CreateUserWhenUnitBooked.createuser(new List<Id>{acc.Id});
        	
         CreateUserWhenUnitBooked.deleteuser(new List<Id>{acc.Id});
+        
+        CreateUserWhenUnitBooked.createuserWithApplicants(new List<Id>{acc.Id});
+        CreateUserWhenUnitBooked.createUserWhenBookingConfirmed(new List<Id>{booking1.Id});
+        CreateUserWhenUnitBooked.createuserWhenApplicantCreated(new List<Id>{app.Id});
+        
         Test.stopTest();
     }
     

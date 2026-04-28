@@ -10,11 +10,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <collectionElements>
-                    <stringValue>shraddha.shahari@runwalgroup.in</stringValue>
-                </collectionElements>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -31,8 +27,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
-                <stringValue>&lt;p&gt;Sales order failed ERP logs:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://runwal.lightning.force.com/lightning/r/ERP_Integration_Log__c/{!$Record.Id}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!$Record.Name}&lt;/a&gt;&lt;/p&gt;</stringValue>
+                <stringValue>&lt;p&gt;Sales order failed ERP logs:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://runwal.lightning.force.com/lightning/r/ERP_Integration_Log__c/{!$Record.Id}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!$Record.Name}&lt;/a&gt; - {!$Record.Error_Reason__c}&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -41,6 +36,28 @@
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_Salesorder_number</name>
+        <label>Check Salesorder number</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_Salesorder</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__r.SalesOrder_Number__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_failure_email</targetReference>
+            </connector>
+            <label>Check Salesorder</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <interviewLabel>Salesorder failure email {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Salesorder failure email</label>
@@ -67,7 +84,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_failure_email</targetReference>
+            <targetReference>Check_Salesorder_number</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

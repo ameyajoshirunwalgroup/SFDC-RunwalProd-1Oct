@@ -8,80 +8,30 @@
         <plural>true</plural>
         <value>CP Brokerage</value>
     </caseValues>
-    <layouts>
-        <layout>CP Base Brokerage Layout</layout>
-        <sections>
-            <label><!-- Approver Details --></label>
-            <section>Approver Details</section>
-        </sections>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-        <sections>
-            <label><!-- Invoice Details --></label>
-            <section>Invoice Details</section>
-        </sections>
-        <sections>
-            <label><!-- SAP Details --></label>
-            <section>SAP Details</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>CP Base Brokerage Layout - CP Access</layout>
-        <sections>
-            <label><!-- Approver Details --></label>
-            <section>Approver Details</section>
-        </sections>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-        <sections>
-            <label><!-- Invoice Details --></label>
-            <section>Invoice Details</section>
-        </sections>
-        <sections>
-            <label><!-- SAP Details --></label>
-            <section>SAP Details</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>CP Brokerage  Layout Channel Partner</layout>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>CP Brokerage Layout</layout>
-        <sections>
-            <label><!-- Approver Details --></label>
-            <section>Approver Details</section>
-        </sections>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-        <sections>
-            <label><!-- SAP Details --></label>
-            <section>SAP Details</section>
-        </sections>
-    </layouts>
-    <layouts>
-        <layout>CP Brokerage Layout - CP Access</layout>
-        <sections>
-            <label><!-- Approver Details --></label>
-            <section>Approver Details</section>
-        </sections>
-        <sections>
-            <label><!-- Custom Links --></label>
-            <section>Custom Links</section>
-        </sections>
-        <sections>
-            <label><!-- SAP Details --></label>
-            <section>SAP Details</section>
-        </sections>
-    </layouts>
+    <recordTypes>
+        <label><!-- Base Brokerage --></label>
+        <name>Base_Brokerage</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- This Brokerage type includes Additional, AOP,1%, and all of them --></description>
+        <label><!-- Other --></label>
+        <name>Other</name>
+    </recordTypes>
     <startsWith>Consonant</startsWith>
+    <webLinks>
+        <label><!-- Download_CP_Invoice --></label>
+        <name>Download_CP_Invoice</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Download_TopSheet --></label>
+        <name>Download_TopSheet</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Generate_SAP_Document_No --></label>
+        <name>Generate_SAP_Document_No</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Submit_For_Approval --></label>
+        <name>Submit_For_Approval</name>
+    </webLinks>
 </CustomObjectTranslation>

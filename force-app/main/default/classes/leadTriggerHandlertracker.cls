@@ -41,7 +41,7 @@ public class leadTriggerHandlertracker
         b1.Name = 'Test 2';
         b1.Unregistered_Channel_Partner__c = true;
         b1.AOP_Type__c = 'AOP';
-        b1.Broker_Pan_No__c = 'AASSZ3456T';
+        b1.Broker_Pan_No__c = 'AASSZ3456D';
         insert b1; 
         
         CP_Category__c pl = new CP_Category__c();

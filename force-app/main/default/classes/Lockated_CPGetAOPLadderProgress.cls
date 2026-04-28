@@ -14,6 +14,8 @@ global without sharing class Lockated_CPGetAOPLadderProgress {
             res.statusCode = 400;
         }else{
             Date todaysDate = system.today();  
+            String cutOffString = System.Label.CP_Billing_Checklist_Cut_off_date;
+            Date cpBillingcutOffDate = Date.valueOf(cutOffString);
             try{
                 list<AOP__c> aoplist = [Select Id,Name,AOP_CP_Name__c,Channel_Partner__c,Relevant_zone__c,Commitment_max__c,AOP_Schemes__c,
                                         AOP_Schemes__r.Financial_Year_Start_Date__c,AOP_Schemes__r.Financial_Year_End_Date__c,Target_AOP_Slab__c,
@@ -66,7 +68,8 @@ global without sharing class Lockated_CPGetAOPLadderProgress {
                                               And Source_of_Booking__c = 'Channel Partner' /*and BrokerIId__c = 'a012800000sGnNs' */ 
                                               and  Brokerage_Scheme__c != null 
                                               AND BrokerIId__r.RecordTypeId =: CPRecordTypeId
-                                              AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....
+                                              //AND Checklist_Approved__c = true//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025....xxx
+                                              AND (DAY_ONLY(Brokerage_Summary__r.CreatedDate) < :cpBillingcutOffDate OR Checklist_Approved__c = true)//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation only for summary created after 11 november,2025 )//06-03-2026....xxx
                                               AND BrokerIId__r.Valid_RERA_certificate__c = true /*AND BrokerIId__r.Valid_competency_certificate__c = true*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.//Added by Prashant to update th condition to restrict billing creation for the cps who dont have valid RERA & CC.11-09-25.	
                                              ];
                     Decimal currentSalesValue = 0;

@@ -26,20 +26,21 @@ global without sharing class LockatedApp_PostSales {
                 if(accId != null){
                     
                     
-                    List<Booking__c> bkgs = [SELECT Id,Name,RW_Registration_Date__c,Booking_Date__c,RW_Key_handover_date__c,No_of_Parking__c,Parking_Type__c,NCF_Status__c,
+                    List<Booking__c> bkgs = [SELECT Id,Name,RW_Registration_Date__c,Booking_Date__c,RW_Key_handover_date__c,No_of_Parking__c,Parking_Type__c,NCF_Status__c,RW_Total_TDS_Due__c,Total_TDS_Amount_Paid_In_Rs__c,
                                              Unit_No__r.Type__c,Unit_No__r.Carpet_Area__c,Unit_No__r.Utility_Area__c,Project__r.Name,Project__r.RERA_Certificate_No__c,Project__r.RW_SAP_Company_Code__c,
                                              Unit_No__r.Name,Unit_No__r.RW_Param3__c,Unit_No__r.RW_Param2__c,Allotment_Premium__c,RW_Total_Demand_Raised__c,Unit_No__r.Deck_Area__c,
                                              RW_Total_Receipt_Amount_Received__c,FBL5N__c,RW_Registration_Status__c,RW_SDR_Status__c,Stamp_duty_Paid__c,Unit_No__r.TowerName__r.RERA_Certificate_No__c,
                                              Unit_No__r.Relationship_Manager__r.did_number_from_user__c,RW_X9_99_Received__c,Unit_No__r.RW_Param4__c,Unit_No__r.Total_RERA_Carpet_Area__c,
                                              RW_Total_SDR_Amount_Payable__c,RW_RM_Email__c,RM_Name__c,Unit_No__r.Relationship_Manager__r.Contact_Number__c,Unit_No__r.Relationship_Manager__r.User__r.MobilePhone,
                                              Sales_Managers__c,Owner.Name,Status__c,Date_of_Occupation_Certificate__c,Sales_Manager__r.Name,Unit_Type__c,Stamp_duty_payable_by_Runwal__c,
+                                             Principal_Previous_Milestone__c,GST_Previous_Milestone__c,Principal_Current_Milestone__c,GST_Current_Milestone__c,Billed_Principal_Amount__c,Billed_GST_Amount__c,GST_Percent__c,Total_Principal_with_GST__c,
                                              Opportunity__r.Account.Country_Code__c,Opportunity__r.Account.Mobile_No__c,Opportunity__r.Account.PersonEmail,Opportunity__r.Account.RW_Email__c,Opportunity__r.Account.LastName,
                                              Opportunity__r.Account.FirstName,Opportunity__r.SAP_Customer_Number__c,Opportunity__r.Account.Birth_Date__c,Unit_No__r.TowerName__c,
                                              Opportunity__r.Account.Gender__c,Project__r.WhatsApp_Bot_Project_Image_File_Id__c,RW_Total_TDS_Outstanding__c,Quotation__r.PaymentPlan__r.Name,
                                              (SELECT Id,DOB__c,Permanent_Address__c,Address_Proof_Number__c,PancardNo__c,Gender__c,Mobile_Number__c,GSTIN_Number__c,Occupation__c,
                                               Email_Address__c,Last_Name__c,First_Name__c,Applicant_Number__c,Correspondence_Address__c,Organization_Name__c FROM ApplicantDetails__r),
                                              (SELECT Id,Name,RW_Fiscal_Year__c,RW_Company_Code__c,RW_Accounting_Document_Number__c,RW_Payment_Amount__c,RW_Usage_Description__c,RW_Bank_Name__c,
-                                              RW_Payment_Date__c,RW_Document_Type__c FROM Payment_Details__r WHERE Status__c != 'Reversed' ORDER By CreatedDate DESC),Quotation__r.Registration_Charges__c,Quotation__r.Plan_Type__c,
+                                              RW_Payment_Date__c,RW_Document_Type__c FROM Payment_Details__r WHERE Status__c != 'Reversed' ORDER By CreatedDate DESC),Quotation__r.Registration_Charges__c,Quotation__r.Plan_Type__c,Quotation__r.Costsheet_format__c,
                                              Quotation__r.Other_Charges_Amount_1__c,Quotation__r.Other_Charges_Desc_1__c,Quotation__r.Other_Charges_Category_1__c,
                                              Quotation__r.Other_Charges_Amount_2__c,Quotation__r.Other_Charges_Desc_2__c,Quotation__r.Other_Charges_Category_2__c,
                                              Quotation__r.Other_Charges_Amount_3__c,Quotation__r.Other_Charges_Desc_3__c,Quotation__r.Other_Charges_Category_3__c,
@@ -57,7 +58,7 @@ global without sharing class LockatedApp_PostSales {
                                              Quotation__r.Other_Charges_Amount_15__c,Quotation__r.Other_Charges_Desc_15__c,Quotation__r.Other_Charges_Category_15__c,
                                              Quotation__r.Other_Charges_Amount_16__c,Quotation__r.Other_Charges_Desc_16__c,Quotation__r.Other_Charges_Category_16__c,
                                              (SELECT Id,Name,RW_Billing_Document_Number__c,Demand_Amount__c,Total_Demand_Paid__c,Remaining_Amount__c,CreatedDate,
-                                              RW_Total_GST_Amount__c,RW_Total_Demand_Amount__c,RW_Demand_Status__c,Demand_Date__c,Due_Date__c,RW_Demand_Milestone__c FROM Demands__r WHERE RW_Demand_Status__c != 'Revoke' ORDER By Due_Date__c DESC)
+                                              RW_Total_GST_Amount__c,RW_Total_Demand_Amount__c,RW_Demand_Status__c,Demand_Date__c,Due_Date__c,RW_Demand_Milestone__c FROM Demands__r WHERE RW_Demand_Status__c != 'Revoke' ORDER By CreatedDate DESC)
                                              FROM Booking__c WHERE Opportunity__r.AccountId =: accId AND Status__c = 'Booking Confirmed'];//Id =: bkgId];
                     
                     LockatedApp_PostSalesWrapper det = new LockatedApp_PostSalesWrapper();
@@ -196,6 +197,24 @@ global without sharing class LockatedApp_PostSales {
                             }
                             bkgDet.homeloan_brochure = System.label.Home_Loan_Brochure_for_Post_Sales_App;
                             bkgDet.stamp_duty_paid_by = (bkg.Stamp_duty_payable_by_Runwal__c > 0)? 'Runwal' : 'Customer';
+                            bkgDet.previous_milestone_principal = bkg.Principal_Previous_Milestone__c;
+                            bkgDet.previous_milestone_gst = bkg.GST_Previous_Milestone__c;
+                            bkgDet.current_milestone_principal = bkg.Principal_Current_Milestone__c;
+                            bkgDet.current_milestone_gst = bkg.GST_Current_Milestone__c;
+                            bkgDet.billed_principal = bkg.Billed_Principal_Amount__c;
+                            bkgDet.billed_gst = bkg.Billed_GST_Amount__c;
+                            bkgDet.total_principal_with_gst = bkg.Total_Principal_with_GST__c;
+                            bkgDet.gst_for_av = bkg.GST_Percent__c;
+                            bkgDet.tds_outstanding = bkg.RW_Total_TDS_Outstanding__c;
+                            
+                            if(!Test.isRunningTest()){
+                                PageReference pdf = new PageReference('/apex/'+bkg.Quotation__r.Costsheet_format__c);
+                                pdf.getParameters().put('id',bkg.Quotation__c);
+                                Blob body= pdf.getContentAsPdf();
+                                bkgDet.payment_schedule = EncodingUtil.base64encode(body);
+                            }
+                            
+                            
                             List<LockatedApp_PostSalesWrapper.other_applicants> otherApplicants = new List<LockatedApp_PostSalesWrapper.other_applicants>();
                             for(Applicant_Details__c app : bkg.ApplicantDetails__r){
                                 if(app.Applicant_Number__c != 'Primary Applicant'){
@@ -394,8 +413,9 @@ global without sharing class LockatedApp_PostSales {
                                     //payDue.milestone_date = String.valueOf(dem.CreatedDate);
                                     payDue.milestone_date = String.valueOf(dem.Due_Date__c);
                                     payDue.base_amount = String.valueOf(dem.RW_Total_Demand_Amount__c);
-                                    payDue.billed_tds = '';
-                                    payDue.tds_received = '';
+                                    payDue.billed_tds = String.valueOf(bkg.RW_Total_TDS_Due__c);
+                                    payDue.tds_received = String.valueOf(bkg.Total_TDS_Amount_Paid_In_Rs__c);
+                                    payDue.tds_outstanding = String.valueOf(bkg.RW_Total_TDS_Outstanding__c);
                                     payDue.payment_received = String.valueOf(dem.Total_Demand_Paid__c);
                                     payDue.total_amount_billed = String.valueOf(dem.Demand_Amount__c);
                                     payDue.total_amount_received = String.valueOf(dem.Total_Demand_Paid__c);

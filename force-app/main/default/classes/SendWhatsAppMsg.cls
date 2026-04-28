@@ -316,14 +316,33 @@ jsonParse += ',"' + param9 + '"';
 }*/
         //jsonParse += ']}}';
         
-        jsonParse += '],';
+        //Added by Prashant to consider the param9 dynamically.. Added on 16-03-2026 //Start..
+        if(String.isNotBlank(param9)){
+            
+            jsonParse += '],';
+            
+            jsonParse += '"buttonPayload" : {';
+            jsonParse += '"0" : ["'+payload+'"]},';
+            
+            jsonParse += '"buttonValues" : {';
+            jsonParse += '"0" : ["'+param9+'"]}}}';
+            
+        }else{
+            
+            jsonParse += ']}}';
+            
+        }
+        //Added by Prashant to consider the param9 dynamically.. Added on 16-03-2026 //End..
+        
+      /*  jsonParse += '],';
         jsonParse += '"buttonPayload" : {';
         jsonParse += '"0" : ["';
         jsonParse +=  payload + '"]},';
         
         jsonParse += '"buttonValues" : {';
         jsonParse += '"0" : ["';
-        jsonParse +=  param9 + '"]}}}';
+        jsonParse +=  param9 + '"]}}}';*///Commented by Prashant as the code was taking the button payload 1 in paramaters as default..//Added on 16-03-2026..
+        
         
         JSONParser parser = JSON.createParser(jsonParse);
         //string str = System.JSON.serialize(parser);
@@ -436,14 +455,32 @@ jsonParse += ',"' + param9 + '"';
 }*/
         //jsonParse += ']}}';
         
-        jsonParse += '],';
+        //Added by Prashant to consider the param9 dynamically.. Added on 16-03-2026 //Start..
+        if(String.isNotBlank(param9)){
+            
+            jsonParse += '],';
+            
+            jsonParse += '"buttonPayload" : {';
+            jsonParse += '"0" : ["'+payload+'"]},';
+            
+            jsonParse += '"buttonValues" : {';
+            jsonParse += '"0" : ["'+param9+'"]}}}';
+            
+        }else{
+            
+            jsonParse += ']}}';
+            
+        }
+        //Added by Prashant to consider the param9 dynamically.. Added on 16-03-2026 //End..
+        
+      /*  jsonParse += '],';
         jsonParse += '"buttonPayload" : {';
         jsonParse += '"0" : ["';
         jsonParse +=  payload + '"]},';
         
         jsonParse += '"buttonValues" : {';
         jsonParse += '"0" : ["';
-        jsonParse +=  param9 + '"]}}}';
+        jsonParse +=  param9 + '"]}}}';*///Commented by Prashant as the code was taking the button payload 1 in paramaters as default..//Added on 16-03-2026..
         
         
         
@@ -463,74 +500,9 @@ jsonParse += ',"' + param9 + '"';
         System.debug('res!!! getStatusCode '+res.getStatusCode());
         
     }
-
+    
     @future(callout=true)
-    Public static void methodToSendWhatsAppMsgNew(String param1, String param2, string param3 ,string param4,string param5,string param6,string param7,string param8,string param9, String countryCode, String MobileNo, String elementName){ //Added by Vinay 10-09-2025
-        
-        RW_Presales_WhatsApp__mdt customMeta = [SELECT Id, MasterLabel, Label, RW_namespace__c,RW_Type__c,RW_element_name__c
-                                                FROM RW_Presales_WhatsApp__mdt where MasterLabel =: elementName limit 1];
-        
-        String templateName = customMeta.RW_element_name__c;
-        String languageCode = 'en';
-        
-        String jsonParse;
-        if(String.isNotBlank(countryCode) && countryCode != null){
-            jsonParse = '{"countryCode" : ' + '"' + countryCode + '",';
-        }else{
-            jsonParse = '{"countryCode" : "+91",';
-        }
-        
-        jsonParse += '"phoneNumber" : ' + '"' + MobileNo + '",';
-        jsonParse += '"type" : "Template",';
-        jsonParse += '"template" : { "name" : '  + '"' + templateName + '", "languageCode" : "'+languageCode+'",';
-        jsonParse += '"bodyValues"  : [';
-        if(String.isNotBlank(param1) && param1 != null){
-            jsonParse += '"' + param1 + '"';
-        }
-        if(String.isNotBlank(param2) && param2 != null){
-            jsonParse += ',"' + param2 + '"';
-        }
-        if(String.isNotBlank(param3) && param3 != null){
-            jsonParse += ',"' + param3 + '"';
-        }
-        if(String.isNotBlank(param4) && param4 != null){
-            jsonParse += ',"' + param4 + '"';
-        }
-        if(String.isNotBlank(param5) && param5 != null){
-            jsonParse += ',"' + param5 + '"';
-        }
-        if(String.isNotBlank(param6) && param6 != null){
-            jsonParse += ',"' + param6 + '"';
-        }
-        if(String.isNotBlank(param7) && param7 != null){
-            jsonParse += ',"' + param7 + '"';
-        }
-        if(String.isNotBlank(param8) && param8 != null){
-            jsonParse += ',"' + param8 + '"';
-        }
-        if(String.isNotBlank(param9) && param9 != null){
-            jsonParse += ',"' + param9 + '"';
-        }
-        jsonParse += ']}}';
-       
-        JSONParser parser = JSON.createParser(jsonParse);
-        System.debug('jsonParse '+jsonParse);
-        Http http = new Http();
-        HttpRequest req = new HttpRequest(); 
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json');
-        req.setHeader('Authorization', 'Basic ' + System.Label.Interakt_Secret_Key_RG); 
-        req.setEndpoint('https://api.interakt.ai/v1/public/message/');
-        req.setBody(jsonParse);
-        HTTPResponse res = http.send(req);
-        System.debug('End Point '+req.getEndpoint());
-        System.debug('res!!! getBody '+res.getBody());
-        System.debug('res!!! getStatusCode '+res.getStatusCode());
-        
-    }
-
-
-    Public static void methodToSendWhatsAppMsgBatchNew(String param1, String param2, string param3 ,string param4,string param5,string param6,string param7,string param8,string param9, String countryCode, String MobileNo, String elementName){ //Added by Vinay 10-09-2025
+    Public static void methodToSendWhatsAppMsgNew(String param1, String param2, string param3 ,string param4,string param5,string param6,string param7,string param8,string param9, String countryCode, String MobileNo, String elementName){
         
         RW_Presales_WhatsApp__mdt customMeta = [SELECT Id, MasterLabel, Label, RW_namespace__c,RW_Type__c,RW_element_name__c
                                                 FROM RW_Presales_WhatsApp__mdt where MasterLabel =: elementName limit 1];
@@ -593,6 +565,71 @@ jsonParse += ',"' + param9 + '"';
         System.debug('res!!! getStatusCode '+res.getStatusCode());
         
     }
+    
+    Public static void methodToSendWhatsAppMsgBatchNew(String param1, String param2, string param3 ,string param4,string param5,string param6,string param7,string param8,string param9, String countryCode, String MobileNo, String elementName){
+        
+        RW_Presales_WhatsApp__mdt customMeta = [SELECT Id, MasterLabel, Label, RW_namespace__c,RW_Type__c,RW_element_name__c
+                                                FROM RW_Presales_WhatsApp__mdt where MasterLabel =: elementName limit 1];
+        
+        String templateName = customMeta.RW_element_name__c;
+        String languageCode = 'en';
+        
+        String jsonParse;
+        if(String.isNotBlank(countryCode) && countryCode != null){
+            jsonParse = '{"countryCode" : ' + '"' + countryCode + '",';
+        }else{
+            jsonParse = '{"countryCode" : "+91",';
+        }
+        
+        jsonParse += '"phoneNumber" : ' + '"' + MobileNo + '",';
+        jsonParse += '"type" : "Template",';
+        jsonParse += '"template" : { "name" : '  + '"' + templateName + '", "languageCode" : "'+languageCode+'",';
+        jsonParse += '"bodyValues"  : [';
+        if(String.isNotBlank(param1) && param1 != null){
+            jsonParse += '"' + param1 + '"';
+        }
+        if(String.isNotBlank(param2) && param2 != null){
+            jsonParse += ',"' + param2 + '"';
+        }
+        if(String.isNotBlank(param3) && param3 != null){
+            jsonParse += ',"' + param3 + '"';
+        }
+        if(String.isNotBlank(param4) && param4 != null){
+            jsonParse += ',"' + param4 + '"';
+        }
+        if(String.isNotBlank(param5) && param5 != null){
+            jsonParse += ',"' + param5 + '"';
+        }
+        if(String.isNotBlank(param6) && param6 != null){
+            jsonParse += ',"' + param6 + '"';
+        }
+        if(String.isNotBlank(param7) && param7 != null){
+            jsonParse += ',"' + param7 + '"';
+        }
+        if(String.isNotBlank(param8) && param8 != null){
+            jsonParse += ',"' + param8 + '"';
+        }
+        if(String.isNotBlank(param9) && param9 != null){
+            jsonParse += ',"' + param9 + '"';
+        }
+        jsonParse += ']}}';
+       
+        JSONParser parser = JSON.createParser(jsonParse);
+        System.debug('jsonParse '+jsonParse);
+        Http http = new Http();
+        HttpRequest req = new HttpRequest(); 
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setHeader('Authorization', 'Basic ' + System.Label.Interakt_Secret_Key_RG);  
+        req.setEndpoint('https://api.interakt.ai/v1/public/message/');
+        req.setBody(jsonParse);
+        HTTPResponse res = http.send(req);
+        System.debug('End Point '+req.getEndpoint());
+        System.debug('res!!! getBody '+res.getBody());
+        System.debug('res!!! getStatusCode '+res.getStatusCode());
+        
+    }
+    
     
     @InvocableMethod (label='Task_Send_Email_Alerts')
     Public Static void methodTofetchLeadforSendingWhatsAppMsg(List<String> lstLead){

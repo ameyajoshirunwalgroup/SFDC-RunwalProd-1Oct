@@ -83,4 +83,63 @@ public class CPBrokerageTriggerHandler {
     }
 
     //Added by Prashant/....5-1-26 END
+    
+    //Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26..START
+    public static void createBrkReceiptonClearing(Set<Id> cpbIds){         
+        system.debug('Inside createBrkReceiptonClearing');
+        if(cpbIds == null || cpbIds.isEmpty()){
+            return;
+        }        
+        Set<Id> existingCPB = new Set<Id>();        
+        for(Brokerage_Receipt__c br : [SELECT CP_Brokerage__c FROM Brokerage_Receipt__c WHERE CP_Brokerage__c IN :cpbIds ]){
+            existingCPB.add(br.CP_Brokerage__c);
+        }
+        
+        List<Brokerage_Receipt__c> brlist = new List<Brokerage_Receipt__c>();
+        
+        List<CP_Brokerage__c> cpblist = [SELECT Id,Name, Invoice_Number__c, SAP_Document_No__c, Total_Brokerage__c,Invoice_Date__c, SAP_Clearing_Date__c, SAP_Broker_code__c,
+            Legal_Entity__r.RDS_Company_Code__c, SAP_Clearing_No__c, SAP_Document_Date__c, SAP_Posting_Date__c,Total_Invoice_Amount__c,SAP_TDS__c,(Select Id from Brokerage_Invoices__r order by createddate desc limit 1) FROM CP_Brokerage__c WHERE Id IN :cpbIds];
+        
+        for(CP_Brokerage__c cpb : cpblist){
+            
+            if(existingCPB.contains(cpb.Id)){
+                continue;
+            }
+            system.debug('Inside createBrkReceiptonClearing -> '+cpb.Name);
+            Brokerage_Receipt__c r = new Brokerage_Receipt__c();
+            r.CP_Brokerage__c = cpb.Id;
+            r.SFDC_Invoice_reference__c = cpb.Invoice_Number__c;
+            r.Document_No__c = cpb.SAP_Document_No__c;
+            r.Document_Date__c = cpb.SAP_Document_Date__c;
+            r.Brokerage_Invoice__c = !cpb.Brokerage_Invoices__r.isEmpty() ? cpb.Brokerage_Invoices__r[0].Id : null;
+            r.Posting_Date__c = cpb.SAP_Posting_Date__c;
+            r.SAP_Invoice_Number__c = cpb.SAP_Document_No__c;
+            Decimal invoiceAmt = cpb.Total_Invoice_Amount__c != null ? cpb.Total_Invoice_Amount__c : 0  - cpb.SAP_TDS__c != null ? cpb.SAP_TDS__c : 0;
+            r.Invoice_Amount__c = invoiceAmt;//Same as defined in earlier process.We use to get the Paid amount from SAP but now as we already have the data here. 
+            r.Invoice_Date__c = cpb.Invoice_Date__c;
+            r.Payment_Date__c = cpb.SAP_Clearing_Date__c;
+            r.Clearing_Document_Number__c = cpb.SAP_Clearing_No__c;
+            r.SAP_Broker_Code__c = cpb.SAP_Broker_code__c;
+            r.SAP_Company_Code__c = cpb.Legal_Entity__r.RDS_Company_Code__c;
+            r.Clearing_Date__c = cpb.SAP_Clearing_Date__c;
+            r.Accounting_Document_No__c = cpb.SAP_Clearing_No__c;
+            if(!cpb.Brokerage_Invoices__r.isEmpty())
+            	brlist.add(r);
+        }
+        
+        if(!brlist.isEmpty()){
+            Database.SaveResult[] results = Database.insert(brlist, false);
+            
+            for(Database.SaveResult sr : results){
+                if(!sr.isSuccess()){
+                    for(Database.Error err : sr.getErrors()){
+                        System.debug('Receipt Insert Error: ' + err.getMessage());
+                    }
+                }
+            }
+        }
+    }
+    //Added by Prashant to Create Brokerage Receipts when Clearing date is updated in the system... 19-02-26..END
+    
+    
 }

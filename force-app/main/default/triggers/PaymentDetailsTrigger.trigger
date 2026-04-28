@@ -45,6 +45,19 @@ trigger PaymentDetailsTrigger on RW_Payment_Details__c (after insert,after Updat
             }
             
         }
+
+        if(trigger.isInsert && trigger.isAfter){  //Added by Vinay 28-02-2026
+            List<Id> paymentReceiptIds = new List<Id>();
+            List<Id> creditNoteIds = new List<Id>();
+            for(RW_Payment_Details__c rec : trigger.new){
+                if(rec.RW_Document_Type__c == 'DF' || rec.RW_Document_Type__c == 'DZ'){
+                    paymentReceiptIds.add(rec.Id);
+                }
+            }
+            if(paymentReceiptIds.size() > 0){
+                LockatedApp_Notifications.paymentDetailsNotification(paymentReceiptIds); 
+            }
+        }
     }
     
     

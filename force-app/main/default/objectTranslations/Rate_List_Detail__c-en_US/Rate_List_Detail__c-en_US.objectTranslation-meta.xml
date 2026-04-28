@@ -9,4 +9,12 @@
         <value>Rate List Details</value>
     </caseValues>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Cannot Save Record because the Rate List is already processed. --></errorMessage>
+        <name>Dont_Save_If_Processed</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- New_Rate_List_Detail --></label>
+        <name>New_Rate_List_Detail</name>
+    </webLinks>
 </CustomObjectTranslation>
