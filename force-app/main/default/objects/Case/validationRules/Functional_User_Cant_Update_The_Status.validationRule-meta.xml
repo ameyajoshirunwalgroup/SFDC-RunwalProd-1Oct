@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Functional_User_Cant_Update_The_Status</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    $User.Id = Functional_User__c,
+    ISCHANGED(Status)
+)</errorConditionFormula>
+    <errorMessage>You are Not Authorize to change the Case Status!!</errorMessage>
+</ValidationRule>

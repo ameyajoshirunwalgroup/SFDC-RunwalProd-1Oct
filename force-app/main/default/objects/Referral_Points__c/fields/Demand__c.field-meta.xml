@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Demand__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Demand</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Booking__c</field>
+            <operation>equals</operation>
+            <valueField>RW_Demand__c.Booking__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>RW_Demand__c</referenceTo>
+    <relationshipLabel>Referral Points</relationshipLabel>
+    <relationshipName>Referral_Points</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>
