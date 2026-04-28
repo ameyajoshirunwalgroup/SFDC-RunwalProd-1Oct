@@ -1,5 +1,6 @@
 public with sharing class QuotationExtn
 {
+    public Decimal carParkAmt{get; set;}
     public Project_Unit__c u {get; set;}
     public Opportunity o {get; set;}
     public Quotation__c q {get;set;}
@@ -1839,7 +1840,7 @@ public with sharing class QuotationExtn
             q.Podium__c = car8;
             q.Puzzle_Car_Park__c = car9; //Added by Vinay 28-03-2025
             q.Stack_Additional_1__c = car10; //Added by Vinay 21-11-2025
-            Decimal carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
+            carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
             
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
