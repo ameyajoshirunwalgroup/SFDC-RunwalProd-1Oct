@@ -5,6 +5,7 @@ on:
     branches:
       - fullcopy
       - main
+      - UAT
     types: [opened, synchronize,reopened]
     paths:
       - 'force-app/**'
@@ -35,6 +36,10 @@ jobs:
             echo "${{ secrets.JWT_SERVER_KEY }}" > private-key.pem
             sf org login jwt --client-id "${{ secrets.CONSUMER_KEY_PROD }}" --jwt-key-file private-key.pem --username "${{ secrets.DEPLOYMET_USERNAME_PROD }}" --instance-url "${{ secrets.INSTANCE_URL_PROD }}"
             TARGET_ORG="${{ secrets.DEPLOYMET_USERNAME_PROD }}"
+          elif [ "$TARGET_BRANCH" = "UAT" ]; then
+            echo "${{ secrets.JWT_SERVER_KEY }}" > private-key.pem
+            sf org login jwt --client-id "${{ secrets.CONSUMER_KEY_UAT }}" --jwt-key-file private-key.pem --username "${{ secrets.DEPLOYMET_USERNAME_UAT }}" --instance-url "${{ secrets.INSTANCE_URL_UAT }}"
+            TARGET_ORG="${{ secrets.DEPLOYMET_USERNAME_UAT }}"
           else
             echo "Invalid target branch: $TARGET_BRANCH"
             exit 1
