@@ -11,10 +11,12 @@ export default class LiveMissedCallDashboard extends LightningElement {
     selectedRM = '';
     selectedTL = '';
     selectedProject = '';
+    selectedSegment = '';
 
     rmOptions = [];
     tlOptions = [];
     projectOptions = [];
+    segmentOptions = [];
 
     sortedBy = '';
     sortDirection = 'asc';
@@ -34,6 +36,7 @@ export default class LiveMissedCallDashboard extends LightningElement {
         }
     }
 
+    
     // ================================
     // REFRESH BUTTON
     // ================================
@@ -73,11 +76,13 @@ export default class LiveMissedCallDashboard extends LightningElement {
         const rmSet = new Set();
         const tlSet = new Set();
         const projectSet = new Set();
+        const segmentSet = new Set();
 
         this.fullData.forEach(row => {
             if (row.rmName) rmSet.add(row.rmName);
             if (row.tlName) tlSet.add(row.tlName);
             if (row.project) projectSet.add(row.project);
+            if (row.segment) segmentSet.add(row.segment);
         });
 
         this.rmOptions = [{ label: 'All', value: '' },
@@ -90,6 +95,10 @@ export default class LiveMissedCallDashboard extends LightningElement {
 
         this.projectOptions = [{ label: 'All', value: '' },
             ...[...projectSet].map(val => ({ label: val, value: val }))
+        ];
+
+        this.segmentOptions = [{ label: 'All', value: '' },
+            ...[...segmentSet].map(val => ({ label: val, value: val }))
         ];
     }
 
@@ -111,10 +120,16 @@ export default class LiveMissedCallDashboard extends LightningElement {
         this.applyFilters();
     }
 
+    handleSegmentChange(event) {
+        this.selectedSegment = event.detail.value;
+        this.applyFilters();
+    }
+
     handleReset() {
         this.selectedRM = '';
         this.selectedTL = '';
         this.selectedProject = '';
+        this.selectedSegment = '';
         this.applyFilters();
     }
 
@@ -128,10 +143,11 @@ export default class LiveMissedCallDashboard extends LightningElement {
             return (
                 (this.selectedRM === '' || row.rmName === this.selectedRM) &&
                 (this.selectedTL === '' || row.tlName === this.selectedTL) &&
-                (this.selectedProject === '' || row.project === this.selectedProject)
+                (this.selectedProject === '' || row.project === this.selectedProject) &&
+                (this.selectedSegment === '' || row.segment === this.selectedSegment)
             );
         });
-
+        console.log('this.selectedProject: ', this.selectedProject);
         this.calculateSummary();
     }
 
@@ -183,13 +199,15 @@ export default class LiveMissedCallDashboard extends LightningElement {
         return {
             customerName: this.getIcon('customerName'),
             customerNumber: this.getIcon('customerNumber'),
+            segment: this.getIcon('segment'),
             project: this.getIcon('project'),
             unit: this.getIcon('unit'),
             tower: this.getIcon('tower'),
             phase: this.getIcon('phase'),
             rmName: this.getIcon('rmName'),
             tlName: this.getIcon('tlName'),
-            communicationType: this.getIcon('communicationType'),
+            lastCrmCallSubject: this.getIcon('lastCrmCallSubject'),
+            assignedTo: this.getIcon('assignedTo'),
             inboundDeskAgent: this.getIcon('inboundDeskAgent'),
             callDate: this.getIcon('callDate'),
             callTime: this.getIcon('callTime'),
@@ -210,20 +228,22 @@ export default class LiveMissedCallDashboard extends LightningElement {
     handleExport() {
 
         let csv = '';
-        const headers = ['Customer', 'SAP Customer Number', 'Project', 'Unit', 'Tower', 'Phase', 'RM', 'TL', 'Communication Type', 'Inbound Desk Agent', 'Date of Call', 'Time of Call', 'Ageing Minutes', 'Ageing Hours', 'Ageing Days', 'Call Overdue > 6 Hours'];
+        const headers = ['Customer', 'SAP Customer Number', 'Segment', 'Project', 'Unit', 'Tower', 'Phase', 'RM', 'TL', 'Last CRM Call Subject', 'Inbound Desk Agent', 'Date of Call', 'Time of Call', 'Ageing Minutes', 'Ageing Hours', 'Ageing Days', 'Call Overdue > 6 Hours'];
         csv += headers.join(',') + '\n';
 
         this.data.forEach(row => {
             csv += [
                 row.customerName,
                 row.customerNumber,
+                row.segment,
                 row.project,
                 row.unit,
                 row.tower,
                 row.phase,
                 row.rmName,
                 row.tlName,
-                row.communicationType,
+                row.lastCrmCallSubject,
+                row.assignedTo,
                 row.inboundDeskAgent,
                 row.callDate,
                 row.callTime,
@@ -236,7 +256,7 @@ export default class LiveMissedCallDashboard extends LightningElement {
 
         const element = document.createElement('a');
         element.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        element.download = 'MissedCallsReport.csv';
+        element.download = 'MissedCalls Report.csv';
         element.click();
     }
 }

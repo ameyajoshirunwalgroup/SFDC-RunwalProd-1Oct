@@ -18,9 +18,13 @@ export default class CpBillingChecklist extends LightningElement {
             let tempData = result.data.map(item => {
                 let fieldDisplayValue = '';
                 console.log('Checklist item name:', JSON.stringify(item.Checklist_Item__c));
-                switch (item.Checklist_Item__c) {
+                switch (item.Checklist_Item__c) {   
                     case 'Agreement Value':
-                        let agreementValue = item.Booking__r?.Original_Agreement_Value__c;
+                        //let agreementValue = item.Booking__r?.Original_Agreement_Value__c ?? item.Booking__r?.Allotment_Premium__c;
+                        let agreementValue = item.Booking__r?.Original_Agreement_Value__c || item.Booking__r?.Allotment_Premium__c;
+                        console.log('Original_Agreement_Value__c - > '+item.Booking__r?.Original_Agreement_Value__c)
+                        console.log('Allotment_Premium__c - > '+item.Booking__r?.Allotment_Premium__c)
+                        console.log('agreementValue - > '+agreementValue)
                         fieldDisplayValue = agreementValue != null
                             ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(agreementValue)
                             : '—';

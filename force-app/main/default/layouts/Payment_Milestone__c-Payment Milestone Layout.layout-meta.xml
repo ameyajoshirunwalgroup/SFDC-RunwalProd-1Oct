@@ -66,8 +66,16 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
+        <fields>Unique_ConstructionStage__c</fields>
+        <fields>Is_to_be_Paid__c</fields>
+        <fields>Is_to_be__c</fields>
+        <fields>Project_Construction_Stages__c</fields>
         <relatedList>Standard_Customer_Pay_Plan_Detail__c.Payment_Milestone__c</relatedList>
+        <sortField>NAME</sortField>
+        <sortOrder>Asc</sortOrder>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

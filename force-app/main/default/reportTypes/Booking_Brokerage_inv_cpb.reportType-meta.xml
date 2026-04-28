@@ -6,10 +6,10 @@
     <description>Booking , Brokerage, invoice &amp; cp brokerage</description>
     <join>
         <join>
-            <outerJoin>false</outerJoin>
+            <outerJoin>true</outerJoin>
             <relationship>Brokerage_Invoices__r</relationship>
         </join>
-        <outerJoin>false</outerJoin>
+        <outerJoin>true</outerJoin>
         <relationship>CP_Brokerage__r</relationship>
     </join>
     <label>Booking , Brokerage, inv &amp; cpb</label>
@@ -2134,6 +2134,29 @@
             <field>is_Demand_Records__c</field>
             <table>Booking__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Lockated_User_Device_ID__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Primary_Applicant_Mobile__c</field>
+            <table>Booking__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Process_Instance_Id__c</field>
+            <table>Booking__c</table>
+        </columns>
         <masterLabel>Booking</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>SAP_Clearing_No__c</field>
+            <table>Booking__c.CP_Brokerage__r</table>
+        </columns>
+        <masterLabel>CP Brokerage</masterLabel>
     </sections>
 </ReportType>

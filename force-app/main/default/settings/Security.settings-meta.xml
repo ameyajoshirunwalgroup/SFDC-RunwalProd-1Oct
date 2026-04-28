@@ -80,6 +80,10 @@
             <start>210.210.24.66</start>
         </ipRanges>
         <ipRanges>
+            <end>209.43.14.97</end>
+            <start>209.43.14.97</start>
+        </ipRanges>
+        <ipRanges>
             <end>207.250.79.110</end>
             <start>207.250.79.96</start>
         </ipRanges>
@@ -219,6 +223,10 @@
         <ipRanges>
             <end>162.158.227.194</end>
             <start>162.158.227.194</start>
+        </ipRanges>
+        <ipRanges>
+            <end>161.71.35.254</end>
+            <start>161.71.32.0</start>
         </ipRanges>
         <ipRanges>
             <end>157.33.219.255</end>
@@ -457,6 +465,10 @@
         <ipRanges>
             <end>103.26.54.234</end>
             <start>103.26.54.234</start>
+        </ipRanges>
+        <ipRanges>
+            <end>100.65.255.254</end>
+            <start>100.64.0.0</start>
         </ipRanges>
         <ipRanges>
             <end>99.50.81.140</end>
@@ -706,6 +718,10 @@
             <start>13.111.17.0</start>
         </ipRanges>
         <ipRanges>
+            <end>10.166.127.254</end>
+            <start>10.166.0.0</start>
+        </ipRanges>
+        <ipRanges>
             <end>1.39.33.208</end>
             <start>1.39.33.208</start>
         </ipRanges>
@@ -753,7 +769,7 @@
         <enableCoopHeader>false</enableCoopHeader>
         <enableLightningLogin>true</enableLightningLogin>
         <enableLightningLoginOnlyWithUserPerm>false</enableLightningLoginOnlyWithUserPerm>
-        <enableMFADirectUILoginOptIn>true</enableMFADirectUILoginOptIn>
+        <enableMFADirectUILoginOptIn>false</enableMFADirectUILoginOptIn>
         <enableOauthCorsPolicy>false</enableOauthCorsPolicy>
         <enablePermissionsPolicy>false</enablePermissionsPolicy>
         <enablePostForSessions>false</enablePostForSessions>
@@ -774,7 +790,6 @@
         <lockerServiceCSP>false</lockerServiceCSP>
         <lockerServiceNext>false</lockerServiceNext>
         <lockerServiceNextControl>false</lockerServiceNextControl>
-        <lockerTrustedMode>false</lockerTrustedMode>
         <redirectBlockModeEnabled>false</redirectBlockModeEnabled>
         <redirectionWarning>false</redirectionWarning>
         <referrerPolicy>true</referrerPolicy>
@@ -783,11 +798,12 @@
         <sendCspForUncommonClients>false</sendCspForUncommonClients>
         <sessionTimeout>TwoHours</sessionTimeout>
         <sidToken3rdPartyAuraApp>false</sidToken3rdPartyAuraApp>
-        <skipSFAWhenMFADirectUILogin>true</skipSFAWhenMFADirectUILogin>
+        <skipSFAWhenMFADirectUILogin>false</skipSFAWhenMFADirectUILogin>
         <terminateUserSessionsWhenAdminResetsPassword>false</terminateUserSessionsWhenAdminResetsPassword>
         <untrustedRedirect>AlwaysAllowed</untrustedRedirect>
         <useEAPIRateLimitForConnectAPI>false</useEAPIRateLimitForConnectAPI>
         <useLocalStorageForLogoutUrl>false</useLocalStorageForLogoutUrl>
+        <welcomeEmailTemplateId>000000000000000</welcomeEmailTemplateId>
     </sessionSettings>
     <singleSignOnSettings>
         <enableCaseInsensitiveFederationID>false</enableCaseInsensitiveFederationID>
