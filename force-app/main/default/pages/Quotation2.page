@@ -274,7 +274,7 @@
                         
                      <br/><br/>
                      <center>
-                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Generate Quote" onclick="changeBaseRate();return false;" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" status="status"/>&nbsp;
+                          <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Apply Premium" onclick="changeBaseRate();return false;" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" status="status" disabled="{!disablePremium}"/>&nbsp;<!--Relabel and add disabled="{!disablePremium}" for SDR Changes-->
                           <apex:commandButton id="btncan" styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Cancel Changes" onclick="getOldBaseRate();" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" oncomplete="reloadURL();" status="status"/>
                      </center>     
                 </apex:outputPanel><br></br><br></br>
@@ -285,7 +285,24 @@
                     <table id="quoteDetails" width='100%'>
                        <tr>
                            <td class="projectStyle">
-                                Prepared For : <a href="/{!oppId}">{!quoteFor}</a>
+                                Prepared For : <a href="/{!oppId}">{!quoteFor}</a><br></br>
+                                <!--Added for SDR/ROC Management starts-->
+                                <label>SD Paid By Runwal</label>&nbsp;&nbsp;
+                                <apex:inputCheckbox id="sdByRunwal" value="{!sdPaidByRunwal}">
+                                    <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="discountedPanel,payplandiv,sdStampPanel,messages,sdByRunwal"/>
+                                </apex:inputCheckbox>
+                                <apex:outputPanel id="sdStampPanel" style="margin-top:4px;">
+                                    <span style="font-weight:bold;">SD By Runwal :</span>
+                                    <apex:outputText value="{0,number,#,##0.00}">
+                                        <apex:param value="{!stampDutyValue}" />
+                                    </apex:outputText>
+                                </apex:outputPanel>
+                                <br/>
+                                <label>Registration Charges Paid by Runwal</label>&nbsp;&nbsp;
+                                   <apex:inputCheckbox id="regChargesByRunwalId" value="{!regChargesByRunwal}">
+                                    <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="discountedPanel,payplandiv,messages,regChargesByRunwalId"/>
+                                </apex:inputCheckbox>
+                                 <!--Added for SDR/ROC Management endds-->
                             </td>
                            <td class="projectStyle">
                                 Quotation Prepared Date:{!quoteDate} 
@@ -439,15 +456,19 @@
                                 </table> 
                             </td>
                             <td width="50%">
+                                <apex:outputPanel id="costPanel"><!--Added for SDR/ROC-->
                                 <apex:dataTable value="{!quoteUIMap['RIGHTTOP']}" var="rows"  id="right1" width="100%">
                                     <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
                                     <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
                                 </apex:dataTable>
+                                </apex:outputPanel><!--Added for SDR/ROC-->
                             </td>
                             <td width="30%">
+                                <apex:outputPanel id="discountedPanel"><!--Added for SDR/ROC-->
                                 <apex:dataTable value="{!quoteUIMapDisc['RIGHTTOP']}" var="rows"  id="right1Disc" width="100%" rendered="{!quoteUIMapDisc != null}">
                                     <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
                                 </apex:dataTable>
+                                </apex:outputPanel>
                             </td>
                         </tr>
                         <tr width="100%">
