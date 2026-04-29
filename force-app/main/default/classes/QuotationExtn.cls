@@ -1,5 +1,6 @@
 public with sharing class QuotationExtn
 {
+    public Decimal carParkAmt{get; set;}
     public Project_Unit__c u {get; set;}
     public Opportunity o {get; set;}
     public Quotation__c q {get;set;}
@@ -138,7 +139,7 @@ public with sharing class QuotationExtn
             //{
             system.debug('((((((((((((((((((((((((((('+unitId+subPlanId);
                 allChargesMap = InventoryCostServices.getAllCharges(unitId,0.0,0.0,subPlanId);
-                quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,0.0,0.0, selectedCarpark1 + selectedcarPark2, subPlanId);
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,0.0,0.0, selectedCarpark1 + selectedcarPark2, subPlanId,q);
                 System.Debug('Quote UI Map : '+quoteUIMap);
                 quoteUIMapDisc = null;
                 payPlanList = InventoryCostServices.getPlanList(u.RW_Project__r.Id, u.TowerName__r.Id, subPlanId);
@@ -414,7 +415,9 @@ public with sharing class QuotationExtn
         InventoryCostServices.baseRateVal = baseRate;
         InventoryCostServices.premiumRateVal = premiumRate;
         InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
-        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7 , subPlanId);        
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
+        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7 , subPlanId,q);      
         allChargesMap = allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.get('AGREEMENTVALUE');
         StotalRateCardPSF = QuotationManagementServices.INFormat(allChargesMap.get('TOTALRATECARDPSF'));
@@ -831,7 +834,7 @@ public with sharing class QuotationExtn
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
-            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId);
+            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
         } else {
             quoteUIMapDisc = null;
         }
@@ -1840,8 +1843,7 @@ public with sharing class QuotationExtn
             q.Basement_Additional__c = car7;
             q.Podium__c = car8;
             q.Puzzle_Car_Park__c = car9; //Added by Vinay 28-03-2025
-            q.Stack_Additional_1__c = car10; //Added by Vinay 21-11-2025
-            Decimal carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
+            carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
             
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
