@@ -102,6 +102,7 @@ trigger trgToUpdateOppStage on Project_Unit__c (after update, before update , af
         //Call the Logic cls
         if(puIdstoUpdate.size() > 0){
             SendRMdetailstoSAP.updateRMUpdationDate(puIdstoUpdate);
+            LockatedApp_Notifications.rmChangedNotification(puIdstoUpdate); //Added by Vinay 28-02-2026
         }
         
         
