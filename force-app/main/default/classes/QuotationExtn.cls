@@ -140,7 +140,7 @@ public with sharing class QuotationExtn
             //{
             system.debug('((((((((((((((((((((((((((('+unitId+subPlanId);
                 allChargesMap = InventoryCostServices.getAllCharges(unitId,0.0,0.0,subPlanId);
-                quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,0.0,0.0, selectedCarpark1 + selectedcarPark2, subPlanId);
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,0.0,0.0, selectedCarpark1 + selectedcarPark2, subPlanId,q);
                 System.Debug('Quote UI Map : '+quoteUIMap);
                 quoteUIMapDisc = null;
                 payPlanList = InventoryCostServices.getPlanList(u.RW_Project__r.Id, u.TowerName__r.Id, subPlanId);
@@ -416,7 +416,9 @@ public with sharing class QuotationExtn
         InventoryCostServices.baseRateVal = baseRate;
         InventoryCostServices.premiumRateVal = premiumRate;
         InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
-        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7 , subPlanId);        
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
+        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7 , subPlanId,q);      
         allChargesMap = allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.get('AGREEMENTVALUE');
         StotalRateCardPSF = QuotationManagementServices.INFormat(allChargesMap.get('TOTALRATECARDPSF'));
@@ -830,7 +832,7 @@ public with sharing class QuotationExtn
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
-            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId);
+            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
         } else {
             quoteUIMapDisc = null;
         }
@@ -1847,7 +1849,7 @@ public with sharing class QuotationExtn
             
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
             allChargesMap = InventoryCostServices.getAllCharges(unitId,carParkAmt,0.0,subPlanId);
-             quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,0.0, selectedCarPark1+selectedCarPark2+selectedCarPark3+selectedCarPark4+selectedCarPark5+selectedCarPark6+selectedCarPark7+selectedCarPark8+selectedCarPark9,subPlanId);
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,0.0, selectedCarPark1+selectedCarPark2+selectedCarPark3+selectedCarPark4+selectedCarPark5+selectedCarPark6+selectedCarPark7+selectedCarPark8+selectedCarPark9,subPlanId,q);
              
             agreementValue = allChargesMap.get('AGREEMENTVALUE');//Added for SDR Changes
              if(discountVal != null && discountVal > 0){
