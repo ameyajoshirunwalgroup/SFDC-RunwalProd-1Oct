@@ -1853,7 +1853,7 @@ public with sharing class QuotationExtn
              
             agreementValue = allChargesMap.get('AGREEMENTVALUE');//Added for SDR Changes
              if(discountVal != null && discountVal > 0){
-                 quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,discountVal, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6+selectedCarPark7+selectedCarPark8, subPlanId);
+                quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,discountVal, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6+selectedCarPark7+selectedCarPark8, subPlanId,q);
              }
              else{
                  quoteUIMapDisc = null;
