@@ -195,7 +195,6 @@ public with sharing class QuotationExtn
         selectedCarPark9 = 0; //Added by Vinay 28-03-2025
         selectedCarPark10 = 0; //Added by Vinay 21-11-2025
        if(proj != null) {
-        parkingApplied = false; //Added by Dolly
         isPremiumApplied = false; //Added for SDR Changes
             checkCarParkAvailablity();
             quoteValidity = (System.today().addDays(Integer.valueOf(proj.Quotation_Validity__c))).format();
