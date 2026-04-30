@@ -1,4 +1,4 @@
-<apex:page controller="SaleConfirmationSheet" renderas="pdf">
+<apex:page applyBodyTag="false" standardController="Booking__c" extensions="SaleConfirmationSheet"  renderAs="pdf" >
     <html>
         <head>
             <style>
@@ -8,6 +8,17 @@
                 div.a {
                 text-transform: uppercase !important;
                 }
+                table {
+                page-break-inside: avoid;
+                }
+                
+                tr {
+                page-break-inside: avoid;
+                }
+                
+                td {
+                page-break-inside: avoid;
+                }
             </style>
             
             
@@ -16,47 +27,36 @@
             
             <div class="a">
                 <!--<div align="right">
-                    <b><u>  CLP</u></b>
-                </div>-->
+<b><u>  CLP</u></b>
+</div>-->
                 <div style="margin-top:2%;text-align:center">
                     <h3><apex:outputText value="{!b[0].Project__r.Name}" style="text-transform: uppercase ;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif; " /></h3><br/>
                     <h4>
-                      <span style="font-family:Tahoma, Geneva, sans-serif;"><u>SALE CONFIRMATION SHEET</u> </span>
+                        <span style="font-family:Tahoma, Geneva, sans-serif;"><u>SALE CONFIRMATION SHEET</u> </span>
                     </h4>
                 </div>
                 <table  style="width:100%;" cellpadding="3">
                     
-                    <!--  <div style="padding-left:250px; float:left; display:inline; font-family:arial; background-color:#fff; color:#222; font-size:16px; font-weight:bold;line-height:5;" >-->
-                                      
-                    <!--For fetching number ofapplicant-->
-                    <!--<apex:variable var="appCount1" value="{!ad.size}"/>
-<apex:repeat var="app" value="{!strapp}">
-<tr>
-<td>&nbsp;<apex:outputPanel rendered="{!appCount1>0}">{!map1[app].Name}</apex:outputPanel></td>
-</tr>
-<apex:variable var="appCount1" value="{!appCount1-1}"/>
-</apex:repeat>-->
-                    
                     <tr>
                         <td colspan="5"  style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >BOOKING DATE </apex:outputLabel></td>
                         <td colspan="4"  style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;" > 
-                           <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}" style="text-transform: uppercase" > 
-                             : &nbsp;   <apex:param value="{!b[0].Booking_Date__c}" />
+                            <apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}" style="text-transform: uppercase" > 
+                                : &nbsp;   <apex:param value="{!b[0].Booking_Date__c}" />
                             </apex:outputText> </td>
                     </tr>    
                     
                     <tr>
                         <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif; "><apex:outputLabel >1st APPLICANT </apex:outputLabel></td>          
-                        <td style=" padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif; ">: &nbsp; <apex:outputText value="{!primaryappname}" style="text-transform: uppercase" /></td>
+                        <td style=" padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif; ">: &nbsp; <apex:outputText value="{!IF( OR(ISBLANK(primaryappname), primaryappname = ''), 'NA', primaryappname)}" style="text-transform: uppercase" /></td>
                     </tr>
                     
                     <tr>
                         <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >2nd APPLICANT</apex:outputLabel> </td>
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!primaryappname1}" style="text-transform: uppercase" /></td>    
+                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!IF( OR(ISBLANK(primaryappname1), primaryappname1 = ''), 'NA', primaryappname1)}" style="text-transform: uppercase" /></td>    
                     </tr>
                     <tr>
                         <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >3rd APPLICANT </apex:outputLabel> </td>
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!primaryappname2}" style="text-transform: uppercase" /></td>
+                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!IF( OR(ISBLANK(primaryappname2), primaryappname2 = ''), 'NA', primaryappname2)}" style="text-transform: uppercase" /></td>
                     </tr>
                     
                     <tr>
@@ -67,8 +67,8 @@
                     <tr >      
                         <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >ADDRESS </apex:outputLabel> </td>  
                         <td style="text-transform:uppercase;font-size:13px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;max-width:50px;"> &nbsp; <p>: {!ad[0].Permanent_Address__c}"</p> </td>
-                            
-                            
+                        
+                        
                     </tr>
                     
                     <tr>
@@ -84,7 +84,9 @@
                     <tr>  
                         <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >AREA </apex:outputLabel></td> 
                         
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!FLOOR(pu[0].Saleable_Area__c)}" style="text-transform: uppercase;font-family:Tahoma, Geneva, sans-serif;" /> SQ.FT.</td>
+                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="Saleable Area - {!FLOOR(pu[0].Saleable_Area__c)}" style="text-transform: uppercase;font-family:Tahoma, Geneva, sans-serif;" /> SQ.FT
+                            <br/>
+                            <apex:outputText value=" Carpet Area - {!carpetAreaWithService}" style="text-transform: uppercase;font-family:Tahoma, Geneva, sans-serif;" /> SQ.FT </td>
                     </tr>
                     
                     
@@ -96,8 +98,8 @@
                             <apex:outputText value="RATE" />  
                         </td><!-- td> :</td>  <td>RS.<apex:outputText value="{!totalrate}" /> /- PER SQ.FT.</td>-->
                         <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
-                           <apex:repeat value="{!m}" var="rateKey">
-                               : &nbsp;<apex:outputText value="{!m[rateKey]}" style="text-transform: uppercase;margin-left:10%;font-size:13px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"/><br/>
+                            <apex:repeat value="{!m}" var="rateKey">
+                                : &nbsp;<apex:outputText value="{!m[rateKey]}" style="text-transform: uppercase;margin-left:10%;font-size:13px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"/><br/>
                             </apex:repeat>
                         </td>
                     </tr>
@@ -121,66 +123,306 @@
                         <td colspan="4">------------------------------------------------------</td>
                     </tr>   
                     
-                    <tr>
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >ALLOTMENT CHARGES </apex:outputLabel></td> 
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!allotment}" style="text-transform: uppercase" /></td>
-                    </tr>
-                   
+                    
+                    
                     <!--- 
-                    <tr style="display:{!if(OR(BCAMCharges =='Rs 0/-' , BCAMCharges== ''), 'none','')}">
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >BCAM </apex:outputLabel></td> 
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!BCAMCharges}" style="text-transform: uppercase" /></td>
-                    </tr>
+<tr style="display:{!if(OR(BCAMCharges =='Rs 0/-' , BCAMCharges== ''), 'none','')}">
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >BCAM </apex:outputLabel></td> 
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!BCAMCharges}" style="text-transform: uppercase" /></td>
+</tr>
+
+<tr style="display:{!if(OR(CAMCharges =='Rs 0/-',CAMCharges==''), 'none','')}">
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel > CAM </apex:outputLabel></td> 
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!CAMCharges }" style="text-transform: uppercase" /></td>
+</tr>
+-->
                     
-                     <tr style="display:{!if(OR(CAMCharges =='Rs 0/-',CAMCharges==''), 'none','')}">
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel > CAM </apex:outputLabel></td> 
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!CAMCharges }" style="text-transform: uppercase" /></td>
-                    </tr>
-                    ----->
+
+                                    <tr>
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >ALLOTMENT CHARGES </apex:outputLabel></td> 
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!allotment}" style="text-transform: uppercase" /></td>
+                                    </tr>
+                                    <!--
+<tr>
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputText value="{!referralDiscountLabel}" /></td> 
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!referralDiscountDisplay}" style="text-transform: uppercase" /></td>
+</tr>
+<tr>
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputText value="{!referralPassbackLabel}" /></td> 
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!referralPassbackDisplay}" style="text-transform: uppercase" /></td>
+</tr>-->
+                                    
+                                    <tr>
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >STAMP DUTY(AVG) </apex:outputLabel></td> 
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!IF(b[0].Unit_No__r.SD_Paid_By_Runwal__c,
+                        b[0].Quotation__r.SD_By_Runwal__c,
+                                                                                                                                                                                                        'Rs 0/-')}" 
+            style="text-transform: uppercase" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >TYPE OF ALLOTMENT </apex:outputLabel></td> 
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!typeOfAllotment}" /></td>
+                                    </tr>
+                                    <tr>    
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >AGREEMENT VALUE </apex:outputLabel> </td>
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!argv}" style="text-transform: uppercase" /></td>
+                                    </tr>
+                                    <tr>    
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >OTHER CHARGES </apex:outputLabel> </td>
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="Rs {0, number, ###,##0.00}">
+                                            <apex:param value="{!otherChargesTotal}" />
+                                            </apex:outputText></td>
+                                    </tr>    
+                                    
+                                    
+                                    <!--Added for Referral Credit Changes starts-->
+                                    <!--<tr>    
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >REFERRAL CREDIT DUE </apex:outputLabel> </td>
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!refCreditDue}" style="text-transform: uppercase" /></td>
+</tr>-->
+                                    <!--Added for Referral Credit Changes ends-->
+                                    
+                                   <!-- <tr> 
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >SOCIETY CHARGES </apex:outputLabel></td>
+                                  -->      <!--<td colspan="3" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!societyChr}" style="text-transform: uppercase" /></td>-->
+                                  <!--      <td colspan="3" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: <span style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"></span>
+                                            <apex:outputText value="{!SocietyCharge}" style="text-transform: uppercase" /><span style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"></span></td>
+                                    </tr> -->
+                                    
+                                    <!--     <tr style="display:{!if(maintnce =='Rs 0/-', 'none','')}">  
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >MAINTENANCE CHARGES </apex:outputLabel></td>
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!maintnce}" style="text-transform: uppercase" /></td>
+</tr>-->
+                                    
+                                    <tr>  
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >NO. OF CAR PARK</apex:outputLabel></td>
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputfield value="{!b[0].Quotation__r.Total_No_of_Parking__c}" style="text-transform: uppercase" /></td>
+                                    </tr>
+                                    
+                                    <tr>  
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                            <apex:outputLabel >BOOKING SOURCE</apex:outputLabel>
+                                        </td>
+                                        
+                                        <td colspan="4" style="padding: 3px; text-transform: uppercase !important;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                            : &nbsp;
+                                            
+                                            <!-- If Referral -->
+                                            <apex:outputText value="{!IF(
+                                                                    b[0].Source_of_Booking__c = 'Referral',
+                                                                    
+                                                                    IF(
+                                                                    NOT(ISBLANK(b[0].Customer_Reference_Opportunity__c)),
+                                                                    
+                                                                    'Referral - ' & 
+                                                                    b[0].Customer_Reference_Opportunity__r.Name & 
+                                                                    IF(
+                                                                    NOT(ISBLANK(b[0].Customer_reference_SAP_Code__c)),
+                                                                    ' (' & b[0].Customer_reference_SAP_Code__c & ')',
+                                                                    ''
+                                                                    ),
+                                                                    
+                                                                    'Referral'
+                                                                    ),
+                                                                    
+                                                                    IF(
+                                                                    b[0].Source_of_Booking__c = 'Channel Partner',
+                                                                    
+                                                                    IF(
+                                                                    NOT(ISBLANK(b[0].Broker_Name__c)),
+                                                                    'Channel Partner - ' & b[0].Broker_Name__c,
+                                                                    'Channel Partner'
+                                                                    ),
+                                                                    
+                                                                    b[0].Source_of_Booking__c
+                                                                    )
+                                                                    
+                                                                    )}"/>
+                                            
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr  style="{!IF(
+                                                b[0].Customer_Reference_Opportunity__c != null && 
+                                                NOT(ISBLANK(b[0].Customer_Reference_Opportunity__r.RW_Project__r.Name)),
+                                                '',
+                                                'display:none'
+                                                )}">
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                            <apex:outputLabel >REFERRER PROJECT NAME</apex:outputLabel>
+                                        </td>
+                                        
+                                        <td colspan="4" style="padding: 3px; text-transform: uppercase !important;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                            : &nbsp;<apex:outputText value="{!b[0].Customer_Reference_Opportunity__r.RW_Project__r.Name}" />
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr style="{!IF(
+                                               b[0].Customer_Reference_Opportunity__c != null && 
+                                               NOT(ISBLANK(b[0].Customer_Reference_Opportunity__r.RW_Project_Unit__r.Name)),
+                                               '',
+                                               'display:none'
+                                               )}">   
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                            <apex:outputLabel >REFERRER UNIT NAME</apex:outputLabel>
+                                        </td>
+                                        
+                                        <td colspan="4" style="padding: 3px; text-transform: uppercase !important;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                            : &nbsp;<apex:outputText value="{!b[0].Customer_Reference_Opportunity__r.RW_Project_Unit__r.name}" />
+                                        </td>
+                                    </tr>
+                                    <tr > 
+                                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >PAYOUTS </apex:outputLabel></td>
+                                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"> : &nbsp;<apex:outputText value="{!referralCreditDisplay}" style="text-transform: uppercase" /></td>
+                                    </tr>
+                                    <!--<tr>
+<td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputText value="{!referralCreditLabel}" /></td> 
+<td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputText value="{!referralCreditDisplay}" style="text-transform: uppercase" /></td>
+</tr>-->
+                                    
+                                    <tr>  
+                                        <td colspan="5" style="padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >TOTAL VALUE</apex:outputLabel></td>
+                                        <td colspan="4" style="padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!totl}" style="text-transform: uppercase" /></td>
+                                    </tr>
+                                    <tr>  
+                                        <td colspan="5" style="padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >PAYMENT PLAN</apex:outputLabel></td>
+                                        <td colspan="4" style="padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!b[0].Quotation__r.PaymentPlan__r.Name}" style="text-transform: uppercase" /></td>
+                                    </tr>
+                              
                     
-                    <tr>    
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >AGREEMENT VALUE </apex:outputLabel> </td>
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!argv}" style="text-transform: uppercase" /></td>
-                    </tr>
                     
-                    <tr> 
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >SOCIETY CHARGES </apex:outputLabel></td>
-                        <!--<td colspan="3" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!societyChr}" style="text-transform: uppercase" /></td>-->
-                         <td colspan="3" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: <span style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"></span>
-                             <apex:outputText value="{!SocietyCharge}" style="text-transform: uppercase" /><span style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"></span></td>
-                    </tr> 
+                    <br/><br/>
+                    <br/><br/><br/><br/>
+                    <table style="width:100%; border-collapse:collapse;">
+                        <tr>
+                            
+                            <td style="width:46%; vertical-align:top; padding-right:10px;">
+                                <apex:outputPanel rendered="{!otherChargesList.size > 0}">
+                                    
+                                    <div style="text-align:center; font-size:14px; font-weight:bold; font-family:Tahoma;">
+                                        OTHER CHARGES
+                                    </div>
+                                    
+                                    <table style="width:100%; border-collapse:collapse; border:1px solid black;" cellpadding="4">
+                                        
+                                        <tr style="background-color:#e5e5e5;">
+                                            <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>DESCRIPTION</b></td>
+                                            <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>AMOUNT</b></td>
+                                        </tr>
+                                        
+                                        <apex:repeat value="{!otherChargesList}" var="oc">
+                                            <tr>
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!oc.description}</td>
+                                                <td style="border:1px solid black; text-align:right;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                    <apex:outputText value="{0, number, ###,##0.00}">
+                                                        <apex:param value="{!oc.amount}" />
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                        </apex:repeat>
+                                        <tr style="border-top:2px solid black;">
+                                            <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                TOTAL
+                                            </td>
+                                            <td style="border:1px solid black;text-align:right;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                <apex:outputText value="{0, number, ###,##0.00}">
+                                                    <apex:param value="{!otherChargesTotal}" />
+                                                </apex:outputText>
+                                            </td>
+                                        </tr>
+                                        
+                                    </table>
+                                    
+                                </apex:outputPanel>
+                              
+                                
+                            </td>
+                            
+                            <td style="width:48%; vertical-align:top; padding-left:10px;">
+                                 
+                                <apex:outputPanel rendered="{!monetaryDiscounts.size > 0}">
+                                    <div style="page-break-inside: avoid;">
+                                        
+                                        <div style="text-align:center; font-size:14px; font-weight:bold; font-family:Tahoma; margin-bottom:6px;">
+                                            MONETARY DISCOUNTS
+                                        </div>
+                                        
+                                        
+                                        <table style="width:80%; margin:0 auto; border-collapse:collapse; border:1px solid black;" cellpadding="5">
+                                            
+                                            <tr style="background-color:#e5e5e5;">
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>NAME</b></td>
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>CATEGORY</b></td>
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>VALUE</b></td>
+                                            </tr>
+                                            
+                                            <apex:repeat value="{!monetaryDiscounts}" var="qd">
+                                                <tr>
+                                                    <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!qd.Name}</td>
+                                                    <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!qd.Offer_type__c}</td>
+                                                    <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!qd.Offer_Value__c}</td>
+                                                </tr>
+                                            </apex:repeat>
+                                            <tr style="border-top:2px solid black;">
+                                                <td colspan="2" style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                    TOTAL
+                                                </td>
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                    <apex:outputText value="{0, number, ###,##0.00}">
+                                                        <apex:param value="{!totalMonetaryDiscount}" />
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                            
+                                            
+                                        </table>
+                                    </div>
+                                    <div style="height:15px;"></div>
+                                    
+                                </apex:outputPanel>
+                                  <apex:outputPanel rendered="{!nonMonetaryDiscounts.size > 0}">
+                                    <div style="page-break-inside: avoid;">
+                                        <div style="text-align:center; font-size:14px; font-weight:bold; font-family:Tahoma;">
+                                            NON MONETARY DISCOUNTS
+                                        </div>
+                                        
+                                        <table style="width:80%; margin:0 auto; border-collapse:collapse; border:1px solid black;" cellpadding="5">
+                                            
+                                            <tr style="background-color:#e5e5e5;">
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>NAME</b></td>
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>CATEGORY</b></td>
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><b>Value</b></td>
+                                            </tr>
+                                            
+                                            <apex:repeat value="{!nonMonetaryDiscounts}" var="qd">
+                                                <tr>
+                                                    <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!qd.Name}</td>
+                                                    <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!qd.Offer_type__c}</td>
+                                                    <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">{!qd.Offer_Value__c}</td>
+                                                </tr>
+                                            </apex:repeat>
+                                            <tr style="border-top:2px solid black;">
+                                                <td colspan="2" style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                    TOTAL
+                                                </td>
+                                                
+                                                <td style="border:1px solid black;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
+                                                    <apex:outputText value="{0, number, ###,##0.00}">
+                                                        <apex:param value="{!totalNonMonetaryDiscount}" />
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                            
+                                        </table>
+                                    </div>
+                                    
+                                </apex:outputPanel>
+                                
+                            </td>
+                            
+                        </tr>
+                    </table>
                     
-                    <tr style="display:{!if(maintnce =='Rs 0/-', 'none','')}">   <!--  -->
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >MAINTENANCE CHARGES </apex:outputLabel></td>
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!maintnce}" style="text-transform: uppercase" /></td>
-                    </tr>
-                    
-                    <tr>  
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >NO. OF CAR PARK</apex:outputLabel></td>
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputfield value="{!b[0].Quotation__r.Total_No_of_Parking__c}" style="text-transform: uppercase" /></td>
-                    </tr>
-                    
-                    <tr>  
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >BOOKING SOURCE </apex:outputLabel></td>
-                        <td colspan="4" style="padding: 3px; text-transform: uppercase !important;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">
-                            : &nbsp;<apex:outputfield value="{!b[0].Source_of_Booking__c}" /><apex:outputText value="{!wcpartner}" />
-                        </td>
-                    </tr>
-                    
-                    <tr > 
-                        <td colspan="5" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >PAYOUTS </apex:outputLabel></td>
-                        <td colspan="4" style="padding: 3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"> : {!payouuts}</td>
-                    </tr>
-                    
-                    <tr>  
-                        <td colspan="5" style="padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><apex:outputLabel >TOTAL VALUE</apex:outputLabel></td>
-                        <td colspan="4" style="padding:3px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;">: &nbsp;<apex:outputtext value="{!totl}" style="text-transform: uppercase" /></td>
-                    </tr>
-                    
-                    
-                    <!-- <tr>           
-<td colspan="4" style="padding: 1.5px;">CHECKED BY-</td>
-</tr> -->
                     <br/> <br/> <br/> <br/> <br/>
                     <tr>
                         <td  colspan="9" style="padding: 5px;font-size:12px;line-height: 150%;font-weight: bold;font-family:Tahoma, Geneva, sans-serif;"><hr width="70%"/>(HOD SALES &amp; MARKETING)</td>
