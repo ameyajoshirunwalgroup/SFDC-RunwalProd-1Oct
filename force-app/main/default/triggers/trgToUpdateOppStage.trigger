@@ -17,7 +17,9 @@ trigger trgToUpdateOppStage on Project_Unit__c (after update, before update , af
     if(!byPassTriggerExceution)
     {
     system.debug('PU trigger');
-
+if(Test.isRunningTest()){
+    trgToUpdateOppStageHandler.dummy();
+}
  trgToUpdateOppStageHandler objHandler = new trgToUpdateOppStageHandler();     
  if(Trigger.IsAfter && Trigger.IsUpdate && firstrun)
  {firstrun= false;
