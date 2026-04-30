@@ -125,6 +125,8 @@ public with sharing class QuotationExtn
         GstLumpsumRate = 0;
         TotalGSTDiscount = 'Rs 0/-';
         TotalGSTDiscountPSF = 'Rs 0/-';
+        regChargesByRunwal = false;//Added for SDR
+        sdPaidByRunwal = false;//Added for SDR
         if(ApexPages.currentPage().getParameters().containsKey('id'))       
             unitId = (Id)ApexPages.currentPage().getParameters().get('id');    
         if(ApexPages.currentPage().getParameters().containsKey('oppId'))  
