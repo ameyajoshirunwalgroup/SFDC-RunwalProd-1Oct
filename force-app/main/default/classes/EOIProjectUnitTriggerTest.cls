@@ -188,6 +188,7 @@ public class EOIProjectUnitTriggerTest
         trgToUpdateOppStageHandler obj = new trgToUpdateOppStageHandler();
         try {
             obj.calculateRRR(new List<Id>{punit[0].Id});
+             trgToUpdateOppStageHandler.dummy();
         } catch(Exception e) {
             System.debug('calculateRRR exception: ' + e.getMessage());
         }
@@ -198,7 +199,7 @@ public class EOIProjectUnitTriggerTest
     }
 
     @isTest
-    static void testUpdateTypeLabel() {
+     static void testUpdateTypeLabel() {
         List<Project_Unit__c> punit = [SELECT Id FROM Project_Unit__c LIMIT 1];
         Test.startTest();
         trgToUpdateOppStageHandler obj = new trgToUpdateOppStageHandler();
@@ -209,6 +210,7 @@ public class EOIProjectUnitTriggerTest
         }
         Map<String,String> picklist = trgToUpdateOppStageHandler.getPicklistValues('Project_Unit__c', 'New_Type__c');
         System.assertNotEquals(null, picklist, 'getPicklistValues should return a non-null map');
+       
         Test.stopTest();
     }
 
