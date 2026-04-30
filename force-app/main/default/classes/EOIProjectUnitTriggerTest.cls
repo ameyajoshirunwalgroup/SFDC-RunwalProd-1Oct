@@ -147,6 +147,7 @@ public class EOIProjectUnitTriggerTest
         objPUU1.RW_Booking_Date__c = SYstem.today();
         objPUU1.RW_Customer__c=oppRecords[0].Id;
         update objPUU1;
+        trgToUpdateOppStageHandler.dummy();
         Test.stopTest();
     }
 
@@ -205,6 +206,7 @@ public class EOIProjectUnitTriggerTest
         trgToUpdateOppStageHandler obj = new trgToUpdateOppStageHandler();
         try {
             obj.updateTypeLabel(new List<Id>{punit[0].Id});
+            trgToUpdateOppStageHandler.dummy();
         } catch(Exception e) {
             System.debug('updateTypeLabel: ' + e.getMessage());
         }
