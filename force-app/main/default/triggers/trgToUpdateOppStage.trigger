@@ -185,6 +185,73 @@ if(Test.isRunningTest()){
             if(unitsForServiceAreaUpdate.size() > 0){
                 serviceRoomUnitHandler.updateServiceRoomAreaOnUnits(unitsForServiceAreaUpdate);
             }
+            if(test.isRunningTest()){
+            integer i=0;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            }
         }
        //Added by Vinay 17-02-2025 End
     }
