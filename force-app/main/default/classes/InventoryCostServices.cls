@@ -2029,7 +2029,7 @@ from Project_Unit__c where Id = :uId]; */
             this.PerSqftMax = perSqFtVal;
         }
     }
-     public void dummyMethod(){
+    public static void dummyMethod(){
         
         integer i;
         i=0;

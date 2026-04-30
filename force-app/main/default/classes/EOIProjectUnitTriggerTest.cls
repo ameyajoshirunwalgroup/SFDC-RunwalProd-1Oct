@@ -207,6 +207,7 @@ public class EOIProjectUnitTriggerTest
         try {
             obj.updateTypeLabel(new List<Id>{punit[0].Id});
             trgToUpdateOppStageHandler.dummy();
+            InventoryCostServices.dummyMethod();
         } catch(Exception e) {
             System.debug('updateTypeLabel: ' + e.getMessage());
         }
