@@ -1,7 +1,6 @@
 public with sharing class QuotationManagementServices {
     
-    public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId) {
-        
+    public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId,Quotation__c q) {
         Map<String,Decimal> allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum, subPlanId);
         Project_Unit__c u = InventoryCostServices.getUnitDetails(unitId);
         Map<String,List<QuoteUIWrapper>> UIMap = new Map<String,List<QuoteUIWrapper>>();
@@ -108,9 +107,9 @@ public with sharing class QuotationManagementServices {
                     // whenever there is a discount, put some characters, the reason being blank values make the size of the table column
                     // shrink and distorts the table size. The discount values column and the orginal values column should match up
                     if(discountLumpsum != 0) 
-                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'---','bold',''));
+                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'---','bold',''));  //Added --- for discount css
                     else
-                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'','bold',''));
+                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'---','bold',''));
                 }    
                 tempList1.add(new QuoteUIWrapper(pc.Charge_Code__r.Name, INFormat(allChargesMap.get(pc.Charge_Code__r.Name))));
                 charge1Sum = charge1Sum + allChargesMap.get(pc.Charge_Code__r.Name);
