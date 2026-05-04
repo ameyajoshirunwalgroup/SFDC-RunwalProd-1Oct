@@ -196,7 +196,7 @@ public class trgToUpdateOppStageHandler
         Set<Id> oppIds = new Set<Id>();
         Set<Id> unitIdsSet = new Set<Id>();
         Set<String> projNames = new Set<String>();
-        Set<Decimal> floorNumber = new Set<Decimal>();
+        // Set<Decimal> floorNumber = new Set<Decimal>();
 
         Decimal areaCalculation = Decimal.valueOf(System.label.Area_Calculation);
         Decimal sqrMtrBuiltUpValue = Decimal.valueOf(System.label.Square_Meter_Built_Up);
@@ -218,7 +218,7 @@ public class trgToUpdateOppStageHandler
                 oppIds.add(projUnit.RW_Customer__c);
                 unitIdsSet.add(projUnit.Id);
                 projNames.add(projUnit.RW_Project__r.Name);
-                floorNumber.add(Decimal.valueOf(projUnit.New_Floor__c));
+                // floorNumber.add(Decimal.valueOf(projUnit.New_Floor__c));
             }
         }
        
