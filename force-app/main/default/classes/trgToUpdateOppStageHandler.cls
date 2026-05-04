@@ -218,7 +218,7 @@ public class trgToUpdateOppStageHandler
                 oppIds.add(projUnit.RW_Customer__c);
                 unitIdsSet.add(projUnit.Id);
                 projNames.add(projUnit.RW_Project__r.Name);
-                // floorNumber.add(Decimal.valueOf(projUnit.New_Floor__c));
+                // floorNumber.add(Decimal.valueOf(projUnit.New_Floor__c)); // Commented By Aditya
             }
         }
        
