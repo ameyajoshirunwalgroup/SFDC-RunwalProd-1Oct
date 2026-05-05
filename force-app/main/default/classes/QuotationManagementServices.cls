@@ -167,7 +167,7 @@ public with sharing class QuotationManagementServices {
                  }
                 serviceCount++;
             }
-            if(pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && !pc.S_Charge_Bucket__c.equals('Agreement Value')) {
+            if(pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && !pc.S_Charge_Bucket__c.equals('Agreement Value') && !pc.S_Charge_Bucket__c.equals('SD In AV')) {//Added !pc.S_Charge_Bucket__c.equals('SD In AV') for SDR Changes
         System.debug('Charge Name:' + pc);
                 if(taxSlabMap.containsKey(pc.Service_Tax_Percentage__c)) {
                   for(tax_breakup__c tb : taxSlabMap.get(pc.Service_Tax_Percentage__c)) {
