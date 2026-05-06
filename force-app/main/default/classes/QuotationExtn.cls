@@ -566,6 +566,8 @@ public with sharing class QuotationExtn
         InventoryCostServices.baseRateVal = baseRate;
         InventoryCostServices.premiumRateVal = premiumRate;
         InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
         Map<String,Decimal> allChargesMapNew = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum, subPlanId);
         Boolean error = false;
         Integer counter = 0;
