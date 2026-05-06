@@ -472,8 +472,7 @@ else {
 // TODO throw exception
 }
 } */
-                
-                if(pc.Active__c && pc.S_Charge_Bucket__c.equals('Agreement Value')) {        // Added by Sheetal on 11/01/2022
+                if(pc.Active__c && pc.S_Charge_Bucket__c.equals('Agreement Value') || (pc.S_Charge_Bucket__c.equals('SD IN AV') && sdPaidByRunwalContext == true)) {   // Added by Sheetal on 11/01/2022 //Added SD IN AV and sdPaidByRunwalContext for SDR Changes
                     if(pc.S_Charge_Calculated_As__c.equals('Rate List at Unit Level')) {
                         agreementVal   += rateListMap.get(pc.Charge_Code__r.Name);
                         
