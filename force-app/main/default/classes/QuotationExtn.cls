@@ -649,6 +649,8 @@ public with sharing class QuotationExtn
         }
         getUpdatedCharges();
         qPlanWrapperList = new List<QPlanDetailWrapper>(); 
+    InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;//Added for SDR Changes
+    InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;//Added for SDR Changes    
         qPlanWrapperList.addAll(qPlanWrapperListC);
         disableDiscount = true;
         editSchedule = false;
