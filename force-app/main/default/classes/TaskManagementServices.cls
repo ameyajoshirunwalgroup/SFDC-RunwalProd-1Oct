@@ -1016,7 +1016,7 @@ update SCPPDtoadd;
                 String dt = '';
                 //Create an object
                 Communication__c cloneRecord = new Communication__c();
-                cloneRecord.Name = t.Subject;
+                cloneRecord.Name = t.Subject?.trim().left(80);
                 cloneRecord.Status__c = t.Status;
                 //This code is added on 22/9/2015 to insert date and time in communication object date and time field
                 cloneRecord.ActivityDate__c = t.ActivityDate;
