@@ -75,7 +75,8 @@ public with sharing class QuotationExtn
     public boolean  canAddCarPark7 {get;set;}
     public boolean  canAddCarPark8 {get;set;}
     public boolean  canAddCarPark9 {get;set;} //Added by Vinay 28-03-2025
-    public boolean  canAddCarPark10 {get;set;} //Added by Vinay 21-11-2025
+    public boolean  canAddCarPark10 {get;set;} //Added by Vinay 19-11-2025
+    //public boolean  canAddCarPark11 {get;set;} //Added by Dolly
     public boolean  showAddCarPark {get;set;} 
     public Integer selectedCarPark1 {get;set;}
     public Integer selectedCarPark2 {get;set;}
@@ -98,6 +99,9 @@ public with sharing class QuotationExtn
     public String TotalGSTDiscount{get;set;}
     public String TotalGSTDiscountPSF{get;set;}
     public decimal GSTpercentageApplied{get;set;}
+    // public Boolean parkingApplied {get; set;}   //Added by Dolly
+    // public Map<String,Integer> appliedParkingSnapshot = new Map<String,Integer>();  //Added by Dolly to track the applied parking at the time of applying parking, this will be used to validate the parking availability when user tries to add/remove parking
+    //Map<String, Integer> parkingTempValues = new Map<String, Integer>(); //Added by Dolly
     // on load page, get all the charges, the flat details and render it on the UI.
     public QuotationExtn()
     {  
@@ -202,6 +206,18 @@ public with sharing class QuotationExtn
             quoteValidity = (System.today().addDays(Integer.valueOf(proj.Quotation_Validity__c))).format();
             quoteDate = System.today().format();
         }
+        //Added by dolly for car parking changes starts
+        // if(proj != null) {
+        //     parkingApplied = false; //Added by Dolly
+        //     isPremiumApplied = false; //Added for SDR Changes
+        //     checkCarParkAvailablity();  //Added by Dolly
+        //     loadProjectAvailability();  //Added by Dolly
+        //     // 🔹 Default UI values from Unit (earmarked)
+        //     syncUnitEarmarkedToQuotation();  //Added by Dolly
+        //     quoteValidity = (System.today().addDays(Integer.valueOf(proj.Quotation_Validity__c))).format();
+        //     quoteDate = System.today().format();
+        // }
+        //Added by dolly for car parking changes ends
     }
     
     
@@ -272,10 +288,75 @@ public with sharing class QuotationExtn
         else
             showAddCarPark = false;
     }
+
+    //Added by dolly for car parking changes starts
+    //Added by Dolly
+    // ====== START: car park method =========
+    // public void checkCarParkAvailablity() {
+
+    //     showAddCarPark = false;
+
+    //     if(projectAvailability == null){
+    //         loadProjectAvailability();
+    //     }
+
+    //     List<ParkingConfig> configs = getParkingConfigs();
+
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer available = projectAvailability.containsKey(p.type)
+    //             ? projectAvailability.get(p.type)
+    //             : 0;
+
+    //         Boolean isAvailable =
+    //             available > 0 ||
+    //             (p.unitEarmarked != null && p.unitEarmarked > 0);
+
+    //         if (isAvailable) {
+    //             showAddCarPark = true;
+    //         }
+
+    //         //IMPORTANT (so UI doesn’t break)
+    //         setCarParkAvailability(p.type, isAvailable);
+    //     }
+    // }
+
+    // private void setCarParkAvailability(String type, Boolean isAvailable){
+
+    //     if(type == 'Single Covered') canAddCarPark1 = isAvailable;
+    //     else if(type == 'Tandem Covered') canAddCarPark2 = isAvailable;
+    //     else if(type == 'Single Open') canAddCarPark3 = isAvailable;
+    //     else if(type == 'Tandem Open') canAddCarPark4 = isAvailable;
+    //     else if(type == 'Stilt') canAddCarPark5 = isAvailable;
+    //     else if(type == 'MLCP') canAddCarPark6 = isAvailable;
+    //     else if(type == 'Basement') canAddCarPark7 = isAvailable;
+    //     else if(type == 'Podium') canAddCarPark8 = isAvailable;
+    //     else if(type == 'Puzzle Car Park') canAddCarPark9 = isAvailable;
+    //     else if(type == 'Covered Stack') canAddCarPark10 = isAvailable;
+    //     else if(type == 'Stack Car Park') canAddCarPark11 = isAvailable;
+    // }
+    //Added by dolly for car parking changes ends
+
     public PageReference addCarPark() {
-        Decimal totalAmount = 0;
-        discountLumpsum = 0;
+
+        //Added by dolly for car parking changes starts
+        // 1️⃣ Load availability once (safe even if already loaded)   //Added by Dolly
+        // loadProjectAvailability();
+
+        // // 2️⃣ Validate against project additional inventory   //Added by Dolly
+        // if (!validateAdditionalParkingAvailability()) {
+        //     system.debug('inside addoark method validateAdditionalParkingAvailability');
+        // }
+
+        // // 3️⃣ Preview calculation only (NO split)   //Added by Dolly
+        // onApplyParking();
+        //Added by dolly for car parking changes ends
+
+        Decimal totalAmount = 0; //Need to remove for new car parking process by dolly
+        discountLumpsum = 0; 
         discountPSF = 0;
+
+        //Need to remove for new car parking process by dolly starts
         selectedCarPark1 = 0;
         selectedCarPark2 = 0;
         selectedCarPark3 = 0;
@@ -414,6 +495,8 @@ public with sharing class QuotationExtn
         
         totalAmount = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
         allotmentCharges = totalAmount;
+        //Need to remove for new car parking process by dolly ends
+
         InventoryCostServices.baseRateVal = baseRate;
         InventoryCostServices.premiumRateVal = premiumRate;
         InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
@@ -670,6 +753,13 @@ public with sharing class QuotationExtn
         
     
     public PageReference openDiscountPage(){
+
+        //Added by Dolly for car parking changes starts
+        // if(!validateParkingApplied('Please click Apply Parking before opening the Discount page.')){
+        //     return null;
+        // }
+        //Added by dolly for car parking changes ends
+
         /**Added for SDR Changes starts */
         if(isPremiumApplied == false){
             ApexPages.addMessage(
@@ -1078,6 +1168,8 @@ public with sharing class QuotationExtn
     
     // =======START: quote related methods start here
     public PageReference savePrint(){
+
+        //need to comment this for new car parking process starts
         Decimal carParkAmount1;
         Decimal carParkAmount2;
         Decimal carParkAmount3;
@@ -1088,6 +1180,8 @@ public with sharing class QuotationExtn
         Decimal carParkAmount8;
         Decimal carParkAmount9; //Added by Vinay 28-03-2025
         Decimal carParkAmount10; //Added by Vinay 21-11-2025
+        //need to comment this for new car parking process ends
+
         // writing the save method within the controller as this save cant be reused elsewhere.
         // its very much tied to the quote wrapper classes.
         Map<String, Id> quoteApproversMap = QuotationManagementServices.getApprovers(proj.Id);
@@ -1136,6 +1230,8 @@ public with sharing class QuotationExtn
             views = views.substring(0,views.length() -1);
             
         q.View__c = views;
+
+        //need to comment this for new car parking process starts
           if(q.single_car_park_additional__c > 0) {
             carParkAmount1 = proj.allotment_charges_1__c * q.single_car_park_additional__c;
             System.debug('carParkAmount1: ' + carParkAmount1);
@@ -1226,7 +1322,26 @@ public with sharing class QuotationExtn
         }
         
         q.No_of_parking__c = carParks + selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 +selectedCarPark6 +selectedCarPark7+selectedCarPark8+selectedCarPark9+selectedCarPark10;
-        
+        //need to comment this for new car parking process ends
+
+
+        //Added by dolly for new car parking process starts
+        //Added by Dolly
+        // if(!validateParkingApplied('Please click Apply Parking before saving the quotation.')){
+        //     return null;
+        // }
+
+        // /**Added for QUotation offer starts */
+        // preserveParkingValues();
+        //if(isCalculateDiscountClicked != true){
+        // //restoreParkingValues();
+        //  ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Before saving, please navigate to the Calculate Discount page and select or deselect the required discounts.'));
+        //  return null;
+        // }
+
+        // applyParkingToQuotation();  //Added by Dolly
+        //Added by dolly for new car parking process ends
+
         if(quoteApproversMap.size() > 0) {
             q.Level_One_Approver__c = quoteApproversMap.get('First Level');
             q.Level_Two_Approver__c = quoteApproversMap.get('Second Level');
@@ -1417,6 +1532,17 @@ public with sharing class QuotationExtn
             q.Quote_Status__c = 'Approval Pending';
         else
             q.Quote_Status__c = 'Valid';
+
+        //added by dolly
+        // 🔹 Parking Approval Logic
+        // Boolean parkingChangedFromDefault = isParkingChangedFromDefault();
+        // if(parkingChangedFromDefault){
+        //     q.Car_Parking_Approval__c = 'Pending';
+        //     q.Quote_Status__c = 'Approval Pending';
+        // } else {
+        //     q.Car_Parking_Approval__c = 'Approved';
+        // }
+
         if(scheduleEdited) {
             q.Payment_Plan_Modified__c = true;  
         } else {
@@ -1721,8 +1847,18 @@ public with sharing class QuotationExtn
     
     Public void changeBaseRate(){
           system.debug('inside BaseRate Method: ');
+            //Added by Dolly for car parking change starts
+            // 🚨 PARKING APPLY VALIDATION
+            
+            // if(!validateParkingApplied('Please click Apply Parking before applying Premium.')){
+            //     return;
+            // }
+            //Added by Dolly for car parking change ends
+
           if(baseRate != null && u!= null){
           system.debug('discountVal::: '+discountVal);
+
+          //Need to comment down for car parking changes starts
            Decimal carParkAmount1 = 0;
             Decimal carParkAmount2 = 0;
             Decimal carParkAmount3 = 0;
@@ -1803,6 +1939,8 @@ public with sharing class QuotationExtn
            q = new Quotation__c();
            selectedPlan = null;
            qPlanWrapper.clear();
+           //Need to comment down for car parking changes ends
+           
            allChargesMapDisc = null;
            quoteUIMapDisc = null;
            quoteApprovalMsg = 'N/A';
@@ -1839,6 +1977,7 @@ public with sharing class QuotationExtn
             pDisc = InventoryCostServices.getProjectLevelDiscounts(u.RW_Project__r.Id, u.Id,oppId);
             pDisc1 = InventoryCostServices.getProjectLevelDiscounts(u.RW_Project__r.Id, u.Id,oppId);
             
+            //Need to comment down for car parking changes starts
             q.single_car_park_additional__c = car1;
             q.Tandem_car_park_additional__c = car2;
             q.Single_Open_additional__c = car3;
@@ -1850,17 +1989,60 @@ public with sharing class QuotationExtn
             q.Puzzle_Car_Park__c = car9; //Added by Vinay 28-03-2025
             q.Stack_Additional_1__c = car10; //Added by Vinay 21-11-2025
             carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
-            
+            //Need to comment down for car parking changes ends
+
+            //Added by Dolly for car parking changes starts
+            // Integer totalParking = 0;
+
+            // List<ParkingConfig> configs = getParkingConfigs();
+
+            // for (ParkingConfig p : configs) {
+            //     Integer qty = q.get(p.addQtyField) == null 
+            //         ? 0 
+            //         : Integer.valueOf(q.get(p.addQtyField));
+
+            //     totalParking += qty;
+            // }
+            // carParkAmt=allotmentCharges;  //Added by Dolly
+            //Added by Dolly for car parking changes ends
+
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
             allChargesMap = InventoryCostServices.getAllCharges(unitId,carParkAmt,0.0,subPlanId);
+
+            // allChargesMap = InventoryCostServices.getAllCharges(          //Added by Dolly for car parking changes
+            //     unitId,  
+            //     carParkAmt,   //already includes parking
+            //     discountLumpsum,
+            //     subPlanId
+            // );
              
             quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,0.0, selectedCarPark1+selectedCarPark2+selectedCarPark3+selectedCarPark4+selectedCarPark5+selectedCarPark6+selectedCarPark7+selectedCarPark8+selectedCarPark9,subPlanId,q);
+            
+            // quoteUIMap = QuotationManagementServices.getQuotationUIFormat(    //Added by Dolly for car parking changes
+            //     unitId,
+            //     carParkAmt,
+            //     discountLumpsum,
+            //     totalParking,
+            //     subPlanId,
+            //     q
+            // );
+
             agreementValue = allChargesMap.get('AGREEMENTVALUE');//Added for SDR Changes
              if(discountVal != null && discountVal > 0){
-                 quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(  unitId,carParkAmt,discountVal, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6+selectedCarPark7+selectedCarPark8, subPlanId,q);
+                 
+                quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(  unitId,carParkAmt,discountVal, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6+selectedCarPark7+selectedCarPark8, subPlanId,q);
+                
+                // quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(    //Added by Dolly for car parking changes
+                //     unitId,
+                //     carParkAmt,
+                //     discountVal,
+                //     totalParking,
+                //     subPlanId,
+                //     q
+                // );
              }
              else{
                  quoteUIMapDisc = null;
@@ -3660,5 +3842,448 @@ public with sharing class QuotationExtn
         i++;   
     }
     
+    //     //Added by Dolly
+    // private class ParkingConfig {
+
+    //     String type;
+    //     Integer multiplier;
+    //     Decimal unitCharge;
+
+    //     Decimal requestedTotal;
+    //     Decimal unitEarmarked;
+
+    //     SObjectField addQtyField;
+    //     SObjectField earmarkQtyField;
+    //     SObjectField addAmtField;
+    //     SObjectField earmarkAmtField;
+
+    //     ParkingConfig(
+    //         String type,
+    //         Integer multiplier,
+    //         Decimal unitCharge,
+    //         Decimal requestedTotal,
+    //         Decimal unitEarmarked,
+    //         SObjectField addQtyField,
+    //         SObjectField earmarkQtyField,
+    //         SObjectField addAmtField,
+    //         SObjectField earmarkAmtField
+    //     ) {
+    //         this.type = type;
+    //         this.multiplier = multiplier;
+    //         this.unitCharge = unitCharge;
+    //         this.requestedTotal = requestedTotal;
+    //         this.unitEarmarked = unitEarmarked;
+    //         this.addQtyField = addQtyField;
+    //         this.earmarkQtyField = earmarkQtyField;
+    //         this.addAmtField = addAmtField;
+    //         this.earmarkAmtField = earmarkAmtField;
+    //     }
+    // }
+
+    // //Added by Dolly
+    // private List<ParkingConfig> getParkingConfigs() {
+
+    //     return new List<ParkingConfig>{
+
+    //         new ParkingConfig(
+    //             'Single Covered',
+    //             1,
+    //             proj.Allotment_Charges_1__c,
+    //             q.Single_car_park_additional__c,
+    //             u.Single_car_park_Earmarked__c,
+    //             Quotation__c.Single_car_park_additional__c,
+    //             Quotation__c.Single_car_park_earmarked__c,
+    //             Quotation__c.Single_Covered_Additional_Amount__c,
+    //             Quotation__c.Single_Covered_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Tandem Covered',
+    //             1,
+    //             proj.Allotment_Charges_2__c,
+    //             q.Tandem_car_park_additional__c,
+    //             u.Tandem_car_park_Earmarked__c,
+    //             Quotation__c.Tandem_car_park_additional__c,
+    //             Quotation__c.Tandem_car_park_earmarked__c,
+    //             Quotation__c.Tandem_Covered_Additional_Amount__c,
+    //             Quotation__c.Tandem_Covered_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Single Open',
+    //             1,
+    //             proj.Allotment_Charges_3__c,
+    //             q.Single_Open_Additional__c,
+    //             u.Single_Open_Earmarked__c,
+    //             Quotation__c.Single_Open_Additional__c,
+    //             Quotation__c.Single_Open_Earmarked__c,
+    //             Quotation__c.Single_Open_Additional_Amount__c,
+    //             Quotation__c.Single_Open_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Tandem Open',
+    //             1,
+    //             proj.Allotment_Charges_10__c,
+    //             q.Tandem_Open_Additional__c,
+    //             u.Tandem_Open_Earmarked__c,
+    //             Quotation__c.Tandem_Open_Additional__c,
+    //             Quotation__c.Tandem_Open_Earmarked__c,
+    //             Quotation__c.Tandem_Open_Additional_Amount__c,
+    //             Quotation__c.Tandem_Open_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Covered Stack',
+    //             1,
+    //             proj.Allotment_Charges_4__c,
+    //             q.Covered_Stack_Additional__c,
+    //             u.Covered_Stack_Earmarked__c,
+    //             Quotation__c.Covered_Stack_Additional__c,
+    //             Quotation__c.Covered_Stack_Earmarked__c,
+    //             Quotation__c.Covered_Stack_Additional_Amount__c,
+    //             Quotation__c.Covered_Stack_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Stilt',
+    //             1,
+    //             proj.Allotment_Charges_5__c,
+    //             q.Stack_Additional__c,
+    //             u.Stack__c,
+    //             Quotation__c.Stack_Additional__c,
+    //             Quotation__c.Stilt_Earmarked__c,
+    //             Quotation__c.Stilt_Additional_Amount__c,
+    //             Quotation__c.Stilt_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'MLCP',
+    //             1,
+    //             proj.Allotment_Charges_6__c,
+    //             q.MLCP_Additional__c,
+    //             u.MLCP_Earmarked__c,
+    //             Quotation__c.MLCP_Additional__c,
+    //             Quotation__c.MLCP_Earmarked__c,
+    //             Quotation__c.MLCP_Additional_Amount__c,
+    //             Quotation__c.MLCP_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Basement',
+    //             1,
+    //             proj.Allotment_Charges_7__c,
+    //             q.Basement_Additional__c,
+    //             u.Basement_Earmarked__c,
+    //             Quotation__c.Basement_Additional__c,
+    //             Quotation__c.Basement_Earmarked__c,
+    //             Quotation__c.Basement_Additional_Amount__c,
+    //             Quotation__c.Basement_Additional_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Podium',
+    //             1,
+    //             proj.Allotment_Charges_8__c,
+    //             q.Podium__c,
+    //             u.Podium_Earmarked__c,
+    //             Quotation__c.Podium__c,
+    //             Quotation__c.Podium_Earmarked__c,
+    //             Quotation__c.Podium_Amount__c,
+    //             Quotation__c.Podium_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Puzzle Car Park',
+    //             1,
+    //             proj.Allotment_Charges_9__c,
+    //             q.Puzzle_Car_Park__c,
+    //             u.Puzzle_Car_Park_Earmarked__c,
+    //             Quotation__c.Puzzle_Car_Park__c,
+    //             Quotation__c.Puzzle_Car_Park_Earmarked__c,
+    //             Quotation__c.Puzzle_Car_Park_Amount__c,
+    //             Quotation__c.Puzzle_Car_Park_Amount__c
+    //         ),
+
+    //         new ParkingConfig(
+    //             'Stack Car Park',
+    //             1,
+    //             proj.Stack_Car_Park_Charges__c,
+    //             q.Stack_Additional_1__c,
+    //             u.Stack_Car_Park_Earmarked__c,
+    //             Quotation__c.Stack_Additional_1__c,
+    //             Quotation__c.Stack_Earmarked__c,
+    //             Quotation__c.Stack_Additional_Amount__c,
+    //             Quotation__c.Stack_Additional_Amount__c
+    //         )
+    //     };
+    // }
+    // //Added by Dolly
+    // private Map<String, Integer> projectAvailability;
+
+    // private void loadProjectAvailability() {
+
+    //     projectAvailability = new Map<String, Integer>();
+
+    //     for (AggregateResult ar : [
+    //         SELECT Parking__c parkingType, COUNT(Id) cnt
+    //         FROM Car_Parking_Charge__c
+    //         WHERE Project__c = :proj.Id
+    //         AND Category__c = 'Additional'
+    //         AND Status__c = 'Vacant'
+    //         GROUP BY Parking__c
+    //     ]) {
+    //         projectAvailability.put(
+    //             (String) ar.get('parkingType'),
+    //             (Integer) ar.get('cnt')
+    //         );
+    //     }
+    // }
+
+    // //Added by Dolly
+    // private void syncUnitEarmarkedToQuotation() {
+
+    //     List<ParkingConfig> configs = getParkingConfigs(); // 🔥 cache
+
+    //     for (ParkingConfig p : configs) {
+    //         q.put(p.addQtyField, p.unitEarmarked);
+    //     }
+    // }
+
+    // //Added by Dolly
+    // private Boolean validateAdditionalParkingAvailability() {
+
+    //     Boolean hasError = false;
+
+    //     List<ParkingConfig> configs = getParkingConfigs();
+
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer requested =
+    //             q.get(p.addQtyField) == null
+    //                 ? 0
+    //                 : Integer.valueOf(q.get(p.addQtyField));
+
+
+    //         Integer earmarked =
+    //             p.unitEarmarked == null ? 0 : p.unitEarmarked.intValue();
+
+    //         Integer additionalRequested = Math.max(requested - earmarked, 0);
+    //         Integer available = projectAvailability.containsKey(p.type) 
+    //                             ? projectAvailability.get(p.type) 
+    //                             : 0;
+
+    //         if (additionalRequested > available) {
+    //             ApexPages.addMessage(
+    //                 new ApexPages.Message(
+    //                     ApexPages.Severity.ERROR,
+    //                     'Only ' + available +
+    //                     ' additional ' + p.type + ' car park(s) are available.'
+    //                 )
+    //             );
+    //             q.put(p.addQtyField, 0);
+    //             q.put(p.addAmtField, 0);
+    //             hasError = true;
+    //         }
+    //     }
+    //     return !hasError;
+    // }
+
+    // //Added by Dolly
+    // public void onApplyParking() {
+    //     system.debug('before validateAdditionalParkingAvailability--?');
+    //     Boolean isValid= validateAdditionalParkingAvailability();
+    //     system.debug('after validateAdditionalParkingAvailability--?');
+
+    //     Decimal totalAmount = 0;
+    //     Integer totalParking = 0;
+    //     List<ParkingConfig> configs = getParkingConfigs();
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer qty =
+    //             q.get(p.addQtyField) == null
+    //                 ? 0
+    //                 : Integer.valueOf(q.get(p.addQtyField));
+
+    //         Decimal charge =
+    //             p.unitCharge == null ? 0 : p.unitCharge;
+
+    //         Decimal amountForType = qty * charge;
+    //         Integer parkingForType = qty * p.multiplier;
+
+    //         // ⭐ TYPE-WISE DEBUG
+    //         System.debug('------------- PARKING TYPE -------------');
+    //         System.debug('Parking Type : ' + p.type);
+    //         System.debug('Qty Entered  : ' + qty);
+    //         System.debug('Unit Charge  : ' + charge);
+    //         System.debug('Amount Added : ' + amountForType);
+    //         System.debug('Parking Count Added : ' + parkingForType);
+
+
+
+    //         totalAmount += qty * charge;
+    //         totalParking += qty * p.multiplier;
+    //     }
+    //     System.debug('========== FINAL PARKING SUMMARY ==========');
+    //     System.debug('TOTAL PARKING SELECTED : ' + totalParking);
+    //     System.debug('TOTAL PARKING AMOUNT   : ' + totalAmount);
+    //     System.debug('===========================================');
+    //     system.debug('atotalAmountability--?'+totalAmount);
+    //     allotmentCharges = totalAmount;
+    //     q.No_of_parking__c = totalParking;
+    //     parkingApplied = true;
+    //     appliedParkingSnapshot.clear();
+
+    //     for (ParkingConfig p : configs) {
+    //         Integer qty = q.get(p.addQtyField) == null ? 0 : Integer.valueOf(q.get(p.addQtyField));
+    //         appliedParkingSnapshot.put(p.type, qty);
+    //     }
+
+
+    // }
+
+    // //Added by Dolly
+    // private void applyParkingToQuotation() {
+
+    //     Decimal totalAmount = 0;
+    //     Integer totalParking = 0;
+
+    //     List<ParkingConfig> configs = getParkingConfigs();
+
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer requested =
+    //             p.requestedTotal == null ? 0 : p.requestedTotal.intValue();
+
+    //         Integer unitQty =
+    //             p.unitEarmarked == null ? 0 : p.unitEarmarked.intValue();
+
+    //         Integer earQty = Math.min(requested, unitQty);
+    //         Integer addQty = Math.max(requested - unitQty, 0);
+    //         Decimal charge = (p.unitCharge == null) ? 0 : p.unitCharge;
+
+    //         Decimal earAmt = (earQty+addQty) * charge;
+    //         //Decimal addAmt = addQty * p.unitCharge;
+
+    //         q.put(p.earmarkQtyField, earQty);
+    //         q.put(p.addQtyField, addQty);
+    //         q.put(p.earmarkAmtField, earAmt);
+    //         q.put(p.addAmtField, earAmt);
+
+    //         totalAmount += earAmt;
+    //         totalParking += (earQty + addQty) * p.multiplier;
+    //     }
+
+    //     allotmentCharges = totalAmount;
+    //     q.No_of_parking__c = totalParking;
+    // }
+
+    // private void preserveParkingValues(){
+
+    //     parkingTempValues.clear();
+
+    //     List<ParkingConfig> configs = getParkingConfigs(); // 🔥 cache
+
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer qty =
+    //             q.get(p.addQtyField) == null ? 0 : Integer.valueOf(q.get(p.addQtyField));
+
+    //         parkingTempValues.put(p.type, qty);
+    //     }
+    // }
+
+    // private void restoreParkingValues(){
+
+    //     List<ParkingConfig> configs = getParkingConfigs(); // 🔥 cache
+
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer qty =
+    //             parkingTempValues.containsKey(p.type)
+    //             ? parkingTempValues.get(p.type)
+    //             : 0;
+
+    //         q.put(p.addQtyField, qty);
+    //     }
+    // }
+    
+    // //Added by Dolly
+    // private Boolean validateParkingApplied(String contextMsg){
+    //     List<ParkingConfig> configs = getParkingConfigs();
+
+    //     // STEP 1: does any parking exist (current OR default)?
+    //     Boolean parkingExists = false;
+
+    //     for (ParkingConfig p : configs) {
+    //         Integer currentQty = q.get(p.addQtyField) == null
+    //             ? 0
+    //             : Integer.valueOf(String.valueOf(q.get(p.addQtyField)));
+
+    //         Integer defaultQty = p.unitEarmarked == null
+    //             ? 0
+    //             : Integer.valueOf(String.valueOf(p.unitEarmarked));
+
+    //         if (currentQty > 0 || defaultQty > 0) {
+    //             parkingExists = true;
+    //             break;
+    //         }
+    //     }
+
+    //     // STEP 2: block if not applied
+    //     if (parkingExists && parkingApplied == false) {
+    //         ApexPages.addMessage(new ApexPages.Message(
+    //             ApexPages.Severity.ERROR,
+    //             contextMsg != null ? contextMsg : 'Please click Apply Parking first.'
+    //         ));
+    //         return false;
+    //     }
+
+    //     // STEP 3: detect change after apply
+    //     for (ParkingConfig p : configs) {
+    //         Integer currentQty = q.get(p.addQtyField) == null
+    //             ? 0
+    //             : Integer.valueOf(String.valueOf(q.get(p.addQtyField)));
+
+    //         Integer appliedQty = appliedParkingSnapshot.containsKey(p.type)
+    //             ? appliedParkingSnapshot.get(p.type)
+    //             : 0;
+
+    //         if (currentQty != appliedQty) {
+    //             ApexPages.addMessage(new ApexPages.Message(
+    //                 ApexPages.Severity.ERROR,
+    //                 contextMsg != null ? contextMsg : 'Please click Apply Parking before proceeding.'
+    //             ));
+    //             return false;
+    //         }
+    //     }
+
+    //     return true; // ✅ safe to proceed
+    // }
+
+    // //Added by Dolly
+    // private Boolean isParkingChangedFromDefault(){
+
+    //     List<ParkingConfig> configs = getParkingConfigs();
+
+    //     for (ParkingConfig p : configs) {
+
+    //         Integer currentQty =
+    //             q.get(p.addQtyField) == null 
+    //             ? 0 
+    //             : Integer.valueOf(String.valueOf(q.get(p.addQtyField)));
+
+    //         Integer defaultQty =
+    //             p.unitEarmarked == null 
+    //             ? 0 
+    //             : Integer.valueOf(String.valueOf(p.unitEarmarked));
+
+    //         if(currentQty != defaultQty){
+    //             return true;
+    //         }
+    //     }
+
+    //     return false;
+    // }
    /* ---------------------------------------------- Vikas Added End here  -------------------------------------------*/ 
  }
