@@ -227,6 +227,16 @@ public with sharing class InventoryCostServices {
              TowerName__r.ProjectName__r.Allotment_Charges_5__c,TowerName__r.ProjectName__r.Allotment_Charges_8__c,TowerName__r.ProjectName__r.Allotment_Charges_9__c,MLCP_Earmarked__c,TowerName__r.ProjectName__r.Allotment_Charges_6__c
              from Project_Unit__C 
              where Id = :unitId];
+        
+        //Added by dolly for car parking charge(Change upper query by this)
+        // u = [Select Id, Single_car_park_Earmarked__c,Single_Open_Earmarked__c, Stack__c, Tandem_car_park_Earmarked__c, Tandem_Open_Earmarked__c,
+        //         TowerName__r.ProjectName__r.Allotment_Charges_1__c, TowerName__r.ProjectName__r.Allotment_Charges_2__c,
+        //         TowerName__r.ProjectName__r.Allotment_Charges_3__c, TowerName__r.ProjectName__r.Allotment_Charges_4__c,
+        //         TowerName__r.ProjectName__r.Allotment_Charges_5__c,TowerName__r.ProjectName__r.Allotment_Charges_8__c,TowerName__r.ProjectName__r.Allotment_Charges_9__c,
+        //         MLCP_Earmarked__c,TowerName__r.ProjectName__r.Allotment_Charges_6__c,TowerName__r.ProjectName__r.Allotment_Charges_10__c,TowerName__r.ProjectName__r.Stack_Car_Park_Charges__c
+        //         from Project_Unit__C 
+        //         where Id = :unitId];
+
         if(u.size() == 1) {
             allotmentCharges = (u[0].Single_car_park_Earmarked__c * u[0].TowerName__r.ProjectName__r.Allotment_Charges_1__c) +
                 (u[0].Tandem_car_park_Earmarked__c *  u[0].TowerName__r.ProjectName__r.Allotment_Charges_2__c) +
@@ -866,6 +876,59 @@ return registration;
         }
         
     }
+
+    //Added by dolly for car parking charge
+    //Modified by dolly
+    // public static Project_Unit__c  getUnitDetails(Id unitId){
+    //     List<Project_Unit__c> unit = [Select Id, Name,RW_Project__r.Name,RW_Project__r.Id,RW_Project__r.ClientLookup__r.Id, RW_Project__r.ClientLookup__r.Name, TowerName__r.Name, 
+    //                                   TowerName__r.Zone_Name__r.Name, S_View1__c,S_View_2__c,S_View_3__c,PLC_Total__c,
+    //                                   Project_Unit_Type__r.Name,New_Floor__c,Carpet_Area__c, Actual_Area_value__c, Saleable_Area__c,
+    //                                   Single_car_park_Earmarked__c,Single_Open_Earmarked__c, Stack__c, Tandem_car_park_Earmarked__c, Tandem_Open_Earmarked__c,
+    //                                   Puzzle_Car_Park_Earmarked__c,Podium_Earmarked__c,MLCP_Earmarked__c,Basement_Earmarked__c,Covered_Stack_Earmarked__c,
+    //                                   Stack_Car_Park_Earmarked__c,
+    //                                   TowerName__r.ProjectName__r.Allotment_Charges_1__c, TowerName__r.ProjectName__r.Allotment_Charges_2__c,
+    //                                   TowerName__r.ProjectName__r.Allotment_Charges_3__c, TowerName__r.ProjectName__r.Allotment_Charges_4__c,
+    //                                   TowerName__r.ProjectName__r.Allotment_Charges_5__c, TowerName__r.ProjectName__r.Allotment_Charges_8__c, 
+    //                                   TowerName__r.ProjectName__r.Allotment_Charges_9__c,
+    //                                   TowerName__r.ProjectName__r.Allotment_Charges_10__c,TowerName__r.ProjectName__r.Stack_Car_Park_Charges__c,
+    //                                   RW_Project__r.OC_Approved__c,TowerName__r.OC_Approved__c,
+    //                                   OC_Approved__c, Tax_Rate_Basic__c,S_Charge_Percentage__c,SD_Paid_by_Runwal__c,Registration_Charges_Paid_By_Runwal__c//Added Registration_Charges_Paid_By_Runwal__c and SD_Paid_by_Runwal__c for SDR/ROC Management
+    //                                   from Project_Unit__c where Id = :unitId];
+    //     if(unit.size() ==1) {
+    //         return unit[0];
+    //     } else {
+    //         return null;
+    //     }
+        
+    // }
+
+    //Added by Dolly for car parking changes
+    // public static Project__c  getProjectDetails(Id unitId){
+    //     List<Project_Unit__c> unit = [Select Id, Name,RW_Project__r.Name,RW_Project__r.Id, TowerName__r.Name, New_View__c,
+    //                                   Project_Unit_Type__r.Name,New_Floor__c,Carpet_Area__c, // RW_Floor__c
+    //                                   RW_Project__r.ClientLookup__r.Id, RW_Project__r.ClientLookup__r.Name
+    //                                   from Project_Unit__c where Id = :unitId];
+    //     if(unit.size() ==1) {                                                            
+    //         List<Project__c> projList = [Select Id, RW_Address__c, Total_Max_Discount_Allowed__c,Edit_Base_Rate__c,Edit_Discount_Lumsum__c, 
+    //                                      Service_Tax_Required_On_Token_Amount__c,NPV__c ,Days_to_Send_Demand__c, Name,Discount_Link_Option__c, 
+    //                                      Quotation_Validity__c, single_car_park_available__c, tandem_car_park_available__c,Edit_AllotmentCharge__c, 
+    //                                      single_open_available__c, tandem_open_available__c, stack_available__c,Edit_Premium_Rate__c,
+    //                                      Allotment_Charges_1__c, Allotment_Charges_2__c, Allotment_Charges_3__c, Allotment_Charges_4__c,Allotment_Charges_6__c,Allotment_Charges_7__c,
+    //                                      Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, 
+    //                                      Allotment_Charges_10__c,
+    //                                      GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Podium_Available__c,Basement_Available1__c,
+    //                                     Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c,Stack_Car_Park_Charges__c
+    //                                      from Project__c where Id =: unit[0].RW_Project__r.Id ];
+    //         if(projList.size() ==1) {
+    //             return projList[0];
+    //         } else {
+    //             return null;
+    //         }
+    //     }else {
+    //         return null;
+    //     }
+        
+    // }
     
     public static Project__c  getProjectDetails(Id unitId){
         List<Project_Unit__c> unit = [Select Id, Name,RW_Project__r.Name,RW_Project__r.Id, TowerName__r.Name, New_View__c,
