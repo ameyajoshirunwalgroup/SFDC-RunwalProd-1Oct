@@ -68,6 +68,76 @@ public with sharing class QuotationManagementServices {
         tempList.add(new QuoteUIWrapper('Car Park', carpark )); 
         tempList.add(new QuoteUIWrapper('Total Parks', string.valueOf(totalCarParks) )); 
         
+        //Added for Car Park
+        //Commented by Dolly
+        // String carpark = '';
+        // String additionalCarpark = '';
+
+        // List<String> res;
+        // res = buildParking(u.single_car_park_earmarked__c, q.Single_car_park_additional__c, 'Single Covered');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.tandem_car_park_earmarked__c, q.Tandem_car_park_additional__c, 'Tandem Covered');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.single_open_earmarked__c, q.Single_Open_Additional__c, 'Single Open');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.tandem_open_earmarked__c, q.Tandem_Open_Additional__c, 'Tandem Open');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.Covered_Stack_Earmarked__c, q.Covered_Stack_Additional__c, 'Covered Stack');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.Stack__c, q.Stack_Additional__c, 'Stilt');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.MLCP_Earmarked__c, q.MLCP_Additional__c, 'MLCP');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.Basement_Earmarked__c, q.Basement_Additional__c, 'Basement');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.Podium_Earmarked__c, q.Podium__c, 'Podium');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.Puzzle_Car_Park_Earmarked__c, q.Puzzle_Car_Park__c, 'Puzzle Car Park');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // res = buildParking(u.Stack_Car_Park_Earmarked__c, q.Stack_Additional_1__c, 'Stack Car Park');
+        // carpark += res[0];
+        // additionalCarpark += res[1];
+
+        // // remove the last character only if its a comma.
+        // if(carpark.length() > 0 && carpark.substring(carpark.length() -1).equals(',')) carpark = carpark.substring(0,carpark.length() -1);
+        
+        // String carparkStr = carpark;
+        // String additionalCarparkStr = additionalCarpark;
+
+        // if(carparkStr.endsWith(', ')){
+        //     carparkStr = carparkStr.substring(0, carparkStr.length()-2);
+        // }
+
+        // if(additionalCarparkStr.endsWith(', ')){
+        //     additionalCarparkStr = additionalCarparkStr.substring(0, additionalCarparkStr.length()-2);
+        // }
+
+        // tempList.add(new QuoteUIWrapper('Car Park(Earmarked)', carparkStr));
+
+        // if(String.isNotBlank(additionalCarparkStr)){
+        //     tempList.add(new QuoteUIWrapper('Car Park(Additional)', additionalCarparkStr));
+        // }
+
         leftTopMap.put('LEFTTOP',tempList);
         
         //Data for right top table
@@ -283,4 +353,27 @@ public with sharing class QuotationManagementServices {
             mf = '- Rs ' + mf + '/-';
         return mf;
     }
+    
+    // Added for Car Park
+    // Commented by Dolly
+    // public static List<String> buildParking( Decimal unitQty, Decimal selQty, String label){
+    //     if(unitQty == null) unitQty = 0;
+    //     if(selQty == null) selQty = unitQty;
+
+    //     Decimal earmarked = Math.min(selQty, unitQty);
+    //     Decimal additional = Math.max(selQty - unitQty, 0);
+
+    //     String car = '';
+    //     String add = '';
+
+    //     if(earmarked > 0){
+    //         car = earmarked + ' ' + label + ', ';
+    //     }
+
+    //     if(additional > 0){
+    //         add = additional + ' ' + label + ', ';
+    //     }
+
+    //     return new List<String>{car, add};
+    // }
 }

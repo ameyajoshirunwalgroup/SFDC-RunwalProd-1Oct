@@ -23,12 +23,14 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         Set<Id> bidsbrok = new Set<Id>(); //Added by Prashant 04-06-2025 Start..///// Update Agreeement value for broker calculation.
         Map<Id,Decimal> oppIdVsAVMap = new Map<Id,Decimal>();//Added by Prashant to update Agreement value on Opportunity if allotment premium is updated on Booking. ////27-06-2025.
         List<Booking__c> soReleasedBkgs = new List<Booking__c>();
+        List<Id> referralBookingIds = new List<Id>(); //Added by Vinay 28-02-2026
        // List<Id> bkIds = new List<Id>();
         
         if(trigger.isAfter){
             System.debug('trigger.isAfter____');
             if(trigger.isInsert || trigger.isUpdate){
                 System.debug('trigger Line 7___');
+                List<Id> bkgIds = new List<Id>(); //Added by Vinay 02-04-2026
                 for(Booking__c bkg: trigger.newMap.values()){
                     ////Added by Prashant 30-05-2025 Start..///// Update booking date on Opportunity based on booking date on booking.
                     if((trigger.oldMap != null && trigger.oldMap.get(bkg.id).Booking_Date__c != trigger.newMap.get(bkg.id).Booking_Date__c) || (trigger.oldMap == null && bkg.Booking_Date__c != null)){
@@ -67,6 +69,10 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                         updateCAMandDevChrgDetails.add(bkg.Id);
                         BookingTriggerHandler.tagReceiptsFromOpportunity(Trigger.New);//Added for unidentified payments
                         //updateDvlpmentCharge.add(bkg.Id);  
+                        if(bkg.Customer_Reference__c != null){ //Added by Vinay 28-02-2026
+                            referralBookingIds.add(bkg.Id);
+                        }
+                        bkgIds.add(bkg.Id); //Added by Vinay 02-04-2026
                     }
                     //Added by coServe 10-10-2022 end
                     
@@ -103,7 +109,10 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                         /*if(bkg.SO_Release_Date_in_SAP__c != null && trigger.oldMap.get(bkg.id).SO_Release_Date_in_SAP__c == null && bkg.X4_5_Received__c == true && bkg.Do_Not_Create_Welcome_Call__c == false){
                             soReleasedBkgs.add(bkg);
                         }*/ //Commented by Vinay 17-04-2025
-                        if(bkg.SO_Release_Date_in_SAP__c != null && trigger.oldMap.get(bkg.id).SO_Release_Date_in_SAP__c == null && bkg.Do_Not_Create_Welcome_Call__c == false){ //Added by Vinay 17-04-2025
+                        /*if(bkg.SO_Release_Date_in_SAP__c != null && trigger.oldMap.get(bkg.id).SO_Release_Date_in_SAP__c == null && bkg.Do_Not_Create_Welcome_Call__c == false){ //Added by Vinay 17-04-2025
+                            soReleasedBkgs.add(bkg);
+                        }*/ //Commented by Vinay 28-04-2026
+                        if((bkg.SO_Release_Date_in_SAP__c != null && bkg.Status__c == 'Booking Confirmed') && (trigger.oldMap.get(bkg.id).SO_Release_Date_in_SAP__c == null || trigger.oldMap.get(bkg.id).Status__c != bkg.Status__c) && bkg.Do_Not_Create_Welcome_Call__c == false){ //Added by Vinay 28-04-2026
                             soReleasedBkgs.add(bkg);
                         }
                         //Added by coServe 20-09-2024 end
@@ -167,7 +176,13 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
                 }
                 //Added by Prashant 04-06-2025 End..///// Update Agreeement value for broker calculation.
                 */
-                
+                if(referralBookingIds.size() > 0){ //Added by Vinay 20-01-2026
+                    LockatedApp_Notifications.referralBookingNotification(referralBookingIds);
+                }
+
+                if(bkgIds.size() > 0){ //Added by Vinay 02-04-2026
+                    PaymentDeviation.milestoneDateCalculation(bkgIds);
+                }
                 
             } 
             if( trigger.isUpdate&& BookingTriggerHandler.firstrun){
@@ -237,6 +252,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         List<Id> apprRejWaiverBIds = new List<Id>();//Added by Prashant to update waiver records and send mail.09-12-25
         List<Id> inProcessApproval = new List<Id>();
         List<Id> iwBIds = new List<Id>();//Added by Prashant to submit record for approval.//17-12-25.
+        List<Id> appEnrollmentBookingIds = new List<Id>(); //Added by Vinay 28-02-2026
+        List<Booking__c> brlUpdatedBookings = new List<Booking__c>(); //Added by Vinay 28-02-2026
+        List<Booking__c> possessionGuideLinesBkgs = new List<Booking__c>(); //Added by Vinay 28-02-2026
+        List<Id> referralBookingIds = new List<Id>(); //Added by Vinay 28-02-2026
+        List<Id> gstPercentChangeIds = new List<Id>(); //Added by Vinay 24-03-2026
         for(Booking__c bk: trigger.new){
             if(( trigger.newMap.get(bk.id).RW_Registration_Done__c == 'Yes' 
                && bk.Brokerage_Scheme__c != null && bk.BrokerIId__c != null && bk.RW_X9_99_Received__c == true )){
@@ -283,7 +303,10 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             }
             
             if(trigger.oldMap.get(bk.Id).Status__c != 'Booking Confirmed' && bk.Status__c == 'Booking Confirmed'){ // Added by Vinay 13-12-2024
-                confirmedBkgIds.add(bk.Id);     
+                confirmedBkgIds.add(bk.Id);   
+                if(bk.Customer_Reference__c != null){ //Added by Vinay 28-02-2026
+                    referralBookingIds.add(bk.Id);
+                }  
             }
 
             if(bk.Cancellation_in_SAP__c == 'Sent to SAP' && bk.Cancellation_in_SAP__c != trigger.oldMap.get(bk.Id).Cancellation_in_SAP__c){ //Added by Vinay 29-03-2025
@@ -311,6 +334,25 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
             if( trigger.oldMap.get(bk.Id).Interest_Waiver_Approval_Status__c != bk.Interest_Waiver_Approval_Status__c && bk.Interest_Waiver_Approval_Status__c != null ){                 
                 bklistforNotif.add(bk);
             }
+            if(bk.Lockated_User_Device_ID__c != null && trigger.oldMap.get(bk.Id).Lockated_User_Device_ID__c == null){ //Added by Vinay 28-02-2026              
+                appEnrollmentBookingIds.add(bk.Id);
+            }
+            if(bk.RW_BRL_Number__c != null && trigger.oldMap.get(bk.Id).RW_BRL_Number__c == null && bk.Funding_Status__c == 'Self Funded'){ //Added by Vinay 28-02-2026              
+                brlUpdatedBookings.add(bk);
+            }
+            if(bk.Possession_Guidelines_Sent_Date__c == Date.today() && trigger.oldMap.get(bk.Id).Possession_Guidelines_Sent_Date__c != bk.Possession_Guidelines_Sent_Date__c){ //Added by Vinay 28-02-2026              
+                possessionGuideLinesBkgs.add(bk);
+            }
+            if(bk.GST_Percent__c != null && trigger.oldMap.get(bk.Id).GST_Percent__c != bk.GST_Percent__c){ //Added by Vinay 24-03-2026              
+                gstPercentChangeIds.add(bk.Id);
+            }
+        }
+        if(appEnrollmentBookingIds.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_LoyaltyEngine.appEnrollment(appEnrollmentBookingIds);
+        }
+       
+        if(possessionGuideLinesBkgs.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.possessionGuidelinesNotification(possessionGuideLinesBkgs);
         }
         if(!bidsonSchUpdate.isEmpty()){
             BookingTriggerHandler.updateBrokerageonSchemeChange(bidsonSchUpdate);//Added by Prashant to update brokerage % whenever scheme is updated ///Added by Prashant. 20-05-2025..///////
@@ -353,9 +395,11 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         // Added by coServe 24-04-2024 Start
         if(dayOfRegBkgs.size() > 0){
             BookingTriggerHandler.sendDayOfRegWhatsAppFBLink(dayOfRegBkgs);
+            LockatedApp_Notifications.registrationCongratulatoryNotification(dayOfRegBkgs); // Added by Vinay 28-02-2026
         }
         if(dayOfKeyHandBkgs.size() > 0){
             BookingTriggerHandler.sendDayOfKeyHandWhatsAppFBLink(dayOfKeyHandBkgs);
+            LockatedApp_Notifications.keyHandoverNotification(dayOfKeyHandBkgs); //Added by Vinay 28-02-2026
         }
         // Added by coServe 24-04-2024 End
         if(sendAccStatementBkgs.size() > 0){ // Added by coServe 19-09-2024
@@ -363,12 +407,27 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
         }
         if(confirmedBkgIds.size() > 0){ // Added by coServe 13-12-2024
             //BookingTriggerHandler.sendNotificationToCustomer(confirmedBkgIds); // Commented by Vinay 10-02-2025
+            CreateUserWhenUnitBooked.createUserWhenBookingConfirmed(confirmedBkgIds); //Added by Vinay 28-02-2026
+        }
+
+        if(referralBookingIds.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.referralBookingNotification(referralBookingIds);
+        }
+
+        if(brlUpdatedBookings.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.agreementReceivedNotification(brlUpdatedBookings); 
         }
 
         if(cancelledOppIds.size() > 0){ // Added by coServe 29-03-2025
             SalesorderUpdateCallout.cancelsalesorder(cancelledOppIds);
         }
+        if(gstPercentChangeIds.size() > 0){ //Added by Vinay 24-06-2026
+            CurrentPreviousMilestoneUpdateOnBooking.updateMilestones(gstPercentChangeIds); 
+        }
         
+        //Added for car park
+        //Commented by Dolly  
+        //BookingTriggerHandler.handleQuotationTagging( Trigger.new, Trigger.oldMap );
     }
     
      
@@ -448,6 +507,36 @@ trigger BookingTrigger on Booking__c (after Insert, after update,before update) 
 			i++;
 			i++;
             i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
+            i++;
+			i++;
+			i++;
             i++;
 			i++;
 			i++;
