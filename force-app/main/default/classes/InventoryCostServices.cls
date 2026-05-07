@@ -958,7 +958,7 @@ return registration;
                                          single_open_available__c, tandem_open_available__c, stack_available__c,Edit_Premium_Rate__c,
                                          Allotment_Charges_1__c, Allotment_Charges_2__c, Allotment_Charges_3__c, Allotment_Charges_4__c,Allotment_Charges_6__c,Allotment_Charges_7__c,
                                          Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, 
-                                         Allotment_Charges_10__c,
+                                         Allotment_Charges_10__c, Stack_Available1__c, 
                                          GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Podium_Available__c,Basement_Available1__c,
                                         Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c,Stack_Car_Park_Charges__c,Is_Car_Parking_Applicable_for_Brokerage__c
                                          from Project__c where Id =: unit[0].RW_Project__r.Id ];
