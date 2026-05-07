@@ -510,7 +510,7 @@ else {
                 }
             }
             allChargesMap.put('AGREEMENTVALUEFORBROKERS',agreementValforBrokers.setscale(0,RoundingMode.HALF_UP));                              
-            allChargesMap.put('AGREEMENTVALUENOTFORBROKERS',agreementValNotforBrokers.setscale(0,RoundingMode.HALF_UP));
+            // allChargesMap.put('AGREEMENTVALUENOTFORBROKERS',agreementValNotforBrokers.setscale(0,RoundingMode.HALF_UP));
             
             if(allotmentCharges1 != 0.0) {
                 agreementVal = (agreementVal + allotmentCharges1).setscale(0,RoundingMode.HALF_UP);
@@ -609,6 +609,10 @@ else {
                 if(allChargesMap.containsKey('Add SD in AV') && (unit[0].S_Charge_Percentage__c == 0 || unit[0].S_Charge_Percentage__c == null && allChargesMap.get('Add SD in AV')!=0)){
                     allChargesMap.put('Stamp Duty',allChargesMap.get('Add SD in AV'));
                 }
+            if(sdPaidByRunwalContext == true){
+                agreementValNotforBrokers +=allChargesMap.get('Stamp Duty');//Added for SDR Changes
+            }
+            allChargesMap.put('AGREEMENTVALUENOTFORBROKERS',agreementValNotforBrokers.setscale(0,RoundingMode.HALF_UP));//Added for SDR Changes
             /**Added for SDR Changes starts */
             
             Decimal charge2Sum = 0;
@@ -702,6 +706,12 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get('AGREEMENTVALUE')/100).setscale(0,RoundingMode.HALF_UP));
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * allChargesMap.get('AGREEMENTVALUE')/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
                                 taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
+                                if(sdPaidByRunwalContext == true){
+                                    if(allChargesMap.containsKey('Stamp Duty')){
+                                        allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100).setscale(0,RoundingMode.HALF_UP));
+                                		allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
+                                    }
+                                }
                                 System.debug('taxAmount:' + taxAmtonAgreement);
                             }
                             
@@ -710,6 +720,12 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get('AGREEMENTVALUE')/100).setscale(0,RoundingMode.HALF_UP));
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , 0);
                                 taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
+                                if(sdPaidByRunwalContext == true){
+                                    if(allChargesMap.containsKey('Stamp Duty')){
+                                        allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100).setscale(0,RoundingMode.HALF_UP));
+                                		allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
+                                    }
+                                }
                                 System.debug('taxAmount:' + taxAmtonAgreement);
                             }
                             
@@ -941,7 +957,10 @@ return registration;
                                          Quotation_Validity__c, single_car_park_available__c, tandem_car_park_available__c,Edit_AllotmentCharge__c, 
                                          single_open_available__c, tandem_open_available__c, stack_available__c,Edit_Premium_Rate__c,
                                          Allotment_Charges_1__c, Allotment_Charges_2__c, Allotment_Charges_3__c, Allotment_Charges_4__c,Allotment_Charges_6__c,Allotment_Charges_7__c,
-                                         Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Stack_Available1__c,Basement_Available1__c, Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c,Stack_Car_Park_Charges__c
+                                         Allotment_Charges_5__c,Allotment_Charges_8__c, Allotment_Charges_9__c, 
+                                         Allotment_Charges_10__c, Stack_Available1__c, 
+                                         GST_Percentage_Discount__c,GST_Percenatge_Discount_Unit__c,MLCP_Available__c,Podium_Available__c,Basement_Available1__c,
+                                        Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c,Stack_Car_Park_Charges__c,Is_Car_Parking_Applicable_for_Brokerage__c
                                          from Project__c where Id =: unit[0].RW_Project__r.Id ];
             if(projList.size() ==1) {
                 return projList[0];
