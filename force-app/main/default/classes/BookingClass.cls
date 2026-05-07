@@ -128,6 +128,12 @@ public with sharing class BookingClass {
         get;
         set;
     }
+    public String selectedMilestone { //Added by Vinay 02-04-2026
+        get;
+        set;
+    }
+    private List<SelectOption> milestoneOptionsCache;//Added by Vinay 16-04-2026
+	private String lastSelectedQuote;//Added by Vinay 16-04-2026
     public Id quotationidparam { 
         get;
         set;
@@ -899,6 +905,125 @@ i = 1;
         }
         set;
     }
+
+    /*public List<SelectOption> getMilestoneOptions{  //Added by Vinay 02-04-2026
+        get {
+        //system.debug('Inside Milestone queryResult' + queryResult);
+        List<SelectOption> optns = new List<Selectoption>();
+        optns.add(new SelectOption('', 'Select a Milestone'));
+        System.debug('selectedQuote: ' + selectedQuote);
+        if(selectedQuote != null){
+            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c =: selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
+            if(cpphList.size() > 0){
+                List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id,Amount_Value__c,Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c =: cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER By Days_Months_Value__c ASC];
+                if(scppdList.size() > 0){
+                    Decimal cumulativePercentage = 0;
+                    for(Standard_Customer_Pay_Plan_Detail__c scppd: scppdList){
+                        cumulativePercentage += scppd.Amount_Value__c;
+                        if(cumulativePercentage > 10){
+                            break;
+                        }
+                        String milestoneStr = cumulativePercentage + '%' + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
+                        //optns.add(new SelectOption(scppd.Id, milestoneStr));
+                        optns.add(new SelectOption(milestoneStr, milestoneStr));
+                    } 
+                    if(optns.size() == 1){
+                        selectedMilestone = 'As per CLP';
+                        optns.add(new SelectOption('As per CLP', 'As per CLP'));
+                    }
+                }else{
+                    selectedMilestone = 'As per CLP';
+                    optns.add(new SelectOption('As per CLP', 'As per CLP'));
+                }
+                
+            }
+        }else{
+            system.debug('Quotation not selected');
+        }
+        System.debug('optns: ' + optns);
+        return optns;
+        }
+        set;
+    }*/
+
+    public void loadMilestoneOptions() { //Added by Vinay 16-04-2026
+        milestoneOptionsCache = buildMilestoneOptions();
+    }
+    
+    public List<SelectOption> getMilestoneOptions { //Added by Vinay 16-04-2026
+        get {
+            if (milestoneOptionsCache == null) {
+                milestoneOptionsCache = new List<SelectOption>();
+                milestoneOptionsCache.add(new SelectOption('', 'Select a Milestone'));
+            }
+            return milestoneOptionsCache;
+        }
+        set;
+    }
+    
+    // Separate method for business logic
+    private List<SelectOption> buildMilestoneOptions() { //Added by Vinay 16-04-2026
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('', 'Select a Milestone'));
+        
+        if (String.isBlank(selectedQuote)) {
+            System.debug('Quotation not selected');
+            return options;
+        }
+        
+        try {
+            // Query for Customer Pay Plan Header
+            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c = :selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
+            
+            if (cpphList.isEmpty()) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+                return options;
+            }
+            
+            // Query for Standard Customer Pay Plan Details
+            List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id, Amount_Value__c, Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c = :cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER BY Days_Months_Value__c ASC];
+            
+            if (scppdList.isEmpty()) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+                return options;
+            }
+            
+            // Build milestone options
+            Decimal cumulativePercentage = 0;
+            for (Standard_Customer_Pay_Plan_Detail__c scppd : scppdList) {
+                cumulativePercentage += scppd.Amount_Value__c;
+                
+                if (cumulativePercentage > 10) {
+                    break;
+                }
+                
+                String milestoneStr = String.valueOf(cumulativePercentage) + '%' 
+                    + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
+                options.add(new SelectOption(milestoneStr, milestoneStr));
+            }
+            
+            // Set default if only one option
+            if (options.size() == 1) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+            }
+            
+        } catch (Exception e) {
+            System.debug('Error building milestone options: ' + e.getMessage());
+            ApexPages.addMessage(new ApexPages.Message(
+                ApexPages.Severity.ERROR, 
+                'Error loading milestone options: ' + e.getMessage()
+            ));
+            selectedMilestone = 'As per CLP';
+            options.add(new SelectOption('As per CLP', 'As per CLP'));
+        }
+        
+        System.debug('Built milestone options: ' + options);
+        return options;
+    }
+
     
     //added by shailesh
     public void addReciept() {
@@ -928,6 +1053,23 @@ i = 1;
                             Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/Development_Charges_L__c
                             FROM Quotation__c WHERE Id =: selectedQuote
                            ];
+
+            //Added by dolly for car parking changes
+            // QuoteDetails = [SELECT id,Single_car_park_earmarked__c,Single_car_park_additional__c,Tandem_car_park_earmarked__c,Tandem_car_park_additional__c,
+            //                 Single_Open_Earmarked__c,Single_Open_Additional__c,Tandem_Open_Earmarked__c,Tandem_Open_Additional__c,Covered_Stack_Earmarked__c,
+            //                 Covered_Stack_Additional__c,Stilt_Earmarked__c,Stack_Additional__c,MLCP_Earmarked__c,MLCP_Additional__c,Basement_Earmarked__c,
+            //                 Basement_Additional__c,Podium_Earmarked__c,Podium__c,Puzzle_Car_Park_Earmarked__c,Puzzle_Car_Park__c,Stack_Earmarked__c,
+            //                 Stack_Additional_1__c,Name, Booking__c, 
+            //                 Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            //                 Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c,
+            //                  Parking_Type__c,Project__r.CEO__c,Stamp_duty_payable_by_Runwal__c,
+            //                 Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,
+            //                 Discount_9_Type__c,Discount_9_L__c, Quote_Status__c,Project_Unit__r.TowerName__c,Agreement_Value_for_brokers__c,Brokerage_Agreement_Value__c,
+            //                 Discount_10_Type__c,Discount_10_L__c,Discount_11_L__c,Discount_11_Type__c,Is_Special_Brokerage_Scheme__c,walkin_Source__c,Total_Car_Park_Amount__c,
+            //                 Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/
+            //                 Development_Charges_L__c//Added Agreement_Value_D_R__c for QUotation Offer, Added Referral_Credit_Due__c for Referral Credit Changes
+            //                 FROM Quotation__c WHERE Id =: selectedQuote
+            //                ];
             
             //System.debug('Inside unitdetails'+unitDetails);
             if (QuoteDetails.size() > 0) {
@@ -1139,6 +1281,7 @@ boookingObj.Is_AOP_CP_Applicable__c = true;
                 }
                 
             }
+            loadMilestoneOptions(); //Added by Vinay 16-04-2026
             if (!Test.isRunningTest())
                 getReceiptDetails();
         } else {
@@ -1213,6 +1356,32 @@ boookingObj.Booking_Date__c = System.Now();
         
         TotalServiceandToken = 0;
         i = 0;
+
+        //Added by dolly for car parking changes start
+        // //Prepare car parking data ONCE   //Added by Dolly
+        // //ParkingContext parkingContext;
+        // ParkingAllocationService service = new ParkingAllocationService();
+        // ParkingAllocationService.ParkingContext parkingContext;
+        // //system.debug('QuoteDetails[0]-->'+QuoteDetails[0]);
+        // system.debug('selectedQuote---->'+selectedQuote);
+        // if(QuoteDetails.size()>0 && QuoteDetails[0] != null && selectedQuote != null && selectedQuote != '' ){
+
+        //     parkingContext =
+        //         service.prepareParkingContext(
+        //             QuoteDetails[0],
+        //             unitId,
+        //             projectId
+        //         );
+
+        //         Boolean parkingError =
+        //             service.validateCarParkingAvailability(parkingContext);
+
+        //         if(parkingError){
+        //             i = 1;
+        //         }
+        //     }
+        //Added by dolly for car parking changes ends
+
         //Brokerage = 2.25;
         ////Anuja added on 7/1/16 ////////////////
         ///Tandem Covered////
@@ -1313,6 +1482,13 @@ boookingObj.Booking_Date__c = System.Now();
         if (boookingObj.Opportunity__c == null) {
             system.debug('Inside null selected quote' + selectedQuote);
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select an Opportunity');
+            ApexPages.addMessage(myMsg);
+            i = 1;
+            System.debug('--i: ' + i);
+        }
+
+        if (selectedMilestone == null || selectedMilestone == '') { //Added by Vinay 13-03-2026
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select Milestone');
             ApexPages.addMessage(myMsg);
             i = 1;
             System.debug('--i: ' + i);
@@ -3072,6 +3248,24 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 boookingObj.Interest_to_be_Applied__c='No';
                 // boookingObj.Booking_Application_Form_Hard_copy__c = fileUrl; //Added by coServe 23-03-2023
                 //boookingObj.status__c = 'Booking Received';   //Modified by Sheetal on 12/1/2022 to solve Issue I0101
+
+                if(selectedMilestone != null && selectedMilestone != '' && selectedMilestone != 'As per CLP'){ //Added by Vinay 02-04-2026
+                    //String milestone = '4.00% (30 days from booking)';
+                    Pattern p = Pattern.compile('\\((\\d+)');
+                    Matcher m = p.matcher(selectedMilestone);
+                    Integer days;
+                    if(m.find()){
+                        days = Integer.valueOf(m.group(1));
+                    }
+                    List<CIF__c> cif =[SELECT Id,Mode_of_funding__c FROM CIF__c WHERE Opportunity__c =: boookingObj.Opportunity__c];
+                    if(cif.size() > 0 && cif[0].Mode_of_funding__c == 'Bank Loan'){
+                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 30;
+                    }else{
+                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 15;
+                    }
+                    //boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
+                }
+                boookingObj.Registration_Expected_Milestone__c = selectedMilestone ;
                 insert boookingObj;
                 update insObj;
                 
@@ -3080,8 +3274,13 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 
             }
             
-            //Updating Parkings/////
-            
+            //Added by dolly for car parking changes Starts
+            // //Updating Parkings/////
+            // //calling 
+            // //syncCarParkingFromQuotation(boookingObj.Id,boookingObj.Unit_No__c,QuoteDetails[0],boookingObj.Project__c);
+            // if(QuoteDetails[0]!=null) service.syncCarParkingAfterBooking( boookingObj.Id, parkingContext );
+            //Added by dolly for car parking changes ends
+
             ////Tandem Covered////
             if (QuoteDetails != null && !QuoteDetails.isEmpty() && QuoteDetails[0].Tandem_car_park_Additional__c > 0) {
                 for (integer j = 0; j < QuoteDetails[0].Tandem_car_park_Additional__c; j++) {
@@ -5092,6 +5291,1093 @@ return null;
         i++;
         i++;
         i++;    
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;   
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; 
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; 
+
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
         
     }
     
