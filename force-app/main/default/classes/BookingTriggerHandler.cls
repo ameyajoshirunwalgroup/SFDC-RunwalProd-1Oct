@@ -2800,6 +2800,113 @@ update bkgs;
             i++;
         }
 
+    //Added for car park
+    //Commented by Dolly    
+    // public static void handleQuotationTagging( List<Booking__c> newList, Map<Id, Booking__c> oldMap){
+
+    //     Set<Id> quotationIds = new Set<Id>();
+    //     Map<Id, Booking__c> quotationBookingMap = new Map<Id, Booking__c>();
+
+    //     List<Id> bookingsToReleaseParking = new List<Id>();
+
+    //     for(Booking__c b : newList){
+
+    //         Booking__c oldB = oldMap.get(b.Id);
+
+    //         // CASE 1: quotation removed
+    //         if(oldB.Quotation__c != null && b.Quotation__c == null){
+    //             bookingsToReleaseParking.add(b.Id);
+    //         }
+
+    //         // CASE 2: quotation changed
+    //         if(oldB.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
+    //             bookingsToReleaseParking.add(b.Id);
+    //         }
+
+    //         // CASE 3: quotation newly added OR changed
+    //         if(b.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
+
+    //             quotationIds.add(b.Quotation__c);
+    //             quotationBookingMap.put(b.Quotation__c, b);
+    //         }
+    //     }
+
+    //     // RELEASE OLD PARKING
+    //     if(!bookingsToReleaseParking.isEmpty()){
+    //         releaseParking(bookingsToReleaseParking);
+    //     }
+
+    //     if(quotationIds.isEmpty()){
+    //         return;
+    //     }
+
+    //     Map<Id, Quotation__c> quotationMap =
+    //         new Map<Id, Quotation__c>(
+    //             [SELECT Id, Project__c, Project_Unit__c,
+    //             Single_car_park_Earmarked__c, Single_car_park_additional__c,
+    //             Tandem_car_park_earmarked__c, Tandem_car_park_additional__c,
+    //             Single_Open_Earmarked__c, Single_Open_Additional__c,
+    //             Tandem_Open_Earmarked__c, Tandem_Open_Additional__c,
+    //             Covered_Stack_Earmarked__c, Covered_Stack_Additional__c,
+    //             Stilt_Earmarked__c, Stack_Additional__c,
+    //             MLCP_Earmarked__c, MLCP_Additional__c,
+    //             Basement_Earmarked__c, Basement_Additional__c,
+    //             Podium_Earmarked__c, Podium__c,
+    //             Puzzle_Car_Park_Earmarked__c, Puzzle_Car_Park__c,
+    //             Stack_Earmarked__c,Stack_Additional_1__c
+    //             FROM Quotation__c
+    //             WHERE Id IN :quotationIds]
+    //         );
+
+    //     for(Id qId : quotationMap.keySet()){
+
+    //         Quotation__c q = quotationMap.get(qId);
+    //         Booking__c b = quotationBookingMap.get(qId);
+
+    //         if(q != null && b != null){
+
+    //             try{
+
+    //                 ParkingAllocationService.allocateParkingFromQuotation(
+    //                     q,
+    //                     b.Id
+    //                 );
+
+    //             }catch(ParkingAllocationService.ParkingValidationException e){
+
+    //                 List<String> errorList = e.getMessage().split('\n');
     
+    //                 List<String> cleanErrors = new List<String>();
+    //                 for(String err : errorList){
+    //                     if(String.isNotBlank(err)){
+    //                         cleanErrors.add('• ' + err.trim());
+    //                     }
+    //                 }
+                    
+    //                 b.addError(String.join(cleanErrors, ' | '));
+
+    //             }
+    //         }
+    //     }
+    // }
+    // public static void releaseParking(List<Id> bookingIds){
+
+    //     List<Car_Parking_Charge__c> parkings = [
+    //         SELECT Id, Status__c, Booking__c
+    //         FROM Car_Parking_Charge__c
+    //         WHERE Booking__c IN :bookingIds
+    //     ];
+
+    //     for(Car_Parking_Charge__c p : parkings){
+    //         p.Status__c = 'Vacant';
+    //         p.Booking__c = null;
+    //         //p.Project_Unit__c = null;
+    //     }
+        
+    //     if(!parkings.isEmpty()){
+    //         update parkings;
+    //     }
+
+    // }
     
 }
