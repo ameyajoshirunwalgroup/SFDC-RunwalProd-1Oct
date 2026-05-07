@@ -618,6 +618,31 @@ insert bkLink; */
             
         }
         
+        //Added by dolly for car parking changes start
+        //Modified in the logic
+        // List<Quotation__c> quotationList = [Select id,Name,Project_Unit__r.TowerName__c,Tandem_car_park_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Single_car_park_Additional__c, Podium__c,Puzzle_Car_Park__c,Project_Unit__r.RW_Unit_Status__c,Stack_Additional__c,MLCP_Additional__c,Project__r.Name,Payment_Plan_Modified__c,Quote_Status__c from Quotation__c  where Opportunity__c  =:recordId];
+        // Set<String>ProjectIds = new Set<String>();
+        // for(Quotation__c qt :quotationList ){
+        //     quotationIdNameMap.put(qt.id,qt);
+        //     ProjectIds.add(qt.Project__c);
+        // }
+        // List<Project__c> projectList = [Select name,Tandem_car_park_Available__c,Tandem_Open_Available__c,Single_car_park_Available__c,Single_Open_Available__c,Stack_Available__c,MLCP_Available__c,Podium_Available__c, Puzzle_Car_Park_Available__c from project__c where id In :ProjectIds ];
+        // Map<String,Map<String,Decimal>> projectCarParAvailMap = new Map<String,Map<String,Decimal>>();
+        // for(project__c prj :projectList ){
+        //     Map<String,Decimal> parkMap = new Map<String,Decimal>();
+        //     parkMap.put('Tandem Covered',prj.Tandem_car_park_Available__c);
+        //     parkMap.put('Covered Stack',prj.Tandem_Open_Available__c);
+        //     parkMap.put('Single Open',prj.Single_Open_Available__c);
+        //     parkMap.put('Single Covered',prj.Single_car_park_Available__c);
+        //     parkMap.put('Stilt',prj.Stack_Available__c);
+        //     parkMap.put('MLCP',prj.MLCP_Available__c);
+        //     parkMap.put('Podium',prj.Podium_Available__c);
+        //     parkMap.put('Puzzle Car Park',prj.Puzzle_Car_Park_Available__c); //Added by Vinay 28-03-2025
+            
+        //     projectCarParAvailMap.put(prj.Name,parkMap);
+            
+        // }
+        
         quotationWrapper qt = new quotationWrapper();
         qt.quotationIdNameMap = quotationIdNameMap;
         qt.errors = new List<errorWrapper>();
