@@ -1557,8 +1557,12 @@ public with sharing class QuotationExtn
         if(allChargesMap.get('AGREEMENTVALUEFORBROKERS') != null)                            // Added by Sheetal to solve Issue I0100
             q.Agreement_Value_for_brokers__c = allChargesMap.get('AGREEMENTVALUEFORBROKERS');
         
-         if(allChargesMap.get('AGREEMENTVALUENOTFORBROKERS') != null)                            // Added by Sheetal on 12/09/2022
+        if(allChargesMap.get('AGREEMENTVALUENOTFORBROKERS') != null){                            // Added by Sheetal on 12/09/2022
             q.Agreement_Value_Not_for_brokers__c = allChargesMap.get('AGREEMENTVALUENOTFORBROKERS');
+            if(proj!=null && proj.Is_Car_Parking_Applicable_for_Brokerage__c == false && allotmentCharges!=null){
+                q.Agreement_Value_Not_for_brokers__c += allotmentCharges;
+            }
+        }
         
         
         // Maintenance charges
