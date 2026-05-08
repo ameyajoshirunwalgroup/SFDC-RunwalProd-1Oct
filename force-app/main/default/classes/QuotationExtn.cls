@@ -733,10 +733,11 @@ public with sharing class QuotationExtn
         if(NPVDiffPSF != 0.0) {
             pDisc.add(pDisc.size()-1,new InventoryCostServices.DiscountWrapper('Payment plan deviation (NPV)', NPVDiffPSF, NPVDiffLumpsum,false,false,true,'NPV'));
         }
-        getUpdatedCharges();
+        // getUpdatedCharges(); Added by Aditya
         qPlanWrapperList = new List<QPlanDetailWrapper>(); 
     InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;//Added for SDR Changes
     InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;//Added for SDR Changes    
+        getUpdatedCharges();// Added by Aditya
         qPlanWrapperList.addAll(qPlanWrapperListC);
         disableDiscount = true;
         editSchedule = false;
@@ -930,6 +931,7 @@ public with sharing class QuotationExtn
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId, allotmentCharges, 0.0, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId, q);// Added by Aditya
             quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
         } else {
             quoteUIMapDisc = null;
@@ -2191,8 +2193,12 @@ public with sharing class QuotationExtn
         InventoryCostServices.premiumRateVal = premiumRate;
         allChargesMap = InventoryCostServices.getAllCharges(unitId, carParkAmt, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.put('AGREEMENTVALUE',agreementValue);
-        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
+        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,0.0,addCarParks,subPlanId,q);
+        if (discountLumpsum != 0) {
         quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
+        }else {
+            quoteUIMapDisc = null;
+        }// Added by Aditya
 
        
          stampDutyValue = InventoryCostServices.paidByRunwalSD;
