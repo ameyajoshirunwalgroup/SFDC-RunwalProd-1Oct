@@ -705,13 +705,13 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAX RATE' , tb.tax_percentage__c );
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get('AGREEMENTVALUE')/100).setscale(0,RoundingMode.HALF_UP));
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * allChargesMap.get('AGREEMENTVALUE')/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
-                                taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
                                 if(sdPaidByRunwalContext == true){
                                     if(allChargesMap.containsKey('Stamp Duty')){
                                         allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100).setscale(0,RoundingMode.HALF_UP));
                                 		allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
                                     }
                                 }
+                                taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
                                 System.debug('taxAmount:' + taxAmtonAgreement);
                             }
                             
@@ -719,13 +719,13 @@ totalTax += allChargesMap.get(pc.charge_code__r.Name + ' '+  tb.tax_name__c + ' 
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAX RATE' , 0);
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * allChargesMap.get('AGREEMENTVALUE')/100).setscale(0,RoundingMode.HALF_UP));
                                 allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , 0);
-                                taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
                                 if(sdPaidByRunwalContext == true){
                                     if(allChargesMap.containsKey('Stamp Duty')){
                                         allChargesMap.put('AGREEMENTVALUE' + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT' , (tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100).setscale(0,RoundingMode.HALF_UP));
                                 		allChargesMap.put('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT' , ((tb.Taxable_Percentage__c * (allChargesMap.get('AGREEMENTVALUE')+allChargesMap.get('Stamp Duty'))/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP) );
                                     }
                                 }
+                                taxAmtonAgreement += allChargesMap.get('AGREEMENTVALUE' + ' '+  tb.tax_name__c + ' TAX AMT');
                                 System.debug('taxAmount:' + taxAmtonAgreement);
                             }
                             
