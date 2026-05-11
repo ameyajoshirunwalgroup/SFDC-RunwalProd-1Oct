@@ -2194,11 +2194,11 @@ public with sharing class QuotationExtn
         allChargesMap = InventoryCostServices.getAllCharges(unitId, carParkAmt, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.put('AGREEMENTVALUE',agreementValue);
         quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,0.0,addCarParks,subPlanId,q);
-        if (discountLumpsum != 0) {
-        quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
-        }else {
+        /*if (discountLumpsum != 0) {*/
+            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
+        /*}else {
             quoteUIMapDisc = null;
-        }// Added by Aditya
+        }*/// Added by Aditya
 
        
          stampDutyValue = InventoryCostServices.paidByRunwalSD;
