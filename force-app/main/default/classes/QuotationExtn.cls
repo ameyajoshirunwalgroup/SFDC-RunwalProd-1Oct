@@ -25,9 +25,12 @@ public with sharing class QuotationExtn
     public Boolean sdPaidByRunwal {get;set;}//Added for SDR ROC Management
     public Boolean regChargesByRunwal {get;set;}//Added for SDR ROC Management
     public Decimal stampDutyValue {get;set;}//Added for SDR ROC Management
+    public Boolean nonMonetaryOfferCheckbox {get;set;}//Added for Quotation Offer
+    public Boolean isAnyNonMonetarySelected  {get;set;}//Added for Quotation Offer
     public Boolean isCalculateDiscountClicked {get;set;}//Added for Quotation Offer
     public Boolean disablePremium {get;set;}//Added for SDR Changes
     public Boolean isPremiumApplied {get;set;}//Added for SDR Changes
+    public Boolean isSelectedOfferApplied {get;set;}//Added for Quotation Offer
     public List<InventoryCostServices.PlanDetailWrapper> payplanDetails;
     public List<InventoryCostServices.PlanDetailWrapper> subventionPayplanDetails;
     public List<QPlanDetailWrapper> qplanWrapperList = new List<QPlanDetailWrapper>();
@@ -805,6 +808,7 @@ public with sharing class QuotationExtn
     public PageReference clearDiscount(){
         discountPSF = 0;
         discountlumpsum = 0;
+        isSelectedOfferApplied = false;//Added for Quotation Offer
         pDisc = InventoryCostServices.getProjectLevelDiscounts(u.RW_Project__r.Id, u.Id,oppId);
         pDisc1 = InventoryCostServices.getProjectLevelDiscounts(u.RW_Project__r.Id, u.Id,oppId);
         FinalCustomerDiscount = null;
@@ -965,6 +969,7 @@ public with sharing class QuotationExtn
         disableDiscount = true;
         editSchedule = false;
         showAddCarPark = false;
+        isSelectedOfferApplied = true;//Added for QUotation Offer
     }
     
    public PageReference MathforAppliedDiscount() {
@@ -979,6 +984,9 @@ public with sharing class QuotationExtn
                     isAnyNonMonetarySelected = false;
                 } // Comment Uncommented by Aditya
                 
+            }
+            if(d.applied == true){
+            isSelectedOfferApplied = false;
             }
             if(d.selected) {
                 change = true;
@@ -4252,6 +4260,26 @@ public with sharing class QuotationExtn
     //         q.put(p.addQtyField, qty);
     //     }
     // }
+    public PageReference handleNonMonetaryNotApplicable() {
+        for(InventoryCostServices.DiscountWrapper  dwrapper : pDisc) {
+            System.debug('nonMonetaryOfferCheckbox**'+nonMonetaryOfferCheckbox);
+            System.debug('d.discountCategory**'+dwrapper.discountCategory);
+                
+                if(dwrapper.discountCategory == 'Non monetary' && nonMonetaryOfferCheckbox == true){
+                    dwrapper.applied = false;
+                    dwrapper.showApply = false;
+                    dwrapper.showMonetizable = false;
+                    //System.debug('disableApply1**'+disableApply);
+                }
+                if(dwrapper.discountCategory == 'Non monetary' && nonMonetaryOfferCheckbox == false){
+                    dwrapper.applied = false;
+                    dwrapper.showApply = true;
+                    dwrapper.showMonetizable = true;
+                    //System.debug('disableApply1**'+disableApply);
+                }
+        }
+        return null;
+    }
     
     // //Added by Dolly
     // private Boolean validateParkingApplied(String contextMsg){
