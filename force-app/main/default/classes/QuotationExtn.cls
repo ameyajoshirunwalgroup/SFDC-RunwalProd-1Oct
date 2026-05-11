@@ -780,6 +780,15 @@ public with sharing class QuotationExtn
         return pageRef;
     }
     public PageReference backtoQuotePage(){
+        if(isSelectedOfferApplied!= true){
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please apply the selected offers or deselect them before proceeding. '));    
+            return null;
+        }
+        
+        if(nonMonetaryOfferCheckbox == false && isAnyNonMonetarySelected!= true){
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please select Non Monetory Discounts Not Applicable .'));    
+            return null;
+        }
         disablePremium = true;//Added for SDR Changes
         PageReference pageRef = new PageReference('/apex/Quotation2');
         pageRef.getParameters().put('subPlanId',selectedPlan);
@@ -862,6 +871,22 @@ public with sharing class QuotationExtn
         discountLumpsum =0; 
         // get the sumtotal of all applied discounts
         for(InventoryCostServices.DiscountWrapper  d : pDisc) {
+            /**Added for Quotation Offer starts */
+            if(d.discountCategory =='Non monetary' && d.applied == true){
+                if(d.applied == true){
+                    isAnyNonMonetarySelected = true;
+                }
+                else if(isAnyNonMonetarySelected != true){
+                isAnyNonMonetarySelected = false;
+                }
+            }// Changed by Aditya
+            /**Added for Quotation Offer ends */
+
+            if(d.discountCategory == 'Non monetary' && d.applied == false && nonMonetaryOfferCheckbox == false && isAnyNonMonetarySelected!= true){
+              System.debug('Inside error**');
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please select Non Monetory Discounts Not Applicable .'));     
+            return;
+            }
             if(d.type != null && d.type.equals('Total Discount')) {
                     d.PerSqFtVal = 0;
                     d.LumpsumVal  = 0;
@@ -946,6 +971,15 @@ public with sharing class QuotationExtn
        Boolean change = false;
         Boolean change1 = false;
         for(InventoryCostServices.DiscountWrapper  d : pDisc) {
+            if( d.discountCategory =='Non monetary'){
+                if(d.applied == true ){
+                isAnyNonMonetarySelected = true;
+                }
+                else if(isAnyNonMonetarySelected != true){
+                    isAnyNonMonetarySelected = false;
+                } // Comment Uncommented by Aditya
+                
+            }
             if(d.selected) {
                 change = true;
                 if(d.Type.equals('Floor Rise') || d.Type.equals('Referral') || d.Type.equals('GST Discount') 
@@ -2194,11 +2228,11 @@ public with sharing class QuotationExtn
         allChargesMap = InventoryCostServices.getAllCharges(unitId, carParkAmt, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.put('AGREEMENTVALUE',agreementValue);
         quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,0.0,addCarParks,subPlanId,q);
-        if (discountLumpsum != 0) {
-        quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
-        }else {
+        /*if (discountLumpsum != 0) {*/
+            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
+        /*}else {
             quoteUIMapDisc = null;
-        }// Added by Aditya
+        }*/// Added by Aditya
 
        
          stampDutyValue = InventoryCostServices.paidByRunwalSD;
