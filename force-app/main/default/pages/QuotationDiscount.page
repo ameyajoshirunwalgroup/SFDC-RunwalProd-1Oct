@@ -254,8 +254,16 @@
                 </tr>
                 <tr>
                     <th colspan="3" align="center" class="header">
-                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Apply Discount"  action="{!getUpdatedCharges}"  oncomplete="bindEvents()" rerender="editArea" status="status" />
+                                                    <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Apply Discount"  action="{!getUpdatedCharges}"  oncomplete="bindEvents()" rerender="editArea, pageMsgs" status="status" />
+                                            </th>
+                                            <!--Added nonMonetaryOfferCheckbox for Quotation Offer starts-->
+                                            <th>
+                                                <label>Non Monetory Discounts Not Applicable</label>&nbsp;&nbsp;
+                                                <apex:inputCheckbox value="{!nonMonetaryOfferCheckbox}" >
+                                                    <apex:actionSupport event="onclick" action="{!handleNonMonetaryNotApplicable}"/>
+                                                </apex:inputCheckbox>
                     </th>
+                                            <!--Added nonMonetaryOfferCheckbox for Quotation Offer ends-->
                     <th colspan="3"  align="center" class="header">
                         <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Clear Discount" action="{!clearDiscount}" status="status" />
                     </th>
@@ -487,6 +495,20 @@
             j$(document).ready(function() {
                 bindEvents();
             });
+        
+        
+            function toggleApplyCheckbox(monetizableCheckbox) {
+            // Traverse to parent row
+            var row = monetizableCheckbox.closest('tr');
+            
+            // Find Apply checkbox in the same row
+            var applyCheckbox = row.querySelector('.applyCheckbox');
+            
+            
+        }
+            
+            
+            
             
             // events are not bound if partial refresh happens. we need to bind it again
             // hence keeping bindevents separately and call them when needed
