@@ -931,7 +931,11 @@ public with sharing class QuotationExtn
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
+            InventoryCostServices.sdPaidByRunwalContext = false;// Added by Aditya
+            InventoryCostServices.regPaidByRunwalContext = false;// Added by Aditya
             quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId, allotmentCharges, 0.0, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId, q);// Added by Aditya
+            InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;// Added by Aditya
+            InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;// Added by Aditya
             quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
         } else {
             quoteUIMapDisc = null;
@@ -2193,7 +2197,12 @@ public with sharing class QuotationExtn
         InventoryCostServices.premiumRateVal = premiumRate;
         allChargesMap = InventoryCostServices.getAllCharges(unitId, carParkAmt, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.put('AGREEMENTVALUE',agreementValue);
+        InventoryCostServices.sdPaidByRunwalContext = false;// Added by Aditya
+        InventoryCostServices.regPaidByRunwalContext = false;// Added by Aditya
         quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,0.0,addCarParks,subPlanId,q);
+        // --- FIX: Restore contexts for the Discounted Column ---
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;// Added by Aditya
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;// Added by Aditya
         /*if (discountLumpsum != 0) {*/
             quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
         /*}else {
