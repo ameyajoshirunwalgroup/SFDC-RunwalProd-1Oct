@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_Edit_On_Resolved_Case</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    $User.Id = Functional_User__c,
+    ISPICKVAL(PRIORVALUE(Functional_Status__c), &quot;Resolved&quot;),
+    NOT(ISCHANGED(Functional_Status__c))
+)</errorConditionFormula>
+    <errorMessage>You cannot edit this case once it has been Resolved.</errorMessage>
+</ValidationRule>

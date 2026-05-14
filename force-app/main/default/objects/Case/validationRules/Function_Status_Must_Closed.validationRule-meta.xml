@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Function_Status_Must_Closed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Functional_Status__c, &quot;Open&quot;),
+    NOT(ISBLANK(Functional_User__c)),
+    ISCHANGED(Status),
+    ISPICKVAL(Status, &quot;Case Closed&quot;)
+)</errorConditionFormula>
+    <errorMessage>Case cannot be closed until the Functional User has resolved the case from their end.</errorMessage>
+</ValidationRule>

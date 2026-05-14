@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_L2_Approval_Until_X20_Received</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Approval_Status__c, &quot;Approved by L2&quot;),
+    ISCHANGED(Approval_Status__c),
+    Booking__r.X20_Received__c &lt;&gt;  true
+)</errorConditionFormula>
+    <errorMessage>You cannot move the Approval Status to &apos;Approved by L2&apos; until the X20 Received checkbox on the associated Booking is checked.</errorMessage>
+</ValidationRule>

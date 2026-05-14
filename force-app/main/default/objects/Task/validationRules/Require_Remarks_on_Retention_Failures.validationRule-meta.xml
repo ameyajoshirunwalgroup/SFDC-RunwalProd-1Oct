@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Remarks_on_Retention_Failures</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Retention_Status__c, &quot;Retention Failed&quot;),
+    ISBLANK(Remarks__c)
+)</errorConditionFormula>
+    <errorDisplayField>Remarks__c</errorDisplayField>
+    <errorMessage>Remarks are mandatory when the Retention Status is set to Retention Failed.</errorMessage>
+</ValidationRule>

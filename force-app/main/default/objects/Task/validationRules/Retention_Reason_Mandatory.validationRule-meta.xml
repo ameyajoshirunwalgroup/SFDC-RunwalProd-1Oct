@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retention_Reason_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Retention_Status__c, &quot;Retention Successful&quot;),
+    ISBLANK(TEXT(Retention_Reason__c))
+)</errorConditionFormula>
+    <errorDisplayField>Retention_Reason__c</errorDisplayField>
+    <errorMessage>Please select a Retention Reason when the status is set to Retention Successful.</errorMessage>
+</ValidationRule>
