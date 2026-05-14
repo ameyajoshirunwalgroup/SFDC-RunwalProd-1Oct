@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Digital Booking Link - Customer</name>
+    <style>none</style>
+    <subject>Your Digital Booking form and Quotation</subject>
+    <textOnly>Dear {!Opportunity.Name},
+
+Thank you for showing interest in our project {!Project__c.Name} and Unit {!Project_Unit__c.RW_Param4__c}. Please find below the &quot;Digital Booking&quot; link for your kind perusal.  You may call on {!SMPhoneNumber} for any assistance.
+
+{!DigitalBooking} to fill the Booking Form.
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

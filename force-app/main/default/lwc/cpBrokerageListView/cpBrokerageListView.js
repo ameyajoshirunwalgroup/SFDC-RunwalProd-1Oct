@@ -24,8 +24,7 @@ const columns = [
     { label: 'Total Brokerage', fieldName: 'Total_Brokerage__c', type: 'currency', sortable: true },
     { label: 'Company Name', fieldName: 'Company_Name__c', sortable: true },
     //For every type
-    // { label: 'Created Date', fieldName: 'CreatedDate', type: 'date', sortable: true },//Commented by Prashant business requirement. 14-01-2026
-    // { label: 'Last Modified Date', fieldName: 'LastModifiedDate', type: 'date', sortable: true },//Commented by Prashant business requirement. 14-01-2026
+
     {
         type: "button", 
         label: 'Preview Invoice', 
@@ -65,6 +64,60 @@ const columns = [
         }
     }
 ];
+
+/*const othercolumns = [
+
+    //For Other Invoices
+    { label: 'Invoice Number', fieldName: 'Invoice_Number__c', sortable: true },
+    { label: 'Approval Status', fieldName: 'Approval_Status__c', sortable: true },
+    { label: 'Approval Status (Clearing)', fieldName: 'Approval_Status_clearing__c', sortable: true },
+    { label: 'Brokerage Type', fieldName: 'Brokerage_Type__c', sortable: true },
+    { label: 'Company Name', fieldName: 'Company_Name__c', sortable: true },
+    { label: 'Invoice Status', fieldName: 'Invoice_Status__c', sortable: true },
+    { label: 'Payment Status', fieldName: 'Status__c', sortable: true },
+    { label: 'Total Brokerage', fieldName: 'Total_Brokerage__c', type: 'currency', sortable: true },
+    // { label: 'Created Date', fieldName: 'CreatedDate', type: 'date', sortable: true },
+    // { label: 'Last Modified Date', fieldName: 'LastModifiedDate', type: 'date', sortable: true },
+    //For Other Invoices ENDS
+    {
+        type: "button", 
+        label: 'Preview Invoice', 
+        initialWidth: 150,
+        typeAttributes: {
+            label: 'Preview',
+            name: 'Preview',
+            title: 'Preview',
+            disabled: false,
+            value: 'edit',
+            iconPosition: 'left'
+        }
+    },
+    {
+        type: "button", 
+        label: 'Generate Invoice', 
+        initialWidth: 150,
+        typeAttributes: {
+            label: 'Generate',
+            name: 'Generate',
+            title: 'Generate',
+            disabled: false,
+            value: 'edit',
+            iconPosition: 'left'
+        }
+    },
+    {
+        type: 'button',
+        label: 'View',
+        initialWidth: 100, 
+        typeAttributes: {
+            label: 'View',
+            name: 'View',
+            title: 'View',
+            disabled: false,
+            iconPosition: 'left'
+        }
+    }
+];*/
 
 export default class CpBrokerageListView extends NavigationMixin(LightningElement) {
     @track data = [];
@@ -110,7 +163,10 @@ export default class CpBrokerageListView extends NavigationMixin(LightningElemen
         const { data, error } = result || {};
         if (data) {
             console.log(' Data received:', JSON.parse(JSON.stringify(data)));
-
+            console.log(' Data received:', JSON.stringify(data));
+            // if(data.length > 0 && data[0].Brokerage_Type__c != null){
+            //     this.columns = data[0].Brokerage_Type__c === 'Base Brokerage'? basecolumns : othercolumns;
+            // }    
             const flattened = data.map(row => {
                 return {
                     ...row,

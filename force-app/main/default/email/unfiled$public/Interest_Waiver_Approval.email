@@ -1,0 +1,9 @@
+<messaging:emailTemplate subject="Interest Waiver Approval" recipientType="User" relatedToType="Booking__c">
+<messaging:htmlEmailBody >
+ <html>
+    <body>
+    </body>
+  </html>
+     <c:interestWaiverApproval idoff="{!RelatedTo.Id}"/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

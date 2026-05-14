@@ -1,0 +1,185 @@
+<template>
+    <lightning-card title="Live Open Complaints Monitoring Dashboard">
+
+        <div class="slds-m-around_medium">
+
+            <!-- SUMMARY CARDS -->
+            <div class="summary-container">
+
+                <div class="summary-card total">
+                    <div class="card-title">Total Complaints</div>
+                    <div class="card-value">{totalCount}</div>
+                </div>
+
+                <div class="summary-card overdue">
+                    <div class="card-title">Overdue (>1 Day)</div>
+                    <div class="card-value">{overdueCount}</div>
+                </div>
+
+                <div class="summary-card within">
+                    <div class="card-title">Within SLA</div>
+                    <div class="card-value">{withinSlaCount}</div>
+                </div>
+
+            </div>
+
+            <!-- FILTER + BUTTON ROW -->
+            <div class="top-bar slds-grid slds-wrap slds-m-bottom_medium">
+
+                <!-- LEFT SIDE : FILTERS -->
+                <div class="slds-col slds-size_3-of-4">
+                    <div class="filter-container">
+
+                        <lightning-combobox label="Segment" value={selectedSegment} options={segmentOptions} onchange={handleSegmentChange}></lightning-combobox>
+
+                        <lightning-combobox label="Project" value={selectedProject} options={projectOptions} onchange={handleProjectChange}></lightning-combobox>
+
+                        <lightning-combobox label="TL Name" value={selectedTL} options={tlOptions} onchange={handleTLChange}></lightning-combobox>
+
+                        <lightning-combobox label="RM Name" value={selectedRM} options={rmOptions} onchange={handleRMChange}></lightning-combobox>
+
+                        <lightning-combobox label="Year" value={selectedYear} options={yearOptions} onchange={handleYearChange}></lightning-combobox>
+
+                        <lightning-combobox label="Month" value={selectedMonth} options={monthOptions} onchange={handleMonthChange}></lightning-combobox>
+
+                        <lightning-input type="date" label="Start Date" value={startDate} onchange={handleStartDateChange}></lightning-input>
+
+                        <lightning-input type="date" label="End Date" value={endDate} onchange={handleEndDateChange}></lightning-input>
+
+                        <lightning-button label="Reset" onclick={handleReset} class="slds-m-left_small"></lightning-button>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE : BUTTONS -->
+                <div class="slds-col slds-size_1-of-4 slds-text-align_right">
+
+                    <lightning-button label="Refresh" icon-name="utility:refresh" onclick={handleRefresh}
+                        class="slds-m-right_small">
+                    </lightning-button>
+
+                    <lightning-button label="Export" icon-name="utility:download" onclick={handleExport}>
+                    </lightning-button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CUSTOM SORTABLE TABLE -->
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th onclick={handleSort} data-field="caseNumber">
+                                Case Number {getSortIcon.caseNumber}
+                            </th>
+                            <th onclick={handleSort} data-field="customerName">
+                                Customer Name {getSortIcon.customerName}
+                            </th>
+                            <th onclick={handleSort} data-field="customerNumber">
+                                SAP Customer Number {getSortIcon.customerNumber}
+                            </th>
+                            <th onclick={handleSort} data-field="segment">
+                                Segment {getSortIcon.segment}
+                            </th>
+                            <th onclick={handleSort} data-field="project">
+                                Project {getSortIcon.project}
+                            </th>
+                            <th onclick={handleSort} data-field="unit">
+                                Unit {getSortIcon.unit}
+                            </th>
+                            <th onclick={handleSort} data-field="tower">
+                                Tower {getSortIcon.tower}
+                            </th>
+                            <th onclick={handleSort} data-field="phase">
+                                Phase {getSortIcon.phase}
+                            </th>
+                            <th onclick={handleSort} data-field="rmName">
+                                RM Name {getSortIcon.rmName}
+                            </th>
+                            <th onclick={handleSort} data-field="tlName">
+                                TL Name {getSortIcon.tlName}
+                            </th>
+                            <th onclick={handleSort} data-field="caseType">
+                                Type of Case {getSortIcon.caseType}
+                            </th>
+                            <th onclick={handleSort} data-field="caseOpenDate">
+                                Date of Case Open {getSortIcon.caseOpenDate}
+                            </th>
+                            <th onclick={handleSort} data-field="caseOpenTime">
+                                Time of Case Open {getSortIcon.caseOpenTime}
+                            </th>
+                            <th onclick={handleSort} data-field="ageMinutesCaseOpen">
+                                Ageing Minutes Case Open {getSortIcon.ageMinutesCaseOpen}
+                            </th>
+                            <th onclick={handleSort} data-field="ageHoursCaseOpen">
+                                Ageing Hours Case Open {getSortIcon.ageHoursCaseOpen}
+                            </th>
+                            <th onclick={handleSort} data-field="ageDaysCaseOpen">
+                                Ageing Days Case Open {getSortIcon.ageDaysCaseOpen}
+                            </th>
+                            <th>Case Open Overdue > 1 Day</th>
+                            <th onclick={handleSort} data-field="caseReopenDate">
+                                Date of Case Reopen {getSortIcon.caseReopenDate}
+                            </th>
+                            <th onclick={handleSort} data-field="caseReopenTime">
+                                Time of Case Reopen {getSortIcon.caseReopenTime}
+                            </th>
+                            <th onclick={handleSort} data-field="ageMinutesCaseReopen">
+                                Ageing Minutes Case Reopen {getSortIcon.ageMinutesCaseReopen}
+                            </th>
+                            <th onclick={handleSort} data-field="ageHoursCaseReopen">
+                                Ageing Hours Case Reopen {getSortIcon.ageHoursCaseReopen}
+                            </th>
+                            <th onclick={handleSort} data-field="ageDaysCaseReopen">
+                                Ageing Days Case Reopen {getSortIcon.ageDaysCasereopen}
+                            </th>
+                            <th>Case Reopen Overdue > 1 Day</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <template for:each={data} for:item="row">
+                            <tr key={row.recordId} class={row.rowClass}>
+                                <td>{row.caseNumber}</td>
+                                <td>{row.customerName}</td>
+                                <td>{row.customerNumber}</td>
+                                <td>{row.segment}</td>
+                                <td>{row.project}</td>
+                                <td>{row.unit}</td>
+                                <td>{row.tower}</td>
+                                <td>{row.phase}</td>
+                                <td>{row.rmName}</td>
+                                <td>{row.tlName}</td>
+                                <td>{row.caseType}</td>
+                                <td>{row.caseOpenDate}</td>
+                                <td>{row.caseOpenTime}</td>
+                                <td>{row.ageMinutesCaseOpen}</td>
+                                <td>{row.ageHoursCaseOpen}</td>
+                                <td>{row.ageDaysCaseOpen}</td>
+                                <td>
+                                    <span class={row.overdueClass}>
+                                        {row.overdueTextCaseOpen}
+                                    </span>
+                                </td>
+                                <td>{row.caseReopenDate}</td>
+                                <td>{row.caseReopenTime}</td>
+                                <td>{row.ageMinutesCaseReopen}</td>
+                                <td>{row.ageHoursCaseReopen}</td>
+                                <td>{row.ageDaysCaseReopen}</td>
+                                <td>
+                                    <span class={row.overdueClass}>
+                                        {row.overdueTextCaseReopen}
+                                    </span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </lightning-card>
+</template>

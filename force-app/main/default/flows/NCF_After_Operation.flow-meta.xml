@@ -34,9 +34,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -65,7 +63,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <stringValue>&lt;p&gt;Hi,&lt;/p&gt;&lt;p&gt;NCF Approved by Customer.&lt;/p&gt;&lt;p&gt;For Booking: &lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Booking__c/{!$Record.Booking__c}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;View Booking Record&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;</stringValue>
+                <stringValue>&lt;p&gt;Hi {!$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.FirstName} {!$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.LastName},&lt;/p&gt;&lt;p&gt;This is to inform you that the NCF has been approved by the customer.&lt;/p&gt;&lt;p&gt;Kindly refer to the booking record for further details: &lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Booking__c/{!$Record.Booking__c}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;View Booking Record&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Please take the required next steps accordingly.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Best regards,&lt;/p&gt;&lt;p&gt;Runwal Group&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -100,9 +98,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Booking__r.Primary_Applicant_Email__c</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -331,7 +327,7 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>InvalidDraft</status>
+    <status>Active</status>
     <variables>
         <name>PDFURL</name>
         <dataType>String</dataType>

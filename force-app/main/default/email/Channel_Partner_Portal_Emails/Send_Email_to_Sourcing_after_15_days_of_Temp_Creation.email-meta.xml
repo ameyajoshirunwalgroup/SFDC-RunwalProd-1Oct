@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Send Email to Sourcing after 15 days of Temp Creation for Registration</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Send Email to Sourcing after 15 days of Temp Creation</name>
+    <style>none</style>
+    <subject>Escalation: Temp CP Not Registered Within 15 Days – {!Broker__c.Name}</subject>
+    <textOnly>Dear {!Manager},
+
+This is to bring to your attention that the Temporary Channel Partner {!Broker__c.Name}, created by {!Broker__c.CreatedBy}, has not been registered even after 15 days of creation.
+
+Request you to kindly look into this matter and take necessary action to ensure timely registration, to avoid delays in payment processing.
+
+Click on link to apply for registration :-
+
+Portal Onboarding Link
+
+Regards
+Runwal Enterprises</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

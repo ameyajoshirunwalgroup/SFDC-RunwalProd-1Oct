@@ -10,6 +10,7 @@ ISBLANK(RW_RM_Remarks__c)
 AND(ISPICKVAL(Status, &quot;Case Closed&quot;),
 ISBLANK(RW_RM_Remarks__c),
 ISBLANK(locobuzz__Locobuzz_ID__c),
+AccountId != null,
 $Label.Disable_all_validations_from_case == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
 )
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Send Notification to SM when task next action is follow by SM</name>
+    <style>none</style>
+    <subject>A prospect has been assigned to you</subject>
+    <textOnly>Dear SM,
+
+The following prospect has been assigned to you. Please click on below link for more information.
+Lead / Account :  {!Task.Lead_Account_Name__c}
+Link :  https://na73.salesforce.com/{!Task.00N0I00000JgyWb}
+
+Thanks,
+Runwal Homes.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

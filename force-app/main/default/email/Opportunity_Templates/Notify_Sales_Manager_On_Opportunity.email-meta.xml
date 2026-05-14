@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Notify Sales Manager On Opportunity</name>
+    <style>none</style>
+    <subject>New Opportunity assigned:  {!Opportunity.Name} on {!Opportunity.Todays_Date__c}</subject>
+    <textOnly>Hello {!Opportunity.Sales_Manager_User__c},
+
+The Opportunity- {!Opportunity.Name} has been assign to you.
+
+Please Click Here to access the opportunity.
+
+Regards,
+Salesforce Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

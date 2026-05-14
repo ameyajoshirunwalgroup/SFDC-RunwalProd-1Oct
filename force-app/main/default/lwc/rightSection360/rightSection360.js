@@ -13,6 +13,8 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent'; // Import Sho
 import getEmailTemplates from '@salesforce/apex/EmailTemplateController.getEmailTemplates';
 import shareEmailTemplateWithCustomer from '@salesforce/apex/EmailTemplateController.shareEmailTemplateWithCustomer';
 // import CASE_PLATFORM_EVENT from '@salesforce/schema/Case_Platform_Event__c';
+import { getObjectInfo } from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
 
 export default class RightSectionComponent extends NavigationMixin(LightningElement) {
 @api opportunityId;
@@ -114,6 +116,19 @@ if (!this.subscription) {
 }
 }
 
+defaultRecordTypeId;
+
+// Fetch Object Info which contains all Record Type details
+@wire(getObjectInfo, { objectApiName: CASE_OBJECT })
+wiredObjectInfo({ error, data }) {
+    if (data) {
+        // This property automatically picks the default RT for the logged-in user's profile
+        this.defaultRecordTypeId = data.defaultRecordTypeId;
+    } else if (error) {
+        console.error('Error fetching object info', error);
+    }
+}
+
 navigateToNewAccountPage() {
 this[NavigationMixin.Navigate]({
     type: 'standard__objectPage',
@@ -121,6 +136,10 @@ this[NavigationMixin.Navigate]({
         objectApiName: 'Case',
         actionName: 'new'
     },
+    state: {
+        // Force the specific Record Type ID for 'Customer'
+        recordTypeId: this.defaultRecordTypeId
+    }
 });
 }
 

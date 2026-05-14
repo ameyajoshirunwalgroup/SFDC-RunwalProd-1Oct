@@ -3,12 +3,35 @@
     <label>Lead Send Project Details</label>
     <protected>false</protected>
     <values>
+        <field>Message_Content__c</field>
+        <value xsi:type="xsd:string">Dear {{1}} ,
+
+Thank you for your interest in our project {{2}} at {{3}} .
+
+We are sharing with you additional details to help you better understand the project, its location, and its offerings.
+
+Location: {{4}}
+
+E-brochure: {{5}}
+
+Walkthrough Video: {{6}}
+
+
+For any additional information, please visit our website www.Runwalgroup.in or call us on .
+
+
+Warm Regards,
+Team Presales,
+Runwal Group
+{{7}}</value>
+    </values>
+    <values>
         <field>RW_Type__c</field>
         <value xsi:type="xsd:string">hsm</value>
     </values>
     <values>
         <field>RW_element_name__c</field>
-        <value xsi:type="xsd:string">new_project_details</value>
+        <value xsi:type="xsd:string">new_project_details1</value>
     </values>
     <values>
         <field>RW_namespace__c</field>

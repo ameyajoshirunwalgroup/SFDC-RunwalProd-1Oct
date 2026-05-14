@@ -8,19 +8,14 @@
 		ISCHANGED(Brokerage_Scheme__c),
 		NOT(IsBlank(Priorvalue(Brokerage_Scheme__c))),
 		$Profile.Name &lt;&gt; &apos;Integration User&apos;,
-		$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
-		$Profile.Name &lt;&gt; &apos;CP Access&apos;,/*Added by Prashant to give scheme edit access to billing team - 16-02-26*/			
-	 $Profile.Name &lt;&gt; &apos;CP Billing Access&apos;/*Added by Prashant to give scheme edit access to billing team - 16-02-26*/	
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos;
 	),
 	AND(
 		not(ISNEW()),
 		ISCHANGED(Brokerage_Scheme_Name__c),
 		NOT(IsBlank(Priorvalue(Brokerage_Scheme_Name__c))),
 		$Profile.Name &lt;&gt; &apos;Integration User&apos;,
-		$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
-		$Profile.Name &lt;&gt; &apos;CP Access&apos;,/*Added by Prashant to give scheme edit access to billing team - 16-02-26*/			
-	 $Profile.Name &lt;&gt; &apos;CP Billing Access&apos;/*Added by Prashant to give scheme edit access to billing team - 16-02-26*/	
-	
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos;
 	)
 ),
 $Label.Disable_all_validations_from_booking == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>

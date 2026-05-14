@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Referral Lead</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!!
+
+Thank you for sharing your referral with Runwal Enterprises. We truly appreciate your trust and the confidence you have placed in us by recommending us to your friends and family.
+
+Our team will connect with your referral and assist them with the same care, transparency, and service that you have experienced with us.
+
+We are grateful for your support in helping us grow the Runwal family.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Thank You for Your Referral – Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Thank You for Your Referral 🤝
+
+We appreciate you referring your friends/family to Runwal. Your trust means a lot to us!</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">my_refferals</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Booking__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Thank You for Sharing Your Referral with Runwal Group</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Referral Lead Creation</value>
+    </values>
+</CustomMetadata>

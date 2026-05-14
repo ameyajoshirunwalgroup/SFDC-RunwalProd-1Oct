@@ -1,0 +1,12 @@
+<messaging:emailTemplate subject="Reminder for the Blocked Unit" recipientType="User" relatedToType="Project_Unit__c">
+<messaging:plainTextEmailBody >
+Hi {!relatedTo.RW_Customer__r.Owner.FirstName+" "+ relatedTo.RW_Customer__r.Owner.LastName},
+
+{!relatedTo.RW_Customer__r.Name} have been Holding the unit "{!relatedTo.Name}". We can hold this unit for two more days.
+
+Thanks,
+Runwal Homes
+
+
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

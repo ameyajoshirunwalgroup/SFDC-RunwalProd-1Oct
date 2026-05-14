@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Bank Loan Sanction Letter Submitted</name>
+    <style>none</style>
+    <subject>Form 16B(TDS Certificate) Submitted</subject>
+    <textOnly>Hi {!Opportunity.RW_RM_Name__c},
+
+The customer named {!Opportunity.Name} has submitted the Bank Loan Sanction Letter.
+
+Thanks
+Runwal Homes</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

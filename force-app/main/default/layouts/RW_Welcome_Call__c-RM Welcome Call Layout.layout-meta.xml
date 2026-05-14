@@ -6,7 +6,6 @@
     <excludeButtons>Delete</excludeButtons>
     <excludeButtons>Edit</excludeButtons>
     <excludeButtons>IsotopeSubscription</excludeButtons>
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>PrintableView</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
@@ -39,18 +38,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>RW_Send_Welcome_Letter_to_RM__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Deck_Area__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Total_RERA_Carpet_Area__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Utility_Area__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -257,6 +244,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>RW_Agreement_Value__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>RW_Source_Of_Booking__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

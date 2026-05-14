@@ -58,6 +58,10 @@
             <label><!-- Quotation Details --></label>
             <section>Quotation Details</section>
         </sections>
+        <sections>
+            <label><!-- Referral Details --></label>
+            <section>Referral Details</section>
+        </sections>
     </layouts>
     <layouts>
         <layout>Quotation Layout - CP Access</layout>
@@ -109,6 +113,50 @@
             <label><!-- Quotation Details --></label>
             <section>Quotation Details</section>
         </sections>
+        <sections>
+            <label><!-- Referral Section --></label>
+            <section>Referral Section</section>
+        </sections>
     </layouts>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please enter the car park amount. --></errorMessage>
+        <name>Car_Parking_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Negative values are not allowed please contact the Sales Strategy. --></errorMessage>
+        <name>Negative_discount_not_allowed</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Generate_Price_Sheet --></label>
+        <name>Generate_Price_Sheet</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Submit_For_Approval --></label>
+        <name>Submit_For_Approval</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- View_Costsheet_1 --></label>
+        <name>View_Costsheet_1</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- View_Deal_Information_Sheet --></label>
+        <name>View_Deal_Information_Sheet</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- View_Discount_Snapshot --></label>
+        <name>View_Discount_Snapshot</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- View_Payment_Plan --></label>
+        <name>View_Payment_Plan</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- View_Quotation --></label>
+        <name>View_Quotation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- View_Quotation_Internal --></label>
+        <name>View_Quotation_Internal</name>
+    </webLinks>
 </CustomObjectTranslation>

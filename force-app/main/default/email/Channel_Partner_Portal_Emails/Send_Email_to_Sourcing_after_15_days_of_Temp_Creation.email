@@ -1,0 +1,22 @@
+<html>
+  <body style="font-family: Arial, Helvetica, sans-serif; color:#222; line-height:1.5; font-size:14px;">
+    <p>Dear {!Manager},</p>
+
+    <p>
+This is to bring to your attention that the Temporary Channel Partner <strong>{!Broker__c.Name}</strong>, created by {!Broker__c.CreatedBy}, has not been registered even after 15 days of creation.
+    </p>
+
+    <p>
+      Request you to kindly look into this matter and take necessary action to ensure timely registration, to avoid delays in payment processing.
+    </p>
+
+      <p>Click on link to apply for registration :-</p>
+<a href="{!$Label.Site_Url_New}/channelpartner/s/customregisterpage?tempcpid={!Broker__c.RW_Broker_Number__c}">Portal Onboarding Link <a/></p>
+
+
+    <p style="margin-top:24px;">
+      Regards<br/>
+      <strong>Runwal Enterprises</strong>
+    </p>
+  </body>
+</html>

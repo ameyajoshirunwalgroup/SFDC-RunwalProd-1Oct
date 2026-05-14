@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Digital EOI Payment Failure</name>
+    <style>none</style>
+    <subject>Digital Payment Failure</subject>
+    <textOnly>Dear Team,
+
+Digital Payment for {!RW_EOI__c.Name} failed through Payment Gateway with payment tracking Id -{!paymentTrackingId} and with failure reason as - {!failureReason}.
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

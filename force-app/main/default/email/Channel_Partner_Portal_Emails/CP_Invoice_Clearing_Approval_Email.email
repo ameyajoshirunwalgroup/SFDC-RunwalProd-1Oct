@@ -1,0 +1,12 @@
+<messaging:emailTemplate subject="CP Invoice Clearing Approval" recipientType="User" relatedToType="Brokerage_Invoice__c">
+<messaging:htmlEmailBody >
+<table id="main" border="0" width="50%" border-collapse="collapse">
+<tr><td> Dear {!recipient.Name}, </td></tr>
+<tr><td> &nbsp; </td></tr>
+</table>
+<c:CPInvoiceClearingApprovalEmailBody ChannelPartnerId="{!relatedto.Id}"></c:CPInvoiceClearingApprovalEmailBody>
+</messaging:htmlEmailBody>
+<messaging:attachment renderAs="PDF" filename="CP Invoice"  >
+<c:CPInvoiceClearingApprovalEmail ChannelPartnerId="{!relatedto.Id}"></c:CPInvoiceClearingApprovalEmail>
+</messaging:attachment>
+</messaging:emailTemplate>

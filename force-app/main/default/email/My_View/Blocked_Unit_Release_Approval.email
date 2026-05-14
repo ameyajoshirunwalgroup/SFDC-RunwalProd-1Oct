@@ -1,0 +1,23 @@
+<messaging:emailTemplate subject="Approval for releasing of blocked unit" recipientType="User" relatedToType="Blocking_Unit_Information__c">
+<messaging:plainTextEmailBody >
+
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody >
+
+Dear Sir/Madam,<br/><br/>
+ 
+Request your approval to unblock the below unit.<br/><br/>
+
+Project : {!relatedTo.Opportunity__r.RW_Project__r.Name}<br/>
+Unit Name : {!relatedTo.Project_Unit__r.Name}<br/>
+Customer Name : {!relatedTo.Opportunity__r.Name}<br/>
+<!--Sales Manager Name : {!relatedTo.Opportunity__r.RW_Sales_Associate__c}<br/> --> <!-- Commented by Vinay 05/12/2025 -->
+Sales Manager Name : {!relatedTo.Opportunity__r.Sales_Manager_User__r.Name}<br/> <!-- Added by Vinay 05/12/2025 -->
+Date of Blocking : {!relatedTo.Opportunity__r.Blocked_Date__c}<br/>
+Reason to release the Inventory : {!relatedTo.Opportunity__r.Reason_for_Release_Inventory__c}<br/><br/>
+
+You can please respond with <b>"YES", "APPROVE", "APPROVED"</b> to approve the request or <b>"NO", "REJECT", "REJECTED"</b> to reject the request.
+<br/><br/><br/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

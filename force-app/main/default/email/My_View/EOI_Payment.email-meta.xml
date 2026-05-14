@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Payment</name>
+    <style>none</style>
+    <subject>EOI Payment</subject>
+    <textOnly>Dear Team,
+
+Digital Payment for {!RW_EOI__c.Name} was successful. To view the EOI Record , Click on {!RW_EOI__c.Link}
+
+Customer Details are as below
+
+Customer Name : {!RW_EOI__c.RW_Primary_First_Name__c} {!RW_EOI__c.RW_Primary_Last_Name__c}
+Project : {!ProjectName}
+Amount : {!Amount}
+Date Of Payment : {!DateOfPayment}
+Mode Of Payment :{!PaymentMode} 
+SAP Customer Number : {!SAPCustomerNumber} 
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

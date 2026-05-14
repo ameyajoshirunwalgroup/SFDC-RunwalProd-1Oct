@@ -13,17 +13,19 @@
                     </lightning-file-upload>
                 </div>
             </div>
-            <div if:true={showapprovalbutton}>
+            <!-- Commented by Prashant as requirement has changed that no approval is required after IOM doc upload added on 29-12-25 -->
+            <!-- <div if:true={showapprovalbutton}>
                 <div class="slds-p-around_large">
                     <lightning-input type="text" variant="standard" value={cmnt} name="name" required="true"
                         label="Approval Comments" onchange={handlecomment}></lightning-input>
-                </div>
+                </div>-->
+            <div if:true={showapprovalbutton}>
                 <div slot="footer">
-                    <lightning-button style="margin-right: 10px;margin-left: 22px;" variant="brand" label="Submit For Approval"
+                    <lightning-button style="margin-right: 10px;margin-left: 22px;" variant="brand" label="Submit"
                         onclick={submitapproval}></lightning-button>
                     <lightning-button variant="brand" label="Back" onclick={back}></lightning-button>
                 </div>
-            </div><br/>
+            </div><br/> 
             <template if:true={data}>
                 <lightning-card title="Uploaded Files" icon-name="standard:account">
                     <div >

@@ -1,0 +1,12 @@
+<messaging:emailTemplate subject="NOC Generated" recipientType="User" relatedToType="Loan__c">
+<messaging:plainTextEmailBody >
+
+Dear,
+
+This is to inform you that NOC has been generated for the Loan - {!relatedTo.Name} for the booking {!relatedTo.RW_Booking__r.Name} of the Unit No. - {!relatedTo.RW_Booking__r.Unit_No__r.Name}
+
+Regards,
+Runwal Team
+
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

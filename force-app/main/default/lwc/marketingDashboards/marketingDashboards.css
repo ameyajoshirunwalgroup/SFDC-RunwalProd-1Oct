@@ -1,0 +1,172 @@
+/* Container to allow horizontal scrolling for large tables */
+.slds-scrollable_x {
+    width: 100%;
+    margin-top: 1rem;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+}
+
+/* Custom Table Styling for Table 1 */
+.custom-table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed; /* Ensures uniform column widths */
+}
+
+/* Header Styling based on the image provided */
+.custom-table thead th {
+    background-color: #fce4d6; /* Light orange color from the image  */
+    color: #000;
+    font-weight: 700;
+    text-align: center;
+    border: 1px solid #a8a8a8;
+    padding: 8px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* Sticky Header Logic so headers stay visible while scrolling */
+.custom-table thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.custom-table thead tr:last-child th {
+    position: sticky;
+    top: 35px; /* Adjust based on height of the first header row */
+    z-index: 2;
+}
+
+/* Cell Styling */
+.custom-table tbody td {
+    border: 1px solid #dddbda;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;      /* Allows unbreakable words to be broken */
+    white-space: normal;       /* Ensures text wraps to the next line */
+    overflow-wrap: break-word; /* Modern browser support for wrapping */
+}
+
+/* Hover effect for rows */
+.custom-table tbody tr:hover {
+    background-color: #f3f3f3;
+}
+
+/* Clickable Cell Styling for Record Details  */
+.clickable-cell {
+    color: #0070d2;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clickable-cell:hover {
+    color: #005fb2;
+}
+
+/* Export Button Alignment */
+.slds-m-top_medium {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Spinner Backdrop Styling [cite: 5] */
+.slds-spinner_container {
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 999;
+}
+
+/* No Data Message Styling [cite: 17] */
+.slds-theme_error {
+    margin: 2rem 0;
+    padding: 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Styling for the Grand Total Row */
+.grand-total-row td {
+    font-weight: bold !important;
+    background-color: #fce4d6 !important; /* Shaded orange matching header */
+    border-top: 1px solid black !important; /* Thick line to separate from data */
+}
+
+.grand-total-row .clickable-cell {
+    /* Optional: disable clicking on the total row if not needed */
+    text-decoration: none;
+    cursor: default;
+    color: black;
+}
+
+/* Styling for the Grand Total Column (Vertical) */
+.total-column {
+    font-weight: bold;
+    background-color: #fce4d6; /* Slightly different shade for the vertical total */
+}
+
+.grand-total-row .total-column {
+    background-color: #fce4d6 !important; /* Intersection cell */
+    font-size: 1.1rem;
+}
+
+
+.media-label {
+    text-align: left !important;
+    font-weight: bold;
+}
+
+.merged-cell {
+    vertical-align: middle !important;
+    background-color: white;
+}
+
+.big-val {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: block;
+}
+
+.sub-text {
+    font-size: 0.75rem;
+    color: #444;
+}
+
+
+.empty-foot {
+    background-color: white !important;
+    border: none !important;
+}
+
+.multi-select-container {
+    position: relative;
+}
+
+.multi-select-box {
+    border: 1px solid #090606;
+    border-radius: 0.25rem;
+    min-height: 2.0rem;
+    padding: 0.5rem;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown-list {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    max-height: 100px;
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    padding: 0.2rem 0;
+}

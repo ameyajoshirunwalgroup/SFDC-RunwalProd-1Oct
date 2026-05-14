@@ -2,22 +2,8 @@
 <RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Detailed_Booking</fullName>
     <active>true</active>
+    <compactLayoutAssignment>Compact_Layout</compactLayoutAssignment>
     <label>Detailed Booking</label>
-    <picklistValues>
-        <picklist>AFS_Internal_Signoff_Status__c</picklist>
-        <values>
-            <fullName>Completed</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>In Progress</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pending</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
     <picklistValues>
         <picklist>Ageing_of_Upgrade_Transfer_in_Diff_Stage__c</picklist>
         <values>
@@ -90,61 +76,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Call_Disposition_L2__c</picklist>
-        <values>
-            <fullName>Change of Mind</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Customer</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dependency on CC</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dependency on Customer</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dependency on Sales</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Financial Constraints</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Greetings</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Misselling</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Others</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Payment schedule</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Re-allocation not done</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Third-party</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Wrong number</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Call_Disposition__c</picklist>
         <values>
             <fullName>Call back request</fullName>
@@ -175,13 +106,56 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Cancellation_Reason__c</picklist>
+        <picklist>Cancellation_Initiated_Stage__c</picklist>
         <values>
-            <fullName>Unit cancelled</fullName>
+            <fullName>Post-Book Now</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Unit transfer</fullName>
+            <fullName>Post-Registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-Block Now</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-Book Now</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cancellation_Reason__c</picklist>
+        <values>
+            <fullName>Cancel %26 Re-book</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Company initiated cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial %2F Funding Constraints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal%2FCompliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical %2F Personal Hardship</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product%2FProject related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade%2FDowngrade</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -247,6 +221,86 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>RA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RB</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RF</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RJ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RQ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RT</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Z1</fullName>
             <default>false</default>
         </values>
@@ -286,19 +340,7 @@
     <picklistValues>
         <picklist>Cancellation_Subtype__c</picklist>
         <values>
-            <fullName>Downgrade</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Involuntary</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Movement</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Upgrade</fullName>
             <default>false</default>
         </values>
         <values>
@@ -352,6 +394,29 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Customer_Base_Count__c</picklist>
+        <values>
+            <fullName>Commercial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EWS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Residential</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retail Shops</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Customer_Category_Type__c</picklist>
         <values>
             <fullName>Barter Deal Customer</fullName>
@@ -375,13 +440,21 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Dispatch_Mode__c</picklist>
+        <picklist>Customer_Lifecycle__c</picklist>
         <values>
-            <fullName>Soft Copy via Email</fullName>
+            <fullName>Home Loan Team</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Soft copy via email and hardcopy</fullName>
+            <fullName>Onboarding Team</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Possession Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sustenance Team</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -511,7 +584,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Aavas Housing Finance Limited</fullName>
+            <fullName>Abhinav Sahakari Bank Ltd</fullName>
             <default>false</default>
         </values>
         <values>
@@ -807,14 +880,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Jio Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Jio finance limited</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Kallappanna Awade Ichalkaranji Janata Sahakari Bank</fullName>
             <default>false</default>
         </values>
@@ -903,7 +968,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>NATIONAL BANK FOR AGRICULTURE AND RURAL DEVELOPMENT</fullName>
+            <fullName>Municipal Co-op%2E Bank Ltd</fullName>
             <default>false</default>
         </values>
         <values>
@@ -916,6 +981,10 @@
         </values>
         <values>
             <fullName>Nagar Urban Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National bank for agr dev</fullName>
             <default>false</default>
         </values>
         <values>
@@ -967,10 +1036,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>RBL Bank Ltd</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Rajasthan State Co-operative Bank</fullName>
             <default>false</default>
         </values>
@@ -996,10 +1061,6 @@
         </values>
         <values>
             <fullName>Rupee Co-operative Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>SBI Caps</fullName>
             <default>false</default>
         </values>
         <values>
@@ -1079,7 +1140,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Tata Capital Housing Finance Limited</fullName>
+            <fullName>Tata Cap Housing Finc Ltd</fullName>
             <default>false</default>
         </values>
         <values>
@@ -1088,14 +1149,6 @@
         </values>
         <values>
             <fullName>Thane Bharat Sahakari Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Thane Janata Sahakari Bank</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>The Abhinav Sahakari Bank Ltd</fullName>
             <default>false</default>
         </values>
         <values>
@@ -1112,10 +1165,6 @@
         </values>
         <values>
             <fullName>The Lakshmi Vilas Bank Ltd</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>The Municipal Co-op%2E Bank Ltd%2E</fullName>
             <default>false</default>
         </values>
         <values>
@@ -1206,9 +1255,24 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Meeting_Status__c</picklist>
+        <values>
+            <fullName>Meeting done</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meeting not-done</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Mode_of_Cancellation__c</picklist>
         <values>
             <fullName>Meeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
             <default>false</default>
         </values>
         <values>
@@ -1239,65 +1303,6 @@
         </values>
         <values>
             <fullName>Pending</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>POA_Name__c</picklist>
-        <values>
-            <fullName>Ajay Sawant</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Ameya Joshi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Amit Vyas</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Deepak Pimpalkar</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Kalpesh Patel</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Manish Kotian</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Meenal Sharma</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pradnesh Pingale</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Raghvendra Poojary</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Rama Vishwakarma</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Saurabh Chaturvedi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Shriniwas Dalvi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Umesh Patil</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Vikas Bobade</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2299,21 +2304,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>RW_confirmation_letter_Received_Status__c</picklist>
-        <values>
-            <fullName>Details Incorporated</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Not yet received</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Received</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Reason_For_10_Delay__c</picklist>
         <values>
             <fullName>AFS WIP</fullName>
@@ -2413,17 +2403,6 @@
         </values>
         <values>
             <fullName>WC Yet To be Received From Sales</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>Reason_For_CRM_returns_to_sales__c</picklist>
-        <values>
-            <fullName>Physical Document Rejected</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Welcome Call Rejected</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2542,6 +2521,17 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Referral_IOM_Created__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Referred_By__c</picklist>
         <values>
             <fullName>Employee</fullName>
@@ -2628,10 +2618,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Gurpreet Kaur</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Hardik Parekh</fullName>
             <default>false</default>
         </values>
@@ -2649,10 +2635,6 @@
         </values>
         <values>
             <fullName>Kruti Bhandare</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Kunal Parmar</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2684,10 +2666,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Payal Kumari</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Piyush Chawla</fullName>
             <default>false</default>
         </values>
@@ -2713,14 +2691,6 @@
         </values>
         <values>
             <fullName>Seema Kale</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Shubham Bhardwaj</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Shweta Moolbharati</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2790,15 +2760,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Loyalty</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>PreSales</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>R Circle Caller</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2807,6 +2769,17 @@
         </values>
         <values>
             <fullName>Temp Channel Partner</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Source_of_Cancellation__c</picklist>
+        <values>
+            <fullName>CRM Initiated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Initiated</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2822,10 +2795,6 @@
         </values>
         <values>
             <fullName>Arnav Singh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Atul Sharma</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2897,10 +2866,6 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Parmanand Tiwari</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Piyush Chawla</fullName>
             <default>false</default>
         </values>
@@ -2922,10 +2887,6 @@
         </values>
         <values>
             <fullName>Seema Kale</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Shilpa Singh</fullName>
             <default>false</default>
         </values>
         <values>
@@ -2954,153 +2915,6 @@
         </values>
         <values>
             <fullName>Vipin Agrawal</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>State__c</picklist>
-        <values>
-            <fullName>Andaman %26 Nicobar</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Andhra Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Arunachal Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Assam</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Bihar</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Chandigarh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Chhattisgarh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Dadar %26 Nagar Haveli</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Daman %26 Diu</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Delhi</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Goa</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Gujarat</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Haryana</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Himachal Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Jammu and Kashmir</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Jharkhand</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Karnataka</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Kerala</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Lakshadweep</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Madhya Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Maharashtra</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Manipur</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Meghalaya</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Mizoram</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Nagaland</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Orissa</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pondichery</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Punjab</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Rajasthan</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Sikkim</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Tamil Nadu</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Telangana</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Tripura</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Uttar Pradesh</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Uttaranchal</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>West Bengal</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -3147,11 +2961,23 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Cancellation Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Cancelled</fullName>
             <default>false</default>
         </values>
         <values>
+            <fullName>Customer Retained</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Processed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention In Progress</fullName>
             <default>false</default>
         </values>
         <values>
@@ -3163,11 +2989,27 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Transfer Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>UnProcessed</fullName>
             <default>false</default>
         </values>
         <values>
             <fullName>Unit Booked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade%2FDowngrade Completed</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -3195,10 +3037,6 @@
         </values>
         <values>
             <fullName>Existing Client</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Existing client reference</fullName>
             <default>false</default>
         </values>
         <values>
@@ -3247,25 +3085,21 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Test_Picklist__c</picklist>
+        <picklist>Type_Of_sale__c</picklist>
         <values>
-            <fullName>A</fullName>
+            <fullName>Cancel %26 Rebook</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>B</fullName>
+            <fullName>New Sale</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>C</fullName>
+            <fullName>Transfer of unit</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>D</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>E</fullName>
+            <fullName>Upgrade of unit</fullName>
             <default>false</default>
         </values>
     </picklistValues>

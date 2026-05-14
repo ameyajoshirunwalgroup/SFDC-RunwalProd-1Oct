@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Loan Onboarding to HL email</name>
+    <style>none</style>
+    <subject>Sanction with Lead no. {!Loan__c.Name} Initiated for the Booking {!Loan__c.RW_Booking__r.Name}</subject>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

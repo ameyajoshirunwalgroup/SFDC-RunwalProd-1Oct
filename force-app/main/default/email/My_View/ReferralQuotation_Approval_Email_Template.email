@@ -1,0 +1,141 @@
+Dear Praveen ,<br/><br/>
+
+We required your approval for below Quotation.<br/><br/>
+
+<table style="border: 1px solid #1C2130; border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; font-weight:normal; color:#333333;">
+
+<tr style="border: 1px solid #1C2130; ">
+<th >Project Name</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Project__c} </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th >Tower</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Wing__c}</td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th >Unit No</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Project_Unit__c}</td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th >Carpet Area (Sq. Ft.)</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Carpet_Area_Sq_Ft__c} </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th >Saleable Area (Sq. Ft.)</th>
+<td style="border: 1px solid #1C2130;"> {!Quotation__c.Saleable_Area_Sq_Ft__c}  </td>
+</tr>
+
+<tr>
+        <td colspan="2" bgcolor="#D3D3D3" style="border:1px solid  black;text-align:center;"><br/></td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th >Opportunity Name</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Opportunity__c}  </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th> Walkin Source </th>
+<td style = "border: 1px solid #1C2130;"> {!Quotation__c.walkin_Source__c}  </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th> Walkin  Referral Sub Source </th>
+<td style = "border: 1px solid #1C2130;"> {!Quotation__c.Walkin_Referral_Sub_Source__c}  </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th> Walkin Customer Reference</th>
+<td style = "border: 1px solid #1C2130;"> {!Quotation__c.Walkin_Customer_Reference__c}  </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th> Customer reference Booked Unit</th>
+<td style = "border: 1px solid #1C2130;"> {!Quotation__c.Customer_reference_Booked_Unit__c}  </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th> Sourcing manager Name</th>
+ <td style = "border: 1px solid #1C2130;">{!Quotation__c.Sourcing_Manager__c}  </td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th >Sales Manager Name</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Sales_Manager_Opp__c}  </td>
+</tr>
+
+</table>
+<br/>
+<table style="border: 1px solid #1C2130; border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; font-weight:normal; color:#333333;">
+<tr  style="border: 1px solid #1C2130; ">
+<th bgcolor= "#92d050" style="border: 1px solid #1C2130;"> Section</th>
+<th bgcolor= "#92d050" style="border: 1px solid #1C2130;"> Details </th>
+<th bgcolor= "#92d050" style="border: 1px solid #1C2130;"> Per Sq.Ft </th>
+<th bgcolor= "#92d050" style="border: 1px solid #1C2130;"> Lumpsum </th>
+</tr>
+<tr>
+        <td colspan="4" style="border:1px solid black;text-align:center;"><br/></td>
+</tr>
+
+<tr>
+        <td colspan="4" style="border:1px solid black;text-align:center;"><br/>
+</td>
+</tr>
+
+<tr style="border: 1px solid #1C2130; ">
+<th style="border: 1px solid #1C2130;">A</th>
+<th style="border: 1px solid #1C2130;">Original Agreement Value ( Including Premium )</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Total_Rate_Card_PSF__c}</td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Agreement_Value__c}</td>
+</tr>
+
+<tr>
+        <td colspan="4" style="border:1px solid black;text-align:center;"><br/>
+</td>
+</tr>
+
+<tr style="border: 1px solid #1C2130; ">
+<th style="border: 1px solid #1C2130;">B ( Discount )</th>
+
+<th  bgcolor="#ffff00" style="border: 1px solid #1C2130;">Total Discount</th>
+<td  bgcolor="#ffff00" style="border: 1px solid #1C2130;">
+{!Quotation__c.Customer_Total_Discount_PSF__c} </td>
+<td    bgcolor="#ffff00" style="border: 1px solid #1C2130;">
+{!Quotation__c.Customer_Total_Discount_L__c}</td>
+</tr>
+
+
+
+<tr style="border: 1px solid #1C2130; ">
+<th  style="border: 1px solid #1C2130;">C ( Discount )</th>
+<th bgcolor="#ffff00" style="border: 1px solid #1C2130;">Referral Passback</th>
+<td bgcolor="#ffff00" style="border: 1px solid #1C2130;">{!Quotation__c.Discount_10_PSF__c}</td>
+<td bgcolor="#ffff00" style="border: 1px solid #1C2130;"> {!Quotation__c.Discount_10_L__c}</td>
+
+</tr>
+<tr style="border: 1px solid #1C2130; ">
+<th  style="border: 1px solid #1C2130;"></th>
+<th bgcolor="#ffff00" style="border: 1px solid #1C2130;">Referral  Discount</th>
+<td bgcolor="#ffff00" style="border: 1px solid #1C2130;">{!Quotation__c.Discount_11_PSF__c}</td>
+<td bgcolor="#ffff00" style="border: 1px solid #1C2130;"> {!Quotation__c.Discount_11_L__c}</td>
+
+
+
+</tr>
+
+<tr style="border: 1px solid #1C2130; ">
+<th bgcolor="#fce4d6" style="border: 1px solid #1C2130;"> Total = A -  (B + C)</th>
+<th bgcolor="#fce4d6" style="border: 1px solid #1C2130;">Final Agreement Value</th>
+<td bgcolor="#fce4d6" style="border: 1px solid #1C2130;">{!Quotation__c.Total_psf__c}</td>
+<td bgcolor="#fce4d6" style="border: 1px solid #1C2130;">{!Quotation__c.Agreement_Value_D__c}  </td>
+</tr>
+</table>
+<br/>
+Click link below to view the quotation details the system.<br/>
+{!Quotation__c.Link}
+<br/>
+<br/>

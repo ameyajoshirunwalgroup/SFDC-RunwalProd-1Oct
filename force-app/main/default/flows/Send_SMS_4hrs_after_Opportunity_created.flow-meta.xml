@@ -38,7 +38,7 @@
         <name>Create_SMS</name>
         <label>Create SMS</label>
         <locationX>308</locationX>
-        <locationY>408</locationY>
+        <locationY>384</locationY>
         <inputAssignments>
             <field>Immediate__c</field>
             <value>
@@ -70,17 +70,17 @@
         <name>Get_Sales_Manager_mobile_number</name>
         <label>Get Sales Manager mobile number</label>
         <locationX>308</locationX>
-        <locationY>288</locationY>
+        <locationY>276</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Create_SMS</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Name</field>
+            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.RW_Sales_Associate__c</elementReference>
+                <elementReference>$Record.Sales_Manager_User__c</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -107,5 +107,5 @@
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
 </Flow>

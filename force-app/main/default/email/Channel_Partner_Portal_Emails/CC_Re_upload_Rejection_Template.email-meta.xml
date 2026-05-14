@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>CC Re-upload Rejection Template</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>CC Re-upload Rejection Template</name>
+    <style>none</style>
+    <subject>Re-Uploaded RERA Certificate Document Approval – {!Broker__c.Name}</subject>
+    <textOnly>Dear {!ApprovalRequest.Process_Approver},  
+
+We regret to inform you that, Your uploaded RERA document is rejected for the following reason Reason for Rejection: - &quot;{!ApprovalRequest.Comments}&quot; 
+Please resubmit the document in the following link. Upload Latest RERA 
+
+Regards, 
+Runwal Enterprises.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

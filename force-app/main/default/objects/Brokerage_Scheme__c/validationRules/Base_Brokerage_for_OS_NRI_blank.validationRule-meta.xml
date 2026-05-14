@@ -5,8 +5,7 @@
     <errorConditionFormula>AND(
 	(Base_Brokerage_for_OS_NRI__c &gt; 0),
 	Start_Date__c &gt;=DATE(2024,04,01)
-)
-/*Deactivated by Prashant as this is no longer needed by business.28-10-25*/</errorConditionFormula>
+)</errorConditionFormula>
     <errorDisplayField>Base_Brokerage_for_OS_NRI__c</errorDisplayField>
     <errorMessage>Base Brokerage for OS / NRI should be blank.</errorMessage>
 </ValidationRule>

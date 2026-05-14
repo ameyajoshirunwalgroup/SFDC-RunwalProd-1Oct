@@ -14,6 +14,22 @@
             <label><!-- Custom Links --></label>
             <section>Custom Links</section>
         </sections>
+        <sections>
+            <label><!-- SAP Details --></label>
+            <section>SAP Details</section>
+        </sections>
     </layouts>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- You cannot move the Approval Status to &apos;Approved by L2&apos; until the X20 Received checkbox on the associated Booking is checked. --></errorMessage>
+        <name>Restrict_L2_Approval_Until_X20_Received</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Generate_SAP_Document_No --></label>
+        <name>Generate_SAP_Document_No</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Upload_IOM --></label>
+        <name>Upload_IOM</name>
+    </webLinks>
 </CustomObjectTranslation>

@@ -1,0 +1,16 @@
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+  <p>Hello Team Lead,</p>
+
+  <p>The following Demand record has crossed its ageing threshold:</p>
+
+  <p>
+    <strong>Demand Amount:</strong> {!RW_Demand__c.RW_Total_Demand_Amount__c}<br>
+    <strong>Demand Due Ageing:</strong> {!RW_Demand__c.RW_Demand_Aging__c} days<br>
+    <strong>PTP Ageing:</strong> {!Demand__c.PTP_Ageing__c} days
+  </p>
+
+  <p>Please follow up accordingly.</p>
+
+  <p>Regards,<br>
+  Runwal Team</p>
+</body>

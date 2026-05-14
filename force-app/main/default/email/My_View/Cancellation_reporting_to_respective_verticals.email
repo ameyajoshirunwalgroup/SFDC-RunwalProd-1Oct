@@ -1,0 +1,37 @@
+<html>
+        <body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="center">
+                        <table width="600" border="0" cellspacing="0" cellpadding="20" style="background-color: #ffffff; border: 1px solid #dddddd;">
+                            <tr>
+                                <td align="center" style="padding: 20px 0;">
+                                    <h1 style="color: #333333;">Booking Registration date exceeded 30 days</h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="color: #333333;">
+                                    <p>Below are booking details,</p>
+                                    <ul>
+                                       <li><strong>Customer Name:</strong>{!Booking__c.Customer_Name__c}</li>
+                                        <li><strong>Project Name:</strong>{!Booking__c.RW_Project_Name__c}</li>
+                                        <li><strong>Booking Date:</strong> {!Booking__c.Booking_Date__c}</li>
+                                        <li><strong>Booking Name:</strong> {!Booking__c.Name}</li>
+                                        <li><strong>Unit Number:</strong>{!Booking__c.Flat_No__c}</li>
+                                    </ul>
+                                    <p>If you have any questions, feel free to reach out to us.</p>
+                                    <p>Best regards,</p>
+                                    <p>The Customer Support Team</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 20px 0;">
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>

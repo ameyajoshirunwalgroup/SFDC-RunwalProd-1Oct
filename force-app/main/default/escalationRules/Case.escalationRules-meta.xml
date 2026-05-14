@@ -1,3 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<EscalationRules xmlns="http://soap.sforce.com/2006/04/metadata"/>
-
+<EscalationRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <escalationRule>
+        <fullName>Testing</fullName>
+        <active>true</active>
+        <ruleEntry>
+            <businessHours>RW Business Hour</businessHours>
+            <businessHoursSource>Static</businessHoursSource>
+            <criteriaItems>
+                <field>Case.Customer_Lifecycle_Touchpoint__c</field>
+                <operation>equals</operation>
+                <value>Cancellation Related</value>
+            </criteriaItems>
+            <criteriaItems>
+                <field>Case.RW_Complaint_Type__c</field>
+                <operation>equals</operation>
+                <value>Request to Cancel the Booking</value>
+            </criteriaItems>
+            <criteriaItems>
+                <field>Case.RW_Complaint_SubType__c</field>
+                <operation>equals</operation>
+                <value>Seeking Refund</value>
+            </criteriaItems>
+            <escalationAction>
+                <assignedTo>stetig.admin@runwal.com</assignedTo>
+                <assignedToType>User</assignedToType>
+                <minutesToEscalation>240</minutesToEscalation>
+                <notifyCaseOwner>false</notifyCaseOwner>
+            </escalationAction>
+            <escalationAction>
+                <assignedTo>amitabh.sharma@saasworx.ai</assignedTo>
+                <assignedToType>User</assignedToType>
+                <minutesToEscalation>270</minutesToEscalation>
+                <notifyCaseOwner>false</notifyCaseOwner>
+            </escalationAction>
+            <escalationStartTime>CaseCreation</escalationStartTime>
+        </ruleEntry>
+    </escalationRule>
+</EscalationRules>

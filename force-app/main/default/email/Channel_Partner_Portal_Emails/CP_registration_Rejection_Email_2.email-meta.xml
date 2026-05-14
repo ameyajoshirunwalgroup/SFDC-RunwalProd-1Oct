@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Your Registration as our channel Partner , Not Considered</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>CP registration Rejection Email 2</name>
+    <style>none</style>
+    <subject>Your Registration as our channel Partner , Not Considered</subject>
+    <textOnly>Dear {!Broker__c.Name},
+
+We regret to inform you that, we cannot register you as our Channel Partner for the following reason
+
+Reason for Rejection:- &quot;{!ApprovalRequest.Comments}&quot;
+
+In case you wish to re-apply for registration please update &amp; submit the documents as per the reason for rejection.
+
+Click on link for re- apply for registration :-
+
+Portal Onboarding Link
+
+Looking forward to a successful partnership.
+
+Warm Regards,
+
+Runwal Enterprises</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

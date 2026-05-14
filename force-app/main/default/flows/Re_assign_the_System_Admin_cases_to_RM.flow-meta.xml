@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>65.0</apiVersion>
+    <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <environments>Default</environments>
     <interviewLabel>Re assign the System Admin cases to RM {!$Flow.CurrentDateTime}</interviewLabel>
@@ -25,8 +25,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
-        <name>Update_owner_as_RM</name>
-        <label>Update owner as RM</label>
+        <name>Update_owner</name>
+        <label>Update owner</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <inputAssignments>
@@ -40,7 +40,7 @@
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <filterLogic>or</filterLogic>
+        <filterLogic>and</filterLogic>
         <filters>
             <field>OwnerId</field>
             <operator>EqualTo</operator>
@@ -48,19 +48,12 @@
                 <stringValue>00528000001G0TPAA0</stringValue>
             </value>
         </filters>
-        <filters>
-            <field>OwnerId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>00528000005HHN9AAO</stringValue>
-            </value>
-        </filters>
         <object>Case</object>
         <recordTriggerType>Create</recordTriggerType>
         <scheduledPaths>
             <name>After_1_min</name>
             <connector>
-                <targetReference>Update_owner_as_RM</targetReference>
+                <targetReference>Update_owner</targetReference>
             </connector>
             <label>After 1 min</label>
             <offsetNumber>1</offsetNumber>

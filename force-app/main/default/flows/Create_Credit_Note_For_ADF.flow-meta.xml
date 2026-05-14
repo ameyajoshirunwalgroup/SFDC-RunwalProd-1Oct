@@ -2,17 +2,87 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <constants>
+        <name>Interest_settled_error_message</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>This value should be less than or equal to Interest Amount Payable</stringValue>
+        </value>
+    </constants>
     <customProperties>
         <name>ScreenProgressIndicator</name>
         <value>
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>Credit_notes_exist</name>
+        <label>Credit notes exist?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Copy_1_of_Create_Credit_Note</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Credit_Note_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Existing_Un_ApprovedCredit_Notes.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>UnApproved_Credit_Notes_Check</targetReference>
+            </connector>
+            <label>Credit Note Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>UnApproved_Credit_Notes_Check</name>
+        <label>UnApproved Credit Notes Check</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Unapproved_credit_note_error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Create</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Existing_Un_ApprovedCredit_Notes.Approval_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Existing_Un_ApprovedCredit_Notes.SAP_Document_Number__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Credit_Note</targetReference>
+            </connector>
+            <label>Create?</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>ADF_Balance</name>
         <dataType>Currency</dataType>
         <expression>{!Get_Booking.ADF_Balance__c}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>ADF_Interest_Paid</name>
+        <dataType>Currency</dataType>
+        <expression>{!Get_Booking.ADF_Interest_Paid__c}</expression>
         <scale>2</scale>
     </formulas>
     <formulas>
@@ -71,8 +141,8 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordCreates>
-        <name>Create_Credit_Note</name>
-        <label>Create Credit Note</label>
+        <name>Copy_1_of_Create_Credit_Note</name>
+        <label>Copy 1 of Create Credit Note</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <inputAssignments>
@@ -85,6 +155,18 @@
             <field>CEO__c</field>
             <value>
                 <elementReference>Get_Booking.Project__r.IW_CEO__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CN_type__c</field>
+            <value>
+                <stringValue>ADF</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CRM_Accounts_Head__c</field>
+            <value>
+                <elementReference>Get_Booking.Project__r.CRM_Accounts_Head__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -108,12 +190,91 @@
         <inputAssignments>
             <field>TL__c</field>
             <value>
-                <elementReference>Get_Booking.Unit_No__r.Relationship_Manager__r.User__r.ManagerId</elementReference>
+                <elementReference>Get_Booking.Project__r.Team_Leader__c</elementReference>
             </value>
         </inputAssignments>
         <object>Credit_Note__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordCreates>
+        <name>Create_Credit_Note</name>
+        <label>Create Credit Note</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Booking__c</field>
+            <value>
+                <elementReference>Booking.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CEO__c</field>
+            <value>
+                <elementReference>Get_Booking.Project__r.IW_CEO__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CN_type__c</field>
+            <value>
+                <stringValue>ADF</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CRM_Accounts_Head__c</field>
+            <value>
+                <elementReference>Get_Booking.Project__r.CRM_Accounts_Head__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CRM_Head__c</field>
+            <value>
+                <elementReference>Get_Booking.Project__r.IW_CRM_Head__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Interest_To_Be_Settled__c</field>
+            <value>
+                <elementReference>Interest_To_Be_Settled</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Reason_For_Settlement__c</field>
+            <value>
+                <elementReference>Reason_For_Settlement</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TL__c</field>
+            <value>
+                <elementReference>Get_Booking.Project__r.Team_Leader__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Credit_Note__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Existing_Un_ApprovedCredit_Notes</name>
+        <label>Existing Un ApprovedCredit Notes</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Credit_notes_exist</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Booking__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Credit_Note__c</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Booking</name>
         <label>Get Booking</label>
@@ -144,7 +305,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Create_Credit_Note</targetReference>
+            <targetReference>Existing_Un_ApprovedCredit_Notes</targetReference>
         </connector>
         <fields>
             <name>New_Credit_Note_Section1</name>
@@ -212,9 +373,11 @@
                 <fields>
                     <name>Interest_To_Be_Settled</name>
                     <dataType>Number</dataType>
+                    <defaultValue>
+                        <elementReference>Interest_Amounts_Payable</elementReference>
+                    </defaultValue>
                     <fieldText>Interest To Be Settled</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <scale>2</scale>
                     <styleProperties>
@@ -225,6 +388,10 @@
                             <stringValue>12</stringValue>
                         </width>
                     </styleProperties>
+                    <validationRule>
+                        <errorMessage>&lt;p&gt;{!Interest_settled_error_message}&lt;/p&gt;</errorMessage>
+                        <formulaExpression>{!Interest_To_Be_Settled} &lt;= {!Interest_Amounts_Payable}</formulaExpression>
+                    </validationRule>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -253,7 +420,6 @@
             </defaultValue>
             <fieldText>Interest Amount Payable</fieldText>
             <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isReadOnly>
                 <booleanValue>true</booleanValue>
             </isReadOnly>
@@ -275,7 +441,6 @@
             </defaultValue>
             <fieldText>ADF Balance</fieldText>
             <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isReadOnly>
                 <booleanValue>true</booleanValue>
             </isReadOnly>
@@ -297,7 +462,6 @@
             </defaultValue>
             <fieldText>Total ADF Amount Received</fieldText>
             <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isReadOnly>
                 <booleanValue>true</booleanValue>
             </isReadOnly>
@@ -319,11 +483,44 @@
             </defaultValue>
             <fieldText>Total AV Amount</fieldText>
             <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isReadOnly>
                 <booleanValue>true</booleanValue>
             </isReadOnly>
             <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>6</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>ADF_Interest_Paid1</name>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>ADF_Interest_Paid</elementReference>
+            </defaultValue>
+            <fieldText>ADF Interest Paid</fieldText>
+            <fieldType>InputField</fieldType>
+            <isReadOnly>
+                <booleanValue>true</booleanValue>
+            </isReadOnly>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>6</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>CNType</name>
+            <fieldText>&lt;p&gt;ADF&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
                     <stringValue>top</stringValue>
@@ -344,7 +541,6 @@
                     <dataType>String</dataType>
                     <fieldText>Reason For Settlement</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -377,6 +573,30 @@
         <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Unapproved_credit_note_error</name>
+        <label>Unapproved credit note error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Copy_1_of_Existing_Unapproved</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px; color: rgb(208, 29, 29);&quot;&gt;The previous credit note not yet approved or posted.﻿&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
     </screens>
     <start>
         <locationX>0</locationX>

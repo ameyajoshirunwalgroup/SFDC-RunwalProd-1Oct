@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Welcome to Runwal Enterprises</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Temp CP creation Email</name>
+    <style>none</style>
+    <subject>Welcome to Runwal Enterprises – Complete Your CP Registration</subject>
+    <textOnly>Dear {!Broker__c.Name},
+
+Welcome to Runwal Enterprises!
+
+We are delighted to have you onboard as our valued Channel Partner.
+
+Your Temporary CP Unique ID is: {!Broker__c.RW_Broker_Number__c}
+
+To get started, kindly register yourself through our CP Portal using the link: Portal Onboarding Link
+
+Looking forward to a successful partnership.
+
+Warm Regards,
+
+Runwal Enterprises</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

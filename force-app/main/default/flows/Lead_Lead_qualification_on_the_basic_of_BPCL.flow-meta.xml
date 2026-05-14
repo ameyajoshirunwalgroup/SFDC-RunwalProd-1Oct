@@ -660,9 +660,8 @@
                     </defaultValue>
                     <fieldText>Budget In Lakh</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <scale>2</scale>
+                    <scale>0</scale>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -671,13 +670,6 @@
                             <stringValue>12</stringValue>
                         </width>
                     </styleProperties>
-                    <validationRule>
-                        <errorMessage>&lt;p&gt;Please enter a number with up to 4 digits before the decimal and up to 2 decimal places&lt;/p&gt;</errorMessage>
-                        <formulaExpression>REGEX(
-  TEXT({!Budget_In_Lakh}),
-  &quot;^[0-9]{1,4}(\\.[0-9]{1,2})?$&quot;
-)</formulaExpression>
-                    </validationRule>
                 </fields>
                 <fields>
                     <name>Configuration</name>
@@ -688,7 +680,6 @@
                     </defaultValue>
                     <fieldText>Configuration</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -719,7 +710,6 @@
                     </defaultValue>
                     <fieldText>Possession</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -739,7 +729,6 @@
                     </defaultValue>
                     <fieldText>Location</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -811,9 +800,8 @@
                     </defaultValue>
                     <fieldText>Budget in Lakh</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <scale>2</scale>
+                    <scale>0</scale>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -822,13 +810,6 @@
                             <stringValue>12</stringValue>
                         </width>
                     </styleProperties>
-                    <validationRule>
-                        <errorMessage>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Please enter a number with up to 4 digits before the decimal and up to 2 decimal places&lt;/span&gt;&lt;/p&gt;</errorMessage>
-                        <formulaExpression>REGEX(
-  TEXT({!Budget_in_Lakh2}),
-  &quot;^[0-9]{1,4}(\\.[0-9]{1,2})?$&quot;
-)</formulaExpression>
-                    </validationRule>
                 </fields>
                 <fields>
                     <name>Configuration_confirm</name>
@@ -839,7 +820,6 @@
                     </defaultValue>
                     <fieldText>Configuration</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -870,7 +850,6 @@
                     </defaultValue>
                     <fieldText>Possession</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -890,7 +869,6 @@
                     </defaultValue>
                     <fieldText>Location</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -954,7 +932,6 @@
             <choiceReferences>No_For_disquli</choiceReferences>
             <dataType>String</dataType>
             <fieldType>RadioButtons</fieldType>
-            <inputsOnNextNavToAssocScrn>ResetValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>
@@ -984,7 +961,6 @@
             <name>Reason_For_Disqualification</name>
             <fieldText>Reason For Disqualification</fieldText>
             <fieldType>LargeTextArea</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>
@@ -1074,7 +1050,6 @@
             <name>Reason_For_Disqualification2</name>
             <fieldText>Reason For Disqualification</fieldText>
             <fieldType>LargeTextArea</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>

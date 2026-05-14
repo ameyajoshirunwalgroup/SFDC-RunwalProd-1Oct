@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Booking Confirmed - Customer</name>
+    <style>none</style>
+    <subject>Booking Confirmation</subject>
+    <textOnly>Dear {!Booking__c.Primary_Applicant_Name__c},
+
+This is with reference to your &quot;Digital Booking form&quot; for Unit:{!Project_Unit__c.RW_Param4__c} of Project: {!Project__c.Name}
+
+We are happy to inform you that your Booking has been registered in our system and is under processing. You may call  {!SMName} on {!SMPhoneNumber} for any assistance.
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

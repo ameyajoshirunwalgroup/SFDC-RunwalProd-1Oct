@@ -14,7 +14,7 @@ export default class GenerateOtp extends LightningElement {
         this.wiredOtpResult = result;
         const { data, error } = result;
         if (data) {
-             this.existingOtp = data.Generated_OTP__c;
+            this.existingOtp = data.Generated_OTP__c
         } else {
             this.existingOtp = null;
             if (error) console.error('Error fetching OTP:', error);

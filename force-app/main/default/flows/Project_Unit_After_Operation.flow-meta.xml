@@ -10,9 +10,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>get_Primary_Applicant_Details.Email_Address__c</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -108,6 +106,28 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Project_Booking_Present_Or_Not</name>
+        <label>Check Project Booking Present Or Not</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Booking_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_update_Car_Parkings_Records</targetReference>
+            </connector>
+            <label>Booking Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>check_RM</name>
         <label>check RM</label>
         <locationX>0</locationX>
@@ -135,8 +155,91 @@
             </connector>
             <label>RM Gets Changed</label>
         </rules>
+        <rules>
+            <name>Unit_status_changed_to_Sold</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RW_Unit_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Unit_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sold</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>update_Car_Parkings_Records</targetReference>
+            </connector>
+            <label>Unit status changed to Sold</label>
+        </rules>
+        <rules>
+            <name>Unit_status_changed_to_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RW_Unit_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Unit_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Available</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Project_Booking_Present_Or_Not</targetReference>
+            </connector>
+            <label>Unit status changed to Available</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>is_Inserted_Is_Updated</name>
+        <label>is Inserted/ Is Updated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Inserted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>is Inserted</label>
+        </rules>
+        <rules>
+            <name>is_Updated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_RM</targetReference>
+            </connector>
+            <label>is Updated</label>
+        </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
     <interviewLabel>Project Unit( After Operation) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Project Unit( After Operation)</label>
     <processMetadataValues>
@@ -186,15 +289,67 @@
         <object>Applicant_Details__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Copy_1_of_update_Car_Parkings_Records</name>
+        <label>update Car Parkings Records(Vacant)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Booking__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Booking__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Booking__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Vacant</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Car_Parking_Charge__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>update_Car_Parkings_Records</name>
+        <label>update Car Parkings Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Booking__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Booking__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Sold</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Car_Parking_Charge__c</object>
+    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>check_RM</targetReference>
+            <targetReference>is_Inserted_Is_Updated</targetReference>
         </connector>
         <object>Project_Unit__c</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>InvalidDraft</status>
+    <status>Active</status>
+    <variables>
+        <name>CarParkingStatus</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

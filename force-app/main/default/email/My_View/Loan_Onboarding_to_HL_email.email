@@ -1,0 +1,40 @@
+<html>
+<head>
+<style>
+table, th, td {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+</style>
+</head>
+<body>
+Dear {!Loan__c.HL_RM_Name__c},
+<br/><br/>
+<table style="width:60%">
+<tr>
+        <td> Booking Lead </td>
+        <td> {!Loan__c.RW_Booking__r.Name}  </td>
+</tr>
+<tr>
+        <td> Name </td>
+        <td> {!Loan__c.Name}  </td>
+</tr>
+<tr>
+        <td> Flat No.</td>
+        <td>{!Loan__c.RW_Booking__r.Flat_No__c}  </td>
+</tr>
+<tr>
+        <td> Agreement Value</td>
+        <td>{!Loan__c.RW_Booking__r.Allotment_Premium__c}  </td>
+</tr>
+<tr>
+        <td> Booking Amt.</td>
+        <td>{!Loan__c.RW_Booking__r.Token_Amount__c}  </td>
+</tr>
+<tr>
+        <td> Preferred Bank</td>
+        <td>{!Loan__c.RW_Bank_Preference_1__c}  </td>
+</tr>
+</table>
+</body>
+</html>

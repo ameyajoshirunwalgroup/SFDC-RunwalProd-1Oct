@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Alert for Error on FB Leads</name>
+    <style>none</style>
+    <subject>Facebook Lead Processing Error</subject>
+    <textOnly>Hi, 
+
+Encountered error on below lead while processsing, 
+Record Link : https://runwal.my.salesforce.com/{!Social_Media_Lead__c.Id} 
+Form Data: {!Social_Media_Lead__c.Form_Data__c} 
+Remarks : {!Social_Media_Lead__c.Remarks__c} 
+
+Thanks.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,71 @@
+<messaging:emailTemplate subject="Booking Confirmation" recipientType="User" relatedToType="Booking__c">
+<messaging:plainTextEmailBody >
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody >
+Dear {!relatedTo.Primary_Applicant_Name__c},<br/><br/>
+
+Please find your booking as below  :- <br/><br/>
+
+<table style="border:1px solid black;border-collapse:collapse;width:75%">
+    <tr>
+        <td colspan="2" style="border:1px solid black;text-align:center;font-size:20px;"><b>Customer Details</b></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Primary Applicant Name</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Primary_Applicant_Name__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Mobile number</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Opportunity__r.RW_Mobile_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Email ID</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Primary_Applicant_Email__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Project Name</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Project_Name__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Cluster Name</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Unit_No__r.TowerName__r.Zone_Name__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Tower Name</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Unit_No__r.RW_Param2__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Flat No.</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Unit_No__r.RW_Param4__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Agreement Value</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Allotment_Premium__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Number Of Car Parking</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Quotation__r.Total_No_of_Parking__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Flat Configuration</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Flat_Typology__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Payment Plan</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Quotation__r.PaymentPlan__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Source of booking</b></td>
+        <td style="border:1px solid black;">{!relatedTo.Source_of_Booking__c}</td>
+    </tr>
+        
+
+</table>
+<br/><br/>
+<b>Regards</b><br/>
+<b>Customer Care Team</b>
+
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

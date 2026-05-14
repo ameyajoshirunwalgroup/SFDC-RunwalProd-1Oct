@@ -137,6 +137,10 @@
             <section>Custom Links</section>
         </sections>
         <sections>
+            <label><!-- Customer Details --></label>
+            <section>Customer Details</section>
+        </sections>
+        <sections>
             <label><!-- General Details --></label>
             <section>General Details</section>
         </sections>
@@ -161,5 +165,13 @@
             <section>Welcome Call Status</section>
         </sections>
     </layouts>
+    <recordTypes>
+        <label><!-- Welcome Call --></label>
+        <name>Welcome_Call</name>
+    </recordTypes>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please select the  Bank preference 1 --></errorMessage>
+        <name>Bank_preference</name>
+    </validationRules>
 </CustomObjectTranslation>

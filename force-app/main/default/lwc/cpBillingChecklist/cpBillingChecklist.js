@@ -20,7 +20,8 @@ export default class CpBillingChecklist extends LightningElement {
                 console.log('Checklist item name:', JSON.stringify(item.Checklist_Item__c));
                 switch (item.Checklist_Item__c) {
                     case 'Agreement Value':
-                        let agreementValue = item.Booking__r?.Original_Agreement_Value__c;
+                        let agreementValue = item.Booking__r?.Original_Agreement_Value__c ?? item.Booking__r?.Allotment_Premium__c;
+                        
                         fieldDisplayValue = agreementValue != null
                             ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(agreementValue)
                             : '—';

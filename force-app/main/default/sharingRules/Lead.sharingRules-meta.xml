@@ -10,7 +10,7 @@
         <criteriaItems>
             <field>LeadSource</field>
             <operation>notEqual</operation>
-            <value>,Loyalty,Corporate,NRI,Channel Partner,Temp Channel Partner,Employee / Managemen,Outstation,Referral,Tenants,Rcircle webinar,R Circle</value>
+            <value>,Loyalty,Corporate,NRI,Channel Partner,Temp Channel Partner,Employee / Managemen,Outstation,Referral,Tenants,Rcircle webinar,R Circle Caller</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -31,6 +31,11 @@
             <field>Project_Name__c</field>
             <operation>equals</operation>
             <value>Runwal Pinnacle</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Owner_Team__c</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -85,7 +90,7 @@
         <criteriaItems>
             <field>LeadSource</field>
             <operation>notEqual</operation>
-            <value>,Loyalty,Corporate,Channel Partner,Temp Channel Partner,Referral,Rcircle webinar,R Circle</value>
+            <value>,Loyalty,Corporate,Channel Partner,Temp Channel Partner,Referral,Rcircle webinar,R Circle Caller</value>
         </criteriaItems>
         <criteriaItems>
             <field>CP_Lead_Status__c</field>
@@ -110,7 +115,7 @@
         <criteriaItems>
             <field>LeadSource</field>
             <operation>equals</operation>
-            <value>Loyalty,Employee / Managemen,Referral,R Circle</value>
+            <value>Loyalty,Employee / Managemen,Referral,R Circle Caller</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -152,7 +157,7 @@
         <criteriaItems>
             <field>LeadSource</field>
             <operation>equals</operation>
-            <value>Loyalty,Employee / Managemen,Referral,R Circle</value>
+            <value>Loyalty,Employee / Managemen,Referral,R Circle Caller</value>
         </criteriaItems>
         <criteriaItems>
             <field>Project_Name__c</field>
@@ -171,7 +176,7 @@
         <criteriaItems>
             <field>LeadSource</field>
             <operation>equals</operation>
-            <value>Loyalty,Employee / Managemen,Referral,R Circle</value>
+            <value>Loyalty,Employee / Managemen,Referral,R Circle Caller</value>
         </criteriaItems>
         <criteriaItems>
             <field>Project_Name__c</field>
@@ -190,7 +195,7 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>equals</operation>
-            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg,Codename Forevergreen</value>
+            <value>Runwal Bliss,5th Avenue - Runwal Avenue,Runwal Avenue,Runwal Commerz,Kanjurmarg,Runwal Commerz Kanjurmarg</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -265,20 +270,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Retention_Lead_sharing_for_RWoods</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Retention Lead sharing for RWoods</label>
-        <sharedTo>
-            <group>R_Woods</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Woods</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>Sharing_rule_for_Lead_Bliss</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Sharing rule for Lead Bliss</label>
@@ -288,7 +279,7 @@
         <criteriaItems>
             <field>Project_Name__c</field>
             <operation>equals</operation>
-            <value>Runwal Bliss,Runwal Avenue,Garden Heights,Codename Forevergreen</value>
+            <value>Runwal Bliss,Runwal Avenue,Garden Heights</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -397,6 +388,25 @@
             <value></value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>cp_group_Avenue_Bliss</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>cp - group Avenue &amp; Bliss</label>
+        <sharedTo>
+            <group>CP_Sourcing_group_Bliss_Avenue</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Project_Name__c</field>
+            <operation>equals</operation>
+            <value>Runwal Bliss,Runwal Avenue</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>cp_group_gardens</fullName>

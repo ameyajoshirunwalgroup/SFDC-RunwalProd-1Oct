@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Phone Number Change Confirmation</label>
+    <protected>false</protected>
+    <values>
+        <field>Message_Content__c</field>
+        <value xsi:type="xsd:string">Dear {{1}},
+
+Your phone number has been updated successfully with OTP verification. Confirmation sent on your new number, email &amp; WhatsApp. Contact Runwal support if you did not authorize this change.</value>
+    </values>
+    <values>
+        <field>RW_Type__c</field>
+        <value xsi:type="xsd:string">hsm</value>
+    </values>
+    <values>
+        <field>RW_element_name__c</field>
+        <value xsi:type="xsd:string">phone_number_change_confirmation</value>
+    </values>
+    <values>
+        <field>RW_namespace__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

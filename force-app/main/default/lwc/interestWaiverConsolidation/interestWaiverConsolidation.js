@@ -257,21 +257,21 @@ export default class InterestWaiverConsolidation extends NavigationMixin(Lightni
                 rawDemands[0].Booking__r.Interest_Waiver_Approved_but_not_Waived__c;
 
             // 🚨 BLOCK COMPONENT IF APPROVED BUT NOT WAIVED EXISTS
-            if (this.totalApprovedButNotSapWaivedAmount > 0) {
+            // if (this.totalApprovedButNotSapWaivedAmount > 0) {
 
-                this.showIWCreationPage = false;
-                this.showIWSubmissionPage = false;
-                this.showModal = false;
+            //     this.showIWCreationPage = false;
+            //     this.showIWSubmissionPage = false;
+            //     this.showModal = false;
 
-                this.showToast(
-                    'Error',
-                    'Interest Waiver is already approved but not yet waived in SAP. Please wait until SAP processes the waiver.',
-                    'error'
-                );
-                // ✅ Close Quick Action modal
-                this.dispatchEvent(new CloseActionScreenEvent());
-                return;
-            }
+            //     this.showToast(
+            //         'Error',
+            //         'Interest Waiver is already approved but not yet waived in SAP. Please wait until SAP processes the waiver.',
+            //         'error'
+            //     );
+            //     // ✅ Close Quick Action modal
+            //     this.dispatchEvent(new CloseActionScreenEvent());
+            //     return;
+            // }
             this.allIwList = [];
 
             // Step 1: map data to temp array

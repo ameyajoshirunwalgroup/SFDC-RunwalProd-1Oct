@@ -72,6 +72,46 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>L1_Approval_Date</fullName>
+        <field>L1_Approval_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>L1 Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>L2_Approval_Date</fullName>
+        <field>L2_Approval_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>L2 Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>L3_Approval_Date</fullName>
+        <field>L3_Approval_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>L3 Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>L4_Approval_Date</fullName>
+        <field>L4_Approval_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>L4 Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Rejected</fullName>
         <field>Approval_Status__c</field>
         <literalValue>Rejected</literalValue>
@@ -112,6 +152,16 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Rejected_By_L1</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected By L1</literalValue>
+        <name>Rejected By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Rejected_By_TL1</fullName>
         <field>Approval_Status__c</field>
         <literalValue>Rejected by TL</literalValue>
@@ -132,10 +182,100 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Submitted_Date</fullName>
+        <field>Approval_Submitted_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>Submitted Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted_For_Audit_Approval</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Submitted for Approval</literalValue>
+        <name>Submitted For Audit Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>TL_Approval_Step_1</fullName>
         <field>Approval_Status__c</field>
         <literalValue>Approved by TL</literalValue>
         <name>TL Approval Step 1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_L1_Approval_Date</fullName>
+        <field>L1_Approvel_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>Update L1 Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_L2_Approval_Date</fullName>
+        <field>L2_Approval_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>Update L2 Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_To_Submitted</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Submitted for Approval</literalValue>
+        <name>Update Status To Submitted</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_to_Approved</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved by L2</literalValue>
+        <name>Update Status to Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_to_Approved_By_L1</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Approved By L1</literalValue>
+        <name>Update Status to Approved By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_to_Rejected_By_L2</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Rejected by L2</literalValue>
+        <name>Update Status to Rejected By L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_to_Submitted_for_L2</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Submitted for L2 Approval</literalValue>
+        <name>Update Status to Submitted for L2</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Loan Documentation Submission Reminder</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!RW_Booking__r.Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!
+
+To proceed with the processing of your home loan sanction, we request you to kindly share the required bank loan documents within the next 3 days.
+
+You may upload the documents directly on the Runwal app for faster processing, or connect with your Relationship Manager (RM) for any assistance.
+
+Upload Documents on App: {!$Label.App_Link}
+
+Timely submission of the documents will help ensure a smooth and timely sanction process.
+
+If you need any support, please feel free to reach out to your RM.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Action Required – Submission of Home Loan Documents</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Action Required – Loan Documentation
+
+Kindly share the required bank loan documents within 3 days to proceed with sanction processing. Upload on the app or reach out to your RM.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">my_loan</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Loan__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Loan Documentation Submission Reminder</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Loan Documentation Submission Reminder</value>
+    </values>
+</CustomMetadata>

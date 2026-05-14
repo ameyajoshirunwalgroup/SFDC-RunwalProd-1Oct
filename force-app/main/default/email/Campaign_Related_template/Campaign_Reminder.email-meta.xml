@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Campaign | Reminder</name>
+    <style>freeForm</style>
+    <subject>Reminder: Your Campaign {!Campaign.Name} Ends Tomorrow</subject>
+    <textOnly>Hi,
+
+
+
+Just a quick reminder that the campaign {!Campaign.Name} is scheduled to end tomorrow {!Campaign.EndDate}.
+
+
+Please take a moment to review its progress and ensure everything is on track.
+
+Thank You...</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -12,7 +12,7 @@
                 <field>Subject</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>Segment__c</field>
             </layoutItems>
             <layoutItems>
@@ -28,15 +28,11 @@
                 <field>CP_Activity__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Project_from_CP__c</field>
+                <behavior>Edit</behavior>
+                <field>Referral_Credit__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>Project__c</field>
-            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Event_Status__c</field>
@@ -109,7 +105,7 @@
         <label>Created Details</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Readonly</behavior>
                 <field>Channel_Partner__c</field>
             </layoutItems>
             <layoutItems>
@@ -159,7 +155,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hfu000008G8Y9</masterLabel>
+        <masterLabel>00h9I000002OgeT</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

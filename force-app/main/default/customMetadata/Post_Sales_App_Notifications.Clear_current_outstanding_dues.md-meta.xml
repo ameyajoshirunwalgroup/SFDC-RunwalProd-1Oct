@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Clear current outstanding dues</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Booking__r.Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!
+
+This is a reminder regarding the outstanding payment for your purchased unit. Please find the details below:
+
+Project: {!Booking__r.Project__r.Name}
+Unit Number: {!Booking__r.Unit_No__r.Name}
+Demand Number: {!RW_Billing_Document_Number__c}
+Milestone: {!RW_Demand_Milestone__c}
+Outstanding Amount: ₹{!Remaining_Amount__c}
+Due Date: {!Due_Date__c}
+
+We request you to kindly clear the dues on or before the due date to avoid any additional late payment charges.
+
+You may also view the demand details on the Runwal Connect App.
+
+If you have already completed the payment, please disregard this message.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Reminder to Clear Pending Dues – {{Project_Name}} Unit {{Unit_Number}}</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Dear {1},
+
+The outstanding amount towards your purchased unit {1} is Rs {3}. Kindly clear your dues before the due date to avoid any additional late payment charges. Please ignore this message if you already have paid the dues.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">payments_due</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">RW_Demand__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Clear current outstanding dues</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Payment Due Alert WhatsApp</value>
+    </values>
+</CustomMetadata>

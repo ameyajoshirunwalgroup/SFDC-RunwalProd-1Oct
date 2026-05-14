@@ -1,0 +1,44 @@
+<messaging:emailTemplate subject="Blocking Release Reminder" recipientType="User" relatedToType="Blocking_Unit_Information__c">
+<messaging:plainTextEmailBody >
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody >
+
+Dear {!relatedTo.CreatedBy.Name},<br/><br/>
+
+The Unit {!relatedTo.Project_Unit__r.Name} was blocked for the customer {!relatedTo.Opportunity__r.Name} but it is not yet booked.<br/><br/>
+
+<table style="border:1px solid black;border-collapse:collapse;width:100%">
+    <tr>
+        <td style="border:1px solid black;">Opportunity Name</td>
+        <td style="border:1px solid black;">{!relatedTo.Opportunity__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Opportunity Id</td>
+        <td style="border:1px solid black;">{!relatedTo.Opportunity__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Unit Name</td>
+        <td style="border:1px solid black;">{!relatedTo.Project_Unit__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">SM Name</td>
+        <td style="border:1px solid black;">{!relatedTo.CreatedBy.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Blocking Date</td>
+        <td style="border:1px solid black;"><apex:outputText value="{0, date, dd-MM-yyyy}">
+            <apex:param value="{!relatedTo.Opportunity__r.Blocked_Date__c}" /> 
+         </apex:outputText></td>
+    </tr>
+</table>
+
+<!--Opportunity Name: {!relatedTo.Opportunity__r.Name}<br/>
+Opportunity Id: {!relatedTo.Opportunity__c}<br/>
+Unit Name: {!relatedTo.Project_Unit__r.Name}<br/>
+SM Name: {!relatedTo.CreatedBy.Name}<br/>
+Blocking Date: {!relatedTo.Opportunity__r.Blocked_Date__c}<br/>-->
+
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

@@ -1,0 +1,10 @@
+<messaging:emailTemplate subject="Approval required for ladder Scheme -  {!RelatedTo.name}" recipientType="User" relatedToType="Brokerage_Scheme__c">
+<messaging:htmlEmailBody >
+ <html>
+    <body>
+      <p>Dear {!recipient.name},</p>
+    </body>
+  </html>
+     <c:BrokerageSchemeTemplate idoff="{!RelatedTo.Id}"/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

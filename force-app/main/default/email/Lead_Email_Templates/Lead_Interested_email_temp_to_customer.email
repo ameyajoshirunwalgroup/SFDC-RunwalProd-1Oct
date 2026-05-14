@@ -1,0 +1,16 @@
+<messaging:emailTemplate subject="Thank You for Your Interest in {!relatedTo.RW_Project__r.Name}" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>Hi {!relatedTo.Name},</p>
+                
+                <p>Thank you for showing interest in <b>{!relatedTo.RW_Project__r.Name}</b>.</p>
+                
+                <p>For any additional information, please visit <a href="{!relatedTo.RW_Project__r.Project_site_URL__c}">{!relatedTo.RW_Project__r.Project_site_URL__c}</a>.</p>
+                
+                
+                <p>Warm Regards,<br/>Team Presales,<br/>Runwal Group</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

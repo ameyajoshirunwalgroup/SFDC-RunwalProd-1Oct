@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Email to Opp Owner on Applicant Ledger Generated true</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Email to Opp Owner on Applicant Ledger Generated true</name>
+    <style>none</style>
+    <subject>Applicant Ledger Generated</subject>
+    <textOnly>Hi {!Opportunity.OwnerFullName},
+
+Applicant Ledger is generated for the following opportunity:
+{!Opportunity.Name}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

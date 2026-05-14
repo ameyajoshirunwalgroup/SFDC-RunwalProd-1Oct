@@ -5,6 +5,7 @@
     <errorConditionFormula>And(
 	Name = (NAME_FIRST__c + &quot; &quot; + NAME_LAST__c),
 	not (Individual_CP__c),
+	RecordType.Name == &apos;Channel Partner&apos;,/*Added by Prashant to keep this validation active for only CP record type not Temp CP*/
 $Label.Disable_all_validations_from_CP == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
 )</errorConditionFormula>
     <errorMessage>For NON Individual CP, Combination of first name and last name must not be as same as CP Record name.</errorMessage>

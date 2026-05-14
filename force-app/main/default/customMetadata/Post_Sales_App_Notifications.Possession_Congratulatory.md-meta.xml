@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Possession Congratulatory</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!!
+
+We are delighted to inform you that the possession and key handover formalities for your home have been successfully completed. Please find your unit details below for reference:
+
+Project: {!Project__r.Name}
+Tower/Wing: {!Tower__r.Name}
+Unit Number: {!Unit_No__r.Name}
+Possession Date: {!RW_Key_handover_date__c}
+
+Congratulations on reaching this important milestone and becoming the proud owner of your new home. We sincerely thank you for your trust in Runwal Enterprises and for being a valued part of the Runwal family.
+
+We wish you and your family many years of happiness, comfort, and wonderful memories in your new home.
+
+For any post-possession assistance, please feel free to reach out to our customer support team.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Congratulations on the Possession of Your New Home</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Welcome Home 🏡
+
+Your flat possession at [Project/Building Name] is complete. Wishing you joy and wonderful new beginnings!</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">home</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Booking__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Possession Congratulatory</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Possession Congratulatory</value>
+    </values>
+</CustomMetadata>

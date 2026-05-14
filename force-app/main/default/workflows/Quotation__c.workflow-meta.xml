@@ -9,7 +9,7 @@
             <type>userLookup</type>
         </recipients>
         <senderType>CurrentUser</senderType>
-        <template>unfiled$public/Quotation_Approval_Rejected_email</template>
+        <template>My_View/Quotation_Approval_Rejected_email</template>
     </alerts>
     <fieldUpdates>
         <fullName>Approved</fullName>
@@ -42,6 +42,26 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Approved_By_L1</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Approved by level 1</literalValue>
+        <name>Approved By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approved_By_L2</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Approved by level 2</literalValue>
+        <name>Approved By L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Approved_L1</fullName>
         <field>Quote_Status__c</field>
         <literalValue>Approved by level 1</literalValue>
@@ -56,6 +76,36 @@
         <field>Quote_Status__c</field>
         <literalValue>Approved by level  2</literalValue>
         <name>Approved L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Car_Parking_Approval</fullName>
+        <field>Car_Parking_Approval__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Car Parking Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Car_Parking_Approval_Rejected</fullName>
+        <field>Car_Parking_Approval__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Car Parking Approval Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Car_Parking_Approval_set_to_Approved</fullName>
+        <field>Car_Parking_Approval__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Car Parking Approval set to Approved</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
@@ -184,6 +234,26 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Rejected_By_L1</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected by level 1</literalValue>
+        <name>Rejected By L1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_By_L2</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected by level 2</literalValue>
+        <name>Rejected By L2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Rejected_L1</fullName>
         <field>Quote_Status__c</field>
         <literalValue>Rejected by  level 1</literalValue>
@@ -218,6 +288,26 @@
         <field>Quote_Status__c</field>
         <literalValue>Rejected</literalValue>
         <name>Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_QuoteStatus_Valid</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Update QuoteStatus Valid</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Quote_Status_Rejected</fullName>
+        <field>Quote_Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Update Quote Status Rejected</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>

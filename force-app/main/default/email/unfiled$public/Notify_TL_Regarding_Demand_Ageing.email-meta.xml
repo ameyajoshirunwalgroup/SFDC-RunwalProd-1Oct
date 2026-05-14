@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Notify TL Regarding Demand Ageing</name>
+    <style>none</style>
+    <subject>Demand - {!RW_Demand__c.Name} Ageing Alert</subject>
+    <textOnly>Hello Team Lead,
+
+The following Demand record has crossed its ageing threshold:
+
+Demand: {!Demand__c.Name}
+Demand Due Ageing: {!RW_Demand__c.RW_Demand_Aging__c} days
+PTP Ageing: {!Demand__c.PTP_Ageing__c} days
+
+Please follow up accordingly.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

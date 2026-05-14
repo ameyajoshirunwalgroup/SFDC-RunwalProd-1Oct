@@ -2,7 +2,9 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Corporate_is_Mandatory</fullName>
     <active>true</active>
-    <errorConditionFormula>AND(  ISPICKVAL(LeadSource , &apos;Corporate&apos;),  OR(ISBLANK(Corporate__c),ISNULL(Corporate__c)) ,$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+    <errorConditionFormula>AND( 
+($User.Id &lt;&gt; $Label.UserId),
+ISPICKVAL(LeadSource , &apos;Corporate&apos;),  OR(ISBLANK(Corporate__c),ISNULL(Corporate__c)) ,$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
     <errorDisplayField>Corporate__c</errorDisplayField>
     <errorMessage>Corporate Cannot be left blank if lead source is Corporate</errorMessage>
 </ValidationRule>

@@ -130,7 +130,7 @@
         <actionName>View</actionName>
         <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Brokerage_Invoice_Record_Page2</content>
-        <formFactor>Large</formFactor>
+        <formFactor>Small</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
@@ -138,7 +138,7 @@
         <actionName>View</actionName>
         <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Brokerage_Invoice_Record_Page2</content>
-        <formFactor>Small</formFactor>
+        <formFactor>Large</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
@@ -159,7 +159,7 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
-    <label>Brokerage Invoice</label>
+    <label>Brokerage Invoice Line Item</label>
     <nameField>
         <displayFormat>BI-{000000}</displayFormat>
         <label>Brokerage Invoice Name</label>
@@ -167,7 +167,13 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Brokerage Invoices</pluralLabel>
-    <searchLayouts></searchLayouts>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Brokerage_Lookup__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Booking__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Brokerage_In_Rs__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Brokerage_Summary__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Brokerage_Scheme_Name__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

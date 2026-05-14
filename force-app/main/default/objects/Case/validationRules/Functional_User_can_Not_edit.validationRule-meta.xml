@@ -3,7 +3,8 @@
     <fullName>Functional_User_can_Not_edit</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-    ISPICKVAL(Status, &quot;Case Closed&quot;),
+    OR(ISPICKVAL(Status, &quot;Case Closed&quot;)
+						),
     $User.Id = Functional_User__c,
     NOT(ISNEW())
 )</errorConditionFormula>

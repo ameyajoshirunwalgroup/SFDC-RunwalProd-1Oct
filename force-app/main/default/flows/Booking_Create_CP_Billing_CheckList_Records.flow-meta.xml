@@ -52,7 +52,14 @@
             <assignToReference>ApproverTypes</assignToReference>
             <operator>Add</operator>
             <value>
-                <stringValue>CP Invoice Clearing L1</stringValue>
+                <stringValue>CP Invoice Approver L1</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Invoice Approver L2</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -112,6 +119,22 @@
             <targetReference>loop_the_check_vakue</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Copy_2_of_Assign_recipient</name>
+        <label>Copy 2 of Assign recipient</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RecipientsId</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>check_Approver_Types</name>
         <label>check Approver Types</label>
@@ -122,19 +145,34 @@
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>is_CP_Invoice_Clearing_L1</name>
+            <name>is_CP_Invoice_Approver_L1</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>CP Invoice Clearing L1</stringValue>
+                    <stringValue>CP Invoice Approver L1</stringValue>
                 </rightValue>
             </conditions>
             <connector>
                 <targetReference>Assign_recipient</targetReference>
             </connector>
-            <label>is CP Invoice Clearing L1</label>
+            <label>is CP Invoice Approver L1</label>
+        </rules>
+        <rules>
+            <name>is_CP_Invoice_Approver_L2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Approver L2</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_2_of_Assign_recipient</targetReference>
+            </connector>
+            <label>is CP Invoice Approver L2</label>
         </rules>
     </decisions>
     <decisions>
@@ -189,6 +227,11 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>CP_User_Id</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Project__r.CP_Invoice_Approver_L2__r.Id}</expression>
+    </formulas>
     <interviewLabel>Booking | Create CP Billing ChekclList Records {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Booking | Create CP Billing CheckList Records</label>
     <loops>

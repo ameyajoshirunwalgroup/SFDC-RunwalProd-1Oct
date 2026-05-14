@@ -71,6 +71,10 @@
                 <behavior>Edit</behavior>
                 <field>Deactivated__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Created_from_Lockated__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -483,9 +487,11 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Brokerage_Scheme_Name__c</fields>
         <fields>Brokerage__c</fields>
         <fields>Total_Brokerage__c</fields>
         <fields>RECORDTYPE</fields>
+        <fields>CREATED_DATE</fields>
         <relatedList>Brokerage_Summary__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -521,6 +527,14 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Temp_Channel_Partner__c.Original_Channel_Partner__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Channel_Partner__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Meeting_Targets__c.CP_Name__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Payment Failed</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!
+
+We noticed that your recent payment attempt through the Runwal Connect App was unsuccessful.
+
+We request you to kindly retry the payment through the app at your convenience. In case any amount has been debited from your account, it will be automatically reversed as per your bank’s timelines.
+
+If the issue persists or you require any assistance, please feel free to reach out to your Relationship Manager.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Payment Attempt Unsuccessful – Please Retry</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Your transaction could not be completed. Please retry; if any amount has been debited, it will be reversed as per your bank’s timelines.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Booking__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Payment_Failed</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:type="xsd:string">Dear [Customer Name],
+Your transaction could not be completed. Kindly retry the payment from the Runwal app.
+
+If any amount has been debited, it will be automatically reversed as per your bank’s timelines.</value>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

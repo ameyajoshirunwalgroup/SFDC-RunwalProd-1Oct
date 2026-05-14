@@ -1,0 +1,480 @@
+<messaging:emailTemplate subject="Welcome Email" recipientType="User" relatedToType="RW_Welcome_Call__c">
+<messaging:plainTextEmailBody >
+
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody > 
+
+
+<apex:outputText style="text-transform: capitalize" value="Dear {!relatedTo.RW_Booking__r.Primary_Applicant_Name__c}"></apex:outputText> <apex:outputPanel rendered="{!relatedTo.RW_Applicant2_Name__c != null}"> <apex:outputText value=" and "/><apex:outputText style="text-transform: capitalize" value="{!relatedTo.RW_Applicant2_Name__c}"></apex:outputText></apex:outputPanel>,<br/><br/>
+
+Greetings from {!relatedTo.RW_Project__c}!<br/><br/>
+
+<!-- The {!relatedTo.RW_Project__c} team congratulates you and thanks you for choosing us for making your home.<br/><br/>-->
+Congratulations and thank you for choosing us.<br/><br/>
+
+With reference to your booking dated <b><apex:outputText value="{0, date, MMM d, yyyy}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Booking_Date__c}" /> 
+         </apex:outputText></b> for {!relatedTo.RW_Booking__r.Unit_No__r.Name}, we wish to affirm the details towards your unit and share other important information related to this booking.
+<br/>
+
+    
+<p><b><u>Booking Details:</u></b></p>
+
+<table style="border:1px solid black;border-collapse:collapse;width:100%">
+    <tr>
+        <td style="border:1px solid black;">Project Name</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Project__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Booking Date</td>
+        <!--<td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Booking_Date__c}</td>-->
+        <td style="border:1px solid black;"><apex:outputText value="{0, date, MMM d, yyyy}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Booking_Date__c}" /> 
+        </apex:outputText></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Tower Name</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Unit Details</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Flat_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Unit Type</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Flat_Typology__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Carpet Area including Deck/Utility Area (if any)</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Total_RERA_Carpet_Area__c}</td>
+        
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Car Park</td>
+        <!-- <td style="border:1px solid black;">{!relatedTo.RW_No_of_Car_Parkings__c}</td>-->
+        <td><apex:outputText value="{0, number, ##}">
+          <apex:param value="{!relatedTo.RW_No_of_Car_Parkings__c}" />
+            </apex:outputText></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Payment Plan</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Quotation__r.PaymentPlan__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">1st Applicant Name</td>
+        <td style="border:1px solid black;"><apex:outputText style="text-transform: capitalize" value="{!relatedTo.RW_Applicant1_Primary_Applicant_Name__c}"></apex:outputText></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">PAN Number 1st Applicant</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Primary_PAN_Details__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Contact No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.RW_Country_Phone_Code__c} {!relatedTo.RW_Applicant1_Mobile_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Email Id</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant1_Email_Address__c}</td>
+    </tr>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Applicant2_Name__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">2nd Applicant Name</td>
+        <td style="border:1px solid black;"><apex:outputText style="text-transform: capitalize" value="{!relatedTo.RW_Applicant2_Name__c}"></apex:outputText></td>
+    </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.Applicant2_PAN__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">PAN Number 2nd Applicant</td>
+        <td style="border:1px solid black;">{!relatedTo.Applicant2_PAN__c}</td>
+    </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Applicant2_Mobile_No__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">Contact No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.RW_Country_Phone_Code__c} {!relatedTo.RW_Applicant2_Mobile_No__c}</td>
+    </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Applicant2_Email_Address__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">Email Id</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant2_Email_Address__c}</td>
+    </tr>
+    </apex:outputPanel>
+     <tr>
+        <td style="border:1px solid black;">Communication Address</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant1_Permanent_Address__c}</td>
+    </tr>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Booking__r.Opportunity__r.Walkin_Source__c != null,relatedTo.RW_Booking__r.Opportunity__r.Walkin_Source__c == 'Channel Partner')}">
+        <tr>
+            <td style="border:1px solid black;">Booking Source</td>
+            <td style="border:1px solid black;"><apex:outputText style="text-transform: capitalize" value="Channel Partner - {!relatedTo.RW_Booking__r.BrokerIId__r.Name}"></apex:outputText></td>
+        </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Booking__r.Opportunity__r.Walkin_Source__c != null,relatedTo.RW_Booking__r.Opportunity__r.Walkin_Source__c == 'Referral')}">
+        <tr>
+            <td style="border:1px solid black;">Booking Source</td>
+            <td style="border:1px solid black;"><apex:outputText style="text-transform: capitalize" value="Referral - {!relatedTo.RW_Booking__r.Opportunity__r.Customer_Reference__r.Name}"></apex:outputText> ({!relatedTo.RW_Booking__r.Opportunity__r.Remark__c})</td>
+        </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Booking__r.Opportunity__r.Walkin_Source__c != 'Referral',relatedTo.RW_Booking__r.Opportunity__r.Walkin_Source__c != 'Channel Partner')}">
+        <tr>
+            <td style="border:1px solid black;">Booking Source</td>
+            <td style="border:1px solid black;">{!relatedTo.RW_Source_Of_Booking__c}</td>
+        </tr>
+    </apex:outputPanel>
+    <tr>
+        <td style="border:1px solid black;">MAHARERA Registration No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.RERA_Certificate_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Agreement Value</td>
+        <td style="border:1px solid black;"><apex:outputPanel rendered="{!FLOOR(relatedTo.RW_Agreement_Value__c) != null}">{!FLOOR(relatedTo.RW_Agreement_Value__c)}/-</apex:outputPanel></td>
+        <!--<td>Rs.<apex:outputText value="{0, number, #,##,##,###}">
+          <apex:param value="{!relatedTo.RW_Agreement_Value__c}" />
+            </apex:outputText>/-</td>-->
+    </tr>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Project__c != 'Runwal Gardens')}"> <!-- Added the outputPanel renderd condition by Vinay 01-09-2025 -->
+    <tr>
+        <td style="border:1px solid black;">Possession Date</td>
+        <!--<td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Possession_Date__c}</td>-->
+        <td style="border:1px solid black;"><apex:outputText value="{0, date, MMM d, yyyy}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Possession_Date__c}" /> 
+        </apex:outputText></td>
+    </tr>
+    </apex:outputPanel>
+    
+</table>
+<br/><br/>
+
+For any discrepancies in the above information, please do get in touch with us at the earliest to have the same corrected.
+
+<p><b><u>Funding of your unit:</u></b></p> 
+
+Should you wish to apply for a home loan, you may connect with our in-house home loan expert who is available on <u>{!relatedTo.RW_Booking__r.Project__r.Home_Loan_Email__c}</u>. Alternatively, you may also contact the team on +91-{!relatedTo.RW_Booking__r.Project__r.Home_Loan_Contact_1__c} <apex:outputPanel rendered="{!relatedTo.RW_Booking__r.Project__r.Home_Loan_Contact_2__c!= null}"> <apex:outputText value="/{!relatedTo.RW_Booking__r.Project__r.Home_Loan_Contact_2__c}"/></apex:outputPanel>.<br/><br/>
+
+In case your home loan application is already in progress, request you to please share the sanction letter with us at the earliest for our internal documentation. To avail bank loan, you are required to first make the payment of your own contribution and register your unit.
+
+<p><u><b>Regarding registration of your unit:</b></u></p> 
+
+We would be commencing the process of execution and registration of 'Agreement for Sale' in respect of your captioned booked unit shortly.<br/><br/>
+
+You are requested to fill the attached <b>'Name Confirmation Form'</b> to prepare the Agreement for Sale and send across a signed copy of the same at the earliest.
+
+<br/><br/>
+
+<apex:outputPanel rendered="{!OR(relatedTo.RW_Booking__r.Stamp_duty_payable_by_Runwal__c == 0, relatedTo.RW_Booking__r.Stamp_duty_payable_by_Runwal__c == null)}">
+<p><b>The payment details of stamp duty and registration charges are as below:</b></p> 
+<br/>
+
+
+<table class="center" style="border:1px solid black;border-collapse:collapse;text-align:center;">
+    <tr style="text-align:center">
+        <td style="border:1px solid black;width:15%">Particulars</td>
+        <td style="border:1px solid black;width:40%">Description/ Calculation</td>
+        <td style="border:1px solid black;width:15%">Amount (Rs.)</td>
+        <td style="border:1px solid black;width:30%">Timeline for Registration</td>
+    </tr>
+     <tr>
+        <td style="border:1px solid black;">1. Stamp Duty*</td>
+        <td style="border:1px solid black;">As mandated by the state/regional regulations</td>
+        <td style="border:1px solid black;">
+        <apex:outputPanel rendered="{! relatedTo.RW_Booking__r.Quotation__r.Discount_Applied__c == true}">
+            <apex:outputText value="{0, number, #,##,##,###}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Quotation__r.Stamp_Duty_D__c}" />
+            </apex:outputText></apex:outputPanel>
+        
+        <apex:outputPanel rendered="{! relatedTo.RW_Booking__r.Quotation__r.Discount_Applied__c == false}">
+            <apex:outputText value="{0, number, #,##,##,###}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Quotation__r.Stamp_Duty__c}" />
+            </apex:outputText></apex:outputPanel>/-</td>
+            
+            
+        <td style="border:1px solid black;" rowspan="2">Execution/Registration of the Agreement is mandatory upon completion of 10% payments towards the Agreement Value, as per the state/regional RERA regulations </td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;">2. Registration</td>
+        <td style="border:1px solid black;">As mandated by the state/regional regulations</td>
+        <td style="border:1px solid black;">30,000/-</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;" colspan="2"><b>Grand Total</b></td>
+        <td style="border:1px solid black;"><b>
+        <apex:outputPanel rendered="{! relatedTo.RW_Booking__r.Quotation__r.Discount_Applied__c == true}">
+            <apex:outputText value="{0, number, #,##,##,###}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Quotation__r.Stamp_Duty_D__c + 30000}" />
+            </apex:outputText>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{! relatedTo.RW_Booking__r.Quotation__r.Discount_Applied__c == false}">
+            <apex:outputText value="{0, number, #,##,##,###}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Quotation__r.Stamp_Duty__c + 30000}" />
+            </apex:outputText>
+        </apex:outputPanel>
+        /-</b></td>
+        <td style="border:1px solid black;"></td>
+     </tr>
+
+</table>
+
+
+<p>Please find given below the process for payment of stamp duty and registration of ‘Agreement for Sale’. Kindly intimate your relationship manager after initiating any payment towards Stamp duty, registration, and agent charges.</p>
+<p><b>*Note: {!relatedTo.RW_Booking__r.Project__r.Registration_Consultation_Fee__c}/-</b> to be paid directly to the agent on the day of registration to facilitate the process through him/her.</p><br/>
+<table class="center" style="border:1px solid black;border-collapse:collapse;">
+     <tr>
+        <td style="border:1px solid black;"><b>Favouring</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Account_Name__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Bank Name</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Bank_Name__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Account Type</b></td>
+        <td style="border:1px solid black;">Current Account</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Account Number</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Account_No__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>IFSC Code</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.IFSC_Code__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Branch Address</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Branch__c}</td>
+     </tr>
+</table>
+</apex:outputPanel>
+<br/>
+
+<apex:outputPanel rendered="{!AND(relatedTo.RW_Booking__r.Stamp_duty_payable_by_Runwal__c != null, relatedTo.RW_Booking__r.Stamp_duty_payable_by_Runwal__c != 0, relatedTo.RW_Booking__r.Project__r.Name != 'Runwal Gardens')}">
+<p><b>The payment details of stamp duty and registration charges are as below:</b></p> 
+<br/>
+
+
+<table class="center" style="border:1px solid black;border-collapse:collapse;text-align:center;">
+    <tr style="text-align:center">
+        <td style="border:1px solid black;width:15%">Particulars</td>
+        <td style="border:1px solid black;width:40%">Description/ Calculation</td>
+        <td style="border:1px solid black;width:15%">Amount (Rs.)</td>
+        <td style="border:1px solid black;width:30%">Timeline for Registration</td>
+    </tr>
+     <tr>
+        <td style="border:1px solid black;">1. Stamp Duty*</td>
+        <td style="border:1px solid black;">As mandated by the state/regional regulations</td>
+        <td style="border:1px solid black;">0/-</td>
+        <td style="border:1px solid black;" rowspan="2">Execution/Registration of the Agreement is mandatory upon completion of 10% payments towards the Agreement Value, as per the state/regional RERA regulations </td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;">2. Registration</td>
+        <td style="border:1px solid black;">As mandated by the state/regional regulations</td>
+        <td style="border:1px solid black;">30,000/-</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;" colspan="2"><b>Grand Total</b></td>
+        <td style="border:1px solid black;"><b>30,000/-</b></td>
+        <td style="border:1px solid black;"></td>
+     </tr>
+
+</table>
+
+
+<p>Please find given below the process for payment of stamp duty and registration of ‘Agreement for Sale’. Kindly intimate your relationship manager after initiating any payment towards Stamp duty, registration, and agent charges.</p>
+<p><b>*Note: {!relatedTo.RW_Booking__r.Project__r.Registration_Consultation_Fee__c}/-</b> to be paid directly to the agent on the day of registration to facilitate the process through him/her.</p><br/>
+<table class="center" style="border:1px solid black;border-collapse:collapse;">
+     <tr>
+        <td style="border:1px solid black;"><b>Favouring</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Account_Name__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Bank Name</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Bank_Name__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Account Type</b></td>
+        <td style="border:1px solid black;">Current Account</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Account Number</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Account_No__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>IFSC Code</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.IFSC_Code__c}</td>
+     </tr>
+     <tr>
+        <td style="border:1px solid black;"><b>Branch Address</b></td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Registration_consultant__r.Branch__c}</td>
+     </tr>
+</table>
+</apex:outputPanel>
+<br/>
+
+<p><b><u>Payment towards your unit:</u></b></p> 
+
+You will be sent a demand letter in accordance with your payment plan and you would be required to pay the dues within the stipulated due date. There are three components to every demand that you will receive – payment towards the unit, payment towards the GST and payment towards the TDS. <br/><br/>
+ 
+To honor your payment towards the unit, kindly issue the cheque in favour of “{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Name_Flat_Cost__c}” OR through RTGS/NEFT, the details of which are tabulated below: 
+<br/><br/>
+<table class="center" style="border:1px solid black;border-collapse:collapse;">
+    <tr>
+        <td style="border:1px solid black;">Bank Name</td>
+        <!--<td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Name_of_Bank__c}</td>-->
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Bank_Name_Flat_Cost__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Account Type </td>
+        <td style="border:1px solid black;">Current Account</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Beneficiary Account Name </td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Name_Flat_Cost__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Beneficiary Account No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Number_Flat_Cost__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Address of the Bank</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Bank_Name_Flat_Cost__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">IFSC Code</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.IFSC_Code_Flat_Cost__c}</td>
+    </tr>
+</table>
+<br/><br/>
+
+<apex:outputPanel rendered="{!AND(relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Number_GST_Deposit__c != null,relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Number_GST_Deposit__c != relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Number_Flat_Cost__c)}">
+
+To honor your payment towards the GST, kindly issue the cheque in favour of “{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Name_for_GST_Deposit__c}” OR through RTGS/NEFT, the details of which are tabulated below: 
+<br/><br/>
+<table class="center" style="border:1px solid black;border-collapse:collapse;">
+    <tr>
+        <td style="border:1px solid black;">Bank Name</td>
+        <!--<td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Bank_Name_Flat_Cost__c}</td>-->
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Bank_Name_GST__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Account Type </td>
+        <td style="border:1px solid black;">Current Account</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Beneficiary Account Name </td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Name_for_GST_Deposit__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Beneficiary Account No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Account_Number_GST_Deposit__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Address of the Bank</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.Bank_Name_GST__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">IFSC Code</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Legal_Entity__r.IFSC_Code_GST_Deposit__c}</td>
+    </tr>
+</table>
+</apex:outputPanel>
+<br/>
+
+Please note, you need to pay the TDS as per the provisions of Income Tax and furnish the Form 16B for accounting purpose, to us. <!-- Below is a tutorial that will guide you to make the TDS payment.
+ 
+<br/><br/>
+<a href="https://youtu.be/tHHh6ivHchw">link</a> -->
+<br/><br/>
+You may also contact Mr. Gourav Mardia at gourav@gyaata.in (+91-9920350878 / +91-9699350878) who can help you with the same. 
+
+<br/>
+<p><b><u>Refer and Earn:</u></b></p> 
+
+We believe our existing customers are our brand ambassadors and we have some very special privileges tailor-made only for you.  
+
+One such initiative is our Referral and Loyalty Program that offers both value added benefits and experiential offerings to its members and their friends and family. Every booking referred by you in any of our projects, entitles your referral to a discount immediately at the time of booking. What’s more, you too in turn earn credits that can be redeemed against your dues towards your own unit. Besides, being a preferred customer gives you access to glittering events and distinctive experiences. 
+<br/>
+<p><b><u>Contacting Us:</u></b></p>
+
+<!-- We operate out of our CRM office at <b><I>R-City Mall, North Wing, 9th floor, Unit Nos. 3<apex:outputText value="&"/>4, LBS Marg, Ghatkopar West-400086.</I></b> In case you wish to visit us, in the interest of better schedule and time management, it would be appreciated if an appointment with your Relationship Manager is fixed a day in advance so that we can serve you better.<br/><br/>-->
+We operate out of our CRM office at <b><I>{!relatedTo.RW_Booking__r.Project__r.CRM_Office_Address__c}.</I></b> In case you wish to visit us, in the interest of better schedule and time management, it would be appreciated if an appointment with your Relationship Manager is fixed a day in advance so that we can serve you better.<br/><br/>
+We are also reachable on {!relatedTo.RW_Booking__r.Project__r.Contact_No__c} from 10 AM to 6 PM (except on Sundays, 2nd <apex:outputText value="&"/> 4th Saturdays and statutory holidays).  You are requested to call on this number from your registered mobile number ONLY. It is crucial for you to call from your registered mobile number as that number has been fed into the back-end system to route your call directly to your designated Relationship Manager. If your call is unanswered / missed, then your call will be returned within 1 working day.<br/><br/>
+
+In our continuous endeavour to bring every convenience to your doorstep, we are pleased to introduce a quick and convenient mode of communication - an exclusive <b><I>Customer Self Service Portal</I></b> and <b><I>R-Connect App</I></b>, specifically created to help you track the details and progress of your home 24X7.  
+
+The <b><I>Customer Self-Service Portal</I></b> and <b><I>R-Connect App</I></b> will showcase details of your unit, your profile and contact details as registered with us, payment history, balances dues and taxes, payment modes to ease your payment transactions, construction updates and also the option to submit your referral leads to enable you to track the status of the same. <br/><br/>
+
+<!--We are sharing video link for the process of booking to registration for your convenience and understanding. You can click on the link below to access.<br/><br/>
+
+<a href="https://www.youtube.com/watch?v=bs4YW8wpjqE&list=PLIpRRatbhQuWdwWP_KF2GXsQynzRJv2i3&index=17&t=22s"><apex:outputText value="link"></apex:outputText></a>
+<br/><br/>-->
+
+A mail with the login details to access your <b><I>Customer Self-Service Portal</I></b> and the <b><I>R-Connect App</I></b> will be sent to you shortly.<br/><br/>
+
+<!--Below is a link that will walk-you through the process of logging in and taking you through the features of the <b><I>Customer Self-Service Portal</I></b> and the <b><I>R-Connect App and various other aspects of your journey with us:</I></b><br/><br/>
+
+<a href="https://www.youtube.com/playlist?list=PLIpRRatbhQuWdwWP_KF2GXsQynzRJv2i3">link</a>
+<br/><br/> -->
+For any query you are kindly requested to write to us on {!relatedTo.RW_Booking__r.Project__r.Customer_Care_Email__c} from your registered email ID for us to track and serve you better. 
+<br/><br/>
+We look forward to serving you better. A very warm welcome to the larger Runwal Family! 
+
+
+
+<br/><br/>
+Best Regards,<br/>
+<apex:outputText style="text-transform: capitalize" value="{!relatedTo.RW_Booking__r.RM_Name__c}"></apex:outputText><br/>
+Email Id: {!relatedTo.RW_Booking__r.Project__r.Customer_Care_Email__c}<br/>
+Contact No: {!relatedTo.RW_Booking__r.Project__r.Contact_No__c}<br/>
+Corporate Website: https://runwalgroup.in/ <br/>
+<!-- Corporate Website: {!relatedTo.RW_Booking__r.Project__r.Project_site_URL__c}<br/> -->
+<!-- Corporate Email: {!relatedTo.RW_Booking__r.Project__r.RW_Corporate_Email__c}<br/> -->
+
+
+    
+</messaging:htmlEmailBody>
+
+<!--<messaging:attachment renderAs="pdf" filename="NAME CONFIRMATION FORM.pdf">
+    <html>
+        <body>
+            <P style="text-align:center;font-size:20px"><b>NAME CONFIRMATION FORM</b></p>
+            <P style="text-align:right;font-size:13px">Dated:______________</p>
+            <P style="text-align:right;font-size:13px">FLAT NO:______________</p>
+            <p style="text-align:left;font-size:13px">
+                (PLEASE FILL THE FORM IN BLOCK LETTERS)<br/><br/>
+                1. NAME OF 1ST APPLICANT:(IF APPLICANT IS NRI AND DOES NOT HAVE PAN CARD, PLEASE PROVIDE OCI/PIO)<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                2. NAME OF 2ND APPLICANT:<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                3. NAME OF 3RD APPLICANT:<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                4. NAME OF 4TH APPLICANT:<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                5. NAME OF THE NOMINEE (IF YES, KINDLY PROVIDE IDENTITY AND ADDRESS PROOF, WRITE "NO" IF THERE IS NO NOMINEE. IF NOMINEE IS MINOR, PLEASE PROVIDE GUARDIAN DETAILS)<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                6. IN CASE OF P.O.A:___________________________________<br/><br/>
+                   PAN NUMBER OF P.O.A: ________________________________<br/><br/>
+                7. ADDRESS TO BE MENTIONED IN THE AGREEMENT:<br/><br/>
+                    _______________________________________________________________<br/><br/>
+                    _______________________________________________________________<br/><br/>
+                8. CONTACT DETAILS:(APPLICANT/P.O.A):_______________________________<br/><br/>
+                9. EMAIL ID:(APPLICANT/P.O.A):____________________________________<br/><br/>
+            </p>
+            <P style="text-align:right;font-size:13px">________________________</p>
+            <P style="text-align:right;font-size:13px">APPLICANT'S SIGNATURE</p><br/><br/>
+            
+            <p style="text-align:left;font-size:13px"><b>
+                In case of bank loan please confirm with your banker before filling the Name Confirmation Form, as no changes in the same will be accepted once the form is received.
+            </b></p>
+            
+        </body>
+    </html>
+</messaging:attachment>-->
+
+
+</messaging:emailTemplate>

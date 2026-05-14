@@ -86,9 +86,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <content>callTempCPCreationNewBtn</content>
+        <content>callTempCPCreationonNewBtn</content>
         <formFactor>Large</formFactor>
-        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>LightningComponent</type>
     </actionOverrides>
     <actionOverrides>
@@ -165,11 +165,10 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Channel Partners</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
     <searchLayouts>
         <customTabListAdditionalFields>Address__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>RW_Mobile_No__c</customTabListAdditionalFields>
-        <lookupDialogsAdditionalFields>SAP_CP_Code__c</lookupDialogsAdditionalFields>
         <searchResultsAdditionalFields>RECORDTYPE</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Representative_Name__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>RW_CreateFromIRIS__c</searchResultsAdditionalFields>
@@ -177,6 +176,7 @@
         <searchResultsAdditionalFields>Broker_Pan_No__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>SAP_CP_Code__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Activate_CP_Portal__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>RW_Broker_Number__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

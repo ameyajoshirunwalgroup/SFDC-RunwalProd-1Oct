@@ -101,6 +101,7 @@
             <label>Check Booking Id present</label>
         </rules>
     </decisions>
+    <description>Added Pass on my Referral Benefit checkbox for source referral</description>
     <dynamicChoiceSets>
         <name>Source</name>
         <dataType>Picklist</dataType>
@@ -122,6 +123,15 @@
     (FIND(&quot;FIELD_CUSTOM_VALIDATION_EXCEPTION: &quot;, {!$Flow.FaultMessage}) + 35)
   ),
   {!$Flow.FaultMessage}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>varOptForReferral</name>
+        <dataType>Boolean</dataType>
+        <expression>IF(
+   {!Pass_on_my_Referral_Benefit} = TRUE,
+   TRUE,
+   FALSE
 )</expression>
     </formulas>
     <interviewLabel>Lead | Create Lead for RM {!$Flow.CurrentDateTime}</interviewLabel>
@@ -154,10 +164,6 @@
         <connector>
             <targetReference>Nevigate_to_Lead_Record_Copy</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Validation</targetReference>
-        </faultConnector>
         <inputAssignments>
             <field>Email</field>
             <value>
@@ -183,6 +189,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Opt_for_Referral__c</field>
+            <value>
+                <elementReference>varOptForReferral</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Phone</field>
             <value>
                 <elementReference>Mobile_Number.value</elementReference>
@@ -204,6 +216,12 @@
             <field>RW_Project__c</field>
             <value>
                 <elementReference>Project.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Remark__c</field>
+            <value>
+                <elementReference>Remarks</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -263,6 +281,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Opt_for_Referral__c</field>
+            <value>
+                <elementReference>varOptForReferral</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Phone</field>
             <value>
                 <elementReference>Mobile_Number.value</elementReference>
@@ -284,6 +308,18 @@
             <field>RW_Project__c</field>
             <value>
                 <elementReference>Project.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RW_Sourcing_Manager__c</field>
+            <value>
+                <stringValue>Piyush Gandhi</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Remark__c</field>
+            <value>
+                <elementReference>Remarks</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -378,7 +414,6 @@
                     <dataType>String</dataType>
                     <fieldText>First Name</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -405,7 +440,6 @@
                     <dataType>String</dataType>
                     <fieldText>Last Name</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -591,6 +625,45 @@
                         </width>
                     </styleProperties>
                 </fields>
+                <fields>
+                    <name>Remarks</name>
+                    <fieldText>Remarks</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Pass_on_my_Referral_Benefit</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Pass on my Referral Benefit</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Lead_Source2</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>Referral</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -611,8 +684,7 @@
                     <dataType>String</dataType>
                     <fieldText>Lead Source</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>

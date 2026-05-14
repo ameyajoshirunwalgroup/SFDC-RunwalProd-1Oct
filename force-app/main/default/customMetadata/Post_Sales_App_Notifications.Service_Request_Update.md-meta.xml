@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Service Request Update</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {AccountId.Name},
+
+Greetings from Runwal Enterprises!!
+
+This is to inform you that the status of your service request has been updated. Please find the request details below for your reference:
+
+Project: {!Opportunity__r.Name}
+Unit Number: {!Opportunity__r.RW_Project_Unit__r.Name}
+Service Request Number: {!CaseNumber}
+Request Category: {!Case_Category__c}
+Current Status: {!Status}
+Last Updated On: {!LastModifiedDate}
+
+For detailed updates and next steps, kindly log in to the Runwal Connect App and review your service request.
+
+If you require any further assistance, please feel free to connect with our customer support team.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Service Request Update</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Service Request Update 🔧
+
+Your service request status has been updated. Please check the Runwal app for details.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">service_request</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Case</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Service Request Update</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Service Request Update</value>
+    </values>
+</CustomMetadata>

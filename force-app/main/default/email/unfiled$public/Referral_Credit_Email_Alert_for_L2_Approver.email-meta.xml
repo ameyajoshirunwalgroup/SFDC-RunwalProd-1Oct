@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Referral Credit Email Alert for L2 Approver</name>
+    <style>none</style>
+    <subject>Referral Credit Approved by Audit Team</subject>
+    <textOnly>Hello Shreya,
+
+This is to inform you that the referral credit request has been successfully approved by the Audit Team.
+
+Details of the record are as follows:
+
+Record Name: {!Referral_Credits__c.Name}
+Customer: {!Referral_Credits__c.Name_of_New_Customer__c}
+Booking : {!Referral_Credits__c.Booking_Name__c}
+Project : {!Referral_Credits__c.Project_Name__c}
+
+Thank you.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

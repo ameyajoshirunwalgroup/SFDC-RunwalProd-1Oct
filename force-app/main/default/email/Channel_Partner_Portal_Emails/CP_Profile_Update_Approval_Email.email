@@ -1,0 +1,5 @@
+<messaging:emailTemplate subject="Approval Request For Channel Partner Profile Update" recipientType="User" relatedToType="Broker__c">
+<messaging:htmlEmailBody >
+<c:CPProfileUpdateApprovalEmail ChannelPartnerId="{!relatedto.Id}"></c:CPProfileUpdateApprovalEmail>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

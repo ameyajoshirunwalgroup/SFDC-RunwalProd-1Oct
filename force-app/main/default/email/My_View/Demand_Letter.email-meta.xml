@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Demand Letter</name>
+    <style>none</style>
+    <subject>Demand Letter</subject>
+    <textOnly>Dear {!RW_Demand__c.Booking__r.Primary_Applicant_Name__c},
+
+This is to inform you that Demand Letter has been generated for the Demand -  {!RW_Demand__c.Name} And Demand  Number -  {!RW_Demand__c.RW_Billing_Document_Number__c}
+Please go through the Attached File.
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

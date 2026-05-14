@@ -1,0 +1,39 @@
+<h4> Quotation Snapshot for {!Quotation__c.Project_Unit__c} in {!Quotation__c.Project__c} - valid till {!Quotation__c.Valid_Till_Date__c} </h4>
+
+<table style="border: 1px solid #1C2130; border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; font-weight:normal; font-size:12px; color:#333333;">
+
+<tr style="border: 1px solid #1C2130; ">
+<th bgcolor="#DCE4F7" style="border: 1px solid #1C2130;"></th>
+<th style="border: 1px solid #1C2130;">Card Rates</th>
+<th style="border: 1px solid #1C2130;">Discounted Booking Rate</th>
+<th style="border: 1px solid #1C2130;">Discount Value</th>
+<th style="border: 1px solid #1C2130;">Additional NPV Discount</th>
+</tr>
+<tr style="border: 1px solid #1C2130; ">
+<th bgcolor="#DCE4F7" style="border: 1px solid #1C2130;">Lumpsum</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Total_Rate_Card_L__c} </td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Base_Rate_L_D__c}</td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Customer_Total_Discount_L__c}</td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.NPV_L__c}</td>
+</tr>
+
+<tr style="border: 1px solid #1C2130;">
+<th  bgcolor="#DCE4F7" style="border: 1px solid #1C2130;">Per Sq Ft</th>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Total_Rate_Card_PSF__c} </td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Base_Rate_PSF_D__c} </td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.Customer_Total_Discount_PSF__c} </td>
+<td style="border: 1px solid #1C2130;">{!Quotation__c.NPV_PSF__c} </td>
+</tr>
+
+
+</table>
+
+<br/>
+Click link below to view the quotation details the system. <br/>
+{!Quotation__c.Link}
+<br/>
+<br/>
+
+Request your approval,
+<br/>
+{!Quotation__c.Sales_Manager_Opp__c}

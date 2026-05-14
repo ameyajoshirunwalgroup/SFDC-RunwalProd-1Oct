@@ -1,0 +1,18 @@
+<messaging:emailTemplate subject="We Tried Contacting You Regarding {!relatedTo.RW_Project__r.Name}" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>Hi {!relatedTo.Name},</p>
+                
+                <p>We tried contacting you regarding <b>{!relatedTo.RW_Project__r.Name}</b> but couldn’t get through.</p>
+                
+                <p>We will try to reach you again soon.</p>
+                
+                <p>In the meantime, you can contact us on <b>{!relatedTo.Owner.Phone}</b> for more information.</p>
+                
+                
+                <p>Warm Regards,<br/>Team Presales,<br/>Runwal Group</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Loan Apply</name>
+    <style>none</style>
+    <subject>Loan Application Documents</subject>
+    <textOnly>Dear Sir/Madam,
+
+This is to inform you that applicant {!Loan__c.RW_Booking__r.Primary_Applicant_Name__c} has shown interest to apply for the Home Loan from the Bank {!Loan__c.RW_Bank_Name__c}.
+Below are the details attached.
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

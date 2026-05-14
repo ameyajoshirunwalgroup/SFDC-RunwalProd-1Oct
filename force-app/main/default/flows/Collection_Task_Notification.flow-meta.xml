@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Collection_Task_Notification</name>
-        <label>Collection Task Notification</label>
+        <name>Send_Custom_Notification_Action_1</name>
+        <label>Send Custom Notification Action 1</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>customNotificationAction</actionName>
@@ -44,7 +44,7 @@
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
     </actionCalls>
-    <apiVersion>65.0</apiVersion>
+    <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Owner_Id</name>
@@ -59,7 +59,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Collection_Task_Notification</targetReference>
+            <targetReference>Send_Custom_Notification_Action_1</targetReference>
         </connector>
     </assignments>
     <environments>Default</environments>
@@ -80,7 +80,7 @@
         <label>Task Loop</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <collectionReference>Collection_Tasks</collectionReference>
+        <collectionReference>Get_Collection_Tasks</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>Owner_Id</targetReference>
@@ -106,8 +106,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Collection_Tasks</name>
-        <label>Collection Tasks</label>
+        <name>Get_Collection_Tasks</name>
+        <label>Get Collection Tasks</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -116,17 +116,17 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>RecordTypeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>012fu000000M5M1AAK</stringValue>
-            </value>
-        </filters>
-        <filters>
             <field>Next_Action_Date__c</field>
             <operator>GreaterThan</operator>
             <value>
                 <elementReference>today</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>0129I000000PIjJQAW</stringValue>
             </value>
         </filters>
         <filters>
@@ -138,6 +138,8 @@
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Task</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -165,16 +167,18 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Collection_Tasks</targetReference>
+            <targetReference>Get_Collection_Tasks</targetReference>
         </connector>
         <schedule>
+            <dayOfMonthToRun>0</dayOfMonthToRun>
             <frequency>Once</frequency>
+            <frequencyNumber>0</frequencyNumber>
             <startDate>2026-01-29</startDate>
-            <startTime>13:00:00.000Z</startTime>
+            <startTime>11:53:00.000Z</startTime>
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>Owner</name>
         <dataType>String</dataType>

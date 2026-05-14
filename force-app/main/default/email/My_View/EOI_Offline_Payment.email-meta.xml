@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <description>EOI Receipt</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Offline Payment</name>
+    <style>none</style>
+    <subject>EOI Receipt</subject>
+    <textOnly>Hi Team,
+
+A Receipt with Payment Mode-{!PaymentMode} has been added for {!RW_EOI__c.Name} . To view the EOI Record , Click on {!RW_EOI__c.Link}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

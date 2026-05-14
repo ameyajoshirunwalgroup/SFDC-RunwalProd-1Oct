@@ -3,6 +3,22 @@
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Mode_Of_Funding</name>
+        <label>Assign Mode Of Funding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Mode_of_funding__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Bank Loan</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Account_Mobile</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Target_To_Loan</name>
         <label>Assign Target To Loan</label>
         <locationX>0</locationX>
@@ -160,7 +176,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Check_Account_Mobile</targetReference>
+                <targetReference>Assign_Mode_Of_Funding</targetReference>
             </connector>
             <label>NEW</label>
         </rules>

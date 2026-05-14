@@ -342,6 +342,13 @@
                 <stringValue>CP Invoice Clearing L1</stringValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ApproverTypes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>CP Invoice Clearing L2</stringValue>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>get_CP_Invoice_Team_Approvers</targetReference>
         </connector>
@@ -349,6 +356,22 @@
     <assignments>
         <name>Assign_CP_Invoice_Clearing_Team_Approver_L1</name>
         <label>Assign CP Invoice Clearing Team Approver L1</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RecipientIDs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Team_Members.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_CP_Invoice_Clearing_Team_Approver_L2</name>
+        <label>Assign CP Invoice Clearing Team Approver L2</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
@@ -385,6 +408,21 @@
                 <targetReference>Assign_CP_Invoice_Clearing_Team_Approver_L1</targetReference>
             </connector>
             <label>is CP Invoice Clearing Approver L1</label>
+        </rules>
+        <rules>
+            <name>is_CP_Invoice_Clearing_Approver_L2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Team_Members.Approver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CP Invoice Clearing L2</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CP_Invoice_Clearing_Team_Approver_L2</targetReference>
+            </connector>
+            <label>is CP Invoice Clearing Approver L2</label>
         </rules>
     </decisions>
     <decisions>
@@ -753,7 +791,6 @@
             <label>Copy 7 of is Not Null</label>
         </rules>
     </decisions>
-    <description>Removed CP Invoice Clearing L2</description>
     <environments>Default</environments>
     <interviewLabel>Task | Update check-list record and Notify billing team {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Task | Update check-list record and Notify billing team</label>
@@ -1054,7 +1091,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <subflows>
         <name>get_CP_Invoice_Team_Approvers</name>
         <label>get CP Invoice Team Approvers</label>

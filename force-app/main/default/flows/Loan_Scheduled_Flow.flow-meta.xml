@@ -10,23 +10,17 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <collectionElements>
-                    <elementReference>recipientIds</elementReference>
-                </collectionElements>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -45,8 +39,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
-                <stringValue>&lt;p&gt;Hi,&lt;/p&gt;&lt;p&gt;The loan for &lt;strong&gt;{!$Record.Account_Name__c}&lt;/strong&gt; was registered on &lt;strong&gt;{!$Record.RW_Booking__r.RW_Registration_Date__c}&lt;/strong&gt;, but the First Disbursement is still not done.&lt;/p&gt;&lt;p&gt;It has been &lt;strong&gt;{!$Record.Registration_to_Disbursement_Days__c}&lt;/strong&gt; days since registration.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Loan Record URL:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://runwal.lightning.force.com/{!$Record.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;https://runwal.lightning.force.com/{!$Record.Id}&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Runwal&lt;/p&gt;</stringValue>
+                <stringValue>&lt;p&gt;Hi,&lt;/p&gt;&lt;p&gt;The loan for &lt;strong&gt;{!$Record.Account_Name__c}&lt;/strong&gt; was registered on &lt;strong&gt;{!$Record.RW_Booking__r.RW_Registration_Date__c}&lt;/strong&gt;, but the First Disbursement is still not done.&lt;/p&gt;&lt;p&gt;It has been &lt;strong&gt;{!$Record.Registration_to_Disbursement_Days__c}&lt;/strong&gt; days since registration.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Loan Record URL:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/{!$Record.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;https://runwal--fullcopy.sandbox.lightning.force.com/{!$Record.Id}&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Runwal&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -56,17 +49,12 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>attachmentId</name>
-            <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
-                <stringValue></stringValue>
-            </value>
+            <name>recipientId</name>
         </inputParameters>
         <inputParameters>
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
-                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -79,7 +67,7 @@
         <offset>0</offset>
         <versionString>2.0.1</versionString>
     </actionCalls>
-    <apiVersion>65.0</apiVersion>
+    <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Assign_CRM_RM</name>
@@ -208,9 +196,11 @@
         </filters>
         <object>Loan__c</object>
         <schedule>
-            <frequency>Daily</frequency>
-            <startDate>2026-02-02</startDate>
-            <startTime>19:00:00.000Z</startTime>
+            <dayOfMonthToRun>0</dayOfMonthToRun>
+            <frequency>Once</frequency>
+            <frequencyNumber>0</frequencyNumber>
+            <startDate>2026-02-01</startDate>
+            <startTime>23:45:00.000Z</startTime>
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>
