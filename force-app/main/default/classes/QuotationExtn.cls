@@ -927,7 +927,7 @@ public with sharing class QuotationExtn
             }
         }
         // recalculate the project cost
-        if(discountLumpsum != 0) {
+        // if(discountLumpsum != 0) {
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
@@ -937,9 +937,9 @@ public with sharing class QuotationExtn
             InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;// Added by Aditya
             InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;// Added by Aditya
             quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
-        } else {
-            quoteUIMapDisc = null;
-        }
+        // } else {
+        //     quoteUIMapDisc = null;
+        // }
         
         disableDiscount = true;
         editSchedule = false;
