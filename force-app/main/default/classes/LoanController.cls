@@ -415,4 +415,17 @@ public without sharing class LoanController{
         
     }
     //Added by Vinay 15-02-2021 end
+    
+    public static void homeLoanOfferUpdateOnBooking(List<Id> bkgIds){ //Added by Vinay 21-04-2026
+        List<Booking__c> bookings = new List<Booking__c>();
+        for(Id bkgId : bkgIds){
+            Booking__c bkg = new Booking__c();
+        	bkg.Id = bkgId;
+            bkg.Home_Loan_Offer__c = true;
+            bookings.add(bkg);
+        }
+        if(bookings.size() > 0){
+            update bookings;
+        }
+    }
 }

@@ -171,14 +171,12 @@ bookingsCount = bklist.size();
 */
         
         //Assign CP Category using CP Category Tier Classification custom settings.
-        String currentYr = String.valueOf(System.today().year());		
-        System.debug('Current Year is ' + currentYr);
         
         list<CP_Category_Tier_Classification__c> cpCategoryTierCS = [select id,Name,Year__c,P1_walkin_max__c,P1_booking_min__c,P1_booking_max__c,
                                                                      P1_walkin_min__c,P2_booking_max__c,P2_booking_min__c,P2_walkin_max__c,P2_walkin_min__c,
                                                                      P3_booking_max__c,P3_booking_min__c,P3_walkin_max__c,P3_walkin_min__c,P4_booking_max__c,
                                                                      P4_booking_min__c,P4_walkin_max__c,P4_walkin_min__c from CP_Category_Tier_Classification__c
-                                                                     where Name =: segmentName and Year__c =: currentYr];
+                                                                     where Name =: segmentName and Year__c =: currentYear];
         system.debug('cpCategoryTierCS'+cpCategoryTierCS);
         list<CP_Category__c> cplisttoUpdate = new list<CP_Category__c>();
         Map<Id,Integer> cpcIdvsCustomerCategoryCountMap = new Map<Id,Integer>();

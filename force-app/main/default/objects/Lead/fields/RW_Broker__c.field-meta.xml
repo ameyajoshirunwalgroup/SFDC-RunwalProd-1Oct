@@ -4,7 +4,7 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Channel Partner</label>
     <lookupFilter>
-        <active>true</active>
+        <active>false</active>
         <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5))</booleanFilter>
         <filterItems>
             <field>Broker__c.Deactivated__c</field>
@@ -14,22 +14,22 @@
         <filterItems>
             <field>$Source.LeadSource</field>
             <operation>equals</operation>
-            <value>Channel Partner</value>
+            <value>Temp Channel Partner</value>
         </filterItems>
         <filterItems>
             <field>Broker__c.RecordType.Name</field>
             <operation>equals</operation>
-            <value>Channel Partner</value>
+            <value>Temp Channel Partner</value>
         </filterItems>
         <filterItems>
             <field>$Source.LeadSource</field>
             <operation>equals</operation>
-            <value>Temp Channel Partner</value>
+            <value>Channel Partner</value>
         </filterItems>
         <filterItems>
             <field>Broker__c.RecordType.Name</field>
             <operation>equals</operation>
-            <value>Temp Channel Partner</value>
+            <value>Channel Partner</value>
         </filterItems>
         <isOptional>true</isOptional>
     </lookupFilter>

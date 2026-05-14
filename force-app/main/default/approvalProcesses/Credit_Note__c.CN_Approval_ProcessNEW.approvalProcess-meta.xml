@@ -6,20 +6,34 @@
         <type>allInternalUsers</type>
     </allowedSubmitters>
     <allowedSubmitters>
+        <type>creator</type>
+    </allowedSubmitters>
+    <allowedSubmitters>
         <type>owner</type>
     </allowedSubmitters>
     <approvalPageFields>
         <field>Name</field>
         <field>Booking__c</field>
-        <field>Payment_Done__c</field>
-        <field>Paymet_Due__c</field>
-        <field>Interest_Amounts_Payable1__c</field>
+        <field>Customer_Name__c</field>
+        <field>CN_type__c</field>
         <field>Interest_To_Be_Settled__c</field>
         <field>Total_AV_Value__c</field>
+        <field>Total_Amount_Received__c</field>
+        <field>Interest_Amounts_Payable__c</field>
+        <field>Approval_Status__c</field>
+        <field>TL__c</field>
+        <field>CRM_Accounts_Head__c</field>
+        <field>CRM_Head__c</field>
+        <field>CEO__c</field>
+        <field>Reason_For_Settlement__c</field>
     </approvalPageFields>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
         <approvalActions>
+            <action>
+                <name>L1_Approval_Date</name>
+                <type>FieldUpdate</type>
+            </action>
             <action>
                 <name>TL_Approval_Step_1</name>
                 <type>FieldUpdate</type>
@@ -32,7 +46,7 @@
             </approver>
             <whenMultipleApprovers>Unanimous</whenMultipleApprovers>
         </assignedApprover>
-        <label>TL Approval Step 1</label>
+        <label>TL</label>
         <name>TL_Approval_Step_1</name>
         <rejectionActions>
             <action>
@@ -46,6 +60,10 @@
         <approvalActions>
             <action>
                 <name>CRM_Head_Approval_Step_2</name>
+                <type>FieldUpdate</type>
+            </action>
+            <action>
+                <name>L2_Approval_Date</name>
                 <type>FieldUpdate</type>
             </action>
         </approvalActions>
@@ -64,7 +82,7 @@
             </criteriaItems>
         </entryCriteria>
         <ifCriteriaNotMet>ApproveRecord</ifCriteriaNotMet>
-        <label>CRM Accounts Head Approval Step 2</label>
+        <label>CRM Accounts Head</label>
         <name>CRM_Accounts_Head_Approval_Step_2</name>
         <rejectBehavior>
             <type>RejectRequest</type>
@@ -83,6 +101,10 @@
                 <name>Approved_By_CRM_Head</name>
                 <type>FieldUpdate</type>
             </action>
+            <action>
+                <name>L3_Approval_Date</name>
+                <type>FieldUpdate</type>
+            </action>
         </approvalActions>
         <assignedApprover>
             <approver>
@@ -99,7 +121,7 @@
             </criteriaItems>
         </entryCriteria>
         <ifCriteriaNotMet>ApproveRecord</ifCriteriaNotMet>
-        <label>CRM Head Approval Step 3</label>
+        <label>CRM Head</label>
         <name>CRM_Head_Approval_Step_3</name>
         <rejectBehavior>
             <type>RejectRequest</type>
@@ -118,6 +140,10 @@
                 <name>Approved_By_CEO</name>
                 <type>FieldUpdate</type>
             </action>
+            <action>
+                <name>L4_Approval_Date</name>
+                <type>FieldUpdate</type>
+            </action>
         </approvalActions>
         <assignedApprover>
             <approver>
@@ -133,7 +159,7 @@
                 <value>Approved by CRM Head</value>
             </criteriaItems>
         </entryCriteria>
-        <label>CEO Approval Step 4</label>
+        <label>CEO</label>
         <name>CEO_Approval_Step_4</name>
         <rejectBehavior>
             <type>RejectRequest</type>
@@ -145,7 +171,8 @@
             </action>
         </rejectionActions>
     </approvalStep>
-    <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
+    <emailTemplate>unfiled$public/Credit_Note_Approval_Email</emailTemplate>
+    <enableMobileDeviceAccess>true</enableMobileDeviceAccess>
     <entryCriteria>
         <formula>NOT(
 ISNULL(Interest_To_Be_Settled__c)  
@@ -165,7 +192,7 @@ ISNULL(Interest_To_Be_Settled__c)
             <type>FieldUpdate</type>
         </action>
     </finalApprovalActions>
-    <finalApprovalRecordLock>true</finalApprovalRecordLock>
+    <finalApprovalRecordLock>false</finalApprovalRecordLock>
     <finalRejectionActions>
         <action>
             <name>Rejected</name>
@@ -176,6 +203,10 @@ ISNULL(Interest_To_Be_Settled__c)
     <initialSubmissionActions>
         <action>
             <name>Submitted</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Submitted_Date</name>
             <type>FieldUpdate</type>
         </action>
     </initialSubmissionActions>

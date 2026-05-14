@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>sonar__Populated_Percentage__c</fullName>
+    <deprecated>false</deprecated>
+    <formula>IF( sonar__Populated_Records__c = 0, 0,
+			IF( ROUND(sonar__Populated_Records__c/sonar__Records_Count__c , 1) == 0
+							, sonar__Populated_Records__c/sonar__Records_Count__c + 0.01
+							, IF( 
+				    AND( ROUND(sonar__Populated_Records__c/sonar__Records_Count__c, 1) == 1 , 
+												sonar__Populated_Records__c/sonar__Records_Count__c != 1
+											)
+			     , 
+			     sonar__Populated_Records__c/sonar__Records_Count__c - 0.01
+			     , 
+			     IF(ROUND(sonar__Populated_Records__c * 10/sonar__Records_Count__c, 1) &lt; sonar__Populated_Records__c * 10/sonar__Records_Count__c,
+											sonar__Populated_Records__c/sonar__Records_Count__c + 0.01, sonar__Populated_Records__c/sonar__Records_Count__c
+										)
+		      )
+			)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Populated Percentage</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

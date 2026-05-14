@@ -151,7 +151,7 @@ public class SAPReceiptAPICallOutBatchTest {
     }
      @istest
     public static void testdemandReceipts(){
-        user u = [select id,name from user limit 1];
+        user u = [select id,name from user where IsActive =true limit 1];
       
         system.runAs(u){
             test.startTest();
@@ -197,7 +197,7 @@ database.executeBatch(bc1,200);
   
      @istest
     public static void testdemandReceipts2(){
-        user u = [select id,name from user limit 1];
+        user u = [select id,name from user where IsActive = true limit 1];
         system.runAs(u){
             Test.setMock(WebServiceMock.class, new UniversalSAPMockClass());
         
@@ -216,7 +216,7 @@ database.executeBatch(bc1,200);
     }
        @istest
     public static void testReceipts(){
-        user u = [select id,name from user limit 1];
+        user u = [select id,name from user where IsActive = true limit 1];
         system.runAs(u){
             
 SAPReceiptAPICallOutBatch cb = new SAPReceiptAPICallOutBatch('20210216101010');
@@ -241,7 +241,7 @@ database.executeBatch(cb,200);
             
             TempSAPReceiptAPICallOutBatch cb1 = new TempSAPReceiptAPICallOutBatch('20210216101010','12345678');
 			database.executeBatch(cb1,200);
-            cb1.dummyMethod();
+            //cb1.dummyMethod();
 
         }
     }

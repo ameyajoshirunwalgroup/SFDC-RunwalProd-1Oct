@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Management_Level_Amount__c</fullName>
+    <formula>IF(
+ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;Dombivali&quot;),
+IF(
+Total_Approved_Interest_Amount_Waived__c &gt; 350000,
+Total_Approved_Interest_Amount_Waived__c - 350000,
+0
+),
+IF(
+OR(
+ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;Mumbai&quot;),
+ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;South Mumbai&quot;)
+),
+IF(
+Total_Approved_Interest_Amount_Waived__c &gt; 650000,
+Total_Approved_Interest_Amount_Waived__c - 650000,
+0
+),
+0
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Management Level Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

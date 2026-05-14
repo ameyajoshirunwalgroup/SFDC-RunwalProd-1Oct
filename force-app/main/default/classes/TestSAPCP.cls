@@ -68,6 +68,7 @@ public class TestSAPCP {
         objPUT.RDS_Project__c = objpr.id;
         insert objPUT;
         
+        list<Project_Unit__c> plist = new list<Project_Unit__c> ();
         objPUU = new Project_Unit__c();  
         objPUU.Project_Unit_Type__c = objPUT.id;  
         objPUU.Name = 'TestUnit';      
@@ -75,7 +76,7 @@ public class TestSAPCP {
         objPUU.RW_Param1__c = '5';
         objPUU.UnitNo__c ='9';
         objPUU.RW_Unit_Status__c ='Available';
-        insert objPUU;
+        plist.add(objPUU);
         
         objPUU1 = new Project_Unit__c();  
         objPUU1.Project_Unit_Type__c = objPUT.id;  
@@ -84,7 +85,8 @@ public class TestSAPCP {
         objPUU1.RW_Param1__c = '5';
         objPUU1.UnitNo__c ='10';
         objPUU1.RW_Unit_Status__c ='Available';
-        insert objPUU1;
+        plist.add(objPUU1);
+        insert plist;
         
         
         
@@ -124,7 +126,7 @@ public class TestSAPCP {
         Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         
-        
+        list<Opportunity> olist = new list<Opportunity>();
         objcustomer= new Opportunity();
         objcustomer.RW_Project__c=objpr.id;
         objcustomer.name='Test 1';
@@ -140,7 +142,7 @@ public class TestSAPCP {
         objcustomer.Walkin_Source__c = 'Channel Partner';
         objcustomer.SalesOrder_Number__c = '36737';
         objcustomer.SAP_Customer_Number__c = '865875';
-        insert objcustomer;
+        olist.add(objcustomer);
         objcustomer2= new Opportunity();
         objcustomer2.RW_Project__c=objpr.id;
         objcustomer2.name='Test 1';
@@ -154,14 +156,16 @@ public class TestSAPCP {
         objcustomer2.RW_Walkin_Channel_Partner__c =  cp.Id;
         objcustomer2.Walkin_Source__c = 'Channel Partner';
         //objcustomer2.Duplicate_Project_Unit_Request__c = false;
-        //objcustomer2.Release_Unit__c = false;
-        insert objcustomer2;
+        //objcustomer2.Release_Unit__c = false
+        olist.add(objcustomer2);
+        insert olist;
         OTP__c otp = new OTP__c();
         otp.Generated_OTP__c = '4522';
         otp.Account__c = cpaccount.Id;
         otp.Project__c = objpr.id;
         insert otp;
         
+         list<Quotation__c> qlist = new list<Quotation__c>();
         Quotation__c q = new Quotation__c();
         q.Name = 'Q010101';
         q.Quote_Status__c = 'Valid';
@@ -184,7 +188,7 @@ public class TestSAPCP {
         q.Stack_Additional__c = 0;
         q.MLCP_Additional__c = null;
         q.Agreement_Value_for_brokers__c = 10000000;
-        insert q;
+        qlist.add(q);
         
         Quotation__c q2 = new Quotation__c();
         q2.Name = 'Q020202';
@@ -204,13 +208,15 @@ public class TestSAPCP {
         q2.Tandem_car_park_Additional__c = 0;
         q2.Tandem_Open_Additional__c= 0;
         q2.Single_car_park_Additional__c= 0;
-        q2.Single_Open_Additional__c = 0;
+        q2.Single_Open_Additional__c = 0;        
         q2.Stack_Additional__c = 0;
         q2.MLCP_Additional__c = null;
         q2.Agreement_Value_for_brokers__c = 10000000;
         //q2.Service_Tax_On_Token_Amount__c = true;
-        insert q2;
+        qlist.add(q2);
+		insert qlist;
         
+        list<Booking__c> blist= new list<Booking__c>();
         Booking__c b = new Booking__c();
         b.Customer__c = objcustomer.Id;
         b.Project__c = objpr.Id;
@@ -230,7 +236,7 @@ public class TestSAPCP {
         b.Brokerage_Scheme__c = bscheme.Id;
         b.Base_Brokerage__c = 2;
         b.Kicker_Incentive_lookup__c = ki.id;
-        insert b;
+        blist.add(b);
         Booking__c b2 = new Booking__c();
         b2.Customer__c = objcustomer2.Id;
         b2.Project__c = objpr.Id;
@@ -249,7 +255,8 @@ public class TestSAPCP {
         b2.Allotment_Premium__c = 10000000;
         b2.Base_Brokerage__c = 2;
         b2.Kicker_Incentive_lookup__c = ki.Id;
-        insert b2;
+        blist.add(b2);
+        insert blist;
         
         Brokerage_Summary__c bs = new Brokerage_Summary__c();
         bs.Channel_Partner__c = cp.Id;

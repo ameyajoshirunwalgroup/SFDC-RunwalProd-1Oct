@@ -315,14 +315,25 @@ this.totalWithTaxStr = INFormat(this.totalWithTax);
             }
             
             // Set tax flags
-            showgst = (pos.size() > 0 && pos[0].Name == 'Maharashtra');
-            showigst = !showgst;
+            
+            //Added by Prashant .../// Added on 01-04-26..START
+            // REASON FOR CHANGE: To dynamically determine correct GST billing on CP Invoices. 
+            // If the CP is registered in Maharashtra (GST starts with 27) AND the Place of Supply is Maharashtra -> (CGST & SGST apply) it is an Intra-State transaction
+            // Otherwise, it is an Inter-State transaction (IGST applies).      
+            String GSTNumber = (channelpartner[0].RW_GST_Number__c != null) ? channelpartner[0].RW_GST_Number__c : '';
+            Boolean isMaharashtraGST = false;            
+            if (String.isNotBlank(GSTNumber)) {
+                isMaharashtraGST = GSTNumber.startsWith('27');
+            }
+            System.debug('isMaharashtraGST -> ' + isMaharashtraGST);
+            showgst = (pos.size() > 0 && pos[0].Name == 'Maharashtra' /*Added by Prashant*/&& channelpartner.size() > 0 && isMaharashtraGST);
+            showigst = !showgst;// Added by Prashant ...
+            /// Added on 01-04-26..END
             istaxapplicable = (cpBrokerage.If_GST_is_applicable__c == 'Yes');
             if(String.isNotBlank(urlGstApp)) {
                 this.istaxapplicable = (urlGstApp == 'Yes');
             }
             System.debug('fetchInvoices - Tax settings: showgst=' + showgst + ', showigst=' + showigst + ', istaxapplicable=' + istaxapplicable);
-            
             // Create invoice wrappers and calculate totals
             totalBrokerageAmount = 0;
             totalCGST = 0;
@@ -532,7 +543,7 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
             // Update individual invoices with THEIR OWN tax amounts and totals
             for(Brokerage_Invoice__c inv : CPInv) {
                 if(String.isBlank(inv.Invoice_Status__c)){
-                inv.Invoice_Status__c = 'Invoice Downloaded';
+                	inv.Invoice_Status__c = 'Invoice Downloaded';
                 }
                 
                 // Get the individual wrapper for this invoice
@@ -553,6 +564,7 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
             update CPInv;
             
             // Update CP Brokerage with TOTALS (sum of all child invoices)
+            System.debug('Check CPBrokerage ->'+cpBrokerage);
             if(cpBrokerage != null) {
                 // Set TOTALS on CP_Brokerage (sum of all child invoice amounts)
                 cpBrokerage.CGST__c = String.valueOf(totalCGST);  // Total of all CGST
@@ -562,10 +574,11 @@ System.debug('dmlOperation - Error updating invoices: ' + e.getMessage());
                 // Also update total amount on CP_Brokerage
                 cpBrokerage.Total_Invoice_Amount__c = grandTotal; // Total of all invoice amounts
                 if(String.isBlank(cpBrokerage.Invoice_Status__c)){
-                cpBrokerage.Invoice_Status__c = 'Invoice Downloaded';
+                	cpBrokerage.Invoice_Status__c = 'Invoice Downloaded';
                 }
                 
                 update cpBrokerage;
+                System.debug('Check CPBrokerage Insides ->'+cpBrokerage);
             }
             
             System.debug('dmlOperation - Successfully updated individual invoice tax amounts and CP Brokerage totals');

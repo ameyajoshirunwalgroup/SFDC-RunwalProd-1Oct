@@ -40,7 +40,7 @@ public class BilldeskPaymentAPI {
         
         Device device = new Device();
         device.init_channel = 'internet';
-        device.ip = '141.163.204.1';
+        device.ip = '104.161.128.0';
         device.accept_header = 'text/html';
         device.browser_tz = '-330';
         device.browser_color_depth = '32';
@@ -86,12 +86,10 @@ public class BilldeskPaymentAPI {
         req.setMethod('POST');
         req.setHeader('content-Type', 'application/jose');
         req.setHeader('bd-timestamp', d.format('yyyyMMddHHmmss'));
-        req.setHeader('bd-traceid', DetailMap.get('bookingId')+timestamp);
+        req.setHeader('bd-traceid', DetailMap.get('bookingId')+'_'+timestamp);
         req.setHeader('accept', 'application/jose');
         req.setBody(jwt);
-        System.debug('req: ' + req);
-        System.debug('req: ' + req.getHeader('bd-timestamp'));
-        System.debug('req: ' + req.getHeader('bd-traceid'));
+        
         Http http = new Http();
         HTTPResponse res = new HttpResponse();
          String resBody;
@@ -116,7 +114,7 @@ public class BilldeskPaymentAPI {
         String decodeBase64String = bsignature.toString();
         System.debug('decodeBase64String: ' + decodeBase64String);
         ResponseBody result = (ResponseBody)JSON.deserialize(decodeBase64String, ResponseBody.class );
-        System.debug('result: ' + result);
+        
         StaticResource sr = [SELECT Id, Body FROM StaticResource WHERE Name = 'Billdesk_html'];
         System.debug('body: ' + sr.Body.toString());
         String srBody = sr.Body.toString();
@@ -125,7 +123,7 @@ public class BilldeskPaymentAPI {
         srBody = srBody.replace('{merchantid}', result.mercid);
         System.debug('srBody: ' + srBody);
         
-        receipt.Booking_Id_with_Timestamp__c = DetailMap.get('bookingId')+timestamp;
+        receipt.Booking_Id_with_Timestamp__c = DetailMap.get('bookingId')+'_'+timestamp;
         receipt.Billdesk_Order_Id__c = result.orderid;
         insert receipt;
         

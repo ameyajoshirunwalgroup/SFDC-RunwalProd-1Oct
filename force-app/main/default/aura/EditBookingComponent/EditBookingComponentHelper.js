@@ -103,7 +103,7 @@
         var errorList =[];
         var validationError = false;
         debugger;
-        var namregExp =/^[A-Za-z]*$/;
+        var namregExp =/^[A-Za-z.]*$/;
         var mobileRegExp = /^\d{10}$/;
         var dateRegEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
         var today = $A.localizationService.formatDate(new Date(), "YYYY-MM-DD");

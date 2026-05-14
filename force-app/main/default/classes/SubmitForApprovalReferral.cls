@@ -137,6 +137,37 @@ public class SubmitForApprovalReferral {
             
         }
     }
+    
+    // Commented by Prashant as requirement has changed that no approval is required after IOM doc upload added on 29-12-25
+     @AuraEnabled
+    public static boolean SendForReferralSubmission(Id rcId){
+        //system.debug('comment::'+comment);
+        system.debug('rcId::'+rcId);
+        /*Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
+        req1.setComments(comment);
+        req1.setObjectId(rcId);
+        req1.setProcessDefinitionNameOrId('Referral_Credits_Approval_Process');
+        req1.setSkipEntryCriteria(true);*/
+        try{
+            //Approval.ProcessResult result = Approval.process(req1);
+            Referral_Credits__c r = new Referral_Credits__c();
+            r.Id = rcId;
+            r.Approval_Status__c = 'Uploaded';
+            update r;
+            return true;
+        }catch(Exception ex){
+            if(!Test.isRunningTest()){
+                throw new AuraHandledException(ex.getMessage());
+            }else{
+                system.debug('Exception LIne'+ex.getLineNumber());
+                return null;
+            }
+            
+            
+        }
+    }
+    
+    
 
     public class Fileupload {
         public String name;

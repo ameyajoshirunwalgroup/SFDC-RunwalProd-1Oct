@@ -1,0 +1,76 @@
+<apex:page controller="BillDeskReturnController"
+           sidebar="false"
+           showHeader="false"
+           applyHtmlTag="true"
+           standardStylesheets="false"
+           docType="html-5.0">
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
+            <style>
+                body { margin: 0; padding: 0; background: #f5f5f5; }
+                .navbar { background: #000; padding: 10px 20px; }
+                .navbar img { width: 70px; }
+                .card {
+                    border-radius: 10px;
+                    -webkit-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    padding: 40px;
+                    text-align: center;
+                    margin-top: 50px;
+                    background: #fff;
+                }
+                .success-icon { color: #28a745; font-size: 80px; }
+                .failure-icon { color: #dc3545; font-size: 80px; }
+                .pending-icon { color: #ffc107; font-size: 80px; }
+                h2 { font-weight: 600; margin-top: 20px; }
+                .order-id { font-size: 16px; color: #666; margin-top: 10px; }
+            </style>
+        </head>
+        <body>
+
+            <!-- Navbar -->
+            <nav class="navbar">
+                <img src="https://www.runwal.com/images/runwal-logo.png" alt="logo"/>
+            </nav>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+
+                            <!-- SUCCESS -->
+                            <apex:outputPanel rendered="{!status == 'SUCCESS'}">
+                                <i class="fas fa-check-circle success-icon"></i>
+                                <h2 style="color:#28a745;">Payment Successful!</h2>
+                                <p class="order-id">Order ID: <strong>{!orderId}</strong></p>
+                                <p>Thank you! Your transaction has been completed successfully.</p>
+                            </apex:outputPanel>
+
+                            <!-- PENDING -->
+                            <apex:outputPanel rendered="{!status == 'PENDING'}">
+                                <i class="fas fa-clock pending-icon"></i>
+                                <h2 style="color:#ffc107;">Payment Pending</h2>
+                                <p class="order-id">Order ID: <strong>{!orderId}</strong></p>
+                                <p>Your payment is being processed. Please wait for confirmation.</p>
+                            </apex:outputPanel>
+
+                            <!-- FAILURE -->
+                            <apex:outputPanel rendered="{!status == 'FAILURE'}">
+                                <i class="fas fa-times-circle failure-icon"></i>
+                                <h2 style="color:#dc3545;">Payment Failed</h2>
+                                <p class="order-id">Order ID: <strong>{!orderId}</strong></p>
+                                <p>Your payment could not be processed. Please try again.</p>
+                            </apex:outputPanel>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </body>
+    </html>
+</apex:page>

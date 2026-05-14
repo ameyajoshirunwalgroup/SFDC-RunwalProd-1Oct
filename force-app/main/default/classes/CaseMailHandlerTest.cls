@@ -81,7 +81,7 @@ public class CaseMailHandlerTest {
         insert testUser;        
         RecordType feedbackRecordType = [SELECT Id FROM RecordType WHERE SObjectType = 'Case' AND Name = 'Customer Feedback' LIMIT 1];
         RecordType visitFeedbackRecordType = [SELECT Id FROM RecordType WHERE SObjectType = 'Case' AND Name = 'Visit Feedback' LIMIT 1];
-
+        
         String recordTypeId  = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Person Account').getRecordTypeId();
         Account a = new Account();
         a.RecordTypeID=recordTypeId ;
@@ -149,6 +149,7 @@ public class CaseMailHandlerTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_Customer_Number__c='0020006618';
@@ -172,6 +173,7 @@ public class CaseMailHandlerTest {
         
         oppRec.Booking__c = objBking.Id;
         update oppRec;
+        
         
         Case testCase1 = new Case(
             SuppliedEmail = 'test2@example.com',
@@ -217,11 +219,11 @@ public class CaseMailHandlerTest {
         caseList.add(testCase2);
         caseList.add(testCase3);
         insert caseList;
-
         Set<Id> caseIds = new Set<Id>();
         caseIds.add([SELECT Id FROM Case WHERE  SuppliedEmail = 'test2@example.com' LIMIT 1].Id);
         caseIds.add([SELECT Id FROM Case WHERE   SuppliedEmail = 'test5@example.com' LIMIT 1].Id);
         caseIds.add([SELECT Id FROM Case WHERE   SuppliedEmail = 'test6@example.com' LIMIT 1].Id);
+        System.debug('caseIds: ' + caseIds);
         
         Test.startTest();
         CaseMailHandler.CaseClosureEmailCustomer(caseIds);

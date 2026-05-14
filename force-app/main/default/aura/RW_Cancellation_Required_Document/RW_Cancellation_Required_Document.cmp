@@ -5,6 +5,8 @@
     }
 </aura:html>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="accept" type="List" default="['.jpg', '.jpeg', '.pdf', '.png', '.xlxs', '.csv']"/>
+	<aura:attribute name="multiple" type="Boolean" default="false"/>
     <aura:attribute name="info" type="Object" />
     <aura:attribute name="recordId" type="String"></aura:attribute>
     <aura:attribute name="errormessage" type="String"/>     
@@ -26,13 +28,12 @@
 	</div>          
 	</div>
     
-    
-   <aura:if isTrue="{!v.info.Status__c == 'Cancellation Initiated'}">
+   <aura:if isTrue="{!or(v.info.Status__c == 'Cancellation Initiated', or(v.info.Status__c == 'Transfer In Progress', or(v.info.Status__c == 'Upgrade In Progress',v.info.Status__c == 'Cancellation In Progress')))}">
    <aura:if isTrue="{!and((empty(v.errormessage)) , (v.info.Cancellation_Requested_Status__c == 'Cancellation Confirmed'))}">
     <lightning:recordEditForm aura:id="myRecordForm" recordId="{!v.recordId}" objectApiName="Booking__c" onsubmit="{!c.handleSubmit}" >
    <div class="slds-grid slds-gutters slds-wrap">
            
-       <aura:if isTrue="{!v.info.Cancellation_Reason__c == 'Unit cancelled'}">
+       <aura:if isTrue="{!and(v.info.Cancellation_Reason__c != 'Transfer', v.info.Cancellation_Reason__c != 'Upgrade/Downgrade')}">
         <div class="slds-col slds-size_1-of-2">
                 <lightning:inputField aura:id="checklistdate" fieldName="Cancellation_checklist_Upload_Date__c" required="true" onchange="{!c.checklistValidation}" />
        </div>
@@ -74,7 +75,7 @@
             </aura:if>  
       </aura:if>
        
-       <aura:if isTrue="{!v.info.Cancellation_Reason__c == 'Unit transfer'}">
+       <aura:if isTrue="{!or(v.info.Cancellation_Reason__c == 'Transfer', v.info.Cancellation_Reason__c == 'Upgrade/Downgrade')}">
        <div class="slds-col slds-size_1-of-2">
                 <lightning:inputField aura:id="transferdate" fieldName="Unit_Transfer_Request_Upload_Date__c" required="true" onchange="{!c.transferValidation}" />
        </div>
@@ -105,13 +106,11 @@
            <lightning:inputField aura:id="cancelReason" fieldName="Cancellation_Reason__c" class ="slds-hide"/>
    			<lightning:inputField aura:id="registrationStatus" fieldName="RW_Registration_Status__c" class ="slds-hide"/>
        
-       <aura:if isTrue="{!or((v.info.Cancellation_Reason__c == 'Unit transfer') , (v.info.Cancellation_Reason__c == 'Unit cancelled'))}">
     <div class="slds-align_absolute-center" >
  	<lightning:button variant="brand" class="slds-m-top_small" label="Close" onclick="{!c.closePopup}"  />
     <lightning:button variant="brand" class="slds-m-top_small" label="Retain Booking" onclick="{!c.retainBooking}"  />
     <lightning:button variant="brand" class="slds-m-top_small" type="Submit" label="Submit Booking for Cancellation" />
     </div>
-       </aura:if>
        
         </div>
        </lightning:recordEditForm>
@@ -133,7 +132,7 @@
     </aura:if>
     </aura:if> 
     
-    <aura:if isTrue="{!and(and( and(v.bookingInfo.Status__c != 'Booking Cancelled – Refund Pending', v.bookingInfo.Status__c != 'Booking Cancelled – Refund Ready'), v.bookingInfo.Status__c != 'Booking Cancelled - Refunded'), v.bookingInfo.Status__c != 'Cancelled')}">
+    <aura:if isTrue="{!and(and( and(v.info.Status__c != 'Booking Cancelled – Refund Pending', v.info.Status__c != 'Booking Cancelled – Refund Ready'), v.info.Status__c != 'Booking Cancelled - Refunded'), v.info.Status__c != 'Cancelled')}">
        <div class="slds-col" style="background-color : #263238;color:white;margin-top:100px;">
       <div class="slds-box slds-align_absolute-center">            
   			<div class="slds-text-heading_medium">            

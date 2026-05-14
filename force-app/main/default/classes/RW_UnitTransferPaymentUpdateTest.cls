@@ -137,6 +137,7 @@ private class RW_UnitTransferPaymentUpdateTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -252,6 +253,7 @@ private class RW_UnitTransferPaymentUpdateTest {
         rec.Sourcing_Manager__c='Aniket Sapre';
         rec.RW_Sourcing_Head__c='Adrian Dsouza';
         rec.RW_Sales_Associate__c='Karthik Chettiar';
+        rec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         rec.RW_Closing_Head__c='Karthik Chettiar';
         rec.Walkin_Source__c='Direct';
         rec.SAP_CUstomer_Number__c='0020009875';

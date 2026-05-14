@@ -11,6 +11,7 @@ public class TestCPProfileUpdate {
         cp.Place_of_Supply__c = 'Maharashtra';
         cp.Channel_Partner_From_CP_Portal__c = true;
         cp.Project__c = 'Runwal Bliss';
+        cp.Company_Name_As_per_RERA__c = 'Runwal Enterprises';
         cp.Approver_L1__c = userinfo.getUserId();
         cp.Approver_L2__c = userinfo.getUserId();
         cp.Registration_Complete__c = true;
@@ -29,6 +30,15 @@ public class TestCPProfileUpdate {
         cp.RW_Is_GST_Applicable__c = true;
         cp.Channel_Partner_From_CP_Portal__c =true;
         insert cp;
+        
+        Account ac = new Account();                        
+        ac.Name = cp.Company_Name_As_per_RERA__c;
+        ac.CP_Email__c = cp.RW_Email__c;
+        ac.Mobile_No__c = cp.RW_Mobile_No__c;
+        ac.Channel_Partner__c = cp.id;
+        Id AccCPRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();                
+        ac.RecordTypeId = AccCPRecordTypeId;
+        insert ac;
         
         Broker__c cp2 = new Broker__c();
         cp2.Name = 'Test CP';
@@ -110,6 +120,8 @@ public class TestCPProfileUpdate {
             Is_NRI_CP__c = false,
             RW_Is_GST_Applicable__c = true,
             Channel_Partner_From_CP_Portal__c =true);
+        system.debug('cp id -> '+cp.id);
+         system.debug('cp id -> '+cp);
         
         Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@stetig.in.com','9098777',false);
@@ -173,15 +185,15 @@ public class TestCPProfileUpdate {
         system.runAs(u){
             CPProfileUpdate.updateChannelPartner(cp);
             CPProfileUpdate.getopps('Test 1', 'Runwal Bliss','CloseDate','Asc');
-            CPBookingController.selfregister(cp2, true);
+            CPBookingController.selfregister(cp2);
             try{
-                CPBookingController.selfregister(cp, true);
+                CPBookingController.selfregister(cp);
             }catch(Exception e){
                 
             }
             //CPBookingController.getCpMandateBookings('test3', 'test4', 'testunit', 'Yes', 'Yes');
-            CPBookingController.selfregister(cp, false);
-            CPBookingController.selfregister(cp3, false);
+            CPBookingController.selfregister(cp);
+            CPBookingController.selfregister(cp3);
             CPBookingController.getCollateralsA();
             CPBookingController.getCollateralsB();
             CPBookingController.getApprovers('Test123');
@@ -281,6 +293,7 @@ public class TestCPProfileUpdate {
         bscheme.Start_Date__c = system.today();
         bscheme.End_Date__c = system.today()+2;
         bscheme.Project_Location__c = pl.Id;
+        bscheme.AOP_CP__c = 1;
         insert bscheme;
         
         Kicker_Incentive__c ki = new Kicker_Incentive__c();
@@ -568,6 +581,7 @@ public class TestCPProfileUpdate {
         bscheme.Start_Date__c = system.today();
         bscheme.End_Date__c = system.today()+2;
         bscheme.Project_Location__c = pl.Id;
+        bscheme.AOP_CP__c = 1;
         insert bscheme;
         
         Kicker_Incentive__c ki = new Kicker_Incentive__c();
@@ -984,8 +998,8 @@ public class TestCPProfileUpdate {
         system.debug('cpAccount:::'+cpaccount);
         User u = [Select Id,name from User where Email =: 'teststetig43646@stetig.in'];
         system.runAs(u){
-            CPBookingController.selfregister(cp4, false);
-            CPBookingController.selfregister(cp5, true);
+            CPBookingController.selfregister(cp4);
+            CPBookingController.selfregister(cp5);
         }
     }
     

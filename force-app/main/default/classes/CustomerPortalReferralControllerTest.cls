@@ -111,6 +111,8 @@ public class CustomerPortalReferralControllerTest {
         ref.RW_Project__c= proj[0].Name;
         ref.RW_Contact_Phone__c = '1221122100';
         
+         Account acc = TestDataFactory.createPATemplate('TestPA1' , 'testleada@ozonetest.com', '9876544441', false);
+        
         RW_Referral__c ref1 = new RW_Referral__c();
         //ref.RW_Project__c = objpr.Id;
         ref1.RW_Status__c = 'Duplicate';
@@ -119,6 +121,8 @@ public class CustomerPortalReferralControllerTest {
         ref1.RW_Email_Address__c='Test@test.com';
         ref1.RW_Project__c= proj[0].Name;
         ref1.RW_Contact_Phone__c = '1221122100';
+        ref1.Account__c = acc.id;
+        insert ref1;
         
          List<User> u = [Select id from User where firstname='TestUser1'];
         system.runAs(u[0])

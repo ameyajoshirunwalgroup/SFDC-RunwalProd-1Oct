@@ -490,7 +490,7 @@
                     <!-- Added by Vinay 05-05-2025 End -->
                     <apex:commandButton value="CANCEL" action="{!Cancel}"  immediate="true" />   
                 </apex:pageBlockButtons>
-                <!-----------------------------------Booking Details--------------------------------------------->
+                <!--Booking Details-->
                 <apex:pageBlockSection title="EOI Details" rendered="{!IF(eoRecord <> null,true,false)}">
                     <apex:OutputText id="eoiId" label="EOI">
                         <apex:outputLink value="/{!eoRecord.id}">{!eoRecord.Name}</apex:outputLink>
@@ -516,9 +516,12 @@
                     </apex:inputField>
                     <apex:selectList id="selectquoteId" value="{!selectedQuote}" size="1" label="Quotation ">
                         <apex:selectOptions value="{!getQuote}"/> 
-                        <apex:actionSupport event="onchange" action="{!getTokenAmount}"  status="status">
-                            <apex:param name="selectedQuote" value="{!getQuote}" assignTo="{!selectedQuote}"/>
+                        <apex:actionSupport event="onchange" action="{!getTokenAmount}" rerender="messages,token,discountSection,refCredit,milestoneBlock" status="status"><!--Addded refCredit for Referral Credit Changes-->
+                            <!--<apex:param name="selectedQuote" value="{!getQuote}" assignTo="{!selectedQuote}"/>-->
                         </apex:actionSupport>
+                    </apex:selectList> <!-- Added by Vinay 13/03/2026 -->
+                    <apex:selectList id="milestoneBlock" value="{!selectedMilestone}" size="1" label="Expected Milestone for Registration">
+                        <apex:selectOptions value="{!getMilestoneOptions}"/> 
                     </apex:selectList>
                     <apex:OutputText id="token" value="{!tokenamt}" label="Token Amount"/>
                     <apex:OutputText value="{!STamt}" label="GST On Token Amount"/> 
@@ -527,6 +530,15 @@
                     <apex:inputField id="futureCorrContact" value="{!boookingObj.Future_Correspondence_Contact__c}" label="Future Correspondence Contact *" >
                         <apex:actionSupport event="onchange"  status="status"/>
                     </apex:inputField>
+                    <apex:outputText id="refCredit" value="{!refCreditDue}" label="Referral Credit Due"/> <!--Added for Referral Credit Changes-->
+                    <!--Added for Cancellation Changes starts-->
+
+                    <apex:inputField id="typeOfSale" value="{!boookingObj.Type_Of_sale__c}" label="Type Of Booking *" >
+                     <apex:actionSupport event="onchange"  action="{!typeOfSaleChanged}"  status="status">
+                        </apex:actionSupport>
+                    </apex:inputField>
+                    <apex:inputText value="{!boookingObj.Reason_For_Change__c}" label=" Reason For Change*"/>
+                    <!--Added for Cancellation Changes ends-->
                 </apex:pageBlockSection>
                 <apex:pageBlockSection id="futuredetail" Rendered="{!If(boookingObj.Future_Correspondence_Contact__c == 'Other',True,False)}" >
                     
@@ -536,6 +548,53 @@
                     <apex:inputField id="futureCorrContactEmail" value="{!boookingObj.Future_Correspondence_Contact_Email__c}" label="Future Correspondence Contact Email *"/>
                     
                 </apex:pageBlockSection>
+
+                <!--Added for Cancellation Changes starts-->
+                <!--<apex:outputPanel id="existingUnitDetails">-->
+                    <apex:pageBlockSection title="Original Unit Details" rendered="{!OR(boookingObj.Type_Of_sale__c=='Transfer of unit',OR(boookingObj.Type_Of_sale__c=='Upgrade of unit',boookingObj.Type_Of_sale__c=='Cancel & Rebook'))}">
+
+                        <!--<apex:inputField value="{!boookingObj.Cancelled_Project__c}" label = "Project Name"/>-->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Original Project Name*" />
+                            <apex:selectList value="{!boookingObj.Cancelled_Project__c}" size="1" multiselect="false" disabled="{!disableCancelledDetails}" >
+                                <apex:selectOptions value="{!projectOptions}" />
+                                <apex:actionSupport event="onchange" action="{!loadTowers}" rerender="towerSection"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                             <apex:outputLabel value="Original Tower*"/>
+                            <apex:outputPanel id="towerSection">
+                                <apex:selectList value="{!boookingObj.Cancelled_Tower__c}" size="1" multiselect="false" disabled="{!disableCancelledDetails}" >
+                                    <apex:selectOptions value="{!towerOptions}" />
+                                    <apex:actionSupport event="onchange" action="{!loadUnits}" rerender="unitSection"/>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Original Unit*"/>
+                            <apex:outputPanel id="unitSection">
+                                <apex:selectList value="{!boookingObj.Cancelled_Unit_No__c}" size="1" multiselect="false" disabled="{!disableCancelledDetails}" >
+                                    <apex:selectOptions value="{!unitOptions}"/>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+
+                        <!--<apex:inputField value="{!boookingObj.Cancelled_Tower__c}" label = " Tower "/>
+                
+                        <apex:inputField value="{!boookingObj.Cancelled_Unit_No__c}" label="Unit No"/>-->
+                        
+                        <!--<apex:inputField value="{!boookingObj.Cancelled_Booking_Date__c}" label="Date Of Booking"/>-->
+                        
+                        <apex:inputText value="{!boookingObj.Cancelled_SAP_Customer_Number__c}" label=" SAP Customer Code*" disabled="{!disableCancelledDetails}" />
+
+                    </apex:pageBlockSection>
+                <!--</apex:outputPanel>-->
+
+                <!--Added for Cancellation Changes ends -->
+
                 
                 <apex:pageBlockSection title="Bank Account Details">
                     <apex:OutputField value="{!boookingObj.Stock__c}" />
@@ -559,8 +618,9 @@
                     <apex:OutputField id="projetUnit" value="{!boookingObj.Unit_No__c}" />
                     <!-- <apex:OutputField id="bookingdate" value="{!boookingObj.Booking_Date__c}" /> OLD -->
                     <!-- <apex:inputField id="bookingDate" value="{!boookingObj.Booking_Date__c}" required="true"/> --><!-- Added By Netra on 28/12/16 -->
-                    <apex:OutputField id="bookingdate1" value="{!boookingObj.Booking_Date__c}" rendered="{!disabelBookingDate == true}"/> <!-- Added By coServe 05-06-2024 -->
-                    <apex:inputField id="bookingDate" value="{!boookingObj.Booking_Date__c}" label="Booking Date *"  rendered="{!disabelBookingDate == false}"/> <!-- Added By coServe 05-06-2024 -->
+                    <!--<apex:OutputField id="bookingdate1" value="{!boookingObj.Booking_Date__c}" rendered="{!disabelBookingDate == true}"/> --> <!-- Added By coServe 05-06-2024 -->
+                    <!--<apex:inputField id="bookingDate" value="{!boookingObj.Booking_Date__c}" label="Booking Date *"  rendered="{!disabelBookingDate == false}"/>--> <!-- Added By coServe 05-06-2024 -->
+                    <apex:inputField id="bookingDate" value="{!boookingObj.Booking_Date__c}" label="Booking Date *" />
                     
                     <apex:OutputField value="{!boookingObj.Sales_Managers__c}" />
                     <apex:OutputField value="{!boookingObj.Sourcing_Mananger__c}"  />
@@ -571,6 +631,20 @@
 
                     <apex:outputText ></apex:outputText>
                 </apex:pageBlockSection>
+                <!--Added by Aditya to Show Applied Discounts Start -->
+                <apex:pageBlockSection title="Applied Discounts" id="discountSection" columns="1">
+                    <apex:pageBlockTable value="{!appliedDiscountList}" var="disc" rendered="{!NOT(ISNULL(appliedDiscountList)) && appliedDiscountList.size > 0}">
+                        <apex:column value="{!disc.Name}" headerValue="Offer Name"/>
+                        <apex:column value="{!disc.Offer_type__c}" headerValue="Offer Type"/>
+                        <apex:column value="{!disc.Discount_Category__c}" headerValue="Offer Category"/>
+                        <apex:column value="{!disc.Offer_Value__c}" headerValue="Offer Value"/>
+                        
+                    </apex:pageBlockTable>
+                    
+                    <apex:outputText value="No non-monetary discounts applied to this quotation." 
+                                     rendered="{!(ISNULL(appliedDiscountList) || appliedDiscountList.size == 0) && NOT(ISBLANK(selectedQuote))}"/>
+                </apex:pageBlockSection>
+                <!--Added by Aditya to Show Applied Discounts End -->
             </apex:pageBlock>
             <!--------------------------------------------Applicant Form--------------------------------------------->
             <ul id="tabs">
@@ -643,7 +717,8 @@
                     <apex:inputField id="ofcDistance"  value="{!acc.Distance_To_Office__c}" label="Distance To Office*" />
                     <apex:inputField id="industry"  value="{!acc.Industry}" label="Industry*" />
                     <apex:inputField id="familyIncome"  value="{!acc.Family_Income__c}" label="Family Income*" />
-                    <apex:inputField id="purchaseReason"  value="{!acc.Purpose__c}" label="Reason To Purchase*" />
+                    <apex:inputField id="purchaseReason"  value="{!acc.Reason_to_Purchase__c}" label="Reason To Purchase*" /><!--Added by Prashant . 11-05-26-->
+                    <apex:inputField id="purpose"  value="{!acc.Purpose__c}" label="Purpose*" />
                     <apex:inputField id="noOfVehicles"  value="{!acc.Vehicles_owned__c}" label="No Of Vehicles*" />
                     <apex:inputField id="fourWheeler"  value="{!acc.Four_Wheeler__c}" label="Four Wheeler*" />
                     <!-- Added by Vinay 04-06-2025 End-->

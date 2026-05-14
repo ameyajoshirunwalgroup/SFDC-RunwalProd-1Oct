@@ -1684,7 +1684,7 @@ public class TestBookingTrigger {
         b.RW_Registration_Type__c = 'Offline Registration';
         b.RW_Expected_Registration_Date__c = system.today();
         b.RW_Registration_Date__c = system.today();
-        b.Cancellation_Reason__c = 'Unit transfer';
+        b.Cancellation_Reason__c = 'Transfer';
         b.Invoice_Submitted_by_CP__c = true;
         b.RW_Total_Receipt_Amount_Received__c = 2000000;
         b.RW_Registration_Done__c = 'No';

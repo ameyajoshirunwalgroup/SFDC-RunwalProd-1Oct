@@ -10,6 +10,7 @@ trigger trgReferralCredit on Referral_Credits__c (after Insert, after update,bef
             //Send referral credit data to SAP
             if(trigger.oldMap.get(rc.id).Approval_Status__c != null && trigger.oldMap.get(rc.id).Approval_Status__c != trigger.newMap.get(rc.id).Approval_Status__c && trigger.newMap.get(rc.id).Approval_Status__c == 'Approved by L2'){
                 
+                rcIds.add(rc.Id);//Added for referral Credit Changes
                 //   System.enqueueJob(new SAPReferralCreditQueueable(rc.Reference_Booking__c));
             }
                         
@@ -24,7 +25,7 @@ trigger trgReferralCredit on Referral_Credits__c (after Insert, after update,bef
             }
             
    	 		//Send record details to SAP.         
-            if(trigger.oldMap.get(rc.id).Approval_Status__c != trigger.newMap.get(rc.id).Approval_Status__c && trigger.newMap.get(rc.id).Approval_Status__c == 'Approved by L2' && trigger.oldMap.get(rc.id).Approval_Status__c == 'Approved by L1'){
+            if(trigger.oldMap.get(rc.id).Approval_Status__c != trigger.newMap.get(rc.id).Approval_Status__c && trigger.newMap.get(rc.id).Approval_Status__c == 'Uploaded'  /*trigger.newMap.get(rc.id).Approval_Status__c == 'Approved by L2' && trigger.oldMap.get(rc.id).Approval_Status__c == 'Approved by L1'*/ /*Commented by Prashant as now the requirement has changed that system should send referral credits to SAP after IOM upload. */ ){
                 rcIds.add(rc.Id);
                 //rcIdsAccs.add(rc.Id);                  
             }
@@ -50,13 +51,13 @@ trigger trgReferralCredit on Referral_Credits__c (after Insert, after update,bef
             SAP_Rest_ReferralCreditAPI.sendReferrallist(rcIds);
         }
         if(!rcIdsCRMHeads.isEmpty()){
-            SendReferralCreditEmails.sendIntimationEmailtoCRMHead(rcIdsCRMHeads);
+           // SendReferralCreditEmails.sendIntimationEmailtoCRMHead(rcIdsCRMHeads);//Commented for Referral Credit Changes
         }
         if(!rcIdsCRMHOD.isEmpty()){
-            SendReferralCreditEmails.sendIntimationEmailtoCRMHOD(rcIdsCRMHOD);
+            //SendReferralCreditEmails.sendIntimationEmailtoCRMHOD(rcIdsCRMHOD);//COmmented for Referral Credit Changes
         }
         if(!rcIdsAccs.isEmpty()){
-            SendReferralCreditEmails.sendEmailtoAccounts(rcIdsAccs);
+            //SendReferralCreditEmails.sendEmailtoAccounts(rcIdsAccs);//Commented for Referral Credit Changes
         }
         if(!rcIdsafterPosting.isEmpty()){
             SendReferralCreditEmails.sendEmailafterPosting(rcIdsafterPosting);
@@ -65,14 +66,26 @@ trigger trgReferralCredit on Referral_Credits__c (after Insert, after update,bef
     
     if(Trigger.isAfter && Trigger.isInsert){
         list<Id> rcIds = new list<Id>();
+        Set<Id> refIds = new Set<Id>();
         for(Referral_Credits__c rc : trigger.new){
             if(Trigger.oldMap == null && Trigger.newMap != null){
                 rcIds.add(rc.Id);
+                refIds.add(rc.Id);//Added for Referral Credit Changes
             }
         }
         
         if(!rcIds.isEmpty()){
-            SendReferralCreditEmails.sendIntimationEmailtoRM(rcIds);
+            //SendReferralCreditEmails.sendIntimationEmailtoRM(rcIds);//Commented for Referral Credit Changes
         }
+        /**Added for Referral Credit Changes starts */
+        if(!refIds.isEmpty()){
+            //ReferralCreditIOMPDFHandler.generateIOM(refIds);
+            System.debug('ReferralCreditIOMPDFHandler called1**');
+            System.enqueueJob(new ReferralCreditIOMPDFHandler(refIds));
+            System.debug('ReferralCreditIOMPDFHandler called**');
+        }
+        /**Added for Referral Credit Changes ends */
     }
+
+    
 }

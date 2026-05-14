@@ -108,13 +108,13 @@ public class BrokerageSchemeTriggerHandler {
                         bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }  */
                     
-                     //Added by Prashant to Handle base brokerage for NRI differently// 22-10-25. START
+                    //Added by Prashant to Handle base brokerage for NRI differently// 22-10-25. START
                     if(!brokerageScheme.isEmpty() && (brokerageScheme[0].Type__c == 'Both' || brokerageScheme[0].Type__c == 'Local') && (bk.Type_of_Client__c == 'Local' || bk.Type_of_Client__c == 'Corporate' )){
-                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                        bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - ((((bk.Passback_Amount__c!= null)?bk.Passback_Amount__c : 0  /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
                         bk.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
                         bk.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                        bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((bk.Passback_Amount__c / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                        bk.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - ((((bk.Passback_Amount__c!= null)?bk.Passback_Amount__c : 0 / bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     }else if(!brokerageScheme.isEmpty() && (brokerageScheme[0].Type__c == 'Both' || brokerageScheme[0].Type__c == 'NRI') && (bk.Type_of_Client__c == 'NRI') /*|| bk.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2*/){
                         bk.Base_Brokerage__c = brokerageScheme[0].Base_Brokerage_for_NRI__c - (((bk.Passback_Amount__c /  bk.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                         bk.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_NRI__c;

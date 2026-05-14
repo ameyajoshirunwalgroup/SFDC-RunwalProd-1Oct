@@ -456,8 +456,17 @@ private class MonthwiseBrokerageRecordsTest {
             bi3.Opportunity__c = objcustomer.Id;
             bi3.Invoice_Date__c = system.today();
             bi3.Brokerage_In_Rs__c = 53633;
+            bi3.SAP_Document_No__c = '678839';
+            bi3.Invoice_Status__c = 'Invoice Uploaded';
+            //bi3.Status__c = 'Paid';
             insert bi3;
             
+            Brokerage_Receipt__c br1 = new Brokerage_Receipt__c(
+                Brokerage_Invoice__c = bi3.Id,
+                Invoice_Amount__c = 54000
+            );
+            //insert br1;  
+            /*
             list<Brokerage_Invoice__c> invvv = [Select Id,Booking__c, Booking__r.Tower__r.Legal_Entity__c,Brokerage_Lookup__r.Brokerage_Type__c,
                 Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c, CP_Brokerage__c,
                 Channel_Partner__c, Invoice_Amount__c, CreatedDate, 
@@ -495,7 +504,7 @@ private class MonthwiseBrokerageRecordsTest {
             system.debug('invoices[0].Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c -> '+invoices[0].Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c);
             system.debug('invoices[0].Channel_Partner__c -> '+invoices[0].Channel_Partner__c);
             system.debug('invoices[0].CP_Brokerage__c -> '+invoices[0].CP_Brokerage__c);
-            
+            */
         }
 
         // --- 2. Execute Batch ---

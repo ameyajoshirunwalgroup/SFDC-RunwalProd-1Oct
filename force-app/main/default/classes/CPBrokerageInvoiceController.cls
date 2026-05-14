@@ -14,7 +14,7 @@
 public without sharing class CPBrokerageInvoiceController {
 
     @AuraEnabled(cacheable=true)
-    public static List<CP_Brokerage__c> getCpBrokerages(
+    public static List<CP_Brokerage__c> getCpBrokerages(	
         String searchKey,
         String sortBy,
         String sortDirection,

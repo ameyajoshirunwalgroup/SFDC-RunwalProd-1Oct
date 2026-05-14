@@ -63,7 +63,7 @@ public class SAPCPBrkReceiptAPICallOut implements Queueable, Database.AllowsCall
                 }
 
                 InvoiceList1 = [
-                    Select Id,name,CP_Brokerage__c 
+                    Select Id,name,CP_Brokerage__c ,Project__c
                     from Brokerage_Invoice__c 
                     Where Id = 'a2f5j000000Dkx5AAC'
                     LIMIT 1
@@ -72,7 +72,7 @@ public class SAPCPBrkReceiptAPICallOut implements Queueable, Database.AllowsCall
                 CPBrkInvoiceList = [
                     Select Id,Name,SAP_Document_No__c,Invoice_Number__c,
                     SAP_Broker_code__c,Legal_Entity__r.RDS_Company_Code__c,
-                    Legal_Entity__c,(Select id from Brokerage_Invoices__r) 
+                    Legal_Entity__c,(Select id,Project__c from Brokerage_Invoices__r) 
                     from CP_Brokerage__c 
                     where Legal_Entity__c != null 
                     and SAP_Document_No__c IN:InvoiceDocNoList

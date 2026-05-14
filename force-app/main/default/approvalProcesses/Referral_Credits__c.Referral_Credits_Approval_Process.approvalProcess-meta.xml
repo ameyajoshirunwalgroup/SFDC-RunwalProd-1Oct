@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
-    <active>true</active>
+    <active>false</active>
     <allowRecall>false</allowRecall>
     <allowedSubmitters>
         <type>owner</type>
@@ -81,7 +81,7 @@
     </approvalStep>
     <emailTemplate>unfiled$public/Referral_Credit_Approval_Email_Template</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
-    <finalApprovalRecordLock>true</finalApprovalRecordLock>
+    <finalApprovalRecordLock>false</finalApprovalRecordLock>
     <finalRejectionRecordLock>false</finalRejectionRecordLock>
     <initialSubmissionActions>
         <action>
@@ -90,7 +90,7 @@
         </action>
     </initialSubmissionActions>
     <label>Referral Credits Approval Process</label>
-    <processOrder>1</processOrder>
+    <processOrder>3</processOrder>
     <recordEditability>AdminOnly</recordEditability>
     <showApprovalHistory>false</showApprovalHistory>
 </ApprovalProcess>

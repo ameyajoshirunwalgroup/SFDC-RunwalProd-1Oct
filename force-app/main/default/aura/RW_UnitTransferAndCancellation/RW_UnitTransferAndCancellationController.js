@@ -2,6 +2,9 @@
     
     doInit: function(component, event, helper) {        
         var BookingID = component.get("v.recordId"); 
+        helper.fetchPicklistValues(component);
+        helper.fetchDynamicPicklists(component);
+        helper.fetchSubtypeMapping(component);
         if(BookingID != null)
         {
         	helper.retrieveBookingInformation(component,BookingID); 
@@ -23,9 +26,9 @@
         var BookingID = component.get("v.recordId"); 
         var cancellationReason = component.find('cancellationReason').get('v.value');
         var cancellationSubReason = component.find('cancellationSubReason').get('v.value');
-        if(cancellationReason == 'Unit cancelled' && cancellationSubReason != 'Z8' && cancellationSubReason != 'R3'){
+        if(cancellationReason != 'Transfer' && cancellationReason != 'Upgrade/Downgrade'){
             helper.saveBookingCancellation(component , BookingID);
-        }else if(cancellationReason == 'Unit cancelled' && (cancellationSubReason == 'Z8' || cancellationSubReason == 'R3')){
+        }else if(cancellationReason == 'Transfer' || cancellationReason == 'Upgrade/Downgrade'){
             helper.saveBookingCancellationUpgrade(component , BookingID);
         }
         
@@ -68,7 +71,7 @@
         debugger;
         var cancellationReason = component.find('cancellationReason').get('v.value');
         var cancellationSubReason = component.find('cancellationSubReason').get('v.value');
-        if(cancellationReason == 'Unit cancelled' && cancellationSubReason != 'Z8' && cancellationSubReason != 'R3'){
+        if((cancellationReason == 'Unit cancelled' && cancellationSubReason != 'Z8' && cancellationSubReason != 'R3') || (cancellationReason != 'Transfer' && cancellationReason != 'Upgrade/Downgrade')){
             var AgreementValue = component.find('AgreementValue').get('v.value'); 
             var MVATM = component.find('MVATM').get('v.value'); 
             var TotalRecievedAmount = component.find('TotalRecievedAmount').get('v.value');
@@ -101,7 +104,7 @@
             var totalforfeitureamount = parseFloat(ForfeitureAmountCalculation) + parseFloat(MVATM) + parseFloat(CGST) + parseFloat(SGST) + parseFloat(BrokerageAmount) + parseFloat(InterestValue) + parseFloat(Taxesifany) +  parseFloat(TDS)+ parseFloat(Otherforfeitureamount);
             component.find('TotalRefundAmount').set('v.value' ,TotalRefundAmount1)	                  
             component.find('TotalForfeitureAmount').set('v.value' ,totalforfeitureamount);
-        }else if(cancellationReason == 'Unit cancelled' && (cancellationSubReason == 'Z8' || cancellationSubReason == 'R3')){
+        }else if((cancellationReason == 'Unit cancelled' && (cancellationSubReason == 'Z8' || cancellationSubReason == 'R3')) || (cancellationReason == 'Transfer' || cancellationReason == 'Upgrade/Downgrade')) {
             var AgreementValue1 = component.find('AgreementValue1').get('v.value'); 
             var MVATM1 = component.find('MVATM1').get('v.value'); 
             var TotalRecievedAmount1 = component.find('TotalRecievedAmount1').get('v.value');
@@ -131,6 +134,52 @@
         	helper.retrieveUnitInformation(component,UnitID,recordId); 
         } 
         
-	}
+	},
+    
+    //Added by Aditya
+    handleReasonChange: function(component, event, helper) {
+        var controllerValue = component.get("v.bookingInfo.Cancellation_Reason__c");
+        var pickListMap = component.get("v.parentChildMap");
+        
+        if (controllerValue && pickListMap[controllerValue]) {
+            component.set("v.subReasonOptions", pickListMap[controllerValue]);
+        } else {
+            component.set("v.subReasonOptions", []);
+        }
+    },
+    
+    handleModeChange: function(component, event, helper) {
+        // This triggers the aura:if blocks to re-evaluate
+        var mode = component.get("v.bookingInfo.Mode_of_Cancellation__c");
+        if(mode !== 'Meeting') {
+            component.set("v.meetingStatus", "");
+            component.set("v.meetingDate", null);
+        }
+    },
+
+    handleUploadFinished: function (component, event) {
+        // Get the list of uploaded files
+        var uploadedFiles = event.getParam("files");
+        var toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            "title": "Success!",
+            "message": uploadedFiles.length + " files uploaded successfully.",
+            "type": "success"
+        });
+        toastEvent.fire();
+    },
+    
+    handleSubReasonChange: function(component, event, helper) {
+        var selectedSubReason = component.get("v.bookingInfo.Cancellation_Sub_reason__c");
+        var mapping = component.get("v.subReasonToTypeMap");
+        console.log('selectedSubReason---->',selectedSubReason);
+        console.log('mapping---->',mapping);
+        if (selectedSubReason && mapping && mapping[selectedSubReason]) {
+            // Automatically set the Subtype field
+            component.set("v.bookingInfo.Cancellation_Subtype__c", mapping[selectedSubReason]);
+        } else {
+            component.set("v.bookingInfo.Cancellation_Subtype__c", "");
+        }
+    }
     
 });

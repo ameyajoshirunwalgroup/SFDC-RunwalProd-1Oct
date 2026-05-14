@@ -32,7 +32,7 @@
          @isTest
     private static void applicantdetailtest2(){
         Test.startTest();
-    ProspectAccessController.dummy();
+    //ProspectAccessController.dummy();
          test.stopTest();
     }
  

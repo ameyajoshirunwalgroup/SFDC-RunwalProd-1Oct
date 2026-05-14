@@ -15,6 +15,14 @@ global class LockatedApp_SubmitReferralEnquiry {
             RefDetails resData = (RefDetails)JSON.deserialize(jsonBody, RefDetails.class);
             system.debug('resData: ' + resData);
             system.debug('booking: ' + resData.booking);
+            String bkgId;
+            if(resData.phase == 'Post Possession'){ //Added by Vinay 24-04-2026
+                List<Project_Unit__c> units = [SELECT Id, Booking__c FROM Project_Unit__c WHERE RW_Project__r.Name =: resData.project AND RW_Param4__c =: resData.unit];
+                if(units.size() > 0){
+                    bkgId = units[0].Booking__c;
+                    resData.booking = bkgId;
+                }
+            }
             if(String.isBlank(resData.booking)){
                 errorResult.put('status', 'error');
                 errorResult.put('message', 'Please pass valid Booking Id');
@@ -45,6 +53,7 @@ global class LockatedApp_SubmitReferralEnquiry {
                         ld.Description = resData.description;
                         ld.LeadSource = 'Referral';
                         ld.RW_Lead_Sub_Source__c = 'Existing client reference';
+                        ld.Integration_Source__c = 'Lockated ' + resData.phase + ' App'; //Added by Vinay 24-04-2026
                         insert ld;
                         res.responseBody = Blob.valueOf('Referral details submitted successfully');
                     	res.statusCode = 200;
@@ -57,14 +66,12 @@ global class LockatedApp_SubmitReferralEnquiry {
                         ld.RW_Project__c = projMap.get(resData.project);
                         ld.Description = resData.description;
                         ld.LeadSource = 'Loyalty';
+                        ld.Integration_Source__c = 'Lockated ' + resData.phase + ' App'; //Added by Vinay 24-04-2026
                         insert ld;
                         res.responseBody = Blob.valueOf('Enquiry details submitted successfully');
                     	res.statusCode = 200;
                     }
-                    
-                    
                 }
-                
             }
         }catch(exception e){
             errorResult.put('status', 'error');
@@ -83,5 +90,7 @@ global class LockatedApp_SubmitReferralEnquiry {
         public String booking;
         public String description;
         public String reqType;
-    }
+        public String phase; //Added by Vinay 24-04-2026
+        public String unit; //Added by Vinay 24-04-2026
+    } 
 }

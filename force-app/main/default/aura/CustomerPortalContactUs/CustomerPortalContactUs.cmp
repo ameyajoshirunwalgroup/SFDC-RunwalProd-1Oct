@@ -12,6 +12,8 @@
     <aura:attribute name="unitNumber" type="String"/>
     <aura:attribute name="bookingName" type="String"/>
     <aura:attribute name="bookingId" type="String"/>
+    <aura:attribute name="disableContactUsSection" type="Boolean" default="false"/> <!-- Added by Vinay 09-06-2025 -->
+    <aura:html tag="style">.toastMessage.forceActionsText{white-space : pre-line !important;}</aura:html>
     
     <aura:attribute name="projectId" type="String"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -65,8 +67,8 @@
                 <!--/div-->
                 </div>
             </lightning:layoutItem>
-            
-            <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="6" largeDeviceSize="4" padding="horizontal-medium">
+            <aura:if isTrue="{!v.disableContactUsSection == false}"> <!-- Added aura:if condition by Vinay 09-06-2025  -->
+            <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="6" largeDeviceSize="4" padding="horizontal-medium" >
                 <div class="slds-box slds-box_small slds-text-align_center textInput">
                     <p class="field-title" title="Cotact Us Form" icon-name="standard:contact">Contact Us Form</p>
                 </div><br/>
@@ -123,6 +125,7 @@
                 </div>
                 </div>
             </lightning:layoutItem>
+            </aura:if>
         </lightning:layout>
     </lightning:card>
 </aura:component>

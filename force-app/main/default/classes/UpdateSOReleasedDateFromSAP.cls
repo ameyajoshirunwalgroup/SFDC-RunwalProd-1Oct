@@ -58,7 +58,7 @@ global class UpdateSOReleasedDateFromSAP {//implements Database.AllowsCallouts, 
             system.debug('crnSoVsRelDate::'+crnSoVsRelDate);
             
             List<Booking__c> bkgs = [SELECT Id, Name, Opportunity__r.SAP_Customer_Number__c, Opportunity__r.SalesOrder_Number__c FROM Booking__c WHERE Opportunity__r.SAP_Customer_Number__c =: crnList AND 
-                                     Opportunity__r.SalesOrder_Number__c =: soList];
+                                     Opportunity__r.SalesOrder_Number__c =: soList AND Status__c = 'Booking Confirmed']; //Added Status__c = 'Booking Confirmed' by Vinay 05-05-2025
             
             //List<Booking__c> bkgs = [SELECT Id, Name, Opportunity__r.SAP_Customer_Number__c, Opportunity__r.SalesOrder_Number__c FROM Booking__c WHERE Id = 'a0s1e0000026TZjAAM'];
             
@@ -101,20 +101,20 @@ global class UpdateSOReleasedDateFromSAP {//implements Database.AllowsCallouts, 
                 mail.sethtmlbody(errorMessage);
                 Messaging.SendEmailResult[] result = Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{mail});
              }
-
-                //Added by Vinay 08-12-2025 Start
-                Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-                mail.settoaddresses(new List<String>{'vinay.kumar.os@runwalgroup.in','shraddha.shahari@runwalgroup.in'});
-                mail.setsubject('SO Release date update status');
-                String htmlBody = '<b>SAP Response: </b><br/>';
-                htmlBody += sapResponse + '<br/><br/><br/><br/>';
-                htmlBody += '<b>Success Record Ids: </b>';
-                htmlBody += successRecordIds + '<br/><br/><br/><br/>';
-                htmlBody += '<b>Failed Record Details: </b>';
-                htmlBody += errorMessage + '<br/><br/>';
-                mail.sethtmlbody(htmlBody);
-                Messaging.SendEmailResult[] result = Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{mail});
-                //Added by Vinay 08-12-2025 End
+            
+            //Added by Vinay 08-12-2025 Start
+            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+            mail.settoaddresses(new List<String>{'vinay.kumar.os@runwalgroup.in','shraddha.shahari@runwalgroup.in'});
+            mail.setsubject('SO Release date update status');
+            String htmlBody = '<b>SAP Response: </b><br/>';
+            htmlBody += sapResponse + '<br/><br/><br/><br/>';
+            htmlBody += '<b>Success Record Ids: </b>';
+            htmlBody += successRecordIds + '<br/><br/><br/><br/>';
+            htmlBody += '<b>Failed Record Details: </b>';
+            htmlBody += errorMessage + '<br/><br/>';
+            mail.sethtmlbody(htmlBody);
+            Messaging.SendEmailResult[] result = Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{mail});
+            //Added by Vinay 08-12-2025 End
         }  
     }
     

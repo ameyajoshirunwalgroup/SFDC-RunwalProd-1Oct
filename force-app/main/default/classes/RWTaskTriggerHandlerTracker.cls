@@ -68,6 +68,16 @@ public with sharing class RWTaskTriggerHandlerTracker
         opp.RW_Project__c = objProject.Id;
         insert opp;
         
+        Account objAccount = new Account();
+        objAccount.Name = 'AccountName';
+        insert objAccount;
+        
+        Case cs = new Case();
+        cs.AccountId = objAccount.Id;
+        cs.Subject = 'Test';
+        cs.OwnerId = UserInfo.getUserId();
+        insert cs;
+        
         Not_Contactable_Email_Alerts__c nc = new Not_Contactable_Email_Alerts__c();
         nc.Name = 'Sales Task';
         nc.Email_Template__c = 'Not_Contactable_Call_Email_CRM';
@@ -75,6 +85,8 @@ public with sharing class RWTaskTriggerHandlerTracker
         insert nc;
         
         Id tskRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Sales Task').getRecordTypeId();
+        Id custIntrRecTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Customer Interaction').getRecordTypeId();
+        List<Task> tskList = new List<Task>();
         
         Task objTask = new Task();
         objTask.subject ='Test';
@@ -83,11 +95,24 @@ public with sharing class RWTaskTriggerHandlerTracker
         objTask.Priority='Normal';
         objTask.RecordTypeId = tskRecTypeId;
         objTask.Communication_Type__c = 'Outbound Call';
-        insert objTask;
+        //insert objTask;
+        tskList.add(objTask);
+        
+        
+        
+        Task objTask1 = new Task();
+        objTask1.subject ='Test';
+        objTask1.WhatId = cs.Id;
+        objTask1.Status = 'Not Started';
+        objTask1.Priority='Normal';
+        objTask1.RecordTypeId = custIntrRecTypeId;
+        objTask1.Description = 'Testing';
+        //insert objTask1;
+        tskList.add(objTask1);
+        insert tskList;
         
         objTask.Status = 'Completed';
         objTask.Call_Status__c = 'Not Contactable';
         update objTask;
-        
     }
 }

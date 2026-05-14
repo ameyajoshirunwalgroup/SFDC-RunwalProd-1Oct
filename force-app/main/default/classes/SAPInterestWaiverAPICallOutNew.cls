@@ -22,7 +22,7 @@ public class SAPInterestWaiverAPICallOutNew implements Queueable, Database.Allow
                                               Interest_Amount__c, Waiver_Amount__c, Project_Name__c,Unit__c,Booking__r.Customer__r.RW_Mobile_No__c,
                                               Approval_Status__c, Booking__c,Customer_Name__c,
                                               Booking__r.Sale_Order__c, Booking__r.Opportunity__r.SAP_Customer_Number__c,
-                                              Is_Send_To_SAP__c, Remarks__c
+                                              Is_Send_To_SAP__c, Remarks__c,Demand__r.Booking__r.is_Approved_From_SAP__c
                                               FROM Interest_Waiver__c 
                                               WHERE Approval_Status__c = 'Approved' AND Id IN :setWaiverId];
         
@@ -160,7 +160,8 @@ objWrapp.bukrs = null;
                 if(res.getStatusCode() == 201 || res.getStatusCode() == 200){
                     for(Interest_Waiver__c objIW : lstWaiver){
                         objIW.Is_Send_To_SAP__c = True;
-						objIW.Booking__r.is_Approved_From_SAP__c = True;
+						objIW.Demand__r.Booking__r.is_Approved_From_SAP__c = True;
+                        system.debug('objIW.Demand__r.Booking__r.is_Approved_From_SAP__c---->'+objIW.Demand__r.Booking__r.is_Approved_From_SAP__c);
                         lstIWUpdate.add(objIW);
                     }
                 }

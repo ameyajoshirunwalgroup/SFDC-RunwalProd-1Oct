@@ -1,4 +1,4 @@
-public class CPBrokerageInvoiceDueUploadEmailCtrl {
+public without sharing class CPBrokerageInvoiceDueUploadEmailCtrl {
     public String cpId{get;set;}
     public List<Broker__c> cpList {get;set;}
     public List<CP_Profile_Update__c> cpprofileupdate {get;set;}
@@ -139,8 +139,7 @@ public class CPBrokerageInvoiceDueUploadEmailCtrl {
                      AOP_Brokerage__c
                      FROM Brokerage_Invoice__c
                      WHERE CP_Brokerage__c = :cpBrokerageId
-                     ORDER BY CreatedDate ASC
-                     LIMIT 50
+                     ORDER BY CreatedDate DESC
                     ];
             
             System.debug('fetchInvoices - Found ' + CPInv.size() + ' invoice records');

@@ -57,10 +57,10 @@ public class SAPCPReceiptAPICallOut {
                 for(sapCPPaymentInterface.ZstrInvSentLog responseRec : sfdcpayReceiptResponse.item){
                     InvoiceDocNoList.add(responseRec.Sapinvoiceno);
                 }
-                  InvoiceList1 = [Select Id,name from Brokerage_Invoice__c Where Id =: 'a2f5j000000Dkx5AAC' LIMIT 1];
+                  InvoiceList1 = [Select Id,name,Project__c from Brokerage_Invoice__c Where Id =: 'a2f5j000000Dkx5AAC' LIMIT 1];
                   system.debug('InvoiceList1 ::'+InvoiceList1);                         
                 System.debug('InvoiceDocNoList:::'+InvoiceDocNoList);
-                InvoiceList = [Select Id,Name,SAP_Document_No__c,Invoice_Number__c,SAP_Broker_code__c,Booking__r.Project__r.Name from Brokerage_Invoice__c where SAP_Document_No__c IN:InvoiceDocNoList ];
+                InvoiceList = [Select Id,Name,SAP_Document_No__c,Invoice_Number__c,SAP_Broker_code__c,Booking__r.Project__r.Name,Project__c from Brokerage_Invoice__c where SAP_Document_No__c IN:InvoiceDocNoList ];
                 List<String> projList = new List<String>();
                 for(Brokerage_Invoice__c br : InvoiceList){
                     projList.add(br.Booking__r.Project__r.Name);

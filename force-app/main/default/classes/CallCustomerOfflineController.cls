@@ -92,8 +92,9 @@ public class CallCustomerOfflineController {
         }
         
         List<User> uList = [Select Id, CTI_Agent_ID__c,	DID__c,Offline_Agent_Name__c, Campaign_name__c, api_key__c,Ozontel_UserName__c, Schedule_Campaign_Name__c, Profile.Name, Backup_Campaign__c, Tata_CTI_Agent_Number__c, International_Campaign__c, International_DID__c From User Where Id = :UserInfo.getUserId()];
+        Boolean agentLogin = false; //Added by Vinay 22-04-2026
         if(uList != null && !uList.isEmpty()) {
-            
+            agentLogin = Ozonetel_AgentLoginCheck.agentLoginCheck(uList[0].CTI_Agent_ID__c); //Added by Vinay 22-04-2026
             if(System.label.Conditional_Campaign_Assignment == 'true'){
                 List<String> profilesList = new List<String>{'Relationship Manager','Team Leader'};
                     //if(uList[0].Profile.Name == 'Relationship Manager' || uList[0].Profile.Name == 'Team Leader'){
@@ -146,10 +147,11 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
             return resp;
         }else{
             //Commented by coServe 22-08-2024 
-            String queryString = 'apiKey='+apiKey+'&userName='+username+'&custNumber='+customerPh+'&phoneName='+PhoneName+'&did='+DID+'&uui='+RecordId;
+            
+            /*String queryString = 'apiKey='+apiKey+'&userName='+username+'&custNumber='+customerPh+'&phoneName='+PhoneName+'&did='+DID+'&uui='+RecordId;
             
             //String endpoint = 'https://api1.cloudagent.in/CAServices/PhoneManualDial.php?'+queryString;
-            String endpoint = 'https://in1-ccaas-api.ozonetel.com/CAServices/PhoneManualDial.php?'+queryString;//(.invalid) Added by Prashant 
+            String endpoint = 'https://in1-ccaas-api.ozonetel.com/CAServices/PhoneManualDial.php?'+queryString;//(.invalid) Added by Prashant
             System.debug('click2call URL:' + endpoint);
             Http httpProtocol = new Http();
             
@@ -169,48 +171,65 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
             }
             System.debug(response.getBody());
             string tempResponse = response.getBody();
-            return tempResponse; 
-        }
-        
-        
-        //Added by coServe 22-08-2024 Start
-        /*ReqData rd = new ReqData();
-rd.userName = username;
-rd.agentID = agentId;
-rd.campaignName = campaignName;
-rd.customerNumber = customerPh;
-rd.UCID = String.valueOf(true);
-rd.uui = RecordId;
-String jsonData = JSON.serialize(rd);
-
-apiKey = System.label.Ozonetel_API_Key;
-HttpRequest req = new HttpRequest();
-req.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/AgentManualDial');
-req.setMethod('POST');
-req.setHeader('Content-Type', 'application/json');
-req.setHeader('apiKey', apiKey);
-req.setBody(jsonData);
-
-Http http = new Http();
-//HTTPResponse res = http.send(req);
-HTTPResponse res = new HttpResponse();
-if(!Test.isRunningTest()){
-res = http.send(req);
-} else {
-res.setBody('{"status" : "queued successfully", "UCID" : "", "message" : ""}');
-}
-System.debug(res.getBody());
-
-RespData resp = new RespData();
-resp = (RespData)JSON.deserialize(res.getBody(), RespData.class);
-string tempResponse;
-if(resp.status == 'queued successfully'){
-tempResponse = resp.status + '!  UCID - ' + resp.UCID;
-}else if(resp.status == 'Fail' || resp.status == 'false'){
-tempResponse = resp.status + ' : ' + resp.message;
-}
-return tempResponse;*/
-        //Added by coServe 22-08-2024 End   
+            return tempResponse; */
+            
+            //Added by Vinay 15-04-2026 Start
+            ReqData rd = new ReqData();
+            rd.userName = username;
+            rd.agentID = agentId;
+            rd.campaignName = campaignName;
+            rd.customerNumber = customerPh;
+            rd.UCID = String.valueOf(true);
+            rd.uui = RecordId;
+            String jsonData = JSON.serialize(rd);
+            
+            apiKey = System.label.Ozonetel_API_Key;
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/AgentManualDial');
+            req.setMethod('POST');
+            req.setHeader('Content-Type', 'application/json');
+            req.setHeader('apiKey', apiKey);
+            req.setBody(jsonData);
+            Http http = new Http();
+            HTTPResponse res = new HttpResponse();
+            if(!Test.isRunningTest()){
+                res = http.send(req);
+            } else {
+                res.setBody('{"status" : "queued successfully", "UCID" : "", "message" : ""}');
+            }
+            System.debug(res.getBody());
+            
+            RespData resp = new RespData();
+            resp = (RespData)JSON.deserialize(res.getBody(), RespData.class);
+            string tempResponse;
+            if(resp.status == 'queued successfully'){
+                tempResponse = resp.status + '!  UCID - ' + resp.UCID;
+                if(agentLogin){ //Added if condition by Vinay 22-04-2026
+                    //Added by Vinay 20-03-2026 Start
+                    Id objId = RecordId;
+                    String objName = objId.getSObjectType().getDescribe().getName();
+                    Task tsk = new Task();
+                    if(objName == 'Lead'){
+                        tsk.WhoId = objId;
+                        tsk.Task_Type__c = 'Presales Call';
+                        tsk.Subject = 'Presales Call';
+                    }else{
+                        tsk.WhatId = objId;
+                        tsk.Task_Type__c = 'CRM Call';
+                        tsk.Subject = 'CRM Call';
+                    }
+                    tsk.Communication_Type__c = 'Outbound Call';
+                    tsk.Campaign_Name_from_CTI__c = campaignName;
+                    tsk.Status = 'In-Progress';
+                    insert tsk;
+                    //Added by Vinay 20-03-2026 End
+                }
+            }else if(resp.status == 'Fail' || resp.status == 'false'){
+                tempResponse = resp.status + ' : ' + resp.message;
+            }
+            return tempResponse;
+            //Added by Vinay 15-04-2026 End 
+        }    
     }
     
     public class ReqData{

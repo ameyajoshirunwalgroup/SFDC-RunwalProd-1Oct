@@ -78,7 +78,7 @@ public class BrokerageManagementServicesV2 {
                         system.debug('updated bkList2 size::'+bkList2.size());
                     }
                     if(!brokerageScheme1.isEmpty() && !scprj.isEmpty() && sctower.isEmpty()){
-                        if(brokerageScheme1[0].Type__c == 'Local' && (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&(bk.Is_Special_Brokerage_Scheme__c == true || bk.Is_AOP_CP_Applicable__c == true)))){
+                        if(brokerageScheme1[0].Type__c == 'Local' && (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&(bk.X20_Received__c == true ||  /*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/bk.Is_Special_Brokerage_Scheme__c == true || bk.Is_AOP_CP_Applicable__c == true)))){
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Is_Special_Brokerage_Scheme__c,RW_X9_99_Received__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
                                        and Type_Of_Client_Formula__c =:brokerageScheme1[0].Type__c  and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
@@ -95,13 +95,13 @@ public class BrokerageManagementServicesV2 {
                         }else if(brokerageScheme1[0].Type__c == 'Both'){
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,RW_X9_99_Received__c,Is_Special_Brokerage_Scheme__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
-                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI') and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
-                                       ( RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or Is_Special_Brokerage_Scheme__c = true or Is_AOP_CP_Applicable__c = true ))) and (RW_X9_99_Received__c = true or X5_Received__c = true) and
+                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI' /*Added by Prashant to add type of client as Outstation-12-03-26*/ OR Type_of_Client__c =:'Outstation') and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
+                                       ( RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (X20_Received__c = true or /*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or Is_Special_Brokerage_Scheme__c = true or Is_AOP_CP_Applicable__c = true ))) and (RW_X9_99_Received__c = true or X5_Received__c = true) and
                                        DAY_ONLY(Booking_Date__c) <=:endDate and BrokerIId__c =: bk.BrokerIId__c ORDER BY Booking_Date__c ASC];
                         }
                     } 
                         else if(!brokerageScheme1.isEmpty() && !scprj.isEmpty() && !sctower.isEmpty()){
-                        if(brokerageScheme1[0].Type__c == 'Local' && (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null && (bk.Is_Special_Brokerage_Scheme__c == true ||bk.Is_AOP_CP_Applicable__c == true)))){
+                        if(brokerageScheme1[0].Type__c == 'Local' && (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null && ( bk.X20_Received__c == true ||/*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ bk.Is_Special_Brokerage_Scheme__c == true ||bk.Is_AOP_CP_Applicable__c == true)))){
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,RW_X9_99_Received__c,Is_Special_Brokerage_Scheme__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
                                        and Type_Of_Client_Formula__c =:brokerageScheme1[0].Type__c  and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and (RW_X9_99_Received__c = true or  X5_Received__c = true) and
@@ -118,8 +118,8 @@ public class BrokerageManagementServicesV2 {
                         }else if(brokerageScheme1[0].Type__c == 'Both'){
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,RW_X9_99_Received__c,Is_Special_Brokerage_Scheme__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
-                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI') and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and 
-                                       ( RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or  Is_Special_Brokerage_Scheme__c = true) ))  and (RW_X9_99_Received__c = true or X5_Received__c = true) and
+                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI' /*Added by Prashant to add type of client as Outstation-12-03-26*/ OR Type_of_Client__c =:'Outstation') and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and 
+                                       ( RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (X20_Received__c = true or /*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or  Is_Special_Brokerage_Scheme__c = true) ))  and (RW_X9_99_Received__c = true or X5_Received__c = true) and
                                        DAY_ONLY(Booking_Date__c) <=:endDate and BrokerIId__c =: bk.BrokerIId__c ORDER BY Booking_Date__c ASC];
                         }
                     }
@@ -2992,10 +2992,15 @@ Kicker_Incentive__c =:KId];*/
         Date endDate;
         Decimal totalAV = 0.0;
         String KickerIncentiveId;
-        Decimal KickerPercentage;
+         Decimal KickerPercentage;
+         String cutOffString = System.Label.CP_Billing_Checklist_Cut_off_date;
+         Date cpBillingcutOffDate = Date.valueOf(cutOffString);
         bkList1 = [select Id,Name,Opportunity__c,Base_Brokerage_2__c,Agreement_Value_for_brokers__c,Project__c,Booking_Date__c,Tower__c,Passback__c,Type_of_Client__c,Is_Special_Brokerage_Scheme__c ,Is_AOP_CP_Applicable__c,
                    RW_Total_Receipt_Amount_Received__c,RW_Registration_Done__c,RW_Registration_Status__c,Brokerage_Scheme__c,BrokerIId__c,RW_Registration_Date__c,Type_Of_Client_Formula__c from Booking__c 
-                   where Id =: bookingId and Project__c != null and BrokerIId__c != null and Opportunity__c != null and Brokerage_Summary__c = null /*Added by Prashant to update the filter conditions to add the RERA & CC check as well. 16-9-25.*/ AND BrokerIId__r.Valid_RERA_certificate__c = true/* AND BrokerIId__r.Valid_competency_certificate__c = true //Commented by Prashant as discussed with team to discard use of CC. 12/12/25.*/ AND Checklist_Approved__c = true/*Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025...*/];
+                   where Id =: bookingId and Project__c != null and BrokerIId__c != null and Opportunity__c != null and Brokerage_Summary__c = null /*Added by Prashant to update the filter conditions to add the RERA & CC check as well. 16-9-25.*/ AND BrokerIId__r.Valid_RERA_certificate__c = true/* AND BrokerIId__r.Valid_competency_certificate__c = true //Commented by Prashant as discussed with team to discard use of CC. 12/12/25.*/
+                   //AND Checklist_Approved__c = true/*Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation )//17-11-2025...*/
+                   AND (DAY_ONLY(Brokerage_Summary__r.CreatedDate) < :cpBillingcutOffDate OR Checklist_Approved__c = true)//Added by Prashant to add checklist approved condition(billing checklist should be approved before summary creation only for summary created after 11 november,2025 )//06-03-2026....xxx   
+                  ];
         system.debug('bkList1::'+bkList1);
         system.debug('bkList1 size::'+bkList1.size());
         
@@ -3039,7 +3044,7 @@ Kicker_Incentive__c =:KId];*/
                     
                     if(!brokerageScheme1.isEmpty() && !scprj.isEmpty() && sctower.isEmpty()){
                         system.debug('Inside brokerageScheme1.isEmpty() && !scprj.isEmpty() && sctower.isEmpty() ::');
-                        if(brokerageScheme1[0].Type__c == 'Local'&& (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&(bk.Is_Special_Brokerage_Scheme__c == true || bk.Is_AOP_CP_Applicable__c == true)))){
+                        if(brokerageScheme1[0].Type__c == 'Local'&& (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&( bk.X20_Received__c == true ||/*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ bk.Is_Special_Brokerage_Scheme__c == true || bk.Is_AOP_CP_Applicable__c == true)))){
                             system.debug('Inside scheme type local::');
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
@@ -3058,13 +3063,13 @@ Kicker_Incentive__c =:KId];*/
                             system.debug('Inside scheme type both::');
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
-                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI') and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
-                                       (RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or Is_Special_Brokerage_Scheme__c = true or Is_AOP_CP_Applicable__c = true ))) and (RW_X9_99_Received__c = true or X5_Received__c = true) and
+                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI' /*Added by Prashant to add type of client as Outstation-12-03-26*/ OR Type_of_Client__c =:'Outstation') and (Project__c IN: scprj) and DAY_ONLY(Booking_Date__c) >=:startDate and 
+                                       (RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (X20_Received__c = true or/*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or Is_Special_Brokerage_Scheme__c = true or Is_AOP_CP_Applicable__c = true ))) and (RW_X9_99_Received__c = true or X5_Received__c = true) and
                                        DAY_ONLY(Booking_Date__c) <=:endDate and BrokerIId__c =: bk.BrokerIId__c ORDER BY Booking_Date__c ASC];
                         }
                     } else if(!brokerageScheme1.isEmpty() && !scprj.isEmpty() && !sctower.isEmpty()){
                         system.debug('Inside !brokerageScheme1.isEmpty() && !scprj.isEmpty() && !sctower.isEmpty()::');
-                        if(brokerageScheme1[0].Type__c == 'Local'&& (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&(bk.Is_Special_Brokerage_Scheme__c == true ||bk.Is_AOP_CP_Applicable__c == true)  ))){
+                        if(brokerageScheme1[0].Type__c == 'Local'&& (bk.RW_Registration_Date__c != Null || (bk.RW_Registration_Date__c ==null &&( bk.X20_Received__c == true ||/*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ bk.Is_Special_Brokerage_Scheme__c == true ||bk.Is_AOP_CP_Applicable__c == true)  ))){
                             system.debug('Inside !brokerageScheme1.isEmpty() && !scprj.isEmpty() && !sctower.isEmpty() scheme type local::');
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
@@ -3086,8 +3091,8 @@ Kicker_Incentive__c =:KId];*/
                             system.debug('Inside !brokerageScheme1.isEmpty() && !scprj.isEmpty() && !sctower.isEmpty() scheme type both::');
                             bkList3 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Passback__c,
                                        RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Type_Of_Client_Formula__c from Booking__c where Status__c = 'Booking Confirmed' 
-                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI') and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and 
-                                       (RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or  Is_Special_Brokerage_Scheme__c = true or Is_AOP_CP_Applicable__c = true) ))and (RW_X9_99_Received__c = true or X5_Received__c = true)and
+                                       and (Type_of_Client__c =:'Local' OR Type_of_Client__c =:'NRI' /*Added by Prashant to add type of client as Outstation-12-03-26*/ OR Type_of_Client__c =:'Outstation') and (Project__c IN: scprj and Tower__c IN: sctower) and DAY_ONLY(Booking_Date__c) >=:startDate and 
+                                       (RW_Registration_Date__c != null or(RW_Registration_Date__c = Null and  (X20_Received__c = true or/*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ Type_of_Client__c ='NRI' or  Type_of_Client__c ='Outstation' or  Is_Special_Brokerage_Scheme__c = true or Is_AOP_CP_Applicable__c = true) ))and (RW_X9_99_Received__c = true or X5_Received__c = true)and
                                        DAY_ONLY(Booking_Date__c) <=:endDate and BrokerIId__c =: bk.BrokerIId__c ORDER BY Booking_Date__c ASC];
                         }
                     }
@@ -3138,7 +3143,7 @@ Kicker_Incentive__c =:KId];*/
         }
         
         bkList5 = [select Id,Name,Customer__c,Agreement_Value_for_brokers__c,Project__c,Status__c,Booking_Date__c,Tower__c,Type_of_Client__c,Passback__c,Account__c,RW_Registration_Date__c,
-                   RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Brokerage__c,Custom_Base_Brokerage__c,Unit_No__c,
+                   RW_Total_Receipt_Amount_Received__c,Brokerage_Scheme__c,RW_Registration_Done__c, BrokerIId__c,Brokerage__c,Custom_Base_Brokerage__c,Unit_No__c,X20_Received__c,
                    Base_Brokerage_2__c,RW_X9_99_Received__c,Is_Special_Brokerage_Scheme__c ,Dif_Br__c,Passback_Amount__c,X5_Received__c,Is_AOP_CP_Applicable__c,Type_Of_Client_Formula__c
                    from Booking__c where Id IN: bId
                    and BrokerIId__c != null];
@@ -3589,7 +3594,7 @@ b.Status__c = 'Due';
                         }                        
                         
                     }// aop applicable
-                    else{ if(brokerSummaryList.isEmpty() && !brokerageSlab.isEmpty() && bk.RW_X9_99_Received__c && (bk.RW_Registration_Date__c != null ||(bk.RW_Registration_Date__c == Null &&  (bk.Type_of_Client__c =='NRI' ||  bk.Type_of_Client__c =='Outstation' || bk.Is_Special_Brokerage_Scheme__c == true )))){
+                    else{ if(brokerSummaryList.isEmpty() && !brokerageSlab.isEmpty() && bk.RW_X9_99_Received__c && (bk.RW_Registration_Date__c != null ||(bk.RW_Registration_Date__c == Null &&  (bk.X20_Received__c == true || /*Added by Prashant on 6-4-26//// to add a condition where the summary is created even if registration is not done but the customer's 20% payment is completed...*/ bk.Type_of_Client__c =='NRI' ||  bk.Type_of_Client__c =='Outstation' || bk.Is_Special_Brokerage_Scheme__c == true )))){
                             system.debug('Inside empty brokerSummaryList-------');
                             //create a brokerage summary record
                             Brokerage_Summary__c bs = new Brokerage_Summary__c();

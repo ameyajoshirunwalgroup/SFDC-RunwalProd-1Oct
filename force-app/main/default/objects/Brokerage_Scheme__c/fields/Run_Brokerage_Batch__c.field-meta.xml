@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Run_Brokerage_Batch__c</fullName>
+    <label>Run_Brokerage_Batch</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Run</fullName>
+                <default>false</default>
+                <label>Run</label>
+            </value>
+            <value>
+                <fullName>Stop</fullName>
+                <default>true</default>
+                <label>Stop</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

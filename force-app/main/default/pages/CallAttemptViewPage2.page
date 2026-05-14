@@ -35,7 +35,7 @@
                         </apex:pageBlockSectionItem>
                         <apex:pageBlockSectionItem >
                             <apex:outputPanel rendered="{!Task.whatId != null}"> 
-                                <apex:outputLabel >Opportunity Name</apex:outputLabel>
+                                <apex:outputLabel >Opportunity Name&nbsp;&nbsp;</apex:outputLabel>
                                 <apex:outputField id="Opportunity" value="{!Task.whatId}" />
                               </apex:outputPanel>
                         </apex:pageBlockSectionItem>
@@ -49,11 +49,12 @@
                         <apex:outputField id="commType" value="{!Task.Communication_Type__c}" />
                         <apex:outputField id="SalescallAttemptedBy" value="{!Task.RW_Sales_Associate__c}" />    
                         <!-- <apex:outputField id="callSource" value="{!Task.Call_Source__c}"/> -->
+                            
+                            
                       <!--    <apex:outputField id="commTypeIn" value="{!Task.Reason_for_Inbound__c}"/> -->
                        <!--   <apex:outputField id="callStatus" value="{!Task.Call_Status__c}" /> -->
                           <apex:outputField id="callStatus1" value="{!Task.Call_Status__c}" />
                            <apex:outputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" /> 
-                            <apex:outputField id="lostJunkReason" value="{!Task.Reason_for_Lost_Junk__c}"/> 
                      <!--      <apex:outputField id="commTypeOut" value="{!Task.Reason_for_Outbound_Communication__c}"/> -->
                            
                           <!-- <apex:outputField id="otherReason" value="{!Task.Specify_Others__c}"/> -->
@@ -110,9 +111,8 @@
                            <apex:outputField id="callStatus2" value="{!Task.Call_Disposition_Custom__c}" /> 
                            <apex:outputField id="callStatus3" value="{!Task.Sub_Disposition_Type__c}" /> 
                            
-                        <!-- <apex:outputField id="callAttemptedBy" value="{!Task.RW_Sales_Associate__c}" />  -->
-                              <apex:outputField id="salesmanager" value="{!Task.Sales_Manager__c}" rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}"/> <!-- Added the rendered condition by Vinay 04-07-2025 -->
-                              <apex:outputField id="crmManager" label="CRM Manager" value="{!Task.RW_Sales_Associate__c}" rendered="{!IF(task.Task_Type__c='CRM Call',true,false)}"/> <!-- Added by Vinay 04-07-2025 -->
+                         <apex:outputField id="callAttemptedBy" value="{!Task.Sales_Manager__c}" rendered="{!IF(task.Task_Type__c='Sales Call',true,false)}"/> <!-- Added the rendered condition by Vinay 04-07-2025 -->
+                         <apex:outputField id="crmManager" label="CRM Manager" value="{!Task.RW_Sales_Associate__c}" rendered="{!IF(task.Task_Type__c='CRM Call',true,false)}"/> <!-- Added by Vinay 04-07-2025 -->
                           <apex:pageBlockSectionItem >
                              <apex:outputLabel >Next Action</apex:outputLabel>
                              <apex:outputField id="callAttemptStatus" value="{!Task.Call_Attempt_Status__c}"/> 

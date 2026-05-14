@@ -15,7 +15,7 @@ private class CPBrokerageSAPTest {
     static void makeData() {
         Account testAccount = new Account(
             Name = 'Test Channel Partner Account'
-        );
+        );	
         insert testAccount;
         
         Legal_Entity__c legalEntity = new Legal_Entity__c(Name ='RREPL', RDS_Company_Code__c = '2020');

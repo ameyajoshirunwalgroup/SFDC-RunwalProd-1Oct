@@ -1,5 +1,5 @@
 @isTest
-private  Class TestVFControllers {
+private  Class TestVFControllers { 
     @isTest
     private static void TaskRelatedListTest() {
         Account acc = createPATemplate('TestPA1' , 'testleada@radiustest.com', '9876544441', false);
@@ -260,7 +260,7 @@ List <Car_Parking_Charge__c>  STACKParkingList = new List <Car_Parking_Charge__c
         
         //List<SelectOption> cli = invController.getClients;
         List<SelectOption> pl = invController.getProjects;
-        //List<SelectOption> cul = invController.getClusterNames;
+        List<SelectOption> cul = invController.getClusterNames;
         List<SelectOption> tl = invController.getTowers;
         //List<SelectOption> pu = invController.getProjectunittype;
         List<Decimal> floorSeq = invController.floorDescSeqList;

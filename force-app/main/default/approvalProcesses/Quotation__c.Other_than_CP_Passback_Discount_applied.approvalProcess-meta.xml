@@ -23,10 +23,10 @@
         <name>Approval1</name>
     </approvalStep>
     <description>Approval Process when Other than CP Passback Discount applied</description>
-    <emailTemplate>unfiled$public/Quotation_Approval_Email_Template</emailTemplate>
+    <emailTemplate>My_View/Quotation_Approval_Email_Template</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
-        <booleanFilter>1 AND 2 AND 3 AND 4</booleanFilter>
+        <booleanFilter>(1 AND 2 AND 3 AND 4) or 5</booleanFilter>
         <criteriaItems>
             <field>Quotation__c.Quote_Status__c</field>
             <operation>equals</operation>
@@ -46,6 +46,11 @@
             <field>Quotation__c.Level_One_Approver__c</field>
             <operation>notEqual</operation>
         </criteriaItems>
+        <criteriaItems>
+            <field>Quotation__c.Car_Parking_Approval__c</field>
+            <operation>equals</operation>
+            <value>Pending,Rejected</value>
+        </criteriaItems>
     </entryCriteria>
     <finalApprovalActions>
         <action>
@@ -62,7 +67,7 @@
     </finalRejectionActions>
     <finalRejectionRecordLock>false</finalRejectionRecordLock>
     <label>Other than CP Passback Discount applied</label>
-    <processOrder>4</processOrder>
+    <processOrder>3</processOrder>
     <recordEditability>AdminOnly</recordEditability>
     <showApprovalHistory>true</showApprovalHistory>
 </ApprovalProcess>

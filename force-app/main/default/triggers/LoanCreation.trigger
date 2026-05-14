@@ -24,12 +24,26 @@ trigger LoanCreation on Loan__c (before insert, after insert, after update, befo
         if (trigger.isAfter) {
             if (trigger.isUpdate) {
                 Set<Id> lnIdsBkFnd = new Set<Id>();
+                List<Id> sanctionDateUpdatedLoanIds = new List<Id>(); // Added by Vinay 14-01-2026
+                List<Id> HLDocInitiatedLoanIds = new List<Id>(); // Added by Vinay 24-02-2026
+                List<Id> homeLoanOfferBkgIds = new List<Id>(); // Added by Vinay 21-04-2026
                for(Loan__c ln: trigger.new){
                     
-                        if((ln.HL_Status__c == 'Self- funding' && ln.HL_Status__c != trigger.oldMap.get(ln.Id).HL_Status__c) || 
-                          (ln.RW_Reason__c == 'Self- funding' && ln.RW_Reason__c != trigger.oldMap.get(ln.Id).RW_Reason__c)){
-                            	lnIdsBkFnd.add(ln.RW_Booking__c);
-                        }
+                   if((ln.HL_Status__c == 'Self- funding' && ln.HL_Status__c != trigger.oldMap.get(ln.Id).HL_Status__c) || 
+                      (ln.RW_Reason__c == 'Self- funding' && ln.RW_Reason__c != trigger.oldMap.get(ln.Id).RW_Reason__c)){
+                          lnIdsBkFnd.add(ln.RW_Booking__c);
+                      }
+                   if(ln.RW_Sanction_Date__c != null && ln.RW_Sanction_Date__c != trigger.oldMap.get(ln.Id).RW_Sanction_Date__c){ // Added by Vinay 14-01-2026
+                       sanctionDateUpdatedLoanIds.add(ln.Id);
+                   }
+                   
+                   if(ln.RW_Loan_Record_Status__c == 'HL Documentation Initiated' && ln.RW_Loan_Record_Status__c != trigger.oldMap.get(ln.Id).RW_Loan_Record_Status__c){ //Added by Vinay 24-02-2026
+                       HLDocInitiatedLoanIds.add(ln.Id);
+                   }
+                   if(ln.RW_First_Disbursement_Date__c != trigger.oldMap.get(ln.Id).RW_First_Disbursement_Date__c && 
+                      (ln.RW_First_Disbursement_Date__c <= (Date.valueOf(ln.RW_Booking__r.CreatedDate) + 60))){ // Added by Vinay 21-04-2026
+                       homeLoanOfferBkgIds.add(ln.RW_Booking__c);
+                   }
                     
                 }
                 if(lnIdsBkFnd.size()>0)
@@ -38,6 +52,18 @@ trigger LoanCreation on Loan__c (before insert, after insert, after update, befo
                 LoanController.sendEmailAfterLoanClosed(trigger.new, trigger.OldMap);
                 LoanController.SendEmailOnNOCGeneration(trigger.new, trigger.OldMap);
                 
+                if(sanctionDateUpdatedLoanIds.size() > 0){ // Added by Vinay 14-01-2026
+                    LockatedApp_Notifications.sanctionStatusNotification(sanctionDateUpdatedLoanIds); 
+                }
+                
+                if(HLDocInitiatedLoanIds.size() > 0){ // Added by Vinay 24-02-2026
+                    LockatedApp_Notifications.loanDocSubmissionNotification(HLDocInitiatedLoanIds); 
+                }
+                
+                if(homeLoanOfferBkgIds.size() > 0){ // Added by Vinay 21-04-2026
+                    LoanController.homeLoanOfferUpdateOnBooking(homeLoanOfferBkgIds); 
+                }
+				                
             }
         }
     }

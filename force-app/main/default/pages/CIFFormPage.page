@@ -208,8 +208,77 @@
                     $("[Id$='plshigh']").attr('checked', true);
                 }
             }
+            
+            //Added by Prashant..11-05-26
+            //Modified by Prashant..12-05-26
+            function validateRequiredFields() {
+                var isValid = true;
+                
+                // 1. Clear previous errors
+                $('.reqField').removeClass('error-border');
+                $('.frmlabel').css('color', ''); // Reset ALL labels to default
+                
+                // 2. Check standard text/picklist fields
+                $('.reqField').each(function() {
+                    var val = $(this).val();
+                    if(val === null || val.trim() === '') {
+                        $(this).addClass('error-border');
+                        // FIND THE LABEL: Goes up to the group container and finds the label
+                        $(this).closest('.form-group').find('.frmlabel').css('color', '#c9302c');
+                        isValid = false;
+                    }
+                });
+                
+                // 3. Check hidden groups (Checkboxes/Occupation)
+                $('.reqHiddenGroup').each(function() {
+                    var val = $(this).val();
+                    if(val === null || val.trim() === '') {
+                        // We no longer add .error-border-box here because you don't want the line
+                        $(this).closest('.form-group').find('.frmlabel').css('color', '#c9302c'); 
+                        isValid = false;
+                    }
+                });
+                
+                // 4. Final Validation Check
+                if(!isValid) {
+                    $('[id$=errorId]').text('Please fill all the required fields highlighted in red.');
+                    return false; 
+                }
+                
+                $('[id$=errorId]').text('');
+                return true; 
+            }
             </script>
             <style>
+                /*Added by Prashant..11-05-26*/
+                /* Modified by Prashant..12-05-26 */
+                
+                /* Bottom line only for text inputs */
+                .error-border {
+                border-bottom: 2px solid #c9302c !important; 
+                border-top: none !important;
+                border-left: none !important;
+                border-right: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background-color: transparent !important;
+                }
+                
+                /* Red Placeholder text */
+                .error-border::-webkit-input-placeholder { color: #c9302c !important; }
+                .error-border::-moz-placeholder { color: #c9302c !important; }
+                
+                /* Checkbox Group styling: 
+                Removed borders entirely. This class now acts as a 
+                placeholder if you need padding, otherwise it's invisible.
+                */
+                .error-border-box {
+                border: none !important; 
+                background-color: transparent !important;
+                }
+                /*Added by Prashant..11-05-26*/END
+                
+                
                 /* @media(max-width: 1024px){
                 html, html body { overflow: auto; -webkit-overflow-scrolling: touch; }
                 body { position: absolute;left: 0;right: 0;top: 0;bottom: 0; }
@@ -355,7 +424,7 @@ style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runw
 <div class ="col-xs-5"> </div>
 <label class="frmlabel"> Enter OTP: </label>
 <div class="col-xs-2">
-<apex:inputField value="{!otpobj.Generated_OTP__c }" styleclass="form-control"/>
+<apex:inputField value="{!otpobj.Generated_OTP__c }" styleclass="form-control reqField"/>
 <br/>
 <apex:commandButton value="Validate" action="{!OTPvalidate}" />
 
@@ -379,15 +448,15 @@ style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runw
                                         <label class="frmlabel">*Name: </label>
                                         <div class="frmElem">
                                             <div class="col-xs-2">
-                                                <apex:inputfield value="{!CIFObj.Salutation__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.Salutation__c}" styleclass="form-control reqField" />
                                                 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Salutation</div>
                                             </div>
                                             <div class="col-xs-5 col-lg-5">
-                                                <apex:inputfield value="{!CIFObj.FirstName__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.FirstName__c}" styleclass="form-control reqField" />
                                                 <div class="text-center " style="font-size: 12px; color: #608506; font-weight: bold; ">First Name</div>
                                             </div>
                                             <div class="col-xs-5 col-lg-5">
-                                                <apex:inputfield value="{!CIFObj.LastName__c}" styleclass="form-control" required="true" />
+                                                <apex:inputfield value="{!CIFObj.LastName__c}" styleclass="form-control reqField" required="true" />
                                                 <div class="text-center " style="font-size: 12px; color: #608506; font-weight: bold; ">Last Name</div>
                                             </div>
                                         </div>
@@ -400,7 +469,7 @@ style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runw
                                         </label>
                                         <div class="frmElem">
                                             <!--<input type="text" class="form-control" id="dob" />-->
-                                            <apex:inputtext value="{!strDOB}" styleclass="form-control clsDatePicker" />
+                                            <apex:inputtext value="{!strDOB}" styleclass="form-control clsDatePicker reqField" />
                                         </div>
                                     </div>
                                 </div>
@@ -415,12 +484,12 @@ style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runw
                                         <div class="frmElem" style="display: flex; gap: 8px; align-items: flex-start;">
                                             <!-- Country Code 1 -->
                                             <div style="width: 120px;">
-                                                <apex:inputfield value="{!CIFObj.Country_Code__c}" styleClass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.Country_Code__c}" styleclass="form-control reqField" />
                                                 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Country Code</div>
                                             </div>
                                             <!-- Mobile No 1 -->
                                             <div style="flex-grow: 1;" >
-                                                <apex:inputfield value="{!CIFObj.MobileNo1__c}" styleClass="form-control" required="true" />
+                                                <apex:inputfield value="{!CIFObj.MobileNo1__c}" styleclass="form-control reqField" required="true" />
                                             </div>
                                         </div>
                                     </div>
@@ -433,12 +502,12 @@ style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runw
                                         <div class="frmElem" style="display: flex; gap: 8px; align-items: flex-start;">
                                             <!-- Country Code 2 -->
                                             <div style="width: 120px;">
-                                                <apex:inputfield value="{!CIFObj.Country_Code_2__c}" styleClass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.Country_Code_2__c}" styleclass="form-control" />
                                                 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Country Code</div>
                                             </div>
                                             <!-- Mobile No 2 -->
                                             <div style="flex-grow: 1;">
-                                                <apex:inputfield value="{!CIFObj.MobileNo2__c}" styleClass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.MobileNo2__c}" styleclass="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -453,7 +522,7 @@ style="text-align: center; display: block; margin: auto; width: 60px;" alt="Runw
 Landline:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!objLead.Phone}" styleclass="form-control" />
+<apex:inputfield value="{!objLead.Phone}" styleclass="form-control reqField" />
 </div>
 </div>
 </div>-->
@@ -463,7 +532,7 @@ Landline:
                                             *Personal Email:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.PrimaryEmail__c}" styleclass="form-control" required="true" />
+                                            <apex:inputfield value="{!CIFObj.PrimaryEmail__c}" styleclass="form-control reqField" required="true" />
                                         </div>
                                     </div>
                                 </div>
@@ -641,19 +710,19 @@ function updateResStat(cntry)
 <label class="frmlabel">*Address:</label>
 <div class="col-xs-12 col-md-2">
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Country__c}" styleclass="form-control" id="resStatus" />
+<apex:inputfield value="{!CIFObj.Country__c}" styleclass="form-control reqField" id="resStatus" />
 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Country</div>
 </div>
 </div>
 <div class="col-xs-12 col-md-2">
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.State__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.State__c}" styleclass="form-control reqField" />
 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">State</div>
 </div>
 </div>
 <div class="col-xs-12 col-md-2">
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.City__c}" styleclass="form-control">
+<apex:inputfield value="{!CIFObj.City__c}" styleclass="form-control reqField">
 <apex:actionsupport event="onchange" rerender="localityzone" status="spinnerStatus"/>
 </apex:inputfield>
 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">City</div>
@@ -663,13 +732,13 @@ function updateResStat(cntry)
 <apex:outputPanel rendered="{!CIFObj.City__c == 'Mumbai'}">
 <div class="col-xs-12 col-md-2">
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Locality__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.Locality__c}" styleclass="form-control reqField" />
 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Locality</div>
 </div>
 </div>
 <div class="col-xs-12 col-md-1" style="display:none;">
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Zone__c}" required="true" styleclass="form-control"/>
+<apex:inputfield value="{!CIFObj.Zone__c}" required="true" styleclass="form-control reqField"/>
 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Zone</div>
 </div>
 </div>
@@ -677,7 +746,7 @@ function updateResStat(cntry)
 </apex:outputPanel>
 <div class="col-xs-12 col-md-2">
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.ZipCode__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.ZipCode__c}" styleclass="form-control reqField" />
 <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Zip Code</div>
 </div>
 </div>
@@ -686,361 +755,331 @@ function updateResStat(cntry)
 </div><br/> -->
                             <!-- reverse address -->
                             <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group addressBlk">
-                                        <label class="frmlabel">*Address:</label>
-                                        <div class="col-xs-12 col-md-2">
-                                            <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.Locality__c}" styleclass="form-control">
-                                                    <apex:actionsupport event="onchange" action="{!changeLocality}" rerender="NRIpannel,Outstationpannel,zipcodepannel" status="spinnerStatus"/>
-                                                </apex:inputfield>
-                                                <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Locality</div>
-                                            </div>
-                                        </div>
-                                        <apex:outputPanel id="NRIpannel">
-                                            <apex:outputPanel rendered="{!CIFObj.Locality__c == 'NRI'}">
-                                                <div class="col-xs-12 col-md-2">
-                                                    <div class="frmElem">
-                                                        <apex:inputfield value="{!CIFObj.Country__c}" styleclass="form-control" id="resStatus" />
-                                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Country</div>
-                                                    </div>
-                                                </div>
-                                            </apex:outputPanel>
-                                        </apex:outputPanel>
-                                        <apex:outputPanel id="Outstationpannel">
-                                            <apex:outputPanel rendered="{!CIFObj.Locality__c == 'Outstation'}">
-                                                <div class="col-xs-12 col-md-2">
-                                                    <div class="frmElem">
-                                                        <apex:inputfield value="{!CIFObj.State__c}" styleclass="form-control" />
-                                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">State</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-md-2">
-                                                    <div class="frmElem">
-                                                        <apex:inputfield value="{!CIFObj.City__c}" styleclass="form-control"/>
-                                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">City</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-md-2">
-                                                    <div class="frmElem">
-                                                        <apex:inputfield value="{!CIFObj.ZipCode__c}" styleclass="form-control" onchange="numericSixDigit(this)"/> <!-- Added onchange function by Vinay 03-07-2025 -->
-                                                        <div id="sixDigitIndianZipError" style="color:red;font-size:12px;"></div> <!-- Added by Vinay 03-07-2025 -->
-                                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Zip Code</div>
-                                                    </div>
-                                                </div> 
-                                                <div class="col-xs-12 col-md-2">
-                                                    <div class="frmElem" style="display:none;">
-                                                        <apex:inputfield value="{!CIFObj.Country__c}" styleclass="form-control" id="resStatus1" />
-                                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Country</div>
-                                                    </div>
-                                                </div>
-                                            </apex:outputPanel>
-                                        </apex:outputPanel>
-                                        <apex:outputPanel id="zipcodepannel">
-                                            <apex:outputPanel rendered="{!CIFObj.Locality__c != '' && CIFObj.Locality__c != null && CIFObj.Locality__c != 'NRI' && CIFObj.Locality__c != 'Outstation'}">
-                                                <div class="col-xs-12 col-md-2">
-                                                    <div class="frmElem">
-                                                        <apex:inputfield value="{!CIFObj.ZipCode__c}" styleclass="form-control" onchange="numericSixDigit(this)"/> <!-- Added onchange function by Vinay 03-07-2025 -->
-                                                        <div id="sixDigitIndianZipError" style="color:red;font-size:12px;"></div> <!-- Added by Vinay 03-07-2025 -->
-                                                        <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Zip Code</div>
-                                                    </div>
-                                                </div>
-                                            </apex:outputPanel>
-                                        </apex:outputPanel>
-                                        <div class="col-xs-12 col-md-1" style="display:none;">
-                                            <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.Zone__c}" required="true" styleclass="form-control"/>
-                                                <div class="text-center" style="font-size: 12px; color: #608506; font-weight: bold;">Zone</div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                
-                                
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label class="frmlabel">
-                                            *Type of Client:
-                                        </label>
+                                        <label class="frmlabel">*Type of Client:</label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Type_of_Client__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Type_of_Client__c}" styleclass="form-control reqField">
+                                                <apex:actionsupport event="onchange" action="{!changeLocality}" rerender="dynamicAddressSection,dynamicAddressSection1" status="spinnerStatus"/>
+                                            </apex:inputfield>                                                              
                                         </div>
                                     </div>
                                 </div>
+                                <apex:outputPanel id="dynamicAddressSection1">
+                                <apex:outputPanel rendered="{!CIFObj.Type_of_Client__c == 'Local'}">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="frmlabel">*Locality / Area:</label>
+                                            <div class="frmElem">
+                                                <apex:inputfield value="{!CIFObj.Locality__c}" styleclass="form-control reqField">
+                                                    <apex:actionsupport event="onchange" action="{!changeLocality}" rerender="dynamicAddressSection2" status="spinnerStatus"/>
+                                                </apex:inputfield>                                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <apex:outputPanel id="dynamicAddressSection2">                                    
+                                    <apex:outputPanel rendered="{!CIFObj.Locality__c != null && CIFObj.Locality__c != ''}">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="frmlabel">Zip Code:</label>
+                                                <div class="frmElem">
+                                                    <apex:inputfield value="{!CIFObj.ZipCode__c}" styleclass="form-control reqField" onchange="numericSixDigit(this)"/>
+                                                    <div id="sixDigitIndianZipError" style="color:red;font-size:11px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                </apex:outputPanel>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-12">                                        
+                                    <div class="row">                                           
+                                        
+                                        <apex:outputPanel id="dynamicAddressSection">
+                                            
+                                            <apex:outputPanel rendered="{!CIFObj.Type_of_Client__c == 'NRI' || CIFObj.Type_of_Client__c == 'Outstation' }">                                                   
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="custNotLocal" class="frmlabel">
+                                                            *Country:
+                                                        </label>
+                                                        <div class="frmElem">
+                                                            <apex:inputfield value="{!CIFObj.Country__c}" styleclass="form-control reqField" id="customerCountry" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="custNotLocal" class="frmlabel">
+                                                            *State:
+                                                        </label>
+                                                        <div class="frmElem">
+                                                            <apex:inputfield value="{!CIFObj.State__c}" styleclass="form-control reqField" id="custState" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="custNotLocal" class="frmlabel">
+                                                            *City:
+                                                        </label>
+                                                        <div class="frmElem">
+                                                            <apex:inputfield value="{!CIFObj.City__c}" styleclass="form-control reqField" id="custCity" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </apex:outputPanel>   
+                                            
+                                        </apex:outputPanel>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="frmlabel">
-                                            Walk-In Details:
+                                            *Customer visited with:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Walk_In_Details__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Walk_In_Details__c}" styleclass="form-control reqField" />
                                         </div>
                                     </div>
                                 </div>
-                            </div><br/>
+                            </div>
                             <!-- Occupation -->
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label for="country" class="frmlabel">
-                                            *Occupation:
-                                        </label>
+                                        <label class="frmlabel">*Occupation:</label>
                                         <div class="frmElem">
-                                            <div class="row">
-                                                <div class="col-xs-6 col-sm-4 col-md-2">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="service" onchange="updateoccupation(this.id)" /> Salaried
-                                                    </label>
+                                            <apex:outputPanel id="occupationPanel">
+                                                <div class="row">
+                                                    <apex:repeat value="{!lstOccupation}" var="occ">
+                                                        <div class="col-xs-6 col-sm-4 col-md-2">
+                                                            <label class="topPos_5">
+                                                                <apex:inputCheckbox value="{!occ.isSelected}" styleClass="customechkBox">
+                                                                    <apex:actionSupport action="{!validateOccupation}" event="onchange" rerender="occupationPanel" status="spinnerStatus">
+                                                                        <apex:param name="currOcc" value="{!occ.strValue}" assignTo="{!strCurrentOccupation}" />
+                                                                    </apex:actionSupport>
+                                                                </apex:inputCheckbox>
+                                                                {!occ.strLabel}
+                                                            </label>
+                                                        </div>
+                                                    </apex:repeat>
                                                 </div>
-                                                <!--<div class="col-xs-6 col-sm-3">
-<label class="topPos_5">
-<input type="checkbox" class="customechkBox" id="bussn" onchange="updateoccupation(this.id)" /> Business
-</label>
-</div>-->
-                                                <div class="col-xs-6 col-sm-4 col-md-2">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="self" onchange="updateoccupation(this.id)" /> Self Employed
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-4 col-md-2">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="home" onchange="updateoccupation(this.id)" /> Homemaker
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-4 col-md-2">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="retired" onchange="updateoccupation(this.id)" /> Retired
-                                                    </label>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-4 col-md-2">
-                                                    <label class="topPos_5">
-                                                        <input type="checkbox" class="customechkBox" id="others" onchange="updateoccupation(this.id)" /> Others
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <apex:inputtext value="{!CIFObj.Occupation__c}" style="display:none" id="occuptn" />
-                                            
-                                            <script>
-                                            function updateoccupation(occpatn)
-                                            {
-                                                if(occpatn.indexOf('service') >= 0)
-                                                {
-                                                    if($("[Id$='service']").is(':checked'))
-                                                    {
-                                                        $("[Id$='self']").attr('checked', false);
-                                                        $("[Id$='others']").attr('checked', false);
-                                                        $("[Id$='retired']").attr('checked', false);
-                                                        $("[Id$='home']").attr('checked', false);
-                                                        $("[Id$='occuptn']").val('Salaried');
-                                                    }
-                                                    else
-                                                    {
-                                                        $("[Id$='occuptn']").val('');
-                                                    }
-                                                }
-                                                if(occpatn.indexOf('self') >= 0)
-                                                {
-                                                    if($("[Id$='self']").is(':checked'))
-                                                    {
-                                                        $("[Id$='service']").attr('checked', false);
-                                                        $("[Id$='others']").attr('checked', false);
-                                                        $("[Id$='retired']").attr('checked', false);
-                                                        $("[Id$='home']").attr('checked', false);
-                                                        $("[Id$='occuptn']").val('Self Employed');
-                                                    }
-                                                    else
-                                                    {
-                                                        $("[Id$='occuptn']").val('');
-                                                    }
-                                                }
-                                                
-                                                if(occpatn.indexOf('home') >= 0)
-                                                {
-                                                    if($("[Id$='home']").is(':checked'))
-                                                    {
-                                                        $("[Id$='service']").attr('checked', false);
-                                                        $("[Id$='others']").attr('checked', false);
-                                                        $("[Id$='retired']").attr('checked', false);
-                                                        $("[Id$='self']").attr('checked', false);
-                                                        $("[Id$='occuptn']").val('Homemaker');
-                                                    }
-                                                    else
-                                                    {
-                                                        $("[Id$='occuptn']").val('');
-                                                    }
-                                                }
-                                                
-                                                if(occpatn.indexOf('retired') >= 0)
-                                                {
-                                                    if($("[Id$='retired']").is(':checked'))
-                                                    {
-                                                        $("[Id$='service']").attr('checked', false);
-                                                        $("[Id$='others']").attr('checked', false);
-                                                        $("[Id$='self']").attr('checked', false);
-                                                        $("[Id$='home']").attr('checked', false);
-                                                        $("[Id$='occuptn']").val('Retired');
-                                                    }
-                                                    else
-                                                    {
-                                                        $("[Id$='occuptn']").val('');
-                                                    }
-                                                }
-                                                
-                                                if(occpatn.indexOf('others') >= 0)
-                                                {
-                                                    if($("[Id$='others']").is(':checked'))
-                                                    {
-                                                        $("[Id$='service']").attr('checked', false);
-                                                        $("[Id$='self']").attr('checked', false);
-                                                        $("[Id$='retired']").attr('checked', false);
-                                                        $("[Id$='home']").attr('checked', false);
-                                                        $("[Id$='occuptn']").val('Others');
-                                                    }
-                                                    else
-                                                    {
-                                                        $("[Id$='occuptn']").val('');
-                                                    }
-                                                }
-                                            }
-                                            </script>
+                                                <apex:inputText value="{!CIFObj.Occupation__c}" style="display:none" id="occuptn" styleClass="reqHiddenGroup" />
+                                            </apex:outputPanel>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Company Name & Location -->
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="companyName" class="frmlabel">
-                                            *Company Name:
-                                        </label>
-                                        <div class="frmElem">
-                                            <!--<input type="text" class="form-control" id="companyName" />-->
-                                            <apex:inputfield value="{!CIFObj.CompanyName__c}" styleclass="form-control" />
+                            <div class="frmContainer">
+                                <legend style="width:auto; border:none; font-size:14px; font-weight:bold; color:#608506; padding:0 10px;">
+                                    COMPANY INFORMATION
+                                </legend>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="companyName" class="frmlabel">
+                                                *Company Name:
+                                            </label>
+                                            <div class="frmElem">
+                                                <apex:inputfield value="{!CIFObj.CompanyName__c}" styleclass="form-control reqField">
+                                                    <apex:actionSupport event="onchange" rerender="companyNamePanel" status="spinnerStatus" />
+                                                </apex:inputfield>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
+                                    
+                                    <div class="col-sm-6">
                                         <apex:outputPanel id="companyNamePanel">
-                                            <apex:outputPanel rendered="{!CIFObj.CompanyName__c == 'Other'}">
-                                                <label for="companyLocation" class="frmlabel">
-                                                    *Other Company Name:
-                                                </label>
-                                            </apex:outputPanel>
-                                            <apex:outputPanel rendered="{!CIFObj.CompanyName__c != 'Other'}">
-                                                <label for="companyLocation" class="frmlabel">
-                                                    Other Company Name:
-                                                </label>
-                                            </apex:outputPanel>
+                                            <div class="form-group">
+                                                <apex:outputPanel rendered="{!CIFObj.CompanyName__c == 'Other'}">
+                                                    <label for="companyLocation" class="frmlabel">
+                                                        *Other Company Name:
+                                                    </label>
+                                                    <div class="frmElem">
+                                                        <apex:inputfield value="{!CIFObj.CompanyNameOther__c}" styleclass="form-control reqField" />
+                                                    </div>
+                                                </apex:outputPanel>
+                                                
+                                                <apex:outputPanel rendered="{!CIFObj.CompanyName__c != 'Other'}">
+                                                    <label for="companyLocation" class="frmlabel">
+                                                        Other Company Name:
+                                                    </label>
+                                                    <div class="frmElem">
+                                                        <apex:inputfield value="{!CIFObj.CompanyNameOther__c}" styleclass="form-control" />
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </div>
                                         </apex:outputPanel>
-                                        <div class="frmElem">
-                                            <!--<input type="text" class="form-control" id="companyLocation" />-->
-                                            <apex:inputfield value="{!CIFObj.CompanyNameOther__c}" styleclass="form-control" />
-                                        </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="companyLocation" class="frmlabel">
+                                                *Country:
+                                            </label>
+                                            <div class="frmElem">
+                                                <apex:inputfield value="{!CIFObj.Company_Country__c}" styleclass="form-control reqField" id="companyCountry" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="companyLocation" class="frmlabel">
+                                                *State:
+                                            </label>
+                                            <div class="frmElem">
+                                                <apex:inputfield value="{!CIFObj.Company_State__c}" styleclass="form-control reqField" id="companyState" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="companyLocation" class="frmlabel">
+                                                *City:
+                                            </label>
+                                            <div class="frmElem">
+                                                <apex:inputfield value="{!CIFObj.Company_City__c}" styleclass="form-control reqField" id="companyCity" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <!--Commented by Prashant as per Business Requirement.//Added on 12-05-26-->
+                               <!-- <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="companyLocation" class="frmlabel">
+                                                *Street Address / Unit / Landmark:
+                                            </label>
+                                            <div class="frmElem">-->
+                                                <!--<input type="text" class="form-control" id="companyLocation" />-->
+                                                <!--<apex:inputfield value="{!CIFObj.CompanyLocation__c}" styleclass="form-control reqField" />-->
+                                               <!-- <apex:inputTextarea value="{!CIFObj.CompanyLocation__c}" rows="1" styleclass="form-control reqField" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
                             </div>
-                            <!-- Designation -->
+                            <!-- Designation --><!--Ethnicity-->
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="companyLocation" class="frmlabel">
-                                            Company Location:
-                                        </label>
-                                        <div class="frmElem">
-                                            <!--<input type="text" class="form-control" id="companyLocation" />-->
-                                            <apex:inputfield value="{!CIFObj.CompanyLocation__c}" styleclass="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="designation" class="frmlabel">
-                                            Designation:
+                                            *Designation:
                                         </label>
                                         <div class="frmElem">
                                             <!--<input type="text" class="form-control" id="designation" />-->
-                                            <apex:inputfield value="{!CIFObj.Designation__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Designation__c}" styleclass="form-control reqField" />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="frmlabel">
                                             *Ethnicity:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Ethnicity__c }" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Ethnicity__c }" styleclass="form-control reqField" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <!--<div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="apartmentType" class="frmlabel">
                                             Religion:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Religion__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Religion__c}" styleclass="form-control reqField" />
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
+                                <!--Commented by Prashant as per Business Requirement.//Added on 07-05-26-->
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="apartmentType" class="frmlabel">
-                                            *Purpose:
+                                        <label class="frmlabel">
+                                            *Reason to Purchase:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Purpose__c}" styleclass="form-control" />
+                                            <apex:inputField value="{!CIFObj.Reason_to_Purchase__c}" styleclass="form-control reqField" />
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="frmlabel">
+                                            *Purpose:
+                                        </label>
+                                        <div class="frmElem">
+                                            <apex:inputField value="{!CIFObj.Purpose__c}" styleclass="form-control reqField" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Commented by Prashant to add dependent picklist as reason to purchase against purpose .//Added on 11-05-26-->
+                           <!-- <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="apartmentType" class="frmlabel">
+                                            *Reason to Purchase:
+                                        </label>
+                                        <div class="frmElem">
+                                            <apex:inputfield value="{!CIFObj.Purpose__c}" styleclass="form-control reqField" />
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!--<div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="apartmentType" class="frmlabel">
                                             Client Type:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Client_Type__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Client_Type__c}" styleclass="form-control reqField" />
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </div>-->
+                                <!--Commented by Prashant as per Business Requirement.//Added on 07-05-26-->
+                           <!-- </div>-->
+                            <!--Commented by Prashant to add dependent picklist as reason to purchase against purpose .//Added on 11-05-26-->
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="apartmentType" class="frmlabel">
-                                            Cars Owned:
+                                            *Cars Owned:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Cars_Owned__c}" styleclass="form-control" /> 
+                                            <apex:inputfield value="{!CIFObj.Cars_Owned__c}" styleclass="form-control reqField" /> 
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="apartmentType" class="frmlabel">
-                                            Education:
+                                            *Education:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Education__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Education__c}" styleclass="form-control reqField" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <!--<div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="frmlabel">
                                             *Marital Status:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Marital_Status__c}" styleclass="form-control">
+                                            <apex:inputfield value="{!CIFObj.Marital_Status__c}" styleclass="form-control reqField">
                                                 <apex:actionsupport event="onchange" oncomplete="applyDatePicker();" rerender="marriedPanel" status="spinnerStatus"/>
                                             </apex:inputfield>   
                                         </div>
@@ -1053,12 +1092,13 @@ function updateResStat(cntry)
 *No of Family Members:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.No_of_Family_Members__c}" styleclass="form-control" />   
+<apex:inputfield value="{!CIFObj.No_of_Family_Members__c}" styleclass="form-control reqField" />   
 </div>
 </div>
 </div> -->
                                 
-                            </div>
+                           <!-- </div>-->
+                            <!--Commented by Prashant as per Business Requirement.//Added on 07-05-26-->
                             
                             <!--    <div class="row">
 <div class="col-sm-6">
@@ -1067,7 +1107,7 @@ function updateResStat(cntry)
 *Industry:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Industry__c}" styleclass="form-control" /> 
+<apex:inputfield value="{!CIFObj.Industry__c}" styleclass="form-control reqField" /> 
 </div>
 </div>
 </div>
@@ -1077,7 +1117,7 @@ function updateResStat(cntry)
 *Distance To Office:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Distance_To_Office__c}" styleclass="form-control" /> 
+<apex:inputfield value="{!CIFObj.Distance_To_Office__c}" styleclass="form-control reqField" /> 
 </div>
 </div>
 </div>
@@ -1090,7 +1130,7 @@ function updateResStat(cntry)
 *Yearly Family Income:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Family_Income__c}" styleclass="form-control" /> 
+<apex:inputfield value="{!CIFObj.Family_Income__c}" styleclass="form-control reqField" /> 
 </div>
 </div>
 </div>
@@ -1100,7 +1140,7 @@ function updateResStat(cntry)
 *No of Vehicles:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.No_of_Vehicles__c}" styleclass="form-control" /> 
+<apex:inputfield value="{!CIFObj.No_of_Vehicles__c}" styleclass="form-control reqField" /> 
 </div>
 </div>
 </div>
@@ -1113,7 +1153,7 @@ function updateResStat(cntry)
 *Four Wheeler:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Four_Wheeler__c}" styleclass="form-control" /> 
+<apex:inputfield value="{!CIFObj.Four_Wheeler__c}" styleclass="form-control reqField" /> 
 </div>
 </div>
 </div>
@@ -1126,7 +1166,7 @@ function updateResStat(cntry)
 *Current Residential Address:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Current_Residential_Address__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.Current_Residential_Address__c}" styleclass="form-control reqField" />
 </div>
 </div>
 </div>
@@ -1143,7 +1183,7 @@ function updateResStat(cntry)
                                                     Spouse Name:
                                                 </label>
                                                 <div class="frmElem">
-                                                    <apex:inputfield value="{!CIFObj.Spouse_Name__c}" styleclass="form-control" />
+                                                    <apex:inputfield value="{!CIFObj.Spouse_Name__c}" styleclass="form-control reqField" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1165,7 +1205,7 @@ function updateResStat(cntry)
                                                     No Of Children:
                                                 </label>
                                                 <div class="frmElem">
-                                                    <apex:inputfield value="{!CIFObj.No_of_Children__c}" styleclass="form-control">
+                                                    <apex:inputfield value="{!CIFObj.No_of_Children__c}" styleclass="form-control reqField">
                                                         <apex:actionsupport event="onchange" rerender="childAges" status="spinnerStatus"/>
                                                     </apex:inputfield>
                                                 </div>
@@ -1181,7 +1221,7 @@ function updateResStat(cntry)
                                                             Age of Child 1:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1193,7 +1233,7 @@ function updateResStat(cntry)
                                                             Age of Child 1:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1203,7 +1243,7 @@ function updateResStat(cntry)
                                                             Age of Child 2:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_2__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_2__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1215,7 +1255,7 @@ function updateResStat(cntry)
                                                             Age of Child 1:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1225,7 +1265,7 @@ function updateResStat(cntry)
                                                             Age of Child 2:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_2__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_2__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1235,7 +1275,7 @@ function updateResStat(cntry)
                                                             Age of Child 3:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_3__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_3__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1247,7 +1287,7 @@ function updateResStat(cntry)
                                                             Age of Child 1:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_1__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1257,7 +1297,7 @@ function updateResStat(cntry)
                                                             Age of Child 2:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_2__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_2__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1267,7 +1307,7 @@ function updateResStat(cntry)
                                                             Age of Child 3:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_3__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_3__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1277,7 +1317,7 @@ function updateResStat(cntry)
                                                             Age of Child 4:
                                                         </label>
                                                         <div class="frmElem">
-                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_4__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Age_of_Child_4__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1291,7 +1331,7 @@ function updateResStat(cntry)
                                                     Spouse Occupation:
                                                 </label>
                                                 <div class="frmElem">
-                                                    <apex:inputfield value="{!CIFObj.Spouse_Occupation__c}" styleclass="form-control" />
+                                                    <apex:inputfield value="{!CIFObj.Spouse_Occupation__c}" styleclass="form-control reqField" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1301,7 +1341,7 @@ function updateResStat(cntry)
                                                     Spouse Company Name:
                                                 </label>
                                                 <div class="frmElem">
-                                                    <apex:inputfield value="{!CIFObj.Spouse_Company_Name__c}" styleclass="form-control" />
+                                                    <apex:inputfield value="{!CIFObj.Spouse_Company_Name__c}" styleclass="form-control reqField" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1313,7 +1353,7 @@ function updateResStat(cntry)
                                                     Spouse Designation:
                                                 </label>
                                                 <div class="frmElem">
-                                                    <apex:inputfield value="{!CIFObj.Spouse_Designation__c}" styleclass="form-control" />
+                                                    <apex:inputfield value="{!CIFObj.Spouse_Designation__c}" styleclass="form-control reqField" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1394,7 +1434,7 @@ function updateResStat(cntry)
                                                         <input type="checkbox" class="customechkBox" id="OfficeSpace" onchange="updateConfig(this.id)" /> Office Space
                                                     </label>
                                                 </div>
-                                                <apex:inputtext value="{!CIFObj.Configuration__c}" style="display:none" id="finalConfig" />
+                                                <apex:inputtext value="{!CIFObj.Configuration__c}" style="display:none" id="finalConfig" styleClass="reqHiddenGroup" />
                                                 <script>
                                                 function updateConfig(confg)
                                                 {
@@ -1648,7 +1688,7 @@ function updateResStat(cntry)
                                             Budget (Rs. in Cr.):
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputField value="{!CIFObj.BudgetIn_Cr__c}" styleClass="form-control" id="budgetInCr"/>
+                                            <apex:inputField value="{!CIFObj.BudgetIn_Cr__c}" styleclass="form-control reqField" id="budgetInCr"/>
                                         </div>
                                     </div>
                                 </div -->
@@ -1659,7 +1699,8 @@ function updateResStat(cntry)
                                             *Budget In Lakh:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputField value="{!CIFObj.Budget_In_Lakh__c}" styleClass="form-control" id="budget"/>
+                                            <!--<apex:inputField value="{!CIFObj.Budget_In_Lakh__c}" styleclass="form-control reqField" id="budget"/>-->
+                                            <apex:inputField value="{!CIFObj.CIF_Budget__c}" styleclass="form-control reqField" id="budget"/>
                                         </div>
                                     </div>
                                 </div>
@@ -1696,7 +1737,7 @@ function updateResStat(cntry)
                                                 
                                                 </apex:repeat>
                                                     </div>
-                                                <apex:inputtext value="{!CIFObj.TimeLine__c}" style="display:none" id="timelineVal" />
+                                                <apex:inputtext value="{!CIFObj.TimeLine__c}" style="display:none" id="timelineVal" styleClass="reqHiddenGroup"/>
                                                
                                                <script>
                                                 document.addEventListener('DOMContentLoaded', function () {
@@ -1738,12 +1779,12 @@ function updateResStat(cntry)
 *Preferred Location:
 </label>
 <div class="frmElem">
-<apex:inputfield value="{!CIFObj.Preferred_Location__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.Preferred_Location__c}" styleclass="form-control reqField" />
 </div>
 </div>
 </div>
 </div>  -->
-                            <h2>Neighbourhood Places Interested in: (Tick All Applicable)</h2>
+                            <!--<h2>Neighbourhood Places Interested in: (Tick All Applicable)</h2>
                             <div class="row">
                                 <div class="col-xs-6 col-md-3">
                                     <label class="topPos_5">
@@ -1816,7 +1857,7 @@ function updateResStat(cntry)
                                     </label>
                                 </div>
                                 <apex:inputtext value="{!CIFObj.NeighbourhoodPlaces__c}" style="display:none" id="neighval" />
-                                <script>
+								<script>
                                 function updatePlaces(ngVal)
                                 {
                                     $("[Id$='neighval']").val('');
@@ -1879,12 +1920,13 @@ function updateResStat(cntry)
                                     }
                                 }
                                 </script>
-                            </div>
+                            </div>-->
+                            <!--Commented by Prashant as per Business Requirement.//Added on 07-05-26-->
                         </div>
                         
                         <!-- Bank Details 
 								@modified by: Aditya Agrawal-->
-                        <div class="frmContainer">
+                        <!--<div class="frmContainer">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <h2>Bank Details:</h2>
@@ -1897,7 +1939,7 @@ function updateResStat(cntry)
                                             Mode Of Funding:
                                         </label>
                                         <div class="frmElem">
-                                            <apex:inputfield value="{!CIFObj.Mode_of_funding__c}" styleclass="form-control" />
+                                            <apex:inputfield value="{!CIFObj.Mode_of_funding__c}" styleclass="form-control reqField" />
                                             <apex:actionSupport event="onchange" reRender="bankPanel"/>
                                         </div>
                                     </div>
@@ -1908,7 +1950,7 @@ function updateResStat(cntry)
                                             	Bank 1:
                                         	</label>
                                         	<div class="frmElem">
-                                            	<apex:inputfield value="{!CIFObj.Bank_Preference_1__c}" styleclass="form-control" />
+                                            	<apex:inputfield value="{!CIFObj.Bank_Preference_1__c}" styleclass="form-control reqField" />
                                         	</div>
                                     	</div>
                                     	<div class="form-group">
@@ -1916,7 +1958,7 @@ function updateResStat(cntry)
                                             	Bank 2:
                                         	</label>
                                         	<div class="frmElem">
-                                            	<apex:inputfield value="{!CIFObj.Bank_Preference_2__c}" styleclass="form-control" />
+                                            	<apex:inputfield value="{!CIFObj.Bank_Preference_2__c}" styleclass="form-control reqField" />
                                         	</div>
                                     	</div>
                                     	<div class="form-group">
@@ -1924,14 +1966,15 @@ function updateResStat(cntry)
                                             	Bank 3:
                                         	</label>
                                         	<div class="frmElem">
-                                            	<apex:inputfield value="{!CIFObj.Bank_Preference_3__c}" styleclass="form-control" />
+                                            	<apex:inputfield value="{!CIFObj.Bank_Preference_3__c}" styleclass="form-control reqField" />
                                         	</div>
                                     	</div>
                                     </apex:outputPanel>
                                     </apex:outputPanel>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
+                        <!--Commented by Prashant as per Business Requirement.//Added on 07-05-26-->
                         
                         <!-- Modification Ends -->
                         
@@ -2012,7 +2055,7 @@ function updateResStat(cntry)
                                                 <!-- <c:AutoCompleteV2 allowclear="true" importjquery="false" labelfield="Name" sobject="Broker__c" valuefield="Id"
 targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  />-->
                                                 
-                                                <apex:inputfield value="{!CIFObj.Broker__c}" styleclass="form-control" html-disabled="true"  />
+                                                <apex:inputfield value="{!CIFObj.Broker__c}" styleclass="form-control reqField" html-disabled="true"  />
                                                 
                                                 
                                             </div>
@@ -2020,7 +2063,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                         <apex:outputpanel layout="block" styleclass="col-xs-4" rendered="{!!CIFObj.ApplyUnregisteredChannelPartner__c}">
                                             <label class="frmlabel">Channel Partner Type :</label>
                                             <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.Broker_Type__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.Broker_Type__c}" styleclass="form-control reqField" />
                                             </div>
                                         </apex:outputpanel>
                                     </div>
@@ -2030,7 +2073,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                                 Unregistered Broker Name :
                                             </label>
                                             <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.UnregisteredChannelPartnerName__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.UnregisteredChannelPartnerName__c}" styleclass="form-control reqField" />
                                             </div>
                                         </apex:outputpanel>
                                         <apex:outputpanel layout="block" styleclass="col-xs-6" rendered="{!CIFObj.ApplyUnregisteredChannelPartner__c}">
@@ -2038,7 +2081,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                                 Unregistered Broker Email :
                                             </label>
                                             <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.UnregisteredChannelPartnerEmail__c }" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.UnregisteredChannelPartnerEmail__c }" styleclass="form-control reqField" />
                                             </div>
                                         </apex:outputpanel>
                                     </div>
@@ -2048,7 +2091,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                                 Unregistered Broker Mobile :
                                             </label>
                                             <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.UnregisteredChannelPartnerMobile__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.UnregisteredChannelPartnerMobile__c}" styleclass="form-control reqField" />
                                             </div>
                                         </apex:outputpanel>
                                         <apex:outputpanel layout="block" styleclass="col-xs-6" rendered="{!CIFObj.ApplyUnregisteredChannelPartner__c}">
@@ -2056,7 +2099,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                                 Unregistered Broker Type :
                                             </label>
                                             <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.UnRegistered_Broker_Type__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.UnRegistered_Broker_Type__c}" styleclass="form-control reqField" />
                                             </div>
                                         </apex:outputpanel>
                                     </div>
@@ -2068,7 +2111,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                             <label class="frmlabel">Reference Source :</label>
                                             <div class="frmElem addressBlk">
                                                 <apex:inputfield value="{!CIFObj.Source__c}" style="display:none" />
-                                                <apex:inputfield value="{!CIFObj.ReferenceSource__c}" styleclass="form-control">
+                                                <apex:inputfield value="{!CIFObj.ReferenceSource__c}" styleclass="form-control reqField">
                                                     <apex:actionsupport event="onchange" rerender="LeadSourcePanel" status="spinnerStatus">
                                                     </apex:actionsupport>
                                                 </apex:inputfield>
@@ -2086,7 +2129,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                                           rendered="{!IF(OR(CIFObj.ReferenceSource__c == 'Management Reference', CIFObj.ReferenceSource__c == 'Employee Reference'), true, false)}">
                                             <label class="frmlabel">Referral Details :</label>
                                             <div class="frmElem">
-                                                <apex:inputfield value="{!CIFObj.Referral_Details__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.Referral_Details__c}" styleclass="form-control reqField" />
                                             </div>
                                         </apex:outputpanel>
                                     </div>
@@ -2097,14 +2140,14 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                             <label class="frmlabel">Source :</label>
                                             <div class="frmElem addressBlk">
                                                 <apex:inputfield value="{!CIFObj.Source__c}" style="display:none" />
-                                                <apex:inputfield value="{!CIFObj.LeadSubSource__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.LeadSubSource__c}" styleclass="form-control reqField" />
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Name of the Employee/Manager :</label>
                                             <div class="frmElem addressBlk">
                                                 <div class="frmElem">
-                                                    <!-- <apex:inputfield value="{!CIFObj.Employee_Reference__c}" styleclass="form-control" />-->
+                                                    <!-- <apex:inputfield value="{!CIFObj.Employee_Reference__c}" styleclass="form-control reqField" />-->
                                                     
                                                     <c:AutoCompleteV2 allowclear="true" importjquery="false" labelfield="Name" sobject="RW_Employee__c " valuefield="Id"
                                                                       targetfield="{!CIFObj.Employee_Reference__c}"  style="width:200px" syncmanualentry="false"  />
@@ -2123,7 +2166,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                             <label class="frmlabel">Source :</label>
                                             <div class="frmElem addressBlk">
                                                 <apex:inputfield value="{!CIFObj.Source__c}" style="display:none" />
-                                                <apex:inputfield value="{!CIFObj.LeadSubSource__c}" styleclass="form-control" />
+                                                <apex:inputfield value="{!CIFObj.LeadSubSource__c}" styleclass="form-control reqField" />
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
@@ -2132,7 +2175,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
                                                     <div class="col-xs-6">
                                                         <label class="frmlabel">Description :</label>
                                                         <div class="frmElem addressBlk">
-                                                            <apex:inputfield value="{!CIFObj.Event_Description__c}" styleclass="form-control" />
+                                                            <apex:inputfield value="{!CIFObj.Event_Description__c}" styleclass="form-control reqField" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2144,7 +2187,7 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
 <div class="col-xs-6">
 <label class="frmlabel">Sub Sub-Source :</label>
 <div class="frmElem addressBlk">
-<apex:inputfield value="{!CIFObj.Lead_Sub_Sub_Source__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.Lead_Sub_Sub_Source__c}" styleclass="form-control reqField" />
 </div>
 </div>
 </div>
@@ -2167,13 +2210,13 @@ targetfield="{!CIFObj.Broker__c}"  style="width:200px" syncmanualentry="false"  
 <label class="frmlabel">Corporate Company :</label>
 <div class="frmElem addressBlk">
 <apex:inputfield value="{!CIFObj.Source__c}" style="display:none" />
-<apex:inputfield value="{!CIFObj.CorporateCompany__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.CorporateCompany__c}" styleclass="form-control reqField" />
 </div>
 </div>
 <div class="col-xs-6">
 <label class="frmlabel">Other Corporate Company :</label>
 <div class="frmElem addressBlk">
-<apex:inputfield value="{!CIFObj.NameofUnregisteredCorporateLeadSource__c}" styleclass="form-control" />
+<apex:inputfield value="{!CIFObj.NameofUnregisteredCorporateLeadSource__c}" styleclass="form-control reqField" />
 </div>
 </div>-->
                                     </div>
@@ -2184,7 +2227,7 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
 <div class="col-xs-6">
 <label class="frmlabel">Other Corporate Company :</label>
 <div class="frmElem addressBlk">
-<apex:inputfield value="{!objLead.NameofUnregisteredCorporate_LeadSource__c}" styleclass="form-control" />
+<apex:inputfield value="{!objLead.NameofUnregisteredCorporate_LeadSource__c}" styleclass="form-control reqField" />
 </div>
 </div>
 </div>
@@ -2208,7 +2251,7 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Referral :&nbsp;&nbsp;&nbsp;&nbsp;</label>   
                                             <div class="frmElem addressBlk">              
-                                                <apex:inputfield value="{!CIFObj.CustomerReference__c}" styleclass="form-control" html-disabled="true"  />
+                                                <apex:inputfield value="{!CIFObj.CustomerReference__c}" styleclass="form-control reqField" html-disabled="true"  />
                                             </div>
                                         </div>
                                     </div>
@@ -2221,7 +2264,7 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Sub-Source :</label>   
                                             <div class="frmElem addressBlk">              
-                                                <apex:inputfield value="{!CIFObj.Referral_Sub_Source__c}" styleclass="form-control" html-disabled="true"  />
+                                                <apex:inputfield value="{!CIFObj.Referral_Sub_Source__c}" styleclass="form-control reqField" html-disabled="true"  />
                                             </div>
                                         </div>
                                     </div>
@@ -2232,7 +2275,8 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Pre-Sales Manager Name :</label>
                                             <div class="frmElem addressBlk">
-                                                <apex:inputfield value="{!CIFObj.Pre_Sales_User__c}" styleclass="form-control" />
+                                                <!--<apex:inputfield value="{!CIFObj.Pre_Sales_User__c}" styleclass="form-control reqField" /> --> <!-- Commneted by Vinay 25-11-2025 -->
+                                                <apex:inputfield value="{!CIFObj.Pre_Sales_User_LU__r.Name}" styleclass="form-control reqField" /> <!-- Added by Vinay 25-11-2025 -->
                                             </div>
                                         </div>
                                     </div>
@@ -2243,7 +2287,8 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
                                         <div class="col-xs-6">
                                             <label class="frmlabel">Sales Manager Name :</label>
                                             <div class="frmElem addressBlk">
-                                                 <apex:inputfield value="{!CIFObj.Sales_manager__c}" styleclass="form-control" />
+                                                 <!--<apex:inputfield value="{!CIFObj.Sales_manager__c}" styleclass="form-control reqField" />-->  <!-- Commneted by Vinay 25-11-2025 -->
+                                                <apex:inputfield value="{!CIFObj.Sales_manager_LU__r.Name}" styleclass="form-control reqField" /> <!-- Added by Vinay 25-11-2025 -->
                                             </div>
                                         </div>
                                     </div>
@@ -2265,9 +2310,9 @@ rendered="{!IF(objLead.LeadSource == 'Corporate(Unregistered)', true, false)}">
 status="spinnerStatus" />
 <apex:commandbutton styleclass="btn btn-danger pull-left" value="Back" action="{!GoBackToLead}" status="spinnerStatus" />-->
                             
-                            <apex:commandbutton value="Save Form & Exit" styleclass="pull-right btn-custm btn-success-custm pull-right" action="{!redirectNext}" 
+                            <apex:commandbutton value="Save Form & Exit" styleclass="pull-right btn-custm btn-success-custm pull-right" action="{!redirectNext}" onclick="if(!validateRequiredFields()) return false;"
                                                 rendered="{!AND($User.UIThemeDisplayed !='Theme4d',$User.UIThemeDisplayed !='Theme4t')}" status="spinnerStatus" rerender="errorDiv,companyNamePanel"/>
-                            <apex:commandbutton action="{!redirectNext}" value="Save & Close" 
+                            <apex:commandbutton action="{!redirectNext}" value="Save & Close" onclick="if(!validateRequiredFields()) return false;"
                                                 styleclass="pull-right btn-custm btn-success-custm"
                                                 rendered="{!OR($User.UIThemeDisplayed == 'Theme4d',$User.UIThemeDisplayed == 'Theme4t')}" status="spinnerStatus" rerender="errorDiv"/><!-- oncomplete="redirectTo({!isSubmitted});"-->
                             <script>

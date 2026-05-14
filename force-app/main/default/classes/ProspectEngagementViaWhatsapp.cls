@@ -24,7 +24,7 @@ global class ProspectEngagementViaWhatsapp implements Database.Batchable <sObjec
                 if(Date.valueOf(opp.Date_Of_Visit__c) == dt - 2 && opp.RW_Project__c != null && opp.RW_Project__r.Day_3_Whatsapp_Content__c != null && opp.RW_Project__r.Key_Features_Amenities_Video_Link__c != null && opp.RW_Project__r.Testimonial_Video_Link__c != null && opp.RW_Project__r.Prospect_Engagement_Team__c != null && opp.RW_Project__r.Strategic_Location_Video__c != null && !Test.isRunningTest()){
                     System.debug('-- Day 3: Follow up');
                     //SendWhatsAppMsg.methodToSendWhatsAppMsgBatch(null, opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Day_3_Whatsapp_Content__c, opp.RW_Project__r.Key_Features_Amenities_Video_Link__c, opp.RW_Project__r.Testimonial_Video_Link__c, opp.RW_Project__r.Strategic_Location_Video__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, opp.Account.Country_Code__c, opp.RW_Mobile_No__c, 'Prospect Engagement Day 3');                    
-                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch(opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Day_3_Whatsapp_Content__c, opp.RW_Project__r.Key_Features_Amenities_Video_Link__c, opp.RW_Project__r.Testimonial_Video_Link__c, opp.RW_Project__r.Strategic_Location_Video__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, opp.RW_Mobile_No__c, 'Prospect Engagement Day 3'); //Commented by Vinay 13-10-2025
+                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch(opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Day_3_Whatsapp_Content__c, opp.RW_Project__r.Key_Features_Amenities_Video_Link__c, opp.RW_Project__r.Testimonial_Video_Link__c, opp.RW_Project__r.Strategic_Location_Video__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, opp.RW_Mobile_No__c, 'Prospect Engagement Day 3'); //Commented by Vinay 29-08-2025
                     if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
                         SendWhatsAppMsg.methodToSendWhatsAppMsgBatchNew(null,opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Day_3_Whatsapp_Content__c, opp.RW_Project__r.Key_Features_Amenities_Video_Link__c, opp.RW_Project__r.Testimonial_Video_Link__c, opp.RW_Project__r.Strategic_Location_Video__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, opp.Account.Country_Code__c, opp.RW_Mobile_No__c, 'Prospect Engagement Day 3');
                     }else{
@@ -40,7 +40,7 @@ global class ProspectEngagementViaWhatsapp implements Database.Batchable <sObjec
                 if(Date.valueOf(opp.Date_Of_Visit__c) == dt - 6 && opp.RW_Project__c != null && opp.RW_Project__r.Photo_Album__c != null && opp.RW_Project__r.Prospect_Engagement_Team__c != null && !Test.isRunningTest()){
                     System.debug('-- Day 7: Personal Touch');
                     //SendWhatsAppMsg.methodToSendWhatsAppMsgBatch(null, opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Photo_Album__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, opp.Account.Country_Code__c, opp.RW_Mobile_No__c, 'Prospect Engagement Day 7');                   
-                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch(opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Photo_Album__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, null, opp.RW_Mobile_No__c, 'Prospect Engagement Day 7'); //Commented by Vinay 13-10-2025
+                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch(opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Photo_Album__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, null, opp.RW_Mobile_No__c, 'Prospect Engagement Day 7'); //Commented by Vinay 29-08-2025
                     if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
                         SendWhatsAppMsg.methodToSendWhatsAppMsgBatchNew(null,opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Photo_Album__c, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, opp.Account.Country_Code__c, opp.RW_Mobile_No__c, 'Prospect Engagement Day 7');
                     }else{
@@ -51,7 +51,8 @@ global class ProspectEngagementViaWhatsapp implements Database.Batchable <sObjec
                 if(Date.valueOf(opp.Date_Of_Visit__c) == dt - 9 && opp.RW_Project__c != null && opp.RW_Project__r.Prospect_Engagement_Team__c != null && !Test.isRunningTest()){
                     System.debug('-- Day 10: Final Reminder');
                     //SendWhatsAppMsg.methodToSendWhatsAppMsgBatch(null, opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, null, opp.Account.Country_Code__c, opp.RW_Mobile_No__c, 'Prospect Engagement Day 10');                    
-                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch(opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, null, null, opp.RW_Mobile_No__c, 'Prospect Engagement Day 10'); //Commented by Vinay 13-10-2025
+                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsgBatch(opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, null, null, opp.RW_Mobile_No__c, 'Prospect Engagement Day 10'); //Commented by Vinay 29-08-2025
+					
                     if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
                         SendWhatsAppMsg.methodToSendWhatsAppMsgBatchNew(null,opp.Name, opp.RW_Project__r.Name, opp.RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, null, opp.Account.Country_Code__c, opp.RW_Mobile_No__c, 'Prospect Engagement Day 10');
                     }else{
@@ -68,7 +69,7 @@ global class ProspectEngagementViaWhatsapp implements Database.Batchable <sObjec
         String b;
         String c;
     }
-
+    
      global void finish(Database.BatchableContext BC){
 
     }

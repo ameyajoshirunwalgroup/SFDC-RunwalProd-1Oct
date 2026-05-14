@@ -55,7 +55,7 @@ trigger ContentDocumentLinkTrigger on ContentDocumentLink (after insert) {
             String amountStr = bookingAmountMap.get(bookingId);
 
             if (amountStr != null) {
-                cv.Title = 'IOM_' + amountStr;
+                //cv.Title = 'IOM_' + amountStr;
                 versionsToUpdate.add(cv);
                 iomBookingIds.add(bookingId);
             }

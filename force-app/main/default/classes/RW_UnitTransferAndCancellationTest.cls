@@ -4,10 +4,6 @@ public class RW_UnitTransferAndCancellationTest {
    	@isTest
     public static void TestgetBookingInformation(){
         
-        
-        Test.startTest();
-        Test.setMock(WebServiceMock.class, new SAPInventoryCallMock());
-        Test.stopTest();
             
         
         UserRole obj=new UserRole(Name= 'ABC'); 
@@ -91,6 +87,7 @@ public class RW_UnitTransferAndCancellationTest {
                 oppRec.Sourcing_Manager__c='Aniket Sapre';
                 oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
                 oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+            	oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
                 oppRec.RW_Closing_Head__c='Karthik Chettiar';
                 oppRec.Walkin_Source__c='Direct';
                 oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -108,8 +105,8 @@ public class RW_UnitTransferAndCancellationTest {
                 objBking.Booking_Date__c = Date.today().addDays(-1);
                 objBking.Status__c ='Cancellation Initiated';
                 objBking.Cancellation_Requested_Status__c = 'Cancellation Confirmed';
-                objBking.Cancellation_Sub_reason__c = 'Z1';
-                objBking.Cancellation_Reason__c = 'Unit cancelled';
+                objBking.Cancellation_Sub_reason__c = 'RL';
+                objBking.Cancellation_Reason__c = 'Cancel & Re-book';
                 objBking.RW_Total_Interest_Amount_Waived__c=6736;
                 objBking.RW_Total_Collectable_Interest__c=6757;
                 objBking.RW_Total_Amount_Collected__c=75757;
@@ -124,21 +121,20 @@ public class RW_UnitTransferAndCancellationTest {
                 objBking.Carpet_Area__c=23;
                 objBking.Cancellation_Request_Date__c = system.today();
                 insert objBking;
-                    
-                RW_UnitTransferAndCancellation.getBookingInformation(objBking.id); 
-                
+
+                RW_UnitTransferAndCancellation.getBookingInformation(objBking.id);
+
                 objBking.Status__c = 'Cancellation Initiated';
                 objBking.Cancellation_Requested_Status__c = 'Cancellation Confirmed';
-                objBking.Old_status__c = 'Booking Confirmed';
+                objBking.Old_status__c = 'UnProcessed';
                 objBking.Old_Opp_Status__c = 'Unit Booked';
                 objBking.Is_Retained__c = false;
                 objBking.Retention_Date__c = system.today();
                 update objBking;
                 RW_UnitTransferAndCancellation.updateRetainBooking(objBking.id);
             
-            
-                string cancelReason = 'Unit cancelled';
-                string cancellationSubReason = 'Z1';
+                string cancelReason = 'Cancel & Re-book';
+                string cancellationSubReason = 'RL';
                 string ForfeitureAmount = '9000';
                 string BrokerageAmount = '9000';
                 string InterestValue = '9000';
@@ -169,8 +165,32 @@ public class RW_UnitTransferAndCancellationTest {
             	String totalAmtToBeTransfrd = '100000';
             	String note = 'Test';
             	String gst = '10';
-            
-            	RW_UnitTransferAndCancellation.bookingcancelled(objBking.id ,cancelReason,cancellationSubReason,ForfeitureAmount,BrokerageAmount,InterestValue,Taxesifany,ForfeitureAmounttype,Otherforfeitureamount,ForfeiPercentage,TotalForfeitureAmount,TotalRefundAmount,FinalRefundAmount,MVAT ,TDS,cancellationdescription ,CGST,SGST , TotalRecievedAmount, cancSubType, modeofCanc, payRefAmt, ResaleStatus, newRate, newFlatAgrVal, recvAmt, referralAmt, swipeCharges, brokeragePaid, totalAmtToBeTransfrd, note, gst);
+            	Map<String,String> cancDetails1 = new Map<String,String>();
+            	cancDetails1.put('ForfeitureAmount',ForfeitureAmount);
+            	cancDetails1.put('BrokerageAmount',BrokerageAmount);
+            	cancDetails1.put('InterestValue',InterestValue);
+            	cancDetails1.put('Taxesifany',Taxesifany);
+            	cancDetails1.put('Otherforfeitureamount',Otherforfeitureamount);
+            	cancDetails1.put('ForfeiPercentage',ForfeiPercentage);
+            	cancDetails1.put('TotalForfeitureAmount',TotalForfeitureAmount);
+            	cancDetails1.put('cancelReason',cancelReason);
+            	cancDetails1.put('cancellationSubReason',cancellationSubReason);
+            	cancDetails1.put('TDS',TDS);
+            	cancDetails1.put('MVAT',MVAT);
+            	cancDetails1.put('TotalRefundAmount',TotalRefundAmount);
+            	cancDetails1.put('FinalRefundAmount',FinalRefundAmount);
+            	cancDetails1.put('CGST',CGST);
+            	cancDetails1.put('SGST',SGST);
+            	cancDetails1.put('TotalRecievedAmount',TotalRecievedAmount);
+            	cancDetails1.put('cancSubType',cancSubType);
+            	cancDetails1.put('modeofCanc',modeofCanc);
+            	cancDetails1.put('payRefAmt',payRefAmt);
+            	cancDetails1.put('ResaleStatus',ResaleStatus);
+            	cancDetails1.put('newFlatAgrVal',newFlatAgrVal);
+            	cancDetails1.put('referralAmt',referralAmt);
+            	cancDetails1.put('BookingId',objBking.id);
+           
+            	RW_UnitTransferAndCancellation.bookingcancelled(cancDetails1);
             
             	Map<String,String> cancDetails = new Map<String,String>();
                 cancDetails.put('BrokerageAmount','1000');
@@ -205,8 +225,9 @@ public class RW_UnitTransferAndCancellationTest {
             	update  objBking;
             
             	RW_UnitTransferAndCancellation.sendApprovalRequest(objBking.id);
+            
             	
-            	objBking.Cancellation_Reason__c = 'Unit cancelled';
+            	objBking.Cancellation_Reason__c = 'Cancel & Re-book';
                 objBking.Refund_handover_document_uploaded__c = true;
                 objBking.Refund_Date__c = system.today();
                 objBking.Refund_Bank__c = 'HDFC';
@@ -214,7 +235,9 @@ public class RW_UnitTransferAndCancellationTest {
                 objBking.Unit_Transfer_Request_Upload_Date__c = system.today();
                 objBking.Transfer_Request_Uploaded__c = true;
                 update  objBking;
-            	
+            
+            Test.startTest();
+            	Test.setMock(WebServiceMock.class, new SAPInventoryCallMock());
             	RW_UnitTransferAndCancellation.updateRefundHandoverDocument(objBking.id);
         		RW_UnitTransferAndCancellation.getRefundHandoverInfo(objBking.Id);
             	
@@ -225,6 +248,7 @@ public class RW_UnitTransferAndCancellationTest {
                 RW_UnitTransferAndCancellation.updateDeedofCancellationDate(objBking.Id);
                 RW_UnitTransferAndCancellation.transferRequestUpload(objBking.Id);
             	RW_UnitTransferAndCancellation.getBookingRecordData(objBking.id);
+            Test.stopTest();
         } 
     }
     

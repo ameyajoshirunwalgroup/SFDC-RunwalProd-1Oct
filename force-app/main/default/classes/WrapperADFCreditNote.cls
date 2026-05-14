@@ -12,5 +12,7 @@ public class WrapperADFCreditNote {
         public String Item_Text { get; set; }
         public String sCurrency { get; set; }
         public String Amount { get; set; }
+        public String TDS_Amount { get; set; } //Added by Vinay 26-02-2026
+        public String Api_Name { get; set; } //Added by Vinay 30-03-2026
     }
 }

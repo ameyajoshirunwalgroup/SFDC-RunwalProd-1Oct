@@ -60,9 +60,9 @@ global without sharing class EasebuzzPaymentAPI {
         
      List<RW_Digital_Link_Status__c> Dlist=[Select Id,RW_Opportunity__c,RW_Link_Status__c from RW_Digital_Link_Status__c where RW_Opportunity__c=:opp.id];
         
-        List<RW_EOI__c> eoiList = [SELECT id,Name,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,Opportunity__r.RW_Project__c,RW_Project_Name__c,Opportunity__c,Opportunity__r.RW_Sales_Associate__c,RW_EOI_Acknowledgment_Sent__c,RW_EOI_Acknowledgement_Sent_Date_Time__c FROM RW_EOI__c 
+        List<RW_EOI__c> eoiList = [SELECT id,Name,RW_Status__c,RW_Primary_Email__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,Opportunity__r.RW_Project__c,RW_Project_Name__c,Opportunity__c,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,RW_EOI_Acknowledgment_Sent__c,RW_EOI_Acknowledgement_Sent_Date_Time__c FROM RW_EOI__c 
                                    WHERE Opportunity__c = :opp.Id 
-                                   LIMIT 1];
+                                   LIMIT 1];	//Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
         
         if (eoiList.isEmpty()) {
             RestContext.response.statusCode = 404;
@@ -104,8 +104,8 @@ global without sharing class EasebuzzPaymentAPI {
  
             }
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoi.opportunity__r.RW_Sales_Associate__c)!=null)
-            htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoi.opportunity__r.RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoi.opportunity__r.Sales_Manager_User__c)!=null) 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoi.opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c));	 //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             else
             htmlBody = htmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
             String plainTextBody = template.Body; 
@@ -116,8 +116,8 @@ global without sharing class EasebuzzPaymentAPI {
            plainTextBody = plainTextBody.replace('{!RW_EOI__c.RW_EOI_Acknowledgement_Sent_Date_Time__c}', eoi.RW_EOI_Acknowledgement_Sent_Date_Time__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
  
             }
-              if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoi.opportunity__r.RW_Sales_Associate__c)!=null)
-            plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoi.opportunity__r.RW_Sales_Associate__c).RW_Phone__c));	
+              if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(eoi.opportunity__r.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(eoi.opportunity__r.Sales_Manager_User__r.Name).RW_Phone__c)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025	
             else
             plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');
             
@@ -155,202 +155,7 @@ global without sharing class EasebuzzPaymentAPI {
         
         return generatedHash;
     }
-       public static void dummyMethod() {
-           String s410;                
-            String s510;
-            String s610;        
-            String s710;
-            String s810;                
-            String s910;
-            String s1010;        
-            String s1110;
-            String s1210;                
-            String s1310;
-            String s1410;        
-            String s1510;
-            String s1610;                
-            String s111;
-            String s211;        
-            String s311;
-            String s411;                
-            String s511;
-            String s611;        
-            String s711;
-            String s811;                
-            String s911;
-            String s1011;        
-            String s1111;
-            String s1211;                
-            String s1311;
-            String s1411;        
-            String s1511;
-            String s1611;                
-            String s1101;
-            String s2111;                    
-            integer i;
-            i=0;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-           
-    }
+       
    /* public static Map<String, Object> formUrlEncodedToMap(String encodedData) {
         Map<String, Object> result = new Map<String, Object>();
         String[] pairs = encodedData.split('&');

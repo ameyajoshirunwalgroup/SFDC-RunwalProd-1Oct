@@ -20,7 +20,7 @@ global without sharing class GetConstructionUpdates {
                                                         WHERE RW_Tower__c =: bkg.Unit_No__r.TowerName__c 
                                                             //AND RW_Project__c =: bkg.Project__c 
                                                             ORDER BY RW_Date__c DESC LIMIT 16];*/
-        List<RW_Tower_Construction_Update__c> constUpdts = [SELECT Id, RW_Description__c, RW_Date__c, RW_Tower_Construction_Photo_ID__c 
+        List<RW_Tower_Construction_Update__c> constUpdts = [SELECT Id, RW_Description__c, RW_Date__c, RW_Tower_Construction_Photo_ID__c,RW_Tower__r.Name 
                                                             FROM RW_Tower_Construction_Update__c WHERE RW_Tower__c =: bkg.Unit_No__r.TowerName__c AND
                                                             RW_Tower_Construction_Photo_ID__c != null ORDER BY RW_Date__c DESC LIMIT 16];
         List<RW_Tower_Construction_Update__c> constUpdates = new List<RW_Tower_Construction_Update__c>();
@@ -80,7 +80,7 @@ global without sharing class GetConstructionUpdates {
             
         
         for(RW_Tower_Construction_Update__c constr : constUpdates){
-            if(constr.RW_Tower_Construction_Photo_ID__c != null && mapVerIdVsContDisb.get(constr.RW_Tower_Construction_Photo_ID__c) != null){ // Added if condition to fix the null pointer error by Vinay 10-06-2025
+            if(constr.RW_Tower_Construction_Photo_ID__c != null && mapVerIdVsContDisb.get(constr.RW_Tower_Construction_Photo_ID__c) != null){  // Added if condition to fix the null pointer error by Vinay 10-06-2025
                 String finalUrl = System.Url.getOrgDomainUrl().toExternalForm() + '/sfc/dist/version/renditionDownload?rendition=THUMB720BY480&versionId=';
                 finalUrl += mapVerIdVsContDisb.get(constr.RW_Tower_Construction_Photo_ID__c).ContentVersionId + '&operationContext=DELIVERY&contentID=';
                 finalUrl += mapVerIdVsContDisb.get(constr.RW_Tower_Construction_Photo_ID__c).ContentDocumentId;
@@ -91,10 +91,13 @@ global without sharing class GetConstructionUpdates {
                 
                 ConstDetails details = new ConstDetails();
                 details.description = constr.RW_Description__c;
+                details.tower = constr.RW_Tower__r.Name;
                 details.constDate = constr.RW_Date__c;
                 details.image = finalUrl;
                 listUpdates.add(details);
             }
+            
+            
         }
         projUpdate.constructionDetails = listUpdates;
         return projUpdate;
@@ -102,6 +105,7 @@ global without sharing class GetConstructionUpdates {
     
     global class ConstDetails{
         public String description;
+        public String tower;
         public String image;
         public Date constDate;
         

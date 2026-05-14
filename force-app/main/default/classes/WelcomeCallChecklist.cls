@@ -318,8 +318,15 @@ public without sharing class WelcomeCallChecklist {
 * Commented by Prashant bcoz it was giving error. Eg - valid email - royaltvlab@gmail.com and dummy email- ab@gmail.com which gives error*/wrpApplist.Email_Address__c != null){
     
     if(str.contains(wrpApplist.Email_Address__c)) {
+        System.debug('Dummy Email Detected for ' + wrpApplist.Applicant_Number__c);
         System.debug('Dummy Email Detected');
-        throw new AuraHandledException('It seems you are using a dummy email ID in this record. This will result in the failure of extending customer portal access. Please update the correct email ID in the Primary Applicant record and continue further.');
+        //throw new AuraHandledException('It seems you are using a dummy email ID in this record. This will result in the failure of extending customer portal access. Please update the correct email ID in the Primary Applicant record and continue further.');
+        throw new AuraHandledException(
+                'It seems you are using a dummy email ID for the ' 
+                + wrpApplist.Applicant_Number__c 
+                + ' in this record. This will result in failure of extending customer portal access. '
+                + 'Please update the correct email ID and continue further.'
+            );
     }
 }
                }

@@ -74,7 +74,7 @@ global class CPMandateBatch implements Database.Batchable <sObject>, Database.Al
                 }
             }
             List<Brokerage_Invoice__c> invoices = new List<Brokerage_Invoice__c>();
-            List<String> canceslStatusValues = new List<String>{'Cancelled','Cancellation Initiated','Booking Cancelled – Refund Pending'};
+            List<String> canceslStatusValues = new List<String>{'Cancelled','Cancellation Initiated','Booking Cancelled – Refund Pending','Transfer Completed','Upgrade/Downgrade Completed','Transfer In Progress','Upgrade In Progress'};
             List<Brokerage_Summary__c> summaries = new List<Brokerage_Summary__c>();
             List<Brokerage__c> brokerages = new List<Brokerage__c>();
             Map<String, String> legalEntityMap = new Map<String, String>();

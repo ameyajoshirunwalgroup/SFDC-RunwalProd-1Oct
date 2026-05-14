@@ -22,8 +22,8 @@
                     background: #000;
                     }
                     label{
-                    font-weight:600;
-                    font-size:20px;
+                    font-weight:bold;
+                    font-size:15px;
                     }
                     .mainDiv{
                     padding:20px;
@@ -199,6 +199,8 @@
                         <div class="Assigned" />
                     </apex:facet>
                 </apex:actionstatus>--><!--Commented for unidentified payments-->
+
+                
                 <div class="col-sm-12 col-md-10 col-lg-25">
                     <div class="">
                         <center>
@@ -216,13 +218,13 @@
                                 <tr>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: center;">
-                                            <label style="width: 250px;  font-weight: normal;">Customer:</label>
+                                            <label style="width: 250px;">Customer:</label>
                                             <span style="width: 200px;">{!opp.Name}</span>
                                         </div>
                                     </td>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: center;">
-                                            <label style="width: 250px;  font-weight: normal;">Project:</label>
+                                            <label style="width: 250px;">Project:</label>
                                             <span style="width: 200px;">{!unit.RW_Project__r.Name}</span>
                                         </div>
                                     </td>
@@ -230,13 +232,13 @@
                                 <tr>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: center;">
-                                            <label style="width: 250px; font-weight: normal;">Project Unit:</label>
+                                            <label style="width: 250px;">Project Unit:</label>
                                             <span style="width: 200px;">{!unit.Name}</span>
                                         </div>
                                     </td>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: center;">
-                                            <label style="width: 250px; font-weight: normal;">Salable Area:</label>
+                                            <label style="width: 250px;">Salable Area:</label>
                                             <span style="width: 200px;">{!unit.Saleable_Area__c}</span>
                                         </div>
                                     </td>
@@ -245,14 +247,14 @@
                                 <tr>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: center;">
-                                            <label style="width: 250px; font-weight: normal;">Agreed Agreement Value:</label>
+                                            <label style="width: 250px;">Agreed Agreement Value:</label>
                                             <apex:input value="{!agrementVal}" styleClass="form-control"
                                                         style="width: 200px;" />
                                         </div>
                                     </td>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: center;">
-                                            <label style="width: 250px; font-weight: normal;">Pending Reason:</label>
+                                            <label style="width: 250px;">Pending Reason:</label>
                                             <apex:selectList value="{!pendingReason}" size="5" multiselect="true" styleClass="form-control" style="width: 350px;">
                                                 <apex:selectOptions value="{!pendingReasonList}" />
                                             </apex:selectList>
@@ -263,14 +265,14 @@
                                 <tr>
                                 <td style="width: 50%;">
                                     <div style="display: flex; align-items: flex-start;">
-                                        <label style="width: 250px; font-weight: normal;">Remarks (if “Others”):</label>
+                                        <label style="width: 250px;">Remarks (if “Others”):</label>
                                         <apex:inputTextarea value="{!remarks}" styleClass="form-control"
                                                             style="width: 200px; height: 70px;" />
                                     </div>
                                 </td>
                                     <td style="width: 50%;">
                                     <div style="display: flex; align-items: flex-start;">
-                                        <label style="width: 250px; font-weight: normal;">Aadhar Number:</label>
+                                        <label style="width: 250px;">Aadhar Number:</label>
                                         <apex:inputText value="{!aadharNumber}" styleClass="form-control"
                                                         style="width: 200px;" maxlength="12"/>
                                     </div>
@@ -279,14 +281,14 @@
                                 <tr > 
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: flex-start; padding-top: 10px;">
-                                            <label style="width: 250px; font-weight: normal;">PAN Number:</label>
+                                            <label style="width: 250px;">PAN Number:</label>
                                             <apex:inputText value="{!panNumber}" styleClass="form-control"
                                                             style="width: 200px;" maxlength="10"/>
                                         </div>
                                     </td>
                                     <td style="width: 50%;">
                                         <div style="display: flex; align-items: flex-start;">
-                                            <label style="width: 250px; font-weight: normal;">Blocked date:</label>  
+                                            <label style="width: 250px;">Blocked date:</label>  
                                             <apex:input type="date" value="{!blockedDate}" styleClass="form-control"
                                                             style="width: 200px;"/>
                                         </div>
@@ -296,7 +298,7 @@
                                 <tr>
                                     <td style="width: 50%;">
                                         <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
-                                            <label for="modeOfFunding" style="width: 250px; font-weight: normal;">
+                                            <label for="modeOfFunding" style="width: 250px;">
                                                 Mode Of Funding:
                                             </label>
                                             <div class="frmElem" style="width: 200px;">
@@ -309,19 +311,19 @@
                                         <apex:outputPanel id="bankPanel">
                                             <apex:outputPanel rendered="{!CIFObj.Mode_of_funding__c == 'Bank Loan'}">
                                                 <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
-                                                    <label for="bank1" style="width: 250px; font-weight: normal;">Bank 1:</label>
+                                                    <label for="bank1" style="width: 250px;">Bank 1:</label>
                                                     <div class="frmElem" style="width: 200px;">
                                                     <apex:inputField value="{!CIFObj.Bank_Preference_1__c}" styleClass="form-control" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
-                                                    <label for="bank2" style="width: 250px; font-weight: normal;">Bank 2:</label>
+                                                    <label for="bank2" style="width: 250px;">Bank 2:</label>
                                                     <div class="frmElem" style="width: 200px;">
                                                     <apex:inputField value="{!CIFObj.Bank_Preference_2__c}" styleClass="form-control" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
-                                                    <label for="bank3" style="width: 250px; font-weight: normal;">Bank 3:</label>
+                                                    <label for="bank3" style="width: 250px;">Bank 3:</label>
                                                     <div class="frmElem" style="width: 200px;">
                                                     <apex:inputField value="{!CIFObj.Bank_Preference_3__c}" styleClass="form-control" />
                                                     </div> 
@@ -331,9 +333,107 @@
                                     </td>
                                 </tr>                
                                 <!--Added By Dolly-->                             
-                                                               
+                                <!--Added for Cancellation Changes starts-->                        
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
+                                            <label style="width: 250px;">Type Of Booking*:</label>
+                                            <div class="frmElem" style="width: 200px;">
+                                                <apex:inputField value="{!opp.Type_Of_Sale__c}" styleClass="form-control" />
+                                                <apex:actionSupport event="onchange" action="{!actionTypeOfSale}" reRender="existingUnitDetails,bankPanel"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!--Added for Cancellation Changes ends--> 
                                 
 							</table>
+                            <apex:actionStatus id="loadingStatus">
+                                <apex:facet name="start">
+                                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; z-index: 1000; background-color: black;">&nbsp;</div>
+                                    <div style="position: fixed; left: 50%; top: 50%; z-index: 1001; background-color: white; padding: 10px; border: 1px solid #A8822B;">
+                                        Refreshing...
+                                    </div>
+                                </apex:facet>
+                            </apex:actionStatus>
+                            </apex:outputPanel>
+                        </apex:form>
+                        
+                        <!-- Added by Aditya -->
+                        <apex:form id="blockUnitFormNew">
+    						<apex:outputPanel rendered="{!hideAll == false}">
+                                <apex:outputPanel id="existingUnitDetails" layout="block">
+                                    <apex:outputPanel rendered="{!OR(opp.Type_Of_Sale__c=='Transfer of unit',OR(opp.Type_Of_Sale__c=='Upgrade of unit',opp.Type_Of_Sale__c=='Cancel & Rebook'))}">
+                                        <!--<div class="form-group" style="display: flex; align-items: center; padding-top:10px;">
+        <label for="dateOfBooking" style="width: 250px;">Date Of Booking:</label>
+        <div class="frmElem" style="width: 200px;">
+        <apex:inputField value="{!opp.Cancelled_Booking_Date__c}" styleClass="form-control" />
+        </div>
+        </div>-->
+                                        <div style="margin-top: 20px; margin-bottom: 10px; border-bottom: 2px solid #A8822B; width: 100%;">
+                                            <h5 style="color: #A8822B; margin-bottom: 5px;">Original Unit And Booking Details</h5>
+                                        </div>
+                                        <apex:actionRegion >
+                                            <table style="width: 100%; border-collapse: collapse; background-color: rgba(255,255,255,0.5); border-radius: 5px;">
+                                                <tr>
+                                                    <td style="width: 50%; padding: 10px 0;">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <label style="width: 250px;">Original Project*:</label>
+                                                            <div class="frmElem" style="width: 200px;">
+                                                                <!--<apex:outputLabel value="Original Project*" />-->
+                                                                <apex:selectList value="{!opp.Cancelled_Project__c}" size="1" styleClass="form-control">
+                                                                    <apex:selectOptions value="{!projectOptions}"/>
+                                                                    <apex:actionSupport event="onchange" action="{!loadTowers}" rerender="towerContainer,unitContainer,pageMsg" status="loadingStatus"/>
+                                                                </apex:selectList>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 50%; padding: 10px 0;">
+                                                        <apex:outputPanel id="towerContainer" layout="block">
+                                                            <div style="display: flex; align-items: center;">
+                                                                <label style="width: 250px;">Original Tower*:</label>
+                                                                <div class="frmElem" style="width: 200px;">
+                                                                    <!--<apex:outputLabel value="Original Tower Name*"/>-->
+                                                                    <apex:selectList value="{!opp.Cancelled_Tower__c}" size="1" multiselect="false" styleClass="form-control">
+                                                                        <apex:selectOptions value="{!towerOptions}"/>
+                                                                        <apex:actionSupport event="onchange" action="{!loadUnits}" rerender="unitContainer" status="loadingStatus"/>
+                                                                    </apex:selectList>
+                                                                </div>
+                                                            </div>
+                                                        </apex:outputPanel>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 50%; padding: 10px 0;">
+                                                        <apex:outputPanel id="unitContainer" layout="block">
+                                                            <div style="display: flex; align-items: center;">
+                                                                <label style="width: 250px;">Original Unit*:</label>
+                                                                <div class="frmElem" style="width: 200px;">
+                                                                    <!--<apex:outputLabel value="Original Unit Name*" />-->
+                                                                    <apex:selectList value="{!opp.Cancelled_Unit__c}" size="1" multiselect="false" styleClass="form-control">
+                                                                        <apex:selectOptions value="{!unitOptions}"/>
+                                                                        <apex:actionSupport event="onchange" action="{!checkUnit}" status="loadingStatus"/>
+                                                                    </apex:selectList>
+                                                                </div>
+                                                            </div>
+                                                        </apex:outputPanel>
+                                                    </td>
+                                                    <td style="width: 50%; padding: 10px 0;">
+                                                        <!--<div style="display: flex; align-items: center;">
+        <label for="sapNumber" style="width: 250px;">Original SAP Customer Number*:</label>
+        <div class="frmElem" style="width: 200px;">-->
+                                                        <apex:outputLabel value="Original SAP Customer Number*" />
+                                                        <apex:inputText value="{!opp.Cancelled_SAP_Customer_Number__c}" styleClass="form-control" />
+                                                        <!--</div>
+        </div>-->
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </apex:actionRegion>
+                                    </apex:outputPanel>
+                                    <!--</apex:outputPanel>-->
+                                </apex:outputPanel>
                             </apex:outputPanel>
                         </apex:form>
                             <br/><br/>
@@ -390,7 +490,7 @@
                                 document.getElementById('totalAmount').innerText = total.toFixed(2);
                             }
                             
-                            function calculateTotalAmount() { //Added by Vinay 09-02-2026
+                                function calculateTotalAmount() { //Added by Vinay 06-02-2026
                                     let total = 0;
                                     const inputs = document.getElementsByClassName('amountField');
                                     console.log('inputs: ', inputs);
@@ -403,16 +503,17 @@
                                     
                                     document.getElementById('totalAmount').innerText = total.toFixed(2);
                                 }
-                                
                             </script>
                             
                             <div style="position: relative;">
                                  
-                                <!--<div style="position: absolute; top: -40px; right: 0;">     Commented by Vinay 09-02-2026)
+                                <!--<div style="position: absolute; top: -40px; right: 0;">   Commented by Vinay 05/02/2026  
+                                    
                                     <input type="button" value="Add Row" onclick="showRow()" id="addBtn" />
                                     <input type="button" value="Remove Row" onclick="hideRow()" id="removeBtn" disabled="disabled" />
                                 </div> -->
-                                <!-- Added by Vinay 09/02/2026 Start -->
+                                
+                                <!-- Added by Vinay 05/02/2026 Start -->
                                 <div style="width: 70%;">
                                     <div style="position: absolute; top: -40px; right: 50;">
                                         <apex:commandButton value="Add Row" action="{!addRow}" />
@@ -451,8 +552,8 @@
                                   
                                     <b>Total: ₹ <span id="totalAmount">0.00</span></b>
                                 </div>
-                                <!-- Added by Vinay 09/02/2026 End -->
-                                <!--<table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="4px">
+                                <!-- Added by Vinay 05/02/2026 End -->
+                                <!--<table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="4px">  (Commented by Vinay 06-02-2026)
                                     
                                     
                                     <tr>
@@ -524,17 +625,17 @@
                                             <b>Total: ₹ <span id="totalAmount">0.00</span></b>
                                         </td>
                                     </tr>
-                                </table> --> <!-- Commented by Vinay 09/02/2026 -->
+                                </table>--> <!-- Commented by Vinay 06-02-2026 -->
                             </div>
                             <br/>
                             
                             <div style="text-align: center; margin-top: 20px;">
-                            <!--<apex:commandButton value="Save" action="{!saveDetails}" status="idActionStatus" rendered="{!showContinueButton == false}" disabled="false" rerender="idActionStatus,pageMsg"/>-->
+                            <!--<apex:commandButton value="Save" action="{!saveDetails1}" status="idActionStatus" rendered="{!showContinueButton == false}" disabled="false" rerender="idActionStatus,pageMsg"/>-->
                             <!--<apex:commandButton value="Save" 
                                                 action="{!saveDetails}" 
                                                 onclick="showSpinner();"  
-                                                />--><!--Added onclick for unidentified payments--> <!-- Commented by Vinay 09/02/2026 -->
-                            <apex:commandButton value="Save" action="{!saveDetails1}" onclick="showSpinner();" />    <!-- Added by Vinay 09/02/2026 -->             
+                                                />--><!--Added onclick for unidentified payments--> <!-- Commented by Vinay 06/02/2026 -->
+                            <apex:commandButton value="Save" action="{!saveDetails1}" onclick="showSpinner();" />    <!-- Added by Vinay 06/02/2026 -->
                                                 
                                                 <!--status="spinnerStatus"-->
                                                 <!--rerender="idActionStatus,pageMsg,flagPanel"-->

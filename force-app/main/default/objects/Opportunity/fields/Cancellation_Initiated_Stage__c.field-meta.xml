@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancellation_Initiated_Stage__c</fullName>
+    <label>Cancellation Initiated Stage</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pre-Block Now</fullName>
+                <default>false</default>
+                <label>Pre-Block Now</label>
+            </value>
+            <value>
+                <fullName>Pre-Book Now</fullName>
+                <default>false</default>
+                <label>Pre-Book Now</label>
+            </value>
+            <value>
+                <fullName>Post-Book Now</fullName>
+                <default>false</default>
+                <label>Post-Book Now</label>
+            </value>
+            <value>
+                <fullName>Post-Registration</fullName>
+                <default>false</default>
+                <label>Post-Registration</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

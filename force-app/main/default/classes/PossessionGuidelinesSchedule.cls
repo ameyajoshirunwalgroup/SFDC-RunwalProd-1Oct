@@ -25,6 +25,7 @@ global class PossessionGuidelinesSchedule implements Database.Batchable <sObject
         list <Messaging.SingleEmailMessage> mails = new list <Messaging.SingleEmailMessage>();
         //EmailTemplate template = [Select Id,Subject,Description,HtmlValue,DeveloperName,Body from EmailTemplate where DeveloperName = 'Possession_Guidelines_Template'];
         //String orgEmailAddress = Utility.getOrgWideEmailAddress();
+        List<App_Notification__c> notifications = new List<App_Notification__c>(); //Added by Vinay 20-01-2026
         for(Booking__c bkg : bkgs){
             bkg.Possession_Guidelines_Sent_Date__c = Date.today();
             /*Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
@@ -86,9 +87,25 @@ global class PossessionGuidelinesSchedule implements Database.Batchable <sObject
                 mail1.setTreatTargetObjectAsRecipient(false);
                 mails.add(mail1);
             }
+            
+            if(bkg.Lockated_User_Device_ID__c != null){ //Added by Vinay 20-01-2026
+                List<String> deviceTokens = bkg.Lockated_User_Device_ID__c.split(',');
+                for(String token : deviceTokens){
+                    App_Notification__c an = new App_Notification__c();
+                    an.Booking__c = bkg.Id;
+                    an.Title__c = 'POSSESSION GUIDELINES';
+                    an.Message__c = 'Possession Guidelines';
+                    an.Notification_Type__c = '';
+                    an.Device_Token__c = token;
+                    notifications.add(an);
+                }
+            }
         }
         System.debug('mails: ' + mails);
         Database.update(bkgs, false);
+        if(notifications.size() > 0){ //Added by Vinay 20-01-2026
+            insert notifications;
+        }
         if(mails.size() > 0){
             //Messaging.SendEmailResult[] results = Messaging.sendEmail(mails);
         }

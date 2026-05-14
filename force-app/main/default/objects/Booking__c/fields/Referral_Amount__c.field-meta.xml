@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Referral_Amount__c</fullName>
-    <formula>(Referral__c  *  Allotment_Premium__c)+Difference_of_Referral__c</formula>
+    <formula>/*(Referral__c  *  Allotment_Premium__c)+Difference_of_Referral__c*/
+
+/*Added by Prashant 31-07-2025 to skip difference of referral fields as discussed with shraddha and ameya*/
+Referral__c  *  Allotment_Premium__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Referral Amount</label>
     <precision>18</precision>

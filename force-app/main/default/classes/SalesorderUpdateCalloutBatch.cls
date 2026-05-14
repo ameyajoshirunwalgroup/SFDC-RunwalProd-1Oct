@@ -58,7 +58,7 @@ global class SalesorderUpdateCalloutBatch implements Database.Batchable<sObject>
             bookingId = oList[0].Booking__c;
             bList = [Select Id,Status__c,RW_Cancellation_initiated_by__c,Cancellation_Sub_reason__c,Cancellation_Reason__c	, Booking_Date__c,Funding_Status__c, Source_Of_Booking__c, Name,RW_Last_SDR_Received__c,
                   RW_Index_2__c,   RW_Registration_Date__c,RW_BRL_Number__c,RW_Release_of_Charge_issue_status__c,RW_ROC_Date__c,RW_Signed_Agreement_to_Customer_Date__c,
-                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c,
+                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c,// ADF_Opted__c,
                     RW_Noc_Generated_Date__c,RW_Loan_Sanction_Date__c, RW_Loan_Account_Number__c,RW_Loan_Amount__c,RW_Loan_Bank__c,Loan_Bank__c,RW_Nominee_Name__c	,Date_of_Occupation_Certificate__c	,Date_of_Cancellation__c,RW_Key_handover_date__c
                      
                      from Booking__c where Id = : bookingId];
@@ -145,6 +145,12 @@ global class SalesorderUpdateCalloutBatch implements Database.Batchable<sObject>
             orderHeader.PoDatS = '';
             orderHeader.DocDate = '';
             orderHeader.SalesOrdNo=oList[0].SalesOrder_Number__c;
+             // added by digicloud for ADF Option
+           /* if(bList[0].ADF_Opted__c == true){
+                orderHeader.ADF_OPTION = 'Y';
+            }else{
+                orderHeader.ADF_OPTION = 'N';
+            }*/
             orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
             orderHeader.ZZREGDT = String.valueOf(bList[0].RW_Registration_Date__c);
             orderHeader.ZzbookDt=String.ValueOf( bList[0].Booking_Date__c.date() );
@@ -251,6 +257,7 @@ global class SalesorderUpdateCalloutBatch implements Database.Batchable<sObject>
                         responseLog.Return_x.item.add(msgLogLine);
                     }
                 }
+                                system.debug('json.serialize(orderHeader)>>>>' +json.serialize(orderHeader)); // added digicloud
                  if(salesOrderResponse.Salesdocument != null && salesOrderResponse.Salesdocument != '') {
                     responseLog.Salesdocument = salesOrderResponse.Salesdocument;
                     SONumber = salesOrderResponse.Salesdocument;

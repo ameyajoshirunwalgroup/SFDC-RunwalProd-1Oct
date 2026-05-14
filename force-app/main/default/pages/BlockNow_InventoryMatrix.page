@@ -648,7 +648,11 @@ function calc()
     <center>
     <div id="filter"></div>
 </center>  
-<a href="/home/home.jsp"><img src="{!$Resource.Home}" style="float:left; width:8%; height:8%;"></img></a>
+<apex:outputLink value="/{!oppId}">
+    <img src="{!$Resource.Home}" style="float:left; width:8%; height:8%;" />
+</apex:outputLink>
+
+
 <!-- <img src="{!$Resource.InventoryLegends}" style="float:right; width:30%; height:8%;"></img>-->
 <apex:form rendered="{!If(SelectedClusterId !=null && selectedTower !=null,true,false)}">
 <a href="/apex/S_InventoryMatrixview"><img src="{!$Resource.newback}"   style="float:right; width:8%; height:8%;"></img></a>

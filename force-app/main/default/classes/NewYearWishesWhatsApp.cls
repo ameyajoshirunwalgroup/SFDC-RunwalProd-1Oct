@@ -11,7 +11,6 @@ global class NewYearWishesWhatsApp implements Database.Batchable<sObject>, Datab
     
     global void execute(Database.BatchableContext BC,list<Account> accList){
         if(accList.size() > 0){
-            System.debug('accList: ' + accList);
             for(Account acc : accList){
                 String jsonParse;
                 String templateName = 'new_year_wishes';
@@ -39,7 +38,6 @@ global class NewYearWishesWhatsApp implements Database.Batchable<sObject>, Datab
                 
                 JSONParser parser = JSON.createParser(jsonParse);
                 //string str = System.JSON.serialize(parser);
-                System.debug('jsonParse '+jsonParse);
                 Http http = new Http();
                 HttpRequest req = new HttpRequest(); 
                 req.setMethod('POST');
@@ -49,8 +47,6 @@ global class NewYearWishesWhatsApp implements Database.Batchable<sObject>, Datab
                 req.setBody(jsonParse);
                 if(!Test.isRunningTest()){
                     HTTPResponse res = http.send(req);
-                    System.debug('res!!! getBody '+res.getBody());
-                	System.debug('res!!! getStatusCode '+res.getStatusCode());
                 }
             }
         }

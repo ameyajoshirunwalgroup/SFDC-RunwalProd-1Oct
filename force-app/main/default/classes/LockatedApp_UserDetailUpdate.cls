@@ -1,9 +1,9 @@
 public class LockatedApp_UserDetailUpdate implements Queueable, Database.AllowsCallouts{
 
-    List<AccountUpdateWrap> accWrap = new List<AccountUpdateWrap>();
+    List<ApplicantUpdateWrap> appWrap = new List<ApplicantUpdateWrap>();
 
-    public LockatedApp_UserDetailUpdate(List<AccountUpdateWrap> accWrap) {
-        this.accWrap = accWrap;
+    public LockatedApp_UserDetailUpdate(List<ApplicantUpdateWrap> appWrap) {
+        this.appWrap = appWrap;
     }
     
     public void execute(QueueableContext context){
@@ -16,38 +16,38 @@ public class LockatedApp_UserDetailUpdate implements Queueable, Database.AllowsC
         }
 
         
-        System.debug('accWrap: ' + accWrap);
-        List<Account> accsToUpdate = new List<Account>();
-        Set<Id> accountIds = new Set<Id>();
-        Map<String, AccountUpdateWrap> accWrapMap = new Map<String, AccountUpdateWrap>();
-        List<String> primaryUpdatedAccIds = new List<String>();
-        List<String> secondaryUpdatedAccIds = new List<String>();
-        for(AccountUpdateWrap wrap : accWrap){
-            accWrapMap.put(wrap.acc.Id, wrap);
+        System.debug('appWrap: ' + appWrap);
+        Map<String, ApplicantUpdateWrap> appWrapMap = new Map<String, ApplicantUpdateWrap>();
+        List<String> primaryUpdatedAppIds = new List<String>();
+        List<String> secondaryUpdatedAppIds = new List<String>();
+        for(ApplicantUpdateWrap wrap : appWrap){
+            appWrapMap.put(wrap.applicantId, wrap);
             if(wrap.primaryMobileChanged || wrap.primaryEmailChanged){
-                primaryUpdatedAccIds.add(wrap.acc.Id);
+                primaryUpdatedAppIds.add(wrap.applicantId);
             }
-            if(wrap.secondaryMobileChanged || wrap.secondaryEmailChanged){
-                secondaryUpdatedAccIds.add(wrap.acc.Id);
+            if(wrap.secondaryMobileChanged){
+                secondaryUpdatedAppIds.add(wrap.applicantId);
             }
         }
-        if(primaryUpdatedAccIds.size() > 0){
-            updateuser(primaryUpdatedAccIds, accWrapMap, projNameVsSocityId, countryNameCodes);
+        if(primaryUpdatedAppIds.size() > 0){
+            updateuser(primaryUpdatedAppIds, appWrapMap, projNameVsSocityId, countryNameCodes);
         }
-        if(secondaryUpdatedAccIds.size() > 0){
-            updateuser(secondaryUpdatedAccIds, accWrapMap, projNameVsSocityId, countryNameCodes);
+        if(secondaryUpdatedAppIds.size() > 0){
+            updateuser(secondaryUpdatedAppIds, appWrapMap, projNameVsSocityId, countryNameCodes);
         }
     }
     
-    public static void updateuser(List<String> accIds, Map<String, AccountUpdateWrap> accWrapMap, Map<String, String> projNameVsSocityId, Map<String, Country_Codes__c> countryNameCodes){
+    public static void updateuser(List<String> appIds, Map<String, ApplicantUpdateWrap> accWrapMap, Map<String, String> projNameVsSocityId, Map<String, Country_Codes__c> countryNameCodes){
         
+        
+        List<Applicant_Details__c> appList = [SELECT Id,Opportunity__c,Booking__c,Booking__r.Opportunity__r.AccountId,First_Name__c,Last_Name__c,
+                                              Booking__r.Opportunity__r.RW_Project_Unit__r.RW_Param4__c,Booking__r.Opportunity__r.RW_Project_Unit__r.RW_Param2__c,
+                                              Booking__r.Opportunity__r.SAP_Customer_Number__c,Booking__r.Opportunity__r.RW_Project__r.Name,Email_Address__c,Mobile_Number__c,
+                                              Booking__r.Opportunity__r.Account.Country_Code__c,Booking__r.Opportunity__r.Account.RW_Country__c,Booking__r.Opportunity__r.Account.Ownership
+                                              FROM Applicant_Details__c WHERE Id =: appIds];
                 
-        List<Opportunity> opps = [SELECT Id, Name, AccountId, Account.FirstName, Account.LastName, Account.PersonEmail,Account.RW_Country__c,
-                           Account.Mobile_No__c, Account.Ownership, RW_Project_Unit__r.RW_Param4__c,  Account.Country_Code__c,
-                           RW_Project_Unit__r.RW_Param2__c, SAP_Customer_Number__c, Booking__c, RW_Project__r.Name, RW_Project_Unit__c
-                           FROM Opportunity WHERE AccountId =: accIds AND StageName = 'Unit Booked'];
         List<ERP_Integration_Log__c> logList = new List<ERP_Integration_Log__c>();
-        for(Opportunity opp : opps){
+        for(Applicant_Details__c app : appList){
             ERP_Integration_Log__c log = new ERP_Integration_Log__c();
             try{
                 HttpRequest request = new HttpRequest();
@@ -56,59 +56,55 @@ public class LockatedApp_UserDetailUpdate implements Queueable, Database.AllowsC
                 
                 String str = '';
                 Map<String,String> data = new Map<String,String>();
-                data.put('account_id', opp.AccountId);
-                data.put('firstname', opp.Account.FirstName);
-                data.put('lastname', opp.Account.LastName);
-                //data.put('email', opp.Account.PersonEmail);
-                //data.put('number', opp.Account.Mobile_No__c);
-                if(opp.RW_Project_Unit__c != null){
-                    data.put('flat', opp.RW_Project_Unit__r.RW_Param4__c);
-                    data.put('tower', opp.RW_Project_Unit__r.RW_Param2__c);
+                data.put('account_id', app.Booking__r.Opportunity__r.AccountId);
+                data.put('firstname', app.First_Name__c);
+                data.put('lastname', app.Last_Name__c);
+                if(app.Booking__r.Opportunity__r.RW_Project_Unit__c != null){
+                    data.put('flat', app.Booking__r.Opportunity__r.RW_Project_Unit__r.RW_Param4__c);
+                    data.put('tower', app.Booking__r.Opportunity__r.RW_Project_Unit__r.RW_Param2__c);
                 }
-                data.put('customer_code', opp.SAP_Customer_Number__c);
-                data.put('booking_number', opp.Booking__c);
-                data.put('society_id', projNameVsSocityId.get(opp.RW_Project__r.Name));
-                if(opp.Account.Country_Code__c != null){
-                    data.put('country_code', opp.Account.Country_Code__c);
+                data.put('customer_code', app.Booking__r.Opportunity__r.SAP_Customer_Number__c);
+                data.put('booking_number', app.Booking__c);
+                data.put('society_id', projNameVsSocityId.get(app.Booking__r.Opportunity__r.RW_Project__r.Name));
+                if(app.Booking__r.Opportunity__r.Account.Country_Code__c != null){
+                    data.put('country_code', app.Booking__r.Opportunity__r.Account.Country_Code__c);
                 }else{
                     data.put('country_code', '+91');
                 }
-                if(opp.Account.RW_Country__c != null && countryNameCodes.get(opp.Account.RW_Country__c) != null){
-                    data.put('country_code_name', countryNameCodes.get(opp.Account.RW_Country__c).Code__c.toLowerCase());
+                if(app.Booking__r.Opportunity__r.Account.RW_Country__c != null && countryNameCodes.get(app.Booking__r.Opportunity__r.Account.RW_Country__c) != null){
+                    data.put('country_code_name', countryNameCodes.get(app.Booking__r.Opportunity__r.Account.RW_Country__c).Code__c.toLowerCase());
                 }else{
                     data.put('country_code_name', 'in');
                 }
                 data.put('status', '1');
-                data.put('ownership', opp.Account.Ownership);
+                data.put('ownership', app.Booking__r.Opportunity__r.Account.Ownership);
                 data.put('is_primary', '1');
                 
-                
-                System.debug('accWrapMap.get(opp.AccountId): ' + accWrapMap.get(opp.AccountId));
-                if(accWrapMap.get(opp.AccountId).primaryMobileChanged){
+                data.put('number', app.Mobile_Number__c);
+                data.put('email', app.Email_Address__c);
+                data.put('mobile_changed','false');
+                data.put('email_changed','false');
+                System.debug('accWrapMap.get(app.Id): ' + accWrapMap.get(app.Id));
+                if(accWrapMap.get(app.Id).primaryMobileChanged){
                     data.put('mobile_changed','true');
-                    data.put('existing_mobile', accWrapMap.get(opp.AccountId).oldPrimaryMobile);
-                    data.put('number', accWrapMap.get(opp.AccountId).newPrimaryMobile);
+                    data.put('existing_mobile', accWrapMap.get(app.Id).oldPrimaryMobile);
+                    data.put('number', accWrapMap.get(app.Id).newPrimaryMobile);
                 }
-                if(accWrapMap.get(opp.AccountId).primaryEmailChanged){
+                if(accWrapMap.get(app.Id).primaryEmailChanged){
                     data.put('email_changed','true');
-                    data.put('existing_email', accWrapMap.get(opp.AccountId).oldPrimaryEmail);
-                    data.put('email', accWrapMap.get(opp.AccountId).newPrimaryEmail);
+                    data.put('existing_email', accWrapMap.get(app.Id).oldPrimaryEmail);
+                    data.put('email', accWrapMap.get(app.Id).newPrimaryEmail);
                 }
-                if(accWrapMap.get(opp.AccountId).secondaryMobileChanged){
+                if(accWrapMap.get(app.Id).secondaryMobileChanged){
                     data.put('mobile_changed','true');
-                    data.put('existing_mobile', accWrapMap.get(opp.AccountId).oldSecondaryMobile);
-                    data.put('number', accWrapMap.get(opp.AccountId).newSecondaryMobile);
-                }
-                if(accWrapMap.get(opp.AccountId).secondaryEmailChanged){
-                    data.put('email_changed','true');
-                    data.put('existing_email', accWrapMap.get(opp.AccountId).oldSecondaryEmail);
-                    data.put('email', accWrapMap.get(opp.AccountId).newSecondaryEmail);
+                    data.put('existing_mobile', accWrapMap.get(app.Id).oldSecondaryMobile);
+                    data.put('number', accWrapMap.get(app.Id).newSecondaryMobile);
                 }
                 
                 System.debug('data: ' + JSON.Serialize(data));
                 
-                
-                request.setEndpoint('https://hi-society.lockated.com/runwal_add_user_sap.json?token=0d93e348a9262bc36c2eb86612f119abe803f368ad503eb9'); //Added by Vinay 03-12-2025
+                //request.setEndpoint('https://hi-society.lockated.com/runwal_add_user_sap.json?token=0d93e348a9262bc36c2eb86612f119abe803f368ad503eb9'); //Added by Vinay 03-12-2025
+                request.setEndpoint(System.label.Lockated_User_Creation_End_Point + '?token=' + System.label.Lockated_User_Creation_Key); 
                 request.setHeader('Content-Type', 'application/json');
                 request.setMethod('POST');
                 request.setTimeout(120000);
@@ -120,7 +116,7 @@ public class LockatedApp_UserDetailUpdate implements Queueable, Database.AllowsC
                     System.debug('Response: ' + response);
                 }else{
                     log.API_Name__c = 'User Update';
-                    log.Opportunity__c = opp.Id;
+                    log.Opportunity__c = app.Booking__r.Opportunity__c;
                     log.Request__c = JSON.Serialize(data);
                     log.Response__c = response.getStatus();
                     logList.add(log);
@@ -137,20 +133,18 @@ public class LockatedApp_UserDetailUpdate implements Queueable, Database.AllowsC
         }
     }
     
-    public class AccountUpdateWrap{
-        public Account acc;
-        public String accountId;
+    
+    
+    public class ApplicantUpdateWrap{
+        public String applicantId;
         public Boolean primaryMobileChanged = false;
         public Boolean primaryEmailChanged = false;
         public Boolean secondaryMobileChanged = false;
-        public Boolean secondaryEmailChanged = false;
         public String oldPrimaryMobile;
         public String oldPrimaryEmail;
         public String oldSecondaryMobile;
-        public String oldSecondaryEmail;
         public String newPrimaryMobile;
         public String newPrimaryEmail;
         public String newSecondaryMobile;
-        public String newSecondaryEmail;
     }
 }

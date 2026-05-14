@@ -254,7 +254,7 @@ opp.CP_Category__c = cpCategoryList[0].Category__c;
             if(cpOpps.size() > 0 ){ // Added by Vinay 20-01-2025
                 trgOppHandler.addAopTypeAndCpCategory(cpOpps);
             }
-            
+            System.debug('Trigger.New**'+Trigger.New);
             objTrigger.BeforeUpdate(Trigger.new, Trigger.OldMap);
         }
         if(Trigger.isUpdate && Trigger.isafter)
@@ -262,9 +262,15 @@ opp.CP_Category__c = cpCategoryList[0].Category__c;
             Set<Id> oSet = new Set<Id>();
             Set<Id> oppIds = new Set<Id>();
             List<String> oppIdsProspectDay1WhatsApp = new List<String>();//Added by coServe 26-07-2024
+            System.debug('Check Before Recursion Update New--->'+Trigger.New);
+            System.debug('Check Before Recursion Update Old Map--->'+Trigger.oldMap);
             if(checkRecursion.isFirstRunA()) 
             {system.debug('MK');
+             System.debug('Check Before Update New--->'+Trigger.New);
+             System.debug('Check Before Update Old Map--->'+Trigger.oldMap);
              objTrigger.AfterUpdate(Trigger.new, Trigger.OldMap);
+             System.debug('Check After Update New--->'+Trigger.New);
+             System.debug('Check After Update Old Map--->'+Trigger.oldMap);
              objTrigger.AfterUpdateSAP(Trigger.new, Trigger.OldMap);
              objTrigger.UpdateCPAccount(trigger.new);
             }
@@ -337,7 +343,7 @@ UpdateMobileAndEmailController.clearTempFields(oppIdsListReject);
                 
                 //Added by Prashant to assign the date on which the RM is updated.
                 //Set<Id> oppIdstoUpdate = new Set<Id>(); // Commented by Vinay 21-01-2025
-                if((Trigger.oldmap.get(o.Id).RW_Sourcing_Manager__c != Trigger.newmap.get(o.Id).RW_Sourcing_Manager__c && o.RW_Sourcing_Manager__c != null) || (Trigger.oldmap.get(o.Id).RW_Closing_Head__c != Trigger.newmap.get(o.Id).RW_Closing_Head__c && o.RW_Closing_Head__c != null) ){                    
+                if((Trigger.oldmap.get(o.Id).Sourcing_Manager_User__c != Trigger.newmap.get(o.Id).Sourcing_Manager_User__c && o.Sourcing_Manager_User__c != null) || (Trigger.oldmap.get(o.Id).RW_Closing_Head__c != Trigger.newmap.get(o.Id).RW_Closing_Head__c && o.RW_Closing_Head__c != null) ){   // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025                 
                     oppIdstoUpdate.add(o.Id);
                 }
                 //Call the Logic cls

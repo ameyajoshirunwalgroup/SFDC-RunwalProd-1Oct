@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <allowRecall>false</allowRecall>
+    <allowedSubmitters>
+        <type>allInternalUsers</type>
+    </allowedSubmitters>
+    <allowedSubmitters>
+        <type>creator</type>
+    </allowedSubmitters>
+    <approvalPageFields>
+        <field>Name</field>
+        <field>Project__c</field>
+        <field>Booking__c</field>
+        <field>CN_type__c</field>
+        <field>Quote_Applied_Discounts__c</field>
+        <field>00N9I00000263DN</field>
+        <field>Approval_Status__c</field>
+    </approvalPageFields>
+    <approvalStep>
+        <allowDelegate>false</allowDelegate>
+        <approvalActions>
+            <action>
+                <name>Update_L1_Approval_Date</name>
+                <type>FieldUpdate</type>
+            </action>
+        </approvalActions>
+        <assignedApprover>
+            <approver>
+                <name>Credit_Note_Approver_L1__c</name>
+                <type>relatedUserField</type>
+            </approver>
+            <whenMultipleApprovers>Unanimous</whenMultipleApprovers>
+        </assignedApprover>
+        <label>Approved By BO Team</label>
+        <name>Approved_By_BO_Team</name>
+        <rejectionActions>
+            <action>
+                <name>Rejected_By_L1</name>
+                <type>FieldUpdate</type>
+            </action>
+        </rejectionActions>
+    </approvalStep>
+    <emailTemplate>Referral_Credit_Template_Folder/CN_Email_For_BO</emailTemplate>
+    <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
+    <entryCriteria>
+        <criteriaItems>
+            <field>Booking__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Booking Confirmed</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Credit_Note__c.Approval_Status__c</field>
+            <operation>equals</operation>
+            <value>Draft,Rejected By L1</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Credit_Note__c.CN_type__c</field>
+            <operation>equals</operation>
+            <value>Offer / Voucher</value>
+        </criteriaItems>
+    </entryCriteria>
+    <finalApprovalActions>
+        <action>
+            <name>Update_Status_to_Approved_By_L1</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalApprovalActions>
+    <finalApprovalRecordLock>true</finalApprovalRecordLock>
+    <finalRejectionRecordLock>false</finalRejectionRecordLock>
+    <initialSubmissionActions>
+        <action>
+            <name>Update_Status_To_Submitted</name>
+            <type>FieldUpdate</type>
+        </action>
+    </initialSubmissionActions>
+    <label>Offer Credit Note Approval</label>
+    <processOrder>2</processOrder>
+    <recordEditability>AdminOnly</recordEditability>
+    <showApprovalHistory>true</showApprovalHistory>
+</ApprovalProcess>

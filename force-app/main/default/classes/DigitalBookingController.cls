@@ -6,7 +6,7 @@ public  without sharing class DigitalBookingController{
         String customerEmail='';
         // try{
         //Opportunity opportunityRec = Utility.getOpportunityRecord(opprecordId);
-        List<Opportunity> opportunityRecord = [SELECT Id,Project_Name__c, Name ,RW_Sourcing_Manager__c,Sales_Manager__c, AccountId,RW_Sales_Associate__c,Walk_in_Sub_Source__c,Walk_in_Source__c, RW_Email__c ,Walkin_Source__c, RW_Mobile_No__c, RW_PAN_Card_Number__c , RW_Additional_Email__c,RW_AADHAR_Card_Number__c,RW_Passport_Number__c,RW_Secondary_Email__c,LeadSource,Lead_Sub_Source__c,RW_Project__c,RW_Project__r.Name,RW_Walkin_Channel_Partner__c,RW_Walkin_Channel_Partner__r.Name,RW_Walkin_Channel_Partner__r.SAP_CP_Code__c,RW_Previous_Opportunity__c,RW_Previous_Opportunity__r.Booking__c,RW_Previous_Opportunity__r.Booking__r.Project__c,RW_Type_of_Client__c,RW_Project_Unit__r.TowerName__c,Account.Country_Code__c,(SELECT id,RW_Status__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c FROM EOI__r),(SELECT id,status__c FROM Booking__r),(Select Id,RecordtypeId,RW_Link_Status__c,RW_Link_Sent_Time__c from Digital_Link_Status__r) FROM Opportunity WHERE Id= :opprecordId ];
+        List<Opportunity> opportunityRecord = [SELECT Id,Project_Name__c, Name ,RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager__c, AccountId,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,Walk_in_Sub_Source__c,Walk_in_Source__c, RW_Email__c ,Walkin_Source__c, RW_Mobile_No__c, RW_PAN_Card_Number__c , RW_Additional_Email__c,RW_AADHAR_Card_Number__c,RW_Passport_Number__c,RW_Secondary_Email__c,LeadSource,Lead_Sub_Source__c,RW_Project__c,RW_Project__r.Name,RW_Walkin_Channel_Partner__c,RW_Walkin_Channel_Partner__r.Name,RW_Walkin_Channel_Partner__r.SAP_CP_Code__c,RW_Previous_Opportunity__c,RW_Previous_Opportunity__r.Booking__c,RW_Previous_Opportunity__r.Booking__r.Project__c,RW_Type_of_Client__c,RW_Project_Unit__r.TowerName__c,Account.Country_Code__c,(SELECT id,RW_Status__c,RW_Primary_First_Name__c,RW_Primary_Last_Name__c,RW_Project_Name__c FROM EOI__r),(SELECT id,status__c FROM Booking__r),(Select Id,RecordtypeId,RW_Link_Status__c,RW_Link_Sent_Time__c from Digital_Link_Status__r) FROM Opportunity WHERE Id= :opprecordId ]; // Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 04-12-2025
         Opportunity opportunityRec = opportunityRecord[0];
         Id bkRecordTypeId =Schema.SObjectType.RW_Digital_Link_Status__c.getRecordTypeInfosByName().get('Booking').getRecordTypeId();
         
@@ -117,20 +117,21 @@ public  without sharing class DigitalBookingController{
             htmlBody = htmlBody.replace('{!DigitalBooking}','<a href="'+Label.Community_URL+'onlinebooking/?data='+encryptedData+'">Click Here'+'</a>' );
             
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c)!=null){   SMmobile=string.valueOf(mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c).RW_Phone__c);
-                                                                                                                                              htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c).RW_Phone__c));
-                                                                                                                                             }else{
-                                                                                                                                                 SMmobile= System.Label.RW_BookingSalesContact;
-                                                                                                                                                 htmlBody = htmlBody.replace('{!SMPhoneNumber}', System.Label.RW_BookingSalesContact);
-                                                                                                                                             }
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__c)!=null){   // Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                SMmobile=string.valueOf(mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__r.Name).RW_Phone__c); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+                htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__r.Name).RW_Phone__c)); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+            }else{ 
+                SMmobile= System.Label.RW_BookingSalesContact;
+                htmlBody = htmlBody.replace('{!SMPhoneNumber}', System.Label.RW_BookingSalesContact);
+            }
             String plainTextBody = template.Body;
             
             plainTextBody = plainTextBody.replace('{!Opportunity.Name}',opportunityRec.Name );
             plainTextBody = plainTextBody.replace('{!Opportunity.Project_Name__c}',opportunityRec.Project_Name__c );
             plainTextBody = plainTextBody.replace('{!Project_Unit__c.RW_Param4__c}',bk.Unit_No__r.RW_Param4__c );
             plainTextBody = plainTextBody.replace('{!DigitalBooking}', '<a href="'+Label.Community_URL+'onlinebooking/?data='+encryptedData+'">Click Here'+'</a>' );
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c)!=null)
-                plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.RW_Sales_Associate__c).RW_Phone__c));
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__c)!=null) // Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityRec.Sales_Manager_User__r.Name).RW_Phone__c)); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             else
                 plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', System.Label.RW_BookingSalesContact);
             message.toAddresses = new String[] { customerEmail };
@@ -192,9 +193,10 @@ public  without sharing class DigitalBookingController{
         //Ended here
         bkRecord.Source_of_Booking__c =   oppRecord.Walkin_Source__c;
         bkRecord.Sub_Source__c = oppRecord.Walk_in_Sub_Source__c;
-        bkRecord.Sourcing_Mananger__c = oppRecord.RW_Sourcing_Manager__c;
-        bkRecord.Sales_Managers__c = oppRecord.RW_Sales_Associate__c;
-        bkRecord.Sales_Manager__c = utility.getUserIdbyName(oppRecord.RW_Sales_Associate__c);
+        bkRecord.Sourcing_Mananger__c = oppRecord.Sourcing_Manager_User__r.Name; // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__r.Name by Vinay 04-12-2025
+        bkRecord.Sales_Managers__c = oppRecord.Sales_Manager_User__r.Name; // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+        //bkRecord.Sales_Manager__c = utility.getUserIdbyName(oppRecord.RW_Sales_Associate__c); //Commented by Vinay 04-12-2025
+        bkRecord.Sales_Manager__c = oppRecord.Sales_Manager_User__c; //Added by Vinay 04-12-2025
         
         bkRecord.BrokerIId__c = oppRecord.RW_Walkin_Channel_Partner__c;
         bkRecord.Broker_Name__c = oppRecord.RW_Walkin_Channel_Partner__r.Name;
@@ -283,7 +285,7 @@ public  without sharing class DigitalBookingController{
         
         //if EOI is filled we get below
         //KYC Details for primary and applicant info for primary
-            Quotation__c  QuoteDetails = [SELECT id,Project__r.CRMHead__c,Project__r.Overall_CRM_Head__c, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+        Quotation__c  QuoteDetails = [SELECT id,Project__r.CRMHead__c,Project__r.Overall_CRM_Head__c, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
                                       Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c, Parking_Type__c,
                                       Project__r.Sales_Site_Head__c, Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c, Project__r.CRM_MIS_Head__c,
                                       Discount_9_Type__c, Quote_Status__c,Discount_9_L__c,Brokerage_Agreement_Value__c,Project_Unit__r.TowerName__c,Is_Special_Brokerage_Scheme__c,Podium__c, Puzzle_Car_Park__c
@@ -291,10 +293,11 @@ public  without sharing class DigitalBookingController{
         Booking__c bkRecord = new Booking__c();
         bkRecord.Opportunity__c=oppRecord.id;
         bkRecord.Customer__c=oppRecord.id;
-        bkRecord.Sales_Managers__c = oppRecord.RW_Sales_Associate__c    ;
-        bkRecord.Sales_Manager__c = utility.getUserIdbyName(oppRecord.RW_Sales_Associate__c);
+        bkRecord.Sales_Managers__c = oppRecord.Sales_Manager_User__r.Name; // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+        //bkRecord.Sales_Manager__c = utility.getUserIdbyName(oppRecord.RW_Sales_Associate__c); //Commented by Vinay 04-12-2025
+        bkRecord.Sales_Manager__c = oppRecord.Sales_Manager_User__c; //Added by Vinay 04-12-2025
         
-        bkRecord.Sourcing_Mananger__c = oppRecord.RW_Sourcing_Manager__c;
+        bkRecord.Sourcing_Mananger__c = oppRecord.Sourcing_Manager_User__r.Name; // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__r.Name by Vinay 04-12-2025
         bkRecord.BrokerIId__c = oppRecord.RW_Walkin_Channel_Partner__c;
         bkRecord.Broker_Name__c = oppRecord.RW_Walkin_Channel_Partner__r.Name;
         bkRecord.Broker_Code__c = oppRecord.RW_Walkin_Channel_Partner__r.SAP_CP_Code__c;
@@ -369,9 +372,8 @@ bkRecord.RW_Gender__c =accRecord.Gender__c;
         bkRecord.Type_of_Client__c = oppRecord.RW_Type_of_Client__c;
         //bkRecord.Tower__c = oppRecord.RW_Project_Unit__r.TowerName__c;
         bkRecord.Old_Booking__c = oppRecord.RW_Previous_Opportunity__r.Booking__c;
-
-        //Modified by Dolly
         if(oppRecord.RW_Project__c!=null){
+            //Added By Dolly
             Set<Id> projectIds = new Set<Id>{ oppRecord.RW_Project__c };
             // Call TeamMemberService method  
             Map<Id, Map<String, Team_Members__c>> approvers = TeamMemberService.getProjectTeamMembers(projectIds, 'CP Approvers Team', new List<String>{ 'CP Invoice Clearing L1', 'CP Invoice Clearing L2' });
@@ -381,16 +383,19 @@ bkRecord.RW_Gender__c =accRecord.Gender__c;
 
             if (approversMap != null) {
 
+                //Commented by Prashant as this user lookups were not being used in any process. // 28-11-25...
                 // Direct assignment — NO loops needed
-                bkRecord.CP_Invoice_Clearing_L1__c = (approversMap.get('CP Invoice Clearing L1') != null ? approversMap.get('CP Invoice Clearing L1').User__c : null);
+                /*bkRecord.CP_Invoice_Clearing_L1__c = (approversMap.get('CP Invoice Clearing L1') != null ? approversMap.get('CP Invoice Clearing L1').User__c : null);
                 bkRecord.CP_Invoice_Clearing_L2__c = (approversMap.get('CP Invoice Clearing L2') != null ? approversMap.get('CP Invoice Clearing L2').User__c : null);
 
                 System.debug('L1 Approver User Id => ' + bkRecord.CP_Invoice_Clearing_L1__c);
                 System.debug('L2 Approver User Id => ' + bkRecord.CP_Invoice_Clearing_L2__c);
+                */
+                //Commented by Prashant as this user lookups were not being used in any process. // 28-11-25...
             }
             // bkRecord.CP_Invoice_Clearing_L1__c = oppRecord.RW_Project__r.CP_Invoice_Clearing_L1__c;
             // bkRecord.CP_Invoice_Clearing_L2__c = oppRecord.RW_Project__r.CP_Invoice_Clearing_L2__c;           
-        }
+         }
         
         if(QuoteDetails.Discount_9_Type__c == 'CP Passback' && QuoteDetails.Quote_Status__c == 'Valid' && QuoteDetails.Discount_9_L__c != Null){
             bkRecord.Passback_Amount__c = QuoteDetails.Discount_9_L__c;
@@ -594,13 +599,13 @@ insert bkLink; */
     @AuraEnabled
     public static quotationWrapper getQuotationMap(String recordId){
         map<string,Quotation__c>quotationIdNameMap = new Map<String,Quotation__c>();
-        List<Quotation__c> quotationList = [Select id,Name,Project_Unit__r.TowerName__c,Tandem_car_park_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Single_car_park_Additional__c,Stack_Additional_1__c, Podium__c,Puzzle_Car_Park__c,Project_Unit__r.RW_Unit_Status__c,Stack_Additional__c,MLCP_Additional__c,Project__r.Name,Payment_Plan_Modified__c,Quote_Status__c from Quotation__c  where Opportunity__c  =:recordId];
+        List<Quotation__c> quotationList = [Select id,Name,Project_Unit__r.TowerName__c,Tandem_car_park_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Single_car_park_Additional__c, Podium__c,Puzzle_Car_Park__c,Project_Unit__r.RW_Unit_Status__c,Stack_Additional__c,MLCP_Additional__c,Project__r.Name,Payment_Plan_Modified__c,Quote_Status__c from Quotation__c  where Opportunity__c  =:recordId];
         Set<String>ProjectIds = new Set<String>();
         for(Quotation__c qt :quotationList ){
             quotationIdNameMap.put(qt.id,qt);
             ProjectIds.add(qt.Project__c);
         }
-        List<Project__c> projectList = [Select name,Tandem_car_park_Available__c,Tandem_Open_Available__c,Single_car_park_Available__c,Single_Open_Available__c,Stack_Available__c,MLCP_Available__c,Stack_Available1__c, Puzzle_Car_Park_Available__c,Stack_Car_Park_Available__c from project__c where id In :ProjectIds ];
+        List<Project__c> projectList = [Select name,Tandem_car_park_Available__c,Tandem_Open_Available__c,Single_car_park_Available__c,Single_Open_Available__c,Stack_Available__c,MLCP_Available__c,Podium_Available__c, Puzzle_Car_Park_Available__c from project__c where id In :ProjectIds ];
         Map<String,Map<String,Decimal>> projectCarParAvailMap = new Map<String,Map<String,Decimal>>();
         for(project__c prj :projectList ){
             Map<String,Decimal> parkMap = new Map<String,Decimal>();
@@ -610,38 +615,12 @@ insert bkLink; */
             parkMap.put('Single Covered',prj.Single_car_park_Available__c);
             parkMap.put('Stilt',prj.Stack_Available__c);
             parkMap.put('MLCP',prj.MLCP_Available__c);
-            parkMap.put('Podium',prj.Stack_Available1__c);
+            parkMap.put('Podium',prj.Podium_Available__c);
             parkMap.put('Puzzle Car Park',prj.Puzzle_Car_Park_Available__c); //Added by Vinay 28-03-2025
-            parkMap.put('Stack Car Park',prj.Stack_Car_Park_Available__c); //Added by Vinay 21-11-2025
             
             projectCarParAvailMap.put(prj.Name,parkMap);
             
         }
-        
-        //Added by dolly for car parking changes start
-        //Modified in the logic
-        // List<Quotation__c> quotationList = [Select id,Name,Project_Unit__r.TowerName__c,Tandem_car_park_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Single_car_park_Additional__c, Podium__c,Puzzle_Car_Park__c,Project_Unit__r.RW_Unit_Status__c,Stack_Additional__c,MLCP_Additional__c,Project__r.Name,Payment_Plan_Modified__c,Quote_Status__c from Quotation__c  where Opportunity__c  =:recordId];
-        // Set<String>ProjectIds = new Set<String>();
-        // for(Quotation__c qt :quotationList ){
-        //     quotationIdNameMap.put(qt.id,qt);
-        //     ProjectIds.add(qt.Project__c);
-        // }
-        // List<Project__c> projectList = [Select name,Tandem_car_park_Available__c,Tandem_Open_Available__c,Single_car_park_Available__c,Single_Open_Available__c,Stack_Available__c,MLCP_Available__c,Podium_Available__c, Puzzle_Car_Park_Available__c from project__c where id In :ProjectIds ];
-        // Map<String,Map<String,Decimal>> projectCarParAvailMap = new Map<String,Map<String,Decimal>>();
-        // for(project__c prj :projectList ){
-        //     Map<String,Decimal> parkMap = new Map<String,Decimal>();
-        //     parkMap.put('Tandem Covered',prj.Tandem_car_park_Available__c);
-        //     parkMap.put('Covered Stack',prj.Tandem_Open_Available__c);
-        //     parkMap.put('Single Open',prj.Single_Open_Available__c);
-        //     parkMap.put('Single Covered',prj.Single_car_park_Available__c);
-        //     parkMap.put('Stilt',prj.Stack_Available__c);
-        //     parkMap.put('MLCP',prj.MLCP_Available__c);
-        //     parkMap.put('Podium',prj.Podium_Available__c);
-        //     parkMap.put('Puzzle Car Park',prj.Puzzle_Car_Park_Available__c); //Added by Vinay 28-03-2025
-            
-        //     projectCarParAvailMap.put(prj.Name,parkMap);
-            
-        // }
         
         quotationWrapper qt = new quotationWrapper();
         qt.quotationIdNameMap = quotationIdNameMap;
@@ -649,15 +628,15 @@ insert bkLink; */
         qt.AvailParking = projectCarParAvailMap;
         //  public String errorfield;
         // public String ErrorMessage;
-        Opportunity Opty = [Select id,RW_Sourcing_Manager__c,RW_Sales_Associate__c, Walkin_Source__c from opportunity where id=:recordId];
-        if (Opty.RW_Sourcing_Manager__c == null) {
+        Opportunity Opty = [Select id,RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, Walkin_Source__c from opportunity where id=:recordId]; // Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name, Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 04-12-2025
+        if (Opty.Sourcing_Manager_User__c == null) {  // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025
             errorWrapper er= new ErrorWrapper();
             er.errorfield = 'Sourcing Manager';
             er.ErrorMessage = 'Sourcing Manager for opportunity  is empty';
             qt.errors.add(er);
             qt.isError =true;
         }
-        if (Opty.RW_Sales_Associate__c == null) {
+        if (Opty.Sales_Manager_User__c == null) { // Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
             errorWrapper er1= new ErrorWrapper();
             er1.errorfield = 'Sourcing Manager';
             er1.ErrorMessage = 'Sales Manager for opportunity  is empty';
@@ -962,7 +941,7 @@ throw new AuraHandledException(e.getMessage());
             receipt.Opportunity__c = details.get('oppRecId');
             recList.add(receipt);
             upsert recList;
-            Booking__c bookingRecord = [Select id,Unit_No__r.RW_Param4__c,Project__r.name,Name,Sales_Managers__c,Status__c,Customer__r.RW_Project__c,RW_Digitally_Accepted_On__c,Primary_Applicant_Email__c,Primary_Applicant_Name__c,customer__r.RW_Sales_Associate__c  from Booking__c where id= : details.get('bookingId')];
+            Booking__c bookingRecord = [Select id,Unit_No__r.RW_Param4__c,Project__r.name,Name,Sales_Managers__c,Status__c,Customer__r.RW_Project__c,RW_Digitally_Accepted_On__c,Primary_Applicant_Email__c,Primary_Applicant_Name__c,customer__r.RW_Sales_Associate__c,customer__r.Sales_Manager_User__c,customer__r.Sales_Manager_User__r.Name from Booking__c where id= : details.get('bookingId')]; //Added customer__r.Sales_Manager_User__c,customer__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
             
             if(bookingRecord.Status__c == 'Booking Received - Payment Pending'){
                 bookingRecord.Status__c = 'Booking Received';
@@ -999,11 +978,11 @@ attach.Body = body;*/
             //  htmlBody = htmlBody.replace('{!Booking__c.RW_Digitally_Accepted_On__c}', bookingRecord.RW_Digitally_Accepted_On__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
             
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(bookingRecord.customer__r.RW_Sales_Associate__c)!=null){
-                htmlBody = htmlBody.replace('{!SMName}', bookingRecord.customer__r.RW_Sales_Associate__c);
-                htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(bookingRecord.customer__r.RW_Sales_Associate__c).RW_Phone__c));
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(bookingRecord.customer__r.Sales_Manager_User__c)!=null){ // Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                htmlBody = htmlBody.replace('{!SMName}', bookingRecord.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+                htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(bookingRecord.customer__r.Sales_Manager_User__r.Name).RW_Phone__c)); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             }else{
-                htmlBody = htmlBody.replace('{!SMName}', bookingRecord.customer__r.RW_Sales_Associate__c);
+                htmlBody = htmlBody.replace('{!SMName}', bookingRecord.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                 htmlBody = htmlBody.replace('{!SMPhoneNumber}', System.Label.RW_BookingSalesContact );
             }
             String plainTextBody = template.Body;
@@ -1013,11 +992,11 @@ attach.Body = body;*/
             plainTextBody = plainTextBody.replace('{!Project__c.Name}', bookingRecord.Project__r.name);
             
             //  plainTextBody = htmlBody.replace('{!Booking__c.RW_Digitally_Accepted_On__c}', bookingRecord.RW_Digitally_Accepted_On__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(bookingRecord.customer__r.RW_Sales_Associate__c)!=null){
-                plainTextBody = plainTextBody.replace('{!SMName}', bookingRecord.customer__r.RW_Sales_Associate__c);
-                plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(bookingRecord.Customer__r.RW_Sales_Associate__c).RW_Phone__c));
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(bookingRecord.customer__r.Sales_Manager_User__c)!=null){ // Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                plainTextBody = plainTextBody.replace('{!SMName}', bookingRecord.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+                plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(bookingRecord.Customer__r.Sales_Manager_User__r.Name).RW_Phone__c)); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
             }else{
-                plainTextBody = plainTextBody.replace('{!SMName}', bookingRecord.customer__r.RW_Sales_Associate__c);
+                plainTextBody = plainTextBody.replace('{!SMName}', bookingRecord.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                 plainTextBody = plainTextBody.replace('{!SMPhoneNumber}',System.Label.RW_BookingSalesContact);
             }
             Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
@@ -1277,13 +1256,13 @@ attach.Body = body;*/
         digitalBookingWrapper(String bookingId){
             booking = [SELECT Account_Name_Service_Tax__c,Account_Number_Service_tax__c,Account_Number__c,Allotment_Premium__c,Bank_Loan_Status__c,Bank_Name_Service_tax__c,Bank__c,
                        Basic_Booking_Amount__c,Booking_Date__c,Booking_Source_CP_New__c,Booking_Source_Details__c,Booking_Source_Reference_by_Customer__c,Booking_Source_Reference_By_Employee__c,
-                       Brokerage_Amount__c,Brokerage__c,Carpet_Area__c,City__c,Code__c,CreatedDate,Credited_Amount__c,Customer_Name__c,Customer__c,Customer__r.RW_Sales_Associate__c,
+                       Brokerage_Amount__c,Brokerage__c,Carpet_Area__c,City__c,Code__c,CreatedDate,Credited_Amount__c,Customer_Name__c,Customer__c,Customer__r.RW_Sales_Associate__c,Customer__r.Sales_Manager_User__c,Customer__r.Sales_Manager_User__r.Name,
                        Opportunity__r.RW_Project__c,Flat_No__c,Flat_Typology__c,Floor__c,Funding_Status__c,Future_Correspondence_Contact_Email__c,
                        Future_Correspondence_Contact_Name__c,Future_Correspondence_Contact_Phone__c,Future_Correspondence_Contact_Relation__c,
                        Future_Correspondence_Contact__c,Id,IFSC_Code_Flat_Cost__c,IFSC_Code_Service_Tax__c,IsDeleted,Level_One_Approver__c,Level_Three_Approver__c,Level_Two_Approver__c,Name,
                        Project__r.name,No_of_Parking__c,Opportunity__c,Parking_Type__c,Primary_Applicant_Email__c,Primary_Applicant_Name__c,Project_Name__c,
                        Project__c,Quotation__c,Remarks__c,RW_Country_Phone_Code__c,Sales_Managers__c,Sales_Manager__c,Sale_Order__c,Sharing_Per_Amt__c,Source_Details__c,Source_of_Booking__c,Sourcing_Mananger__c,Status__c,Stock__c,
-                       ST_Token_Amount__c,Sub_Source__c,Token_Amount__c,Unit_No__c,Wing__c,Zone__c,Unit_No__r.RW_Param4__c,Unit_No__r.TowerName__c  FROM Booking__c where id = :bookingId];
+                       ST_Token_Amount__c,Sub_Source__c,Token_Amount__c,Unit_No__c,Wing__c,Zone__c,Unit_No__r.RW_Param4__c,Unit_No__r.TowerName__c  FROM Booking__c where id = :bookingId]; //Added Customer__r.Sales_Manager_User__c,Customer__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
             
             applicants = [SELECT Address_Proof_Document__c,Address_Proof_Number__c,Address_Proof__c,Applicant_Number__c,BookingDetails__c,Booking__c,Certified_copy_of_Article_of_Association__c,
                           Certified_copy_of_Board_Resolution__c,Certified_copy_of_Partnership_Deed__c,Certified_copy_of_ROC_Incorporation__c,Certified_extract_of_Registration__c,
@@ -1402,7 +1381,7 @@ ContentDocData.put(contDocument.Id,contDoc);
         try{
             //  system.debug(Json.serialize(bkwrap));
             system.debug(bk);
-            Quotation__c    QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            Quotation__c    QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
                                             Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c, Parking_Type__c,
                                             Allotment_Premium_Agreement_Value__c,Total_No_of_Parking__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,Podium__c, Puzzle_Car_Park__c
                                             FROM Quotation__c WHERE Id =:  bk.bookingDetails.booking.Quotation__c];
@@ -1520,7 +1499,7 @@ ContentDocData.put(contDocument.Id,contDoc);
             List < Car_Parking_Charge__c > MLCPParkingList = new List < Car_Parking_Charge__c > ();
             List < Car_Parking_Charge__c > PodiumParkingList = new List < Car_Parking_Charge__c > ();
             List < Car_Parking_Charge__c > PuzzleCarParkList = new List < Car_Parking_Charge__c > ();//Added by Vinay 28-03-2025
-            List < Car_Parking_Charge__c > StackCarParkList = new List < Car_Parking_Charge__c > ();//Added by Vinay 21-11-2025
+            
             
             
             Set<String> quotationCarParking = new Set<String>();
@@ -1550,9 +1529,6 @@ ContentDocData.put(contDocument.Id,contDoc);
             if (QuoteDetails.Puzzle_Car_Park__c!= null) { //Added by Vinay 28-03-2025
                 quotationCarParking.add('Puzzle Car Park');
             }
-            if (QuoteDetails.Stack_Additional_1__c!= null) { //Added by Vinay 21-11-2025
-                quotationCarParking.add('Stack Car Park');
-            }
             List<Car_Parking_Charge__c> AvailableParking = [Select id, Parking__c, Status__c, Category__c, Name, Booking__c From Car_Parking_Charge__c where Parking__c IN : quotationCarParking and Status__c =: 'Vacant' and Category__c =: 'Additional' and Project__c =:bk.bookingDetails.booking.Project__c];
             for(Car_Parking_Charge__c cp :AvailableParking ){
                 switch on cp.Parking__c{
@@ -1564,7 +1540,6 @@ ContentDocData.put(contDocument.Id,contDoc);
                     when 'MLCP'{MLCPParkingList.add(cp);}
                     when 'Podium'{PodiumParkingList.add(cp);}
                     when 'Puzzle Car Park'{PuzzleCarParkList.add(cp);} //Added by Vinay 28-03-2025
-                    when 'Stack Car Park'{StackCarParkList.add(cp);} //Added by Vinay 28-03-2025
                 }
             }
             //Updating Parkings/////
@@ -1656,16 +1631,6 @@ ContentDocData.put(contDocument.Id,contDoc);
                 }
                 
             }
-            if(QuoteDetails.Stack_Additional_1__c> 0){ //Added by Vinay 21-11-2025
-                for (integer j = 0; j < QuoteDetails.Stack_Additional_1__c; j++) {
-                    StackCarParkList[j].Status__c = 'Booked';
-                    if (bk.bookingDetails.booking.Id != null)
-                        StackCarParkList[j].Booking__c = bk.bookingDetails.booking.Id;
-                    ParkingListToUpdate.add(StackCarParkList[j]);
-                    
-                }
-                
-            }
             if(ParkingListToUpdate.size() > 0){
                 update ParkingListToUpdate;
             }
@@ -1753,11 +1718,11 @@ attach.Body = body;*/
                 htmlBody = htmlBody.replace('{!Project__c.Name}', bk.bookingDetails.booking.Project__r.name);
                 
                 map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-                if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get( bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c)!=null){
-                    htmlBody = htmlBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c);
-                    htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get( bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c).RW_Phone__c));
+                if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get( bk.bookingDetails.booking.customer__r.Sales_Manager_User__r.Name)!=null){ // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+                    htmlBody = htmlBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+                    htmlBody = htmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get( bk.bookingDetails.booking.customer__r.Sales_Manager_User__r.Name).RW_Phone__c)); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                 }else{
-                    htmlBody = htmlBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c);
+                    htmlBody = htmlBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                     htmlBody = htmlBody.replace('{!SMPhoneNumber}', System.Label.RW_BookingSalesContact );
                 }
                 String plainTextBody = template.Body;
@@ -1767,11 +1732,11 @@ attach.Body = body;*/
                 
                 plainTextBody = htmlBody.replace('{!Booking__c.Primary_Applicant_Name__c}',bk.bookingDetails.applicants[0].Name);
                 //   plainTextBody = htmlBody.replace('{!Booking__c.RW_Digitally_Accepted_On__c}', bk.bookingDetails.booking.RW_Digitally_Accepted_On__c.format('dd/MM/yyyy HH:mm:ss','IST')+' IST');
-                if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c)!=null){
-                    plainTextBody = plainTextBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c);
-                    plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(bk.bookingDetails.booking.Customer__r.RW_Sales_Associate__c).RW_Phone__c));
+                if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(bk.bookingDetails.booking.customer__r.Sales_Manager_User__c)!=null){ // Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 04-12-2025
+                    plainTextBody = plainTextBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
+                    plainTextBody = plainTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(bk.bookingDetails.booking.Customer__r.Sales_Manager_User__r.Name).RW_Phone__c)); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                 }else{
-                    plainTextBody = plainTextBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.RW_Sales_Associate__c);
+                    plainTextBody = plainTextBody.replace('{!SMName}', bk.bookingDetails.booking.customer__r.Sales_Manager_User__r.Name); // Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 04-12-2025
                     plainTextBody = plainTextBody.replace('{!SMPhoneNumber}',System.Label.RW_BookingSalesContact);
                 }
                 Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
@@ -2046,6 +2011,7 @@ i = 1;
             }
         System.debug('totalPaid**'+totalPaid);
         System.debug('requiredTokenAmount**'+requiredTokenAmount);
+        System.debug('bk.Customer__r.Blocked_Date__c**'+bk.Customer__r.Blocked_Date__c);
         if(totalPaid < requiredTokenAmount && bk.Customer__r.Blocked_Date__c !=null && bk.Customer__r.Blocked_Date__c>blockedDateLimit){
             errorWrapper wrap = new errorWrapper();
             wrap.isError = true;
@@ -2493,7 +2459,7 @@ else*/
                 
                 if(msgList.get(BillDeskResFormat1.indexOf('AuthStatus')) == '0300'){
                     /* PLN*/
-                    Booking__c bookingRecord = [Select id,Unit_No__r.RW_Param4__c,Project__r.name,Name,Sales_Managers__c,Status__c,Customer__r.RW_Project__c,RW_Digitally_Accepted_On__c,Primary_Applicant_Email__c,Primary_Applicant_Name__c,customer__r.RW_Sales_Associate__c  from Booking__c where id= : bRecId];
+                    Booking__c bookingRecord = [Select id,Unit_No__r.RW_Param4__c,Project__r.name,Name,Sales_Managers__c,Status__c,Customer__r.RW_Project__c,RW_Digitally_Accepted_On__c,Primary_Applicant_Email__c,Primary_Applicant_Name__c,customer__r.RW_Sales_Associate__c,customer__r.Sales_Manager_User__c,customer__r.Sales_Manager_User__r.Name from Booking__c where id= : bRecId]; //Added customer__r.Sales_Manager_User__c,customer__r.Sales_Manager_User__r.Name by Vinay 04-12-2025
                     
                     if(bookingRecord!=NULL && bookingRecord.Status__c == 'Booking Received - Payment Pending'){
                         bookingRecord.Status__c = 'Booking Received';

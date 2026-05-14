@@ -82,7 +82,7 @@ global class LockatedApp_ServiceRequests {
             if(postType == 'case'){
                 caseDetails det = (caseDetails) JSON.deserialize(jsonBody, caseDetails.class);
                 if(det.booking_id != null){
-                    List<Booking__c> bkg = [SELECT Opportunity__r.AccountId FROM Booking__c WHERE Id =: det.booking_id];
+                    List<Booking__c> bkg = [SELECT Name,Opportunity__r.AccountId FROM Booking__c WHERE Id =: det.booking_id];
                     if(bkg.size() == 0){
                         errorResult.put('status', 'error');
                         errorResult.put('message', 'Booking record not found');
@@ -90,6 +90,7 @@ global class LockatedApp_ServiceRequests {
                         res.statusCode = 400;
                     }else{
                         Case cs = new Case();
+                        cs.Subject = 'Service Request - ' + bkg[0].Name;
                         cs.RW_Case_Type__c = det.caseType;
                         cs.Origin = 'Lockated App';
                         if(det.caseType == 'Complaint'){

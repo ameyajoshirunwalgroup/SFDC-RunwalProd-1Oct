@@ -238,6 +238,7 @@
                 <apex:selectOptions value="{!getPlans}" /> 
                 <apex:actionSupport event="onchange">
                     <apex:param name="selectedPlanId" value="{!getPlans}" assignTo="{!selectedPlanId}"/>
+                        
                 </apex:actionSupport>    
             </apex:selectList>
         </apex:inputField>

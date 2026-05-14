@@ -17,9 +17,9 @@ global class FarvisionApiConfiguration
             objOpportunities = [Select Zip_Code__c, Walkin_SubSource__c, Walkin_Source__c, Type, SystemModstamp, SyncedQuoteId, 
                                         Street__c, State__c, StageName, Remark__c, RW_Walk_in_Source__c, RW_Unregistered_Broker_Name__c, 
                                         RW_Unregistered_Broker_Mobile__c, RW_Unregistered_Broker_Email__c, RW_Unit_Rate__c, 
-                                        RW_Unit_Area__c, RW_Type_of_Parking__c, RW_Time_line__c, RW_Sourcing_Manager__c, 
+                                        RW_Unit_Area__c, RW_Type_of_Parking__c, RW_Time_line__c, RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,
                                         RW_Site_Visit_Completion__c, RW_Secondary_Mobile_No__c, RW_Secondary_Email__c, 
-                                        RW_Sales_Manager_Comment__c, RW_Sales_Associate__c, RW_Referral_Details__c, 
+                                        RW_Sales_Manager_Comment__c, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Referral_Details__c, 
                                         RW_Reference_Source__c, RW_Reason_for_Unqualified__c, RW_Reason_for_Closed_Lost__c, 
                                         RW_Rating__c, RW_Project__r.Name, RW_Project_Unit__c, RW_Pre_Sales_User__c, RW_Phone_No__c, 
                                         RW_Passport_Received__c, RW_Passport_Number__c, RW_PAN_Card_Received__c, RW_PAN_Card_Number__c, 
@@ -40,7 +40,7 @@ global class FarvisionApiConfiguration
                                         Account.ShippingStreet, Account.ShippingCountry, Account.ShippingState, Account.ShippingCity, 
                                         Account.ShippingPostalCode, Account.Organization_Name__c 
                                 From Opportunity 
-                                where Id in: OpportunityIds];
+                                where Id in: OpportunityIds];  // Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager_User__c,Sales_Manager_User__r.Name  by Vinay 04-12-2025
         }
         
         system.debug('CreateApplicationInFarvision - objOpportunity======' + objOpportunities);
@@ -160,7 +160,7 @@ global class FarvisionApiConfiguration
                             objFarvisionApplicant.OfficeFax      = emptyContent;
                             objFarvisionApplicant.OfficeEmail    =  emptyContent;
                             objFarvisionApplicant.CoAppName    =  CheckNull(objOpportunity.RW_Co_Owner_Name__c);
-                            objFarvisionApplicant.SalesPersonName    =  CheckNull(objOpportunity.RW_Sales_Associate__c);
+                            objFarvisionApplicant.SalesPersonName    =  CheckNull(objOpportunity.Sales_Manager_User__r.Name); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                         
                             string jsonRequest = System.JSON.serialize(objFarvisionApplicant);
                             system.debug('jsonRequest=====' + jsonRequest);

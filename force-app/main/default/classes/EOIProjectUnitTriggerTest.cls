@@ -98,7 +98,7 @@ public class EOIProjectUnitTriggerTest
         update objPUU1;
         Test.stopTest();
     }
-
+    
     @isTest
     private static void testtrgToUpdateOppStageHandlerSecond()
     {

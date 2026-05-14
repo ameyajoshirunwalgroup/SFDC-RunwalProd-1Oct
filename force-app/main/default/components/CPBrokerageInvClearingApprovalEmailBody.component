@@ -60,11 +60,7 @@
         <table id="main" border="0" width="90%" border-collapse="collapse">
             <tr><td>Greeting From Runwal Group !!!.</td></tr>
             <tr><td> &nbsp; </td></tr>
-            <tr><td>Required Your approval for Channel Partner ( 
-            <apex:outputPanel rendered="{!NOT(ISBLANK(CPInv)) && CPInv.size > 0}">
-    {!CPInv[0].CP_Name__c}
-</apex:outputPanel> 
-)  Invoice Calculation. Please find the attachment for the same</td></tr>
+            <tr><td>Required Your approval for Channel Partner ( {!CPInv[0].CP_Name__c} )  Invoice Calculation. Please find the attachment for the same</td></tr>
             <tr><td> &nbsp; </td></tr>
             <tr><td>Approval Link : {!ApprovalLink}</td></tr>
             <tr><td>Record Link : {!Recordurl}</td></tr>

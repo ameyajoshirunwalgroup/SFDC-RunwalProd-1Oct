@@ -6,15 +6,22 @@
         <ruleEntry>
             <assignedTo>gaurav.pandey@runwal.com</assignedTo>
             <assignedToType>User</assignedToType>
+            <booleanFilter>1 AND 2</booleanFilter>
             <criteriaItems>
                 <field>Lead.LeadSource</field>
                 <operation>equals</operation>
                 <value>Digital</value>
             </criteriaItems>
+            <criteriaItems>
+                <field>Lead.IsActive__c</field>
+                <operation>equals</operation>
+                <value>False</value>
+            </criteriaItems>
         </ruleEntry>
         <ruleEntry>
             <assignedTo>gaurav.pandey@runwal.com</assignedTo>
             <assignedToType>User</assignedToType>
+            <booleanFilter>1 AND 2 AND 3</booleanFilter>
             <criteriaItems>
                 <field>Lead.RW_Corporate_Web_To_Lead__c</field>
                 <operation>equals</operation>
@@ -22,6 +29,11 @@
             </criteriaItems>
             <criteriaItems>
                 <field>Lead.RW_Existing_Corporate_Tie_Up__c</field>
+                <operation>equals</operation>
+                <value>False</value>
+            </criteriaItems>
+            <criteriaItems>
+                <field>Lead.IsActive__c</field>
                 <operation>equals</operation>
                 <value>False</value>
             </criteriaItems>

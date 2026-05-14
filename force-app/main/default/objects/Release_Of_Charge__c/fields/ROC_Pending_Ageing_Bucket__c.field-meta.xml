@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ROC_Pending_Ageing_Bucket__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+     ROC_Pending_Ageing_Days__c &lt;= 3,
+    &quot;0–3 Days&quot;,
+    IF(
+      ROC_Pending_Ageing_Days__c &lt;= 5,
+      &quot;3–5 Days&quot;,
+      IF(
+        ROC_Pending_Ageing_Days__c &lt;= 7,
+        &quot;6–7 Days&quot;,
+        &quot;&gt;7 Days&quot;
+      )
+    )
+  )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>ROC Pending Ageing Bucket</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

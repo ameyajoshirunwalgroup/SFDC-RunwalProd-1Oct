@@ -21,12 +21,21 @@ global class LockatedApp_Holidays {
         Date todayDate = Date.today();
         Date startOfYear = Date.newInstance(todayDate.year(), 1, 1);
         Date endOfYear = Date.newInstance(todayDate.year(), 12, 31);
-        Map<Date, Holiday> holidaysMap = getHolidaysForDates(startOfYear,endOfYear);
+        Map<Date, List<Holiday>> holidaysMap = getHolidaysForDates(startOfYear,endOfYear);
         //Map<Date, Holiday> holidaysMap = getHolidaysForDates(startDate,endDate);
         
         for(Date dt : holidaysMap.keySet()){
             Day d = new Day();
-            d.holiday_name = holidaysMap.get(dt).Name;
+            if(holidaysMap.get(dt).size() > 1){
+                for(Holiday h : holidaysMap.get(dt)){
+                    if(d.holiday_name == null)
+                    	d.holiday_name = h.Name;
+                    else
+                        d.holiday_name = d.holiday_name + ', ' + h.Name;
+                }
+            }else if(holidaysMap.get(dt).size() == 1){
+                d.holiday_name = holidaysMap.get(dt)[0].Name;
+            }
             d.holiday_date = String.valueOf(dt);
             days.add(d);
         }
@@ -37,8 +46,8 @@ global class LockatedApp_Holidays {
     }
     
        
-    public static Map<Date, Holiday> getHolidaysForDates(Date startDate, date endDate){
-        Map<Date, Holiday> toReturn = new Map<Date, holiday>();
+    public static Map<Date, List<Holiday>> getHolidaysForDates(Date startDate, date endDate){
+        Map<Date, List<Holiday>> toReturn = new Map<Date, List<Holiday>>();
         List<Date> dates = new List<Date>();
         List<Holiday> holidays = [select id, name, ActivityDate, Description, EndTimeInMinutes, IsAllDay, IsRecurrence, RecurrenceDayOfMonth, RecurrenceDayOfWeekMask, RecurrenceEndDateOnly, 
                                     RecurrenceInstance, RecurrenceInterval, RecurrenceMonthOfYear, RecurrenceStartDate, RecurrenceType, StartTimeInMinutes FROM Holiday
@@ -61,8 +70,14 @@ global class LockatedApp_Holidays {
                 dates = getNoRecurrenceHolidays(h, startDate, endDate);
             }
                 
-            for (Date d : dates)
-                toReturn.put(d, h);
+            for (Date d : dates){
+                if(toReturn.get(d) != null){
+                    toReturn.get(d).add(h);
+                }else{
+                    toReturn.put(d, new List<Holiday>{h});
+                }
+            }
+                
         }
         System.debug('dates: ' + dates);
         return toReturn;

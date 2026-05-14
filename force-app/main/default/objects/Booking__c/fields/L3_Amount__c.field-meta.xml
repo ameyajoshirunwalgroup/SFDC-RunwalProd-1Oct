@@ -5,7 +5,7 @@
 ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;Dombivali&quot;),
 IF(
 Total_Approved_Interest_Amount_Waived__c &gt; 150000,
-Total_Approved_Interest_Amount_Waived__c - 150000,
+MIN(Total_Approved_Interest_Amount_Waived__c - 150000, 200000),
 0
 ),
 IF(
@@ -15,7 +15,7 @@ ISPICKVAL(Project__r.Project_Location__r.Location__c, &quot;South Mumbai&quot;)
 ),
 IF(
 Total_Approved_Interest_Amount_Waived__c &gt; 300000,
-Total_Approved_Interest_Amount_Waived__c - 300000,
+MIN(Total_Approved_Interest_Amount_Waived__c - 300000, 350000),
 0
 ),
 0

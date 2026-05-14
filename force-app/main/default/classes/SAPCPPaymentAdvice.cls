@@ -32,7 +32,7 @@ public class SAPCPPaymentAdvice {
         Blob headerValue = Blob.valueOf(username + ':' + password);
         String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
         //String Endpoint = 'http://123.108.44.40:8002/pdf/PA_PDF?sap-client=210&DOCNO='+docno+'&C_CODE='+companycode+'&FISC_YEAR='+currentFiscalYear+''; //SB
-        String Endpoint = 'http://123.108.44.39:8000/pdf/PA_PDF?sap-client=300&DOCNO='+docno+'&C_CODE='+companycode+'&FISC_YEAR='+currentFiscalYear+'';   //PROD
+        String Endpoint = 'http://123.108.44.40:8002/pdf/PA_PDF?sap-client=300&DOCNO='+docno+'&C_CODE='+companycode+'&FISC_YEAR='+currentFiscalYear+'';   //PROD
         HttpRequest req = new HttpRequest();
         SAPCPPaymentAdviceParse jsonResponse = new SAPCPPaymentAdviceParse();
         Http http = new Http();

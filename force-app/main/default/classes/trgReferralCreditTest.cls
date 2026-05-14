@@ -287,6 +287,7 @@ public class trgReferralCreditTest {
         SendReferralCreditEmails.sendIntimationEmailtoCRMHead(new list<Id>{r.Id});
         SendReferralCreditEmails.sendIntimationEmailtoCRMHOD(new list<Id>{r.Id});
         SendReferralCreditEmails.send20PercentReport();
+        SAP_Rest_ReferralCreditAPI.sendReferrallist(new list<Id>{r.Id});
         Test.stopTest();
         
     }  

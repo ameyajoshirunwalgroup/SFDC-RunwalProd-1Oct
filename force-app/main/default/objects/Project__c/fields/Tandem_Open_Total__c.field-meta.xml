@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Tandem_Open_Total__c</fullName>
-    <label>Covered Stack (Total)</label>
-    <summaryFilterItems>
-        <field>Car_Parking_Charge__c.Category__c</field>
-        <operation>equals</operation>
-        <value>Additional</value>
-    </summaryFilterItems>
+    <label>Tandem Open (Total)</label>
     <summaryFilterItems>
         <field>Car_Parking_Charge__c.Parking__c</field>
         <operation>equals</operation>
-        <value>Covered Stack</value>
+        <value>Tandem Open</value>
     </summaryFilterItems>
     <summaryForeignKey>Car_Parking_Charge__c.Project__c</summaryForeignKey>
     <summaryOperation>count</summaryOperation>

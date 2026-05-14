@@ -36,6 +36,65 @@ public class CreateWelcomeCallForSoReleasedBkgs {
             createWelcomeCallTask(bkgsToCreateTask);
         }
     }
+    // public static void createWelcomeCall(List<Booking__c> bkgs){
+    
+    //     List<String> bkgsToCreateTask = new List<String>();
+    //     Set<Id> oppIds = new Set<Id>();
+
+    //     for(Booking__c bkg : bkgs){
+    //         if(bkg.Opportunity__c != null){
+    //             oppIds.add(bkg.Opportunity__c);
+    //         }
+    //     }
+
+    //     if(oppIds.isEmpty()) return;
+
+    //     /* GET RECORD TYPE : Greeting Call */
+    //     Id greetingRTId = Schema.SObjectType.RW_Welcome_Call__c.getRecordTypeInfosByDeveloperName().get('Greeting_Call').getRecordTypeId();
+    //     Id welcomeRTId = Schema.SObjectType.RW_Welcome_Call__c.getRecordTypeInfosByDeveloperName().get('Welcome_Call').getRecordTypeId();
+
+
+    //     /* FETCH EXISTING GREETING CALL RECORDS FROM OPPORTUNITY */
+    //     Map<Id, RW_Welcome_Call__c> oppWelcomeCallMap = new Map<Id, RW_Welcome_Call__c>();
+
+    //     for(RW_Welcome_Call__c wc : [
+    //         SELECT Id, Opportunity__c
+    //         FROM RW_Welcome_Call__c
+    //         WHERE Opportunity__c IN :oppIds
+    //         AND RecordTypeId = :greetingRTId
+    //     ]){
+    //         oppWelcomeCallMap.put(wc.Opportunity__c, wc);
+    //     }
+
+    //     /* UPDATE EXISTING RECORDS */
+    //     List<RW_Welcome_Call__c> listOfWelcomcalls = new List<RW_Welcome_Call__c>();
+
+    //     for(Booking__c bkg : bkgs){
+            
+    //         RW_Welcome_Call__c wc = oppWelcomeCallMap.get(bkg.Opportunity__c);
+            
+    //         if(wc != null){
+    //             wc.Booking_Id__c = bkg.Id;
+    //             wc.RW_Booking__c = bkg.Id;
+    //             wc.RW_Welcome_Call_Status__c = 'Due';
+    //             wc.RecordTypeId = welcomeRTId; 
+
+    //             listOfWelcomcalls.add(wc);
+    //             bkgsToCreateTask.add(bkg.Id);
+    //         }
+    //     }
+
+    //     /* UPDATE INSTEAD OF UPSERT */
+    //     if(listOfWelcomcalls.size() > 0){
+    //         update listOfWelcomcalls;
+    //     }
+
+    //     /* KEEP TASK + EMAIL SAME */
+    //     if(bkgsToCreateTask.size() > 0){
+    //         createWelcomeCallTask(bkgsToCreateTask);
+    //     }
+    // }
+
     
     //Creates Welcome Call Task and Send Email alert
     public static void createWelcomeCallTask (List<String> bkgIds) {
@@ -110,9 +169,9 @@ public class CreateWelcomeCallForSoReleasedBkgs {
                     rmMail.sethtmlbody(body);
                     lstMail.add(rmMail);
                 }
+                
                 //Messaging.SendEmailResult[] results = Messaging.sendEmail(lstMail);
                 
-               
                 
                 if(bk.Project__r.Sales_Order_Release_Intimation__c != null){
                     Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();

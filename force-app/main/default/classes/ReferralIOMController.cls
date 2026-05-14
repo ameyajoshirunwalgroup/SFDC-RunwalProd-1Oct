@@ -1,6 +1,7 @@
 public class ReferralIOMController {
     public List<Booking__c> BookingList{get;set;}
     public Id BookingId{get;set;}
+    public Id recordId{get;set;}//Added for Referral Credit Changes
     public string AVAllotmentPremium{get;set;}
     public string TotalAmountReceived{get;set;}
     public string ActualReferralAmount{get;set;}
@@ -23,7 +24,8 @@ public class ReferralIOMController {
         isDue = false;
         isShowBtn = true;
         BookingList = New List<Booking__c>(); 
-        BookingId = ApexPages.currentPage().getParameters().get('id');
+        BookingId = ApexPages.currentPage().getParameters().get('id');//Added for Referral Credit Changes
+        recordId = ApexPages.currentPage().getParameters().get('id');//Added for Referral Credit Changes
         
         BookingList = [Select Id,name,RW_Project_Name__c,Customer_Reference_Opportunity__r.SAP_Customer_Number__c, Customer_Reference_Opportunity__r.Booking__r.RW_Registration_Done__c,
                        Customer_Reference_Opportunity__r.name,Reference_Booking_Registration_Date__c,Customer_Reference_Opportunity__r.Booking__r.RW_Total_Receipt_Amount_Received__c,
@@ -105,6 +107,38 @@ public class ReferralIOMController {
         objReference.setRedirect(true);
         return objReference;
     }
+
+    // public PageReference save(){
+
+    //     BookingList[0].Referral_IOM_Created_checkbox__c = true;
+    //     update BookingList[0];
+
+    //     PageReference pdfPage = Page.ReferralIOMPdf;
+    //     pdfPage.getParameters().put('id', BookingId);
+
+    //     Blob pdfBlob = pdfPage.getContentAsPDF();
+
+    //     ContentVersion cv = new ContentVersion();
+    //     cv.Title = 'Referral IOM';
+    //     cv.PathOnClient = 'ReferralIOM.pdf';
+    //     cv.VersionData = pdfBlob;
+    //     insert cv;
+
+    //     cv = [SELECT Id, ContentDocumentId FROM ContentVersion WHERE Id =: cv.Id];
+
+    //     // Link only to Booking
+    //     ContentDocumentLink cdl = new ContentDocumentLink();
+    //     cdl.ContentDocumentId = cv.ContentDocumentId;
+    //     cdl.LinkedEntityId = BookingId;
+    //     cdl.ShareType = 'V';
+    //     cdl.Visibility = 'AllUsers';
+    //     insert cdl;
+
+    //     PageReference objReference = new PageReference('/' + BookingId);
+    //     objReference.setRedirect(true);
+    //     return objReference;
+    // }
+
      //on cancel button
     public PageReference goBack() {
         /*Pagereference objReference = new Pagereference('/Home');

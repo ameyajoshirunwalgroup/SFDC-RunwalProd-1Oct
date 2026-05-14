@@ -41,6 +41,7 @@ public class BookingClassTest {
         objPUU.RW_Param1__c = '5';
         objPUU.UnitNo__c ='9';
         objPUU.RW_Unit_Status__c ='Available';
+        objPUU.Token_Amount__c =100;
         //insert objPUU;
         units.add(objPUU);
         
@@ -143,6 +144,15 @@ public class BookingClassTest {
         objCP11.Project__c = objpr.Id;
         parkings.add(objCP11);
         
+        //Added by Vinay 20-11-2025 Start
+        Car_Parking_Charge__c objCP12 = new Car_Parking_Charge__c();
+        objCP12.Status__c = 'Vacant';
+        objCP12.Category__c = 'Additional';
+        objCP12.Parking__c = 'Stack Car Park';
+        objCP12.Project__c = objpr.Id;
+        parkings.add(objCP12);
+        //Added by Vinay 20-11-2025 End
+        
         insert parkings;
         
         Account a = TestDataFactory.createPATemplate('WC Account', 'wc@email.com','9098777332',false);
@@ -223,6 +233,7 @@ public class BookingClassTest {
         q.Basement_Additional__c = 1;
         q.Podium__c = 1;
         q.Puzzle_Car_Park__c = 1;
+        q.Stack_Additional_1__c = 1; //Added by Vinay 20-11-2025
         q.Agreement_Value_for_brokers__c  = 100000;
         
         //insert q;
@@ -248,6 +259,7 @@ public class BookingClassTest {
         q2.Single_car_park_Additional__c= 0;
         q2.Single_Open_Additional__c = 0;
         q2.Stack_Additional__c = 0;
+        q2.Stack_Additional_1__c = 0; //Added by Vinay 20-11-2025
          q2.Agreement_Value_for_brokers__c  = 100000;
         //q2.Service_Tax_On_Token_Amount__c = true;
         //insert q2;
@@ -345,8 +357,8 @@ public class BookingClassTest {
         objBroker.Unregistered_Channel_Partner__c = true;
         objBroker.SAP_CP_Code__c = 'Test';
         Insert objBroker; 
-        
-       Blocking_Unit_Information__c  blk1 = new Blocking_Unit_Information__c();
+                
+        Blocking_Unit_Information__c blk1 = new Blocking_Unit_Information__c();
         
         blk1.Pan_Number__c ='NBHGT5432E';
         blk1.Aadhar_Number__c='897654321234';
@@ -407,8 +419,25 @@ public class BookingClassTest {
         data.acc = [SELECT Id FROM Account LIMIT 1];
         data.objcustomers =[SELECT Id FROM Opportunity LIMIT 2];
           return data;
+        /*PageReference pRef1 = Page.BookingPageForm2;
+        Test.setCurrentPage(pRef1);
+
+        ApexPages.currentPage().getParameters().put('optyId', objcustomer.Id);
+        ApexPages.currentPage().getParameters().put('unitId', objPUU.Id);
+        ApexPages.currentPage().getParameters().put('projectId', objpr.Id);
+
+        BookingClass bookC1 = new BookingClass();
+        bookC1.i = 0;
+        List<SelectOption> sq1 = bookC1.getQuote;
+        bookC1.selectedQuote = q.Id;
+        bookC1.receiptlist.add(r1);
+        bookC1.getTokenAmount();
+        bookC1.getReceiptDetails();
+        bookC1.addReciept();
+        bookC1.getaddressstatus();
+        bookC1.Save();*/
     }
-    
+
     @isTest
     static void BookingTest1() {
         Test.startTest();
@@ -422,16 +451,25 @@ public class BookingClassTest {
         bookC1.i = 0;
         List < SelectOption > sq1= bookC1.getQuote;
         bookC1.selectedQuote = data1.q.Id;
+        //Added by Vinay 27-03-2026 Start
+        Global_Charges__c gc = new Global_Charges__c(Name = 'Basic', Code__c = '100');
+        insert gc;
+        Customer_Pay_Plan_Header__c cpph = new Customer_Pay_Plan_Header__c(Quotation__c = data1.q.Id, Global_Charges__c = gc.Id);
+        insert cpph;
+        Standard_Customer_Pay_Plan_Detail__c scppd = new Standard_Customer_Pay_Plan_Detail__c(Customer_Pay_Plan_Header__c = cpph.Id, Is_to_be_Paid__c = 'From Dt. of Booking',Amount_Value__c = 10, Days_Months_Value__c = 30);
+        insert scppd;
+        List < SelectOption > sq2= bookC1.getMilestoneOptions; 
+        bookC1.selectedMilestone = '10.00% (30 days from booking)';
+        //Added by Vinay 27-03-2026 End
         bookC1.receiptlist.add(data1.r1);
         bookC1.getTokenAmount();
         bookC1.getReceiptDetails();
         bookC1.addReciept();
         bookC1.getaddressstatus();
         bookC1.Save();
-        
-        Test.stopTest();       
+        Test.stopTest();
     }
-    
+
     @isTest
     static void BookingTest2() {
         Test.startTest();
@@ -490,11 +528,12 @@ public class BookingClassTest {
         bookC1.applicant5.PancardNo__c = 'ABC1234';
         bookC1.applicant5.Address_Proof_Number__c = 'ABC1234*';
         bookC1.addressCheckApplicant5 = false;
+        bookC1.boookingObj.RW_Total_Receipt_Amount_Received__c = 1000;   
+        bookC1.boookingObj.Type_Of_sale__c = 'Transfer of unit'; 
         bookC1.Save();
-        
-        Test.stopTest();    
+        Test.stopTest();
     }
-    
+
    // @isTest
    /* private static void BookingTest3() {
         Test.startTest();
@@ -554,7 +593,7 @@ public class BookingClassTest {
         bookC1.applicant5.Country__c = 'India';
         //bookC1.Save();
         
-        bookC1.applicant.Subtype_Of_Applicant__c = 'For NRI';
+         bookC1.applicant.Subtype_Of_Applicant__c = 'For NRI';
         bookC1.applicant.PancardNo__c = 'ABC1234';
         bookC1.applicant.Address_Proof_Number__c = 'ABC1234*';
         bookC1.applicant2.Subtype_Of_Applicant__c = 'For NRI';
@@ -681,9 +720,10 @@ public class BookingClassTest {
         Booking__c updatedBooking3 = BookingClass2.updateBrokerageSchemeDetails(booking2, quoteList1, bschemelist);
          Booking__c updatedBooking4 = BookingClass2.updateBrokerageSchemeDetails(booking2, quoteList1, bs1list);
          Booking__c updatedBooking5 = BookingClass2.updateBrokerageSchemeDetails(booking1, quoteList1, bs2list);
-        Test.stopTest();    
+        Test.stopTest();
     }*/
-    
+
+      
     @isTest
     private static void BookingTest4(){
         Test.StartTest();
@@ -709,8 +749,8 @@ public class BookingClassTest {
         bookC1.addReciept();
         bookC1.getaddressstatus();
         
-        Test.stopTest();    
-        BookingClass.Dummy();
+        Test.stopTest();   
+        //BookingClass.Dummy();
     }
     
     @isTest
@@ -768,6 +808,8 @@ public class BookingClassTest {
         bookC1.applicant5.Name = 'Applicant 5';
         bookC1.applicant5.Mobile_Number__c = '5555555555';
         bookC1.applicant5.Email_Address__c = '555@mail.com';
+        bookC1.boookingObj.RW_Total_Receipt_Amount_Received__c = 1000;   
+        bookC1.boookingObj.Type_Of_sale__c = 'Transfer of unit'; 
         bookC1.Save();
         Test.stopTest();    
     }
@@ -821,6 +863,8 @@ public class BookingClassTest {
         //bookC1.Save();
         bookC1.boookingObj.Future_Correspondence_Contact__c = '5th Applicant';
         bookC1.applicant5.Name = null;
+        bookC1.boookingObj.RW_Total_Receipt_Amount_Received__c = 1000;   
+        bookC1.boookingObj.Type_Of_sale__c = 'Transfer of unit'; 
         bookC1.Save();
         Test.stopTest();    
     }
@@ -854,6 +898,9 @@ public class BookingClassTest {
         bookC1.applicant.Salutation__c = 'Mr.';
         bookC1.applicant.Permanent_Address__c = 'Address 1';
         bookC1.applicant.Organization_Name__c = 'Test';
+        bookC1.boookingObj.RW_Total_Receipt_Amount_Received__c = 1000;   
+        bookC1.boookingObj.Type_Of_sale__c = 'Transfer of unit';  
+        bookC1.boookingObj.Quotation__r.Project_Unit__r.Token_Amount__c = 100;   
         bookC1.Save();
         //bookC1.dummyMethod();
         Test.stopTest();    
@@ -879,12 +926,38 @@ public class BookingClassTest {
         app.Permanent_Address__c = 'Test Addr';
         app.Organization_Name__c = 'Test org';
         app.Designation__c = 'Desig';
+        app.Mailing_Country__c='India';
         insert app;
         
         BookingClass2.updateAccount(app, acc);
+		    
         Test.stopTest();    
     }
    
-
+ 	@isTest
+    private static void BookingTest9(){
+        Test.StartTest();
+        Account acc = new Account();
+        acc.LastName = 'Account 1';
+        acc.RW_Zip_Code__c = '521355';
+        acc.Current_Residential_Address__c = 'Test Acc Address';
+        acc.RW_Company_Name__c = 'Test';
+        acc.RW_Designation__c = 'Test';
+        insert acc;
+        
+        Applicant_Details__c app = new Applicant_Details__c();
+        app.Salutation__c = 'Mr';
+        app.First_Name__c = 'First';
+        app.Middle_Name__c = 'Middle';
+        app.Last_Name__c = 'Last';
+        app.Pincode__c = 521366;
+        app.Permanent_Address__c = 'Test Addr';
+        app.Organization_Name__c = 'Test org';
+        app.Designation__c = 'Desig';
+        insert app;
+        BookingClass bookingClass= new BookingClass();
+		bookingClass.Cancel(); 
+        Test.stopTest();   
+    }
     
 }

@@ -28,7 +28,6 @@ global class ProjectUnitUpdateOnCaseBatch implements Database.Batchable<sObject>
             List<Case> caseList = new List<Case>();
             List<Case> caseListToUpdate = new List<Case>();
             for(Case c : lstCase){
-                System.debug('Case: ' + c.Id);
                 if(accVsOppMap.get(c.AccountId) != null && accVsOppMap.get(c.AccountId).size() > 0){
                     if(c.RW_Project__c != null){
                         for(Opportunity opp : accVsOppMap.get(c.AccountId)){
@@ -57,8 +56,6 @@ global class ProjectUnitUpdateOnCaseBatch implements Database.Batchable<sObject>
                 }
                 
             }
-            System.debug('caseList: ' + caseList);
-            System.debug('caseListToUpdate: ' + caseListToUpdate);
             if(caseList.size() > 0){
                 System.debug('caseList: ' + caseList);
                 try{

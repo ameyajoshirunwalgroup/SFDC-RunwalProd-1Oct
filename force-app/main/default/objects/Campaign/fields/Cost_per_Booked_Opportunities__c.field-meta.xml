@@ -5,7 +5,7 @@
 AND(NumberOfWonOpportunities &lt;&gt; 0, NOT(ISNULL(NumberOfWonOpportunities))),
 ActualCost /  NumberOfWonOpportunities , 0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Cost per Booking</label>
+    <label>Campaign Spend per Won Opportunity</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

@@ -15,6 +15,7 @@ public class NonReleasedSalesordersReportTest {
         opp.SAP_Customer_Number__c = '1234';
         opp.SalesOrder_Number__c = '5678';
         opp.RW_Sales_Associate__c = 'Test';
+        opp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         insert opp;
         
         Booking__c bkg = new Booking__c();
