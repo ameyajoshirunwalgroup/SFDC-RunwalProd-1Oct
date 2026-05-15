@@ -1764,7 +1764,11 @@ return registration;
             Decimal st = 0;
             Integer count = 1;
             if(String.isNotBlank(spph.Charge_Code__r.Service_Tax_Percentage__c) && taxSlabMap.containsKey(spph.Charge_Code__r.Service_Tax_Percentage__c)) {
-                for(Tax_Breakup__c tb: taxSlabMap.get(spph.Charge_Code__r.Service_Tax_Percentage__c)) {                  st = ((tb.Taxable_Percentage__c * allChargesMap.get(spph.Charge_Code__r.Name)/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP);
+                for(Tax_Breakup__c tb: taxSlabMap.get(spph.Charge_Code__r.Service_Tax_Percentage__c)) {
+                    System.debug('tax breakup ---->'+tb);
+                    System.debug('tb.Taxable_Percentage__c---->'+tb.Taxable_Percentage__c);
+                    System.debug('allChargesMap.get(spph.Charge_Code__r.Name)---->'+allChargesMap.get(spph.Charge_Code__r.Name));
+                    st = ((tb.Taxable_Percentage__c * allChargesMap.get(spph.Charge_Code__r.Name)/100) * tb.Tax_Percentage__c/100).setscale(0,RoundingMode.HALF_UP);
                                                                                                        String fieldTaxName = 'Tax_Name_' + count + '__c';
                                                                                                        String fieldTaxAmount = 'Tax_Amount_' + count + '__c';
                                                                                                        String fieldTaxPercent = 'Tax_Percentage_' + count  + '__c';
