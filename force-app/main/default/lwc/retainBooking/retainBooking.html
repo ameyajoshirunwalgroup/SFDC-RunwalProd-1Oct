@@ -1,0 +1,33 @@
+<template>
+    <lightning-quick-action-panel header="Retain Booking">
+        <div class="slds-is-relative">
+            <template if:true={isLoading}>
+                <lightning-spinner 
+                    alternative-text="Loading" 
+                    size="medium" 
+                    variant="brand">
+                </lightning-spinner>
+            </template>
+
+            <div class="slds-p-around_medium slds-text-align_center">
+                <p class="slds-text-heading_small">Are you sure you want to retain this booking?</p>
+                <p class="slds-m-top_x-small slds-text-color_weak">This will cancel the pending cancellation process.</p>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <lightning-button 
+                label="Cancel" 
+                onclick={closeAction}
+                disabled={isLoading}>
+            </lightning-button>
+            <lightning-button 
+                variant="brand" 
+                label="Confirm Retain" 
+                class="slds-m-left_x-small"
+                onclick={handleRetain}
+                disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>
