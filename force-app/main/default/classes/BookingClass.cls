@@ -3469,23 +3469,23 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 // boookingObj.Booking_Application_Form_Hard_copy__c = fileUrl; //Added by coServe 23-03-2023
                 //boookingObj.status__c = 'Booking Received';   //Modified by Sheetal on 12/1/2022 to solve Issue I0101
 
-                if(selectedMilestone != null && selectedMilestone != '' && selectedMilestone != 'As per CLP'){ //Added by Vinay 02-04-2026
-                    //String milestone = '4.00% (30 days from booking)';
-                    Pattern p = Pattern.compile('\\((\\d+)');
-                    Matcher m = p.matcher(selectedMilestone);
-                    Integer days;
-                    if(m.find()){
-                        days = Integer.valueOf(m.group(1));
-                    }
-                    List<CIF__c> cif =[SELECT Id,Mode_of_funding__c FROM CIF__c WHERE Opportunity__c =: boookingObj.Opportunity__c];
-                    if(cif.size() > 0 && cif[0].Mode_of_funding__c == 'Bank Loan'){
-                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 30;
-                    }else{
-                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 15;
-                    }
-                    //boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
-                }
-                boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
+                // if(selectedMilestone != null && selectedMilestone != '' && selectedMilestone != 'As per CLP'){ //Added by Vinay 02-04-2026
+                //     //String milestone = '4.00% (30 days from booking)';
+                //     Pattern p = Pattern.compile('\\((\\d+)');
+                //     Matcher m = p.matcher(selectedMilestone);
+                //     Integer days;
+                //     if(m.find()){
+                //         days = Integer.valueOf(m.group(1));
+                //     }
+                //     List<CIF__c> cif =[SELECT Id,Mode_of_funding__c FROM CIF__c WHERE Opportunity__c =: boookingObj.Opportunity__c];
+                //     if(cif.size() > 0 && cif[0].Mode_of_funding__c == 'Bank Loan'){
+                //         boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 30;
+                //     }else{
+                //         boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 15;
+                //     }
+                //     //boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
+                // }
+                // boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
 
                 /**Added for Cancellation Changes starts */
                 if(oppList!=null && !oppList.isEmpty() && oppList[0].Booking__c!=null ) {
