@@ -16,6 +16,8 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     //@track selectedMonth = (new Date().getMonth() + 1).toString(); // Default Current Month [cite: 16]
     selectedMonthLabels = [];
     selectedMonthValues = [];
+    selectedLeadSourceLabels = [];
+    selectedLeadSourceValues = [];
     @track data = [];
     @track columns = [];
     @track isLoading = false; // Spinner control [cite: 5]
@@ -25,19 +27,20 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     @track grandTotalRev = 0;
     @track totalSpnd = 0;
     @track spndPct = 0;
-    leadSourceOptions = [];
+    @track leadSourceOptions = [];
     verticalOptions = [];
     projectOptions = [];
     @track selectedSource;
     @track selectedProject = 'All';
     @track selectedDateRange;
-    @track showDropdown = false;
+    @track showMonthsDropdown = false;
+    @track showLeadSourceDropdown = false;
 
     // Options for Table Selection Dropdown [cite: 3]
     get tableOptions() {
         return [
             { label: 'Lead, Walk-in & Booking', value: 'table1' },
-            { label: 'Lead Statuses', value: 'table2' },
+            { label: 'Lead Status', value: 'table2' },
             { label: 'Junk %', value: 'table3' },
             { label: 'Walking to booking %', value: 'table4' },
             { label: 'Digital Budget', value: 'table5' },
@@ -50,6 +53,7 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     get yearOptions() {
         const currentYear = new Date().getFullYear();
         let years = [];
+        years.push({ label: '--Select Year--', value: '' });
         for (let i = 0; i < 5; i++) {
             const y = (currentYear - i).toString();
             years.push({ label: y, value: y });
@@ -58,7 +62,7 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     }
 
     // Month Dropdown 
-    get monthOptions() {
+   /* get monthOptions() {
         return [
             //{ label: '--None (Yearly)--', value: '' },
             { label: 'January', value: '1', checked: false }, { label: 'February', value: '2', checked: false },
@@ -68,9 +72,9 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
             { label: 'September', value: '9', checked: false }, { label: 'October', value: '10', checked: false },
             { label: 'November', value: '11', checked: false}, { label: 'December', value: '12', checked: false }
         ];
-    }
+    }*/
 
-    /*get dateRangeOptions() {
+    get dateRangeOptions() {
         return [
             //{ label: '--Select--', value: '' },
             { label: 'Last 7 Days', value: 'LAST_N_DAYS:7' }, { label: 'Last 15 Days', value: 'LAST_N_DAYS:15' },
@@ -80,7 +84,7 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
             { label: 'Current FY', value: 'THIS_FISCAL_YEAR' }, { label: 'Previous FY', value: 'LAST_FISCAL_YEAR' },
             { label: 'Custom', value: 'Custom' }
         ];
-    }*/
+    }
 
     @track monthOptions = [
         { label: 'January', value: '1', checked: false },
@@ -98,32 +102,34 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     ];
 
     @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
-    objectInfo;
+    leadObjectInfo;
 
     @wire(getPicklistValues, {
-        recordTypeId: '$objectInfo.data.defaultRecordTypeId',
+        recordTypeId: '$leadObjectInfo.data.defaultRecordTypeId',
         fieldApiName: LEAD_SOURCE_FIELD
     })
     leadSourceValues({ data, error }) {
         if (data) {
             this.leadSourceOptions = [
-                { label: '--None--', value: '' },
+                //{ label: '--None--', value: '', checked: false },
     
                 ...data.values.map(item => ({
                     label: item.label,
-                    value: item.value
+                    value: item.value,
+                    checked: false
                 }))
             ];
         } else if (error) {
             console.error(error);
         }
+        console.log('this.leadSourceOptions: ', this.leadSourceOptions);
     }
 
     @wire(getObjectInfo, { objectApiName: COMPANY_TARGET_OBJECT })
-    objectInfo;
+    companyTargetObjectInfo;
 
     @wire(getPicklistValues, {
-        recordTypeId: '$objectInfo.data.defaultRecordTypeId',
+        recordTypeId: '$companyTargetObjectInfo.data.defaultRecordTypeId',
         fieldApiName: VERTICALS_FIELD
     })
     verticalValues({ data, error }) {
@@ -141,7 +147,7 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
         }
     }
 
-    @wire(getProjects)
+    @wire(getProjects, { table: '$selectedTable' })
     wiredProjects({ error, data }) {
         if (data) {
             this.projectOptions = data;
@@ -149,6 +155,8 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
             console.error(error);
         }
     }
+
+   
 
     // Check if we should show the custom HTML Table 1 [cite: 9]
     get isTable1() {
@@ -158,10 +166,10 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
         return this.selectedTable === 'table2';
     }
     get isTable3() {
-        return (this.selectedTable === 'table3' && this.selectedDateRange == '');
+        return (this.selectedTable === 'table3' && this.selectedYear == '');
     }
     get isTable3_1() {
-        return (this.selectedTable === 'table3' && this.selectedDateRange != '');
+        return (this.selectedTable === 'table3' && this.selectedYear != '');
     }
     get isTable4() {
         return (this.selectedTable === 'table4' && this.selectedDateRange == '');
@@ -184,17 +192,26 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     }
 
     get showDateRange() {
+        return this.selectedTable != 'table1' && this.selectedTable != 'table3' && this.selectedTable != 'table5';
+    }
+
+    get showLeadSource() {
         return this.selectedTable != 'table1' && this.selectedTable != 'table5';
     }
 
     get showYearMonth() {
-        return this.selectedTable === 'table1' || this.selectedTable === 'table5' || this.selectedDateRange === 'Custom';
+        return this.selectedTable === 'table1' || this.selectedTable == 'table3' || this.selectedTable === 'table5' || this.selectedDateRange === 'Custom';
     }
 
     get selectedMonthsLabel() {
         return this.selectedMonthLabels.length
             ? this.selectedMonthLabels.join(', ')
             : '--Select Months--';
+    }
+    get selectedLeadSourceLabel() {
+        return this.selectedLeadSourceLabels.length
+            ? this.selectedLeadSourceLabels.join(', ')
+            : '--Select Sources--';
     }
 
     generateMonthLabels() {
@@ -217,23 +234,30 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
 
     // Lifecycle hook to load initial data
     connectedCallback() {
-        const currentMonth = (new Date().getMonth() + 1).toString();
-        this.monthOptions = this.monthOptions.map(item => {
-            if(item.value === currentMonth) {
-                item.checked = true;
-                this.selectedMonthLabels.push(item.label);
-                this.selectedMonthValues.push(item.value);
-            }
-            return item;
-        });
+        if(this.selectedTable != 'table3'){
+            const currentMonth = (new Date().getMonth() + 1).toString();
+            this.monthOptions = this.monthOptions.map(item => {
+                if(item.value === currentMonth) {
+                    item.checked = true;
+                    this.selectedMonthLabels.push(item.label);
+                    this.selectedMonthValues.push(item.value);
+                }
+                return item;
+            });
+        }
+        
 
         if(this.selectedTable != 'table6'){
             this.selectedSource = 'Digital';
         }
-        if(this.selectedTable === 'table3' || this.selectedTable === 'table4'){
+        if(this.selectedTable === 'table4'){
             this.selectedDateRange = '';
         }else{
             this.selectedDateRange = 'THIS_MONTH';
+        }
+        if(this.selectedTable === 'table3'){
+            this.selectedYear = '';
+            this.selectedMonthValues = [];
         }
         this.loadDashboardData();
     }
@@ -248,18 +272,25 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
         }else{
             this.selectedSource = '';
         }
-        if(this.selectedTable === 'table3' || this.selectedTable === 'table4'){
+        if(this.selectedTable === 'table4'){
             this.selectedDateRange = '';
         }else{
             this.selectedDateRange = 'THIS_MONTH';
         }
+        if(this.selectedTable === 'table3'){
+            this.selectedYear = '';
+            this.selectedMonthValues = [];
+        }
         this.triggerLoad();
     }
 
-    
+   
 
-    toggleDropdown() {
-        this.showDropdown = !this.showDropdown;
+    toggleMonthsDropdown() {
+        this.showMonthsDropdown = !this.showMonthsDropdown;
+    }
+    toggleLeadSourceDropdown() {
+        this.showLeadSourceDropdown = !this.showLeadSourceDropdown;
     }
 
     handleMonthSelect(event) {
@@ -275,6 +306,25 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
             .map(item => item.label);
 
         this.selectedMonthValues = this.monthOptions
+            .filter(item => item.checked)
+            .map(item => item.value);
+
+            this.triggerLoad();
+    }
+
+    handleLeadSourceSelect(event) {
+        const value = event.target.value;
+        this.leadSourceOptions = this.leadSourceOptions.map(item => {
+            if(item.value === value) {
+                item.checked = event.target.checked;
+            }
+            return item;
+        });
+        this.selectedLeadSourceLabels = this.leadSourceOptions
+            .filter(item => item.checked)
+            .map(item => item.label);
+
+        this.selectedLeadSourceValues = this.leadSourceOptions
             .filter(item => item.checked)
             .map(item => item.value);
 
@@ -321,7 +371,7 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
                 tableType: this.selectedTable,
                 year: this.selectedYear,
                 months: this.selectedMonthValues,
-                source: this.selectedSource,
+                sources: this.selectedLeadSourceValues,
                 dateRange: this.selectedDateRange,
                 project: this.selectedProject
             });
@@ -454,7 +504,7 @@ export default class MarketingDashboard extends NavigationMixin(LightningElement
     handleExport() {
         const tableType = this.selectedTable;
         console.log('tableType: ', tableType);
-        generateCSV({ tableType: tableType, year: this.selectedYear, months: this.selectedMonthValues, source: this.selectedSource, dateRange: this.selectedDateRange, project: this.selectedProject })
+        generateCSV({ tableType: tableType, year: this.selectedYear, months: this.selectedMonthValues, sources: this.selectedLeadSourceValues, dateRange: this.selectedDateRange, project: this.selectedProject })
             .then(result => {
                 Object.keys(result).forEach(fileName => {
                     const base64Data = result[fileName];

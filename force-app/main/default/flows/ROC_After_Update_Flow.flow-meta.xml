@@ -10,17 +10,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Booking__r.Primary_Applicant_Email__c</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -39,6 +45,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Dear {!$Record.Booking__r.Primary_Applicant_Name__c},&lt;/p&gt;&lt;p&gt;We would like to inform you that the ROC has been successfully raised for your booking.&lt;/p&gt;&lt;p&gt;As the ROC Raised Date is now available, please find the SD (Sanction &amp;amp; Disbursement) information below:&lt;/p&gt;&lt;p&gt;Booking Number:&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!$Record.Booking__r.Name}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Project Name: {!$Record.Booking__r.RW_Project_Name__c}&lt;/p&gt;&lt;p&gt;If you have any questions or need further clarification, please feel free to contact us.&lt;/p&gt;&lt;p&gt;Thank you for your cooperation.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;CRM Team&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -52,6 +59,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
