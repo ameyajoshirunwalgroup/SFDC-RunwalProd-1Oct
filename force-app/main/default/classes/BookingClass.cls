@@ -934,24 +934,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
                 ApexPages.addMessage(myMsg);
                 i = 1;
             }                
-        }/* else if (boookingObj.Opportunity__c != null && ProjectId != null && unitId != null) {
-system.debug('get quote if opty and ProjectId and unitId ');
-system.debug('get quote if ProjectId  is not null and ProjectId  :-' + ProjectId);
-system.debug('get quote if opty and unitId ' + unitId);
-queryResult = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c,Stack_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and(Project_Unit__r.RW_Unit_Status__c = 'Available'
-OR Project_Unit__r.RW_Unit_Status__c = 'Hold' OR Project_Unit__r.RW_Unit_Status__c = 'Blocked') and Project_Unit__c =: unitId and Booking__c =: null];
-system.debug('queryResult' + queryResult);
-
-if (queryResult.size() > 0) {
-system.debug('Result only opty and ProjectId quotations' + queryResult);
-} else {
-system.debug('Quotation Else if opty  and Project');
-ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Either the opportunity does not have a Valid Quotation or the unit associated with it is not Available or hold');
-ApexPages.addMessage(myMsg);
-i = 1;
-} 
-
-} */
+        }
         else if (boookingObj.Opportunity__c != null && ProjectId != null && unitId != null) {
             system.debug('get quote if ProjectId  is not null and ProjectId  :-' + ProjectId + 'get quote if opty and unitId ' + unitId);
             queryResult = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c,Stack_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and(Project_Unit__r.RW_Unit_Status__c = 'Available'
@@ -986,46 +969,7 @@ i = 1;
         set;
     }
 
-    /*public List<SelectOption> getMilestoneOptions{  //Added by Vinay 02-04-2026
-        get {
-        //system.debug('Inside Milestone queryResult' + queryResult);
-        List<SelectOption> optns = new List<Selectoption>();
-        optns.add(new SelectOption('', 'Select a Milestone'));
-        System.debug('selectedQuote: ' + selectedQuote);
-        if(selectedQuote != null){
-            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c =: selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
-            if(cpphList.size() > 0){
-                List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id,Amount_Value__c,Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c =: cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER By Days_Months_Value__c ASC];
-                if(scppdList.size() > 0){
-                    Decimal cumulativePercentage = 0;
-                    for(Standard_Customer_Pay_Plan_Detail__c scppd: scppdList){
-                        cumulativePercentage += scppd.Amount_Value__c;
-                        if(cumulativePercentage > 10){
-                            break;
-                        }
-                        String milestoneStr = cumulativePercentage + '%' + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
-                        //optns.add(new SelectOption(scppd.Id, milestoneStr));
-                        optns.add(new SelectOption(milestoneStr, milestoneStr));
-                    } 
-                    if(optns.size() == 1){
-                        selectedMilestone = 'As per CLP';
-                        optns.add(new SelectOption('As per CLP', 'As per CLP'));
-                    }
-                }else{
-                    selectedMilestone = 'As per CLP';
-                    optns.add(new SelectOption('As per CLP', 'As per CLP'));
-                }
-                
-            }
-        }else{
-            system.debug('Quotation not selected');
-        }
-        System.debug('optns: ' + optns);
-        return optns;
-        }
-        set;
-    }*/
-
+    
     public void loadMilestoneOptions() { //Added by Vinay 16-04-2026
         milestoneOptionsCache = buildMilestoneOptions();
     }
@@ -1808,21 +1752,7 @@ i=1;
             i = 1;
             System.debug('--i: ' + i);
         }
-        // if(dupflag == true && boookingObj.Brokerage__c == null){   
-        /* ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Brokerage % Cannot Be Left Blank');
-ApexPages.addMessage(myMsg);
-i = 1; */
-        //boookingObj.Brokerage__c = 2.25;      // Added by Sheetal on 13/01/2021
-        //Brokerage =  boookingObj.Brokerage__c ;
-        //update boookingObj;
         
-        // }
-        /*  if (boookingObj.Scheme_of_Customer1__c == '' || boookingObj.Scheme_of_Customer1__c == null) {
-ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Scheme of Customer Cannot Be Left Blank');
-ApexPages.addMessage(myMsg);
-i = 1;
-System.debug('--i: ' + i);
-}*/
         ////////////////////////// error messagess for applicant 1  //////////////////////////
         if (applicant.Salutation__c == '' || applicant.Salutation__c == null) {
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 1 Cannot Be Left Blank');
@@ -3067,94 +2997,7 @@ System.debug('--i: ' + i);
         system.debug('Scheme configuration ----->>>> '+sc);
         system.debug('Brokerage scheme ----->>>> '+brokerageScheme);
         
-     /*   if(QuoteDetails != null && !QuoteDetails.isEmpty() && QuoteDetails[0].walkin_Source__c == 'Channel Partner'){
-
-//Added by Prashant to compress code for this cls. // START 9-7-25
-
-system.debug('Base Brokerage Before -->>'+boookingObj.Base_Brokerage__c);
-
-boookingObj = BookingClass2.updateBrokerageSchemeDetails(boookingObj, QuoteDetails, brokerageScheme, bookingDate, bookingDate2);
-
-system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
-
-//Added by Prashant to compress code for this cls. // END 9-7-25
-        
-        /* if(QuoteDetails != null && !QuoteDetails.isEmpty() &&  (QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner') ){
-            
-            // if(QuoteDetails[0].Agreement_Value_for_brokers__c != 0 || QuoteDetails[0].Agreement_Value_for_brokers__c != Null)
-            
-            if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Local'  ){
-                
-                boookingObj.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
-                
-                boookingObj.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
-                
-                boookingObj.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                
-                boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((boookingObj.Passback_Amount__c /  QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                
-            }else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'NRI' && bookingDate < bookingDate2){
-                
-                boookingObj.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
-                
-                boookingObj.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
-                
-                boookingObj.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                
-                boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((boookingObj.Passback_Amount__c /  QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                
-            }
-            
-            else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'NRI' && bookingDate >= bookingDate2){
-                
-                boookingObj.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
-                
-                boookingObj.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
-                
-                boookingObj.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                
-                boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((boookingObj.Passback_Amount__c /  QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                
-            }
-            
-            else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Both' && (boookingObj.Type_of_Client__c == 'Local' || boookingObj.Type_of_Client__c == 'Corporate' )){
-                
-                boookingObj.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
-                
-                boookingObj.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
-                
-                boookingObj.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                
-                boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((boookingObj.Passback_Amount__c / QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                
-            }else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Both' && (boookingObj.Type_of_Client__c == 'NRI' || boookingObj.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2){
-                
-                boookingObj.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c;
-                
-                boookingObj.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
-                
-                boookingObj.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                
-                boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_OS_NRI__c - (((boookingObj.Passback_Amount__c / QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                
-            }
-            
-            else if(!brokerageScheme.isEmpty() && brokerageScheme[0].Type__c == 'Both' && (boookingObj.Type_of_Client__c == 'NRI' || boookingObj.Type_of_Client__c == 'Outstation') && bookingDate >= bookingDate2){
-                
-                boookingObj.Base_Brokerage_2__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c;
-                
-                boookingObj.Brokerage_Scheme_Name__c =  brokerageScheme[0].Name;
-                
-                boookingObj.Brokerage_Scheme__c =  brokerageScheme[0].Id;
-                
-                boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((boookingObj.Passback_Amount__c / QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
-                
-            }
-        } */
-        //Added by Prashant to tag the scheme based on the booking date. END 9-4-25////
-        //
-        //
-
+     
         //Added by Prashant to update logic to add scheme brokerage based on type of client - 22-10-25. START///////
         system.debug('Base Brokerage Before -->>'+boookingObj.Base_Brokerage__c);
         boookingObj = BookingClass2.updateBrokerageSchemeDetails(boookingObj, QuoteDetails, brokerageScheme);
@@ -3466,27 +3309,7 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 boookingObj.Customer__c = boookingObj.Opportunity__c;
                 boookingObj.status__c = 'UnProcessed'; 
                 boookingObj.Interest_to_be_Applied__c='No';
-                // boookingObj.Booking_Application_Form_Hard_copy__c = fileUrl; //Added by coServe 23-03-2023
-                //boookingObj.status__c = 'Booking Received';   //Modified by Sheetal on 12/1/2022 to solve Issue I0101
-
-                // if(selectedMilestone != null && selectedMilestone != '' && selectedMilestone != 'As per CLP'){ //Added by Vinay 02-04-2026
-                //     //String milestone = '4.00% (30 days from booking)';
-                //     Pattern p = Pattern.compile('\\((\\d+)');
-                //     Matcher m = p.matcher(selectedMilestone);
-                //     Integer days;
-                //     if(m.find()){
-                //         days = Integer.valueOf(m.group(1));
-                //     }
-                //     List<CIF__c> cif =[SELECT Id,Mode_of_funding__c FROM CIF__c WHERE Opportunity__c =: boookingObj.Opportunity__c];
-                //     if(cif.size() > 0 && cif[0].Mode_of_funding__c == 'Bank Loan'){
-                //         boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 30;
-                //     }else{
-                //         boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 15;
-                //     }
-                //     //boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
-                // }
-                // boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
-
+                
                 /**Added for Cancellation Changes starts */
                 if(oppList!=null && !oppList.isEmpty() && oppList[0].Booking__c!=null ) {
                   boookingObj.Old_Booking__c = oppList[0].Booking__c;
@@ -4167,33 +3990,6 @@ insert listReceiptDetails;
     /**Addded for Cancellation Changes ends */
     
     
-    //Added by coServe 23-03-2023 Start
-    /* public PageReference upload() {
-try {
-document.AuthorId = UserInfo.getUserId();
-document.FolderId = UserInfo.getUserId();
-insert document;
-
-} catch (DMLException e) {
-this.fileUploaded = false;
-ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Kindly upload Booking Application Form'));
-return null;
-} 
-System.debug('document: ' + document.Id);
-this.docId = document.Id;
-String baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-String fileUrl = baseUrl + '/servlet/servlet.FileDownload?file=' + docId;
-System.debug('fileUrl: ' + fileUrl);
-this.fileUrl = fileUrl;
-this.document = document;
-this.selectedvalue = selectedvalue;
-this.fileUploaded = true;
-ApexPages.addMessage(new ApexPages.message(ApexPages.severity.INFO,'Document uploaded successfully'));
-return null;
-}
-//Added by coServe 23-03-2023 End*/
-    
-  
     
     
 }
