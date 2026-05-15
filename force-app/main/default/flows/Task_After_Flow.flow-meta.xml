@@ -1,6 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Notification_Of_Success_For_Retention</name>
+        <label>Notification Of Success For Retention</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification_Type.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recpientIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>subjectEmailRetentionSucessful</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>subjectEmailRetentionSucessful</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.WhatId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_Of_Retention_Failures</name>
+        <label>Send Email Of Retention Failures</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Check_Notification_Type_Is_Present</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmail</elementReference>
+                </collectionElements>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>customer.care@runwalgroup.in</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subjectForRetentionFails</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>emailBodyRetentionFails</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.WhatId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>3.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
         <name>Send_Email_to_Queue</name>
         <label>Send Email to Queue</label>
         <locationX>0</locationX>
@@ -13,7 +136,11 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmail</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -31,6 +158,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailBodyForTaskQueue</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -43,6 +171,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.WhatId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -54,6 +183,84 @@
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
         <versionString>2.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_To_Recpient_Ids</name>
+        <label>Send Email To Recpient Ids</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Check_Recpient_Ids</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value>
+                <collectionElements>
+                    <elementReference>recepientEmail</elementReference>
+                </collectionElements>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>customer.care@runwalgroup.in</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subjectEmailRetentionSucessful</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>notificationBodyForSuccesfulEmail</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.WhatId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>3.0.1</versionString>
     </actionCalls>
     <actionCalls>
         <name>Send_Email_To_User</name>
@@ -68,17 +275,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Owner:User.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -98,6 +311,7 @@
             <name>emailBody</name>
             <value>
                 <elementReference>emailBodyForUser</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -110,6 +324,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.WhatId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -123,6 +338,51 @@
         <versionString>2.0.1</versionString>
     </actionCalls>
     <actionCalls>
+        <name>Send_Notification_For_Retention_Failures</name>
+        <label>Send Notification For Retention Failures</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification_Type.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recpientIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>subjectForRetentionFails</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>subjectForRetentionFails</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.WhatId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Send_Notification_To_Group_Users</name>
         <label>Send Notification To Group Users</label>
         <locationX>0</locationX>
@@ -134,6 +394,7 @@
             <name>customNotifTypeId</name>
             <value>
                 <elementReference>Get_Notification_Record_Types_For_Group.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -146,18 +407,21 @@
             <name>title</name>
             <value>
                 <elementReference>notificationBodyForTask</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
             <name>body</name>
             <value>
                 <elementReference>notificationBodyForTask</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
             <name>targetId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
@@ -175,6 +439,7 @@
             <name>customNotifTypeId</name>
             <value>
                 <elementReference>Get_Notification_Record_Types.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -187,18 +452,21 @@
             <name>title</name>
             <value>
                 <elementReference>notificationBodyForTask</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
             <name>body</name>
             <value>
                 <elementReference>notificationBodyForTask</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
             <name>targetId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
@@ -299,6 +567,52 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assignment_Of_RM_Email</name>
+        <label>Assignment Of RM Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recepientEmail</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Booking_Record.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recpientIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Booking_Record.Unit_No__r.Relationship_Manager__r.User__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_SM</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assignment_Of_SM_Email</name>
+        <label>Assignment Of SM Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recepientEmail</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Booking_Record.Sales_Manager__r.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recpientIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Booking_Record.Sales_Manager__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Retention_Status_Failed_Or_Success</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assignment_Of_Task</name>
         <label>Assignment Of Task</label>
         <locationX>0</locationX>
@@ -393,6 +707,31 @@
                 <targetReference>Assignment_Of_Booking_Share_Record</targetReference>
             </connector>
             <label>Assigned To Present</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_For_Recpient_Email_Ids</name>
+        <label>Check For Recpient Email Ids</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Notification_Type_Is_Present</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Recpient_Email_Ids_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recepientEmail</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_Of_Retention_Failures</targetReference>
+            </connector>
+            <label>Recpient Email Ids Present</label>
         </rules>
     </decisions>
     <decisions>
@@ -491,6 +830,35 @@
                 <targetReference>Check_Status_Updated</targetReference>
             </connector>
             <label>Updated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Notification_Type_Is_Present</name>
+        <label>Check Notification Type Is Present</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Notification_Type_Is_Presents</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Custom_Notification_Type</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Custom_Notification_Type.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Notification_For_Retention_Failures</targetReference>
+            </connector>
+            <label>Notification Type Is Presents</label>
         </rules>
     </decisions>
     <decisions>
@@ -631,6 +999,67 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Recipient_Email</name>
+        <label>Check Recipient Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Recpient_Ids</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>recipient_Emails_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recepientEmail</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_To_Recpient_Ids</targetReference>
+            </connector>
+            <label>recipient Emails Present</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Recpient_Ids</name>
+        <label>Check Recpient Ids</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Recpient_Ids_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recpientIds</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Custom_Notification_Type</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Custom_Notification_Type.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notification_Of_Success_For_Retention</targetReference>
+            </connector>
+            <label>Recpient Ids Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Retention_Queue_Present_Or_Not</name>
         <label>Check Retention Queue Present Or Not</label>
         <locationX>0</locationX>
@@ -691,7 +1120,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Check_Retention_Status_Failed_Or_Success</targetReference>
+                <targetReference>Get_Booking_Record</targetReference>
             </connector>
             <label>Rention Failed By Rention Team</label>
         </rules>
@@ -713,7 +1142,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Booking_Record</targetReference>
+                <targetReference>Find_Booking_Record</targetReference>
             </connector>
             <label>Retention Status Retention Successful</label>
         </rules>
@@ -753,6 +1182,56 @@
                 <targetReference>Create_Retention_Task</targetReference>
             </connector>
             <label>Retention Task List</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_RM</name>
+        <label>Check RM</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_SM</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>RM_Is_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Booking_Record.Unit_No__r.Relationship_Manager__r.User__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Of_RM_Email</targetReference>
+            </connector>
+            <label>RM Is Present</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_SM</name>
+        <label>Check SM</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Retention_Status_Failed_Or_Success</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>SM_Is_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Booking_Record.Sales_Manager__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Of_SM_Email</targetReference>
+            </connector>
+            <label>SM Is Present</label>
         </rules>
     </decisions>
     <decisions>
@@ -995,7 +1474,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Find_Booking_Record</targetReference>
+            <targetReference>Get_Custom_Notification_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1049,6 +1528,27 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Booking__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Custom_Notification_Type</name>
+        <label>Get Custom Notification Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_RM</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Task_Assignment</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -1252,6 +1752,9 @@
         <label>Update Booking Status</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_For_Recpient_Email_Ids</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -1312,6 +1815,9 @@
         <label>Update Opportunity Status</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Recipient_Email</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -1413,14 +1919,34 @@
         <text>&lt;p&gt;Hi Team,&lt;/p&gt;&lt;p&gt;A new task has been created and assigned to you. Below are the task details:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Task Subject: {!$Record.Subject}&lt;/p&gt;&lt;p&gt;Status: {!$Record.Status}&lt;/p&gt;&lt;p&gt;Due Date: {!$Record.ActivityDate}&lt;/p&gt;&lt;p&gt;Customer Name: {!Get_Booking_Record_For_Details.Opportunity__r.Name}&lt;/p&gt;&lt;p&gt;Booking: {!Get_Booking_Record_For_Details.Name}&lt;/p&gt;&lt;p&gt;Project Unit: {!Get_Booking_Record_For_Details.Unit_No__r.Name} &lt;/p&gt;&lt;p&gt;Task Link: &lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Task/{!$Record.Id}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Task/{!$Record.Id}/view&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Please review the task and take the necessary action at the earliest. Make sure to update the task status as progress is made.&lt;/p&gt;&lt;p&gt;Best Regards,&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
+        <name>emailBodyRetentionFails</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;strong&gt;Dear RM/SM,&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;This is to notify you that despite our best efforts, the retention process for {!Get_Booking_Record.Customer__r.Name} was unsuccessful.&lt;/p&gt;&lt;p&gt;The customer has decided to proceed with the cancellation/exit. Consequently, we are moving the file forward for the standard offboarding or refund process as per company policy.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Key Details:&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Customer Name:&lt;/strong&gt; {!Get_Booking_Record.Customer__r.Name}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Unit/Account No:&lt;/strong&gt; {!Get_Booking_Record.Unit_No__r.Name}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Primary Reason for Exit:&lt;/strong&gt; {!$Record.Remarks__c}&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Please take the necessary steps to close the lead/account in the CRM and handle any further communication regarding the refund status.&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
         <name>emailSubjectForUser</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>&quot;New Task Assigned:&quot;&amp; {!$Record.Subject}</text>
     </textTemplates>
     <textTemplates>
+        <name>notificationBodyForSuccesfulEmail</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;strong&gt;Dear RM/SM,&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;We are pleased to inform you that the retention process for {!Get_Booking_Record.Customer__r.Name} has been successfully completed by the Retention Team.&lt;/p&gt;&lt;p&gt;The customer has agreed to continue their association with us, and the cancellation request has been officially withdrawn.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Key Details:&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Customer Name:&lt;/strong&gt; &lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!Get_Booking_Record.Customer__r.Name}&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Unit/Account No:&lt;/strong&gt; {!Get_Booking_Record.Unit_No__r.Name}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Retention Reason:&lt;/strong&gt; {!$Record.Retention_Reason__c}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Current Status:&lt;/strong&gt; Active&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Please ensure that any pending documentation related to this retention is updated in the system. Feel free to reach out to the customer to reinforce the relationship.&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
         <name>notificationBodyForTask</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>{!$Record.Subject}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>subjectEmailRetentionSucessful</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&amp;nbsp;Retention Successful: {!Get_Booking_Record.Customer__r.Name}&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>subjectForRetentionFails</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Retention Update: {!Get_Booking_Record.Customer__r.Name} – Unsuccessful&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>taskSubjectForRetentionTeam</name>

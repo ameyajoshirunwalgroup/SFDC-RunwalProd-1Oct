@@ -1092,7 +1092,7 @@ public with sharing class MarketingDashboardController {
 
         
         String bkgQry = 'SELECT Opportunity__r.LeadSource src, COUNT(Id) total, SUM(Allotment_Premium__c) rev FROM Booking__c WHERE Opportunity__r.LeadSource != null';
-        bkgQry += ' AND Project__r.Name != \'Runwal Garden City\'';
+        bkgQry += ' AND Project__r.Name != \'Runwal Garden City\' AND Status__c = \'Booking Confirmed\'';
         if(sources.size() > 0){
             bkgQry += ' AND Opportunity__r.LeadSource IN: sources';
         }else{
@@ -1485,7 +1485,7 @@ public with sharing class MarketingDashboardController {
 
         
         String bkgQry = 'SELECT Project__r.Name proj, COUNT(Id) total, SUM(Allotment_Premium__c) rev FROM Booking__c WHERE Opportunity__r.LeadSource != null';
-        bkgQry += ' AND Project__r.Name != \'Runwal Garden City\'';
+        bkgQry += ' AND Project__r.Name != \'Runwal Garden City\' AND Status__c = \'Booking Confirmed\'';
         if(sources != null && sources.size() > 0){
             bkgQry += ' AND Opportunity__r.LeadSource IN: sources';
         }
@@ -1892,7 +1892,21 @@ public with sharing class MarketingDashboardController {
             if(budgetCSV != null){
                 csvFiles.put('Budget Vs Expenses.csv', EncodingUtil.base64Encode(Blob.valueOf(budgetCSV)));
             }
+        }else if(tableType == 'table6' || tableType == 'table7'){
+            String leadCSV = leadsData(tableType, year_Int, months_Int, sources, dateRange, project);
+            String opportunityCSV = opportunitiesData(tableType, year_Int, months_Int, sources, dateRange, project);
+            String bookingCSV = bookingsData(tableType, year_Int, months_Int, sources, dateRange, project);
+            if(leadCSV != null){
+                csvFiles.put('Leads.csv', EncodingUtil.base64Encode(Blob.valueOf(leadCSV)));
+            }
+            if(opportunityCSV != null){
+                csvFiles.put('Opportunities.csv', EncodingUtil.base64Encode(Blob.valueOf(opportunityCSV)));
+            }
+            if(bookingCSV != null){
+                csvFiles.put('Bookings.csv', EncodingUtil.base64Encode(Blob.valueOf(bookingCSV)));
+            }
         }
+        
 
         return csvFiles;      
     }
@@ -2069,7 +2083,7 @@ public with sharing class MarketingDashboardController {
         }
     }
 
-    private static String leadsData(String tableType, Integer year, Integer month, String source, String dateRange, String project){
+    private static String leadsData(String tableType, Integer year, List<Integer> months, List<String> sources, String dateRange, String project){
         String leadCSV = 'Id,FirstName,LastName,LeadSource,Status,Project Name\n';
         
         String qry = 'SELECT Id, FirstName, LastName, LeadSource, Status, RW_Project__r.Name FROM Lead WHERE IsConverted = false AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\'';
@@ -2079,12 +2093,12 @@ public with sharing class MarketingDashboardController {
         if(year != null){
             qry +=  ' AND CALENDAR_YEAR(CreatedDate) = ' +  year;
         }
-        if(month != null){
-            qry +=  ' AND CALENDAR_MONTH(CreatedDate) = ' +  month;
+        if(months != null && months.size() > 0){
+            qry +=  ' AND CALENDAR_MONTH(CreatedDate) IN: months';
         }
-        if(source != ''){
-            qry += ' AND LeadSource =: source';
-        }else if(tableType == 'table6' && source == ''){
+        if(sources != null && sources.size() > 0){
+            qry += ' AND LeadSource =: sources';
+        }else if(tableType == 'table6'){
             List<String> mediaCategories = new List<String>{
                 'Hoarding', 'Newspapers', 'Digital', 'Presales', 'Channel Partner', 'Referral', 'Loyalty', 'Employee / Managemen'
             };
@@ -2107,7 +2121,7 @@ public with sharing class MarketingDashboardController {
         }
     }
 
-    private static String opportunitiesData(String tableType, Integer year, Integer month, String source, String dateRange, String project){
+    private static String opportunitiesData(String tableType, Integer year, List<Integer> months, List<String> sources, String dateRange, String project){
         String opportunityCSV = 'Id,Name,StageName,LeadSource,Project Name\n';
         String qry = 'SELECT Id, Name, StageName, LeadSource, RW_Project__r.Name FROM Opportunity WHERE RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\'';
         if(project != 'All'){
@@ -2116,14 +2130,11 @@ public with sharing class MarketingDashboardController {
         if(year != null){
             qry +=  ' AND CALENDAR_YEAR(CreatedDate) = ' +  year;
         }
-        if(month != null){
-            qry +=  ' AND CALENDAR_MONTH(CreatedDate) = ' +  month;
+        if(months != null && months.size() > 0){
+            qry +=  ' AND CALENDAR_MONTH(CreatedDate) IN: months';
         }
-        if(source != ''){
-            qry += ' AND LeadSource =: source';
-        }
-        if(tableType == 'table1'){
-            qry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            qry += ' AND LeadSource =: sources';
         }else if(tableType == 'table6'){
             List<String> mediaCategories = new List<String>{
                 'Hoarding', 'Newspapers', 'Digital', 'Presales', 'Channel Partner', 'Referral', 'Loyalty', 'Employee / Managemen'
@@ -2145,7 +2156,7 @@ public with sharing class MarketingDashboardController {
         }
     }
 
-    private static String bookingsData(String tableType, Integer year, Integer month, String source, String dateRange, String project){
+    private static String bookingsData(String tableType, Integer year, List<Integer> months, List<String> sources, String dateRange, String project){
         String bookingsCSV = 'Id,Name,Status,LeadSource,Project Name\n';
         String qry = 'SELECT Id, Name, Status__c, Opportunity__r.LeadSource, Project__r.Name FROM Booking__c WHERE  Project__c != null AND Project__r.RW_Status__c = \'Active\'';
         if(project != 'All'){
@@ -2154,14 +2165,11 @@ public with sharing class MarketingDashboardController {
         if(year != null){
             qry +=  ' AND CALENDAR_YEAR(CreatedDate) = ' +  year;
         }
-        if(month != null){
-            qry +=  ' AND CALENDAR_MONTH(CreatedDate) = ' +  month;
+        if(months != null && months.size() > 0){
+            qry +=  ' AND CALENDAR_MONTH(CreatedDate) IN: months';
         }
-        if(source != ''){
-            qry += ' AND Opportunity__r.LeadSource =: source';
-        }
-        if(tableType == 'table1'){
-            qry += ' AND Opportunity__r.LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            qry += ' AND Opportunity__r.LeadSource IN: sources';
         }else if(tableType == 'table6'){
             List<String> mediaCategories = new List<String>{
                 'Hoarding', 'Newspapers', 'Digital', 'Presales', 'Channel Partner', 'Referral', 'Loyalty', 'Employee / Managemen'

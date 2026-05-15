@@ -13,17 +13,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Functional_User__r.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -42,6 +48,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>{!$Record.RM_Comment_For_Functional_User__c}
 
 Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringValue>
@@ -50,6 +57,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>attachmentId</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue></stringValue>
             </value>
         </inputParameters>
@@ -57,6 +65,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -82,17 +91,23 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Owner:User.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -111,6 +126,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>{!$Record.RW_Resolution_comments__c}
 
 
@@ -121,6 +137,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>attachmentId</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue></stringValue>
             </value>
         </inputParameters>
@@ -128,6 +145,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -153,17 +171,23 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Owner:User.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -182,6 +206,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>{!$Record.RW_Resolution_comments__c}
 
 
@@ -192,6 +217,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>attachmentId</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue></stringValue>
             </value>
         </inputParameters>
@@ -199,6 +225,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -268,17 +295,23 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>Get_User_For_This_Contact.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -297,6 +330,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Hello {!Get_User_For_This_Contact.Name},&lt;/p&gt;&lt;p&gt;The following case has been assigned to you for your review and action:&lt;/p&gt;&lt;p&gt;Case Number: {!$Record.CaseNumber}&lt;/p&gt;&lt;p&gt;Case Subject: {!$Record.Subject}&lt;/p&gt;&lt;p&gt;Case Priority: {!$Record.Priority}&lt;/p&gt;&lt;p&gt;Case Status: {!$Record.Status}&lt;/p&gt;&lt;p&gt;Customer Name: {!$Record.Account.Name}&lt;/p&gt;&lt;p&gt;Description: {!$Record.Description}&lt;/p&gt;&lt;p&gt;👉 Click here to open the Case:&lt;/p&gt;&lt;p&gt;https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Customer Care&lt;/p&gt;&lt;p&gt;Runwal&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -316,6 +350,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -341,17 +376,23 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Name_Confirmation_Form__r.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -370,6 +411,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Please Check the NCF Case.&lt;/p&gt;&lt;p&gt;Case: &lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Case/{!$Record.Id}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;&lt;u&gt;View Case Record&lt;/u&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;NCF: &lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Case/{!$Record.Name_Confirmation_Form__c}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;&lt;u&gt;View NCF Record&lt;/u&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -383,6 +425,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Name_Confirmation_Form__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>

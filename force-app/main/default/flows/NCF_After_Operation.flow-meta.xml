@@ -34,17 +34,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>OrgWideEmailAddress</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>customer.care@runwalgroup.in</stringValue>
             </value>
         </inputParameters>
@@ -63,6 +69,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Hi {!$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.FirstName} {!$Record.Booking__r.Unit_No__r.Relationship_Manager__r.User__r.LastName},&lt;/p&gt;&lt;p&gt;This is to inform you that the NCF has been approved by the customer.&lt;/p&gt;&lt;p&gt;Kindly refer to the booking record for further details: &lt;a href=&quot;https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Booking__c/{!$Record.Booking__c}/view&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;View Booking Record&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Please take the required next steps accordingly.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Best regards,&lt;/p&gt;&lt;p&gt;Runwal Group&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -76,6 +83,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>
@@ -98,7 +106,11 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>ReceipientId</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -115,6 +127,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Dear {!$Record.Booking__r.Primary_Applicant_Name__c},&lt;/p&gt;&lt;p&gt;Your Name Confirmation Form has been generated after the welcome call.&lt;/p&gt;&lt;p&gt;Please login to the customer portal to review and approve or reject your NCF.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;NCF PDF&lt;/strong&gt;: &lt;a href=&quot;{!PDFURL}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;View PDF&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;NCF Reference:&lt;/strong&gt; &lt;a href=&quot;https://runwal--fullcopy.sandbox.my.site.com/customer/s/accountdetails&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;u&gt;{!$Record.Name}&lt;/u&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Customer Portal Access Information:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;If you are &lt;strong&gt;unable to log in&lt;/strong&gt; to the Customer Portal, please use this email ID:&lt;/p&gt;&lt;p&gt;{!$Record.Booking__r.Customer__r.Account.PersonEmail} as your &lt;strong&gt;username&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;Click on &lt;strong&gt;“Forgot Password”&lt;/strong&gt; on the login page to generate your password.&lt;/p&gt;&lt;p&gt;The password reset link will be sent to this email address.&lt;/p&gt;&lt;p&gt;If you need any assistance, please feel free to contact us.&lt;/p&gt;&lt;p&gt;Thank you,&lt;/p&gt;&lt;p&gt;CRM Team&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -128,6 +141,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <inputParameters>

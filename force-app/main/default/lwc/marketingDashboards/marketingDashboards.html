@@ -5,10 +5,29 @@
                 <lightning-combobox label="Select Table" value={selectedTable} 
                     options={tableOptions} onchange={handleTableChange}></lightning-combobox>
             </div>
-            <template if:false={isTable1}>
-                <div class="slds-col slds-size_2-of-12">
+            <template if:true={showLeadSource}>
+                <!--<div class="slds-col slds-size_2-of-12">
                     <lightning-combobox label="Lead Source" value={selectedSource} 
                         options={leadSourceOptions} onchange={handleFilterChange}></lightning-combobox>
+                </div>-->
+                <div class="slds-col slds-size_2-of-12">
+                    <div class="multi-select-container">
+                        <label class="slds-form-element__label">Lead Source</label>
+                        <div class="multi-select-box" onclick={toggleLeadSourceDropdown}>
+                            <span>{selectedLeadSourceLabel}</span>
+                            <lightning-icon  icon-name="utility:down" size="xx-small"></lightning-icon>
+                        </div>
+                        <template if:true={showLeadSourceDropdown}>
+                            <div class="dropdown-list">
+                                <template for:each={leadSourceOptions} for:item="leadsource">
+                                    <div key={leadsource.value} class="dropdown-item">
+                                        <lightning-input type="checkbox" label={leadsource.label} value={leadsource.value} checked={leadsource.checked} onchange={handleLeadSourceSelect}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </template>
             <template if:true={isTable1}>
@@ -38,25 +57,27 @@
                         <lightning-combobox label="Month" value={selectedMonths} 
                             options={monthOptions} onchange={handleFilterChange} class="compact-dropdown"></lightning-combobox>
                     </div>-->
-                    <div class="slds-col slds-size_2-of-12">
-                        <div class="multi-select-container">
-                            <label class="slds-form-element__label">Months</label>
-                            <div class="multi-select-box" onclick={toggleDropdown}>
-                                <span>{selectedMonthsLabel}</span>
-                                <lightning-icon  icon-name="utility:down" size="xx-small"></lightning-icon>
-                            </div>
-                            <template if:true={showDropdown}>
-                                <div class="dropdown-list">
-                                    <template for:each={monthOptions} for:item="month">
-                                        <div key={month.value} class="dropdown-item">
-                                            <lightning-input type="checkbox" label={month.label} value={month.value} checked={month.checked} onchange={handleMonthSelect}>
-                                            </lightning-input>
-                                        </div>
-                                    </template>
+                    <template if:true="{selectedYear != ''}">
+                        <div class="slds-col slds-size_2-of-12">
+                            <div class="multi-select-container">
+                                <label class="slds-form-element__label">Months</label>
+                                <div class="multi-select-box" onclick={toggleMonthsDropdown}>
+                                    <span>{selectedMonthsLabel}</span>
+                                    <lightning-icon  icon-name="utility:down" size="xx-small"></lightning-icon>
                                 </div>
-                            </template>
+                                <template if:true={showMonthsDropdown}>
+                                    <div class="dropdown-list">
+                                        <template for:each={monthOptions} for:item="month">
+                                            <div key={month.value} class="dropdown-item">
+                                                <lightning-input type="checkbox" label={month.label} value={month.value} checked={month.checked} onchange={handleMonthSelect}>
+                                                </lightning-input>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
-                    </div>
+                    </template>
                 </template>
             </template>
             <div class="slds-col slds-size_7-of-12"></div>
@@ -129,7 +150,7 @@
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th colspan="9">Lead Statuses</th>
+                                    <th colspan="9">Lead Status</th>
                                 </tr>
                                 <tr>
                                     <th>Project</th>
