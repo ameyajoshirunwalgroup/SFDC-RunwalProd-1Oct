@@ -128,6 +128,12 @@ public with sharing class BookingClass {
         get;
         set;
     }
+    public String selectedMilestone { //Added by Vinay 02-04-2026
+        get;
+        set;
+    }
+    private List<SelectOption> milestoneOptionsCache;//Added by Vinay 16-04-2026
+	private String lastSelectedQuote;//Added by Vinay 16-04-2026
     public Id quotationidparam { 
         get;
         set;
@@ -276,6 +282,8 @@ public with sharing class BookingClass {
     Receipt_Details__c objReceiptDetails = new Receipt_Details__c();
     Receipt_Details__c objReceiptDetailsST = new Receipt_Details__c();
     List < Project_Charges__c > listglobalcharges = new List < Project_Charges__c > ();
+    public List<Opportunity> oppList {get; set;}//Added for Cancellation Changes
+    public Decimal originalAV ;//Added for Cancellation Changes
     public List < Receipt__c > ListOldReceipt {
         get;
         set;
@@ -315,6 +323,21 @@ set;
     public Boolean disabelBookingDate {get;set;}
     //Added by coServe 23-03-2023 End
     public Account acc {get;set;} //Added by Vinay 03-06-2025    
+
+    /**Added for Cancellation Changes starts */
+
+    public List<SelectOption> projectOptions {get; set;}
+    public List<SelectOption> towerOptions {get; set;}
+    public List<SelectOption> unitOptions {get; set;}
+    public List<Project__c> projectLst {get; set;}
+    public List<Tower__c> towerLst {get; set;}
+    public List<Project_Unit__c> unitLst {get; set;}
+    public Opportunity opp {get; set;}
+    public String oldTypeOfSale {get; set;}
+    public Boolean disableCancelledDetails {get; set;}
+
+    /**Added for Cancellation Changes starts */
+
     
     public BookingClass() {
         
@@ -406,7 +429,70 @@ set;
         if (ApexPages.currentPage().getParameters().get('optyid') != null && ApexPages.currentPage().getParameters().get('optyid') != '') {
             boookingObj.Opportunity__c = ApexPages.currentPage().getParameters().get('optyid');
             // Added For Unidentified Payment RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c
-            Opportunity opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025
+            opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c,
+                               SAP_Customer_Number__c,Cancelled_Booking__c,Cancelled_Project__c,Cancelled_Tower__c,Cancelled_Unit__c,Type_Of_sale__c,Cancelled_SAP_Customer_Number__c
+                                FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025, Added Cancelled_SAP_Customer_Number__c,SAP_Customer_Code__c,Cancelled_Booking__c,Cancelled_Project__c,Type_Of_sale__c,Cancelled_Tower__c,Cancelled_Unit__c for Cancellation Changes
+              
+
+             /**Added for Cancellation Changes starts */
+
+             if(opp.Type_Of_sale__c!=null){
+                disableCancelledDetails = true;
+             }
+            Id matchedProjectId = null;
+            projectOptions = new List<SelectOption>();
+            projectOptions.add(new SelectOption('', '--Select Project--'));
+
+            towerOptions = new List<SelectOption>();
+            towerOptions.add(new SelectOption('', '--Select Tower--'));
+
+            unitOptions = new List<SelectOption>();
+            unitOptions.add(new SelectOption('', '--Select Unit--'));
+
+                projectLst = [Select Id,Name from Project__c where RW_Status__c = 'Active' ORDER BY Name];
+                for(Project__c proj : projectLst) {
+                    projectOptions.add(new SelectOption(proj.Id, proj.Name));
+                    if(proj.Name == opp.Cancelled_Project__c) {
+                        matchedProjectId = proj.Id;
+                    }
+                }
+                if(matchedProjectId != null) {
+                    boookingObj.Cancelled_Project__c = matchedProjectId;
+                } else {
+                    System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Project__c);
+                }
+                if(boookingObj.Cancelled_Project__c != null) {
+                  loadTowers();
+                  
+                }
+                if(opp.Cancelled_Tower__c != null) {
+                    List<Tower__c> towers = [SELECT Id FROM Tower__c 
+                                    WHERE Name = :opp.Cancelled_Tower__c 
+                                    AND ProjectName__c = :boookingObj.Cancelled_Project__c LIMIT 1];
+                    if(!towers.isEmpty()) {
+                        boookingObj.Cancelled_Tower__c = towers[0].Id;
+                        loadUnits();
+                    }
+                }
+                
+                if(opp.Cancelled_Unit__c != null) {
+                    List<Project_Unit__c> units = [SELECT Id FROM Project_Unit__c 
+                                        WHERE Name = :opp.Cancelled_Unit__c 
+                                        LIMIT 1];
+                    if(!units.isEmpty()) {
+                        boookingObj.Cancelled_Unit_No__c = units[0].Id;
+                    }
+                }
+
+            boookingObj.Cancelled_SAP_Customer_Number__c = opp.Cancelled_SAP_Customer_Number__c;
+            boookingObj.Type_Of_sale__c = opp.Type_Of_sale__c;
+            if(opp.Cancelled_Booking__c!=null){
+                    boookingObj.Old_Booking__c = opp.Cancelled_Booking__c;
+            }
+            oldTypeOfSale = opp.Type_Of_sale__c;//Added for Cancellation Changes
+            System.debug('oldTypeOfSale**'+oldTypeOfSale);
+            /**Added for Cancellation Changes ends */
+
             // Added For Unidentified Payment End
             acc = [SELECT Id, Salutation, FirstName, LastName, RW_Zip_Code__c, RW_Company_Name__c, RW_Other_Company_Name__c, RW_Designation__c, No_of_family_members__c, RW_Occupation__c, Distance_To_Office__c, Family_Income__c, Purpose__c, Vehicles_owned__c, Industry, Current_Residential_Address__c, Four_Wheeler__c FROM Account WHERE Id =: opp.AccountId]; //Added by Vinay 03-06-2025
             if(opp.RW_Type_of_Client__c == null && !Test.isRunningTest()){
@@ -899,6 +985,125 @@ i = 1;
         }
         set;
     }
+
+    /*public List<SelectOption> getMilestoneOptions{  //Added by Vinay 02-04-2026
+        get {
+        //system.debug('Inside Milestone queryResult' + queryResult);
+        List<SelectOption> optns = new List<Selectoption>();
+        optns.add(new SelectOption('', 'Select a Milestone'));
+        System.debug('selectedQuote: ' + selectedQuote);
+        if(selectedQuote != null){
+            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c =: selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
+            if(cpphList.size() > 0){
+                List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id,Amount_Value__c,Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c =: cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER By Days_Months_Value__c ASC];
+                if(scppdList.size() > 0){
+                    Decimal cumulativePercentage = 0;
+                    for(Standard_Customer_Pay_Plan_Detail__c scppd: scppdList){
+                        cumulativePercentage += scppd.Amount_Value__c;
+                        if(cumulativePercentage > 10){
+                            break;
+                        }
+                        String milestoneStr = cumulativePercentage + '%' + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
+                        //optns.add(new SelectOption(scppd.Id, milestoneStr));
+                        optns.add(new SelectOption(milestoneStr, milestoneStr));
+                    } 
+                    if(optns.size() == 1){
+                        selectedMilestone = 'As per CLP';
+                        optns.add(new SelectOption('As per CLP', 'As per CLP'));
+                    }
+                }else{
+                    selectedMilestone = 'As per CLP';
+                    optns.add(new SelectOption('As per CLP', 'As per CLP'));
+                }
+                
+            }
+        }else{
+            system.debug('Quotation not selected');
+        }
+        System.debug('optns: ' + optns);
+        return optns;
+        }
+        set;
+    }*/
+
+    public void loadMilestoneOptions() { //Added by Vinay 16-04-2026
+        milestoneOptionsCache = buildMilestoneOptions();
+    }
+    
+    public List<SelectOption> getMilestoneOptions { //Added by Vinay 16-04-2026
+        get {
+            if (milestoneOptionsCache == null) {
+                milestoneOptionsCache = new List<SelectOption>();
+                milestoneOptionsCache.add(new SelectOption('', 'Select a Milestone'));
+            }
+            return milestoneOptionsCache;
+        }
+        set;
+    }
+    
+    // Separate method for business logic
+    private List<SelectOption> buildMilestoneOptions() { //Added by Vinay 16-04-2026
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('', 'Select a Milestone'));
+        
+        if (String.isBlank(selectedQuote)) {
+            System.debug('Quotation not selected');
+            return options;
+        }
+        
+        try {
+            // Query for Customer Pay Plan Header
+            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c = :selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
+            
+            if (cpphList.isEmpty()) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+                return options;
+            }
+            
+            // Query for Standard Customer Pay Plan Details
+            List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id, Amount_Value__c, Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c = :cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER BY Days_Months_Value__c ASC];
+            
+            if (scppdList.isEmpty()) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+                return options;
+            }
+            
+            // Build milestone options
+            Decimal cumulativePercentage = 0;
+            for (Standard_Customer_Pay_Plan_Detail__c scppd : scppdList) {
+                cumulativePercentage += scppd.Amount_Value__c;
+                
+                if (cumulativePercentage > 10) {
+                    break;
+                }
+                
+                String milestoneStr = String.valueOf(cumulativePercentage) + '%' 
+                    + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
+                options.add(new SelectOption(milestoneStr, milestoneStr));
+            }
+            
+            // Set default if only one option
+            if (options.size() == 1) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+            }
+            
+        } catch (Exception e) {
+            System.debug('Error building milestone options: ' + e.getMessage());
+            ApexPages.addMessage(new ApexPages.Message(
+                ApexPages.Severity.ERROR, 
+                'Error loading milestone options: ' + e.getMessage()
+            ));
+            selectedMilestone = 'As per CLP';
+            options.add(new SelectOption('As per CLP', 'As per CLP'));
+        }
+        
+        System.debug('Built milestone options: ' + options);
+        return options;
+    }
+
     
     //added by shailesh
     public void addReciept() {
@@ -928,6 +1133,23 @@ i = 1;
                             Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/Development_Charges_L__c
                             FROM Quotation__c WHERE Id =: selectedQuote
                            ];
+
+            //Added by dolly for car parking changes
+            // QuoteDetails = [SELECT id,Single_car_park_earmarked__c,Single_car_park_additional__c,Tandem_car_park_earmarked__c,Tandem_car_park_additional__c,
+            //                 Single_Open_Earmarked__c,Single_Open_Additional__c,Tandem_Open_Earmarked__c,Tandem_Open_Additional__c,Covered_Stack_Earmarked__c,
+            //                 Covered_Stack_Additional__c,Stilt_Earmarked__c,Stack_Additional__c,MLCP_Earmarked__c,MLCP_Additional__c,Basement_Earmarked__c,
+            //                 Basement_Additional__c,Podium_Earmarked__c,Podium__c,Puzzle_Car_Park_Earmarked__c,Puzzle_Car_Park__c,Stack_Earmarked__c,
+            //                 Stack_Additional_1__c,Name, Booking__c, 
+            //                 Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            //                 Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c,
+            //                  Parking_Type__c,Project__r.CEO__c,Stamp_duty_payable_by_Runwal__c,
+            //                 Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,
+            //                 Discount_9_Type__c,Discount_9_L__c, Quote_Status__c,Project_Unit__r.TowerName__c,Agreement_Value_for_brokers__c,Brokerage_Agreement_Value__c,
+            //                 Discount_10_Type__c,Discount_10_L__c,Discount_11_L__c,Discount_11_Type__c,Is_Special_Brokerage_Scheme__c,walkin_Source__c,Total_Car_Park_Amount__c,
+            //                 Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/
+            //                 Development_Charges_L__c//Added Agreement_Value_D_R__c for QUotation Offer, Added Referral_Credit_Due__c for Referral Credit Changes
+            //                 FROM Quotation__c WHERE Id =: selectedQuote
+            //                ];
             
             //System.debug('Inside unitdetails'+unitDetails);
             if (QuoteDetails.size() > 0) {
@@ -1139,6 +1361,7 @@ boookingObj.Is_AOP_CP_Applicable__c = true;
                 }
                 
             }
+            loadMilestoneOptions(); //Added by Vinay 16-04-2026
             if (!Test.isRunningTest())
                 getReceiptDetails();
         } else {
@@ -1213,6 +1436,32 @@ boookingObj.Booking_Date__c = System.Now();
         
         TotalServiceandToken = 0;
         i = 0;
+
+        //Added by dolly for car parking changes start
+        // //Prepare car parking data ONCE   //Added by Dolly
+        // //ParkingContext parkingContext;
+        // ParkingAllocationService service = new ParkingAllocationService();
+        // ParkingAllocationService.ParkingContext parkingContext;
+        // //system.debug('QuoteDetails[0]-->'+QuoteDetails[0]);
+        // system.debug('selectedQuote---->'+selectedQuote);
+        // if(QuoteDetails.size()>0 && QuoteDetails[0] != null && selectedQuote != null && selectedQuote != '' ){
+
+        //     parkingContext =
+        //         service.prepareParkingContext(
+        //             QuoteDetails[0],
+        //             unitId,
+        //             projectId
+        //         );
+
+        //         Boolean parkingError =
+        //             service.validateCarParkingAvailability(parkingContext);
+
+        //         if(parkingError){
+        //             i = 1;
+        //         }
+        //     }
+        //Added by dolly for car parking changes ends
+
         //Brokerage = 2.25;
         ////Anuja added on 7/1/16 ////////////////
         ///Tandem Covered////
@@ -1229,6 +1478,89 @@ boookingObj.Booking_Date__c = System.Now();
             i = 1;
             System.debug('--i: ' + i); 
         }
+
+        /**Added for Cancellation Changes starts */
+            if (boookingObj.Type_Of_sale__c == null) { //Added by Vinay 13-03-2026
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select Type Of Booking');
+                ApexPages.addMessage(myMsg);
+                i = 1;
+                System.debug('--i: ' + i);
+            }
+        	List<Opportunity> cancelOpp = new List<Opportunity>();
+            if (boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c =='Upgrade of unit' || boookingObj.Type_Of_sale__c =='Cancel & Rebook') {
+                // if (boookingObj.Cancelled_Project__c == null) { //Added by Vinay 13-03-2026
+                //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Project Name in the Existing Unit Details Section');
+                //     ApexPages.addMessage(myMsg);
+                //     i = 1;
+                //     System.debug('--i: ' + i);
+                // }
+
+                // if (boookingObj.Cancelled_Unit_No__c == null) { //Added by Vinay 13-03-2026
+                //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Unit in the Existing Unit Details Section');
+                //     ApexPages.addMessage(myMsg);
+                //     i = 1;
+                //     System.debug('--i: ' + i);
+                // }
+                if(String.isNotBlank(opp.Cancelled_SAP_Customer_Number__c)){
+                    cancelOpp = [Select Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,SAP_Customer_Number__c,Booking__r.RW_Total_Receipt_Amount_Received__c from Opportunity where SAP_Customer_Number__c =: opp.Cancelled_SAP_Customer_Number__c];
+                }
+                if(String.isBlank(opp.Cancelled_SAP_Customer_Number__c) && String.isNotBlank(opp.Cancelled_Project__c)){
+                    cancelOpp = [Select Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,SAP_Customer_Number__c,Booking__r.RW_Total_Receipt_Amount_Received__c from Opportunity where RW_Project__c =: opp.Cancelled_Project__c 
+                                 AND RW_Project_Unit__r.TowerName__c =:opp.Cancelled_Tower__c AND RW_Project_Unit__c =:opp.Cancelled_Unit__c];
+                }
+                System.debug('opp.Cancelled_Project__c'+opp.Cancelled_Project__c);
+                System.debug('opp.Cancelled_Tower__c'+opp.Cancelled_Tower__c);
+                System.debug('opp.Cancelled_Unit__c'+opp.Cancelled_Unit__c);
+                System.debug('opp.Cancelled_SAP_Customer_Number__c'+opp.Cancelled_SAP_Customer_Number__c);
+                System.debug('CancelOpp ----->'+cancelOpp);
+                if (String.isBlank(boookingObj.Reason_For_Change__c) && oldTypeOfSale!=null && oldTypeOfSale != boookingObj.Type_Of_Sale__c){
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
+                        ApexPages.addMessage(myMsg);
+                        i = 1;
+                }
+                if (oldTypeOfSale != boookingObj.Type_Of_Sale__c && boookingObj.Type_Of_Sale__c == 'Transfer of unit' || boookingObj.Type_Of_Sale__c =='Upgrade of unit')  { 
+                       
+                    System.debug('oldTypeOfSale**'+oldTypeOfSale);
+                    System.debug('boookingObj.Type_Of_Sale__c**'+boookingObj.Type_Of_Sale__c);
+
+                    System.debug('boookingObj.Cancelled_SAP_Customer_Number__c**'+boookingObj.Cancelled_SAP_Customer_Number__c);
+                    if ( (String.isBlank(boookingObj.Cancelled_SAP_Customer_Number__c) && String.isBlank(boookingObj.Cancelled_Project__c)) ||
+                         (String.isNotBlank(boookingObj.Cancelled_SAP_Customer_Number__c) && String.isNotBlank(boookingObj.Cancelled_Project__c))) { 
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add either SAP Customer Number or Project Details');
+                        ApexPages.addMessage(myMsg);
+                        i = 1;
+                    }
+                    // if (String.isBlank(boookingObj.Reason_For_Change__c) ){
+                    //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
+                    //     ApexPages.addMessage(myMsg);
+                    //     i = 1;
+                    // }
+                    if(String.isNotBlank(boookingObj.Cancelled_Project__c)){
+
+                        if(String.isBlank(boookingObj.Cancelled_Tower__c)){
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please add Tower for the selected Project');
+                        ApexPages.addMessage(myMsg); 
+                        i = 1;
+                        }
+                    
+                        if(String.isNotBlank(boookingObj.Cancelled_Tower__c) && String.isBlank(boookingObj.Cancelled_Unit_No__c)){
+                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please add Unit for the selected Project and Tower');
+                            ApexPages.addMessage(myMsg); 
+                           i = 1;  
+                        }
+                    }
+                }
+
+                // if (boookingObj.Cancelled_Booking_Date__c == null ) { 
+                //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Booking Date in the Existing Unit Details Section');
+                //     ApexPages.addMessage(myMsg);
+                //     i = 1;
+                //     System.debug('--i: ' + i);
+                // }
+                
+            } 
+
+            /**Added for Cancellation Changes ends */
         
         ///tandem Open////
         if (QuoteDetails != null && QuoteDetails.size() > 0 && TandemOPENParkingList.size() < QuoteDetails[0].Tandem_Open_Additional__c) {
@@ -1313,6 +1645,13 @@ boookingObj.Booking_Date__c = System.Now();
         if (boookingObj.Opportunity__c == null) {
             system.debug('Inside null selected quote' + selectedQuote);
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select an Opportunity');
+            ApexPages.addMessage(myMsg);
+            i = 1;
+            System.debug('--i: ' + i);
+        }
+
+        if (selectedMilestone == null || selectedMilestone == '') { //Added by Vinay 13-03-2026
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select Milestone');
             ApexPages.addMessage(myMsg);
             i = 1;
             System.debug('--i: ' + i);
@@ -2827,12 +3166,63 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
         
         //////////////////////////////////////Added BY Aniket Ends Here on 29-09-2022////////////////////////////////////////
         //////////////////////////////////////Receipt Mandatory Checks//////////////////////////////////////////
+        Decimal requiredTokenAmount = 0;
+        if(QuoteDetails != null && !QuoteDetails.isEmpty()){
+        	requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+        }
+        System.debug(' requiredTokenAmount'+ requiredTokenAmount);
+        System.debug(' boookingObj.Type_Of_sale__c**'+ boookingObj.Type_Of_sale__c);
+        
+        /**Added for Cancellation Changes starts */
+        if(boookingObj.Type_Of_sale__c =='Transfer of unit' || boookingObj.Type_Of_sale__c =='Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') {
+            if(String.isNotBlank(boookingObj.Cancelled_SAP_Customer_Number__c)){
+                oppList = [
+                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,
+                    Booking__r.RW_Total_Receipt_Amount_Received__c
+                    FROM Opportunity 
+                    WHERE SAP_Customer_Number__c = :boookingObj.Cancelled_SAP_Customer_Number__c
+                    LIMIT 1
+                ];
+            }
+            else if(String.isNotBlank(boookingObj.Cancelled_Project__c)&& String.isNotBlank(boookingObj.Cancelled_Tower__c) &&String.isNotBlank(boookingObj.Cancelled_Unit_No__c)){
+                oppList = [
+                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,SAP_Customer_Number__c,
+                    Booking__r.RW_Total_Receipt_Amount_Received__c
+                    FROM Opportunity 
+                    WHERE RW_Project__c =:boookingObj.Cancelled_Project__c AND RW_Project_Unit__r.TowerName__c =: boookingObj.Cancelled_Tower__c 
+                    AND RW_Project_Unit__c =:boookingObj.Cancelled_Unit_No__c
+                    LIMIT 1
+                ];
+            } 
+        }
+        Decimal amountFromOriginalUnit = 0;
+        if(oppList != null && !oppList.isEmpty() && oppList[0].Booking__c != null && oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c != null){
+            amountFromOriginalUnit = oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c;
+        }
+        Boolean skipReceiptChecks = false;
+        if((boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit >= requiredTokenAmount) {
+            skipReceiptChecks = true;
+        }
         system.debug('ReceiptDetails.size():::: ' + ReceiptDetails.size());
         if (ReceiptDetails.size() == 0 && STReceiptDetails.size()==0) {
             System.Debug('insert receipt ' + ReceiptObj);
             System.Debug('receiptlist.size() ' + receiptlist.size());
             
+            Boolean isReceiptRowEmpty = true;
+            if(receiptlist != null && receiptlist.size() > 0) {
+                for(Receipt__c rce : receiptlist) {
+                    if(rce.Mode__c != null || rce.Cheque_DD__c != null || (rce.Total_Amount__c != null && rce.Total_Amount__c > 0) || rce.DraweeBank__c != null) {
+                        isReceiptRowEmpty = false;
+                        break;
+                    }
+                }
+            }
             
+            if (skipReceiptChecks && isReceiptRowEmpty) {
+                // Requirements met for bypass & no receipt data entered. Clear empty row to skip validations.
+                receiptlist.clear();
+            }
+            else{
             System.Debug('--receiptlist :' + receiptlist);
             for(Receipt__c rce : receiptlist)
             {
@@ -2875,6 +3265,7 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
                 }
                 
                 
+                }
             }
             
             System.debug('Step oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
@@ -3017,13 +3408,18 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                     ReceiptLstTobeUpdate.add(receiptOBJTobeUpdate);
             }
 
-            Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+            System.debug('totalAmount --> '+ totalAmount);
+            System.debug('requiredTokenAmount -->'+ requiredTokenAmount);
+                        if((boookingObj.Type_Of_sale__c == 'New Sale') ||(!oppList.isEmpty() && (boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit < requiredTokenAmount)){
+                          /**Added for Cancellation Changes ends */
             if(totalAmount < requiredTokenAmount){ //Added by Vinay 14-08-2025
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Total Amount is less than the Token Amount, you cannot book this unit.  Token Amount is:'+requiredTokenAmount);
                 ApexPages.addMessage(myMsg); 
                 i = 1;
                 return null;
+                            }
             }
+            
             
             try {
                 if (!ReceiptLstTobeUpdate.isEmpty()) {
@@ -3072,6 +3468,60 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 boookingObj.Interest_to_be_Applied__c='No';
                 // boookingObj.Booking_Application_Form_Hard_copy__c = fileUrl; //Added by coServe 23-03-2023
                 //boookingObj.status__c = 'Booking Received';   //Modified by Sheetal on 12/1/2022 to solve Issue I0101
+
+                if(selectedMilestone != null && selectedMilestone != '' && selectedMilestone != 'As per CLP'){ //Added by Vinay 02-04-2026
+                    //String milestone = '4.00% (30 days from booking)';
+                    Pattern p = Pattern.compile('\\((\\d+)');
+                    Matcher m = p.matcher(selectedMilestone);
+                    Integer days;
+                    if(m.find()){
+                        days = Integer.valueOf(m.group(1));
+                    }
+                    List<CIF__c> cif =[SELECT Id,Mode_of_funding__c FROM CIF__c WHERE Opportunity__c =: boookingObj.Opportunity__c];
+                    if(cif.size() > 0 && cif[0].Mode_of_funding__c == 'Bank Loan'){
+                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 30;
+                    }else{
+                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 15;
+                    }
+                    //boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
+                }
+                boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
+
+                /**Added for Cancellation Changes starts */
+                if(oppList!=null && !oppList.isEmpty() && oppList[0].Booking__c!=null ) {
+                  boookingObj.Old_Booking__c = oppList[0].Booking__c;
+                }
+
+                // List<Project__c> lstOfProject;
+                // List<Tower__c> lstOfTower;
+                // List<Project_Unit__c> lstOfUnit;
+
+                // if(boookingObj.Cancelled_Project__c!=null){
+                //    lstOfProject = [Select Id,Name from Project__c where Id=: boookingObj.Cancelled_Project__c];
+                // }
+
+                // if(boookingObj.Cancelled_Tower__c!=null){
+                //   lstOfTower = [Select Id,Name from Tower__c where Id=: boookingObj.Cancelled_Tower__c];
+                // }
+
+                // if(boookingObj.Cancelled_Unit_No__c!=null){
+                //    lstOfUnit = [Select Id,Name from Project_Unit__c where Id=: boookingObj.Cancelled_Unit_No__c];
+                // }
+
+                 if(oppList!=null && !oppList.isEmpty() && oppList[0].Booking__r.Project__r.Name!=null){
+                    boookingObj.Cancelled_Project__c = oppList[0].Booking__r.Project__r.Name;
+                }
+                if(oppList!=null && !oppList.isEmpty() && oppList[0].Booking__r.Unit_No__r.TowerName__r.Name!=null){
+                boookingObj.Cancelled_Tower__c = oppList[0].Booking__r.Unit_No__r.TowerName__r.Name;
+                }
+                if(oppList!=null && !oppList.isEmpty() && oppList[0].Booking__r.Unit_No__r.Name!=null){
+                boookingObj.Cancelled_Unit_No__c = oppList[0].Booking__r.Unit_No__r.Name;
+                }
+                if(oppList!=null && !oppList.isEmpty() && boookingObj.Cancelled_SAP_Customer_Number__c == null){
+                    boookingObj.Cancelled_SAP_Customer_Number__c = oppList[0].SAP_Customer_Number__c;
+                }
+                /**Added for Cancellation Changes ends */
+
                 insert boookingObj;
                 update insObj;
                 
@@ -3080,8 +3530,13 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 
             }
             
-            //Updating Parkings/////
-            
+            //Added by dolly for car parking changes Starts
+            // //Updating Parkings/////
+            // //calling 
+            // //syncCarParkingFromQuotation(boookingObj.Id,boookingObj.Unit_No__c,QuoteDetails[0],boookingObj.Project__c);
+            // if(QuoteDetails[0]!=null) service.syncCarParkingAfterBooking( boookingObj.Id, parkingContext );
+            //Added by dolly for car parking changes ends
+
             ////Tandem Covered////
             if (QuoteDetails != null && !QuoteDetails.isEmpty() && QuoteDetails[0].Tandem_car_park_Additional__c > 0) {
                 for (integer j = 0; j < QuoteDetails[0].Tandem_car_park_Additional__c; j++) {
@@ -3647,6 +4102,69 @@ insert listReceiptDetails;
         pageRef.setRedirect(true);
         return pageRef;
     }
+
+    /**Added for Cancellation Changes starts */
+
+    public void loadTowers() {
+        towerOptions.clear();
+        //Id matchedTowerId = null;
+        towerOptions.add(new SelectOption('', '--Select Tower--'));
+        List<Tower__c> towerLst = [SELECT Id, Name 
+                FROM Tower__c 
+                WHERE ProjectName__c = :boookingObj.Cancelled_Project__c ORDER BY Name];
+
+        System.debug('towerLst**'+towerLst);
+        if(String.isNotBlank(boookingObj.Cancelled_Project__c)) {
+            for(Tower__c t : towerLst) {
+                towerOptions.add(new SelectOption(t.Id, t.Name));
+            }
+        }
+    }
+
+    public void loadUnits() {
+        unitOptions.clear();
+        //Id matchedUnitId = null;
+        unitOptions.add(new SelectOption('', '--Select Unit--'));
+        List<Project_Unit__c> projectList = [SELECT Id, Name 
+                FROM Project_Unit__c 
+                WHERE TowerName__c = :boookingObj.Cancelled_Tower__c ORDER BY Name];
+        System.debug('projectList**'+projectList);
+        if(String.isNotBlank(boookingObj.Cancelled_Tower__c)) {
+            for(Project_Unit__c unit : projectList) {
+                unitOptions.add(new SelectOption(unit.Id, unit.Name));
+                // if(unit.Name == opp.Cancelled_Unit__c) {
+                //     matchedUnitId = unit.Id;
+                // }
+            }
+            // if(matchedUnitId != null) {
+            //     boookingObj.Cancelled_Unit_No__c = matchedUnitId;
+            // }
+            // else {
+            //     System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Unit__c);
+            // }
+        }
+        System.debug('unitOptions**'+unitOptions);
+    }
+    /**Added for Cancellation Changes ends */
+
+    /**Addded for Cancellation Changes starts */
+    public void typeOfSaleChanged() {
+        
+        boookingObj.Cancelled_Project__c = null;
+        boookingObj.Cancelled_Tower__c = null;
+        boookingObj.Cancelled_Unit_No__c = null;
+        boookingObj.Cancelled_SAP_Customer_Number__c = null;
+        disableCancelledDetails = false;
+    
+        
+        if (String.isBlank(boookingObj.Reason_For_Change__c) && oldTypeOfSale!=null ){
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
+                        ApexPages.addMessage(myMsg);
+                       // i = 1;
+        }
+        
+    }
+    /**Addded for Cancellation Changes ends */
     
     
     //Added by coServe 23-03-2023 Start
@@ -5092,6 +5610,1093 @@ return null;
         i++;
         i++;
         i++;    
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;   
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; 
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; 
+
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
         
     }
     

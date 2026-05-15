@@ -11,7 +11,7 @@ public class SalesOrderUpdateCallout {
         // check if customer is present, if not call CC API and SO API.
         if(oList.size()>0 && oList[0].SAP_Customer_Number__c!=null && oList[0].SalesOrder_Number__c!=null){
           system.debug(oList[0].StageName );
-            if(oList[0].StageName == 'Cancelled' || oList[0].StageName =='Booking Cancelled – Refund Pending'){
+            if(oList[0].StageName == 'Cancelled' || oList[0].StageName =='Booking Cancelled – Refund Pending' || oList[0].StageName =='Transfer Completed' || oList[0].StageName == 'Upgrade/Downgrade Completed'){
                 cancelsalesorder(oIdSet);
             }else{
                 updatesalesorder(oIdSet,oList[0].SAP_Customer_Number__c);
@@ -689,7 +689,7 @@ billPlanList.item.add(billPlan);
                                SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                                orderCondition.ItmNumber = orderLine.ItmNumber;
                                orderCondition.CondType = cpph.Global_Charges__r.SAP_Condition_Type__c;
-                               orderCondition.CondValue = String.valueOf(cpph.Amount__c);
+                               orderCondition.CondValue = (cpph.Amount__c != null)? String.valueOf(cpph.Amount__c.setscale(2,RoundingMode.HALF_UP)) : '';
                                orderConditionsList.item.add(orderCondition);
                            }
                         count++;
@@ -875,10 +875,16 @@ billPlanList.item.add(billPlan);
                 if(salesOrderResponse.Status != null){
                     bList[0].Cancellation_in_SAP__c = salesOrderResponse.Status;
                     if(salesOrderResponse.Status == 'Success'){
-                        if(bList[0].Cancellation_Reason__c == 'Unit cancelled'){
+                        if(bList[0].Cancellation_Reason__c != 'Transfer' &&  bList[0].Cancellation_Reason__c != 'Upgrade/Downgrade'){
                             bList[0].Status__c = 'Booking Cancelled – Refund Pending';
-                        }else if(bList[0].Cancellation_Reason__c ==	'Unit transfer'){
-                            bList[0].Status__c = 'Cancelled';
+                        }else if(bList[0].Cancellation_Reason__c ==	'Transfer'){
+                            bList[0].Status__c = 'Transfer Completed';
+                        }
+                        else if(bList[0].Cancellation_Reason__c == 'Upgrade/Downgrade'){
+                            bList[0].Status__c = 'Upgrade/Downgrade Completed';
+                        }
+                        else if(bList[0].Cancellation_Reason__c == 'Unit Transfer'){
+                            bList[0].Status__c = 'Cancelled'; // To Handle old Cases which are already In Process
                         }
                     }
                     update bList[0];
