@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Cancellation Refund</name>
+    <style>none</style>
+    <subject>EOI Refund</subject>
+    <textOnly>Dear Team,
+
+Refund of amount {!Amount} is processed against EOI Cancellation for {!RW_EOI__c.Name}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -57,7 +57,7 @@ leadDuplicateMap.putAll(leadEmailDupMap);
             FROM Project__c
             WHERE Id IN :projectIds
         ]) {
-            /*if (proj.Segment_Lookup__r != null) //Commented by Vinay 15-01-2026
+            /*if (proj.Segment_Lookup__r != null)  //Commented by Vinay 15-01-2026
                 projectIdToDev.put(proj.Id, proj.Segment_Lookup__r.Name);*/
         }
         
@@ -496,7 +496,7 @@ return personAccountEmailDup;
                 }
             }
         }
-        //Added by Vinay 30-01-2026 Start
+        
         List<Opportunity> oppList = [SELECT Id,RW_Mobile_No__c,RW_Opportunity_Status__c,RW_Project__c FROM Opportunity WHERE RW_Mobile_No__c =: mobileKeyMap.keySet() AND RW_Opportunity_Status__c = 'Active'];
         Map<String, List<Opportunity>> mobileVsOppMap = new Map<String, List<Opportunity>>();
         for(Opportunity opp : oppList){
@@ -515,10 +515,30 @@ return personAccountEmailDup;
                             PAMobileDupMap.remove(ld);
                         }
                     }
+                    /*if(opp.RW_Project__c == ld.RW_Project__c ){
+                        Communication__c com = new Communication__c();
+                        com.Name = 'New Enquiry Received From:Digital';
+                        com.Customer_Mobile_Phone__c = ld.RW_Mobile_No__c;
+                        com.Customer_Preferred_Email__c = ld.Email;
+                        com.Email_Id__c = ld.Email;
+                        com.Enquiry_Received_Project_Lookup__c = ld.RW_Project__c;
+                        com.OptyName__c = opp.Id;
+                        com.Project_Interested__c = ld.RW_Project__c;
+                        com.sobjectName__c = 'Opportunity';
+                        com.Status__c = 'Completed';
+                        com.Subject__c = 'New Enquiry Received From:Digital';
+                        communications.add(com);
+                    }else{
+                        if (PAMobileDupMap.containsKey(ld)) {
+                            PAMobileDupMap.remove(ld);
+                        }
+                    }*/
                 }
             }
         }
-         //Added by Vinay 30-01-2026 End
+        if(communications.size() > 0){
+            //insert communications;
+        }
         return PAMobileDupMap;
     }
     // alt email and mobile logic for accounts deduping added on 3/1/16

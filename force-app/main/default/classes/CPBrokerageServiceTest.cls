@@ -88,7 +88,7 @@ private class CPBrokerageServiceTest {
             Booking__c = booking.Id,
             Brokerage_Lookup__c = bl_aop.Id,
             Brokerage_Summary__c = summary.Id,
-            Brokerage_In_Rs__c = 1000,
+            Brokerage_In_Rs__c = 1000, 
             CP_Invoice_Approver_L1__c = runningUserId,
             CP_Invoice_Approver_L2__c = runningUserId,
             CP_Invoice_Approver_L3__c = runningUserId,

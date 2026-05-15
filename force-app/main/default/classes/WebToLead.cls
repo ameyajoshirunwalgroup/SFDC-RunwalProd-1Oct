@@ -14,7 +14,7 @@ global without sharing class WebToLead{
         String remark = null;
         boolean isAnarockLead = false;
         System.debug('WEB LEAD:' + wl);
-        if (String.isNotBlank(wl.source) && (wl.source.equals('DIGITAL MARKETING') || wl.source.equals('Anarock')|| wl.source.equals('CHATBOT'))) {
+        if (String.isNotBlank(wl.source) && (wl.source.equals('DIGITAL MARKETING') || wl.source.equals('Anarock')|| wl.source.equals('CHATBOT') || wl.source.equals('AI Voice Bot'))) {
             if (String.isBlank(wl.fullName) || String.isBlank(wl.dialingCode) || String.isBlank(wl.source) || String.isBlank(wl.city)) {
                 System.debug('Missing Required Parameters');
                 r.returnCode = 1;
@@ -185,12 +185,13 @@ global without sharing class WebToLead{
             return r;
         }
         if (l != null) {
-            //Added by Vinay 27-01-2026 Start
+            //Added by Vinay 22-01-2026 Start
             List<Lead> leads = [SELECT Id,RW_Mobile_No__c,RW_Project__c FROM Lead WHERE RW_Mobile_No__c =: wl.mobileNumber];
             List<Opportunity> oppList = [SELECT Id FROM Opportunity WHERE RW_Mobile_No__c =: wl.mobileNumber AND RW_Project__c =: projectId AND StageName = 'Unit Booked'];
             Boolean addLead = true;
             List<RW_Presales_Communication__c> presalesCommList = new List<RW_Presales_Communication__c>();
             List<Task> tskList = new List<Task>();
+            
             for(Lead ld : leads){
                 Boolean createTask = false;
                 if(ld.RW_Project__c == projectId){
@@ -253,15 +254,16 @@ global without sharing class WebToLead{
             if(addLead){
                 leadList.add(l);
             }
-            //Added by Vinay 27-01-2026 End
-            //leadList.add(l); //Commented by Vinay 27-01-2026
+            //Added by Vinay 22-01-2026 End
+            //leadList.add(l); //Commented by Vinay 22-01-2026
             try {
-               // List < DupResultsDTO > dupList = new List < DupResultsDTO >();  //Added by Vinay 03-07-2025
-               List < DupResultsDTO > dupList = LeadManagementServices.leadPreprocessing(leadList, 'WEB'); //Commented by Vinay 03-07-2025
-                 //    List<DupResultsDTO> dupList = LeadManagementServices.checkAndCreateTaskForDuplicates(leadList);
-
+                // List < DupResultsDTO > dupList = new List < DupResultsDTO >();  //Added by Vinay 03-07-2025
+                List < DupResultsDTO > dupList = LeadManagementServices.leadPreprocessing(leadList, 'WEB'); //Commented by Vinay 03-07-2025
+                //    List<DupResultsDTO> dupList = LeadManagementServices.checkAndCreateTaskForDuplicates(leadList);
+                
                 if (dupList.isEmpty()) {
                     try {
+                        
                         Database.saveResult[] srList = Database.insert(leadList, true);
                         for (Database.SaveResult sr: srList) {
                             if (sr.isSuccess()) {
@@ -277,7 +279,7 @@ global without sharing class WebToLead{
                                     Map < Id, Lead > enquiryMap = new Map < Id, Lead > ();
                                     enquiryMap.put(sr.getId(), l);
                                     Map < Id, Task > whoIdMap = new Map < Id, Task > ();
-                                    //whoIdMap = TaskManagementServices.createTaskforEnquiries(enquiryMap); //Commented by Vinay 26-09-2025
+                                    //whoIdMap = TaskManagementServices.createTaskforEnquiries(enquiryMap);
                                 } catch (Exception ex) {
                                     System.debug('Catch and Ignore enquiry task create exception:' + ex.getMessage());
                                 }
@@ -301,12 +303,24 @@ global without sharing class WebToLead{
                         r.returnCode = 1;
                         r.message = msg;
                         r.recordId = null;
+                        //Added by Vinay 29-04-2026 Start
+                        ERP_Integration_Log__c log = new ERP_Integration_Log__c();
+                        log.request__c = String.valueOf(wl);
+                        log.API_name__c = 'Lead Creation Error';
+                        log.Status__c='Failure';
+                        log.Error_Type__c='Data Error';
+                        log.Error_Reason__c = msg;
+                        insert log;
+                        //Added by Vinay 29-04-2026 End
                         return r;
                     }
                 } else {
                     r.recordId = dupList[0].duplicateMaster;
                     r.returnCode = 0;
-                    r.message = 'SUCCESS';                  
+                    r.message = 'SUCCESS';  
+                    /*RW_Presales_Communication__c preSalesComm = new RW_Presales_Communication__c();
+            		preSalesComm.RW_Lead__c = '00Q9I00000HyZvcUAF';
+                    insert preSalesComm;*/
                 }
             } catch (GlobalException g) {
                 r.returnCode = 1;

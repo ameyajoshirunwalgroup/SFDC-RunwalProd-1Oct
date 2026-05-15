@@ -341,7 +341,7 @@ throw new AuraHandledException(e.getMessage());
                     upsert sf;
                     if(sf.Id != null){
                         try{
-                            List<Lead> leadList = [SELECT Id FROM Lead WHERE RW_Broker__c =: sf.Id AND LeadSource = 'Temp Channel Partner' AND IsConverted = false]; 
+                            List<Lead> leadList = [SELECT Id FROM Lead WHERE RW_Broker__c =: sf.Id AND LeadSource = 'Temp Channel Partner' AND IsConverted = false and IsActive__c =true and Isactive__c = true/*Isactive =  true - Added by Prashant on 30-03-26 to add change only in active leads.*/ ]; 
                             System.debug('leadList: ' + leadList);
                             for(Lead ld : leadList){
                                 ld.LeadSource = 'Channel Partner';
@@ -658,16 +658,31 @@ throw new AuraHandledException(e.getMessage());
         //     ApproversId.add(plist[0].Project_Location__r.CP_Sourcing_Head__c);
         // } 
 
-        list<CP_Invoice_Approvers_list_CS__c> cpcustomSettingList = [select id,Name, CP_MIS__c, CP_Sourcing_Head__c from CP_Invoice_Approvers_list_CS__c where Name =: pname];
+        /*list<CP_Invoice_Approvers_list_CS__c> cpcustomSettingList = [select id,Name, CP_MIS__c, CP_Sourcing_Head__c from CP_Invoice_Approvers_list_CS__c where Name =: pname];
         if(!cpcustomSettingList.isEmpty()){
             ApproversId.add(cpcustomSettingList[0].CP_MIS__c);
             ApproversId.add(cpcustomSettingList[0].CP_Sourcing_Head__c);
            // ApproversId.add('0055j000007G2SJAA0');
             //ApproversId.add('0055j000007G2SJAA0');
-        } 
-        System.debug('ApproversId'+ApproversId);
-        return ApproversId;
+} *///Commented by Prashant to take the approvers from team members maintained under team under project....Added on 30-03-2026...
         
+        //Added by Prashant to take the approvers from team members maintained under team under project....Added on 30-03-2026...
+        list <Team_Members__c> tmlist = [Select id,Approver_Type__c,User__c from Team_Members__c where Team__r.Team_Type__c  = 'CP Invoice Approver Team' and Team__r.Project__r.Name =: pname];
+        if(!tmlist.isEmpty()){
+            for(Team_Members__c tm : tmlist){
+                if(tm.Approver_Type__c != null){
+                    if(tm.Approver_Type__c == 'CP MIS'){
+                        ApproversId.add(tm.User__c);
+                    }
+                    if(tm.Approver_Type__c == 'CP Sourcing Head'){
+                        ApproversId.add(tm.User__c);
+                    }   
+                }            
+            }            
+        } 
+        //Added by Prashant to take the approvers from team members maintained under team under project....Added on 30-03-2026...
+        System.debug('ApproversId'+ApproversId);
+        return ApproversId;        
     }
     
     
@@ -745,7 +760,41 @@ throw new AuraHandledException(e.getMessage());
         //return null;
     }
     
-    public void dummyMethod(){
+    //Added by Prashant../// Send Registratin link to CP from button on the record. // Started 23-02-26.
+    @AuraEnabled
+    public static String sendRegistrationLinktoCP(Id brId){
+        list<Broker__c> cplist = [Select Id,RW_Mobile_No__c,RW_Email__c,RecordTypeId,Name,RW_Broker_Number__c,Dialing_Country_Code1__c from Broker__c where Id =: brId];
+        Id tempCPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
+        Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        if(!cplist.isEmpty()){
+            //Send Email
+            Map<Id,String> tempCPIdVsEmailMap = new Map<Id,String>();//Added by Prashant..///  
+            tempCPIdVsEmailMap.put(cplist[0].Id,cplist[0].RW_Email__c);
+            if(tempCPIdVsEmailMap.size() > 0){                
+                System.enqueueJob(new SendCPEmails(new Map<Id, String>{ cplist[0].Id => (cplist[0].RW_Email__c != null ? cplist[0].RW_Email__c : 'prashant.chaurasia.os@runwalgroup.in') }, 'Temp_CP_creation_Email'));
+                system.debug('Email Sent');
+                String registrationLink;
+                if(cplist[0].RecordTypeId == tempCPRecordTypeId){
+                    registrationLink = System.Label.Site_Url_New + '/channelpartner/s/customregisterpage?tempcpid='+ cplist[0].RW_Broker_Number__c;
+                }else {
+                    registrationLink = System.Label.Site_Url_New + '/channelpartner/s/customregisterpage?brId='+ cplist[0].Id;
+                }
+                SendWhatsAppMsg.methodToSendWhatsAppMsg(null,cplist[0].Name,cplist[0].RW_Broker_Number__c,/*link*/registrationLink,null,null,null,null,null,cplist[0].Dialing_Country_Code1__c, cplist[0].RW_Mobile_No__c,'CP registration email');  // Added by Prashant to send Whatsapp to cp for registration...Added on 09-03-26..   
+                return 'The registration link has been sent successfully';                
+            }
+            //Send SMS
+            
+            //Send Whatsapp
+            //SendWhatsAppMsg.methodToSendWhatsAppMsg(null,bkg.Primary_Applicant_Name__c,null,null,null,null,null,null,null,bkg.RW_Country_Phone_Code__c,bkg.Opportunity__r.RW_Mobile_No__c,'Registration Date Entry');
+            return '';
+        }else{
+            return 'No Broker Found with the given Id';
+        }
+    }
+    //Added by Prashant../// Send Registratin link to CP from button on the record. // End 23-02-26.
+    //
+    
+     public void dummyMethod(){
         integer i;
             i=0;
             i++;
@@ -803,6 +852,7 @@ throw new AuraHandledException(e.getMessage());
             i++;
             i++;
     }
+    
 
     
 }

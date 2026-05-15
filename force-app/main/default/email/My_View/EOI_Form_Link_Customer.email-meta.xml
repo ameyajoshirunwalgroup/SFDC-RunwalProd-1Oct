@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Form Link - Customer</name>
+    <style>none</style>
+    <subject>EOI Form Submission</subject>
+    <textOnly>Dear {!RW_EOI__c.RW_Primary_First_Name__c} {!RW_EOI__c.RW_Primary_Last_Name__c},
+
+Thank you for showing interest in our project {!RW_EOI__c.RW_Project_Name__c}. Please find below the &quot;Expression of Interest&quot; link for your kind perusal.  You may call on {!SMPhoneNumber} for any assistance.  
+
+{!EOIFormLink} to fill the EOI Form.
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

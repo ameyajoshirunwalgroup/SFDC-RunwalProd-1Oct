@@ -17,19 +17,19 @@ if(Trigger.IsAfter && (Trigger.IsInsert || Trigger.IsUpdate))
     {
         List<Id> carParkingIds = new List<Id>();
         /*for(Car_Parking_Charge__c carpid : Trigger.New)  //Commented by Vinay 05-05-2025
-             if(Trigger.IsUpdate){
-        {  if(carpid.Status__c == 'Vacant' && Trigger.oldmap.get(carpid.id).Parking__c != Trigger.newmap.get(carpid.id).Parking__c)          
-            carParkingIds.add(carpid.id);
-        }}else{
-                        carParkingIds.add(carpid.id);
+if(Trigger.IsUpdate){
+{  if(carpid.Status__c == 'Vacant' && Trigger.oldmap.get(carpid.id).Parking__c != Trigger.newmap.get(carpid.id).Parking__c)          
+carParkingIds.add(carpid.id);
+}}else{
+carParkingIds.add(carpid.id);
 
-        }*/
-       // PricelistCallout.sendPricelist(carParkingIds);
-       // InventoryCallout.sendinventory(carParkingIds);
-       for(Car_Parking_Charge__c carpid : Trigger.New){ //Added by Vinay 05-05-2025
+}*/
+        // PricelistCallout.sendPricelist(carParkingIds);
+        // InventoryCallout.sendinventory(carParkingIds);
+        for(Car_Parking_Charge__c carpid : Trigger.New){ //Added by Vinay 05-05-2025
             if(Trigger.IsUpdate){
                 if((carpid.Status__c == 'Vacant' && Trigger.oldmap.get(carpid.id).Parking__c != Trigger.newmap.get(carpid.id).Parking__c) || 
-                (Trigger.oldmap.get(carpid.id).Car_Parking_Number__c != Trigger.newmap.get(carpid.id).Car_Parking_Number__c ||
+                   (Trigger.oldmap.get(carpid.id).Car_Parking_Number__c != Trigger.newmap.get(carpid.id).Car_Parking_Number__c ||
                     Trigger.oldmap.get(carpid.id).Height_of_Car_Park_in_ft__c != Trigger.newmap.get(carpid.id).Height_of_Car_Park_in_ft__c ||
                     Trigger.oldmap.get(carpid.id).Length_of_Car_Park_in_ft__c != Trigger.newmap.get(carpid.id).Length_of_Car_Park_in_ft__c ||
                     Trigger.oldmap.get(carpid.id).Width_of_Car_Park_in_ft__c != Trigger.newmap.get(carpid.id).Width_of_Car_Park_in_ft__c)){
@@ -44,7 +44,7 @@ if(Trigger.IsAfter && (Trigger.IsInsert || Trigger.IsUpdate))
         }
         if(carParkingIds.size()>0){
             If(!test.isRunningTest())
-       		CarParkingCallout.sendCarPakingList(carParkingIds);
+                CarParkingCallout.sendCarPakingList(carParkingIds);
         }
     }
     }

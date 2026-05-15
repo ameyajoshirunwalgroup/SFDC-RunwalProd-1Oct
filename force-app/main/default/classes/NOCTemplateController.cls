@@ -1,5 +1,4 @@
-public class NOCTemplateController 
-{
+public class NOCTemplateController{
     public List<RW_NOC_Template__c> nocRecord;
     public RW_NOC_Template__c noc{get;set;}
     public Loan__c loanRecord{get;set;}
@@ -23,7 +22,6 @@ public class NOCTemplateController
         for(String str : fields){
             qryStr += ', ' + str;
         }
-        System.debug('qryStr: ' + qryStr);
         
         String qry = 'SELECT Id, RW_Sanction_Letter_ID__c, RW_Booking__c, RW_Booking__r.Quotation__r.Grand_Total__c, RW_Booking__r.RW_Registration_Status__c, RW_Loan_Record_Status__c, RW_NOC_Generated__c' + qryStr +  ' FROM Loan__c WHERE Id = : loanId LIMIT 1';
         if(!Test.isRunningTest()){
@@ -33,7 +31,7 @@ public class NOCTemplateController
                           RW_Booking__r.Unit_No__r.Utility_Area__c, RW_Booking__r.RW_Signed_Agreement_to_Customer_Date__c, RW_Booking__r.Unit_No__r.New_Floor__c,
                           RW_Booking__r.Unit_No__r.TowerName__r.name, RW_Booking__r.Quotation__r.Grand_Total__c, RW_Booking__r.Unit_No__r.RW_Param4__c, RW_Booking__r.Quotation__r.Agreement_Value__c, RW_Booking__r.RW_Registration_Status__c, RW_Loan_Record_Status__c, RW_NOC_Generated__c ,
                           RW_Project_Name__r.RDS_Company_Code__r.Account_Name_Flat_Cost__c , RW_Project_Name__r.RDS_Company_Code__r.Account_Number_Flat_Cost__c,						  
-						  RW_Project_Name__r.RDS_Company_Code__r.Account_Name_Service_Tax__c , RW_Project_Name__r.RDS_Company_Code__r.Account_Number_Service_tax__c
+                          RW_Project_Name__r.RDS_Company_Code__r.Account_Name_Service_Tax__c , RW_Project_Name__r.RDS_Company_Code__r.Account_Number_Service_tax__c
                           from Loan__c 
                           WHERE Id = : ApexPages.currentpage().getParameters().get('id') LIMIT 1];
         }
@@ -43,30 +41,20 @@ public class NOCTemplateController
         List<String> ApplicantsName = new List<String>();
         string applicantsNames = null;
         
-        if(bookingR.size()>0)
-        {
-            for(Booking__c book : bookingR)
-            {
-                for(Applicant_Details__c app : book.ApplicantDetails__r)
-                {
-                    system.debug('Applicant Details --> ' + app);
+        if(bookingR.size()>0){
+            for(Booking__c book : bookingR){
+                for(Applicant_Details__c app : book.ApplicantDetails__r){
                     ApplicantsName.add(app.Name);
-                    system.debug('ApplicantsName in the List' + ApplicantsName);
                 }  
                 
             }
             applicantsNames = String.join(ApplicantsName, ' AND ');
             
-            system.debug('applicantsNames' + applicantsNames);
         }
         
         
-        nocRecord = [SELECT id,name,RW_Template__c,RW_Keyword__c,RW_Runwal_Logo__c , RW_Project__r.RDS_Company_Code__r.Name , RW_Project__r.RDS_Company_Code__r.RDS_Company_Name__c
-                     from RW_NOC_Template__c WHERE RW_Bank_Name__c =: loanRecord.RW_Bank_Name__c AND RW_Project__c =: loanRecord.RW_Project_Name__c];
-        system.debug('nocrecord -->'+ nocRecord);
-        if(nocRecord!=null && nocRecord.size()>0)
-        {
-            system.debug('nocrecord inside -->'+ nocRecord);
+        nocRecord = [SELECT id,name,RW_Template__c,RW_Keyword__c,RW_Runwal_Logo__c , RW_Project__r.RDS_Company_Code__r.Name , RW_Project__r.RDS_Company_Code__r.RDS_Company_Name__c from RW_NOC_Template__c WHERE RW_Bank_Name__c =: loanRecord.RW_Bank_Name__c AND RW_Project__c =: loanRecord.RW_Project_Name__c];
+        if(nocRecord!=null && nocRecord.size()>0) {
             noc = nocRecord[0];
             //  nocText = nocRecord[0].RW_Template__c;
         }else{
@@ -87,18 +75,14 @@ public class NOCTemplateController
             Map<String,String> dataValues = new Map<String, String>();
             
             for(String str : nocVar.keySet()){
-                System.debug('--: ' + nocVar.get(str).Field__c);
                 String field = nocVar.get(str).Field__c;
-                System.debug('field: ' + field);
                 List<String> strSplit = new List<String>();
                 if(field != null && field != ''){
                     strSplit = field.split('\\.');
                 }
                 
-                System.debug('size: ' + strSplit);
                 String value;
                 if(Keywords.contains(str)){
-                    
                     
                     if(strSplit.size() == 1){
                         if(loanRecord.get(nocVar.get(str).Field__c) != null && loanRecord.get(nocVar.get(str).Field__c) != ''){
@@ -119,7 +103,6 @@ public class NOCTemplateController
                                 value = String.valueof(loanRecord.getSObject(strSplit[0]).get(strSplit[1]));
                             }
                         }else{
-                            System.debug('str: ' + str);
                             noc.RW_Template__c = '<h3> The value is missing for : ' + str.subString(1,str.length()-1) + ' : ' + strSplit[0] + '.' + strSplit[1] + '</h3>';
                             isError = true;
                         }
@@ -151,11 +134,11 @@ value = S_NumberToWord.convertNumbertoWords(Decimal.valueof(value));
 }*/
                     if(isError == false){
                         /*if(str == '[ApplicantNames]_Fixed'){
-                            value = applicantsNames;
-                        }
-                        if(str == '[Today]_Fixed'){
-                            value = String.valueOf(system.today().format());
-                        }*/
+value = applicantsNames;
+}
+if(str == '[Today]_Fixed'){
+value = String.valueOf(system.today().format());
+}*/
                         if(nocVar.get(str).In_Words__c){
                             value = S_NumberToWord.convertNumbertoWords(Decimal.valueof(value).setscale(0));
                         }
@@ -168,7 +151,6 @@ value = S_NumberToWord.convertNumbertoWords(Decimal.valueof(value));
                     }
                     
                     
-                    System.debug('value: ' + value);
                     dataValues.put(str.split('_')[0],value);
                 }
                 if(str == '[ApplicantNames]_Fixed'){
@@ -188,113 +170,175 @@ value = S_NumberToWord.convertNumbertoWords(Decimal.valueof(value));
                     isError = true;
                 }
             }
-            System.debug('KeywordValueMap: ' + KeywordValueMap);
             
-            system.debug('BranchName-->' + loanRecord.RW_Bank_Branch__c);
         }
-        if(noc!=null && isError == false)
-        {
+        if(noc!=null && isError == false) {
             List<String> KeywordList = noc.RW_Keyword__c.split(',');
             system.debug(KeywordList+'^^^^^^^^^^^^^^^^^^^^^^66');
             
             if(loanRecord.RW_Booking__r.Unit_No__r.Carpet_Area__c!=null || loanRecord.RW_Project_Name__r.name!=null || loanRecord.RW_Booking__r.Unit_No__r.Deck_Area__c!=null || 
                loanRecord.RW_Booking__r.Unit_No__r.Utility_Area__c!=null || loanRecord.RW_Bank_Name__c!=null || loanRecord.RW_Booking__r.Unit_No__r.New_Floor__c!=null || loanRecord.RW_Booking__r.Unit_No__r.TowerName__r.name!=null ||
-               loanRecord.RW_Booking__r.Quotation__r.Grand_Total__c!=null || loanRecord.RW_Booking__r.Quotation__r.FlatNo__c!=null || loanRecord.RW_Booking__r.Quotation__r.Agreement_Value__c!=null || loanRecord.RW_Bank_Branch__c!=null )
-            {
-                system.debug('map of keyword ' + keywordValueMap);
-                system.debug('inside if carper area all '+ loanRecord.RW_Booking__r.Unit_No__r.Carpet_Area__c + loanRecord.RW_Booking__r.Unit_No__r.Deck_Area__c + loanRecord.RW_Booking__r.RW_Registration_Status__c + loanRecord.RW_Loan_Record_Status__c + loanRecord.RW_Sanction_Letter_ID__c );
-                if(loanRecord.RW_Booking__r.RW_Registration_Status__c == 'Registration Completed' && loanRecord.RW_Loan_Record_Status__c == 'Loan Sanctioned' && loanRecord.RW_Sanction_Letter_ID__c !=null)
-                { 
-                    system.debug('map of keyword 2 '+KeywordList + keywordValueMap);
-                    for(String listOfKey :KeywordList)
-                    {
-                        system.debug('KeywordValueMap' + KeywordValueMap);
-                        system.debug('listOfKey' + listOfKey);
-                        
-                        if(KeywordValueMap.ContainsKey(listOfKey))
-                        {
-                            system.debug('listOfKey  -> 2' + listOfKey + '**' + KeywordValueMap.get(listOfKey));
-                            if(KeywordValueMap.get(listOfKey) !=null)
-                            {
-                                noc.RW_Template__c = noc.RW_Template__c.replace(listOfKey,KeywordValueMap.get(listOfKey)); 
-                            }
-                            
-                            else
-                            {
-                                noc.RW_Template__c = noc.RW_Template__c.replace(listOfKey,'');                                 
-                            }
-                        }
-                        
-                        
-                    }
-                    
-                    noc.RW_Template__c = noc.RW_Template__c.replace('[justify start]','<div style="text-align: justify;">'); 
-                    noc.RW_Template__c = noc.RW_Template__c.replace('[justify end]','</div>');
-                      
-                    
-                    if(!isError){
-                        /*loanRecord.RW_Loan_Record_Status__c = 'NOC Generated';
-                        loanRecord.RW_NOC_Generated__c = true;
-                        loanRecord.RW_NOC_Generated_Date__c = system.today();
-                        system.debug('Loan Status --->' + loanRecord.RW_Loan_Record_Status__c);
-                        system.debug('Loan NOC Generated ? --->' + loanRecord.RW_NOC_Generated__c);
-                        system.debug('Loan NOC Generated Date ? --->' + loanRecord.RW_NOC_Generated_Date__c);
-                        
-                        update loanRecord;*/
-                    }
-                    
-                }   
-                
-                
-                else if(loanRecord.RW_NOC_Generated__c)
-                {
-                    isError = true;
-                    system.debug('NOC generated ?' + loanRecord.RW_NOC_Generated__c);
-                    noc.RW_Template__c = '<h3> NOC Cannot be Generated Twice </h3>';
-                    
-                } 
-                
-                else
-                {
-                    noc.RW_Template__c = '<h3> To Generate NOC you need to complete the Registration First and upload the Sanction Letter </h3>';
-                    isError = true;
-                }
-                
-            }
+               loanRecord.RW_Booking__r.Quotation__r.Grand_Total__c!=null || loanRecord.RW_Booking__r.Quotation__r.FlatNo__c!=null || loanRecord.RW_Booking__r.Quotation__r.Agreement_Value__c!=null || loanRecord.RW_Bank_Branch__c!=null ){
+                   if(loanRecord.RW_Booking__r.RW_Registration_Status__c == 'Registration Completed' && loanRecord.RW_Loan_Record_Status__c == 'Loan Sanctioned' && loanRecord.RW_Sanction_Letter_ID__c !=null){ 
+                       for(String listOfKey :KeywordList){
+                           
+                           if(KeywordValueMap.ContainsKey(listOfKey)){
+                               if(KeywordValueMap.get(listOfKey) !=null){
+                                   noc.RW_Template__c = noc.RW_Template__c.replace(listOfKey,KeywordValueMap.get(listOfKey)); 
+                               }else{
+                                   noc.RW_Template__c = noc.RW_Template__c.replace(listOfKey,'');                                 
+                               }
+                           }
+                           
+                           
+                       }
+                       
+                       noc.RW_Template__c = noc.RW_Template__c.replace('[justify start]','<div style="text-align: justify;">'); 
+                       noc.RW_Template__c = noc.RW_Template__c.replace('[justify end]','</div>');
+                       
+                       
+                       if(!isError){
+                           /*loanRecord.RW_Loan_Record_Status__c = 'NOC Generated';
+loanRecord.RW_NOC_Generated__c = true;
+loanRecord.RW_NOC_Generated_Date__c = system.today();
+system.debug('Loan Status --->' + loanRecord.RW_Loan_Record_Status__c);
+system.debug('Loan NOC Generated ? --->' + loanRecord.RW_NOC_Generated__c);
+system.debug('Loan NOC Generated Date ? --->' + loanRecord.RW_NOC_Generated_Date__c);
+
+update loanRecord;*/
+                       }
+                       
+                   }else if(loanRecord.RW_NOC_Generated__c){
+                       isError = true;
+                       noc.RW_Template__c = '<h3> NOC Cannot be Generated Twice </h3>';
+                       
+                   }else{
+                       noc.RW_Template__c = '<h3> To Generate NOC you need to complete the Registration First and upload the Sanction Letter </h3>';
+                       isError = true;
+                   }
+                   
+               }
             
         }
     }
     
-    public PageReference downloadPdf(){
-        
+    /*public PageReference downloadWord(){
+
+loanRecord.RW_Loan_Record_Status__c = 'NOC Generated';
+loanRecord.RW_NOC_Generated__c = true;
+loanRecord.RW_NOC_Generated_Date__c = system.today();
+update loanRecord;
+
+PageReference wordPage = Page.NOCTemplateWord;
+wordPage.getParameters().put('id', loanRecord.Id);
+
+Blob wordBody;
+
+if(!Test.isRunningTest()){
+wordBody = wordPage.getContent();
+}else{
+wordBody = Blob.valueOf('Test');
+}
+
+Attachment att = new Attachment();
+att.Body = wordBody;
+att.Name= 'NOC.doc';
+att.ParentId = loanId;
+
+insert att;
+
+String link = 'https://runwal--fullcopy.sandbox.file.force.com/servlet/servlet.FileDownload?file='+att.Id;
+return new PageReference(link);
+}*/
+    
+    //Added by Prashant to update download logic... //Added on 18-03-26
+    public PageReference downloadWord(){
         
         loanRecord.RW_Loan_Record_Status__c = 'NOC Generated';
         loanRecord.RW_NOC_Generated__c = true;
         loanRecord.RW_NOC_Generated_Date__c = system.today();
-        system.debug('Loan Status --->' + loanRecord.RW_Loan_Record_Status__c);
-        system.debug('Loan NOC Generated ? --->' + loanRecord.RW_NOC_Generated__c);
-        system.debug('Loan NOC Generated Date ? --->' + loanRecord.RW_NOC_Generated_Date__c);
-        
         update loanRecord;
-		        
-        PageReference pdfPage = Page.NOCTemplateNew;
-        pdfPage.getParameters().put('id',loanRecord.Id);
-        blob pdfBody;
+        
+        PageReference wordPage = Page.NOCTemplateWord;
+        wordPage.getParameters().put('id', loanRecord.Id);
+        
+        Blob wordBody;
+        
         if(!Test.isRunningTest()){
-            pdfBody = pdfPage.getContentAsPDF();
+            String htmlContent = wordPage.getContent().toString();        
+            String utf8BOM = '\uFEFF';        
+            wordBody = Blob.valueOf(utf8BOM + htmlContent);
         }else{
-            pdfBody = Blob.valueOf('');
+            wordBody = Blob.valueOf('Test');
         }
         
-        Attachment att=new Attachment();
-        att.Body= pdfBody;
-        att.Name= 'NOC.pdf';
-        att.parentId= loanId;
+        Attachment att = new Attachment();
+        att.Body = wordBody;
+        att.Name= 'NOC.doc';
+        att.ParentId = loanId;
+        
         insert att;
         
-        String link = 'https://runwal.file.force.com/servlet/servlet.FileDownload?file='+att.Id;
-        return new PageReference(link);
+        String fileHostname = System.DomainCreator.getContentHostname();
+        
+        String dynamicLink = 'https://' + fileHostname + '/servlet/servlet.FileDownload?file=' + att.Id;
+        
+        PageReference pr = new PageReference(dynamicLink);
+        pr.setRedirect(true); 
+        
+        return pr;
     }
+    
+    public String getCleanTemplate() {
+        if(noc.RW_Template__c == null) return '';
+        
+        String txt = noc.RW_Template__c;
+        
+        txt = txt.replace('“', '&ldquo;');
+        txt = txt.replace('”', '&rdquo;');
+        txt = txt.replace('‘', '&lsquo;');
+        txt = txt.replace('’', '&rsquo;');
+        
+        txt = txt.replace('–', '&ndash;');
+        txt = txt.replace('—', '&mdash;');
+        
+        txt = txt.replace('Â', '');
+        
+        txt = txt.replace('\u00A0', '&nbsp;'); 
+        
+        return txt;
+    }
+    
+    //Added by Prashant to update download logic... //Added on 18-03-26 END
+    
+    /* public PageReference downloadPdf(){
 
+
+loanRecord.RW_Loan_Record_Status__c = 'NOC Generated';
+loanRecord.RW_NOC_Generated__c = true;
+loanRecord.RW_NOC_Generated_Date__c = system.today();
+
+update loanRecord;
+
+PageReference pdfPage = Page.NOCTemplateNew;
+pdfPage.getParameters().put('id',loanRecord.Id);
+blob pdfBody;
+if(!Test.isRunningTest()){
+pdfBody = pdfPage.getContentAsPDF();
+}else{
+pdfBody = Blob.valueOf('');
+}
+
+Attachment att=new Attachment();
+att.Body= pdfBody;
+att.Name= 'NOC.pdf';
+att.parentId= loanId;
+insert att;
+
+String link = 'https://runwal--fullcopy.sandbox.file.force.com/servlet/servlet.FileDownload?file='+att.Id;
+return new PageReference(link);
+}
+
+*/  //Commented by Prashant as now we are using download as word functionality..Added on 18-03-26. 
     
 }

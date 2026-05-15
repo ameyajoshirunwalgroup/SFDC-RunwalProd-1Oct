@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Registration_Status__c</fullName>
     <externalId>false</externalId>
-    <formula>/*IF(X9_90_Received__c = &apos;Yes&apos; &amp;&amp; NOT(ISBLANK(RW_Registration_Date__c)) &amp;&amp;
+    <formula>/*IF(X9_90_Received__c = &apos;Yes&apos; &amp;&amp; NOT(ISBLANK(RW_Registration_Date__c)) &amp;&amp; 
 Reference_Booking_9_90_Received__c = &apos;Yes&apos; &amp;&amp;NOT(ISBLANK(Reference_Booking_Registration_Date__c )),
 &apos;Due&apos;,&apos;Not Due&apos;)*/
 

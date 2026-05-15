@@ -87,6 +87,7 @@ public  Class SendNotificationtoSMforVisitFollowUpTest {
             StageName = 'Qualification',
             CloseDate = Date.today().addDays(10),
             RW_Sales_Associate__c = 'Test', // Replace with appropriate field if necessary
+            Sales_Manager_User__c= UserInfo.getUserId(), //Added by Vinay 09-12-2025
             Date_Of_Visit__c = Date.today().addDays(-1),
             AccountId =acc.Id,
             RW_CIF_form_number__c = '12222',

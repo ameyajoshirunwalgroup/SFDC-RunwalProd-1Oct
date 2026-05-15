@@ -1,0 +1,24 @@
+<html>
+  <body style="font-family: Arial, Helvetica, sans-serif; color:#222; line-height:1; font-size:14px;">
+    <p>Dear {!Broker__c.CreatedBy},</p>
+
+    <p>
+      This is a gentle reminder that 7 days have passed since the creation of
+      Temporary Channel Partner <strong>{!Broker__c.Name}</strong>, and the registration process is still pending.
+    </p>
+
+    <p>
+      Kindly ensure that the registration is completed at the earliest to avoid delays in onboarding,
+      payment, or portal access.
+    </p>
+    
+    <p>Click on link to apply for registration :-</p>
+<a href="{!$Label.Site_Url_New}/channelpartner/s/customregisterpage?tempcpid={!Broker__c.RW_Broker_Number__c}">Portal Onboarding Link <a/></p>
+
+
+    <p style="margin-top:24px;">
+      Regards<br/>
+      <strong>Runwal Enterprises</strong>
+    </p>
+  </body>
+</html>

@@ -3,6 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import updateTaskLocation from '@salesforce/apex/CPTasklocationController.updateTaskLocation';
 import getTaskById from '@salesforce/apex/CPTasklocationController.getTaskById';
+import getRestrictedLocations from '@salesforce/apex/CPTasklocationController.getRestrictedLocations';
 import FORM_FACTOR from "@salesforce/client/formFactor"
 
 export default class CpMeetingLocation extends NavigationMixin(LightningElement) {
@@ -53,6 +54,9 @@ export default class CpMeetingLocation extends NavigationMixin(LightningElement)
         debugger;
         this.isLoaded = true;
         this.handleFormFactor();
+        getRestrictedLocations({}).then(result => {
+            this.restrictedLocations = result;
+        }).catch(error=>{})
         getTaskById({ taskId: this.recordId }).then(result => {
             console.log('Check result--->',result);
             this.handleData(result);
@@ -102,7 +106,45 @@ export default class CpMeetingLocation extends NavigationMixin(LightningElement)
         this.currentLocation.latitude = position.coords.latitude;
         this.currentLocation.longitude = position.coords.longitude;
         this.currentaddress = `Latitude: ${this.currentLocation.latitude}, Longitude: ${this.currentLocation.longitude}`;
+        // 🚫 Check if user is near RCC or HO
+        if (this.isInRestrictedArea(this.currentLocation.latitude, this.currentLocation.longitude)) {
+            this.isLoaded = false;
+            this.showToast('Error', 'You cannot capture location at HO or RCC address.', 'error');
+            return;
+        }
         this.updateTaskWithLocation(); 
+    }
+
+    // ❌ Restricted Coordinates (RCC & HO)
+    restrictedLocations = [];
+
+    // 📏 Allowed distance threshold in meters (100 m)
+    restrictedRadius = 100;
+
+    // 🧮 Haversine formula to calculate distance between two coordinates
+    getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
+        const R = 6371000; // Earth's radius in meters
+        const dLat = this.deg2rad(lat2 - lat1);
+        const dLon = this.deg2rad(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in meters
+    }
+
+    deg2rad(deg) {
+        return deg * (Math.PI / 180);
+    }
+
+    // 🚫 Check if within restricted radius
+    isInRestrictedArea(lat, lon) {
+        return this.restrictedLocations.some(loc => {
+            const distance = this.getDistanceFromLatLonInM(lat, lon, loc.latitude, loc.longitude);
+            console.log(`Distance from ${loc.name}: ${distance} m`);
+            return distance <= this.restrictedRadius;
+        });
     }
 
     async updateTaskWithLocation() {

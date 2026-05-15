@@ -208,7 +208,7 @@
                             <td></td>
                         </tr>
                     </apex:outputText>
-                    <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name  == 'Kicker Incentive' || InvoiceList[0].Brokerage_Lookup__r.name  == 'Base Brokerage' || InvoiceList[0].Brokerage_Lookup__r.name  == 'Additional Brokerage'  || InvoiceList[0].Brokerage_Lookup__r.name  == 'Retrofit Brokerage' ||  InvoiceList[0].Brokerage_Lookup__r.name  == '1% Brokerage',True,False)}">
+                    <!--<apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name  == 'Kicker Incentive' || InvoiceList[0].Brokerage_Lookup__r.name  == 'Base Brokerage' || InvoiceList[0].Brokerage_Lookup__r.name  == 'Additional Brokerage'  || InvoiceList[0].Brokerage_Lookup__r.name  == 'Retrofit Brokerage' ||  InvoiceList[0].Brokerage_Lookup__r.name  == '1% Brokerage',True,False)}">
                         <tr>
                             <apex:outputText rendered="{!if(InvoiceList[0].Brokerage_Lookup__r.name == 'Base Brokerage' && InvoiceList[0].Brokerage_Lookup__r.AOP_CP__c == 
                                                        false,True,False)}">
@@ -231,7 +231,14 @@
                             <td Style="font-size:14px;background-color:#fef2cb;text-align:center;font-weight: bold;">{!InvoiceList[0].Brokerage__c }%&nbsp; </td>
                             <td Style="font-size:14px;background-color:#fef2cb;text-align:right;font-weight: bold;background-color:#f2f2f2;">{!BrokerageAmount}&nbsp;</td>
                         </tr>
-                    </apex:outputText>
+                    </apex:outputText>-->
+                    <apex:repeat value="{!allInvcList}" var="invc">
+                        <tr>
+                            <td style="font-size:14px;">&nbsp;&nbsp;&nbsp;{!invc.invName}</td>
+                            <td style="font-size:14px;background-color:#fef2cb;text-align:center;font-weight: bold;">{!invc.invBrokerage}%</td>
+                            <td style="font-size:14px;background-color:#fef2cb;text-align:center;font-weight: bold;">{!invc.invBrokerageAmt}</td>
+                        </tr>
+                    </apex:repeat>
                     <tr>
                         <td Style="font-size:14px;">&nbsp;&nbsp;&nbsp;Brokerage - Other Incentive</td>
                         <td></td>

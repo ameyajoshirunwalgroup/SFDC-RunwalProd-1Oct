@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Presales New Lead Created</name>
+    <style>none</style>
+    <subject>Welcome to Runwal</subject>
+    <textOnly>Dear Sir/Madam,
+
+Thank you for showing interest in our project  {!Lead.Project_Name__c}. Please visit www.runwalgroup.in to know more. You may call on 02248807012 for any assistance.
+
+With Warm Regards,
+Team Presales,
+Runwal Group.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

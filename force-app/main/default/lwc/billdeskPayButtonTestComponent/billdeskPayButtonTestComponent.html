@@ -1,0 +1,43 @@
+<template>
+    <lightning-card title="BillDesk Payment">
+
+        <div class="slds-p-around_medium">
+
+            <lightning-combobox
+                label="Payment Type"
+                value={paymentType}
+                options={paymentOptions}
+                onchange={handlePaymentTypeChange}>
+            </lightning-combobox>
+
+            <lightning-input
+                type="number"
+                label="Amount"
+                value={amount}
+                onchange={handleAmountChange}
+                class="slds-m-top_small">
+            </lightning-input>
+
+            <lightning-button
+                label="Pay Now"
+                variant="brand"
+                onclick={handleSubmit}
+                class="slds-m-top_medium">
+            </lightning-button>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Processing"></lightning-spinner>
+            </template>
+
+            <template if:true={responseData}>
+                <div class="slds-m-top_medium slds-box">
+                    <p><strong>Status:</strong> {responseData.status}</p>
+                    <p><strong>Transaction ID:</strong> {responseData.transactionId}</p>
+                    <p><strong>Message:</strong> {responseData.message}</p>
+                    <p><strong>Amount:</strong> {responseData.amount}</p>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

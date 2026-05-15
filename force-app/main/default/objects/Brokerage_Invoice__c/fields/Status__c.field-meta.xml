@@ -5,7 +5,9 @@
     <formula>/*IF(AND(Total_Amount_Balance__c &lt;= 1 ,  Total_Amount_Balance__c &gt;= -1), &apos;Paid&apos;, &apos;Unpaid&apos;)*/
 
 
-IF(AND(Total_Amount_Balance__c &lt;= 1), &apos;Paid&apos;, &apos;Unpaid&apos;)</formula>
+/*IF(AND(Total_Amount_Balance__c &lt;= 1), &apos;Paid&apos;, &apos;Unpaid&apos;)*/
+
+IF(CP_Brokerage__c !=null, CP_Brokerage__r.Status__c, IF(AND(Total_Amount_Balance__c &lt;= 1), &apos;Paid&apos;, &apos;Unpaid&apos;))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Status</label>
     <required>false</required>

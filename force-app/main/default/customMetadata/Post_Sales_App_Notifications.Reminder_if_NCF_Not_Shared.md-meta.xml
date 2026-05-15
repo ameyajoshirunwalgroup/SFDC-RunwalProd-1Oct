@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Reminder if NCF Not Shared</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!
+
+This is a reminder to kindly share your Name Confirmation Form (NCF) within the next 3 days to avoid any delay in the registration process.
+
+For your convenience, the NCF format is attached with this email. You may also review and approve the NCF details directly through the Runwal app.
+
+If you require any assistance, please feel free to contact our support team.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Reminder – Name Confirmation Form Submission</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Reminder – NCF Pending ⏳
+
+Please share your Name Confirmation Form within 3 days to avoid delays.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">ncf_form</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Booking__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Reminder if NCF Not Shared</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">NCF Reminder</value>
+    </values>
+</CustomMetadata>

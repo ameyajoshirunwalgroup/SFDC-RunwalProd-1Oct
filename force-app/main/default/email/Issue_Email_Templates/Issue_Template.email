@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">     
+      
+        <body>
+           
+            <table>
+                <tr><td colspan="2"><b>Hello Team,</td></tr>
+               
+                <tr><td colspan="2">New issue has been raised,  Please check <br/><br/>
+                       Issue Details : {!Issue__c.Description__c}<br/><br/>Issue Name : {!Issue__c.Name}<br/><br/>Issue Id :  
+                                              {!Issue__c.Issue_Name__c}<br><br>
+                 <tr><td colspan="2">&nbsp;</td></tr>
+                <tr><td><b>Following are the details</b></td></tr>
+                
+                <tr><td>
+                <table width="400" border "1" style="border-collapse: collapse;">
+                 <th style="background-color:#FFA07A;padding:6px;text-align:center;">Fields</th><th style="background-color:#FFA07A;padding:6px;text-align:center;">Values</th>
+
+                <tr> <td>Module</td> <td>{!Issue__c.Module__c}</td></tr>
+                
+<tr> <td>Stream</td> <td>{!Issue__c.Stream__c}</td></tr>
+                
+<tr> <td>Subject</td><td>{!Issue__c.Subject__c}</td></tr>
+
+<tr> <td>Department</td><td>{!Issue__c.Department__c}</td></tr>
+                
+<tr> <td>Type</td><td>{!Issue__c.Type__c}</td></tr>
+
+<tr> <td>Status</td><td>{!Issue__c.Status__c}</td></tr>
+               
+<tr> <td>Priority</td><td>{!Issue__c.Priority__c}</td></tr>
+                
+<tr> <td>Raised by</td><td>{!Issue__c.Raised_By__c}</td></tr>
+                
+<tr> <td>Primary Resource</td><td>{!Issue__c.Primary_Resource__c}</td></tr>
+                
+
+                </table><br>  
+                
+Link : {!Issue__c.Link} 
+                </td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr><td colspan="2"><b>Thanks and Regards</td></tr>
+               
+                                            
+            </table> 
+
+        </body>
+       
+    </html>

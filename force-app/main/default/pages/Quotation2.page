@@ -191,6 +191,23 @@
     .contributionBank {
        background-color:#FADADD;
     }
+            #carparkTable {
+    
+  }
+
+  td[width="20%"], td[width="50%"], td[width="30%"] {
+    vertical-align: top;
+  }
+
+    /**Added for Quotation Offer starts*/
+    .customErrorMsg .messageText {
+        font-size: 16px;        
+    }
+
+    .customErrorMsg .errorM3 {
+        padding: 12px;
+    }
+    /**Added for Quotation Offer ends*/
     
     </style>
         <body>
@@ -206,7 +223,7 @@
             
             <apex:form id="newquoteform">
                 
-                <apex:actionFunction name="RefreshPlanDiv" action="{!QueryPlanDetails}" oncomplete="populatePlan1()" reRender="payplandiv">
+                <apex:actionFunction name="RefreshPlanDiv" action="{!QueryPlanDetails}" oncomplete="populatePlan1()" reRender="npvErrorMsg,payplandiv,DeafultNPVPanel_1,SelectedNPVPanel_2,DiffNPVPanel_3,NPVPanel1,NPVPanel2,NPVPanel3,NPVPanel5,NPVPanel6">
                     <apex:param id="plan" name="subPlanId" value="" />
                     <apex:param id="av" name="aVal" value="" />
                 </apex:actionFunction>
@@ -215,9 +232,14 @@
                     <apex:param id="av2" name="aVal" value="" />
                     <apex:param id="flag" name="flag" value="true" assignTo="{!editSchedule}" />
                 </apex:actionFunction>
-                <apex:actionFunction name="saveScheduleAction" action="{!savePaymentSchedule}" oncomplete="PreselectPlanAfterSave()" rerender="printArea" status="status"/>  
-                <apex:actionFunction name="applyScheduleAction" action="{!updatePaymentSchedule}" oncomplete="populatePlan21()" rerender="messages,payplaneditdiv,NPVPanel1,NPVPanel2,NPVPanel3,NPVPanel5,NPVPanel5,NPVPanel6,discounts" status="status" /> 
+                <apex:actionFunction name="saveScheduleAction" action="{!savePaymentSchedule}" oncomplete="PreselectPlanAfterSave()" rerender="printArea, right1Disc,pricingSection" status="status"/>  
+                <apex:actionFunction name="applyScheduleAction" action="{!updatePaymentSchedule}" oncomplete="populatePlan21()" rerender="messages,payplaneditdiv,DeafultNPVPanel_1,SelectedNPVPanel_2,DiffNPVPanel_3,NPVPanel1,NPVPanel2,NPVPanel3,NPVPanel5,NPVPanel5,NPVPanel6,discounts,DiffNPVPanel_3,npvErrorMsg" status="status" /> 
                 <apex:actionFunction name="rowModifyFunction" action="{!rowModify}" oncomplete="populatePlan2()" reRender="payplaneditable" status="status" >
+                    
+                    
+                 
+                            
+                            
                     <apex:param id="rowNumber" name="rowNumber" value="index" assignTo="{!rowNumber}"/>
                     <apex:param id="type" name="addType" value="type" assignTo="{!addType}"/>
                     <apex:param id="flag1" name="flag" value="true" assignTo="{!editSchedule}" />
@@ -235,8 +257,9 @@
                 </div>
                 </apex:facet>
                 </apex:actionStatus>
-                <apex:outputPanel id="messages" >
-                    <apex:PageMessages id="pageMsgs" />
+                <apex:outputPanel id="messages" styleClass="customErrorMsg"><!--added for Quotation Offer-->
+                    <apex:PageMessages id="pageMsgs"/>
+                        <apex:outputText value="{!errorMessage}" />
                 </apex:outputPanel>
                 <!-- <apex:pageBlock rendered="{!(oppId == null || unitId == null ||subPlanId == null)}">
                     <apex:pageBlockSection id="opptyUnitPgBlock" title="Unit and Opportunity Details" collapsible="false" columns="1">
@@ -247,40 +270,226 @@
                             <apex:inputField value="{!q.Plan_Type__c}" required="true" rendered="{!subPlanId = null}" />
                             <apex:outputField value="{!q.Plan_Type__c}" rendered="{!subPlanId != null}" />
                             <apex:inputField id="projLookup" styleclass="disableField" value="{!q.Project__c}" rendered="{!unitId != null}" />
-                    </apex:pageBlockSection>
+                                
+                               
+                   
                     <apex:pageBlockButtons location="bottom">
                         <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Generate Quote" action="{!startQuote}"/>
-                        <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" value="Cancel" action="{!cancel}" immediate="true"  html-formnovalidate="formnovalidate" />
+                       
+                            styleClass="slds-button slds-button--brand slds-button--small" 
+                            value="Cancel" 
+                            action="{!cancel}" 
+                            immediate="true"
+                            html-formnovalidate="formnovalidate" />    
                     </apex:pageBlockButtons>
                 </apex:pageBlock> -->
                 
 <!---------------------------------------  Added by Vikas    ------------------------------------------------->   
-             
-                <apex:outputPanel id="baseaRate" rendered="{!(oppId != null && unitId !=null && NOT(editSchedule))}">
-                <apex:actionFunction name="changeBaseRate" action="{!changeBaseRate}" reRender="printArea,planOptions,payplandiv,discounts" oncomplete="loadPaymentPlan();" status="status"/>
+            <apex:outputPanel id="baseaRate" rendered="{!(oppId != null && unitId !=null && NOT(editSchedule))}">
+                <apex:actionFunction name="changeBaseRate" action="{!changeBaseRate}" reRender="messages,printArea,planOptions,payplandiv,discounts" oncomplete="loadPaymentPlan();" status="status"/>
                 <apex:actionFunction name="getOldBaseRate" action="{!getOldBaseRate}" reRender="printArea,planOptions,payplandiv" status="status"/>
                 <apex:actionFunction name="reloadURL" action="{!reloadURL}" reRender="printArea" status="status"/>  
-                      <apex:outputLabel value="Please select car parking before making any changes in Rates or Discount." style="font-weight:bold;padding-left:200px;color:red;" rendered="{!if(proj.Edit_Base_Rate__c == true || proj.Edit_Discount_Lumsum__c == true,true,false)}"/> <br/><br/>
+                      <!--<apex:outputLabel value="Please select car parking before making any changes in Rates or Discount." style="font-weight:bold;padding-left:200px;color:red;" rendered="{!if(proj.Edit_Base_Rate__c == true || proj.Edit_Discount_Lumsum__c == true,true,false)}"/> <br/><br/>
                       <apex:outputLabel value="Base Rate:" style="font-weight:bold;padding-left:0px;">
                                   &nbsp;&nbsp;<apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!baseRate}" rendered="{!if(proj.Edit_Base_Rate__c == true,true,false)}"/>
                                   &nbsp;&nbsp;<apex:outputText style="background-color:#FADADD;font-weight:normal;" value="{!baseRate}" rendered="{!if(proj.Edit_Base_Rate__c == false,true,false)}"/>
                       </apex:outputLabel>
-                      <apex:outputLabel value="Premium:" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_Premium_Rate__c == true,true,false)}"/>&nbsp;&nbsp;&nbsp;
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputLabel value="Premium:" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_Premium_Rate__c == true,true,false)}"/>&nbsp;&nbsp;&nbsp;
                         <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!premiumRate}" rendered="{!if(proj.Edit_Premium_Rate__c == true,true,false)}"/>
                       <apex:outputLabel value="Allotment Charge(Lumsum):" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_AllotmentCharge__c == true,true,false)}"></apex:outputLabel>&nbsp;&nbsp;&nbsp;
                         <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!allotmentChargeLumsum}" rendered="{!if(proj.Edit_AllotmentCharge__c == true,true,false)}"/>
                       <apex:outputLabel value="Discount(Lumpsum):" style="font-weight:bold;padding-left:10px;" rendered="{!if(proj.Edit_Discount_Lumsum__c == true,true,false)}"></apex:outputLabel>&nbsp;&nbsp;&nbsp;
-                        <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!discountVal}" rendered="{!if(proj.Edit_Discount_Lumsum__c == true,true,false)}"/>
-                        
+                      <apex:inputText style="background-color:#FADADD;font-weight:normal;" value="{!discountVal}" rendered="{!if(proj.Edit_Discount_Lumsum__c == true,true,false)}"/><br/>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                             
+                          <!-- Keep all your existing logic, just replace this section for 4 fields -->
+                             
                      <br/><br/>
                      <center>
                           <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Apply Premium" onclick="changeBaseRate();return false;" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" status="status" disabled="{!disablePremium}"/>&nbsp;<!--Relabel and add disabled="{!disablePremium}" for SDR Changes-->
-                          <apex:commandButton id="btncan" styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Cancel Changes" onclick="getOldBaseRate();" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" oncomplete="reloadURL();" status="status"/>
+                          <apex:commandButton id="btncan" styleClass="slds-button slds-button--brand slds-button--small" style="font-size:12px;" value="Cancel Changes" onclick="getOldBaseRate();" rendered="{!if((proj.Edit_Discount_Lumsum__c == true || proj.Edit_Base_Rate__c  == true || proj.Edit_Premium_Rate__c == true || proj.Edit_AllotmentCharge__c == true),true,false)}" oncomplete="reloadURL();" status="status"/>&nbsp;
+                          <apex:commandButton id="cancelBtn2"
+                    styleClass="slds-button slds-button--brand slds-button--small" 
+                    style="font-size:12px;" 
+                    value="Cancel" 
+                    action="{!cancleButton}" 
+                    status="status"/>
                      </center>     
-                </apex:outputPanel><br></br><br></br>
-                
+                </apex:outputPanel><br></br><br></br>     
 <!---------------------------------------  Vikas Added end here  ------------------------------------------------->
-                
+                              <apex:outputPanel id="pricingSection" rendered="{!(oppId != null && unitId != null && NOT(editSchedule))}">
+                              <table width="100%">
+                              <tr>
+                              <!-- Base Rate -->
+                              <td class="projectStyle">
+                                  <apex:outputLabel value="Base Rate:" style="font-weight:bold;" />
+                                  <apex:inputText value="{!baseRate}"
+                                  style="background-color:#FADADD; width: 100px; margin-left:10px;"
+                                  rendered="{!proj.Edit_Base_Rate__c}" />
+                                  <apex:outputText value="{!baseRate}"
+                                  style="margin-left:10px;"
+                                  rendered="{!NOT(proj.Edit_Base_Rate__c)}" />
+                               <!-- Allotment Charge (Lumpsum) -->
+                               <!--td class="projectStyle" colspan="1">
+                               <apex:outputLabel value="Allotment Charge (Lumsum):" style="font-weight:bold;" 
+                               rendered="{!proj.Edit_AllotmentCharge__c}" />
+                               <apex:inputText value="{!allotmentChargeLumsum}" 
+                               style="background-color:#FADADD; width: 100px; margin-left:10px;" 
+                               rendered="{!proj.Edit_AllotmentCharge__c}" />
+                                </td-->
+                                                     
+                                                     <!-- Discount (Lumpsum) -->
+                                  <!--td class="projectStyle">
+                                      <apex:outputLabel value="Discount (Lumpsum):" style="font-weight:bold;" 
+                                      rendered="{!proj.Edit_Discount_Lumsum__c}" />
+                                          <apex:inputText value="{!discountVal}" 
+                                          style="background-color:#FADADD; width: 100px; margin-left:10px;" 
+                                          rendered="{!proj.Edit_Discount_Lumsum__c}" />
+                                              </td-->
+                              <!-- Agreement Value -->
+                              <td class="projectStyle">
+                              <apex:outputLabel value="Unit AV:" style="font-weight:bold;" />
+                              <apex:outputText value="{!OfferValue}" 
+                              style="width: fixed; margin-left:10px;" />
+                              </td>
+                              
+                              
+                              <!-- Quoted Value -->
+                                  <td class="projectStyle"> 
+                                      <apex:outputLabel value="Quoted AV:" style="font-weight:bold;" />
+                                          <apex:outputPanel id="quotedAV" >
+                                              <apex:outputText value="{!QuotedOfferValue}" 
+                                              style="width: Fixed; margin-left:10px;" />
+                                                  </apex:outputPanel> 
+                                              </td>
+                              </td>
+                              <!-- Premium -->
+                              <td class="projectStyle">
+                                <apex:outputLabel value="Premium (PSF):" style="font-weight:bold;" 
+                                rendered="{!proj.Edit_Premium_Rate__c}" />
+                                <apex:inputText value="{!premiumRate}" 
+                                style="background-color:#FADADD; width: 100px; margin-left:50px;" 
+                                rendered="{!proj.Edit_Premium_Rate__c}" onkeypress="if(event.keyCode==13){return false;}"/><!--Added onkeypress for SDR changes-->
+
+                              <!--Added for Quotation Offer Changes starts-->
+                               <!-- <apex:outputLabel value="Premium (PSF) value:" style="font-weight:bold;" />
+                              <apex:outputText value="{!premiumPSFAmount}" 
+                                style="margin-left:20px; font-weight:bold;" 
+                                rendered="{!proj.Edit_Premium_Rate__c}" />-->
+                                <!--Added for Quotation Offer Changes ends-->
+
+                              </td>
+                              
+                              </tr>       
+                            <!-- Mandatory Discount -->
+                            <!--<td class="projectStyle">Commented for Quotation Offer Changes
+                                <apex:outputLabel value="Site Discounts:" style="font-weight:bold;" />
+                                <apex:outputText value="{!SfixedDiscount}" 
+                                    style="background-color:#FADADD; width: 100px; margin-left:10px;" />
+                            </td>-->
+                             
+                            
+                            <!-- Non-Mandatory Monetory Discount -->
+                            <td class="projectStyle">
+                                <apex:outputLabel value="Additional discounts:" style="font-weight:bold;" />
+                                <apex:outputText value="{!StringnonMandetory_monetorydiscount}" 
+                                    style="background-color:#FADADD; width: 100px; margin-left:10px;" />
+                            </td>
+                            
+                            <!-- Non-Mandatory Non-Monetory Discount -->
+                            <td class="projectStyle">
+                                <apex:outputLabel value="Other Offers:" style="font-weight:bold;" />
+                                <apex:outputText value="{!StringnonMandetory_nonmonitizablediscount}" 
+                                    style="background-color:#FADADD; width: 100px; margin-left:10px;" />
+                            </td>
+                            
+                            <!-- Non-Mandatory Monetizable Discount -->
+                            <td class="projectStyle">
+                                <apex:outputLabel value="Additional discounts (Monitized):" style="font-weight:bold;" />
+                                <apex:outputText value="{!StringnonMandetory_monitizablediscount}" 
+                                    style="background-color:#FADADD; width: 100px; margin-left:10px;" />
+                            </td>
+                            <tr>
+                                  <!-- Source Discount -->
+                             
+                              <td class="projectStyle">
+                                    <apex:outputPanel rendered="{!OR(o.Walkin_Source__c == 'Referral', o.Walkin_Source__c == 'Loyalty')}"><!--Added walkin source Loyalty for QUotation Offer Changes-->
+                                        <apex:outputLabel value="Referral/Loyalty Discount Value:" style="font-weight:bold;" /><!--Added Loyalty for Quotation Offer Changes-->
+                                        <apex:outputText value="{!FormattedRefDisc}" 
+                                            style="width: 100px; margin-left:10px;" />
+                                    </apex:outputPanel>
+                              </td>
+                              <td class="projectStyle">
+                                    <apex:outputPanel rendered="{!OR(o.Walkin_Source__c == 'Referral', o.Walkin_Source__c == 'Loyalty')}"><!--Added walkin source Loyalty for QUotation Offer Changes-->
+                                        <apex:outputLabel value="Referral/Loyalty Discount AV:" style="font-weight:bold;" /><!--Added Loyalty for Quotation Offer Changes-->
+                                        <apex:outputText value="{!FormattedRefDiscAV}" 
+                                            style="width: 100px; margin-left:10px;" />
+                                    </apex:outputPanel>
+                              </td>
+                             <td class="projectStyle">
+                                <apex:outputPanel rendered="{!OR(o.Walkin_Source__c == 'Referral', o.Walkin_Source__c == 'Loyalty') && o.Opt_for_Referral__c == True}"><!--Added Loyalty condition for Quotation Offer Changes-->
+                                    <apex:outputLabel value="Referral/Loyalty PassBack Value:" style="font-weight:bold;" /><!--Added Loyalty for Quotation Offer Changes-->
+                                    <apex:outputText value="{!FormattedRefDiscPassBack}" 
+                                        style="width: 100px; margin-left:10px;" />
+                                </apex:outputPanel>
+                            </td>
+                            <td class="projectStyle">
+                                <apex:outputPanel id="referralPassBackAV" rendered="{!OR(o.Walkin_Source__c == 'Referral', o.Walkin_Source__c == 'Loyalty') && o.Opt_for_Referral__c == True}"><!--Added Loyalty condition for Quotation Offer Changes-->
+                                    <apex:outputLabel value="Referral/Loyalty PassBack AV:" style="font-weight:bold;" /><!--Added Loyalty for Quotation Offer Changes-->
+                                    <apex:outputText value="{!FormattedRefDiscPassBackAV}" 
+                                        style="width: 100px; margin-left:10px;" />
+                                </apex:outputPanel>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td class="projectStyle">
+                                    <apex:outputLabel value="Applied Discounts: " style="font-weight:bold;" />
+                                    <apex:outputText value="{!appliedOfferValue}" 
+                                        style="width: 100px; margin-left:10px;" />
+                            </td>
+                             </tr>
+                             <!--tr class="projectStyle">
+                                 <td class="projectStyle">
+                                    <apex:outputPanel rendered="{!o.Walkin_Source__c == 'Channel Partner'}">
+                                        <apex:outputLabel value="CP Passback:" style="font-weight:bold;" />
+                                        <apex:inputText value="{!CP_DiscountInput}" id="CP_DiscountInput" 
+                                            style="width: 100px; margin-left:10px;" />
+                                    </apex:outputPanel>
+                                </td>
+                                                                
+                              <td>
+                                    <apex:outputPanel rendered="{!o.Walkin_Source__c == 'Channel Partner'}">
+                                        <apex:outputLabel value="CP PassBack Value:" style="font-weight:bold;" />
+                                        <apex:outputText value="{!Formatted_CP_PassbackValue}" 
+                                            style="width: 100px; margin-left:10px;" />
+                                    </apex:outputPanel>
+                              </td>
+                              <td>
+                                    <apex:outputPanel rendered="{!o.Walkin_Source__c == 'Channel Partner'}">
+                                        <apex:outputLabel value="CP PassBack AV:" style="font-weight:bold;" />
+                                        <apex:outputText value="{!Formatted_CP_PassbackAV}" 
+                                            style="width: 100px; margin-left:10px;" />
+                                    </apex:outputPanel>
+                             </td>
+                             <td>
+                                <apex:commandButton value="Calculate CP Passback" action="{!calculateCPPassback}" 
+                                            rendered="{!o.Walkin_Source__c == 'Channel Partner'}"
+                                styleClass="slds-button slds-button--brand slds-button--small" 
+                                            style="font-size:12px; margin-left:10px;"
+                                            reRender="pricingSection,discounts,baseaRate,payplandiv" status="status"/>
+                             </td>
+                             </tr-->
+                             <tr class="projectStyle">
+                             <td>
+                                    <apex:outputPanel rendered="{!NOT(o.Walkin_Source__c == 'Referral' || o.Walkin_Source__c == 'Channel Partner')}">
+                                        <!-- Hide the column for other walk-in sources -->
+                                    </apex:outputPanel>
+                             </td>          
+                             </tr>
+							</table>
+                            </apex:outputPanel>
+                           
+                                            <apex:outputText value="{!o.Referral_Sub_Source__c}" 
+                                              style="width: Fixed; margin-left:10px;" />
                 <apex:outputPanel id="printArea" rendered="{!(oppId != null && unitId !=null)}">
                     <table id="quoteDetails" width='100%'>
                        <tr>
@@ -298,10 +507,12 @@
                                     </apex:outputText>
                                 </apex:outputPanel>
                                 <br/>
+                                    <!--<apex:param name="cbVal" assignTo="{!cbValue}" value="" />-->
                                 <label>Registration Charges Paid by Runwal</label>&nbsp;&nbsp;
                                    <apex:inputCheckbox id="regChargesByRunwalId" value="{!regChargesByRunwal}">
                                     <apex:actionSupport event="onclick" action="{!updateCalculations}" rerender="discountedPanel,payplandiv,messages,regChargesByRunwalId"/>
                                 </apex:inputCheckbox>
+                                <!--<apex:inputField value="{!u.Registration_Charges_Paid_By_Runwal__c}" />-->
                                  <!--Added for SDR/ROC Management endds-->
                             </td>
                            <td class="projectStyle">
@@ -332,7 +543,7 @@
                                     <apex:param name="mode" value="edit" assignTo="{!discountPageMode}"/>
                                 </apex:commandLink> 
                                 &nbsp; &nbsp; &nbsp;
-                                  <apex:commandLink value="View Discounts" id="viewdisc" style="float:right;color:#D61C59;" target="_blank" action="{!openDiscountPage}" rendered="{!disableDiscount || editSchedule}">
+                                  <apex:commandLink value="View Discounts" id="viewdisc" style="float:right;color:#D61C59;" target="_blank" action="{!openDiscountPage}" rendered="{!disableDiscount}">
                                     <apex:param name="mode" value="view" assignTo="{!discountPageMode}"/>
                                 </apex:commandLink> 
                             </apex:outputPanel>
@@ -344,114 +555,10 @@
                                     <apex:column styleClass="{!rows.formatText}">{!rows.colText}</apex:column>
                                     <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
                                 </apex:dataTable>
+                                <apex:outputPanel style="{!IF(NOT(showAddCarPark), 'pointer-events:none; opacity:0.5;', '')}" layout="block">
                                <table  id="carparkTable" width="100%">
                                     <th colspan="2">Additional Car Parks</th>
-                                    <!-- //Need to comment down for car parking changes starts -->
                                     <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Single Covered" />
-                                        </th>
-                                        <td width="50%">
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Single_car_park_Additional__c}" rendered="{!canAddCarPark1}"/>
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark1)}"/>
-                                        </td>
-                                    </tr>
-                                   <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Tandem Covered" />
-                                        </th>
-                                        <td width="50%">
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Tandem_car_park_Additional__c}" rendered="{!canAddCarPark2}"  />
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark2)}" />
-                                        </td>
-                                    </tr>
-                                    <tr> 
-                                        <th width="50%">
-                                            <apex:outputText value="Single Open" />
-                                        </th>
-                                        <td width="50%">
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Single_Open_Additional__c}" rendered="{!canAddCarPark3}"  />
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark3)}" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Covered Stack" />
-                                        </th>
-                                        <td width="50%">
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Tandem_Open_Additional__c}" rendered="{!canAddCarPark4}"  />
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark4)}" />
-                                        </td>
-                                    </tr> 
-                                    <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Stilt" />
-                                        </th>
-                                        <td width="50%">
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Stack_Additional__c}" rendered="{!canAddCarPark5}"  />
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark5)}" />
-                                        </td>
-                                    </tr>
-                                                                                
-                                    <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="MLCP" />
-                                        </th>
-                                        <td width="50%">
-                                           
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.MLCP_Additional__c}" rendered="{!canAddCarPark6}"/>
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark6)}"/>
-                                        </td>
-                                    </tr>        
-                                     
-                                    <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Basement" />
-                                        </th>
-                                        <td width="50%">
-                                           
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Basement_Additional__c}" rendered="{!canAddCarPark7}"/>
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark7)}"/>
-                                        </td>
-                                    </tr>
-                                      <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Podium" />
-                                        </th>
-                                        <td width="50%">
-                                           
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Podium__c}" rendered="{!canAddCarPark8}"/>
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark8)}"/>
-                                        </td>
-                                    </tr>  
-
-                                    <!-- Added by Vinay 28-03-2025 Start-->        
-                                    <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Puzzle Car Park" />
-                                        </th>
-                                        <td width="50%">
-                                           
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Puzzle_Car_Park__c}" rendered="{!canAddCarPark9}"/>
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark9)}"/>
-                                        </td>
-                                    </tr>  
-                                    <!-- Added by Vinay 28-03-2025 End--> 
-                                    <!-- Added by Vinay 21-11-2025 Start-->        
-                                    <tr>
-                                        <th width="50%">
-                                            <apex:outputText value="Stack Car Park" />
-                                        </th>
-                                        <td width="50%">
-                                           
-                                            <apex:inputField style="background-color:#FADADD" value="{!q.Stack_Additional_1__c}" rendered="{!canAddCarPark10}"/>
-                                            <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark10)}"/>
-                                        </td>
-                                    </tr>  
-                                    <!-- //Need to comment down for car parking changes ends
-
-                                    //Added by dolly for car parking changes starts   -->
-                                    <!-- <tr>
                                         <th width="50%">
                                             <apex:outputText value="Single Covered" />
                                         </th>
@@ -538,7 +645,7 @@
                                         </td>
                                     </tr>  
 
-                                            
+                                    <!-- Added by Vinay 28-03-2025 Start-->        
                                     <tr>
                                         <th width="50%">
                                             <apex:outputText value="Puzzle Car Park" />
@@ -549,7 +656,8 @@
                                             <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark9)}"/>
                                         </td>
                                     </tr>  
-                                         
+                                    <!-- Added by Vinay 28-03-2025 End--> 
+                                    <!-- Added by Vinay 19-11-2025 Start-->        
                                     <tr>
                                         <th width="50%">
                                             <apex:outputText value="Stack Car Park" />
@@ -559,17 +667,23 @@
                                             <apex:inputField style="background-color:#FADADD" value="{!q.Stack_Additional_1__c}" rendered="{!canAddCarPark11}"/>
                                             <apex:outputText value="Not Available"  rendered="{!NOT(canAddCarPark11)}"/>
                                         </td>
-                                    </tr>   -->
-                                    <!-- //Added by dolly for car parking changes ends -->
-                                    
-
-                                    <!-- Added by Vinay 21-11-2025 End-->
+                                    </tr>  
+                                    <!-- Added by Vinay 19-11-2025 End--> 
+                                            
                                     <tr> 
                                         <th colspan="2">
                                             <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small"  value="Apply Selection" action="{!addCarPark}" disabled="{!NOT(showAddCarPark)}"/>
+                                        </th>  
+                                    </tr>
+                                    <!--Added for Quotation offer starts-->
+                                    <tr>
+                                        <th colspan="4" class="blinkMe">
+                                            You cannot add car park after discounts
                                         </th>
                                     </tr>
+                                    <!--Added for Quotation offer starts-->
                                 </table> 
+                                </apex:outputPanel>
                             </td>
                             <td width="50%">
                                 <apex:outputPanel id="costPanel"><!--Added for SDR/ROC-->
@@ -581,12 +695,13 @@
                             </td>
                             <td width="30%">
                                 <apex:outputPanel id="discountedPanel"><!--Added for SDR/ROC-->
-                                <apex:dataTable value="{!quoteUIMapDisc['RIGHTTOP']}" var="rows"  id="right1Disc" width="100%" rendered="{!quoteUIMapDisc != null}">
-                                    <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
-                                </apex:dataTable>
+                                    <apex:dataTable value="{!quoteUIMapDisc['RIGHTTOP']}" var="rows"  id="right1Disc" width="100%" rendered="{!quoteUIMapDisc != null}">
+                                        <apex:column styleClass="{!rows.formatVal}">{!rows.colValue}</apex:column>
+                                    </apex:dataTable>
                                 </apex:outputPanel>
                             </td>
                         </tr>
+                                            
                         <tr width="100%">
                             <td width="30%">
                                 <apex:dataTable value="{!quoteUIMap['LEFTBOTTOM']}" var="rows"  id="left2" width="100%">
@@ -610,17 +725,27 @@
                                                 </select>
                         
                                         </th>
-                                        <th>
-                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="editScheduleBtn" value="Edit Schedule" title="Edit Schedule" onclick="editSchedule();return false;" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}" status="status"/>
-                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="applyScheduleBtn" value="View Updated Schedule" title="View Updated Schedule" onclick="applyScheduleAction();return false;" status="status" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}"/>
-                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="saveScheduleBtn" value="Confirm Changes" title="Save Schedule" onclick="saveScheduleAction();return false;" status="status" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}"/>
+                                           <th>
+                                                <apex:selectList value="{!selectedDiscountOption}" size="1" 
+                                           
+                                            onchange="refreshPlanOnDiscountChange()">
+                                            <apex:selectOptions value="{!discountOptions}"/>
+                                                </apex:selectList>
+                                            </th>
+                                        <th style="Padding : 5px">
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="editScheduleBtn" value="Edit Schedule" title="Edit Schedule" onclick="editSchedule();return false;" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}" status="status"/><br/>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="applyScheduleBtn" value="View Updated Schedule" title="View Updated Schedule" onclick="applyScheduleAction();return false;" status="status" rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}"/><br/>
+                                            <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="saveScheduleBtn" 
+                                            value="Confirm Changes" title="Save Schedule" 
+                                            onclick="saveScheduleAction();return false;" 
+                                            status="status" rendered="{!if(scheduleEdited != true && subPlanId == null && NPVDiffLumpsum_Loss !=NULL,true,false)}"/>
                                             <apex:commandButton styleClass="slds-button slds-button--brand slds-button--small" id="cancelBtn"  value="Cancel Changes" title="Cancel Changes" action="{!cancelEdit}"  oncomplete="PreselectPlanOnCancel();"  rerender="printArea" status="status" rendered="{!if(subPlanId == null,true,false)}"/> <!-- rendered="{!if(scheduleEdited != true && subPlanId == null,true,false)}" -->
                                         </th>
                                     </tr>
                                     <tr>
                                         <td colspan="3">
                                             <apex:outputPanel id="payplandiv" >
-                                                <apex:dataTable id="ppTable" value="{!qPlanWrapper}" var="pd" width="100%">
+                                                <apex:dataTable id="ppTable" value="{!qPlanWrapper}" var="pd" width="100%" rendered="{!qPlanWrapper !=NULL && editSchedule != True}">
                                                     <apex:column rendered="{!pd.PayPlanRecord != null}"><apex:outputField value="{!pd.PayPlanRecord.Is_to_be__c}"/></apex:column>
                                                     <apex:column rendered="{!pd.PayPlanRecord  == null}">Grand Total</apex:column>
                                                     <apex:column rendered="{!pd.PayPlanRecord != null}"><apex:outputField value="{!pd.PayPlanRecord.Due_Date__c}"/></apex:column>
@@ -637,117 +762,166 @@
                                                     <apex:column styleClass="contributionBank" rendered="{!if(pd.PayPlanRecord != null && pd.PayPlanRecord.OC_Milestone__c == false && subPlanId != null,true,false)}"><apex:outputField value="{!pd.PayPlanRecord.Contribution_From__c}"/>  
                                                     </apex:column> 
                                                     <apex:column rendered="{!pd.PayPlanRecord == null}"></apex:column>
+                                               
                                                 </apex:dataTable>
+                                                   
                                             </apex:outputPanel>
+                                            
                                             <apex:outputPanel id="payplaneditable">
-                                            <table id="ppt">
-                                                <tr>
-                                                    <td width="40%">
-                                                     <apex:outputPanel id="payplaneditdivstatic" >
-                                                        <apex:dataTable id="ppTable2static" value="{!qPlanWrapper}" var="mm" width="100%" rendered="{!qPlanWrapper !=NULL && editSchedule}">
-                                                            <!--  cloned column variable Read Only Mode -->
-                                                             <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord != null}"><apex:outputField value="{!mm.PayPlanRecord.Is_to_be__c}" /></apex:column>
-                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord  == null}">Grand Total</apex:column>
-                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord != null}"><apex:outputField value="{!mm.PayPlanRecord.Due_Date__c}" /></apex:column>
-                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord == null}"></apex:column>
-                                                            <apex:column styleClass="readOnly"><apex:outputField value="{!mm.PayPlanRecord.Value__c}" /></apex:column>
-                                                            <apex:column styleClass="readOnly">{!mm.strAmount}</apex:column>
-                                                            <apex:column styleClass="readOnly" rendered="{!if(mm.PayPlanRecord != null && mm.PayPlanRecord.OC_Milestone__c == true && subPlanId != null,true,false)}"><apex:outputText value="✔"/> 
-                                                            </apex:column>
-                                                            <apex:column styleClass="readOnly" rendered="{!if(mm.PayPlanRecord != null && mm.PayPlanRecord.OC_Milestone__c == False && subPlanId != null,true,false)}"><apex:outputText value="✘"/> 
-                                                            </apex:column>
-                                                            <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord == null}"></apex:column>
-                                                         </apex:dataTable>
-                                                      </apex:outputPanel>
-                                                     </td>
-                                                     <td width="60%" colspan="2">
-                                                      <apex:outputPanel id="payplaneditdiv" >
-                                                        <apex:variable var="index" value="{!0}"/>
-                                                         <apex:dataTable id="ppTable2" value="{!qPlanWrapperC}" var="pd" width="100%" rendered="{!qPlanWrapperC !=NULL && editSchedule}">
-                                                            <apex:column width="15%" styleClass="Edit" >
-                                                                 <apex:inputField id="istobepaid" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Is_to_be_Paid__c}" rendered="{!pd.PayPlanRecord != null}" />                    
-                                                            </apex:column>
-                                                            <apex:column width="10%" styleClass="Edit">
-                                                                 <apex:inputField id="daysmonths" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Days_Months__c}" rendered="{!pd.PayPlanRecord != null}" />                    
-                                                            </apex:column>
-                                                            <apex:column width="1%" styleClass="Edit">
-                                                                 <apex:inputField id="daysmonthsvalue" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Days_Months_Value__c}" rendered="{!pd.PayPlanRecord != null}" />                    
-                                                            </apex:column>  
-                                                            <apex:column width="20%" styleClass="Edit">
-                                                                 <apex:inputField id="constructionstage" styleClass="{!pd.style}" style="width:85%" value="{!pd.payPlanRecord.Project_Construction_Stages__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
-                                                            </apex:column>
-                                                            <apex:column width="13%" styleClass="Edit">
-                                                                 <apex:inputField id="amountpercent" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Amount__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
-                                                            </apex:column>
-                                                            <apex:column width="13%" styleClass="Edit">
-                                                                 <apex:inputField id="amtvalue" styleClass="{!pd.style}" style="width:95%"  value="{!pd.PayPlanRecord.Amount_Value__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
-                                                            </apex:column>
-                                                            <!-- <apex:column styleClass="Edit">
-                                                                <apex:inputField value="{!pd.PayPlanRecord.Deduct_Token__c}" rendered="{!pd.PayPlanRecord != null && pd.PayPlanRecord.Amount__c == 'Percentage'}"  onclick="deductTokenCheck(this);"/>
-                                                            </apex:column> -->
-                                                            <apex:column styleClass="Edit" width="8%"><apex:outputField value="{!pd.PayPlanRecord.Due_Date__c}" rendered="{!pd.PayPlanRecord != null}"/></apex:column>
-                                                            <apex:column styleClass="Edit" width="15%">{!pd.strAmount}</apex:column>
-                                                             <apex:column >
-                                                                 <apex:commandLink value="+" onclick="rowModify({!index},'new');return false;" rendered="{!pd.PayPlanRecord != null}"/>
-                                                                 &nbsp; &nbsp;
-                                                                 
-                                                                 <apex:commandLink value="_" onclick="rowModify({!index},'remove');return false;" rendered="{!pd.PayPlanRecord != null}"/ > 
-                                                                 <apex:variable var="index" value="{!index + 1}" />
-                                                            </apex:column> 
-                                                        </apex:dataTable>
-                                                        </apex:outputPanel>
-                                                       </td>
-                                                   </tr>
-                                                    <tr>
-                                                        <th width="33%">
-                                                              <apex:outputPanel id="NPVPanel1" rendered="{!editSchedule}">
-                                                                <apex:outputLabel for="onpv" value="Original NPV :      " /> 
-                                                                 <apex:outputText id="onpv" value="{!SOriginalPlanNPV}" />
-                                                              </apex:outputPanel>
-                                                             </th>
-                                                             <th width="33%">
-                                                                <apex:outputPanel id="NPVPanel2" rendered="{!editSchedule}">
-                                                                <apex:outputLabel for="mnpv" value="Modified NPV :      " />
-                                                                <apex:outputText id="mnpv" value="{!SUpdatedPlanNPV}" />
-                                                                </apex:outputPanel>
-                                                            </th>
-                                                             <th width="34%">
-                                                                <apex:outputPanel id="NPVPanel3" rendered="{!editSchedule}">
-                                                                <apex:outputLabel for="diff" value="Discount :      " />
-                                                                <apex:outputText id="diff" value="{!SNPVDiffLumpsum}" />
-                                                                </apex:outputPanel>
-                                                            </th>
-                                                    </tr>
-                                                    <tr>
-                                                            <th width="33%">
-                                                              <apex:outputPanel id="NPVPanel4" rendered="{!editSchedule}">
-                                                                <apex:outputLabel for="onpvpsf" value="Original NPV PSF :   " /> 
-                                                                 <apex:outputText id="onpvpsf" value="{!SOriginalNPVPSF}" />
-                                                              </apex:outputPanel>
-                                                             </th>
-                                                             <th width="33%">
-                                                                <apex:outputPanel id="NPVPanel5" rendered="{!editSchedule}">
-                                                                <apex:outputLabel for="mnpvpsf" value="Modified NPV PSF : " />
-                                                                <apex:outputText id="mnpvpsf" value="{!SUpdatedNPVPSF}" />
-                                                                </apex:outputPanel>
-                                                            </th>
-                                                             <th width="34%">
-                                                                <apex:outputPanel id="NPVPanel6" rendered="{!editSchedule}">
-                                                                <apex:outputLabel for="diffpsf" value="Discount PSF : " />
-                                                                <apex:outputText id="diffpsf" value="{!SNPVDiffPSF}" />
-                                                                </apex:outputPanel>
-                                                            </th>
-                                                    </tr>
-                                                   </table>
-                                                </apex:outputPanel>
-                                            </td>
-                                        </tr>
-                                        
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </apex:outputPanel>
+                                                                    <table id="ppt">
+                                                                        <tr>
+                                                                            <td width="40%">
+                                                                            <apex:outputPanel id="payplaneditdivstatic" >
+                                                                                <apex:dataTable id="ppTable2static" value="{!qPlanWrapper}" var="mm" width="100%" rendered="{!qPlanWrapper !=NULL && editSchedule}">
+                                                                                    <!--  cloned column variable Read Only Mode -->
+                                                                                    <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord != null}"><apex:outputField value="{!mm.PayPlanRecord.Is_to_be__c}" /></apex:column>
+                                                                                    <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord  == null}">Grand Total</apex:column>
+                                                                                    <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord != null}"><apex:outputField value="{!mm.PayPlanRecord.Due_Date__c}" /></apex:column>
+                                                                                    <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord == null}"></apex:column>
+                                                                                    <apex:column styleClass="readOnly"><apex:outputField value="{!mm.PayPlanRecord.Value__c}" /></apex:column>
+                                                                                    <apex:column styleClass="readOnly">{!mm.strAmount}</apex:column>
+                                                                                    <apex:column styleClass="readOnly" rendered="{!if(mm.PayPlanRecord != null && mm.PayPlanRecord.OC_Milestone__c == true && subPlanId != null,true,false)}"><apex:outputText value="✔"/> 
+                                                                                    </apex:column>
+                                                                                    <apex:column styleClass="readOnly" rendered="{!if(mm.PayPlanRecord != null && mm.PayPlanRecord.OC_Milestone__c == False && subPlanId != null,true,false)}"><apex:outputText value="✘"/> 
+                                                                                    </apex:column>
+                                                                                    <apex:column styleClass="readOnly" rendered="{!mm.PayPlanRecord == null}"></apex:column>
+                                                                                </apex:dataTable>
+                                                                            
+                                                                            </apex:outputPanel>
+                                                                            </td>
+                                                                            <td width="60%" colspan="2">
+                                                                            <apex:outputPanel id="payplaneditdiv" >
+                                                                                -----Total Vaule2---
+                                                                                <apex:variable var="index" value="{!0}"/>
+                                                                                <apex:dataTable id="ppTable2" value="{!qPlanWrapperC}" var="pd" width="100%" rendered="{!qPlanWrapperC !=NULL && editSchedule}">
+                                                                                    <apex:column width="15%" styleClass="Edit" >
+                                                                                        <apex:inputField id="istobepaid" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Is_to_be_Paid__c}" rendered="{!pd.PayPlanRecord != null}" />                    
+                                                                                    </apex:column>
+                                                                                    <apex:column width="10%" styleClass="Edit">
+                                                                                        <apex:inputField id="daysmonths" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Days_Months__c}" rendered="{!pd.PayPlanRecord != null}" />                    
+                                                                                    </apex:column>
+                                                                                    <apex:column width="1%" styleClass="Edit">
+                                                                                        <apex:inputField id="daysmonthsvalue" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Days_Months_Value__c}" rendered="{!pd.PayPlanRecord != null}" />                    
+                                                                                    </apex:column>  
+                                                                                    <apex:column width="20%" styleClass="Edit">
+                                                                                        <apex:inputField id="constructionstage" styleClass="{!pd.style}" style="width:85%" value="{!pd.payPlanRecord.Project_Construction_Stages__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
+                                                                                    </apex:column>
+                                                                                    <apex:column width="13%" styleClass="Edit">
+                                                                                        <apex:inputField id="amountpercent" styleClass="{!pd.style}" style="width:95%" value="{!pd.PayPlanRecord.Amount__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
+                                                                                    </apex:column>
+                                                                                    <apex:column width="13%" styleClass="Edit">
+                                                                                        <apex:inputField id="amtvalue" styleClass="{!pd.style}" style="width:95%"  value="{!pd.PayPlanRecord.Amount_Value__c}" rendered="{!pd.PayPlanRecord != null}"/>                    
+                                                                                    </apex:column>
+                                                                                    <!-- <apex:column styleClass="Edit">
+                                                                                        <apex:inputField value="{!pd.PayPlanRecord.Deduct_Token__c}" rendered="{!pd.PayPlanRecord != null && pd.PayPlanRecord.Amount__c == 'Percentage'}"  onclick="deductTokenCheck(this);"/>
+                                                                                    </apex:column> -->
+                                                                                    <apex:column styleClass="Edit" width="8%"><apex:outputField value="{!pd.PayPlanRecord.Due_Date__c}" rendered="{!pd.PayPlanRecord != null}"/></apex:column>
+                                                                                    <apex:column styleClass="Edit" width="15%">{!pd.strAmount}</apex:column>
+                                                                                    <apex:column >
+                                                                                        <apex:commandLink value="+" onclick="rowModify({!index},'new');return false;" rendered="{!pd.PayPlanRecord != null}"/>
+                                                                                        &nbsp; &nbsp;
+                                                                                        
+                                                                                        <apex:commandLink value="_" onclick="rowModify({!index},'remove');return false;" rendered="{!pd.PayPlanRecord != null}"/ > 
+                                                                                        <apex:variable var="index" value="{!index + 1}" />
+                                                                                    </apex:column> 
+                                                                                </apex:dataTable>
+                                                                                </apex:outputPanel>
+                                                                            </td>
+                                                                        </tr>
+                                                                            <tr>
+                                                                                <th width="33%">
+                                                                                    <apex:outputPanel id="NPVPanel1" rendered="{!editSchedule}">
+                                                                                        <apex:outputLabel for="onpv" value="Original NPV-(A) :      " /> 
+                                                                                        <apex:outputText id="onpv" value="{!SOriginalPlanNPV}" />
+                                                                                        <!--<apex:outputText id="onpv" value="{!SOriginalPlanNPV2}" />-->
+                                                                                    </apex:outputPanel> 
+                                                                                    </th>
+                                                                                    <th width="33%">
+                                                                                        <apex:outputPanel id="NPVPanel2" rendered="{!editSchedule}">
+                                                                                        <apex:outputLabel for="mnpv" value="Modified NPV-(B) :      " />
+                                                                                        <apex:outputText id="mnpv" value="{!SUpdatedPlanNPV}" />
+                                                                                        </apex:outputPanel>
+                                                                                    </th>
+                                                                                    <th width="34%">
+                                                                                        <apex:outputPanel id="NPVPanel3" rendered="{!editSchedule}">
+                                                                                        <apex:outputLabel for="diff" value="Discount (NPV1) :      " />
+                                                                                        <apex:outputText id="diff" value="{!SNPVDiffLumpsum}" />
+                                                                                        </apex:outputPanel>
+                                                                                    </th>
+                                                                            </tr>
+                                                                            
+                                                                            <tr>
+                                                                                    <th width="33%">
+                                                                                    <apex:outputPanel id="NPVPanel4" rendered="{!editSchedule}">
+                                                                                        <apex:outputLabel for="onpvpsf" value="Original NPV PSF :   " /> 
+                                                                                        <apex:outputText id="onpvpsf" value="{!SOriginalNPVPSF}" />
+                                                                                    </apex:outputPanel>
+                                                                                    </th>
+                                                                                    <th width="33%">
+                                                                                        <apex:outputPanel id="NPVPanel5" rendered="{!editSchedule}">
+                                                                                        <apex:outputLabel for="mnpvpsf" value="Modified NPV PSF : " />
+                                                                                        <apex:outputText id="mnpvpsf" value="{!SUpdatedNPVPSF}" />
+                                                                                        </apex:outputPanel>
+                                                                                    </th>
+                                                                                    <th width="34%">
+                                                                                        <apex:outputPanel id="NPVPanel6" rendered="{!editSchedule}">
+                                                                                        <apex:outputLabel for="diffpsf" value="Discount PSF : " />
+                                                                                        <apex:outputText id="diffpsf" value="{!SNPVDiffPSF}" />
+                                                                                        </apex:outputPanel>
+                                                                                    </th>
+                                                                            </tr>
+                                                                        </table>
+                                                                        </apex:outputPanel>
+                                                                    </td>
+                                                                </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                  </table>
+                                                
+                                            </apex:outputPanel>
+                                            <apex:outputPanel >
+                                            <table>
+                                            <tr>
+                                            <apex:outputText value="{!SOriginalPlanNPV}" 
+                                            style="width: fixed; margin-left:10px;" />
+                                            </tr>
+                                            
+                                            <tr >
+                                            <th>
+                                            <apex:outputPanel id="DeafultNPVPanel_1" >
+                                            <apex:outputLabel for="onpv_1" value="NPV1-A (Default) :      " /> 
+                                            <apex:outputText id="onpv1_2" value="{!FormattedOriginalPlanNPVDeafult}" />
+                                            <!--<apex:outputText id="onpv" value="{!SOriginalPlanNPV2}" />-->
+                                            </apex:outputPanel> 
+                                            </th>
+                                            <th>
+                                            <apex:outputPanel id="SelectedNPVPanel_2" >
+                                            <apex:outputLabel for="mnpv_1" value="NPV1-B (Default) :      " />
+                                            <apex:outputText id="mnpv1_1" value="{!FormattedOriginalPlanNPV}" />
+                                            </apex:outputPanel>
+                                            </th>
+                                            <th>
+                                            <apex:outputPanel id="DiffNPVPanel_3">
+                                            <apex:outputLabel for="diff_1" value="NPV1 Loss:      " />
+                                            <apex:inputText id="diff_1" value="{!NPVDiffLumpsum_Loss}"
+                                            onchange="recalculateNPVLoss(this.value)"/>
+                                            </apex:outputPanel>
+                                            </th>
+                                            
+                                            <th colspan="4" class="blinkMe">
+                                            <apex:outputPanel id="npvErrorMsg">
+                                            <apex:outputText id="npvErrorMsg_1" value="{!errorMessage}" />
+                                            </apex:outputPanel>
+											</th>
+                                            </tr>
+                                            </table>
+                                            </apex:outputPanel>
+                                            
+                                            
+                                           
+                                            
+                                           
             </apex:form>
             
               <!-- DEMAND SEARCH FORM -->
@@ -762,6 +936,9 @@
   <!-- / REQUIRED SLDS WRAPPER -->  
             <!-- JAVASCRIPT -->
             <script>
+             
+			                               
+                                            
           var j$ = jQuery.noConflict();
      
             j$(document).ready(function() {
@@ -773,9 +950,53 @@
             }    
             });
             
+                                     
+            function recalculateNPVLoss(value) {
+        console.log('NPV Loss Changed (client-side): ' + value);
+    }                                       
             // events are not bound if partial refresh happens. we need to bind it again
             // hence keeping bindevents separately and call them when needed
-            
+
+            // /**Added for SDR Changes starts*/
+
+            // function validateCheckbox() {
+            //     var isDiscountClicked = '{!isCalculateDiscountClicked}';
+            //     if(isDiscountClicked !== 'true'){
+            //         alert('Please navigate to the Calculate Discount page and select or deselect the required discounts.');
+            //         return false; // ⛔ stops checkbox toggle
+            //     }
+            //     return true;
+            // }
+
+            // /**Added for SDR Changes ends*/
+            function refreshPlanOnDiscountChange() {
+                    var selectedPlan = j$('#planOptions :selected').val();
+                    if (selectedPlan && selectedPlan.length != 0) {
+                        console.log("Discount changed, refreshing plan with new discount option");
+                        
+                        var aVal = j$('.aval').text();
+                        aVal = removeFormat(aVal);
+                        var aValDisc = j$('.avalDisc').text();
+                        aValDisc = removeFormat(aValDisc);
+                        
+                        if(aValDisc === null || aValDisc == '') {
+                            RefreshPlanDiv(selectedPlan, aVal);
+                        } else {
+                            RefreshPlanDiv(selectedPlan, aValDisc);
+                 			
+                        }
+                        
+                 		
+                        	j$("[id$='saveScheduleBtn']").show();
+                        
+                    }
+                }
+                                     
+            function getCP_DiscountInput(){
+                const Cp_DicountInputPercent = parseFloat(document.getElementById('{!$Component.CP_DiscountInput}').value) || 0;
+                }
+                                     
+                                     
             function bindEvents() {
                 j$('.disableField').prop('disabled', true);
                 j$("[id$='projLookup_lkwgt']").remove();
@@ -889,7 +1110,52 @@
                 });
         }
        
-       function populatePlan21(){
+            /*  function populatePlan21(){
+            console.log('1: ');
+                var errorId = '';
+                var rowHtml1 = "<tr><th>Milestone Type</th> <th>Add Delay</th><th>Days/Months</th> <th>Construction Link</th><th>Pay Type</th><th>Amount</th><th>Date</th><th>Installment</th> <th>Action</th></tr>";
+           		 console.log('2: ');     
+           j$("[id$='ppTable2']" + '> tbody > tr:first').before(rowHtml1);
+            console.log('3: ');
+                j$("[id$='ppTable2'] tr").last().find('td').each (function() {
+                        j$(this).addClass("header");
+                }); 
+            console.log('4: ');
+                j$('.messageCell').hide();
+            console.log('5: ');
+                // disable edits of payment plan on the edit schedule screen
+                j$('#planOptions :selected').prop('disabled',true);
+            console.log('6: ');
+                j$("[id$='editScheduleBtn']").hide();
+            console.log('7: ');
+                j$("[id$='applyScheduleBtn']").show();
+            console.log('8: ');
+                j$("[id$='saveScheduleBtn']").show();
+           	    
+                //j$("[id$='baseaRate']").hide();
+                console.log('before error');
+                j$("[id$='ppTable2']").find("tr").each(function() { //get all rows in table
+                   errorId = j$(this).find('td input.error').attr('id');
+                    
+                    console.log('9: '+errorId);
+                   if(errorId) {
+                        return false;
+                   }
+                 });
+            console.log('10: ');
+                if(errorId) {
+                    j$("[id$='saveScheduleBtn']").prop('disabled',true);
+                    
+                } else {
+                     console.log('11: ');
+                    j$("[id$='saveScheduleBtn']").prop('disabled',false);                    
+                }
+           		
+           		
+           		
+        }     */
+            
+              function populatePlan21(){
                 var errorId = '';
                 var rowHtml1 = "<tr><th>Milestone Type</th> <th>Add Delay</th><th>Days/Months</th> <th>Construction Link</th><th>Pay Type</th><th>Amount</th><th>Date</th><th>Installment</th> <th>Action</th></tr>";
                 j$("[id$='ppTable2']" + '> tbody > tr:first').before(rowHtml1);
@@ -949,6 +1215,7 @@
                       j$("[id$='saveScheduleBtn']").prop('disabled',true);
                 }
         }
+            
         function PreselectPlan(){
             // calling bind events to re-register handlers on partial page updates
             if('{!subPlanId}' != null && '{!subPlanId}' != ''){
@@ -995,6 +1262,7 @@
             j$("#quoteDetails").show();
             j$("[id$='baseaRate']").show();
             j$("[id$='cancelBtn']").show();
+            
         }
         
         function PreselectPlanOnCancel() {
@@ -1022,7 +1290,7 @@
             j$("#projectAddress").show();
             j$("#quoteDetails").show();
             j$("[id$='baseaRate']").show();
-            
+            //j$("[id$='right1Disc']").hide();
         }
         
         function editSchedule(){
@@ -1128,6 +1396,11 @@
                 bindEvents2();
           }
         }
+        
+        
+  
+		
+                        
       </script>
      <!-- / JAVASCRIPT -->
     </body>

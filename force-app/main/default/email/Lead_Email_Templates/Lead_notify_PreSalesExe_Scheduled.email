@@ -1,0 +1,9 @@
+<messaging:emailTemplate subject="You Have an Upcoming Visit" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>You have an upcoming follow-up on a VC/VP for Mr/Ms. {!relatedTo.Name}.</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

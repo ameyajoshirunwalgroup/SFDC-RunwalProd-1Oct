@@ -17,9 +17,7 @@ trigger trgToUpdateOppStage on Project_Unit__c (after update, before update , af
     if(!byPassTriggerExceution)
     {
     system.debug('PU trigger');
-if(Test.isRunningTest()){
-    trgToUpdateOppStageHandler.dummy();
-}
+
  trgToUpdateOppStageHandler objHandler = new trgToUpdateOppStageHandler();     
  if(Trigger.IsAfter && Trigger.IsUpdate && firstrun)
  {firstrun= false;
@@ -45,7 +43,7 @@ if(Test.isRunningTest()){
      List<Id> unitIds = new List<Id>();  //Added by Vinay 18-02-2025
      list<Id> unitIdstoUpdate = new list<Id>();//Added by Prashant 5-3-25
      List<Id> unitIdsLst = new List<Id>();//Added for SDR/ROC Management
-     List<Project_Unit__c> serviceRoomsToUpdate = new List<Project_Unit__c>();  //Added by Vinay 20-05-2025
+     List<Project_Unit__c> serviceRoomsToUpdate = new List<Project_Unit__c>();  //Added by Vinay 06-05-2025
      for(Project_Unit__c pid : Trigger.New)
      {     system.debug(pid.RW_Unit_Status__c);
       
@@ -67,11 +65,16 @@ if(Test.isRunningTest()){
           if(Trigger.oldmap.get(pid.id).New_Type__c != Trigger.newmap.get(pid.id).New_Type__c){
               unitIdstoUpdate.add(pid.Id);//Added by Prashant 5-3-25
           }
-          if(String.isNotBlank(pid.Service_Room_Unit__c) && pid.RW_Unit_Status__c =='Booked' && Trigger.oldmap.get(pid.id).RW_Unit_Status__c !='Booked'){ //Added by Vinay 20-05-2025
+          SYstem.debug('Outsideif**');
+          if(String.isNotBlank(pid.Service_Room_Unit__c) && pid.RW_Unit_Status__c =='Booked' && Trigger.oldmap.get(pid.id).RW_Unit_Status__c !='Booked'){ //Added by Vinay 06-05-2025
+              System.debug('Inside test**');
               Project_Unit__c unit = new Project_Unit__c();
               unit.Id = pid.Service_Room_Unit__c;
               unit.RW_Unit_Status__c = 'Sold';
               serviceRoomsToUpdate.add(unit);
+          }
+          if(pid.Send_to_SAP__c && !Trigger.oldmap.get(pid.id).Send_to_SAP__c){ //Added by Vinay 07-05-2025
+              projectUnitIds.add(pid.Id);
           }
           if(Trigger.oldmap.get(pid.id).SD_Paid_By_Runwal__c != Trigger.newmap.get(pid.id).SD_Paid_By_Runwal__c){
             unitIdsLst.add(pid.Id);
@@ -92,7 +95,7 @@ if(Test.isRunningTest()){
             objHandler.calculateRRR(unitIdsLst);
      }
      if(serviceRoomsToUpdate.size() > 0){ //Added by Vinay 20-05-2025
-        update serviceRoomsToUpdate;
+         update serviceRoomsToUpdate;
      }
      
  }
@@ -111,7 +114,7 @@ if(Test.isRunningTest()){
         //Call the Logic cls
         if(puIdstoUpdate.size() > 0){
             SendRMdetailstoSAP.updateRMUpdationDate(puIdstoUpdate);
-            LockatedApp_Notifications.rmChangedNotification(puIdstoUpdate); //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.rmChangedNotification(puIdstoUpdate); //Added by Vinay 20-01-2026
         }
         
         
@@ -185,74 +188,9 @@ if(Test.isRunningTest()){
             if(unitsForServiceAreaUpdate.size() > 0){
                 serviceRoomUnitHandler.updateServiceRoomAreaOnUnits(unitsForServiceAreaUpdate);
             }
-            if(test.isRunningTest()){
-            integer i=0;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            i++;
-			i++;
-			i++;
-            }
+            
         }
        //Added by Vinay 17-02-2025 End
     }
+    
 }

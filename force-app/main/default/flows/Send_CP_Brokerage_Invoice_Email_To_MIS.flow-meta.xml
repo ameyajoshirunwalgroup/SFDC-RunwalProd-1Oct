@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_CP_Brokerage_Invoice_Email_to_MIS</name>
+        <label>Send CP Brokerage Invoice Email to MIS</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>CP_Brokerage__c.Send_CP_Brokerage_Invoice_Email_to_MIS</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>CP_Brokerage__c.Send_CP_Brokerage_Invoice_Email_to_MIS</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>66.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Intimation mail triggers the MIS for invoice approval after CP has uploaded the docs.</description>
+    <environments>Default</environments>
+    <interviewLabel>Send CP Brokerage Invoice Email To MIS {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Send CP Brokerage Invoice Email To MIS</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_CP_Brokerage_Invoice_Email_to_MIS</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Invoice_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Invoice Uploaded</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Invoice_Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>CP_Brokerage__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

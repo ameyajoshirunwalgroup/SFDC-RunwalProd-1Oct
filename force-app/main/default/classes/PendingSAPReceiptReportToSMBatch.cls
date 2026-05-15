@@ -39,10 +39,13 @@ global class PendingSAPReceiptReportToSMBatch implements Database.Batchable<sObj
     global void execute(Database.BatchableContext bc, List<Booking__c> scope) {
 
         Map<String, List<Booking__c>> smEmailVsBookings = new Map<String, List<Booking__c>>();
+        //Map<Id, List<RW_Payment_Details__c>> bookingVsReceipts = new Map<Id, List<RW_Payment_Details__c>>();
+        //Set<Id> bookingIds = new Set<Id>();
         
         if(!scope.isEmpty()){
             for (Booking__c b : scope) {
                 String email = b.Customer__r.Sales_Manager_User__r.Email;
+                //bookingIds.add(b.Id);
                 if (!smEmailVsBookings.containsKey(email)) {
                     smEmailVsBookings.put(email, new List<Booking__c>());
                 }
@@ -50,6 +53,18 @@ global class PendingSAPReceiptReportToSMBatch implements Database.Batchable<sObj
             }
         }
 
+        // List<RW_Payment_Details__c> lstReceipt = new List<RW_Payment_Details__c>();
+        // if(!bookingIds.isEmpty()){
+        //     lstReceipt = [Select Id,Name,RW_Booking__c from RW_Payment_Details__c where RW_Booking__c=:bookingIds];
+        // }
+        //  if(!lstReceipt.isEmpty() && lstReceipt.size()>0){
+        //     for (RW_Payment_Details__c r : lstReceipt) {
+        //         if (!bookingVsReceipts.containsKey(r.RW_Booking__c)) {
+        //             bookingVsReceipts.put(r.RW_Booking__c, new List<RW_Payment_Details__c>());
+        //         }
+        //         bookingVsReceipts.get(r.RW_Booking__c).add(r);
+        //     }
+        // }
 
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
 
@@ -63,7 +78,9 @@ global class PendingSAPReceiptReportToSMBatch implements Database.Batchable<sObj
                 'Booking Id,Booking Name,Customer Name,SAP Customer Number,Project,Unit,Status\n';
 
             for (Booking__c bkg : bkgList) {
-                
+                //List<Receipt__c> receiptList = bookingVsReceipts.get(bkg.Id);
+                //for (Receipt__c receipt : receiptList) {
+                //if(!bookingVsReceipts.containsKey(bkg.Id)){
                     csvData +=
                     bkg.Id + ',' +
                     bkg.Name + ',' +
@@ -72,7 +89,8 @@ global class PendingSAPReceiptReportToSMBatch implements Database.Batchable<sObj
                     bkg.Project__r.Name + ',' +
                     bkg.Unit_No__c + ',' +
                     bkg.Status__c + '\n';
-                }
+                //}
+            }
             csvData = csvData.replace('null', '');
 
             Messaging.EmailFileAttachment attach = new Messaging.EmailFileAttachment();

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CN_type__c</fullName>
+    <label>CN type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ADF</fullName>
+                <default>false</default>
+                <label>ADF</label>
+            </value>
+            <value>
+                <fullName>Offer / Voucher</fullName>
+                <default>false</default>
+                <label>Offer / Voucher</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

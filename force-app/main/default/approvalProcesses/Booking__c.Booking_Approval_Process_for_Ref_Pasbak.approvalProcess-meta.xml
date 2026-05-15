@@ -42,7 +42,7 @@
             <type>RejectRequest</type>
         </rejectBehavior>
     </approvalStep>
-    <emailTemplate>unfiled$public/Booking_Approver_for_Referral_Passback</emailTemplate>
+    <emailTemplate>My_View/Booking_Approver_for_Referral_Passback</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
         <formula>IF( AND(ISPICKVAL( Source_of_Booking__c , &apos;Referral&apos;), ISPICKVAL( Sub_Source__c , &apos;Existing client reference&apos;)), AND( AND(NOT(ISPICKVAL( Booking_Confirmation_Approval_Status__c , &apos;Approved&apos;)), NOT(ISPICKVAL( Booking_Confirmation_Approval_Status__c , &apos;Sent for Approval&apos;))),AND(Not(ISNULL( Brokerage__c )), RW_Applicant_KYC_Verified__c )) , AND( AND(NOT(ISPICKVAL( Booking_Confirmation_Approval_Status__c , &apos;Approved&apos;)), NOT(ISPICKVAL( Booking_Confirmation_Approval_Status__c , &apos;Sent for Approval&apos;))) ,RW_Applicant_KYC_Verified__c) )</formula>

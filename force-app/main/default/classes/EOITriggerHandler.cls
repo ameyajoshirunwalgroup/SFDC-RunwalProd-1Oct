@@ -18,7 +18,7 @@ public without sharing class EOITriggerHandler
         Map<String,String> dataErrorMap= new Map<String,String>();
         
         
-		List<Opportunity> oList  = [Select Id, SAP_Customer_Number__c, RW_Sourcing_Manager__c,RW_Sourcing_Head__c,RW_Sales_Associate__c,RW_Closing_Head__c,Walkin_Source__c,SalesOrder_Number__c, RW_Project_Unit__c,  RW_Project_Unit__r.TowerName__c,  RW_Project__c, RW_Project_Unit__r.Booking__c , (Select Id,Name from EOI__r Where RW_Status__c='EOI Confirmed') from Opportunity where Id IN: oIdSet];           
+		List<Opportunity> oList  = [Select Id, SAP_Customer_Number__c, RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,RW_Sourcing_Head__c,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,RW_Closing_Head__c,Walkin_Source__c,SalesOrder_Number__c, RW_Project_Unit__c,  RW_Project_Unit__r.TowerName__c,  RW_Project__c, RW_Project_Unit__r.Booking__c , (Select Id,Name from EOI__r Where RW_Status__c='EOI Confirmed') from Opportunity where Id IN: oIdSet]; //Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 04-12-2025
         {
             System.debug('*inside opportunity*'+oList);
             for(Opportunity opp : oList)
@@ -251,10 +251,10 @@ public without sharing class EOITriggerHandler
             receiptMap.put(receiptRecord.Id , receiptRecord);
             }
         }
-             for(RW_EOI__c eoiRec :[Select Id,Name,Total_Amount_Received__c,RW_Primary_First_Name__c,Opportunity__r.SAP_Customer_Number__c, Opportunity__r.RW_Sales_Associate__c,RW_Primary_Last_Name__c,RW_Primary_Email__c,Opportunity__r.RW_Project__c,Opportunity__c,Opportunity__r.RW_Project__r.Name,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email from RW_EOI__c where Id IN : eoiRecIds])
+             for(RW_EOI__c eoiRec :[Select Id,Name,Total_Amount_Received__c,RW_Primary_First_Name__c,Opportunity__r.SAP_Customer_Number__c, Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,RW_Primary_Last_Name__c,RW_Primary_Email__c,Opportunity__r.RW_Project__c,Opportunity__c,Opportunity__r.RW_Project__r.Name,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email from RW_EOI__c where Id IN : eoiRecIds])  //Added Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name by Vinay 05-12-2025
         {
            eoiRecMap.put(eoiRec.Id,eoiRec) ;
-           eoiSalesManagerSet.add(eoiRec.Opportunity__r.RW_Sales_Associate__c);
+           eoiSalesManagerSet.add(eoiRec.Opportunity__r.Sales_Manager_User__r.Name); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
            ProjetRecIds.add(eoiRec.Opportunity__r.RW_Project__c);
         }
             
@@ -341,11 +341,11 @@ public without sharing class EOITriggerHandler
                 toAddress.add(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email);
             }
 
-            if(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.RW_Sales_Associate__c != null && eoiSalesManagerEmailIds.containsKey(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.RW_Sales_Associate__c))
+            if(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.Sales_Manager_User__c != null && eoiSalesManagerEmailIds.containsKey(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.Sales_Manager_User__r.Name))	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             {
-                system.debug('*Email 3*'+eoiSalesManagerEmailIds.get(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.RW_Sales_Associate__c));
-                If(eoiSalesManagerEmailIds.get(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.RW_Sales_Associate__c) != null)
-                toAddress.add(eoiSalesManagerEmailIds.get(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.RW_Sales_Associate__c));
+                system.debug('*Email 3*'+eoiSalesManagerEmailIds.get(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.Sales_Manager_User__r.Name));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
+                If(eoiSalesManagerEmailIds.get(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.Sales_Manager_User__c) != null) 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+                toAddress.add(eoiSalesManagerEmailIds.get(eoiRecMap.get(receiptMap.get(receipts).EOI__c).Opportunity__r.Sales_Manager_User__r.Name));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             }
             SYSTEM.debug('*EMAIL iDS*'+toAddress);
             if(toAddress != null && toAddress.size() > 0)
@@ -430,12 +430,12 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             customerHeader.kukla = 'Partnership Firm';
             
              // these need to mapped in SAP based on SFDC data
-                if(String.isNotBlank(oppRec.RW_Sourcing_Manager__c))
-                    customerHeader.Kvgr1 =oppRec.RW_Sourcing_Manager__c;
+                if(String.isNotBlank(oppRec.Sourcing_Manager_User__c))  // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025
+                    customerHeader.Kvgr1 =oppRec.Sourcing_Manager_User__r.Name; // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__r.Name by Vinay 04-12-2025
                 if(String.isNotBlank(oppRec.RW_Sourcing_Head__c))
                     customerHeader.Kvgr2 =oppRec.RW_Sourcing_Head__c;
-                if(String.isNotBlank(oppRec.RW_Sales_Associate__c))
-                    customerHeader.Kvgr3 = oppRec.RW_Sales_Associate__c;
+                if(String.isNotBlank(oppRec.Sales_Manager_User__c)) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+                    customerHeader.Kvgr3 = oppRec.Sales_Manager_User__r.Name; 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 if(String.isNotBlank(oppRec.RW_Closing_Head__c))
                     customerHeader.Kvgr4 = oppRec.RW_Closing_Head__c;
                 if(String.isNotBlank(oppRec.Walkin_Source__c))
@@ -981,7 +981,7 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
         }
         System.debug('inside method');
         
-        List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Project__r.Sales_Site_Head__c,RW_Project__r.Sales_Site_Head__r.Email,RW_Sales_Associate__c,RW_Sourcing_Manager__c, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds];
+        List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Project__r.Sales_Site_Head__c,RW_Project__r.Sales_Site_Head__r.Email,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds]; //Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 04-12-2025
         for(Opportunity opp : oppRecList)
         {
             for(RW_EOI__c eoiRec : eoiMap.values())
@@ -991,7 +991,7 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
                      opportunityEoiMap.put(eoiRec.Id, opp);
                      oppRecords.add(opp);
                      eoiSalesManagerSet.add(opp.RW_Sales_Associate__c);
-                     eoiSourcingManagerSet.add(opp.RW_Sourcing_Manager__c);
+                     eoiSourcingManagerSet.add(opp.Sourcing_Manager_User__c); // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025
                     }
                 }
         }
@@ -1037,11 +1037,11 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
                 eoiSalesManagerEmailIds.put(u.Name,u.Email);
             }
         
-        List<User> userRecord = [Select id,Name,Email from User Where Name IN:eoiSourcingManagerSet];
+        List<User> userRecord = [Select id,Name,Email from User Where Id IN:eoiSourcingManagerSet]; //Replaced Name with Id by Vinay 04-12-2025
             if(userRecord != null && userRecord.size() >0)
             {
                 for(User u : userRecord)
-                eoiSourcingManagerEmailIds.put(u.Name,u.Email);
+                eoiSourcingManagerEmailIds.put(u.Id,u.Email); //Replaced Name with Id by Vinay 04-12-2025
             }
             
             EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='EOI_Cancellation'];
@@ -1061,13 +1061,13 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             if(opportunityEoiMap.get(eoiRec.Id).RW_Project__r.Sales_Site_Head__c != null && opportunityEoiMap.get(eoiRec.Id).RW_Project__r.Sales_Site_Head__r.Email != null )
             toAddress.add(opportunityEoiMap.get(eoiRec.Id).RW_Project__r.Sales_Site_Head__r.Email);
 
-            if(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c != null && eoiSalesManagerEmailIds.containsKey(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c))
+            if(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c != null && eoiSalesManagerEmailIds.containsKey(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name)) 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             {
-                toAddress.add(eoiSalesManagerEmailIds.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c));
+                toAddress.add(eoiSalesManagerEmailIds.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             }
-                 if(opportunityEoiMap.get(eoiRec.Id).RW_Sourcing_Manager__c != null && eoiSourcingManagerEmailIds.containsKey(opportunityEoiMap.get(eoiRec.Id).RW_Sourcing_Manager__c))
+                 if(opportunityEoiMap.get(eoiRec.Id).Sourcing_Manager_User__c != null && eoiSourcingManagerEmailIds.containsKey(opportunityEoiMap.get(eoiRec.Id).Sourcing_Manager_User__c)) // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025
             {
-                toAddress.add(eoiSourcingManagerEmailIds.get(opportunityEoiMap.get(eoiRec.Id).RW_Sourcing_Manager__c));
+                toAddress.add(eoiSourcingManagerEmailIds.get(opportunityEoiMap.get(eoiRec.Id).Sourcing_Manager_User__c)); // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025
             }
                 
                 
@@ -1118,15 +1118,15 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             String customerhtmlBody = customertemplate.HtmlValue; 
             customerhtmlBody = customerhtmlBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null)	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c)); 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             else
             customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');  
                 
                 String customerTextBody = customertemplate.Body; 
             customerTextBody = customerTextBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);  
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025	
             else
             customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx');  
             
@@ -1158,7 +1158,7 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
                 opportunityIds.add(eoiRec.Opportunity__c);
             }
         
-            List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Sales_Associate__c, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds];
+            List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
         for(Opportunity opp : oppRecList)
         {
             for(RW_EOI__c eoiRec : eoiMap.values())
@@ -1177,14 +1177,14 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             String customerhtmlBody = customertemplate.HtmlValue; 
             customerhtmlBody = customerhtmlBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null)  //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025	
             else
             customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx'); 
                 String customerTextBody = customertemplate.Body; 
             customerTextBody = customerTextBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);  
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c));	 //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025	
             else
             customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx'); 
             
@@ -1213,7 +1213,7 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
                 opportunityIds.add(eoiRec.Opportunity__c);
             }
         
-            List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Sales_Associate__c, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds];
+            List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
         for(Opportunity opp : oppRecList)
         {
             for(RW_EOI__c eoiRec : eoiMap.values())
@@ -1231,14 +1231,14 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             String customerhtmlBody = customertemplate.HtmlValue; 
             customerhtmlBody = customerhtmlBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);
              map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null)	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             else
             customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx'); 
                 String customerTextBody = customertemplate.Body; 
             customerTextBody = customerTextBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);  
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             else
             customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx'); 
             
@@ -1281,7 +1281,7 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
                 opportunityIds.add(eoiRec.Opportunity__c);
             }
         
-         List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Sales_Associate__c, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds];
+         List<Opportunity> oppRecList = [Select Id,RW_Project__r.Name ,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, SAP_Customer_Number__c from Opportunity where Id= :opportunityIds]; 	//Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
         for(Opportunity opp : oppRecList)
         {
             for(RW_EOI__c eoiRec : eoiMap.values())
@@ -1294,15 +1294,15 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
                 }
         }
         
-            List<RW_EOI__c> eoiRecords = [Select Id,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email from RW_EOI__c Where id IN:eoiIds];
+            List<RW_EOI__c> eoiRecords = [Select Id,Name,Opportunity__r.RW_Sales_Associate__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email from RW_EOI__c Where id IN:eoiIds]; //Added Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name by Vinay 05-12-2025
             for(RW_EOI__c eoiRec : eoiRecords)
             {
                 if(eoiRec.Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email != null)
                 SiteHeadMap.put(eoiRec.Id, eoiRec.Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email);
-                if(eoiRec.Opportunity__r.RW_Sales_Associate__c != null)
+                if(eoiRec.Opportunity__r.Sales_Manager_User__c != null) 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
                 {
-                 eoiSalesManagerSet.add(eoiRec.Opportunity__r.RW_Sales_Associate__c);
-                eoiSalesManagerMap.put(eoiRec.Id,eoiRec.Opportunity__r.RW_Sales_Associate__c);
+                 eoiSalesManagerSet.add(eoiRec.Opportunity__r.Sales_Manager_User__r.Name); 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
+                eoiSalesManagerMap.put(eoiRec.Id,eoiRec.Opportunity__r.Sales_Manager_User__r.Name); 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 }
             }
         
@@ -1324,10 +1324,10 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             customerhtmlBody = customerhtmlBody.replace('{!UnitNumber}', eoiUnitMap.get(eoiRec.Id).Name);
             customerhtmlBody = customerhtmlBody.replace('{!EOIAckDate}', String.valueOf(eoiRec.RW_EOI_Acknowledgement_Sent_Date_Time__c));
             map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
-             System.debug('block number'+mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c));
-            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
+             System.debug('block number'+mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name)); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
+            if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null)  //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
             {
-                customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+                customerhtmlBody = customerhtmlBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c));	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 System.debug('inside phone check');
             }
                 else
@@ -1339,9 +1339,9 @@ public static String createCustomer(Opportunity oppRec,RW_EOI__c eoiRec ,Project
             customerTextBody = customerTextBody.replace('{!CustomerName}', eoiRec.RW_Primary_First_Name__c+' '+eoiRec.RW_Primary_Last_Name__c);  
             customerTextBody = customerTextBody.replace('{!UnitNumber}', eoiUnitMap.get(eoiRec.Id).Name);
             customerTextBody = customerTextBody.replace('{!EOIAckDate}', String.valueOf(eoiRec.RW_EOI_Acknowledgement_Sent_Date_Time__c));
-             System.debug('block number'+mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c));
-                if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c)!=null)
-            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).RW_Sales_Associate__c).RW_Phone__c));	
+             System.debug('block number'+mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name)); 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
+                if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__c)!=null) 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+            customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', string.valueOf(mapOfCustomSetting.get(opportunityEoiMap.get(eoiRec.Id).Sales_Manager_User__r.Name).RW_Phone__c)); 	//Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025	
             else
             customerTextBody = customerTextBody.replace('{!SMPhoneNumber}', 'xxxxxxxxxx'); 
             

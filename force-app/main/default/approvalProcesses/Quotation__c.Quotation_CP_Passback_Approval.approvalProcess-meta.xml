@@ -24,6 +24,14 @@
             </approver>
             <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
         </assignedApprover>
+        <entryCriteria>
+            <criteriaItems>
+                <field>Quotation__c.Discount_Applied__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </criteriaItems>
+        </entryCriteria>
+        <ifCriteriaNotMet>GotoNextStep</ifCriteriaNotMet>
         <label>Level 1</label>
         <name>Level1</name>
         <rejectionActions>
@@ -66,10 +74,10 @@
     </approvalStep>
     <description>Approval process when CP Passback discount is given.
 approvers are - Souricing head and Site head.</description>
-    <emailTemplate>unfiled$public/Quotation_Approval_Email_Template</emailTemplate>
+    <emailTemplate>My_View/Quotation_Approval_Email_Template</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
-        <booleanFilter>(1 AND 2 AND 3 AND 4) OR (1 AND 2 AND 3 AND 4 AND 5)</booleanFilter>
+        <booleanFilter>(1 AND 2 AND 3 AND 4) OR (1 AND 2 AND 3 AND 4 AND 5) OR 6</booleanFilter>
         <criteriaItems>
             <field>Quotation__c.Quote_Status__c</field>
             <operation>equals</operation>
@@ -92,6 +100,11 @@ approvers are - Souricing head and Site head.</description>
         <criteriaItems>
             <field>Quotation__c.Discount_1_Type__c</field>
             <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Quotation__c.Car_Parking_Approval__c</field>
+            <operation>equals</operation>
+            <value>Pending,Rejected</value>
         </criteriaItems>
     </entryCriteria>
     <finalApprovalActions>

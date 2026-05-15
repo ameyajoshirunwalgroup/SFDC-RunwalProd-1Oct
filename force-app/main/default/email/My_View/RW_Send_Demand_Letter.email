@@ -1,0 +1,14 @@
+<messaging:emailTemplate subject="Demand letter" recipientType="User" relatedToType="RW_Demand__c">
+<messaging:plainTextEmailBody >
+
+Dear Team,
+
+This is to inform you that Demand Letter has been generated for the Demand - {!RelatedTo.Name} And Demand Number - {!RelatedTo.RW_Billing_Document_Number__c}.
+
+Please go through the Attached File!
+
+Thanks,
+Runwal Team
+
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

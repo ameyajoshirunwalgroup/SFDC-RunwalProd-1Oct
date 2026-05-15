@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retention_Task_Completed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;Retention_Task&quot;,
+    ISPICKVAL(Status, &quot;Completed&quot;),
+    ISBLANK(TEXT(Retention_Status__c))
+)</errorConditionFormula>
+    <errorDisplayField>Retention_Status__c</errorDisplayField>
+    <errorMessage>You cannot complete a Retention Task without selecting a Retention Status. Please update the &apos;Retention Status&apos; field before saving.</errorMessage>
+</ValidationRule>

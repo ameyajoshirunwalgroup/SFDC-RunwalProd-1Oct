@@ -4,7 +4,8 @@
     <active>true</active>
     <errorConditionFormula>AND(
 NOT(ISPICKVAL( RW_Loan_Record_Status__c , &apos;Loan Closed&apos;)),
-ISPICKVAL(RW_Bank_Preference_1__c , &apos;&apos;)
+ISPICKVAL(RW_Bank_Preference_1__c , &apos;&apos;),
+ ByPassValidations__c == false
 )</errorConditionFormula>
     <errorMessage>Please select Bank Preference 1</errorMessage>
 </ValidationRule>

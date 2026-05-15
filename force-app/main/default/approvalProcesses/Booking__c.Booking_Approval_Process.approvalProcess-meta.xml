@@ -31,6 +31,19 @@
         <label>Site head approval</label>
         <name>Site_head_approval</name>
     </approvalStep>
+    <description>1. The Standard Requirements (Everyone)
+For any booking to be considered valid under this logic, these conditions must be true:
+
+The Approval is not finished: The booking status is currently not &quot;Approved.&quot;
+
+The Approval hasn&apos;t started: The status is not &quot;Sent for Approval.&quot;
+
+KYC is done: The Applicant’s KYC verification must be checked/verified.
+
+2. The Partner Requirement (Channel Partners Only)
+If the source of the booking is a Channel Partner, the system adds one extra &quot;must-have&quot;:
+
+Brokerage must be entered: The Brokerage field cannot be empty.</description>
     <emailTemplate>RW_Booking/Booking_Approver_Request_Template</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>

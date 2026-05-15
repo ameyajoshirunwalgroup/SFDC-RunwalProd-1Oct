@@ -30,22 +30,15 @@
                 <div class="slds-col slds-size_3-of-4">
                     <div class="filter-container">
 
+                        <lightning-combobox label="Segment" value={selectedSegment} options={segmentOptions} onchange={handleSegmentChange}></lightning-combobox>
 
-                        <lightning-combobox label="Project" value={selectedProject} options={projectOptions}
-                            onchange={handleProjectChange}>
-                        </lightning-combobox>
+                        <lightning-combobox label="Project" value={selectedProject} options={projectOptions} onchange={handleProjectChange}></lightning-combobox>
 
-                        <lightning-combobox label="TL Name" value={selectedTL} options={tlOptions}
-                            onchange={handleTLChange}>
-                        </lightning-combobox>
+                        <lightning-combobox label="TL Name" value={selectedTL} options={tlOptions} onchange={handleTLChange}></lightning-combobox>
 
-                        <lightning-combobox label="RM Name" value={selectedRM} options={rmOptions}
-                            onchange={handleRMChange}>
-                        </lightning-combobox>
+                        <lightning-combobox label="RM Name" value={selectedRM} options={rmOptions} onchange={handleRMChange}></lightning-combobox>
 
-
-                        <lightning-button label="Reset" onclick={handleReset} class="slds-m-left_small">
-                        </lightning-button>
+                        <lightning-button label="Reset" onclick={handleReset} class="slds-m-left_small"></lightning-button>
 
                     </div>
                 </div>
@@ -76,6 +69,9 @@
                             <th onclick={handleSort} data-field="customerNumber">
                                 SAP Customer Number {getSortIcon.customerNumber}
                             </th>
+                            <th onclick={handleSort} data-field="segment">
+                                Segment {getSortIcon.segment}
+                            </th>
                             <th onclick={handleSort} data-field="project">
                                 Project {getSortIcon.project}
                             </th>
@@ -94,8 +90,11 @@
                             <th onclick={handleSort} data-field="tlName">
                                 TL Name {getSortIcon.tlName}
                             </th>
-                            <th onclick={handleSort} data-field="commType">
-                                Communication Type {getSortIcon.commType}
+                            <th onclick={handleSort} data-field="lastCrmCallSubject">
+                                Last CRM Call Subject {getSortIcon.lastCrmCallSubject}
+                            </th>
+                            <th onclick={handleSort} data-field="assignedTo">
+                                Assigned To {getSortIcon.assignedTo}
                             </th>
                             <th onclick={handleSort} data-field="inboundDeskAgent">
                                 Inbound Desk Agent {getSortIcon.inboundDeskAgent}
@@ -124,13 +123,15 @@
                             <tr key={row.recordId} class={row.rowClass}>
                                 <td>{row.customerName}</td>
                                 <td>{row.customerNumber}</td>
+                                <td>{row.segment}</td>
                                 <td>{row.project}</td>
                                 <td>{row.unit}</td>
                                 <td>{row.tower}</td>
                                 <td>{row.phase}</td>
                                 <td>{row.rmName}</td>
                                 <td>{row.tlName}</td>
-                                <td>{row.communicationType}</td>
+                                <td>{row.lastCrmCallSubject}</td>
+                                <td>{row.assignedTo}</td>
                                 <td>{row.inboundDeskAgent}</td>
                                 <td>{row.callDate}</td>
                                 <td>{row.callTime}</td>

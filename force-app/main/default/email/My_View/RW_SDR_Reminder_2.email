@@ -1,0 +1,10 @@
+<messaging:emailTemplate subject="SDR Reminder" recipientType="User" relatedToType="Booking__c">
+<messaging:plainTextEmailBody >   
+Dear RM,
+
+This is the Reminder mail 2 for the SDR for the Booking "{!relatedTo.Name}".
+
+Thanks,
+Runwal Team
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

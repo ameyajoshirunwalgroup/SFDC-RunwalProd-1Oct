@@ -1,23 +1,23 @@
 trigger ChannelPartnerTrigger on Broker__c (Before Insert,Before Update, After Insert, After Update) {
     
-    if(trigger.isbefore && trigger.isInsert){        
+    if(trigger.isbefore && trigger.isInsert){
         //Added by Prashant to Assign Temp CP Unique No based on previous record created....///START.. 07-08-2025/////
         Id tempRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
         Id cpRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
         
         
         //Added by Prashant to check duplicate CP. START...////
-        ChannelPartnerTriggerHandler.checkDuplicateCPs(trigger.new);
-        Map<Id, String> dupMap = ChannelPartnerTriggerHandler.checkDuplicateCPs(Trigger.new);
+        /*ChannelPartnerTriggerHandler.checkDuplicateCPs(trigger.new);
+        Map<Id, String> dupMap = ChannelPartnerTriggerHandler.checkDuplicateCPs(Trigger.new);*///Commmented by Prashant as now we are using standard duplicate rule .. added on 25-02-26.
 
         //Added by Prashant to check duplicate CP. END...//
         
         for(Broker__c br : Trigger.New){
-            if(!dupMap.isEmpty()){
+            /*if(!dupMap.isEmpty()){
                 if(dupMap.containsKey(br.Id)){
                     br.addError(dupMap.get(br.Id));
                 }
-            }
+            }*///Commmented by Prashant as now we are using standard duplicate rule .. added on 25-02-26.
             if(br.RecordTypeId == cpRecordTypeId){
                 if(br.STREET__c != '' && br.STREET__c != null)
                     br.Address__c = br.STREET__c;
@@ -144,6 +144,10 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
                 system.debug('Inside Temp CP');
                 tempCPIdVsEmailMap.put(br.Id,br.RW_Email__c);
                 tempCPList.add(br);
+                if(!Test.isRunningTest()){
+                    String registrationLink = System.Label.Site_Url_New + '/channelpartner/s/customregisterpage?tempcpid='+ br.RW_Broker_Number__c;
+                    SendWhatsAppMsg.methodToSendWhatsAppMsg(null,br.Name,br.RW_Broker_Number__c,/*link*/registrationLink,null,null,null,null,null,br.Dialing_Country_Code1__c, br.RW_Mobile_No__c,'CP registration email');  // Added by Prashant to send Whatsapp to cp for registration...Added on 09-03-26..
+                }
             }
             //Added by Prashant to send temp cp creation mail... 25-08-25///END
         }
@@ -158,7 +162,7 @@ br.Name = br.NAME_FIRST__c + ' ' + br.NAME_LAST__c;
         }
         //Added by Prashant 11-06-2025. End*
         //Added by Prashant 06-10-2025. Start
-         if(tempCPList.size() > 0){ 
+        if(tempCPList.size() > 0){
             ChannelPartnerTriggerHandler.createTempCPTasks(tempCPList);
         }
         //Added by Prashant 06-10-2025. End

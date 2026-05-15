@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
     <active>true</active>
-    <allowRecall>false</allowRecall>
+    <allowRecall>true</allowRecall>
+    <allowedSubmitters>
+        <type>allInternalUsers</type>
+    </allowedSubmitters>
+    <allowedSubmitters>
+        <submitter>R_Forest</submitter>
+        <type>group</type>
+    </allowedSubmitters>
+    <allowedSubmitters>
+        <submitter>Runwal_All_Project_Group</submitter>
+        <type>group</type>
+    </allowedSubmitters>
     <allowedSubmitters>
         <type>owner</type>
     </allowedSubmitters>
     <approvalPageFields>
         <field>Name</field>
         <field>Owner</field>
+        <field>Total_Waiver_Amount_to_be_Approved__c</field>
+        <field>Interest_Waiver_Approved_but_not_Waived__c</field>
+        <field>Interest_Waiver_Requested__c</field>
+        <field>Total_Approved_Interest_Amount_Waived__c</field>
+        <field>Interest_Waiver_Approval_Status__c</field>
+        <field>Project_Lead__c</field>
+        <field>L1_Amount__c</field>
+        <field>CRM_Head__c</field>
+        <field>L2_Amount__c</field>
+        <field>CEO__c</field>
+        <field>L3_Amount__c</field>
     </approvalPageFields>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
@@ -21,6 +43,11 @@
         <label>Segment Head Approval</label>
         <name>Step_1</name>
     </approvalStep>
+    <description>The Booking is Finalized:
+The Status must be exactly &quot;Booking Confirmed.&quot; This usually means the initial paperwork is done and the unit is off the market.
+
+The Clock is Ticking on Interest:
+The Interest Applied On Booking? field must be set to &quot;Yes.&quot; This indicates that the grace period (if any) has ended, and interest is now being applied to the outstanding balance.</description>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
         <criteriaItems>

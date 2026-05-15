@@ -1,0 +1,82 @@
+{
+  "appPageId" : "0c43d153-5533-4587-a9ed-1bb5f1a02d81",
+  "componentName" : "siteforce:sldsTwoCol66Layout",
+  "dataProviders" : [ ],
+  "id" : "7c81e3d9-31e2-40d8-85cc-f56d57d90762",
+  "label" : "Record Detail",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "771caaf7-17c8-4092-b3a8-351a6a24282a",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : {
+        "small" : "719de18f-b9f3-46da-96b4-afd65b0eb107"
+      },
+      "renditions" : [ {
+        "id" : "719de18f-b9f3-46da-96b4-afd65b0eb107",
+        "renditionValue" : {
+          "isVisible" : true
+        },
+        "type" : "renditionComponent"
+      } ],
+      "type" : "component"
+    } ],
+    "id" : "17bc2165-7fca-4ceb-b114-587b3b71db6c",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordDetail",
+      "id" : "07388a00-9c0f-46dc-882c-987d76993da4",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "52bb20b7-56b3-43dd-b4ce-3c1205745852",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "94fb3341-81dc-4c46-8ba4-cb7735c73021",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "a8f93b1e-ceaf-4eef-896f-4a0e3f62618f",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "8257646b-7e9f-4c42-9482-9e6441336e5a",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}",
+        "width" : "MEDIUM"
+      },
+      "componentName" : "forceCommunity:relatedRecords",
+      "id" : "0a2cf958-8c04-494a-b156-4fc5d1d89ec2",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "5f0af250-8089-4c06-8b63-9d72bb011250",
+    "regionName" : "sidebar",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail"
+}

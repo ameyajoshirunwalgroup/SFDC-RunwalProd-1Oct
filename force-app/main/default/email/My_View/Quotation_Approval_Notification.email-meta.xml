@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Quotation Approval Notification</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Quotation Approval Notification</name>
+    <style>none</style>
+    <subject>Quotation Requires your approval -  {!Quotation__c.Project_Unit__c} in {!Quotation__c.Project__c}</subject>
+    <textOnly>Quotation Snapshot for {!Quotation__c.Project_Unit__c} in {!Quotation__c.Project__c} - valid till {!Quotation__c.Valid_Till_Date__c}
+
+Card Rates Discounted Booking Rate Discount Value Additional NPV Discount
+Lumpsum {!Quotation__c.Total_Rate_Card_L__c}   {!Quotation__c.Base_Rate_L_D__c}  {!Quotation__c.Customer_Total_Discount_L__c}  {!Quotation__c.NPV_L__c}
+Per Sq Ft {!Quotation__c.Total_Rate_Card_PSF__c}   {!Quotation__c.Base_Rate_PSF_D__c}   {!Quotation__c.Customer_Total_Discount_PSF__c}   {!Quotation__c.NPV_PSF__c}
+
+
+Click link below to view the quotation details the system.
+{!Quotation__c.Link}
+
+Request your approval,
+{!Quotation__c.Sales_Manager_Opp__c}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

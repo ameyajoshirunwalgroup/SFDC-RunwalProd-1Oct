@@ -80,7 +80,17 @@
                 If replying via email, you can also add comments on the second line.
                 Comments will be stored with the approval request in Salesforce CRM.<br/><br/>
             </apex:outputPanel>
-            
+            <apex:outputPanel rendered="{!NOT(ISNULL(latestIOMFile))}">
+
+    <b>IOM Document:</b><br/>
+
+    <a href="{!iomFileUrl}">
+        {!latestIOMFile.Title}.{!latestIOMFile.FileExtension}
+    </a>
+
+    <br/><br/>
+
+</apex:outputPanel>
             Thanks and Regards,<br/>
             Runwal Team
         </body>

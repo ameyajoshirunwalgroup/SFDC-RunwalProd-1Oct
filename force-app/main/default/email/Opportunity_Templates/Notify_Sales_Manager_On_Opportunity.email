@@ -1,0 +1,32 @@
+Dear {!Opportunity.Sales_Manager_User__c},
+<br/><br/>
+A new opportunity has been assigned to you. Please <a href="https://runwal--fullcopy.sandbox.my.salesforce.com/{!Opportunity.Id}">Click Here</a> to access the opportunity.<br/><br/>
+Additionally, please find the details below:<br/><br/>
+
+<b>1.Opportunity Details</b><br/>
+Name: {!Opportunity.Name}<br/>
+Residential location: {!Opportunity.Locality__c}<br/>
+Age: {!Opportunity.Age_of_customer__c}<br/>
+Ethnicity: {!Opportunity.Ethnicity__c}<br/>
+Marital status: {!Opportunity.Marital_Status__c}<br/><br/>
+
+<b>2.Occupation Details</b><br/>
+Occupation: {!Opportunity.Occupation__c}<br/>
+Company Name: {!CIF__c.CompanyName__c}<br/><br/>
+
+<b>3.Purchase Details</b><br/>
+Purpose: {!Opportunity.Purpose__c}<br/>
+Budget:{!TEXT(Opportunity.Budget_In_Cr__c)}<br/>
+Configuration: {!Opportunity.RW_Configuration__c}<br/>
+Possession timeline: {!Opportunity.RW_Time_line__c}<br/><br/>
+
+<b>4.Source & Remarks</b><br/>
+Type of client: {!Opportunity.RW_Type_of_Client__c}<br/>
+Source: {!Opportunity.LeadSource}<br/>
+Remarks (from source): {!Opportunity.Remark__c}<br/><br/>
+
+<br/><br/>
+
+Regards,
+<br/>
+Salesforce Team

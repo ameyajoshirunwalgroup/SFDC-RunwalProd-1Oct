@@ -1,0 +1,41 @@
+<template>
+    <lightning-card icon-name="standard:email">
+        <div slot="title" class="slds-text-align_center slds-text-heading_small">
+            Channel Partner Registration
+        </div>
+
+        <div class="slds-p-around_medium slds-is-relative slds-text-align_center">
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <div class="slds-m-bottom_medium slds-grid slds-grid_vertical slds-grid_align-center"
+                style="display: inline-block; text-align: left; width: fit-content;">
+                <p><strong>Partner Name:</strong> {brokerName}</p>
+                <p><strong>Email Address:</strong> {brokerEmail}</p>
+                <p><strong>Mobile Number:</strong> {brokerMobile}</p>
+                <p>
+                    <strong>Link:</strong>
+                    <a href={registrationLink} target="_blank">{registrationLink}</a>
+                </p>
+            </div>
+            <template lwc:if={isTempPartner}>
+                <p class="slds-m-bottom_small slds-text-color_weak">
+                    Initiate registration by sending the secure link via Email, SMS, and WhatsApp to this Channel
+                    Partner.
+                </p>
+            </template>
+            <template lwc:else>
+                <p class="slds-m-bottom_small slds-text-color_weak">
+                    Initiate CP Updation by sending the secure link via Email, SMS, and WhatsApp to this Channel
+                    Partner.
+                </p>
+            </template>
+
+
+            <lightning-button label="Send Link" onclick={handleSendEmail} variant="brand" disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ADF_Interest_Balance__c</fullName>
+    <formula>ABS(ADF_Interest_Amount_Payable1__c -  Balance_of_ADF_Interest__c )</formula>
+    <label>ADF Interest Balance</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Payment Details Upload Request</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear Customer,
+
+Greetings from Runwal Enterprises!!!
+
+Once you have completed your payment, kindly upload the transaction details on the Runwal Connect App. Alternatively, you may share the details with your Relationship Manager to help us trace the payment.
+
+This will enable our team to verify the transaction and share the payment receipt within 3 working days.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Upload Payment Details for Receipt Processing</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Payment Details Required 💳
+
+Please upload your transaction details/UTR on the app to complete verification and receive your receipt.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">payments_due</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">RW_Payment_Details__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Payment Details Upload Request</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Payment Details Upload Request</value>
+    </values>
+</CustomMetadata>

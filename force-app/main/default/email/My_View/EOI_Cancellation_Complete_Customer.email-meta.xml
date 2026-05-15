@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Cancellation Complete - Customer</name>
+    <style>none</style>
+    <subject>EOI Cancellation</subject>
+    <textOnly>Dear {!CustomerName},
+
+This is with reference to your &quot;Expression of Interest&quot; cancellation request. Kindly note that your EOI has been cancelled in our system.
+
+We look forward to serving you soon again. You may call on {!SMPhoneNumber} for any assistance. 
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

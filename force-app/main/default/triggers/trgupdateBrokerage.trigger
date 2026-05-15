@@ -2,7 +2,7 @@ trigger trgupdateBrokerage on Booking__c (before update,before insert) {
     if(trigger.isbefore && trigger.isupdate){
         for(Booking__c bk: trigger.new){
             if(bk.Stamp_duty_Paid2__c != NULL){
-                if(bk.Stamp_duty_Paid2__c > bk.Stamp_duty_payable_by_Runwal__c){
+                if(bk.Stamp_duty_Paid2__c > bk.Base_Brokerage_2__c ){
                     if(bk.Base_Brokerage_2__c != Null && bk.Passback__c!= Null ){
                         bk.Brokerage__c =   bk.Base_Brokerage_2__c - bk.Passback__c;
                         

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Notify Project Lead and CRM Head on IW Creation</name>
+    <style>none</style>
+    <subject>Action Required: Interest Waiver Request for {!Interest_Waiver__c.Customer_Name__c}</subject>
+    <textOnly>Dear Runwal Employee ,
+
+There is an approval task pending towards interest waiver, request you to approve the same in SFDC .
+
+Thank you,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

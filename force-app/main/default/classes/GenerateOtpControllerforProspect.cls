@@ -18,7 +18,7 @@ public class GenerateOtpControllerforProspect {
          lstpros = [Select id,Name,Project__c,Last_Call_Attempt_Status__c,call_proposed_date_of_visit__c,Channel_Partner__c,Channel_Partner__r.Name,
                    Sales_Call_Attempt_Status__c,Sales_Call_Proposed_Date_Of_Visit__c, Account__c,Lead__c,Lead__r.IsConverted, Opportunity__c , Lead__r.RW_Project__c,
                    First_CRM_Call_Attempt_Status__c,Last_CRM_Call_Attempt_Status__c,CRM_Call_Proposed_Date_Of_Visit__c,Sourcing_Manager__c,Channel_Partner__r.Account__c,Customer_Reference__c,Customer_Reference__r.name,Lead_Sub_Source__c,Lead_Source__c,is_Converted__c,
-                    Opportunity__r.RW_Opportunity_Status__c, Temp_Channel_Partner__c
+                    Opportunity__r.RW_Opportunity_Status__c, Temp_Channel_Partner__c,Sourcing_Manager_LU__c
                     
                    From Prospect__c Where Id =:prosId];
     		     system.debug('lstpros' +lstpros );
@@ -90,9 +90,12 @@ public class GenerateOtpControllerforProspect {
              otpobj.Project__c = lstpros[0].Project__c;
              otpobj.User__c = UserInfo.getUserId();
 
-             if(lstpros[0].Sourcing_Manager__c != Null)				//Added by Sheetal on 07/07/2022 to solve issue I0200 -Take Sourcing Manager from Prospect on OTP record.
+             /*if(lstpros[0].Sourcing_Manager__c != Null)				//Added by Sheetal on 07/07/2022 to solve issue I0200 -Take Sourcing Manager from Prospect on OTP record.
              {
                  otpObj.Sourcing_Manager__c = lstpros[0].Sourcing_Manager__c;
+             }*/ //Commented by Vinay 25-11-2025
+             if(lstpros[0].Sourcing_Manager_LU__c != Null){ //Added by Vinay 25-11-2025
+                 otpObj.Sourcing_Manager_LU__c = lstpros[0].Sourcing_Manager_LU__c;
              }
            if(otpObj.OTP_Generate_For__c == 'Referral' && lstpros[0].Lead_Source__c == 'Referral'  && lstpros[0].Lead_Sub_Source__c == 'Existing client reference' &&  lstpros[0].Customer_Reference__c != null){
                otpObj.Customer_Reference_Lookup__c = lstpros[0].Customer_Reference__c;
@@ -142,54 +145,7 @@ public class GenerateOtpControllerforProspect {
          otp=false;
 
   }
-    public void dummyMethod(){
-        integer i;
-        i=0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++; 
-        i++;
-        i++;
-        i++;
-        i++;
-        i++; 
-        
-        
-    }
+    
     public PageReference Back(){
 
     PageReference prospectobjpage = new pageReference('/' + prosId);

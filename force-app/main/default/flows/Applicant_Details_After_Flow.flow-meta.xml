@@ -81,8 +81,8 @@
             <targetReference>Check_Applicant_Update_To_SAP</targetReference>
         </connector>
         <object>Applicant_Details__c</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>

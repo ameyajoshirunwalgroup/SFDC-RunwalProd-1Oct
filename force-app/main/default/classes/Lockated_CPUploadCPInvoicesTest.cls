@@ -520,6 +520,19 @@ public class Lockated_CPUploadCPInvoicesTest {
         setupRestContext(fileReq,brokerage.Id);
         Lockated_CPUploadCPInvoices.uploadInvoice();
     }
+    
+    @isTest
+    static void testFileDataMissing() {
+        CP_Brokerage__c brokerage = [SELECT Id FROM CP_Brokerage__c LIMIT 1];
+        
+        Lockated_CPUploadCPInvoices.FileRequest fileReq = new Lockated_CPUploadCPInvoices.FileRequest();
+        fileReq.fileName = 'Test.pdf';
+        
+        setupRestContext(fileReq, brokerage.Id);
+        Lockated_CPUploadCPInvoices.uploadInvoice();
+        
+        System.assertEquals(400, RestContext.response.statusCode);
+    }
     @isTest
     static void testGetActiveProjectsSuccessBrokerageInv() {
         Brokerage_Invoice__c brokerage = [SELECT Id FROM Brokerage_Invoice__c LIMIT 1];

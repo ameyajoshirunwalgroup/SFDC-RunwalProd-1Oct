@@ -227,7 +227,7 @@ private  Class Test2BookingClass {
         bookC1.boookingObj.Sales_Managers__c = 'TestUser';
         bookC1.boookingObj.Sourcing_Mananger__c = 'RamuKaka';
         //bookC1.Save();
-        bookC1.dummyMethod();
+        //bookC1.dummyMethod();
 
        
         /*bookC1.boookingObj.Future_Correspondence_Contact__c = '2nd Applicant';    
@@ -1636,6 +1636,7 @@ private  Class Test2BookingClass {
         opp.Primary_Name__c='ABC';
          opp.Applicant_Name__c='XYZ';
                          opp.RW_Sales_Associate__c='A Aastha Tripathi';
+                         opp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         insert opp;
        Project_Unit__c objPUU1 = new Project_Unit__c();  
         objPUU1.Project_Unit_Type__c = objPUT.id;  
@@ -2121,6 +2122,7 @@ eoiRecord.RW_Primary_First_Name__c = 'Test1';
         opp.Primary_Name__c='ABC';
          opp.Applicant_Name__c='XYZ';
                          opp.RW_Sales_Associate__c='A Aastha Tripathi';
+                         opp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         insert opp;
        Project_Unit__c objPUU1 = new Project_Unit__c();  
         objPUU1.Project_Unit_Type__c = objPUT.id;  

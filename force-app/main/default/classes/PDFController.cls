@@ -12,14 +12,10 @@ public class PDFController {
         String ZdocType = 'DM';
         String ZfiYear;
         String ZsaleOrderNum;
-        if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-        else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
     }
@@ -28,9 +24,7 @@ public class PDFController {
     public static string getdemandPdf(string recordId){
         SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS  pdf= new SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS();
         
-        system.debug('demand in method' + recordId);
        RW_Demand__c demand = [SELECT Id, Name,RW_Billing_Document_Number__c, RW_Customer_Number__c FROM RW_Demand__c WHERE Id= :recordId];
-            system.debug('demand recordss' + demand);
         String ZaccdocNum;
         //String ZbdocNum = '9010000321';
       
@@ -40,14 +34,10 @@ public class PDFController {
         String ZfiYear;
         String ZsaleOrderNum;
       //SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, demand.RW_Billing_Document_Number__c, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-         if(!Test.isRunningTest())
-        {
-        SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, demand.RW_Billing_Document_Number__c, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-        else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, demand.RW_Billing_Document_Number__c, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
     }
@@ -56,9 +46,7 @@ public class PDFController {
     public static string getreceiptPdf(string recordId){
         SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS  pdf= new SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS();
         
-        system.debug('reciept in method' + recordId);
        RW_Payment_Details__c receipt = [SELECT Id, Name,RW_Accounting_Document_Number__c, RW_Fiscal_Year__c, RW_Company_Code__c FROM RW_Payment_Details__c WHERE Id= :recordId];
-            system.debug('recipet recordss' + receipt);
         String ZaccdocNum = receipt.RW_Accounting_Document_Number__c;
         //String ZaccdocNum = '0180000190';
         //String ZbdocNum = '9010000321';
@@ -70,14 +58,10 @@ public class PDFController {
         String ZfiYear = receipt.RW_Fiscal_Year__c;
         //String ZfiYear = '2020';
         String ZsaleOrderNum;
-           if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, null, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-         else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, null, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
         
@@ -103,30 +87,25 @@ public class PDFController {
         }
         //Added by coServe 14-10-2024 End
         
-          if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-         else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
     }
     
-     @AuraEnabled
+    @AuraEnabled
     public static List<RW_Demand__c> getdemandDetails(string recordId){
-        return [SELECT Id, Name,RW_Billing_Document_Number__c, RW_Customer_Number__c, Booking__r.Primary_Applicant_Email__c FROM RW_Demand__c WHERE Id= :recordId];
+        return [SELECT Id, Name,RW_Billing_Document_Number__c,RW_Customer_Number__c,Booking__r.Primary_Applicant_Email__c FROM RW_Demand__c WHERE Id= :recordId];
     } 
   
   
-     @AuraEnabled
+    @AuraEnabled
     public static string getinttLedgerPdf(string recordId){
         SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS  pdf= new SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS();
         
-        Booking__c book = [SELECT Id, Name, Opportunity__r.SAP_Customer_Number__c, Project__r.RW_SAP_Company_Code__c FROM Booking__c WHERE Id= :recordId];
-        system.debug('Booking recordss' + book);
+        Booking__c book = [SELECT Id,Name,Opportunity__r.SAP_Customer_Number__c,Project__r.RW_SAP_Company_Code__c FROM Booking__c WHERE Id= :recordId];
         
         String ZaccdocNum;
         String ZbdocNum;
@@ -136,108 +115,73 @@ public class PDFController {
         String ZdocType = 'IL';
         String ZfiYear;
         String ZsaleOrderNum;
-         if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-        else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
-        
     }
     
-     @AuraEnabled
+    @AuraEnabled
     public static List<RW_Demand__c> sendDemandEmail(List<String> recordId, String pdfdata){
         List<Messaging.SingleEmailMessage> emailList =  new List<Messaging.SingleEmailMessage>();
         List<RW_Demand__c> demandList =  [SELECT Id, Name,RW_Billing_Document_Number__c, RW_Customer_Number__c, Booking__r.Primary_Applicant_Email__c,Booking__r.Primary_Applicant_Name__c, RW_Demand_Milestone__c FROM RW_Demand__c WHERE Id IN : recordId];
         List<String> emailsToSend = new List<String>();
         string emailSend = '';
          
-        for(RW_Demand__c emails : demandList)
-        {
-            if(emails.Booking__r.Primary_Applicant_Email__c !=null)
-            {
+        for(RW_Demand__c emails : demandList){
+            if(emails.Booking__r.Primary_Applicant_Email__c !=null){
             emailSend = emails.Booking__r.Primary_Applicant_Email__c;
             emailsToSend.add(emailSend); 
             }
         }
         
-         system.debug('emails to send in demand PDF'+ emailsToSend);
        
         
-        if(emailsToSend.size()>0)
-        {     
-        for(RW_Demand__c cc : demandList)
-        {             
+        if(emailsToSend.size()>0){     
+        for(RW_Demand__c cc : demandList){             
             EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, developername FROM EmailTemplate WHERE developername = 'Demand_Letter' LIMIT 1];
             String htmlBody = template.HtmlValue; 
             String plainTextBody = template.Body;
-            system.debug('Email Template -->' + template);
-            system.debug('before replace -->');
             
-            if(cc.Booking__r.Primary_Applicant_Name__c !=null)
-            {
+            if(cc.Booking__r.Primary_Applicant_Name__c !=null){
             htmlBody = htmlBody.replace('{!RW_Demand__c.Booking__r.Primary_Applicant_Name__c}', cc.Booking__r.Primary_Applicant_Name__c);
-            system.debug('after replace -->' + htmlBody);
-            }
-            else
-            {
+            }else{
              htmlBody = htmlBody.replace('{!RW_Demand__c.Booking__r.Primary_Applicant_Name__c}', 'Applicant');
             }
            
-            if(cc.Name != null)
-            {
+            if(cc.Name != null){
                 htmlBody = htmlBody.replace('{!RW_Demand__c.RW_Demand_Milestone__c}', cc.RW_Demand_Milestone__c);
-            }
-            else
-            {
+            }else{
                 htmlBody = htmlBody.replace('{!RW_Demand__c.RW_Demand_Milestone__c}', '');
             }
                 
-            system.debug('after replace Demand Name -->' + htmlBody);
             
-            if(cc.RW_Billing_Document_Number__c != null)
-            {
+            if(cc.RW_Billing_Document_Number__c != null){
              htmlBody = htmlBody.replace('{!RW_Demand__c.RW_Billing_Document_Number__c}', cc.RW_Billing_Document_Number__c);
-             system.debug('after replace Demand No. -->' + htmlBody);
-            }
-            else
-            {
+            }else{
                htmlBody = htmlBody.replace('{!RW_Demand__c.RW_Billing_Document_Number__c}',''); 
             }
        
-            if(cc.Booking__r.Primary_Applicant_Name__c !=null)
-            {
+            if(cc.Booking__r.Primary_Applicant_Name__c !=null){
               plainTextBody = plainTextBody.replace('{!RW_Demand__c.Booking__r.Primary_Applicant_Name__c}', cc.Booking__r.Primary_Applicant_Name__c);                
-            }
-            else
-            {
+            }else{
               plainTextBody = plainTextBody.replace('{!RW_Demand__c.Booking__r.Primary_Applicant_Name__c}','Applicant'); 
             }
                
-            if(cc.Name != null)
-            {
+            if(cc.Name != null){
               plainTextBody=plainTextBody.replace('{!RW_Demand__c.RW_Demand_Milestone__c}', cc.RW_Demand_Milestone__c);
-            }
-            else
-            {
+            }else{
               plainTextBody=plainTextBody.replace('{!RW_Demand__c.RW_Demand_Milestone__c}','');                
             }
                 
-            if(cc.RW_Billing_Document_Number__c != null)
-            {
+            if(cc.RW_Billing_Document_Number__c != null){
               plainTextBody = plainTextBody.replace('{!RW_Demand__c.RW_Billing_Document_Number__c}', cc.RW_Billing_Document_Number__c);
-            }
-            else
-            {
+            }else{
               plainTextBody = plainTextBody.replace('{!RW_Demand__c.RW_Billing_Document_Number__c}',''); 
             }
             
-            system.debug('After Replace HTML BOdy'+ htmlBody);
-            system.debug('After Replace HTML BOdy Plain Text'+ plainTextBody);
             
             Blob b = EncodingUtil.base64Decode(pdfdata);
                 
@@ -265,15 +209,13 @@ public class PDFController {
     
     @AuraEnabled
     public static List<RW_Payment_Details__c> sendReceiptEmail(List<String> recordId, String pdfdata){
-        List<RW_Payment_Details__c> receipts = [SELECT Id, RW_Booking__r.Primary_Applicant_Name__c, RW_Booking__r.Primary_Applicant_Email__c, RW_Accounting_Document_Number__c
-                                                FROM RW_Payment_Details__c WHERE Id =: recordId];
+        List<RW_Payment_Details__c> receipts = [SELECT Id, RW_Booking__r.Primary_Applicant_Name__c, RW_Booking__r.Primary_Applicant_Email__c, RW_Accounting_Document_Number__c FROM RW_Payment_Details__c WHERE Id =: recordId];
         List<String> emailsToSend = new List<String>();
         for(RW_Payment_Details__c rec : receipts){
             if(rec.RW_Booking__r.Primary_Applicant_Email__c != null){
                 emailsToSend.add(rec.RW_Booking__r.Primary_Applicant_Email__c);
             }
         }
-        System.debug('receipts: ' + receipts.size());
         if(emailsToSend.size() > 0){
             for(RW_Payment_Details__c rec : receipts){
                 
@@ -293,7 +235,6 @@ public class PDFController {
                 message.setFileAttachments(new List<Messaging.EmailFileAttachment>{efa});
                 Messaging.SingleEmailMessage[] messages = new List<Messaging.SingleEmailMessage> {message};
                 Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
-                System.debug('message: ' + message.toAddresses);
             }
         }
         return receipts;
@@ -301,8 +242,7 @@ public class PDFController {
     
     
     @AuraEnabled
-    public static string getagreementPdf(string salesorderNumber)
-    {
+    public static string getagreementPdf(string salesorderNumber){
         SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS  pdf= new SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS();
         
         String ZaccdocNum;
@@ -313,14 +253,10 @@ public class PDFController {
         String ZdocType = 'AD';
         String ZfiYear;
         String ZsaleOrderNum=salesorderNumber;
-         if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-        else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
     }
@@ -340,24 +276,19 @@ public class PDFController {
         String ZdocType = 'CL';
         String ZfiYear;
         String ZsaleOrderNum;
-         if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-        else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
     }
     
-        @AuraEnabled
+    @AuraEnabled
     public static string getCustLedgerPdf(string recordId){
         SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS  pdf= new SapSoapFunctionsMcS.ZSD_SFDC_PDF_WS();
         
-        Booking__c book = [SELECT Id, Name, Opportunity__r.SAP_Customer_Number__c, Project__r.RW_SAP_Company_Code__c FROM Booking__c WHERE Id= :recordId];
-        system.debug('Booking recordss' + book);
+        Booking__c book = [SELECT Id,Name,Opportunity__r.SAP_Customer_Number__c,Project__r.RW_SAP_Company_Code__c FROM Booking__c WHERE Id= :recordId];
         
         
         String ZaccdocNum;
@@ -370,14 +301,10 @@ public class PDFController {
         String ZdocType = 'CL';
         String ZfiYear;
         String ZsaleOrderNum;
-         if(!Test.isRunningTest())
-        {
-      SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
-      system.debug(pdfResponse.ZpdfBase64);
-        return pdfResponse.ZpdfBase64;
-        }
-        else
-        {
+        if(!Test.isRunningTest()){
+            SapSoapFunctionsMcS.ZsdSfdcPdfResponse_element  pdfResponse = pdf.ZsdSfdcPdf(ZaccdocNum, ZbdocNum, ZcompCode, ZcustNum, ZdocType, ZfiYear, ZsaleOrderNum);
+            return pdfResponse.ZpdfBase64;
+        }else{
             return '';
         }
     }

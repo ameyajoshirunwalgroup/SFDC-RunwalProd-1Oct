@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Possession Feedback form</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Possession Feedback for customer</name>
+    <style>none</style>
+    <subject>Site Visit Feedback Survey - Runwal Homes</subject>
+    <textOnly>Dear {!Opportunity.Name}
+
+Runwal Group congratulates you on getting possession of your new home at {!Opportunity.RW_Project__c}! We are certain it will be the source of many fond and cherished memories in the years to come.
+
+We would love to know how was your experience with us. It will help us in serving you better. Kindly provide your valuable feedback by clicking on the link given below.
+
+With Warm Regards,
+Team {!Opportunity.RW_Project__c}
+
+{!Opportunity.Possession_Feedback_Link__c}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

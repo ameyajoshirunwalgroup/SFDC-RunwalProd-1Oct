@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionPlanTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Task 1</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>High</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>ActivityDate</name>
+            <valueFormula>StartDate + 0</valueFormula>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>OwnerId</name>
+            <valueLiteral>0059I0000078nh3QAA</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>IsReminderSet</name>
+            <valueLiteral>false</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>ReminderDateTime</name>
+            <valueFormula>StartDate + 0 - 0 +</valueFormula>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Task 1</name>
+        <uniqueName>Task_1_6f017820_28fd_11f1_a1cd_5581d55f275f</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Task 2</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>ActivityDate</name>
+            <valueFormula>StartDate + 0</valueFormula>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>OwnerId</name>
+            <valueLiteral>0059I0000078nh3QAA</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>IsReminderSet</name>
+            <valueLiteral>true</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>ReminderDateTime</name>
+            <valueFormula>StartDate + 0 - 0 + 08:00:00.000</valueFormula>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Task 2</name>
+        <uniqueName>Task_2_af5ed32b_28fd_11f1_af22_67e26a972047</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItemDependencies>
+        <creationType>OnPreviousItemCompleted</creationType>
+        <name>name</name>
+        <previousTemplateItem>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>Subject</name>
+                <valueLiteral>Task 1</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>Priority</name>
+                <valueLiteral>High</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>ActivityDate</name>
+                <valueFormula>StartDate + 0</valueFormula>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>OwnerId</name>
+                <valueLiteral>0059I0000078nh3QAA</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>IsReminderSet</name>
+                <valueLiteral>false</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>ReminderDateTime</name>
+                <valueFormula>StartDate + 0 - 0 +</valueFormula>
+            </actionPlanTemplateItemValue>
+            <isRequired>true</isRequired>
+            <itemEntityType>Task</itemEntityType>
+            <name>Task 1</name>
+            <uniqueName>Task_1_6f017820_28fd_11f1_a1cd_5581d55f275f</uniqueName>
+        </previousTemplateItem>
+        <templateItem>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>Subject</name>
+                <valueLiteral>Task 2</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>Priority</name>
+                <valueLiteral>Normal</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>ActivityDate</name>
+                <valueFormula>StartDate + 0</valueFormula>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>OwnerId</name>
+                <valueLiteral>0059I0000078nh3QAA</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>IsReminderSet</name>
+                <valueLiteral>true</valueLiteral>
+            </actionPlanTemplateItemValue>
+            <actionPlanTemplateItemValue>
+                <itemEntityType>Task</itemEntityType>
+                <name>ReminderDateTime</name>
+                <valueFormula>StartDate + 0 - 0 + 08:00:00.000</valueFormula>
+            </actionPlanTemplateItemValue>
+            <isRequired>false</isRequired>
+            <itemEntityType>Task</itemEntityType>
+            <name>Task 2</name>
+            <uniqueName>Task_2_af5ed32b_28fd_11f1_af22_67e26a972047</uniqueName>
+        </templateItem>
+    </actionPlanTemplateItemDependencies>
+    <isAdHocItemCreationEnabled>false</isAdHocItemCreationEnabled>
+    <name>Sales Action Plan for Opportunity</name>
+    <status>Final</status>
+    <targetEntityType>Opportunity</targetEntityType>
+    <uniqueName>Sales_Action_Plan_for_Opportunity_415fa4d8_28fd_11f1_9c23_7ddbfbbd9220</uniqueName>
+</ActionPlanTemplate>

@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Latest Greeting Call Remarks" icon-name="standard:log_a_call">
+        <div class="slds-p-around_medium">
+            <template if:true={parsedData.length}>
+                <lightning-datatable
+                    key-field="id"
+                    data={parsedData}
+                    columns={columns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+            <template if:false={parsedData.length}>
+                <p>No remarks found for this record.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

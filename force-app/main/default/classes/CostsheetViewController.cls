@@ -160,7 +160,8 @@ public with sharing class CostsheetViewController {
             installment1 = installment;
             gst = gstAmount.setScale(0);
             
-            if( (AggrVal /*+ othercharges*/) < 5000000)//Added by Prashant to remove other charges from the total, as per Business. 18-12-25.
+            //if( (AggrVal /*+ othercharges*/) < 5000000)//Added by Prashant to remove other charges from the total, as per Business. 18-12-25.
+            if( (AggrVal + othercharges) < 5000000)//Removed by Prashant the above added logic again as per business requirement. 26-2-26  
             {  tds = 0; }
             else
             {  tds = (installment * 1 /100).setScale(0); }
@@ -270,8 +271,9 @@ public with sharing class CostsheetViewController {
               otherchargesTax = ((othercharges) * 18/100).setScale(0);  
            }
            
-          if( (agreementValuewithDiscount /*+ othercharges*/)< 5000000){//Added by Prashant to remove other charges from the total, as per Business. 18-12-25.
-            totalTDS = 0;
+          //if( (agreementValuewithDiscount /*+ othercharges*/)< 5000000){//Added by Prashant to remove other charges from the total, as per Business. 18-12-25.
+            if( (agreementValuewithDiscount + othercharges)< 5000000){//Removed by Prashant the above added logic again as per business requirement. 26-2-26  
+           totalTDS = 0;
           }
        }
        system.debug('agreement value::'+agreementValuewithDiscount +'::+tax calculated on it::'+scGST+'::TDS on it::'+totalTDS);
@@ -390,7 +392,7 @@ public with sharing class CostsheetViewController {
         }
         
        List <Quotation__c> lstq = new List <Quotation__c>();
-       lstq =[select id,Single_car_park_Earmarked__c,Tandem_car_park_Earmarked__c,Single_Open_Earmarked__c,Tandem_Open_Earmarked__c,Stack_Earmarked__c,
+       lstq =[select id,Single_car_park_Earmarked__c,Tandem_car_park_Earmarked__c,Single_Open_Earmarked__c,Tandem_Open_Earmarked__c,
               MLCP_Earmarked__c,MLCP_Additional__c,Stack_Additional__c,Tandem_Open_Additional__c,Single_Open_Additional__c,Tandem_car_park_Additional__c,
               Single_car_park_Additional__c,Basement_Additional__c,Podium__c, Puzzle_Car_Park__c,Stack_Additional_1__c from Quotation__c where id =: q.id];
               

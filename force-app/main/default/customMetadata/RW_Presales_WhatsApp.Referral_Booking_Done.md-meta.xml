@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Referral Booking Done</label>
+    <protected>false</protected>
+    <values>
+        <field>Message_Content__c</field>
+        <value xsi:type="xsd:string">Dear {{1}},
+
+We are thrilled to share that your referral, {{2}}, has successfully booked a flat with Runwal Enterprises! Your support in connecting us with valued customers is truly appreciated.
+Thank you for being a part of our journey.</value>
+    </values>
+    <values>
+        <field>RW_Type__c</field>
+        <value xsi:type="xsd:string">hsm</value>
+    </values>
+    <values>
+        <field>RW_element_name__c</field>
+        <value xsi:type="xsd:string">referral_booking_done</value>
+    </values>
+    <values>
+        <field>RW_namespace__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

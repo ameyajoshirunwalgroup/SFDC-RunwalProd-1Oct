@@ -1,0 +1,24 @@
+<messaging:emailTemplate subject="Thank You for Your Interest in {!relatedTo.RW_Project__r.Name}" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>Dear Sir/Madam,</p>
+                
+                <p>Thank you for your interest in our project <b>{!relatedTo.RW_Project__r.Name}</b> at <b>{!relatedTo.RW_Project__r.RW_LocalityName__c}</b>.</p>
+                
+                <p>We are sharing with you additional details to help you better understand the project, its location, and its offerings.</p>
+                
+                <p><b>Location:</b> <a href="{!relatedTo.RW_Project__r.Site_Address_Map_Link__c}">Click Here</a></p>
+                
+                <p><b>E-brochure:</b> <a href="{!relatedTo.RW_Project__r.RW_Project_Brochure_PublicUrl__c}">View Brochure</a></p>
+                
+                <p><b>Walkthrough Video:</b> <a href="{!relatedTo.RW_Project__r.RW_Project_Location_Videos_Link__c}">Watch Video</a></p>
+                
+                <p>For any additional information, please visit our website <a href="https://runwalgroup.in">www.runwalgroup.in</a> or call us on <b>{!relatedTo.Owner.Phone}</b>.</p>
+                
+                
+                <p>Warm Regards,<br/>Team Presales,<br/>Runwal Group</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

@@ -3,11 +3,11 @@
     <fullName>Rating_formual_image__c</fullName>
     <externalId>false</externalId>
     <formula>CASE(
- Rating,
-&quot;Hot&quot;, IMAGE(&quot;/resource/HotRating&quot;, &quot;Hot Rating&quot;, 30, 80),
-&quot;Warm&quot;, IMAGE(&quot;/resource/WarmRating&quot;, &quot;Warm Rating&quot;, 30, 80),
-&quot;Cold&quot;, IMAGE(&quot;/resource/coldRating&quot;, &quot;Cold Rating&quot;, 30, 80),
-&quot;&quot;
+    Rating,
+    &quot;Hot&quot;, IMAGE(&quot;/resource/HotRating&quot;, &quot;Hot Rating&quot;, 30, 80),
+    &quot;Warm&quot;, IMAGE(&quot;/resource/WarmRating&quot;, &quot;Warm Rating&quot;, 30, 80),
+    &quot;Cold&quot;, IMAGE(&quot;/resource/coldRating&quot;, &quot;Cold Rating&quot;, 30, 80),
+    &quot;&quot;
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Rating</label>

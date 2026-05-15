@@ -16,13 +16,14 @@ global without sharing class LockatedApp_RegistrationAppointment {
             res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
             res.statusCode = 400;
         }else{
-            List<Registration_Schedule__c> regs = [SELECT Id,Address__c,Registration_Schedule_Date__c,Registration_Schedule_Time__c,Venue__c,Booking__r.Unit_No__r.Relationship_Manager__r.Contact_Number__c FROM Registration_Schedule__c WHERE Booking__c =: bkgId AND Active__c = true]; 
+            List<Registration_Schedule__c> regs = [SELECT Id,Address__c,Registration_Schedule_Date__c,Registration_Schedule_Time__c,Venue__c,Booking__r.Unit_No__r.Relationship_Manager__r.Contact_Number__c,Google_Map_Link__c FROM Registration_Schedule__c WHERE Booking__c =: bkgId AND Active__c = true]; 
             if(regs.size() > 0){
                 Schedule sch = new Schedule();
                 Appointment app = new Appointment();
                 app.appointmentDateTime = String.valueOf(regs[0].Registration_Schedule_Date__c) + ' ' + String.valueOf(regs[0].Registration_Schedule_Time__c);
                 Address addr = new Address();
                 addr.address = regs[0].Address__c;
+                addr.mapLink = regs[0].Google_Map_Link__c;
                 app.registrationAddress = addr;
                 Contact con = new Contact();
                 con.rmNumber = regs[0].Booking__r.Unit_No__r.Relationship_Manager__r.Contact_Number__c;

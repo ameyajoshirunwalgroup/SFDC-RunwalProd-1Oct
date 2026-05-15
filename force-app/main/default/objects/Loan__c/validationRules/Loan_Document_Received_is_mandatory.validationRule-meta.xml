@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loan_Document_Received_is_mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL( RW_Loan_Record_Status__c , &quot;Loan Sanctioned&quot;),
+    ISBLANK(Loan_Document_Received_Date__c)
+)</errorConditionFormula>
+    <errorDisplayField>Loan_Document_Received_Date__c</errorDisplayField>
+    <errorMessage>Loan Document Received Date is mandatory when status is Loan Sanctioned.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,36 @@
+<messaging:emailTemplate subject="Welcome Letter" recipientType="User" relatedToType="RW_Welcome_Call__c">
+  <messaging:htmlEmailBody >
+        <html>
+        <body>
+Date: {!DAY(TODAY())}/{!MONTH(TODAY())}/{!YEAR(TODAY())}<br/> 
+To  {!relatedTo.RW_Applicant1_Primary_Applicant_Name__c} <br/> <br/>
+    
+Address  - {!relatedTo.RW_Applicant1_Permanent_Address__c} <br/>
+Contact No: {!relatedTo.RW_Applicant1_Mobile_No__c}  <br/><br/>
+
+Greetings from the {!relatedTo.RW_Project__c} Team! <br/>
+All of us at {!relatedTo.RW_Project__c} thank you for choosing our project. It makes us proud and happy to have you as a part of the {!relatedTo.RW_Project__c} family and congratulate you on the decision. <br/><br/>
+The details of your chosen apartment are: <br/>
+Building {!relatedTo.RW_Project__c} <br/>
+Flat No {!relatedTo.RW_Flat_No__c}. <br/><br/>
+
+We are committed to serve you and will always be glad to provide any assistance or information that you may require about the project.  <br/><br/>
+At Runwal Group, it has been our endeavor to bring you the best of products and services. As an organization, we strive for superior quality at all times and aim to deliver unmatched service and give our customers a special and unique experience when dealing with us. <br/><br/>
+We are committed to excellence in service delivery at all times and with this objective in mind,  we have appointed {!relatedTo.RM_Name__c}  as your dedicated Relationship Manager and will continue to be your one point of contact for all your queries with regards to your home at {!relatedTo.RW_Project__c}. You can reach  {!relatedTo.RM_Name__c} on {!relatedTo.RM_contact_Number__c} <br/><br/>
+For any service issues or escalations, please write to CRM Head {!relatedTo.RW_Booking__r.Project__r.CRMHead__r.Name} - Customer Care at {!relatedTo.RW_Booking__r.Project__r.Customer_Care_Email__c}. If issue still remains unresolved for more than 48hrs of first level escalation, you may further escalate to Customer Care at {!relatedTo.RW_Booking__r.Project__r.Customer_Care_Email__c} for any complaints or unresolved issues. <br/><br/>
+
+We look forward to a long term and mutually beneficial relationship with you. <br/><br/>
+Best Regards, <br/>
+{!relatedTo.RM_Name__c} <br/>
+Email Id: {!relatedTo.RW_Booking__r.Project__r.Customer_Care_Email__c} <br/>
+Contact No.{!relatedTo.RM_contact_Number__c}<br/>
+Website: {!relatedTo.RW_Booking__r.Project__r.Project_site_URL__c}  <br/> 
+Corporate Email: {!relatedTo.RW_Booking__r.Project__r.RW_Corporate_Email__c} <br/>
+           
+           
+                   
+        </body>
+        </html>
+    </messaging:htmlEmailBody>
+
+</messaging:emailTemplate>

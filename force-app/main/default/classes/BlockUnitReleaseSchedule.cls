@@ -6,7 +6,7 @@ global class BlockUnitReleaseSchedule implements Database.Batchable <Blocking_Un
         Date dt2 = Date.today() - Integer.valueof(System.label.Blocking_Release_Days_for_Approval);
         
         List<Blocking_Unit_Information__c> blksToTrigger = new List<Blocking_Unit_Information__c>();
-        List<Blocking_Unit_Information__c> blks = [SELECT Id, Opportunity__c, Blocked_Date__c, Opportunity__r.Booking__c, Opportunity__r.StageName, Opportunity__r.Blocked_Date__c, Approval_Status__c, Project_Unit__c, CreatedBy.Email, CreatedBy.Manager.Email, Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email FROM Blocking_Unit_Information__c WHERE Active__c = true];
+        List<Blocking_Unit_Information__c> blks = [SELECT Id, Opportunity__c, Blocked_Date__c, Opportunity__r.Booking__c, Opportunity__r.StageName, Opportunity__r.Blocked_Date__c, Approval_Status__c, Project_Unit__c, CreatedBy.Email, CreatedBy.Manager.Email, Opportunity__r.RW_Project__r.Sales_Site_Head__r.Email,Createddate FROM Blocking_Unit_Information__c WHERE Active__c = true];
         
         return blks;
     }
@@ -41,7 +41,7 @@ global class BlockUnitReleaseSchedule implements Database.Batchable <Blocking_Un
                 blk.Active__c = false;
                 blksToUpdate.add(blk);
             }*/
-            if((blk.Approval_Status__c == null || blk.Approval_Status__c == 'Approved') && blk.Blocked_Date__c <= dt1 && blk.Opportunity__r.Booking__c == null && (blk.Opportunity__r.StageName == 'Unit Blocked' || blk.Opportunity__r.StageName == 'Qualification')){
+            if((blk.Approval_Status__c == null || blk.Approval_Status__c == 'Approved') && /*blk.Blocked_Date__c*/ Date.valueOf(blk.Createddate)/*Added by Prashant as requirement is changed now -date to be veified by created date and not the blocked date . 30-0-26*/ <= dt1 && blk.Opportunity__r.Booking__c == null && (blk.Opportunity__r.StageName == 'Unit Blocked' || blk.Opportunity__r.StageName == 'Qualification')){
                 blk.Active__c = false;
                 blksToUpdate.add(blk);
             }
@@ -82,7 +82,7 @@ global class BlockUnitReleaseSchedule implements Database.Batchable <Blocking_Un
                 mail.setToAddresses(toAdrd);
                 mails.add(mail);
             }*/
-            if((blk.Approval_Status__c == null || blk.Approval_Status__c == 'Approved') && blk.Blocked_Date__c <= (dt1 + 1) && blk.Opportunity__r.Booking__c == null && (blk.Opportunity__r.StageName == 'Unit Blocked' || blk.Opportunity__r.StageName == 'Qualification')){
+            if((blk.Approval_Status__c == null || blk.Approval_Status__c == 'Approved') && /*blk.Blocked_Date__c*/ Date.valueOf(blk.Createddate) /*Added by Prashant as requirement is changed now -date to be veified by created date and not the blocked date . 30-0-26*/ <= (dt1 + 1) && blk.Opportunity__r.Booking__c == null && (blk.Opportunity__r.StageName == 'Unit Blocked' || blk.Opportunity__r.StageName == 'Qualification')){
                 List<String> toAdrd = new List<String>();
                 toAdrd.add(blk.CreatedBy.Email);
                 if(blk.CreatedBy.Email != null){

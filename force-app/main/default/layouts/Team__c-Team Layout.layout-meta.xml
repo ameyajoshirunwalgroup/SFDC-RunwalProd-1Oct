@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -67,11 +66,7 @@
         <fields>Approver_Type__c</fields>
         <fields>IsActive__c</fields>
         <fields>User__c</fields>
-        <fields>User_Active__c</fields>
-        <fields>Counter__c</fields>
         <relatedList>Team_Members__c.Team__c</relatedList>
-        <sortField>Counter__c</sortField>
-        <sortOrder>Desc</sortOrder>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

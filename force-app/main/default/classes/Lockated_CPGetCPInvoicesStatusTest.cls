@@ -21,6 +21,7 @@ private class Lockated_CPGetCPInvoicesStatusTest {
         objpr.RDS_Short_Name__c = 'T';
         objpr.Start_Date__c = System.today().addDays(-5);
         objpr.RDS_Interest_Rate__c = 12;
+        objpr.Project_Property_Type__c= 'Residential';
         insert objpr;
         
         List<Tower__c> t = TestDataFactory.createTowers(1, objpr.Id);
@@ -473,7 +474,7 @@ private class Lockated_CPGetCPInvoicesStatusTest {
             Booking__c = b.Id,
             Brokerage_Summary__c = bs1.Id,
             Opportunity_AV__c = 13602975,
-            Brokerage_Type__c = 'Base Brokerage'
+            Brokerage_Type__c = 'Base Brokerage'            
         );
         
         Brokerage__c bro2 = new Brokerage__c(
@@ -507,7 +508,8 @@ private class Lockated_CPGetCPInvoicesStatusTest {
             If_GST_is_applicable__c = 'No',
             Invoice_Status__c = 'Not Submitted',
             Brokerage_Lookup__c = bro2.Id,
-            Channel_Partner__c = cp.Id
+            Channel_Partner__c = cp.Id,
+            Booking__c = b.Id
         );
         insert brokerageInv;
     }

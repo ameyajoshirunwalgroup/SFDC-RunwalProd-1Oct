@@ -124,6 +124,7 @@ public class OppTriggerHandlerTracker
         objopp5.RW_Project_Unit__c = objPU2.id;
         objopp5.Walkin_Source__c = 'Referral';
         objopp5.RW_Sales_Associate__c = 'Test22';
+        objopp5.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         objopp5.RW_Mobile_No__c = '1233211231122';
         objopp5.RW_Email__c = 'test1@test2122.com';
         objopp5.RW_RM_Name__c = 'Aliya Kirkire';
@@ -145,6 +146,7 @@ public class OppTriggerHandlerTracker
         objopp.RW_Project_Unit__c = objPU.id;
         objopp.Walkin_Source__c = 'Referral';
         objopp.RW_Sales_Associate__c = 'Test2';
+        objopp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         objopp.RW_Mobile_No__c = '1233211231';
         objopp.RW_Email__c = 'test1@test2.com';
         objopp.RW_RM_Name__c = 'Aliya Kirkire';
@@ -170,6 +172,7 @@ public class OppTriggerHandlerTracker
         objopp2.RW_Walkin_Customer_Reference__c = null;
         objopp2.RW_Agreement_Value__c = 200000;
         objopp2.RW_Sales_Associate__c = 'Test2';
+        objopp2.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         objopp2.RW_Mobile_No__c = '1233211231';
         objopp2.RW_Email__c = 'test1@test2.com';
         objopp2.RW_RM_Name__c = 'Aliya Kirkire';
@@ -200,6 +203,7 @@ public class OppTriggerHandlerTracker
         objopp1.RW_Project_Unit__c = objPU.id;
         objopp1.Walkin_Source__c = 'Referral';
         objopp1.RW_Sales_Associate__c = 'Test2';
+        objopp1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         objopp1.RW_Mobile_No__c = '1233211231';
         objopp1.RW_Email__c = 'test1@test2.com';
         objopp1.RW_RM_Name__c = 'Aliya Kirkire';
@@ -373,6 +377,7 @@ Test.stopTest();
         objopp5.RW_Project_Unit__c = objPU2.id;
         objopp5.Walkin_Source__c = 'Direct';
         objopp5.RW_Sales_Associate__c = 'Test22';
+        objopp5.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         objopp5.RW_Mobile_No__c = '1233211231122';
         objopp5.RW_Email__c = 'test1@test2122.com';
         objopp5.RW_RM_Name__c = 'Aliya Kirkire';
@@ -393,6 +398,7 @@ Test.stopTest();
         objopp.RW_Project_Unit__c = objPU2.id;
         objopp.Walkin_Source__c = 'Referral';
         objopp.RW_Sales_Associate__c = 'Test2';
+        objopp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         objopp.RW_Mobile_No__c = '1233211231';
         objopp.RW_Email__c = 'test1@test2.com';
         objopp.RW_RM_Name__c = 'Aliya Kirkire';

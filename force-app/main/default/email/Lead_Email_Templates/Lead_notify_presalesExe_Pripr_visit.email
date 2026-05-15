@@ -1,0 +1,9 @@
+<messaging:emailTemplate subject="Visit in 15 Minutes" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>You have an upcoming visit scheduled for Mr/Ms. {!relatedTo.Name}.</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

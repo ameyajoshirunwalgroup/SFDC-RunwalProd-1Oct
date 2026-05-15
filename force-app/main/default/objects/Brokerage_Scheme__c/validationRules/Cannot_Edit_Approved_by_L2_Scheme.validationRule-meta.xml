@@ -3,9 +3,16 @@
     <fullName>Cannot_Edit_Approved_by_L2_Scheme</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
-NOT(ISNEW()),
-text(Approval_Status__c)= &apos;Approved by Level 2&apos;
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+    NOT(ISNEW()),
+    TEXT(Approval_Status__c) = &quot;Approved by Level 2&quot;,
+    IF(
+        OR($Profile.Name = &quot;CP Access&quot;, $Profile.Name = &quot;CP Billing Access&quot;),
+        /* Loophole: Only block these profiles if they try to change something OTHER than the legacy field */
+        NOT(ISCHANGED(Legacy_booking_treated__c)),
+        /* Strict Lock: Block all other profiles from changing anything at all */
+        TRUE
+    )
 )</errorConditionFormula>
     <errorMessage>You cannot edit this scheme.</errorMessage>
 </ValidationRule>

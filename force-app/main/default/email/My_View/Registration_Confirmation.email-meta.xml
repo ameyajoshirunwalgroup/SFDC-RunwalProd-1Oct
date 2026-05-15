@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Registration Confirmation</name>
+    <style>none</style>
+    <subject>Registration Confirmation</subject>
+    <textOnly>Dear {!Registration_Schedule__c.Customer_Name__c},
+
+We are excited about the registration of your unit in {!Registration_Schedule__c.Project__c} scheduled today at {!Registration_Schedule__c.Venue__c} at {!Registration_Schedule__c.Registration_Schedule_Time__c}.
+
+Please do remember to carry along the required documents for today, that were detailed in the mail sent to you earlier.
+
+Looking forward to meeting you at the registrar’s office.
+
+Regards,
+{!Registration_Schedule__c.Project__c} CRM</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

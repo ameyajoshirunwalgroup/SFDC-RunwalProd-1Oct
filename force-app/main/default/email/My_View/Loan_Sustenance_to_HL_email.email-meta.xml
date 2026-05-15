@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Loan Sustenance to HL email</name>
+    <style>none</style>
+    <subject>Sanction awaited post registration towards Lead no. {!Loan__c.Name} for the Booking {!Loan__c.RW_Booking__r.Name}</subject>
+    <textOnly>Dear {!Loan__c.HL_RM_Name__c},
+
+Booking Lead    {!Loan__c.RW_Booking__r.Name}
+Name    {!Loan__c.Name}
+Flat No.  {!Loan__c.RW_Booking__r.Flat_No__c}
+Agreement Value  {!Loan__c.RW_Booking__r.Allotment_Premium__c}
+Amount Received  {!Loan__c.RW_Booking__r.RW_Total_Amount_Recieved__c}
+Preferred Bank  {!Loan__c.RW_Bank_Preference_1__c}
+Registration Date  {!Loan__c.Registration_Date__c}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

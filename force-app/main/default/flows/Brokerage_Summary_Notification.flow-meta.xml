@@ -39,7 +39,6 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
-        <offset>0</offset>
     </actionCalls>
     <apiVersion>58.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
@@ -51,6 +50,9 @@
         <assignmentItems>
             <assignToReference>NotifyUser</assignToReference>
             <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Booking__r.Project__r.CP_Invoice_Clearing_L1__c</elementReference>
+            </value>
         </assignmentItems>
         <connector>
             <targetReference>Get_Custom_Notification_Record_Id</targetReference>
@@ -114,7 +116,7 @@
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Obsolete</status>
     <variables>
         <name>NotifyUser</name>
         <dataType>String</dataType>

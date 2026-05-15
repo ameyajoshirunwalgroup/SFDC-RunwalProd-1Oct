@@ -2,18 +2,15 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Country_Code_For_Secondaty_Mobile</fullName>
     <active>true</active>
-    <errorConditionFormula>AND(
-   NOT(ISPICKVAL(CP_Lead_Status__c, &quot;Inactive&quot;)),
-   OR(
-      AND(
-         NOT(ISBLANK(RW_Secondary_Mobile_No__c)),
-         ISPICKVAL(Country_Code_2__c, &quot;&quot;)
-      ),
-      AND(
-         ISBLANK(RW_Secondary_Mobile_No__c),
-         NOT(ISPICKVAL(Country_Code_2__c, &quot;&quot;))
-      )
-   )
+    <errorConditionFormula>OR(
+    AND(
+        NOT(ISBLANK(RW_Secondary_Mobile_No__c)),
+        ISPICKVAL(Country_Code_2__c, &quot;&quot;)
+    ),
+    AND(
+        ISBLANK(RW_Secondary_Mobile_No__c),
+        NOT(ISPICKVAL(Country_Code_2__c, &quot;&quot;))
+    )
 )</errorConditionFormula>
     <errorDisplayField>Country_Code_2__c</errorDisplayField>
     <errorMessage>Please select a Country Code for the Secondary Mobile Number.</errorMessage>

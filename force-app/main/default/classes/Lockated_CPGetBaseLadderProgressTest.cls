@@ -36,8 +36,8 @@ public class Lockated_CPGetBaseLadderProgressTest {
         bscheme.Base_Brokerage_for_NRI__c = 2;
         bscheme.Base_Brokerage_for_OS_NRI__c = 2;
         bscheme.Slab_Type__c = 'Count';
-        bscheme.Start_Date__c = system.today()-20;
-        bscheme.End_Date__c = system.today()-10;
+        bscheme.Start_Date__c = Date.valueOf('2025-12-01');
+        bscheme.End_Date__c = Date.valueOf('2025-12-10');
         bscheme.Project_Location__c = pl.Id;
         insert bscheme;
         

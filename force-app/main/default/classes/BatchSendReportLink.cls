@@ -63,10 +63,10 @@ global class BatchSendReportLink implements Database.Batchable<SObject>,Schedula
 
         private String generateReportCsv(String bookingSource, String projectName) {
              Date thirtyDaysAgo = Date.today().addDays(-30);
-            List<Booking__c> blist = [ SELECT Id,RW_Booking_Confirmed_Date__c,Formatted_Booking_Date__c,Customer__r.Name,Customer__r.RW_CIF_form_number__c,Customer__r.SAP_Customer_Number__c,Customer_Payment_Received1__c,Customer__r.RW_Agreement_Value__c,Customer__r.RW_Sourcing_Manager__c,RM_Name__c,Bank_Loan_Status__c, Name, RW_Project_Name__c, Source_of_Booking__c ,Booking_Date__c,Flat_No__c
+            List<Booking__c> blist = [ SELECT Id,RW_Booking_Confirmed_Date__c,Formatted_Booking_Date__c,Customer__r.Name,Customer__r.RW_CIF_form_number__c,Customer__r.SAP_Customer_Number__c,Customer_Payment_Received1__c,Customer__r.RW_Agreement_Value__c,Customer__r.RW_Sourcing_Manager__c,Customer__r.Sourcing_Manager_User__c,Customer__r.Sourcing_Manager_User__r.Name,RM_Name__c,Bank_Loan_Status__c, Name, RW_Project_Name__c, Source_of_Booking__c ,Booking_Date__c,Flat_No__c
         FROM Booking__c 
         WHERE Source_of_Booking__c = :bookingSource 
-          AND RW_Project_Name__c = :projectName  AND  Booking_Date__c >= :thirtyDaysAgo AND RW_Registration_Done__c='No'];
+          AND RW_Project_Name__c = :projectName  AND  Booking_Date__c >= :thirtyDaysAgo AND RW_Registration_Done__c='No']; //Added Customer__r.Sourcing_Manager_User__c,Customer__r.Sourcing_Manager_User__r.Name by Vinay 04-12-2025
 
            
             String header = 'Customer Name,Name,Project Name ,Source of Booking,Unit Number,Booking Date,Sourcing Manager,RM Name,Loan Status,Agreement Value,SAP Customer Number,CIF Number,Payment recieved% \n';
@@ -85,7 +85,7 @@ for (Booking__c b : blist) {
         String projectNameField = (b.RW_Project_Name__c != null) ? b.RW_Project_Name__c : '';
         String sourceOfBooking = (b.Source_of_Booking__c != null) ? b.Source_of_Booking__c : '';
         String flatNo = (b.Flat_No__c != null) ? b.Flat_No__c : '';
-        String sourcingManager = (b.Customer__r.RW_Sourcing_Manager__c != null) ? b.Customer__r.RW_Sourcing_Manager__c : '';
+        String sourcingManager = (b.Customer__r.Sourcing_Manager_User__c != null) ? b.Customer__r.Sourcing_Manager_User__r.Name : ''; // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__r.Name by Vinay 04-12-2025
         String rmName = (b.RM_Name__c != null) ? b.RM_Name__c : '';
        
            
@@ -98,8 +98,8 @@ for (Booking__c b : blist) {
         
 
     String recordString = b.Customer__r.Name + ',' + b.Name + ',' + b.RW_Project_Name__c + ',' + b.Source_of_Booking__c + ',' + b.Flat_No__c
-        + ',' + bookingDateFormatted + ',' + b.Customer__r.RW_Sourcing_Manager__c + ',' + b.RM_Name__c + ',' + b.Bank_Loan_Status__c
-        + ',' + b.Customer__r.RW_Agreement_Value__c +','+b.Customer__r.SAP_Customer_Number__c + ','+ b.Customer__r.RW_CIF_form_number__c + ',' + b.Customer_Payment_Received1__c + '\n';
+        + ',' + bookingDateFormatted + ',' + b.Customer__r.Sourcing_Manager_User__r.Name + ',' + b.RM_Name__c + ',' + b.Bank_Loan_Status__c
+        + ',' + b.Customer__r.RW_Agreement_Value__c +','+b.Customer__r.SAP_Customer_Number__c + ','+ b.Customer__r.RW_CIF_form_number__c + ',' + b.Customer_Payment_Received1__c + '\n'; // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__r.Name by Vinay 04-12-2025
     
     finalstr += recordString;
 }
@@ -131,22 +131,5 @@ return finalstr;
             }
         }
     }
-     public void dummyMethod() {
-       Integer i=0;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         i++;
-         
-    }
+     
 }

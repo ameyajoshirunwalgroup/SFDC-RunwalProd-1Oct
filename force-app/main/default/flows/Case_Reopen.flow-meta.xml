@@ -25,6 +25,13 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.Parent.RW_RM_Remarks__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Unregistered Customer</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_Case</targetReference>
             </connector>

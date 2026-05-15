@@ -1,0 +1,13 @@
+Hi {!ApprovalRequest.Process_Approver},
+
+Request your approval for giving ADF interest to the following customer:
+
+1. Customer name: {!Credit_Note__c.Customer_Name__c}	
+2. Booking ID: {!Credit_Note__c.Booking__c}	
+3. ADF Interest to be settled: {!Credit_Note__c.Interest_To_Be_Settled__c}	
+4. ADF amount: {!Credit_Note__c.Interest_To_Be_Settled__c}	
+5. Approval level: {!ApprovalRequest.Process_Step_Name}	
+
+Link for approval: {!ApprovalRequest.Internal_URL}
+
+Please reply to this email with one of these words in the first line of the email message: APPROVE, APPROVED, YES, REJECT, REJECTED, NO.

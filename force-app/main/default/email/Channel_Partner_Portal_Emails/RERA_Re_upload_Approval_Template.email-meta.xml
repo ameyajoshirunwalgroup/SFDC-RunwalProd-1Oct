@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>RERA Re-upload Approval Template</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>RERA Re-upload Approval Template</name>
+    <style>none</style>
+    <subject>Re-Uploaded RERA Document Approval – {!Broker__c.Name}</subject>
+    <textOnly>Dear {!ApprovalRequest.Process_Approver},  
+
+{!Broker__c.Name} has re-uploaded their Latest RERA certificate. Please review and approve the document to proceed with activation.  
+
+Regards, Runwal Enterprises.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

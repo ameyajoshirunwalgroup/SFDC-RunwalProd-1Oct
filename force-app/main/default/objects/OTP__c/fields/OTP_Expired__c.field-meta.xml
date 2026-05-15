@@ -4,28 +4,26 @@
     <formula>/*OR(IF(( TODAY() - DATEVALUE( CreatedDate ) ) &gt; 7, true,false),
 IF( AND(Prospect__r.is_Converted__c == true,Prospect__r.Opportunity__r.RW_Opportunity_Status__c == &apos;Active&apos;) , true,false))*/
 
-/*IF(
-    CreatedDate &lt; DATETIMEVALUE(&quot;2025-07-29 00:00:00&quot;),
-    OR(
-        (TODAY() - DATEVALUE(CreatedDate)) &gt; 7,
-        AND(
-            Prospect__r.is_Converted__c = TRUE,
-            Prospect__r.Opportunity__r.RW_Opportunity_Status__c = &quot;Active&quot;
-        )
-    ),
-    AND(
-        NOT(ISPICKVAL(OTP_Generate_For__c, &quot;Direct Lead Creation&quot;)),
-        OR(
-            Owner_Changed__c,
-            AND(
-                NOT(ISBLANK(Lead__c)),
-                NOT(Lead__r.IsActive__c)
-            )
-        )
-    )
-)*/
-
-TODAY() - DATEVALUE( CreatedDate )  &gt; 60</formula>
+IF(
+CreatedDate &lt; DATETIMEVALUE(&quot;2025-07-29 00:00:00&quot;),
+OR(
+(TODAY() - DATEVALUE(CreatedDate)) &gt; 7,
+AND(
+Prospect__r.is_Converted__c = TRUE,
+Prospect__r.Opportunity__r.RW_Opportunity_Status__c = &quot;Active&quot;
+)
+),
+AND(
+NOT(ISPICKVAL(OTP_Generate_For__c, &quot;Direct Lead Creation&quot;)),
+OR(
+Owner_Changed__c,
+AND(
+NOT(ISBLANK(Lead__c)),
+NOT(Lead__r.IsActive__c)
+)
+)
+)
+)</formula>
     <label>OTP Expired</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

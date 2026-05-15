@@ -42,6 +42,21 @@
             <type>RejectRequest</type>
         </rejectBehavior>
     </approvalStep>
+    <description>Rule 1: For Channel Partner (Broker) Bookings
+To pass this check, all of the following must be true:
+
+The Approval Status: It is NOT currently &quot;Approved&quot; or &quot;Sent for Approval.&quot;
+
+Brokerage Details: The Brokerage field is NOT empty (money must be recorded).
+
+KYC Verification: The Applicant’s KYC has been verified.
+
+Rule 2: For All Other Bookings (Direct, etc.)
+To pass this check, all of the following must be true:
+
+The Approval Status: It is NOT currently &quot;Approved&quot; or &quot;Sent for Approval.&quot;
+
+KYC Verification: The Applicant’s KYC has been verified.</description>
     <emailTemplate>RW_Booking/Booking_Approver_for_Passback_Template</emailTemplate>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>

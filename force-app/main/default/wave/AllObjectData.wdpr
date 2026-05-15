@@ -1,0 +1,249 @@
+{
+  "version" : "56.0",
+  "nodes" : {
+    "Account" : {
+      "action" : "load",
+      "sources" : [ ],
+      "parameters" : {
+        "fields" : [ "Id", "Name" ],
+        "dataset" : {
+          "type" : "connectedDataset",
+          "label" : "Brokerage_Invoice__c",
+          "connectionName" : "SFDC_LOCAL",
+          "sourceObjectName" : "Brokerage_Invoice__c"
+        },
+        "sampleDetails" : {
+          "type" : "TopN",
+          "sortBy" : [ ]
+        }
+      }
+    },
+    "Booking" : {
+      "action" : "load",
+      "sources" : [ ],
+      "parameters" : {
+        "fields" : [ "Id" ],
+        "dataset" : {
+          "type" : "connectedDataset",
+          "connectionName" : "SFDC_LOCAL",
+          "sourceObjectName" : "Booking__c"
+        },
+        "sampleDetails" : {
+          "type" : "TopN",
+          "sortBy" : [ ]
+        }
+      }
+    },
+    "BrokerageSummary" : {
+      "action" : "load",
+      "sources" : [ ],
+      "parameters" : {
+        "fields" : [ "Id" ],
+        "dataset" : {
+          "type" : "connectedDataset",
+          "connectionName" : "SFDC_LOCAL",
+          "sourceObjectName" : "Brokerage_Summary__c"
+        },
+        "sampleDetails" : {
+          "type" : "TopN",
+          "sortBy" : [ ]
+        }
+      }
+    },
+    "Lead" : {
+      "action" : "load",
+      "sources" : [ ],
+      "parameters" : {
+        "fields" : [ "Id" ],
+        "dataset" : {
+          "type" : "connectedDataset",
+          "label" : "Lead",
+          "connectionName" : "SFDC_LOCAL",
+          "sourceObjectName" : "Lead"
+        },
+        "sampleDetails" : {
+          "type" : "TopN",
+          "sortBy" : [ ]
+        }
+      }
+    },
+    "Opp" : {
+      "action" : "load",
+      "sources" : [ ],
+      "parameters" : {
+        "fields" : [ "Id" ],
+        "dataset" : {
+          "type" : "connectedDataset",
+          "connectionName" : "SFDC_LOCAL",
+          "sourceObjectName" : "Opportunity"
+        },
+        "sampleDetails" : {
+          "type" : "TopN",
+          "sortBy" : [ ]
+        }
+      }
+    },
+    "AppendData_1" : {
+      "action" : "appendV2",
+      "sources" : [ "Account", "Booking" ],
+      "parameters" : {
+        "fieldMappings" : [ {
+          "top" : "Id",
+          "bottom" : "Id"
+        } ]
+      }
+    },
+    "AppendData_2" : {
+      "action" : "appendV2",
+      "sources" : [ "AppendData_1", "BrokerageSummary" ],
+      "parameters" : {
+        "fieldMappings" : [ {
+          "top" : "Id",
+          "bottom" : "Id"
+        } ]
+      }
+    },
+    "AppendData_3" : {
+      "action" : "appendV2",
+      "sources" : [ "AppendData_2", "Lead" ],
+      "parameters" : {
+        "fieldMappings" : [ {
+          "top" : "Id",
+          "bottom" : "Id"
+        } ]
+      }
+    },
+    "AppendData" : {
+      "action" : "appendV2",
+      "sources" : [ "AppendData_3", "Opp" ],
+      "parameters" : {
+        "fieldMappings" : [ {
+          "top" : "Id",
+          "bottom" : "Id"
+        } ]
+      }
+    },
+    "register_AllData" : {
+      "action" : "save",
+      "sources" : [ "AppendData" ],
+      "parameters" : {
+        "fields" : [ ],
+        "dataset" : {
+          "type" : "analyticsDataset",
+          "label" : "AllData",
+          "name" : "AllData_df2R3",
+          "folderName" : "Event_Monitoring_App"
+        },
+        "measuresToCurrencies" : [ ]
+      }
+    }
+  },
+  "ui" : {
+    "nodes" : {
+      "Account" : {
+        "label" : "Brokerage_Invoice__c",
+        "type" : "LOAD_DATASET",
+        "top" : 112,
+        "left" : 112,
+        "parameters" : {
+          "sampleSize" : 2000
+        }
+      },
+      "Booking" : {
+        "label" : "Booking",
+        "type" : "LOAD_DATASET",
+        "top" : 252,
+        "left" : 112,
+        "parameters" : {
+          "sampleSize" : 2000
+        }
+      },
+      "BrokerageSummary" : {
+        "label" : "BrokerageSummary",
+        "type" : "LOAD_DATASET",
+        "top" : 252,
+        "left" : 252,
+        "parameters" : {
+          "sampleSize" : 2000
+        }
+      },
+      "Lead" : {
+        "label" : "Lead",
+        "type" : "LOAD_DATASET",
+        "top" : 252,
+        "left" : 392,
+        "parameters" : {
+          "sampleSize" : 2000
+        }
+      },
+      "Opp" : {
+        "label" : "Opp",
+        "type" : "LOAD_DATASET",
+        "top" : 252,
+        "left" : 532,
+        "parameters" : {
+          "sampleSize" : 2000
+        }
+      },
+      "AppendData_1" : {
+        "label" : "AppendData_1",
+        "type" : "APPEND",
+        "top" : 112,
+        "left" : 252
+      },
+      "AppendData_2" : {
+        "label" : "AppendData_2",
+        "type" : "APPEND",
+        "top" : 112,
+        "left" : 392
+      },
+      "AppendData_3" : {
+        "label" : "AppendData_3",
+        "type" : "APPEND",
+        "top" : 112,
+        "left" : 532
+      },
+      "AppendData" : {
+        "label" : "AppendData",
+        "type" : "APPEND",
+        "top" : 112,
+        "left" : 672
+      },
+      "register_AllData" : {
+        "label" : "register_AllData",
+        "type" : "OUTPUT",
+        "top" : 112,
+        "left" : 812
+      }
+    },
+    "connectors" : [ {
+      "source" : "Account",
+      "target" : "AppendData_1"
+    }, {
+      "source" : "Booking",
+      "target" : "AppendData_1"
+    }, {
+      "source" : "AppendData_1",
+      "target" : "AppendData_2"
+    }, {
+      "source" : "BrokerageSummary",
+      "target" : "AppendData_2"
+    }, {
+      "source" : "AppendData_2",
+      "target" : "AppendData_3"
+    }, {
+      "source" : "Lead",
+      "target" : "AppendData_3"
+    }, {
+      "source" : "AppendData_3",
+      "target" : "AppendData"
+    }, {
+      "source" : "Opp",
+      "target" : "AppendData"
+    }, {
+      "source" : "AppendData",
+      "target" : "register_AllData"
+    } ],
+    "hiddenColumns" : [ ]
+  }
+}

@@ -511,9 +511,9 @@ public class Lockated_CPGetAOPLadderProgressTest {
         RW_Demand_Item__c dmid3 = new RW_Demand_Item__c(RW_Demand_Item_Amount__c=200000, RW_Demand__c=dmd3.Id, RW_GST_Amount__c=1000, RW_Legacy_Amount_Paid__c=5000, RW_Legacy_Demand__c=true, Total_Demand_Item_Amount_Paid__c=200000);
         insert new List<RW_Demand_Item__c>{ dmid, dmid2, dmid3 };
             
-            system.debug('9.99 b3::'+ b3.RW_Total_Amount_Received_Without_GST__c );
+            /*system.debug('9.99 b3::'+ b3.RW_Total_Amount_Received_Without_GST__c );
             system.debug('9.99 b3::' + [SELECT Id, Name, RW_X9_99_Received__c FROM Booking__c WHERE Id = :b3.Id]);
-         system.debug('9.99 b3::' + [SELECT Id, Name, RW_X9_99_Received__c FROM Booking__c WHERE RW_X9_99_Received__c = true]);
+         system.debug('9.99 b3::' + [SELECT Id, Name, RW_X9_99_Received__c FROM Booking__c WHERE RW_X9_99_Received__c = true]);*/
         
             RestRequest req = new RestRequest();
             RestResponse res = new RestResponse();

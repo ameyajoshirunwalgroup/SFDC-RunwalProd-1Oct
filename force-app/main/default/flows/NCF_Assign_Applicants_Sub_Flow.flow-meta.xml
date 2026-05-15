@@ -158,6 +158,13 @@
                 <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varNCF.RW_Primary_Middle_Name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loop_on_All_Applicants.Middle_Name__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>loop_on_All_Applicants</targetReference>
         </connector>
@@ -466,7 +473,7 @@
             <targetReference>get_ALL_Exisiting_NCFs</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>bokingId</name>
         <dataType>String</dataType>

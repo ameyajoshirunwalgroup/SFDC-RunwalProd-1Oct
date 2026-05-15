@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Monetary_Discounts_Amount__c</fullName>
+    <description>It includes the amount of all the monetary discounts amount</description>
+    <inlineHelpText>Sum of all the monetary discounts applied.</inlineHelpText>
+    <label>Monetary Discounts Amount</label>
+    <summarizedField>Quote_Applied_Discounts__c.Offer_Value__c</summarizedField>
+    <summaryFilterItems>
+        <field>Quote_Applied_Discounts__c.Discount_Category__c</field>
+        <operation>equals</operation>
+        <value>Monetary</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Quote_Applied_Discounts__c.Quotation__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -41,11 +41,7 @@ public class EnableCPPortaluser {
                 u.ContactId = conlist[0].Id;
                 u.LanguageLocaleKey = 'en_US';
                 u.CommunityNickname = a.Name;
-                Try{
-                    insert u;
-                System.debug('User Inserted successfully ');
                 
-                Contact cn = New Contact();
                 Account ac = New Account();
                 /*If(u.ContactId != Null)
                 {
@@ -55,10 +51,17 @@ public class EnableCPPortaluser {
                 ac = [Select Id ,Channel_Partner_Activated__c From Account Where Id =: a.id];
                 if( ac != Null)
                 {
-                    ac.Channel_Partner_Activated__c = true ;
+                    ac.Channel_Partner_Activated__c = true ;   
                     update ac;
                     System.debug('Check box updated successfully :: ');
                 }
+                
+                Try{
+                    insert u;
+                System.debug('User Inserted successfully ');
+                
+                //Contact cn = New Contact();
+                
                 }catch(DmlException e) {
                     System.debug('The following exception has occurred: ' + e.getMessage());
                 }

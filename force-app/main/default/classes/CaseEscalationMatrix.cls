@@ -3,16 +3,15 @@ global class CaseEscalationMatrix implements Schedulable {
     global void execute(SchedulableContext sc){
         //Map<String, Case_Escalation_Matrix_SLA__c> escalationSLA = Case_Escalation_Matrix_SLA__c.getall();
         
-        List<Case_Escalation_Matrix_SLA__c> escalationSLA = [SELECT Id, Active__c, Case_Sub_Type__c, Case_Type__c, Customer_Lifecycle_Touchpoint__c, SLA__c FROM Case_Escalation_Matrix_SLA__c WHERE Active__c = true];
+        List<Case_Escalation_Matrix_SLA__c> escalationSLA = [SELECT Id,Active__c,Case_Sub_Type__c,Case_Type__c,Customer_Lifecycle_Touchpoint__c,SLA__c FROM Case_Escalation_Matrix_SLA__c WHERE Active__c = true];
         
         List<Case> caseList = new List<Case>();
         
         if(!Test.isRunningTest()){
-            caseList = [SELECT Id, CaseNumber, Status, RW_Complaint_Type__c, RW_Complaint_SubType__c, CreatedDate, Escalation_Level__c, RW_RM_Name__c, RW_Case_Reopened_Date__c, Customer_Lifecycle_Touchpoint__c FROM Case 
-                        WHERE Status != 'Case Closed' AND Customer_Lifecycle_Touchpoint__c != null AND RW_Complaint_Type__c != null AND RW_Complaint_SubType__c != null AND RW_RM_Name__c != null];
+            caseList = [SELECT Id,CaseNumber,Status,RW_Complaint_Type__c,RW_Complaint_SubType__c,CreatedDate,Escalation_Level__c,RW_RM_Name__c,RW_Case_Reopened_Date__c,Customer_Lifecycle_Touchpoint__c FROM Case WHERE Status != 'Case Closed' AND Customer_Lifecycle_Touchpoint__c != null AND RW_Complaint_Type__c != null AND RW_Complaint_SubType__c != null AND RW_RM_Name__c != null];
                        // AND CreatedDate <=: (Date.today() - 1)];
         }else{
-            caseList = [SELECT Id, CaseNumber, Status, RW_Complaint_Type__c, RW_Complaint_SubType__c, CreatedDate, Escalation_Level__c, RW_RM_Name__c, RW_Case_Reopened_Date__c, Customer_Lifecycle_Touchpoint__c FROM Case];
+            caseList = [SELECT Id,CaseNumber,Status,RW_Complaint_Type__c,RW_Complaint_SubType__c,CreatedDate,Escalation_Level__c,RW_RM_Name__c,RW_Case_Reopened_Date__c,Customer_Lifecycle_Touchpoint__c FROM Case];
         }
         
         /*List<Case> caseList = [SELECT Id, CaseNumber, Status, RW_Complaint_Type__c, RW_Complaint_SubType__c, CreatedDate, Escalation_Level__c, RW_RM_Name__c 
@@ -40,7 +39,7 @@ global class CaseEscalationMatrix implements Schedulable {
             rmUserNames.add(rm.User_Name__c);
         }
         
-        List<User> users = [SELECT Id, Name, Email FROM User WHERE UserName =: rmUserNames OR Email =: managerEmails];
+        List<User> users = [SELECT Id,Name,Email FROM User WHERE UserName =: rmUserNames OR Email =: managerEmails];
         Map<String, User> userMap = new Map<String, User>();
         for(User usr : users){
             userMap.put(usr.Email, usr);
@@ -66,7 +65,6 @@ global class CaseEscalationMatrix implements Schedulable {
             }
             
             //Long hourDifference = 1;
-            System.debug('difference: ' + difference);
             Long hourDifference = difference / 3600000;
             long daysDifference = hourDifference / 24;
             if(cs.Escalation_Level__c == 'New'){
@@ -174,7 +172,6 @@ global class CaseEscalationMatrix implements Schedulable {
         }
         
         Messaging.SendEmailResult[] result = Messaging.sendEmail(mails);
-        System.debug('result: ' + result);
         insert taskList;
         update casesToUpdate;
     }

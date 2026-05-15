@@ -648,7 +648,7 @@ public class SAPCPBrokerageCreation {
                                     if(String.isNotBlank(resp.INV_DT) && resp.INV_DT != '0000-00-00'){
                                         try {
                                             updateCPBrokerage.SAP_Document_Date__c = Date.valueOf(resp.INV_DT);
-                                            updateCPBrokerage.SAP_Posting_Date__c = Date.valueOf(resp.INV_DT);
+                                            //updateCPBrokerage.SAP_Posting_Date__c = Date.valueOf(resp.INV_DT);//Commented by Prashant..18-02-26
                                             updateCPBrokerage.SAP_Clearing_Date__c = Date.valueOf(resp.INV_DT);
                                         } catch(Exception dateEx){
                                             system.debug('Date parsing error: ' + dateEx.getMessage());

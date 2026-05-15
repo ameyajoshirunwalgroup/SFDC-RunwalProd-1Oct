@@ -18,6 +18,16 @@
             <targetReference>Check_New_Or_Updated</targetReference>
         </connector>
     </assignments>
+    <customErrors>
+        <name>NCF_Creation_Updation_Not_Allowed</name>
+        <label>NCF Creation/Updation Not Allowed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>NCF details cannot be updated once the Registration Date is updated and NCF Status is Completed on the Booking.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
     <decisions>
         <name>Check_New_Or_Updated</name>
         <label>Check New Or Updated</label>
@@ -46,7 +56,53 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>check_Registration_Date_and_NCF_Status_on_Booking</targetReference>
+            </connector>
             <label>IS Updated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_Registration_Date_and_NCF_Status_on_Booking</name>
+        <label>check Registration Date and NCF Status on Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Registration_Date_not_Null_and_Ncf_status_Completed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.RW_Registration_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Booking__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>NCF_Creation_Updation_Not_Allowed</targetReference>
+            </connector>
+            <label>is Registration Date not Null and Ncf status Completed</label>
         </rules>
     </decisions>
     <decisions>
@@ -130,5 +186,5 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>

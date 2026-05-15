@@ -38,6 +38,7 @@ public class TestCloneOpportunityController {
         objopp.RW_Project__c = objProj.id;
         //objopp.RW_Project_Unit__c = objPU.id;
         objopp.RW_Sales_Associate__c = 'Test22';
+        objopp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         objopp.RW_Mobile_No__c = '1233211222';
         objopp.RW_Email__c = 'test@56test2.com';
         //objopp.RW_RM_Name__c = 'test RM';

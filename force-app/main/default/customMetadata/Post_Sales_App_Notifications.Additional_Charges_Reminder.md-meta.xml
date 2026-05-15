@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Additional Charges Reminder</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {1},
+
+Greetings from Runwal Enterprises !!!
+Our records indicate that the payment of {2} due on {3} is yet to be received. Please note that as the payment is overdue, additional interest charges have now been applied as per the terms.
+Kindly settle the outstanding amount at the earliest to avoid further charges.
+To ignore the demand incase if it’s already paid.
+Thank you.</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Additional Charges &amp; Pending Dues</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Dear {1},
+
+Our records show payment of ₹{2} due on {3} is unpaid. Additional interest charges apply. Please clear the dues promptly. Ignore if already paid.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">payment_dues</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Additional Charges Reminder (Overdue Payment)</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

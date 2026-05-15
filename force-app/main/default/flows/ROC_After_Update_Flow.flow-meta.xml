@@ -10,9 +10,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Booking__r.Primary_Applicant_Email__c</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -41,7 +39,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <stringValue>&lt;p&gt;Dear {!$Record.Booking__r.Customer__r.Account.Name},&lt;/p&gt;&lt;p&gt;We would like to inform you that the ROC has been successfully raised for your booking.&lt;/p&gt;&lt;p&gt;As the ROC Raised Date is now available, please find the SD (Sanction &amp;amp; Disbursement) information below:&lt;/p&gt;&lt;p&gt;Booking Number:&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!$Record.Booking__r.Name}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;ROC Raised Date: {!$Record.ROC_Submitted_Date__c}&lt;/p&gt;&lt;p&gt;Project Name: {!$Record.Booking__r.RW_Project_Name__c}&lt;/p&gt;&lt;p&gt;If you have any questions or need further clarification, please feel free to contact us.&lt;/p&gt;&lt;p&gt;Thank you for your cooperation.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;CRM Team&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</stringValue>
+                <stringValue>&lt;p&gt;Dear {!$Record.Booking__r.Primary_Applicant_Name__c},&lt;/p&gt;&lt;p&gt;We would like to inform you that the ROC has been successfully raised for your booking.&lt;/p&gt;&lt;p&gt;As the ROC Raised Date is now available, please find the SD (Sanction &amp;amp; Disbursement) information below:&lt;/p&gt;&lt;p&gt;Booking Number:&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!$Record.Booking__r.Name}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Project Name: {!$Record.Booking__r.RW_Project_Name__c}&lt;/p&gt;&lt;p&gt;If you have any questions or need further clarification, please feel free to contact us.&lt;/p&gt;&lt;p&gt;Thank you for your cooperation.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;CRM Team&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -75,6 +73,28 @@
         <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
+            <name>is_Raised</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ROC_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ROC_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ROC Raised</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_ROC_Submitted_Date</targetReference>
+            </connector>
+            <label>is Raised</label>
+        </rules>
+        <rules>
             <name>Is_Received</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
@@ -107,13 +127,6 @@
             <name>is_Not_Null_ROC_Date</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.ROC_Submitted_Date__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
                 <leftValueReference>$Record.Booking__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
@@ -125,6 +138,13 @@
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ROC_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ROC Raised</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -225,5 +245,5 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>InvalidDraft</status>
+    <status>Active</status>
 </Flow>

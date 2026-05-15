@@ -439,6 +439,7 @@ public class TestREST_CallbackCTI {
         objOpportunity.RW_Mobile_No__c = '9879976656';
         objOpportunity.StageName = 'Unit Booked'; 
         objOpportunity.RW_Sales_Associate__c = 'Test1 User Test';
+        objOpportunity.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
         objOpportunity=RDSCommon.CreateOpportunity(objOpportunity);
         
         Project__c p = TestDataFactory.createProject('Xanadu_prj2','111');
@@ -528,7 +529,7 @@ public class TestREST_CallbackCTI {
         RestContext.response = res;
         
         REST_CallbackCTI.CreateEnquiry();  
-         //REST_CallbackCTI.dummyMethod(); //Commented by Vinay 06-02-2026
+        //REST_CallbackCTI.dummyMethod();
     }
       
 	@isTest(SeeAllData=false)
@@ -547,10 +548,13 @@ public class TestREST_CallbackCTI {
         RestContext.request = req;
         RestContext.response = res;
         
+
         REST_CallbackCTI.CreateEnquiry();  
-         //REST_CallbackCTI.dummyMethod(); //Commented by Vinay 06-02-2026
-         CallbackCTI_Queueable.dummyMethod(); //Added by Vinay 06-02-2026
-         CallbackCTI_Queueable.createERPlog(json,'','','Test'); //Added by Vinay 06-02-2026
-         //REST_CallbackCTI.createERPlog(json,'','','Test'); //Commented by Vinay 06-02-2026
+         //REST_CallbackCTI.dummyMethod();
+        CallbackCTI_Queueable.dummyMethod();
+        CallbackCTI_Queueable.createERPlog(json,'','','Test');
+        CallbackCTI_Queueable_New.createERPlog(json,'','','Test');
+        CallbackCTI_Queueable_New.dummyMethod();
+        //REST_CallbackCTI.createERPlog(json,'','','Test');
     }
 }

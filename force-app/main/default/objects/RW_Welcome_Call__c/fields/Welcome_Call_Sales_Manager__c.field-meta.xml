@@ -2,8 +2,11 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Welcome_Call_Sales_Manager__c</fullName>
     <externalId>false</externalId>
-    <formula>IF(  ISBLANK(RW_Booking__r.Sales_Manager__c), 
- TEXT(RW_Booking__r.Opportunity__r.RW_Sales_Associate__c),RW_Booking__r.Sales_Manager__r.FirstName+ &apos; &apos; +RW_Booking__r.Sales_Manager__r.LastName)</formula>
+    <formula>/*IF(  ISBLANK(RW_Booking__r.Sales_Manager__c), 
+ TEXT(RW_Booking__r.Opportunity__r.RW_Sales_Associate__c),RW_Booking__r.Sales_Manager__r.FirstName+ &apos; &apos; +RW_Booking__r.Sales_Manager__r.LastName) */ /* Commented by Vinay 05-12-2025 */
+	
+	IF(  ISBLANK(RW_Booking__r.Sales_Manager__c), 
+ RW_Booking__r.Opportunity__r.Sales_Manager_User__r.FirstName + &apos; &apos; + RW_Booking__r.Opportunity__r.Sales_Manager_User__r.LastName,RW_Booking__r.Sales_Manager__r.FirstName+ &apos; &apos; +RW_Booking__r.Sales_Manager__r.LastName) /* Added by Vinay 05-12-2025 */</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Welcome Call Sales Manager</label>
     <required>false</required>

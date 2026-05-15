@@ -17,15 +17,15 @@
                 <field>Channel_Partner__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Project__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Customer_Name__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Tower_Unit__c</field>
             </layoutItems>
             <layoutItems>
@@ -62,6 +62,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Invoice_Status_CP_Portal__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Invoice_Date__c</field>
             </layoutItems>
             <layoutItems>
@@ -69,8 +73,8 @@
                 <field>Month__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Uploaded_Manually__c</field>
+                <behavior>Edit</behavior>
+                <field>SAP_Clearing_No__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -131,8 +135,12 @@
                 <field>Place_of_Supply__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Brokerage_Scheme_Name__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Uploaded_Manually__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -361,7 +369,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hfu00000CcbHP</masterLabel>
+        <masterLabel>00h9I000002fyQT</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

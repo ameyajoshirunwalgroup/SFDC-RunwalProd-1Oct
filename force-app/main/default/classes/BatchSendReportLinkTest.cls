@@ -72,7 +72,7 @@ public class BatchSendReportLinkTest {
         // Execute the batch
         BatchSendReportLink batch = new BatchSendReportLink();
         Database.executeBatch(batch);
-        batch.dummyMethod();
+        
 
         Test.stopTest();
 

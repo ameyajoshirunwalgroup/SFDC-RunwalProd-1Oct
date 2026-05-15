@@ -70,7 +70,7 @@
                         <valueListItems>
                             <value>Lead.Qualification</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2 OR 3</booleanFilter>
+                                <booleanFilter>(1 OR 2 ) AND  3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -82,9 +82,9 @@
                                     <rightValue>Interested</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.Status}</leftValue>
+                                    <leftValue>{!Record.Owners_Team__c}</leftValue>
                                     <operator>EQUAL</operator>
-                                    <rightValue>New</rightValue>
+                                    <rightValue>Presales</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -108,6 +108,16 @@
                         </valueListItems>
                         <valueListItems>
                             <value>Lead.Send_Project_Details2</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Clone</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.IsActive__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -361,9 +371,9 @@
                 <identifier>c_generateOtp</identifier>
                 <visibilityRule>
                     <criteria>
-                        <leftValue>{!Record.Is_Record_Owner__c}</leftValue>
+                        <leftValue>{!Record.Status}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
+                        <rightValue>VCVP</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>

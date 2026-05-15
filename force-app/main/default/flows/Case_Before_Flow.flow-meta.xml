@@ -13,9 +13,7 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Functional_User__r.Email</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -84,9 +82,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Owner:User.Email</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -157,9 +153,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Owner:User.Email</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -218,6 +212,50 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <versionString>2.0.1</versionString>
     </actionCalls>
     <actionCalls>
+        <name>Notification_To_Functional_User</name>
+        <label>Notification To Functional User</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Email_To_Community_User</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>get_Custom_Notification_Types.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recipientIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue>New case ____ has been assigned to FT member.</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>$Record.RM_Comment_For_Functional_User__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Send_Email_To_Community_User</name>
         <label>Send Email To Community User</label>
         <locationX>0</locationX>
@@ -230,9 +268,7 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>Get_User_For_This_Contact.Email</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -255,55 +291,25 @@ Click https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}</stringVa
         <inputParameters>
             <name>emailSubject</name>
             <value>
-                <stringValue>Case is Assigned to You.</stringValue>
+                <stringValue>New case ____ has been assigned to FT member.</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <stringValue>Hello {!Get_User_For_This_Contact.Name},
-
-
-
-The following case has been assigned to you for your review and action:
-
-
-
-Case Number: {!$Record.CaseNumber}
-
-
-
-Case Subject: {!$Record.Subject}
-
-
-
-Case Priority: {!$Record.Priority}
-
-
-
-Case Status: {!$Record.Status}
-
-
-
-Customer Name: {!$Record.Account_Channel_Partner__r.Name}
-
-
-
-Description: {!$Record.Description}
-
-
-
-👉 Click here to open the Case:
-
-https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}
-
-
-
-Thanks,
-
-Customer Care
-
-Runwal</stringValue>
+                <stringValue>&lt;p&gt;Hello {!Get_User_For_This_Contact.Name},&lt;/p&gt;&lt;p&gt;The following case has been assigned to you for your review and action:&lt;/p&gt;&lt;p&gt;Case Number: {!$Record.CaseNumber}&lt;/p&gt;&lt;p&gt;Case Subject: {!$Record.Subject}&lt;/p&gt;&lt;p&gt;Case Priority: {!$Record.Priority}&lt;/p&gt;&lt;p&gt;Case Status: {!$Record.Status}&lt;/p&gt;&lt;p&gt;Customer Name: {!$Record.Account.Name}&lt;/p&gt;&lt;p&gt;Description: {!$Record.Description}&lt;/p&gt;&lt;p&gt;👉 Click here to open the Case:&lt;/p&gt;&lt;p&gt;https://runwal--fullcopy.sandbox.my.site.com/cases/{!$Record.Id}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Customer Care&lt;/p&gt;&lt;p&gt;Runwal&lt;/p&gt;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useLineBreaks</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -335,9 +341,7 @@ Runwal</stringValue>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value>
-                <elementReference>$Record.Name_Confirmation_Form__r.Booking__r.Unit_No__r.Relationship_Manager__r.User__c</elementReference>
-            </value>
+            <value/>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
@@ -570,6 +574,22 @@ Runwal</stringValue>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Recepients</name>
+        <label>Assign Recepients</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recipientIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_User_For_This_Contact.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>get_Custom_Notification_Types</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assignment_Of_Recipient_Id</name>
         <label>Assignment Of Recipient Ids</label>
         <locationX>0</locationX>
@@ -644,7 +664,7 @@ Runwal</stringValue>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>RM_Comment_For_Functional_User_Updated</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>((1 AND 2 AND 3) OR (3 AND 4 AND 5))</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.RM_Comment_For_Functional_User__c</leftValueReference>
                 <operator>IsNull</operator>
@@ -664,6 +684,20 @@ Runwal</stringValue>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Functional_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Open</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Functional_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -711,24 +745,17 @@ Runwal</stringValue>
             <name>Case_Resolved_By_Functional_User</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Status</leftValueReference>
+                <leftValueReference>$Record.Functional_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Resolved</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Status</leftValueReference>
+                <leftValueReference>$Record.Functional_Status__c</leftValueReference>
                 <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Functional_User__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <elementReference>$User.Id</elementReference>
                 </rightValue>
             </conditions>
             <connector>
@@ -870,6 +897,31 @@ Runwal</stringValue>
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Notification</name>
+        <label>Check Notification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Send_Email_To_Community_User</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Notification_Type_Presents</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Custom_Notification_Types.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notification_To_Functional_User</targetReference>
+            </connector>
+            <label>Notification Type Presents</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Notification_Id</name>
         <label>Check Notification Id</label>
         <locationX>0</locationX>
@@ -967,38 +1019,6 @@ Runwal</stringValue>
                 <targetReference>Send_Notification_To_RMs</targetReference>
             </connector>
             <label>Get Notification Types</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Check_RecordType_Exists</name>
-        <label>Check RecordType Exists</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Create_Task_For_The_User</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>RecordType_Exists</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>get_Record_Type_Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>get_Record_Type_Id.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Copy_1_of_Create_Task_For_The_User</targetReference>
-            </connector>
-            <label>RecordType Exists</label>
         </rules>
     </decisions>
     <decisions>
@@ -1119,7 +1139,7 @@ Runwal</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>get_Record_Type_Id</targetReference>
+                <targetReference>Create_The_Sharing_Record</targetReference>
             </connector>
             <label>User Find</label>
         </rules>
@@ -1162,88 +1182,12 @@ Runwal</stringValue>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
-        <name>Copy_1_of_Create_Task_For_The_User</name>
-        <label>Copy 1 of Create Task For The User</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Send_Email_To_Community_User</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>OwnerId</field>
-            <value>
-                <elementReference>Get_User_For_This_Contact.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>RecordTypeId</field>
-            <value>
-                <elementReference>get_Record_Type_Id.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Not Started</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Subject</field>
-            <value>
-                <stringValue>Awaiting Response</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>WhatId</field>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Task</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
-        <name>Create_Task_For_The_User</name>
-        <label>Create Task For The User</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Send_Email_To_Community_User</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>OwnerId</field>
-            <value>
-                <elementReference>Get_User_For_This_Contact.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Not Started</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Subject</field>
-            <value>
-                <stringValue>Awaiting Response</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>WhatId</field>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Task</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
         <name>Create_The_Sharing_Record</name>
         <label>Create The Sharing Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Check_RecordType_Exists</targetReference>
+            <targetReference>Assign_Recepients</targetReference>
         </connector>
         <inputAssignments>
             <field>CaseAccessLevel</field>
@@ -1272,6 +1216,27 @@ Runwal</stringValue>
         <object>CaseShare</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>get_Custom_Notification_Types</name>
+        <label>get Custom Notification Types</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Notification</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Locobuzz_Case_Update_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Notification_Id</name>
         <label>Get Notification Id</label>
@@ -1354,34 +1319,6 @@ Runwal</stringValue>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>CustomNotificationType</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>get_Record_Type_Id</name>
-        <label>get Record Type Id</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Create_The_Sharing_Record</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>DeveloperName</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Customer_Interaction</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>SobjectType</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Task</stringValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -1476,6 +1413,12 @@ Runwal</stringValue>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <inputAssignments>
+            <field>Functional_Status__c</field>
+            <value>
+                <stringValue>Open</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Functional_User_Assignment_Time__c</field>
             <value>
                 <elementReference>CurrentDateTime</elementReference>
@@ -1515,7 +1458,7 @@ Runwal</stringValue>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>InvalidDraft</status>
+    <status>Active</status>
     <textTemplates>
         <name>SubjectForRMEmail</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>

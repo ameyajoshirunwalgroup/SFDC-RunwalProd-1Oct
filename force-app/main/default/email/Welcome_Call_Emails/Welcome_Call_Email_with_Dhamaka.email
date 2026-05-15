@@ -1,0 +1,197 @@
+<messaging:emailTemplate subject="Welcome Email" recipientType="User" relatedToType="RW_Welcome_Call__c">
+<messaging:plainTextEmailBody >
+
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody > 
+
+Dear {!relatedTo.RW_Applicant1_Primary_Applicant_Name__c} {!IF(relatedTo.RW_Applicant2_Name__c != null, 'and ', '')} {!IF(relatedTo.RW_Applicant2_Name__c != null, relatedTo.RW_Applicant2_Name__c, '')},<br/><br/>
+
+Greetings from {!relatedTo.RW_Project__c}!<br/><br/>
+
+The {!relatedTo.RW_Project__c} team congratulates you and thank you for choosing us for making your home.<br/><br/>
+
+With reference to your booking dated <apex:outputText value="{0, date, MM-dd-yyyy}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Booking_Date__c}" /> 
+        </apex:outputText> for {!relatedTo.RW_Project__c} {!relatedTo.RW_Flat_No__c}, we wish to affirm the details towards your apartment and share other important information related to this booking.
+<br/><br/>
+
+    
+<p><b>Booking Details:</b></p>    
+
+<table style="border:1px solid black;border-collapse:collapse;width:100%">
+    <tr>
+        <td style="border:1px solid black;">Project Name</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Project__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Booking Date</td>
+        <td style="border:1px solid black;"><apex:outputText value="{0, date, MM.dd.yyyy}">
+                                                <apex:param value="{!relatedTo.RW_Booking__r.Booking_Date__c}" /> 
+                                            </apex:outputText></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Tower Name</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Name}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Flat Details</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Flat_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Flat Type</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Flat_Typology__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Carpet Area including Deck/Utility Area (if any)</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.Total_RERA_Carpet_Area__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Payment Plan</td>
+        <td style="border:1px solid black;"></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">1st Applicant Name</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant1_Primary_Applicant_Name__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">PAN Number 1st Applicant</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Primary_PAN_Details__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Contact No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant1_Mobile_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Email Id</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant1_Email_Address__c}</td>
+    </tr>
+      <apex:outputPanel rendered="{!AND(relatedTo.RW_Applicant2_Name__c != null)}">  
+    <tr>
+        <td style="border:1px solid black;">2nd Applicant Name</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant2_Name__c}</td>
+    </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.Applicant2_PAN__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">PAN Number 2nd Applicant</td>
+        <td style="border:1px solid black;">{!relatedTo.Applicant2_PAN__c}</td>
+    </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Applicant2_Mobile_No__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">Contact No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant2_Mobile_No__c}</td>
+    </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Applicant2_Email_Address__c != null)}">
+    <tr>
+        <td style="border:1px solid black;">Email Id</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant2_Email_Address__c}</td>
+    </tr>
+    </apex:outputPanel>
+     <tr>
+        <td style="border:1px solid black;">Communication Address</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Applicant1_Permanent_Address__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Booking Source</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Source_Of_Booking__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">MAHARERA Registration No.</td>
+        <td style="border:1px solid black;">{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.RERA_Certificate_No__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Agreement Value</td>
+        <td style="border:1px solid black;">{!FLOOR(relatedTo.RW_Agreement_Value__c)}/-</td>
+        <!--<td><apex:outputText value="{0, number,  #,##,##,###}">
+          <apex:param value="{!relatedTo.RW_Agreement_Value__c}" />
+            </apex:outputText></td>-->
+    </tr>
+    <apex:outputPanel rendered="{!AND(relatedTo.RW_Project__c != 'Runwal Gardens')}"> <!-- Added the outputPanel renderd condition by Vinay 01-09-2025 -->
+    <tr>
+        <td style="border:1px solid black;">Possession Date</td>
+        <!--<td style="border:1px solid black;">{!relatedTo.RW_Booking__r.RW_Actual_Possession_Date__c}</td>-->
+        <td style="border:1px solid black;"><apex:outputText value="{0, date, d MMMM yyyy}">
+            <apex:param value="{!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Possession_Date__c}" /> 
+        </apex:outputText></td>
+    </tr>
+    </apex:outputPanel>
+</table>
+<br/><br/>
+
+For any discrepancies in the above information, please do get in touch with us at the earliest to have the same corrected.
+
+<p><b>Funding of your unit</b></p> 
+
+Should you wish to apply for a home loan, you may connect with our in-house home loan expert who is available on {!relatedTo.RW_Booking__r.Project__r.Home_Loan_Email__c}.<br/><br/>
+
+In case your home loan application is already in progress, request you to please share the sanction letter with us at the earliest for our internal process. To avail of bank loan, you are required to first make the payment of your own contribution.
+
+<p><b>Regarding registration of your unit</b></p> 
+
+We would be commencing the process of execution and registration of 'Agreement for Sale' in respect of your captioned booked flat shortly.<br/><br/>
+
+You are requested to fill the enclosed <b>'Name Confirmation Form'</b> to prepare the Agreement for Sale and send across a signed copy of the same at the earliest.
+
+<br/><br/>
+A mail with the login details to access your <b><I>Customer Self-Service Portal</I></b> and the R-Connect App will be sent to you shortly.<br/><br/>
+
+<!-- Below is a link that will walk-you through the process of logging in and taking you through the features of the <b><I>Customer Self-Service Portal</I></b> and the <b><I>R-Connect App and various other aspects of your journey with us:</I></b><br/><br/>
+
+<a href="https://www.youtube.com/playlist?list=PLIpRRatbhQuWdwWP_KF2GXsQynzRJv2i3">link</a>
+
+<br/><br/> -->
+Best Regards,<br/>
+{!relatedTo.RW_Booking__r.RM_Name__c}<br/>
+Email Id: {!relatedTo.RW_Booking__r.Project__r.Customer_Care_Email__c}<br/>
+Contact No: {!relatedTo.RW_Booking__r.Project__r.Contact_No__c}<br/>
+Website: {!relatedTo.RW_Booking__r.Project__r.Project_site_URL__c}<br/>
+Corporate Email: {!relatedTo.RW_Booking__r.Project__r.RW_Corporate_Email__c}<br/><br/>
+
+   
+    
+</messaging:htmlEmailBody>
+
+<!--<messaging:attachment renderAs="pdf" filename="NAME CONFIRMATION FORM.pdf">
+    <html>
+        <body>
+            <P style="text-align:center;font-size:20px"><b>NAME CONFIRMATION FORM</b></p>
+            <P style="text-align:right;font-size:13px">Dated:______________</p>
+            <P style="text-align:right;font-size:13px">FLAT NO:______________</p>
+            <p style="text-align:left;font-size:13px">
+                (PLEASE FILL THE FORM IN BLOCK LETTERS)<br/><br/>
+                1. NAME OF 1ST APPLICANT:(IF APPLICANT IS NRI AND DOES NOT HAVE PAN CARD, PLEASE PROVIDE OCI/PIO)<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                2. NAME OF 2ND APPLICANT:<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                3. NAME OF 3RD APPLICANT:<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                4. NAME OF 4TH APPLICANT:<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                5. NAME OF THE NOMINEE (IF YES, KINDLY PROVIDE IDENTITY AND ADDRESS PROOF, WRITE "NO" IF THERE IS NO NOMINEE. IF NOMINEE IS MINOR, PLEASE PROVIDE GUARDIAN DETAILS)<br/><br/>
+                   Mr./Mrs.______________________________________<br/><br/>
+                   PAN NO:____________________________________<br/><br/>
+                6. IN CASE OF P.O.A:___________________________________<br/><br/>
+                   PAN NUMBER OF P.O.A: ________________________________<br/><br/>
+                7. ADDRESS TO BE MENTIONED IN THE AGREEMENT:<br/><br/>
+                    _______________________________________________________________<br/><br/>
+                    _______________________________________________________________<br/><br/>
+                8. CONTACT DETAILS:(APPLICANT/P.O.A):_______________________________<br/><br/>
+                9. EMAIL ID:(APPLICANT/P.O.A):____________________________________<br/><br/>
+            <p style="font-size:12px;color:#FF0000">PS : Please note that the details mentioned in the Name Confirmation form will be considered as final details which will be incorporated in the Agreement and no changes would be accepted post that.</p>
+            </p>
+            <P style="text-align:right;font-size:13px">________________________</p>
+            <P style="text-align:right;font-size:13px">APPLICANT'S SIGNATURE</p><br/><br/>
+            
+        </body>
+    </html>
+</messaging:attachment>-->
+
+
+</messaging:emailTemplate>

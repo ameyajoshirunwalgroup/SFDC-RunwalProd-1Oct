@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Runwal Elevate – Channel Partner App Launch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f0ece4;
+      font-family: 'DM Sans', sans-serif;
+      color: #1a1611;
+    }
+
+    .email-wrapper {
+      max-width: 640px;
+      margin: 40px auto;
+      background: #faf8f4;
+      border: 1px solid #d9d0c0;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: #1a1611;
+      padding: 36px 48px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,162,94,0.18) 0%, transparent 70%);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      background: #c4a25e;
+      color: #1a1611;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 2px;
+    }
+
+    .app-icon-area {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .app-icon-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 8px 24px rgba(196,162,94,0.35);
+      flex-shrink: 0;
+    }
+
+    .app-title-block h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .app-title-block span {
+      font-size: 13px;
+      color: #c4a25e;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    /* Gold divider */
+    .gold-rule {
+      height: 2px;
+      background: linear-gradient(to right, transparent, #c4a25e, transparent);
+      margin: 0;
+    }
+
+    /* Body */
+    .body-content {
+      padding: 44px 48px;
+    }
+
+    .greeting {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: #1a1611;
+      margin-bottom: 6px;
+    }
+
+    .intro-text {
+      font-size: 15px;
+      color: #4a4035;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .intro-text strong { color: #1a1611; font-weight: 500; }
+
+    /* Feature cards */
+    .section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c4a25e;
+      margin-bottom: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid #e8e0d0;
+      padding: 18px 16px;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: #c4a25e;
+    }
+
+    .feature-icon { font-size: 22px; margin-bottom: 8px; }
+
+    .feature-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1611;
+      margin-bottom: 4px;
+    }
+
+    .feature-desc {
+      font-size: 12px;
+      color: #7a6e60;
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: #1a1611;
+      border-radius: 6px;
+      padding: 28px 32px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .cta-section p {
+      font-size: 14px;
+      color: #c4a25e;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #c4a25e;
+      color: #1a1611;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .cta-btn.secondary {
+      background: transparent;
+      border: 1px solid #c4a25e;
+      color: #c4a25e;
+    }
+
+    .cta-btn-icon { font-size: 16px; }
+
+    /* Login Box */
+    .login-box {
+      background: #ffffff;
+      border: 1px solid #e8e0d0;
+      border-left: 4px solid #c4a25e;
+      border-radius: 4px;
+      padding: 22px 24px;
+      margin-bottom: 28px;
+    }
+
+    .login-intro {
+      font-size: 13.5px;
+      color: #4a4035;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .login-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px dashed #e8e0d0;
+    }
+
+    .login-row:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .login-icon {
+      font-size: 20px;
+      width: 32px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .login-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #c4a25e;
+      margin-bottom: 2px;
+    }
+
+    .login-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1611;
+    }
+
+    .login-password {
+      font-family: 'Courier New', monospace;
+      background: #f0ece4;
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+      color: #1a1611;
+      border: 1px dashed #c4a25e;
+    }
+
+    .password-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #7a6e60;
+      background: #fdf6e8;
+      border: 1px solid #e8d8a0;
+      border-radius: 3px;
+      padding: 8px 12px;
+      line-height: 1.5;
+    }
+
+    /* Closing */
+    .closing-text {
+      font-size: 14px;
+      color: #4a4035;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .signature {
+      border-top: 1px solid #e0d8c8;
+      padding-top: 24px;
+    }
+
+    .sig-warmregards {
+      font-size: 14px;
+      color: #4a4035;
+      margin-bottom: 16px;
+    }
+
+    .sig-logo {
+      height: 90px;
+      width: auto;
+    }
+
+    @media (max-width: 480px) {
+      .body-content, .header { padding: 28px 24px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="email-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div class="badge">Exclusive Launch</div>
+    </div>
+    <div class="app-icon-area">
+      <img src="https://runwal--fullcopy.sandbox.my.salesforce.com/sfc/p/9I000001tHAv/a/9I000000qFkX/9zqVuRSlxwGgND7EIqKYilFJRUMgvFJbrcr_zsXNKfo" alt="Runwal Enterprises" class="app-icon-img" />
+      <div class="app-title-block">
+        <h1>Runwal Elevate</h1>
+        <span>Channel Partner App</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- Body -->
+  <div class="body-content">
+
+    <p class="greeting">Dear {!Broker__c.Name},</p>
+    <p class="intro-text">
+      We are delighted to introduce <strong>Runwal Elevate</strong> — our brand-new, purpose-built app
+      designed exclusively for our valued Channel Partners. Everything you need to serve your
+      customers, manage your business, and stay ahead is now in the palm of your hand.
+    </p>
+
+    <p class="section-label">What's Inside the App</p>
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">🏢</div>
+        <div class="feature-title">Project Details</div>
+        <div class="feature-desc">Explore in-depth information on all Runwal projects — specs, amenities, and availability — in one place.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <div class="feature-title">Offers &amp; Brochures</div>
+        <div class="feature-desc">Download the latest offer sheets and instantly share them with prospective customers.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Billings &amp; Invoices</div>
+        <div class="feature-desc">Access your billing statements and transaction history anytime, without a single call.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Payout Tracking</div>
+        <div class="feature-desc">Stay on top of your earnings — view payout schedules and commission statuses in real time.</div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <p>Download <strong>Runwal Elevate</strong> now and experience a smarter way to partner with us. Available on both iOS and Android.</p>
+      <div class="cta-buttons">
+        <a href="https://play.google.com/store/apps/details?id=com.lockated.runwal.cp" class="cta-btn" target="_blank">
+          <span class="cta-btn-icon">▶</span> Download on Google Play
+        </a>
+        <a href="https://apps.apple.com/in/app/runwal-elevate/id6758725386" class="cta-btn secondary" target="_blank">
+          <span class="cta-btn-icon">🍎</span> Download on App Store
+        </a>
+      </div>
+    </div>
+
+    <!-- Login Info -->
+    <div class="login-box">
+      <p class="section-label" style="margin-bottom:12px;">Your Login Credentials</p>
+      <p class="login-intro">You can login using your registered Email ID or Phone Number:</p>
+      <div class="login-row">
+        <span class="login-icon">✉️</span>
+        <div>
+          <div class="login-label">Email</div>
+          <div class="login-value">{!Broker__c.RW_Email__c}</div>
+        </div>
+      </div>
+      <div class="login-row">
+        <span class="login-icon">📱</span>
+        <div>
+          <div class="login-label">Phone Number</div>
+          <div class="login-value">{!Broker__c.RW_Mobile_No__c}</div>
+        </div>
+      </div>
+      <div class="login-row">
+        <span class="login-icon">🔒</span>
+        <div>
+          <div class="login-label">Default Password</div>
+          <div class="login-value login-password">runwal@1234</div>
+        </div>
+      </div>
+      <p class="password-note">⚠️ For your security, please change your password after your first login.</p>
+    </div>
+
+    <p class="closing-text">
+      This app is exclusively available to our registered Channel Partners. Should you face any issues
+      or need assistance, please reach out to your dedicated Sales Representative.
+      We look forward to growing together with this powerful new tool at your fingertips.
+    </p>
+
+    <!-- Signature -->
+    <div class="signature">
+      <p class="sig-warmregards">Warm Regards,</p>
+    </div>
+
+      <img src="https://runwal--fullcopy.sandbox.my.salesforce.com/sfc/p/9I000001tHAv/a/9I000000qFkX/9zqVuRSlxwGgND7EIqKYilFJRUMgvFJbrcr_zsXNKfo" alt="Runwal Enterprises" class="sig-logo" />
+  </div>
+
+</div>
+
+</body>
+</html>

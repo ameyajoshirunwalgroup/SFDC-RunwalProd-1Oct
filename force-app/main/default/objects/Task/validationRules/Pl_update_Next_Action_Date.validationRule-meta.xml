@@ -5,8 +5,7 @@
     <errorConditionFormula>and(
 ISPICKVAL(Call_Status__c, &apos;Follow Up&apos;),
 ISNULL(Next_Action_Date__c),
- $Profile.Name != &quot;Receptionist&quot;,
-$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+ $Profile.Name != &quot;Receptionist&quot;
 )</errorConditionFormula>
     <errorDisplayField>Next_Action_Date__c</errorDisplayField>
     <errorMessage>Next action Date is mandatory for Follow up tasks</errorMessage>

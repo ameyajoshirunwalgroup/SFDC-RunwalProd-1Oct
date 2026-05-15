@@ -385,7 +385,7 @@ Runwal Group</stringValue>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Is_Not_Null_onLoan</name>
-            <conditionLogic>(1 AND 2) OR (3 AND 4)</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HL_RM__c</leftValueReference>
                 <operator>IsNull</operator>
@@ -396,20 +396,6 @@ Runwal Group</stringValue>
             <conditions>
                 <leftValueReference>ISNEW</leftValueReference>
                 <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>ISNEW</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.HL_RM__c</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>

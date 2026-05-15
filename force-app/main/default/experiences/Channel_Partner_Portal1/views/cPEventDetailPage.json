@@ -2,18 +2,26 @@
   "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
   "componentName" : "siteforce:sldsOneColLayout",
   "dataProviders" : [ ],
-  "id" : "c5442ee4-a52e-456c-b881-496b95dcddc2",
+  "id" : "edc36e46-c624-452f-a761-e393e84404a6",
   "label" : "CP Event Detail Page",
   "regions" : [ {
-    "id" : "524554ff-db13-40a5-8e29-91519af50d57",
+    "id" : "52bffe81-0c69-42fb-8857-a7f614ba3001",
     "regionName" : "header",
     "type" : "region"
   }, {
-    "id" : "c921bb20-de50-48ce-9619-98215c1245b4",
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:showCampaignDetailsPage",
+      "id" : "ef82827b-335c-4c2a-a3d1-31ad8d4c53bd",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "112abb76-4674-4a84-bc79-7305421e7107",
     "regionName" : "content",
     "type" : "region"
   }, {
-    "id" : "9720362d-99b1-4855-b87a-2925e3552f99",
+    "id" : "b049831e-d309-4ff9-84f0-329a2f726333",
     "regionName" : "footer",
     "type" : "region"
   }, {
@@ -24,11 +32,11 @@
         "title" : "CP Event Detail Page"
       },
       "componentName" : "forceCommunity:seoAssistant",
-      "id" : "2b29a1bf-c5cd-4285-91f3-fad378960f71",
+      "id" : "4615c4c0-859f-4e08-99de-21f697bdb564",
       "renditionMap" : { },
       "type" : "component"
     } ],
-    "id" : "74a540e4-6e21-4bdd-bc73-c442dbd179ae",
+    "id" : "1d05ac68-9b07-4d5a-aba3-e5b737d22c8f",
     "regionName" : "sfdcHiddenRegion",
     "type" : "region"
   } ],

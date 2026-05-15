@@ -64,7 +64,7 @@
                         <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:16px" colspan="4">{!ChannelPartner[0].Name}<apex:outputPanel rendered="{!ChannelPartner[0].Company_Name_As_per_RERA__c != null}">({!ChannelPartner[0].Company_Name_As_per_RERA__c})</apex:outputPanel></th>
                     </tr>
                     <tr>
-                        <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:14px" colspan="4"><apex:outputPanel rendered="{!ChannelPartner[0].Address__c != null}">{!ChannelPartner[0].Address__c}</apex:outputPanel></th>
+                        <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:14px" colspan="4">{!ChannelPartner[0].Address__c}</th>
                     </tr>
                     <tr>
                         <th Style="text-align:center;background-color:#e6f9ff;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;width:50%;height:30px;font-size:14px" colspan="4">Mobile No:&nbsp;{!ChannelPartner[0].RW_Mobile_No__c}&nbsp;&nbsp;Email:&nbsp;{!ChannelPartner[0].RW_Email__c}</th>

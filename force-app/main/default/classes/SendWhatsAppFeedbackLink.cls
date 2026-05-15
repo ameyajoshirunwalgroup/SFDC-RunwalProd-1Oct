@@ -10,12 +10,13 @@ public class SendWhatsAppFeedbackLink {
       //Added by Vinay 29-10-2021
       if(survey.Opportunity__r.LeadSource != 'Channel Partner' && !Test.isRunningTest()){
       		//SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null, survey.Opportunity__r.RW_Mobile_No__c,System.Label.Lead_Visit_Done_Thank_You_Feedback_HSM);
-            //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null, survey.Opportunity__r.RW_Mobile_No__c,'Lead Visit Done Thank You Feedback'); //Commented by Vinay 13-10-2025
-            if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
-               SendWhatsAppMsg.methodToSendWhatsAppMsgNew(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null,survey.Opportunity__r.Account.Country_Code__c, survey.Opportunity__r.RW_Mobile_No__c,'Lead Visit Done Thank You Feedback'); 
-           }else{
-               SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null, survey.Opportunity__r.RW_Mobile_No__c,'Lead Visit Done Thank You Feedback');
-           }
+            //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null, survey.Opportunity__r.RW_Mobile_No__c,'Lead Visit Done Thank You Feedback'); //Commented by Vinay 29-08-2025
+          
+          if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 10-10-2025
+              SendWhatsAppMsg.methodToSendWhatsAppMsgNew(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null,survey.Opportunity__r.Account.Country_Code__c, survey.Opportunity__r.RW_Mobile_No__c,'Lead Visit Done Thank You Feedback'); 
+          }else{
+              SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null, survey.Opportunity__r.RW_Mobile_No__c,'Lead Visit Done Thank You Feedback');
+          }
       }
       //Commented by Vinay 29-10-2021
       //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(survey.Opportunity__r.Project_Name__c, Url.getOrgDomainUrl().toExternalForm()+'/SurveyPage?sid='+survey.Id, null, null,null,null,null,null,null, survey.Opportunity__r.RW_Mobile_No__c,System.Label.Lead_Visit_Done_Thank_You_Feedback_HSM);

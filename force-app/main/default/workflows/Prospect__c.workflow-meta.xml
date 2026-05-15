@@ -9,7 +9,7 @@
             <type>email</type>
         </recipients>
         <senderType>CurrentUser</senderType>
-        <template>unfiled$public/Send_Email_Sales_Manager_when_prospect_Assigned</template>
+        <template>My_View/Send_Email_Sales_Manager_when_prospect_Assigned</template>
     </alerts>
     <fieldUpdates>
         <fullName>Update_Prospect_Name</fullName>
@@ -25,6 +25,17 @@
         <fullName>Send escalation mail for SM Call on Prospect</fullName>
         <active>true</active>
         <formula>OR(AND(ISBLANK(Sales_Call_Attempt_Date__c ),((NOW() - Last_Call_Attempt_Date__c)*24*60 &gt; 120)),AND(NOT(ISBLANK(Sales_Call_Attempt_Date__c )),((Last_Call_Attempt_Date__c -  Sales_Call_Attempt_Date__c)*24*60 &gt; 120)))</formula>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <offsetFromField>Prospect__c.Last_Call_Attempt_Date__c</offsetFromField>
+            <timeLength>2</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <rules>
+        <fullName>Send escalation mail for SM Call on Prospect if sales call is not empty</fullName>
+        <active>false</active>
+        <formula>NOT(ISBLANK(Sales_Call_Attempt_Date__c ))  &amp;&amp;  ((Last_Call_Attempt_Date__c - Sales_Call_Attempt_Date__c )*24*60 &gt; 1)</formula>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
         <workflowTimeTriggers>
             <offsetFromField>Prospect__c.Last_Call_Attempt_Date__c</offsetFromField>

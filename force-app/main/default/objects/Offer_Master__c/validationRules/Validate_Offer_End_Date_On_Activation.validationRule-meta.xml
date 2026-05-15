@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Offer_End_Date_On_Activation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    End_Date__c &lt; TODAY(),
+    Active__c = TRUE,
+    ISCHANGED(Active__c)
+)</errorConditionFormula>
+    <errorMessage>You cannot activate this offer because the End Date has already passed.</errorMessage>
+</ValidationRule>

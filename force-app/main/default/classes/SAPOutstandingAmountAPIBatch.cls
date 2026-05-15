@@ -13,6 +13,7 @@ global class SAPOutstandingAmountAPIBatch implements Database.Batchable<sObject>
                 soNums.add(r.VbelnN);
                 soVsAmt.put(r.VbelnN,r.Dmshb);
             }
+            System.debug('soVsAmt: ' + soVsAmt);
         }catch(exception ex){
             ERP_Integration_Log__c erp = new ERP_Integration_Log__c();
             erp.API_Name__c = 'Outstanding API';

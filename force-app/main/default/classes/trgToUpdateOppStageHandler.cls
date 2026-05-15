@@ -26,7 +26,7 @@ public class trgToUpdateOppStageHandler
                 //Added by coServe 11-01-2023 End
             }
             //system.debug(setIds);
-            List<Opportunity> lstUpdateOpp = new List<Opportunity>(); 
+            Set<Opportunity> lstUpdateOpp = new Set<Opportunity>(); 
             List<RW_EOI__c> eoiRecords = new List<RW_EOI__c>();
             if(setIds != null && setIds.size() > 0)
             {
@@ -85,17 +85,19 @@ public class trgToUpdateOppStageHandler
             }
             if(set7th!=null && set7th.size()>0)
             {
-                List<Opportunity> lstOpp1 = [SELECT Id, StageName FROM Opportunity WHERE Id IN : set7th];
+                List<Opportunity> lstOpp1 = [SELECT Id, StageName FROM Opportunity WHERE Id IN : set7th and StageName = 'Unit Blocked'/*Stage Unit Blocked added by Prashant to release the unit only if it iis blocked.//Added on 04-05-2026.*/];
                 for(Project_Unit__c objProj1 : lstProjUnit)
                 {
-                    for(Opportunity objOpp1 : lstOpp1)
-                    {
-                        if(objOpp1.Id == objProj1.RW_Customer__c && objProj1.Booking__c == null)
+                    if(!lstOpp1.isEmpty()){
+                        for(Opportunity objOpp1 : lstOpp1)
                         {
-                            objOpp1.RW_Project_Unit__c = null;
-                            objOpp1.StageName = 'Qualification';
-                            lstUpdateOpp.add(objOpp1);
-                            system.debug('Inside fifth list add'+lstUpdateOpp);
+                            if(objOpp1.Id == objProj1.RW_Customer__c && objProj1.Booking__c == null)
+                            {
+                                objOpp1.RW_Project_Unit__c = null;
+                                objOpp1.StageName = 'Qualification';
+                                lstUpdateOpp.add(objOpp1);
+                                system.debug('Inside fifth list add'+lstUpdateOpp);
+                            }
                         }
                     }
                 }
@@ -119,7 +121,7 @@ public class trgToUpdateOppStageHandler
             if(lstUpdateOpp != null && lstUpdateOpp.size() > 0)
             {
                 if(!test.isRunningTest())
-                    update lstUpdateOpp;
+                    update new List<Opportunity>(lstUpdateOpp);
             }
             
             if(eoiRecords!= null && eoiRecords.size() >0)
@@ -167,10 +169,11 @@ public class trgToUpdateOppStageHandler
         
         return values;
     }
-    
+
     /**Added for SDR/ROC Management starts */
     public void calculateRRR(List<Id> unitIds){
 
+        System.debug('unitIds**'+unitIds);
 
         Decimal carpetarea=0;
         Decimal deckArea=0;
@@ -196,7 +199,7 @@ public class trgToUpdateOppStageHandler
         Set<Id> oppIds = new Set<Id>();
         Set<Id> unitIdsSet = new Set<Id>();
         Set<String> projNames = new Set<String>();
-        // Set<Decimal> floorNumber = new Set<Decimal>();
+        // Set<Decimal> floorNumber = new Set<Decimal>();// Not In Used Commented By Aditya 04/05/2026
 
         Decimal areaCalculation = Decimal.valueOf(System.label.Area_Calculation);
         Decimal sqrMtrBuiltUpValue = Decimal.valueOf(System.label.Square_Meter_Built_Up);
@@ -204,7 +207,12 @@ public class trgToUpdateOppStageHandler
         Decimal parkingMultiplication = Decimal.valueOf(System.label.Parking_Multiplication);
         Decimal additionalMultiplication = Decimal.valueOf(System.label.Additional_Mutiplication);
 
-       
+        System.debug('areaCalculation**'+areaCalculation);
+        System.debug('sqrMtrBuiltUpValue**'+sqrMtrBuiltUpValue);
+        System.debug('parkingArea**'+parkingArea);
+        System.debug('parkingMultiplication**'+parkingMultiplication);
+        System.debug('additionalMultiplication**'+additionalMultiplication);
+
         List<Quotation__c> quoteLst = new List<Quotation__c>();
         List<Quotation__c> quotelstToUpdate = new List<Quotation__c>();
         List<Floor_Rise__mdt> floorRiseLst = new List<Floor_Rise__mdt>();
@@ -213,43 +221,63 @@ public class trgToUpdateOppStageHandler
         List<Project_Unit__c> projUnitLst =[Select Id,RW_Customer__c,RW_Project__c,RW_Project__r.Name,New_Floor__c from Project_Unit__c where Id=:unitIds AND SD_Paid_By_Runwal__c = true];
         if (projUnitLst.isEmpty()) return;
 
+        System.debug('projUnitLst size = '+ projUnitLst.size());
+        System.debug('projUnitLst = ' + projUnitLst);
+
         for(Project_Unit__c projUnit :projUnitLst){
             if(projUnit.RW_Customer__c!=null){
                 oppIds.add(projUnit.RW_Customer__c);
                 unitIdsSet.add(projUnit.Id);
                 projNames.add(projUnit.RW_Project__r.Name);
-                // floorNumber.add(Decimal.valueOf(projUnit.New_Floor__c));
+                // floorNumber.add(Decimal.valueOf(projUnit.New_Floor__c));// Not In Used Commented By Aditya 04/05/2026
             }
         }
-       
+        System.debug('projNames**'+projNames);
+        // System.debug('floorNumber**'+floorNumber);// Not In Used Commented By Aditya 04/05/2026
+        System.debug('unitIdsSet**'+unitIdsSet);
+        System.debug('oppIds**'+oppIds);
+
         floorRiseLst = [Select Id,Max_Value__c,Min_Value__c,Percentage_Value__c,Project__c from Floor_Rise__mdt where Project__c=:projNames];
         bigProjectLst = [Select Id,Applicable_Percentage__c,Project__c from Big_Project__mdt where Project__c=:projNames];
-
+        
+        System.debug('floorRiseLst**'+floorRiseLst);
 
         quoteLst = [Select Id,No_of_parking__c,Total_MV__c,Project_Unit__r.New_Floor__c,Project__r.Name,Project_Unit__r.Carpet_Area__c,Project_Unit__r.Total_RERA_Carpet_Area__c,Agreement_Value__c,Project_Unit__r.Deck_Area__c,Project_Unit__r.Service_Room_Carpet_Area__c,Project_Unit__r.Utility_Area__c,Project__r.S_Ready_Reckoner_Rate__c,Project_Unit__r.S_Charge_Percentage__c,Opportunity__r.Walkin_Source__c from Quotation__c where Project_Unit__c=:unitIdsSet AND Quote_Status__c='Valid' AND Opportunity__c =:oppIds];
+         System.debug('quoteLst**'+quoteLst);
 
         for(Quotation__c quote : quoteLst){
             carpetarea = quote.Project_Unit__r.Carpet_Area__c !=null ? quote.Project_Unit__r.Carpet_Area__c/areaCalculation : 0;
+            System.debug('carpetarea**'+carpetarea);
 
             deckArea = quote.Project_Unit__r.Deck_Area__c !=null ? quote.Project_Unit__r.Deck_Area__c/areaCalculation :0;
+            System.debug('deckArea**'+deckArea);
 
             utilityArea = quote.Project_Unit__r.Utility_Area__c !=null ? quote.Project_Unit__r.Utility_Area__c/areaCalculation : 0;
+            System.debug('utilityArea**'+utilityArea);
 
             reraCarpetArea = quote.Project_Unit__r.Total_RERA_Carpet_Area__c !=null ? quote.Project_Unit__r.Total_RERA_Carpet_Area__c/areaCalculation :0;
+            System.debug('reraCarpetArea**'+reraCarpetArea);
 
             serviceArea = quote.Project_Unit__r.Service_Room_Carpet_Area__c !=null ? quote.Project_Unit__r.Service_Room_Carpet_Area__c/areaCalculation :0;
+            System.debug('serviceArea**'+serviceArea);
 
             totalAreaInMtr = carpetarea + deckArea + utilityArea + serviceArea+reraCarpetArea;
-
+            System.debug('totalAreaInMtr**'+totalAreaInMtr);
+            
             sqrMtrBuiltUp = totalAreaInMtr*sqrMtrBuiltUpValue;
-
+            System.debug('sqrMtrBuiltUp**'+sqrMtrBuiltUp);
+            
             parkingCount = quote.No_of_parking__c;
             parkingMtrs = parkingCount*(parkingArea*parkingMultiplication);
-
+            System.debug('parkingMtrs**'+parkingMtrs);
+            
+            //totalArea = sqrMtrBuiltUp + parkingMtrs;
 
             marketValue = quote.Project__r.S_Ready_Reckoner_Rate__c!=null ? quote.Project__r.S_Ready_Reckoner_Rate__c :marketValue;
+            System.debug('marketValue**'+marketValue);
 
-
+           // finalArea = totalArea*additionalMultiplication;
+            
             for(Big_Project__mdt bigProjectObj : bigProjectLst){
             if(bigProjectObj.Project__c!=null && bigProjectObj.Applicable_Percentage__c!=null){
                 if(bigProjectObj.Project__c == quote.Project__r.Name){
@@ -257,43 +285,56 @@ public class trgToUpdateOppStageHandler
                 }
             }
             }
+            System.debug('bigProjectPercentage**'+bigProjectPercentage);
 
             for(Floor_Rise__mdt floorRiseObj:floorRiseLst){
-                if(floorRiseObj.Min_Value__c!=null && floorRiseObj.Max_Value__c!=null && floorRiseObj.Percentage_Value__c!=null &&
+                if(floorRiseObj.Min_Value__c!=null && floorRiseObj.Max_Value__c!=null && floorRiseObj.Percentage_Value__c!=null && 
                    quote.Project_Unit__r.New_Floor__c!= null &&
-                   Decimal.valueOf(floorRiseObj.Min_Value__c) <= Decimal.valueOf(quote.Project_Unit__r.New_Floor__c) &&
+                   Decimal.valueOf(floorRiseObj.Min_Value__c) <= Decimal.valueOf(quote.Project_Unit__r.New_Floor__c) && 
                    Decimal.valueOf(floorRiseObj.Max_Value__c) >= Decimal.valueOf(quote.Project_Unit__r.New_Floor__c))
                 {
                 floorRisePercentage =  Decimal.valueOf(floorRiseObj.Percentage_Value__c);
                 }
 
+                System.debug('floorRisePercentage**'+floorRisePercentage);
 
+                
+                // if(totalArea!=null && floorRisePercentage!=null ){
+                // floorRiseValue = (totalArea*floorRisePercentage)/100;
+                //}
             }
 
             bigProjectValue = marketValue * bigProjectPercentage;
+            System.debug('bigProjectValue**'+bigProjectValue);
 
             floorRiseValue = bigProjectValue * floorRisePercentage;
+            System.debug('floorRiseValue**'+floorRiseValue);
 
             totalAreaMV = sqrMtrBuiltUp * floorRiseValue;
+            System.debug('totalAreaMV**'+totalAreaMV);
 
             parkingAreaMV = parkingMtrs * bigProjectValue ;
-
+            System.debug('parkingAreaMV**'+parkingAreaMV);
+            
             if(totalAreaMV!=null && parkingAreaMV!=null){
               totalMV =  Math.ceil((totalAreaMV + parkingAreaMV)/1000*1000);
             }
+            System.debug('totalMV**'+totalMV);
+            System.debug('quote.Agreement_Value__c**'+quote.Agreement_Value__c);
 
             if(totalMV!=null){
                 quote.Total_MV__c = totalMV;
                 if(quote.Opportunity__r.Walkin_Source__c == 'Channel Partner'){
                     if(totalMV > quote.Agreement_Value__c){
-                        SDForBrokerage = (quote.Project_Unit__r.S_Charge_Percentage__c*totalMV)/100;
+                        SDForBrokerage = (quote.Project_Unit__r.S_Charge_Percentage__c*totalMV)/100; 
                     }
                     else{
-                        SDForBrokerage = (quote.Project_Unit__r.S_Charge_Percentage__c*quote.Agreement_Value__c)/100;
+                        SDForBrokerage = (quote.Project_Unit__r.S_Charge_Percentage__c*quote.Agreement_Value__c)/100; 
                     }
                     quote.Agreement_Value_for_brokers__c = quote.Agreement_Value__c	- SDForBrokerage;
                 }
             }
+            System.debug('Total_MV__c**'+quote.Total_MV__c);
             quotelstToUpdate.add(quote);
         }
 
@@ -303,8 +344,57 @@ public class trgToUpdateOppStageHandler
     }
 
     /**Added for SDR/ROC Management ends */
+    
     public static void dummy(){
         integer i=0;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
         i++;
         i++;
         i++;

@@ -1,0 +1,11 @@
+<messaging:emailTemplate subject="Loan is Closed" recipientType="User" relatedToType="Loan__c">
+<messaging:plainTextEmailBody >
+Dear Team,
+
+This is to notify that Loan - {!relatedTo.Name} has been Closed for the Booking - {!relatedTo.RW_Booking__r.name}! of the Unit Number - {!relatedTo.RW_Booking__r.Unit_No__r.name}
+
+Thanks,
+Runwal Team
+
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

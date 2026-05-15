@@ -3,9 +3,9 @@
     <fullName>Registration_to_Disbursement_Days__c</fullName>
     <externalId>false</externalId>
     <formula>IF(
-    NOT(ISBLANK(RW_First_Disbursement_Date__c)),
-    RW_First_Disbursement_Date__c - RW_Booking__r.RW_Registration_Date__c,
-    TODAY() - RW_Booking__r.RW_Registration_Date__c
+NOT(ISBLANK(RW_First_Disbursement_Date__c)),
+RW_First_Disbursement_Date__c - RW_Booking__r.RW_Registration_Date__c,
+TODAY() - RW_Booking__r.RW_Registration_Date__c
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Registration to Disbursement Days</label>

@@ -27,6 +27,7 @@ public class MonthwiseBrokerageRecords implements Database.Batchable<SObject>, D
                 'CP_Invoice_Approver_L4__c, CP_Invoice_Approver_L5__c, Customer_Name__c,Tower_Unit__c,Type_of_Client__c,Brokerage_Scheme_Name__c ' +
                 'FROM Brokerage_Invoice__c ' +
                 'WHERE Brokerage_Lookup__r.Brokerage_Type__c = \'Additional Brokerage\' ' +
+                'AND Brokerage_Summary__r.Brokerage_Scheme__r.Ladder_Creation_Manual__c = false ' +
                 'AND CreatedDate = THIS_MONTH ' +
                 'AND Booking__r.Tower__r.Legal_Entity__c != null ' +
                 'AND Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Name__c != null ' +

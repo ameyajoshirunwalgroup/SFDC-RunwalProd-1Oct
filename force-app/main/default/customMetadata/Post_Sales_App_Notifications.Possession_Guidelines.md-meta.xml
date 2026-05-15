@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Possession Guidelines</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!!
+
+We are pleased to inform you that the possession process and detailed guidelines for your unit are now available on the Runwal Connect App.
+
+Please find your unit details below for reference:
+
+Project: {!Project__r.Name}
+Unit Number: {!Unit_No__r.Name}
+Tower/Wing: {!Tower__r.Name}
+
+The guidelines outline the step-by-step possession process, required documentation, and important instructions to help ensure a smooth and timely handover of your home.
+
+We request you to log in to the Runwal Connect App and review the guidelines carefully, and complete the necessary steps as mentioned.
+
+For any assistance, please feel free to connect with your Relationship Manager.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Possession Process &amp; Guidelines for Your Unit</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Possession Guidelines Available 🏡
+
+Your possession process and guidelines are now live on the app. Please review for a smooth handover.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">possession_guidelines</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Booking__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">POSSESSION GUIDELINES</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">possession_guidelines</value>
+    </values>
+</CustomMetadata>

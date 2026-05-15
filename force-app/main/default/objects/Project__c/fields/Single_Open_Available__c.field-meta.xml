@@ -2,9 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Single_Open_Available__c</fullName>
     <externalId>false</externalId>
-    <formula>Single_Open_Total__c  - ( Single_Open_Booked__c + Single_Open_Sold__c)</formula>
+    <formula>Single_Open_Total__c  - ( Single_Open_Booked__c + Single_Open_Sold__c+Single_Open_Earmarked_Available__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Single Open (Available)</label>
+    <label>Single Open Additional (Available)</label>
     <precision>18</precision>
     <required>false</required>
     <scale>0</scale>

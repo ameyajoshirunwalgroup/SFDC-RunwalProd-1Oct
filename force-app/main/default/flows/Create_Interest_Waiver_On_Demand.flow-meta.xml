@@ -8,6 +8,31 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>check_Waiver_amt</name>
+        <label>check Waiver amt</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>waiver_amt_less_than_Total_Interest_Leived</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Waiver_Amount</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Demand.Total_Interest_Amount__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Interest_Waiver</targetReference>
+            </connector>
+            <label>waiver amt less than Total Interest Leived</label>
+        </rules>
+    </decisions>
     <dynamicChoiceSets>
         <name>SubReason</name>
         <dataType>Picklist</dataType>
@@ -219,6 +244,31 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
+        <name>Error</name>
+        <label>Error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>showError</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(255, 51, 10);&quot;&gt;Please enter a waiver amount that is less than the total interest levied on the demand.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>OK</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <name>New_Interest_Waiver</name>
         <label>New Interest Waiver</label>
         <locationX>0</locationX>
@@ -227,7 +277,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Create_Interest_Waiver</targetReference>
+            <targetReference>check_Waiver_amt</targetReference>
         </connector>
         <fields>
             <name>Waiver_Information</name>
@@ -241,7 +291,6 @@
                     <dataType>Currency</dataType>
                     <fieldText>Waiver Amount</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <scale>2</scale>
                     <styleProperties>
@@ -307,7 +356,6 @@
                     </defaultValue>
                     <fieldText>Project Name</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -377,7 +425,6 @@
                     </defaultValue>
                     <fieldText>Unit Name</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -442,7 +489,6 @@
                     </defaultValue>
                     <fieldText>Project Location</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -485,9 +531,8 @@
                     <defaultValue>
                         <elementReference>TotalInterestAmount</elementReference>
                     </defaultValue>
-                    <fieldText>Total Interest Amount</fieldText>
+                    <fieldText>Total Interest Levied on Demand</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -510,7 +555,6 @@
                     </defaultValue>
                     <fieldText>Interest Days</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -533,7 +577,6 @@
                     </defaultValue>
                     <fieldText>Slab Code</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -555,7 +598,6 @@
                     </defaultValue>
                     <fieldText>Project Name</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -586,9 +628,8 @@
                     <defaultValue>
                         <elementReference>NetInterestAmount</elementReference>
                     </defaultValue>
-                    <fieldText>Net Interest Amount</fieldText>
+                    <fieldText>Net Interest Post Waiver</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -611,7 +652,6 @@
                     </defaultValue>
                     <fieldText>Previously Waived Amount (SAP)</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -634,7 +674,6 @@
                     </defaultValue>
                     <fieldText>Slab Description</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -656,7 +695,6 @@
                     </defaultValue>
                     <fieldText>Project Location</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isReadOnly>
                         <booleanValue>true</booleanValue>
                     </isReadOnly>
@@ -701,7 +739,6 @@
                     <dataType>String</dataType>
                     <fieldText>Remarks</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>

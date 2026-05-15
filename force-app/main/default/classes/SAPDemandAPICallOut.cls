@@ -39,7 +39,7 @@ public class SAPDemandAPICallOut
         }else{
                     sapDemandBNDApi.timeout_x = 60000;
 
-            sfdcpayDemandResponse = sapDemandBNDApi.ZSD_SFDC_WS_DEMAND( timestamp); } 
+            sfdcpayDemandResponse = sapDemandBNDApi.ZSD_SFDC_WS_DEMAND( timestamp, null); } 
             //  SAPDemandAPI.ZSD_SFDC_DEMAND_INFO_TT sfdcpayDemandResponse = sapDemandBNDApi.ZSD_SFDC_WS_DEMAND('20201230101010');  
            }   catch(exception ex){
                if(!bypassErrorLog){

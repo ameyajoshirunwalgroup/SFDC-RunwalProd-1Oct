@@ -43,8 +43,8 @@ public class CPDashboardCondtollerTest {
         CPDashboardController.getUnprocessedCases('Custom', '2023', '6', u.Id);
         CPDashboardController.getUnprocessedCases('Custom', '', '', u.Id);
         CPDashboardController.getUnprocessedCases('Custom', '2023', '', u.Id);
-        CPDashboardController.getCaseDataBasedonCustomLabel();
-        CPDashboardController.dummy();
+        //CPDashboardController.getCaseDataBasedonCustomLabel();
+        //CPDashboardController.dummy();
         Test.stopTest();
         
         

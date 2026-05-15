@@ -23,6 +23,7 @@ trigger PaymentItemRollUp on RW_Payment_Detail_Item__c (after delete, after inse
                 if(paymentItem.RW_Demand_Item__c != null)
                 {
                     PaymentItemIds.add(paymentItem.RW_Demand_Item__c);
+                    system.debug('Is Insert or Undeleted PaymentItemIds>>>>>' +PaymentItemIds);
                 }
                 
             }
@@ -31,14 +32,18 @@ trigger PaymentItemRollUp on RW_Payment_Detail_Item__c (after delete, after inse
             for (RW_Payment_Detail_Item__c paymentItem : Trigger.old)
             {
                 PaymentItemIds.add(paymentItem.RW_Demand_Item__c);
+                system.debug('Is Delete PaymentItemIds>>>>>' +PaymentItemIds);
+
                 if(Trigger.isUpdate)
                 {
                     if(paymentItem.RW_Demand_Item__c != null){
                         if(trigger.oldmap.get(paymentItem.id).RW_Demand_Item__c != paymentItem.RW_Demand_Item__c){
-                            PaymentItemIds.add(paymentItem.RW_Demand_Item__c);     
+                            PaymentItemIds.add(paymentItem.RW_Demand_Item__c);   
+                              system.debug('Is Update PaymentItemIds>>>>>' +PaymentItemIds);
                         }
                     } 
                     PaymentItemIds.add(trigger.oldmap.get(paymentItem.id).RW_Demand_Item__c);
+                    system.debug('Is old map PaymentItemIds>>>>>' +PaymentItemIds);
                 }
             }
         }

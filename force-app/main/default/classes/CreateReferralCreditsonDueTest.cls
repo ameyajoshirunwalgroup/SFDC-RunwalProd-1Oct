@@ -134,6 +134,8 @@ public class CreateReferralCreditsonDueTest {
         
         
         
+        
+        
         RW_Demand__c dmd2 = new RW_Demand__c();
         dmd2.Booking__c =b.id;
         dmd2.name= '890890';
@@ -190,6 +192,105 @@ public class CreateReferralCreditsonDueTest {
         b1.RW_Expected_Registration_Date__c = system.today();
         b1.RW_Registration_Done__c = 'No';
         insert b1;
+        
+        List<Applicant_Details__c> apps = new List<Applicant_Details__c>();
+        Applicant_Details__c apt1 = new Applicant_Details__c();
+        apt1.Name = 'Applicant 1';
+        apt1.Permanent_Address__c = 'test address';
+        apt1.Opportunity__c = o.Id;
+        apt1.Applicant_Number__c = 'Primary Applicant';
+        apt1.Subtype_Of_Applicant__c = 'Indian National';
+        apt1.Type_Of_Applicant__c= 'Individual Buyer';
+        apt1.Booking__c = b1.Id;
+        apt1.DOB__c = Date.today();
+        apt1.Office_Address_Line_1__c = 'Office Address Line 1';
+        apt1.Mobile_Number__c = '1234567890';
+        apt1.Email_Address__c = 'test@test.com';
+        apt1.PancardNo__c = 'ABC123456';
+        apt1.Address_Proof__c = true;
+        apt1.Address_Proof_Document__c = 'Passport';
+        //apt1.PancardNo__c = 'abc213456';
+        //insert apt1;
+        apps.add(apt1);
+        
+        Applicant_Details__c apt2 = new Applicant_Details__c();
+        apt2.Name = 'Applicant 2';
+        apt2.Permanent_Address__c = 'test address1';
+        apt2.Opportunity__c = o.Id;
+        apt2.Applicant_Number__c = 'Second Applicant';
+        apt2.Subtype_Of_Applicant__c = 'Indian National';
+        apt2.Type_Of_Applicant__c= 'Individual Buyer';
+        apt2.Booking__c = b1.Id;
+        apt2.DOB__c = Date.today();
+        apt2.Office_Address_Line_1__c = 'Office Address Line 2';
+        apt2.Mobile_Number__c = '1234567899';
+        apt2.Email_Address__c = 'test1@test1.com';
+        apt2.Address_Proof__c = true;
+        apt2.Address_Proof_Document__c = 'Passport';
+        apt2.gender__c = 'Female';
+        apt2.Designation_picklist__c = 'Accounting';
+        apt2.Occupation__c = 'Admin';
+        apt2.PancardNo__c = 'ABC123456';
+        //insert apt2;
+        apps.add(apt2);
+        
+        Applicant_Details__c apt3 = new Applicant_Details__c();
+        apt3.Name = 'Applicant 3';
+        apt3.Permanent_Address__c = 'test address1';
+        apt3.Opportunity__c = o.Id;
+        apt3.Applicant_Number__c = 'Third Applicant';
+        apt3.Subtype_Of_Applicant__c = 'Indian National';
+        apt3.Type_Of_Applicant__c= 'Individual Buyer';
+        apt3.Booking__c = b1.Id;
+        apt3.DOB__c = Date.today();
+        apt3.Office_Address_Line_1__c = 'Office Address Line 2';
+        apt3.Mobile_Number__c = '1234567899';
+        apt3.Email_Address__c = 'test1@test1.com';
+        apt3.Address_Proof__c = true;
+        apt3.Address_Proof_Document__c = 'Passport';
+        apt3.gender__c = 'Male';
+        apt3.Designation_picklist__c = 'Accounting';
+        apt3.Occupation__c = 'Admin';
+        apt3.PancardNo__c = 'ABC123456';
+        //insert apt3;
+        apps.add(apt3);
+        
+        Applicant_Details__c apt4 = new Applicant_Details__c();
+        apt4.Name = 'Applicant 4';
+        apt4.Permanent_Address__c = 'test address1';
+        apt4.Opportunity__c = o.Id;
+        apt4.Applicant_Number__c = 'Fourth Applicant';
+        apt4.Subtype_Of_Applicant__c = 'Indian National';
+        apt4.Type_Of_Applicant__c= 'Individual Buyer';
+        apt4.Booking__c = b1.Id;
+        apt4.DOB__c = Date.today();
+        apt4.Office_Address_Line_1__c = 'Office Address Line 2';
+        apt4.Mobile_Number__c = '1234567899';
+        apt4.Email_Address__c = 'test1@test1.com';
+        apt4.Address_Proof__c = true;
+        apt4.Address_Proof_Document__c = 'Passport';
+        apt4.PancardNo__c = 'ABC123456';
+        //insert apt4;
+        apps.add(apt4);
+        
+        Applicant_Details__c apt5 = new Applicant_Details__c();
+        apt5.Name = 'Applicant 5';
+        apt5.Permanent_Address__c = 'test address1';
+        apt5.Opportunity__c = o.Id;
+        apt5.Applicant_Number__c = 'Fifth Applicant';
+        apt5.Subtype_Of_Applicant__c = 'Indian National';
+        apt5.Type_Of_Applicant__c= 'Individual Buyer';
+        apt5.Booking__c = b1.Id;
+        apt5.DOB__c = Date.today();
+        apt5.Office_Address_Line_1__c = 'Office Address Line 2';
+        apt5.Mobile_Number__c = '1234567899';
+        apt5.Email_Address__c = 'test1@test1.com';
+        apt5.Address_Proof__c = true;
+        apt5.Address_Proof_Document__c = 'Passport';
+        apt5.PancardNo__c = 'ABC123456';
+        //insert apt5;
+        apps.add(apt5);
+        insert apps;
         
         Opportunity o1 = new Opportunity();
         o1.id = o.id;

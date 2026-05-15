@@ -527,7 +527,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Payment_Type__c</field>
+            <field>Promise_To_Pay_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Payment_type__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -543,11 +548,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_Project_Name__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Promise_To_Pay_Date__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -952,6 +952,31 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Loan_Document_Received_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Payment_Deviation_to_Disb_Ageing__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RW_Booking__c.RW_Registration_Status__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RW_Booking__c.Allotment_Premium__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RW_Opportunity__c.Blocked_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>RW_Booking__c.Opportunity__c.SAP_Customer_Number__c</field>
             <table>Loan__c</table>
         </columns>
@@ -972,17 +997,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>RW_Opportunity__c.Blocked_Date__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Conditional_Remarks__c</field>
-            <table>Loan__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>First_Disbursement_RM_Name__c</field>
             <table>Loan__c</table>
         </columns>
         <columns>
@@ -1013,6 +1028,21 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>RW_Booking__c.Monthly_Collection_Status__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>RW_Booking__c.Signed_Agreement_Handover_Date__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Mode_of_funding__c</field>
+            <table>Loan__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>ByPassValidations__c</field>
             <table>Loan__c</table>
         </columns>
         <masterLabel>Loans</masterLabel>

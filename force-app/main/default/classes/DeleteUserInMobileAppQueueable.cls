@@ -33,7 +33,7 @@ public class DeleteUserInMobileAppQueueable implements Queueable, Database.allow
                 data.put('booking_number', opp.Booking__c);
                 data.put('society_id', projNameVsSocityId.get(opp.RW_Project__r.Name));
                 System.debug(JSON.Serialize(data));
-                request.setEndpoint('https://snagging.lockated.com/runwal_remove_user_sap.json');
+                request.setEndpoint('https://snagging.lockated.com.invalid/runwal_remove_user_sap.json');//(.invalid) Added by Prashant
                 request.setHeader('Content-Type', 'application/json');
                 request.setMethod('POST');
                 request.setHeader('Authorization', '0d93e348a9262bc36c2eb86612f119abe803f368ad503eb9');

@@ -1,0 +1,55 @@
+Dear Sir / Madam,<br/><br/>
+
+Request your approval for change of contact details of customer as below:<br/><br/>
+
+<b>Customer Name:</b> {!Opportunity.Name}<br/>
+<b>Project Name:</b> {!Opportunity.Project_Name_formula__c}<br/>
+<b>Project Unit:</b> {!Opportunity.RW_Project_Unit__c}<br/>
+<br/>
+<table style="border:1px solid black;border-collapse:collapse;width:80%">
+    <tr>
+        <td style="border:1px solid black;"><b>Field</b></td>
+        <td style="border:1px solid black;"><b>Existing Values</b></td>
+        <td style="border:1px solid black;"><b>New Values</b></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Primary Mobile No.</td>
+        <td style="border:1px solid black;">{!Opportunity.Mobile_Number__c}</td>
+        <td style="border:1px solid black;">{!Opportunity.Temp_Mobile__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Secondary Mobile No.</td>
+        <td style="border:1px solid black;">{!Opportunity.Secondary_Mobile_No_Masked__c}</td>
+        <td style="border:1px solid black;">{!Opportunity.Temp_Secondary_Mobile__c}</td>
+    </tr>
+    <!--<tr>
+        <td style="border:1px solid black;">Country Code</td>
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;">{!Opportunity.Temp_Country_Code__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Dailing Country</td>
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;">{!Opportunity.Temp_Dialing_Country__c}</td>
+    </tr>-->
+    <tr>
+        <td style="border:1px solid black;">Primary Email</td>
+        <td style="border:1px solid black;">{!Opportunity.RW_Email__c}</td>
+        <td style="border:1px solid black;">{!Opportunity.Temp_Email__c}</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Secondary Email</td>
+        <td style="border:1px solid black;">{!Opportunity.RW_Secondary_Email__c}</td>
+        <td style="border:1px solid black;">{!Opportunity.Temp_Secondary_Email__c}</td>
+    </tr>
+    
+</table>
+<br/><br/>
+
+Reply to this email with one of these words in the first line of the email message: APPROVE, APPROVED, YES, REJECT, REJECTED, NO
+
+You can also add comments on the second line. Comments will be stored with the approval request in Salesforce CRM.<br/><br/>
+
+<b>NOTE</b> – this mail might have been sent to you for change in mobile / email on Account / Applicant details / SAP.<br/><br/>
+
+Alternatively, To approve or reject this item, click this link <a href= {!ApprovalRequest.Internal_URL}>{!ApprovalRequest.Internal_URL}</a>

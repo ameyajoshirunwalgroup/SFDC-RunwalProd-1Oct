@@ -1,6 +1,6 @@
 public class RegistrationChallanController 
 {
-    public static void updateBooking(List<RW_Registration_Challan__c> Challans)
+    /*public static void updateBooking(List<RW_Registration_Challan__c> Challans)
     {
         Map<ID, Booking__c> parentBooking = new Map<ID, Booking__c>(); 
         List<Id> listIds = new List<Id>();
@@ -22,5 +22,5 @@ public class RegistrationChallanController
         update parentBooking.values();  
         BookingTriggerHandler.byPass = false;
         
-    } 
+    } */
 }

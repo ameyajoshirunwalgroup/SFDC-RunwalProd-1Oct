@@ -159,7 +159,7 @@ public class CallOzonetelSchedulerAPI{
       }
         //endpointURL  = 'https://api1.getkookoo.com/CAServices/scheduleCampaignData/scheduleCampaignData.php?';
        // endpointURL  = '';//https://api1.cloudagent.in/CAServices/scheduleCampaignData/scheduleCampaignData.php?
-       endpointURL  = 'https://in1-ccaas-api.ozonetel.com/CAServices/scheduleCampaignData/scheduleCampaignData.php?';
+       //endpointURL  = 'https://in1-ccaas-api.ozonetel.com.invalid/CAServices/scheduleCampaignData/scheduleCampaignData.php?';//(.invalid) Added by Prashant //Commented by Vinay 17-04-2026
 
           System.debug('After Endpoint Url ::');
         if(tlist.size() > 0){
@@ -214,22 +214,35 @@ public class CallOzonetelSchedulerAPI{
             Http http = new Http();
             HttpRequest request = new HttpRequest();
             // request.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-            request.setMethod('GET');  
+            //request.setMethod('GET');  
             request.setTimeout(60000);
             
-            system.debug('Priority ::: ' + Priority );
+            /*system.debug('Priority ::: ' + Priority );
+            	
             String strbulkData =  '{"map":["PhoneNumber","Name","ScheduledTime","skill","AgentID","Priority"],'+'"data":[["'+mobile+'","'+Name+'","'+scheduledDateTime+'","'+skill+'","'+AgentId+'","'+Priority+'"]]}';
-            system.debug('Priority ::: ' + Priority );
+            
+            
             strbulkData = EncodingUtil.URLENCODE(strbulkData ,'UTF-8');
             
             system.debug('strbulkData @@'+ strbulkData);  
             String endpoint = endpointURL+'api_key='+apiKey+'&campaign_name='+campaignName+'&bulkData='+strbulkData;
             system.debug('endpoint @@'+ endpoint ); 
-            system.debug('priority @@'+ priority); 
+            system.debug('priority @@'+ priority); */
             
+            //Added by Vinay 17-04-2026 Start
+            String data = '{"userName":"' + System.label.Ozonetel_User_Name + '","campaignName":"' + campaignName + '","checkDuplicate":true,';
+            data += '"bulkData":{"map":["PhoneNumber","Name","ExpiryDate","ScheduledTime"],"data":[["'+mobile+'","'+Name+'","","'+scheduledDateTime +'"]]}}';
+            request.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/ca_apis/CampaignScheduledData');
+            request.setMethod('POST');
+            request.setHeader('Content-Type', 'application/json');
+            request.setHeader('apiKey', apiKey);
+            request.setBody(data);
+            //Added by Vinay 17-04-2026 End
+            
+            system.debug('Priority ::: ' + Priority );
             //if(!Test.isRunningTest()){
-                system.debug('endpoint:: ' + endpoint);
-                request.setEndpoint(endpoint);
+                //system.debug('endpoint:: ' + endpoint);
+                //request.setEndpoint(endpoint); //Commented by Vinay 17-04-2026
             if(!Test.isRunningTest()){
                 HttpResponse response = http.send(request);
             system.debug('Response :'+response);

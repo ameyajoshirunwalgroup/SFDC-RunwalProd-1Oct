@@ -15,7 +15,7 @@ global class LockatedApp_DocumentDetails {
                 res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
                 res.statusCode = 400;
             }else{ 
-                List<Booking__c> bkgs = [SELECT Id, RW_Signed_Agreement_Document_Id__c, Possession_Guidelines_Sent_Date__c, Booking_Form_Id__c FROM Booking__c WHERE Id =: bkgId];
+                List<Booking__c> bkgs = [SELECT Id, RW_Signed_Agreement_Document_Id__c, Possession_Guidelines_Sent_Date__c,Booking_Form_Id__c FROM Booking__c WHERE Id =: bkgId];
                 if(bkgs.size() > 0){
                     DocumentDetails det = new DocumentDetails();
                     Documents doc = new Documents();
@@ -24,7 +24,7 @@ global class LockatedApp_DocumentDetails {
                     bkgForm.title = 'Booking Form';
                     bkgForm.doc_number = '';
                     bkgForm.doc_date = '';
-                    //bkgForm.url = 'https://runwal.my.salesforce-sites.com/PreviewBooking/?id='+bkgId;
+                    //bkgForm.url = 'https://runwal--fullcopy.sandbox.my.salesforce-sites.com/PreviewBooking/?id='+bkgId;
                     bkgForm.url = distPublicUrl(bkgs[0].Booking_Form_Id__c);
                     doc.booking_form = bkgForm;
                     
@@ -32,9 +32,10 @@ global class LockatedApp_DocumentDetails {
                     agr.title = 'Agreement';
                     agr.doc_number = '';
                     agr.doc_date = '';
+                    //agr.url = 'https://runwal--fullcopy.sandbox.my.salesforce-sites.com/AgreementDoc/'+bkgs[0].RW_Signed_Agreement_Document_Id__c;
                     RestRequest req10= new RestRequest(); 
                     RestResponse res10 = new RestResponse();
-                    req10.requestURI = 'https://runwal.my.salesforce.com/services/apexrest/AgreementDoc/'+bkgs[0].RW_Signed_Agreement_Document_Id__c; 
+                    req10.requestURI = 'https://runwal--fullcopy.sandbox.my.salesforce.com/services/apexrest/AgreementDoc/'+bkgs[0].RW_Signed_Agreement_Document_Id__c; 
                     req10.httpMethod = 'Get';
                     req10.addHeader('Content-Type', 'application/json'); 
                     RestContext.request = req10;

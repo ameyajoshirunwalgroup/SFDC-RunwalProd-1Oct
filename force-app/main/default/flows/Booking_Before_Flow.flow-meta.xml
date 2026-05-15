@@ -3,6 +3,26 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assignment_Cancellation_Request_Status</name>
+        <label>Assignment Cancellation Request Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cancellation_Requested_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Cancellation Confirmed</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Cancellation_Confirmation_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Today</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Assignment_Of_Registrable_Status</name>
         <label>Assignment Of Registrable Status</label>
         <locationX>0</locationX>
@@ -14,12 +34,61 @@
                 <elementReference>FormulaForStatus</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>New_Or_Updated</targetReference>
+        </connector>
     </assignments>
+    <decisions>
+        <name>Check_Cancellation_Confirmed_Or_Not</name>
+        <label>Check Cancellation Confirmed Or Not</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Cancellation_Status</name>
+            <conditionLogic>((1 OR 2 OR 3) AND 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Cancellation In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Transfer In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Upgrade In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Cancellation_Request_Status</targetReference>
+            </connector>
+            <label>Cancellation Status</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Check_ReasonForRegistrationIsUpdated</name>
         <label>Check ReasonForRegistrationIsUpdated</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>New_Or_Updated</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>ReasonForRegistrationIsUpdated</name>
@@ -51,6 +120,40 @@
             <label>ReasonForRegistrationIsUpdated</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>New_Or_Updated</name>
+        <label>New Or Updated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>New</label>
+        </rules>
+        <rules>
+            <name>Updated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Cancellation_Confirmed_Or_Not</targetReference>
+            </connector>
+            <label>Updated</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>FormulaForStatus</name>
@@ -69,6 +172,11 @@
         <name>ISNEW</name>
         <dataType>Boolean</dataType>
         <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>Today</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()</expression>
     </formulas>
     <interviewLabel>Booking(Before Flow) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Booking(Before Flow)</label>
@@ -101,5 +209,5 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>

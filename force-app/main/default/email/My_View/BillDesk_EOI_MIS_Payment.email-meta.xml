@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>BillDesk EOI Payment Receipt</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>BillDesk EOI MIS Payment</name>
+    <style>none</style>
+    <subject>BillDesk EOI Payment Receipt</subject>
+    <textOnly>Dear Team,
+
+A Receipt with Payment Mode-{!Receipt__c.Mode__c} of Rs {!Receipt__c.Total_Amount__c} has been added for {!RW_EOI__c.Name} for Customer {!RW_EOI__c.RW_Primary_Applicant_Name__c} {!RW_EOI__c.RW_Primary_Last_Name__c} via {!Receipt__c.Payment_Gateway__c}. To view the Booking Record , Click on {!Receipt__c.Link}
+
+Customer Details are as below:
+Customer Name : {!RW_EOI__c.RW_Primary_Applicant_Name__c} {!RW_EOI__c.RW_Primary_Last_Name__c}
+Project : {!ProjectName}
+Amount : {!Receipt__c.Total_Amount__c}
+Date Of Payment : {!DateOfPayment}
+Mode Of Payment : {!Receipt__c.Mode__c}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

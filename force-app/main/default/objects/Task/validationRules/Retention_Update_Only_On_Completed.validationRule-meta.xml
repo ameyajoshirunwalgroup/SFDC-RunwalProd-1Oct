@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retention_Update_Only_On_Completed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISCHANGED(Retention_Status__c),
+    NOT(ISPICKVAL(Status, &quot;Completed&quot;))
+)</errorConditionFormula>
+    <errorMessage>Retention Status can be update on status Completed</errorMessage>
+</ValidationRule>

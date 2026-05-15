@@ -1,21 +1,15 @@
-public without sharing class InventoryCallout
-{
+public without sharing class InventoryCallout{
     //public static List<ERP_Integration_Log__c> erpLogList = new List<ERP_Integration_Log__c>();
     @future (callout=true)
-    public static void sendinventory(set<Id> projectUnitIds)
-    {
-        System.debug('*After insert*'+ projectUnitIds);
-        List<Project_Unit__c> objrecords = [select id,Saleable_Area__c , New_Floor__c,New_Type__c,New_View__c ,RW_Param4__c,TowerName__r.Property_Type__c,
-                                            RW_Unit_Status__c , TowerName__r.SAP_Plant_Code__c ,RW_Project__r.Project_Property_Type__c ,RW_Project__r.SAPMaterial_Code__c
-                                            ,Unit_SAP_Code__c,Carpet_Area__c,Deck_Area__c,Utility_Area__c, RW_Project__r.Unit_of_Area_for_SAP__c  from Project_Unit__c Where id IN :projectUnitIds];
+    public static void sendinventory(set<Id> projectUnitIds){
+        List<Project_Unit__c> objrecords = [select id,Saleable_Area__c,New_Floor__c,New_Type__c,New_View__c,RW_Param4__c,TowerName__r.Property_Type__c,RW_Unit_Status__c , TowerName__r.SAP_Plant_Code__c ,RW_Project__r.Project_Property_Type__c ,RW_Project__r.SAPMaterial_Code__c,Unit_SAP_Code__c,Carpet_Area__c,Deck_Area__c,Utility_Area__c, RW_Project__r.Unit_of_Area_for_SAP__c  from Project_Unit__c Where id IN :projectUnitIds];
         
-        Map<String , Id> mapMaterialRecordId = new Map<string , Id>();
+        Map<String, Id> mapMaterialRecordId = new Map<string, Id>();
         SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS_TT materialDetailsList = new SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS_TT();
         materialDetailsList.item = new List<SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS>();
         // SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS materialItem1 = new SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS();
-        Map<String , SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS> requestMap = new Map<String , SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS>();
-        for(Project_Unit__c pUnitInput : objrecords)
-        {
+        Map<String, SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS> requestMap = new Map<String, SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS>();
+        for(Project_Unit__c pUnitInput : objrecords){
             
             
             SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS materialItem1 = new SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS();
@@ -31,7 +25,6 @@ public without sharing class InventoryCallout
             }else{
                 materialItem1.MEINS = 'FT2';
             }
-            System.debug('materialItem1.MEINS: ' + materialItem1.MEINS);
             if(pUnitInput.RW_Unit_Status__c == 'Available')    
                 materialItem1.MSTAV = '01';
             else if(pUnitInput.RW_Unit_Status__c == 'Blocked')
@@ -70,14 +63,11 @@ public without sharing class InventoryCallout
                 materialItem1.MVGR5 = 'Z02';
             else
                 materialItem1.MVGR5 = 'Z00';
-            if(pUnitInput.TowerName__r.Property_Type__c == 'Residential') 
-            {   
+            if(pUnitInput.TowerName__r.Property_Type__c == 'Residential'){   
                 materialItem1.VTWEG = '10';
                 materialItem1.KONDM = 'ZA';
                 materialItem1.KTGRM = 'ZA';
-            }
-            else
-            {
+            }else{
                 materialItem1.VTWEG = '20';
                 materialItem1.KONDM = 'ZB';
                 materialItem1.KTGRM = 'ZB'; 
@@ -87,13 +77,10 @@ public without sharing class InventoryCallout
             materialItem1.DECK_A = string.valueof(pUnitInput.Deck_Area__c);
             materialItem1.UTIL_A = string.valueof(pUnitInput.Utility_Area__c);
             if(pUnitInput.Carpet_Area__c != null){
-            if((pUnitInput.Carpet_Area__c)/10.764 < 60)
-            {
+            if((pUnitInput.Carpet_Area__c)/10.764 < 60){
                 materialItem1.TAXCLASS3 = '0';
                 materialItem1.MFRGR = '1';
-            }
-            else
-            {
+            }else{
                 materialItem1.TAXCLASS3 = '1';
                 materialItem1.MFRGR = '2';
             }
@@ -106,25 +93,17 @@ public without sharing class InventoryCallout
         String exceptionMsg = '';
         SAPInventoryCallout.ZSD_SFDC_RETURN_DETAILS_TT inventoryCreationResponse = new SAPInventoryCallout.ZSD_SFDC_RETURN_DETAILS_TT();
         try{
-            system.debug('--->'+materialDetailsList);
-            system.debug(json.serialize(materialDetailsList));
             SAPInventoryCallout.ZSD_SFDC_WSDL_MCR_MCH_BND createInventory = new SAPInventoryCallout.ZSD_SFDC_WSDL_MCR_MCH_BND();
             createInventory.timeout_x = 60000;
             inventoryCreationResponse = createInventory.ZSD_SFDC_WS_MAT_CRT_CHNG(materialDetailsList);
-            System.debug('New Inventory response:' +json.serialize(inventoryCreationResponse));
-        }  
-        catch (Exception ex) {
-            System.debug('Exception:' + ex.getMessage());
+        }catch (Exception ex) {
             callOutError = true;
             exceptionMsg = ex.getMessage();
-        }
-        finally {
-            System.debug('JSON Logger request:' + JSON.SerializePretty(inventoryCreationResponse));
+        }finally{
             //  Map<String ,  SAPInventoryCallout.ZSD_SFDC_RETURN_DETAILS> mapResponse = new  Map<String ,  SAPInventoryCallout.ZSD_SFDC_RETURN_DETAILS>();
             List<ERP_Integration_Log__c> erpLogList = new List<ERP_Integration_Log__c>();
             if(inventoryCreationResponse.item!= null && inventoryCreationResponse.item.size()> 0)
-            for(SAPInventoryCallout.ZSD_SFDC_RETURN_DETAILS res : inventoryCreationResponse.item)
-            {
+            for(SAPInventoryCallout.ZSD_SFDC_RETURN_DETAILS res : inventoryCreationResponse.item){
                 ERP_Integration_Log__c log = new ERP_Integration_Log__c();
                 String requestF = JSON.SerializePretty(requestMap.get(res.MATERIALNO));
                 requestF =  requestF.replaceAll('&quot;','"');
@@ -136,17 +115,12 @@ public without sharing class InventoryCallout
                 responseF =  responseF.replaceAll('\n','<br/>');
                 responseF  = responseF.replaceAll('\t', '&nbsp;');
                 log.response__c = responseF;
-                if(res.Status == 'SUCCESS') 
-                {
+                if(res.Status == 'SUCCESS'){
                     log.Status__c = 'Success';
-                    
-                } 
-                else 
-                {
+                }else{
                     if(!callOutError){
                         log.Status__c = 'Failure';
                         log.Error_Type__c='Data Error';
-                        
                         log.Error_Reason__c = res.ErrorMessage;
                     }else{
                         log.Status__c='Failure';
@@ -155,32 +129,25 @@ public without sharing class InventoryCallout
                     }
                 }
                 erpLogList.add(log);  
-                
             }else{     
-                  for(String s : requestMap.keyset())
-            {
- ERP_Integration_Log__c log = new ERP_Integration_Log__c();
-                String requestF = JSON.SerializePretty(requestMap.get(s));
-                requestF =  requestF.replaceAll('&quot;','"');
-                //requestF  = requestF.replaceAll('\t', '&nbsp;');
-                log.request__c = requestF;
-                log.API_name__c = 'Unit Inventory';                
-                log.Project_Unit__c = mapMaterialRecordId.get(s);
-                String responseF = JSON.SerializePretty(inventoryCreationResponse);
-                responseF =  responseF.replaceAll('\n','<br/>');
-                responseF  = responseF.replaceAll('\t', '&nbsp;');
-                log.response__c = responseF;
-               
-              
-                  
-                        log.Status__c='Failure';
-                        log.Error_Type__c='Timeout Error';
-                        log.Error_Reason__c = exceptionMsg;
+                for(String s : requestMap.keyset()){
+                    ERP_Integration_Log__c log = new ERP_Integration_Log__c();
+                    String requestF = JSON.SerializePretty(requestMap.get(s));
+                    requestF =  requestF.replaceAll('&quot;','"');
+                    //requestF  = requestF.replaceAll('\t', '&nbsp;');
+                    log.request__c = requestF;
+                    log.API_name__c = 'Unit Inventory';                
+                    log.Project_Unit__c = mapMaterialRecordId.get(s);
+                    String responseF = JSON.SerializePretty(inventoryCreationResponse);
+                    responseF =  responseF.replaceAll('\n','<br/>');
+                    responseF  = responseF.replaceAll('\t', '&nbsp;');
+                    log.response__c = responseF;
+                    log.Status__c='Failure';
+                    log.Error_Type__c='Timeout Error';
+                    log.Error_Reason__c = exceptionMsg;
+                    erpLogList.add(log);  
                     
-                    
-                                erpLogList.add(log);  
-
-            } 
+                } 
             }
             insert erpLogList;
             /*  }

@@ -89,6 +89,7 @@ public class SAPCreditNotADFAPICallout implements Queueable, Database.AllowsCall
                     formattedDocDate = documentDate.format('yyyyMMdd').trim();
                     
                     WrapperADFCreditNote.ADF_CRN_Item objADF_CN = new WrapperADFCreditNote.ADF_CRN_Item();
+                    objADF_CN.Api_Name = 'ADF'; //Added by Vinay 30-03-2026
                     if(objCN.Booking__c != null && objCN.Booking__r.Opportunity__c != null && objCN.Booking__r.Opportunity__r.SAP_Customer_Number__c != null){
                         objADF_CN.Customer = objCN.Booking__r.Opportunity__r.SAP_Customer_Number__c;
                     }
@@ -114,14 +115,12 @@ public class SAPCreditNotADFAPICallout implements Queueable, Database.AllowsCall
                         objADF_CN.Pstng_Date = ''; 
                     }
                     if(documentDate != null){
-                        // Added by Vinay 22-01-2026 Start
-                        String month = String.valueOf(documentDate.month()); 
-                        if(month == '1' || month == '2' || month == '3' ){ 
+                        String month = String.valueOf(documentDate.month()); // Added by Vinay 22-01-2026
+                        if(month == '1' || month == '2' || month == '3' ){ // Added by Vinay 22-01-2026
                             objADF_CN.Fisc_Year  = String.valueOf(documentDate.year() - 1);
                         }else{
                             objADF_CN.Fisc_Year  = String.valueOf(documentDate.year());
                         }
-                        // Added by Vinay 22-01-2026 End
                         //objADF_CN.Fisc_Year  = String.valueOf(documentDate.year()); // Commented by Vinay 22-01-2026
                     } 
                     else{
@@ -147,7 +146,14 @@ public class SAPCreditNotADFAPICallout implements Queueable, Database.AllowsCall
                     }
                     objADF_CN.sCurrency   = 'INR';
                     if(objCN.Interest_To_Be_Settled__c != null){
-                        objADF_CN.Amount = String.ValueOf(objCN.Interest_To_Be_Settled__c);
+                        //objADF_CN.Amount = String.ValueOf(objCN.Interest_To_Be_Settled__c); //Commented by Vinay 26-02-2026 Start
+                        //Added by Vinay 26-02-2026 Start
+                        Decimal tdsAmount = objCN.Interest_To_Be_Settled__c * (Decimal.ValueOf(System.label.ADF_TDS)/100);
+                        Decimal amount = objCN.Interest_To_Be_Settled__c - tdsAmount;
+                        objADF_CN.TDS_Amount = String.ValueOf(tdsAmount); 
+                        objADF_CN.Amount = String.ValueOf(amount);
+                        //Added by Vinay 26-02-2026 End
+                        System.debug('objADF_CN.TDS_Amount: ' + objADF_CN.TDS_Amount);
                     }
                     else{
                         objADF_CN.Amount = '';
@@ -192,7 +198,20 @@ public class SAPCreditNotADFAPICallout implements Queueable, Database.AllowsCall
                                     SAP_IntegrationHelper.insertLogEntry('ADF Credit Note', 'Failure', objCN.Id, objCN.Booking__c,jsonPayload, res.getBody(), record.INV_DOC_MSG, '');
                                 }else if(record.STATUS == 'Success'){
                                     objCN.Sent_to_SAP__c = true;
-                                    objCN.SAP_Document_Number__c = record.CRN_DOC; //Added by Vinay 22-01-2026
+                                    objCN.SAP_Document_Number__c = record.CRN_DOC; //Added by Vinay 12-01-2026
+                                    //Added by Vinay 01-04-2026 Start
+                                    objCN.Vendor_Code__c = record.CUSTOMER;
+                                    String docDateStr = record.DOC_DATE;
+                                    Date docDate = Date.newInstance(
+                                        Integer.valueOf(docDateStr.substring(0,4)),
+                                        Integer.valueOf(docDateStr.substring(5,7)),
+                                        Integer.valueOf(docDateStr.substring(8,10))
+                                    );
+                                    objCN.SAP_Document_Date__c = docDate;
+                                    objCN.Invoice_Document_Number__c = record.INV_DOC;
+                                    objCN.CLR_Document_Number__c = record.CLR_DOC;
+                                    objCN.Financial_Year__c = record.CRN_DOC_MSG.split('/')[2].substring(0, 4);
+                                    //Added by Vinay 01-04-2026 End
                                     SAP_IntegrationHelper.insertLogEntry('ADF Credit Note', 'Success', objCN.Id, objCN.Booking__c, jsonPayload, res.getBody(), '', '');
                                 }
                                 lstCNUpdate.add(objCN);

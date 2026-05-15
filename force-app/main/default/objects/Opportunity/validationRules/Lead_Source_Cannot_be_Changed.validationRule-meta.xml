@@ -3,10 +3,10 @@
     <fullName>Lead_Source_Cannot_be_Changed</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-!ISBLANK( TEXT (PRIORVALUE(LeadSource))),
+!ISBLANK( TEXT (PRIORVALUE(LeadSource))), 
 ISCHANGED( LeadSource),$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
 $Profile.Name &lt;&gt; &quot;Sales Strategy&quot; ,
-$Profile.Name &lt;&gt; &quot;Channel Partner Portal Profile&quot;,/*Added by Prashant to allow convertion of source for Temp Cps from CP Portal Site Guest User - 15-9-25*/
+$Profile.Name &lt;&gt; &quot;Channel Partner Portal Profile&quot;,/*Added by Prashant to allow convertion of source for Temp Cps from CP Portal Site Guest User - 15-9-25*/ 
 $Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
     <errorDisplayField>LeadSource</errorDisplayField>
     <errorMessage>Lead Source Cannot be Changed</errorMessage>

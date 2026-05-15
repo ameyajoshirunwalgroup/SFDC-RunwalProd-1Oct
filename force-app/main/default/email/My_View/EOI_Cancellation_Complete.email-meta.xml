@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Cancellation Complete</name>
+    <style>none</style>
+    <subject>EOI Cancellation</subject>
+    <textOnly>Dear team,
+
+{!RW_EOI__c.Name} has been cancelled and the amount is refunded to customer. 
+To view the EOI record , Click here {!RW_EOI__c.Link}
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Phone Number Change Confirmation</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Name},
+
+Greetings from Runwal Enterprises!
+
+Your request for change of phone number has been successfully processed and updated in our system. The update was validated through a two-step OTP verification process for security.
+
+Please find the updated details below:
+
+Previous Phone Number: {!Previous_Mobile_Number__c}
+
+Updated Phone Number: {!Mobile_Number__c}
+
+If you notice any discrepancy or did not authorize this request, please contact our customer support team immediately.
+
+Thank you for your continued trust in Runwal Enterprises.
+
+Warm regards,
+Runwal Enterprises
+{!$Label.Support_Email} | {!$Label.Support_Phone}</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Phone Number Change Confirmation</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Contact Update Confirmed
+
+Your phone number is now updated. If you did not authorize this change, please contact support immediately.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">primary/coapplicant</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Applicant_Details__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Phone Number Change Confirmation</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Phone Number Change Confirmation</value>
+    </values>
+</CustomMetadata>

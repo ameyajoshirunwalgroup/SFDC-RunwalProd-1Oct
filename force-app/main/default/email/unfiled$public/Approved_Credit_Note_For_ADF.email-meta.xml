@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Approved Credit Note For ADF</name>
+    <style>none</style>
+    <subject>Confirmation: Credit Note for ADF has been Approved</subject>
+    <textOnly>Dear Mr / Mrs {!Credit_Note__c.Customer_Name__c},
+
+We are pleased to inform you that a credit amount of Rs.  {!TEXT(Credit_Note__c.Interest_To_Be_Settled__c)}  has been completed towards your purchased Runwal unit {!Credit_Note__c.Unit_No__c}, {!Credit_Note__c.Project__c} in lieu of the advance payment made by you towards your  unit.
+
+We thank you for being a part of the Runwal Family .
+
+Best regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

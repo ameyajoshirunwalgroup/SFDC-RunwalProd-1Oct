@@ -3,9 +3,9 @@
     <fullName>OwnerPhone__c</fullName>
     <externalId>false</externalId>
     <formula>IF(
-  NOT(ISBLANK(OwnerId)) &amp;&amp; LEFT(OwnerId, 3) = &quot;005&quot;, 
-  Owner:User.MobilePhone, 
-  &quot;&quot;
+NOT(ISBLANK(OwnerId)) &amp;&amp; LEFT(OwnerId, 3) = &quot;005&quot;,
+Owner:User.MobilePhone,
+&quot;&quot;
 )</formula>
     <label>OwnerPhone</label>
     <required>false</required>

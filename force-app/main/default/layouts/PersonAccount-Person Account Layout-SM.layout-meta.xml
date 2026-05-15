@@ -86,6 +86,10 @@
                 <behavior>Edit</behavior>
                 <field>mass_email_date__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Reason_to_Purchase__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -358,6 +362,7 @@
     <relatedLists>
         <fields>FULL_NAME</fields>
         <fields>RW_Project__c</fields>
+        <fields>LEAD.LEAD_SOURCE</fields>
         <fields>LEAD.MOBILE_PHONE</fields>
         <fields>LEAD.RATING</fields>
         <fields>LEAD.STATUS</fields>
@@ -397,12 +402,13 @@
         <relatedList>Prospect__c.Customer_Reference__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>FULL_NAME</fields>
-        <fields>RW_Project__c</fields>
-        <fields>LEAD.MOBILE_PHONE</fields>
-        <fields>LEAD.RATING</fields>
-        <fields>LEAD.STATUS</fields>
-        <relatedList>Lead.Related_Account__c</relatedList>
+        <fields>NAME</fields>
+        <fields>Name_of_New_Customer__c</fields>
+        <fields>Booking__c</fields>
+        <fields>Reference_Booking__c</fields>
+        <fields>Referral_Amount_Due__c</fields>
+        <fields>SAP_Document_Date__c</fields>
+        <relatedList>Referral_Credits__c.Referrer_Account__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

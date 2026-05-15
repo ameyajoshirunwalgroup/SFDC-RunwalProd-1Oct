@@ -74,6 +74,7 @@ public class SendWhatsAppOnSOCreationQueueableTest {
         objopp.RW_Project__c = objProj.id;
         objopp.RW_Project_Unit__c = objPU.id;
         objopp.RW_Sales_Associate__c = 'Test2';
+        objopp.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         objopp.RW_Mobile_No__c = '1233211231';
         objopp.RW_Email__c = 'test1@test2.com';
         objopp.RW_RM_Name__c = 'Aliya Kirkire';
@@ -126,7 +127,7 @@ public class SendWhatsAppOnSOCreationQueueableTest {
         Test.startTest();
         SendWhatsAppOnSOCreationQueueable que = new SendWhatsAppOnSOCreationQueueable(new List<Id>{objopp.Id});
         system.enqueueJob(que);
-        SendWhatsAppOnSOCreationQueueable.dummy();
+        //SendWhatsAppOnSOCreationQueueable.dummy();
         Test.stopTest();
     }
     

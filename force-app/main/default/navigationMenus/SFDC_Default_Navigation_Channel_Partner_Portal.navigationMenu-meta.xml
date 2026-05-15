@@ -73,15 +73,8 @@
         <type>SalesforceObject</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <label>CP Brokerage Invoices</label>
-        <position>8</position>
-        <publiclyAvailable>false</publiclyAvailable>
-        <target>CP_Brokerage__c</target>
-        <type>SalesforceObject</type>
-    </navigationMenuItem>
-    <navigationMenuItem>
         <label>CP Mandate</label>
-        <position>9</position>
+        <position>8</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>/cpmandateinvoices</target>
         <type>InternalLink</type>
@@ -89,7 +82,7 @@
     <navigationMenuItem>
         <defaultListViewId>All_Brokerage_Schemes</defaultListViewId>
         <label>Ladder Scheme</label>
-        <position>10</position>
+        <position>9</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>Brokerage_Scheme__c</target>
         <type>SalesforceObject</type>
@@ -97,30 +90,45 @@
     <navigationMenuItem>
         <defaultListViewId>All</defaultListViewId>
         <label>Collaterals</label>
-        <position>11</position>
+        <position>10</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>Collateral__c</target>
         <type>SalesforceObject</type>
     </navigationMenuItem>
     <navigationMenuItem>
         <label>FAQ</label>
-        <position>12</position>
+        <position>11</position>
         <publiclyAvailable>true</publiclyAvailable>
         <target>ShowMoreTopics</target>
         <type>NavigationalTopic</type>
     </navigationMenuItem>
     <navigationMenuItem>
         <label>Help</label>
-        <position>13</position>
+        <position>12</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>/helppage</target>
         <type>InternalLink</type>
     </navigationMenuItem>
     <navigationMenuItem>
         <label>Upload Latest RERA</label>
-        <position>14</position>
+        <position>13</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>/upload-latest-rera</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>CP Brokerage Invoices</label>
+        <position>14</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>CP_Brokerage__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>CP Event Detail Page</label>
+        <position>15</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/cp-event-detail-page</target>
         <type>InternalLink</type>
     </navigationMenuItem>
 </NavigationMenu>

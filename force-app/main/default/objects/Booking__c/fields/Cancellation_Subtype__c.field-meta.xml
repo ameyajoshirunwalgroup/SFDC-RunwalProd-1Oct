@@ -6,6 +6,7 @@
     <trackHistory>false</trackHistory>
     <type>Picklist</type>
     <valueSet>
+        <controllingField>Cancellation_Sub_reason__c</controllingField>
         <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
@@ -20,20 +21,69 @@
                 <label>Voluntary</label>
             </value>
             <value>
-                <fullName>Upgrade</fullName>
-                <default>false</default>
-                <label>Upgrade</label>
-            </value>
-            <value>
                 <fullName>Downgrade</fullName>
                 <default>false</default>
+                <isActive>false</isActive>
                 <label>Downgrade</label>
             </value>
             <value>
                 <fullName>Movement</fullName>
                 <default>false</default>
+                <isActive>false</isActive>
                 <label>Movement</label>
             </value>
+            <value>
+                <fullName>Upgrade</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Upgrade</label>
+            </value>
         </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>RB</controllingFieldValue>
+            <controllingFieldValue>RC</controllingFieldValue>
+            <controllingFieldValue>RD</controllingFieldValue>
+            <controllingFieldValue>RE</controllingFieldValue>
+            <controllingFieldValue>RF</controllingFieldValue>
+            <controllingFieldValue>RG</controllingFieldValue>
+            <controllingFieldValue>RK</controllingFieldValue>
+            <controllingFieldValue>RL</controllingFieldValue>
+            <controllingFieldValue>R4</controllingFieldValue>
+            <controllingFieldValue>RM</controllingFieldValue>
+            <controllingFieldValue>R5</controllingFieldValue>
+            <controllingFieldValue>RN</controllingFieldValue>
+            <controllingFieldValue>R8</controllingFieldValue>
+            <controllingFieldValue>RP</controllingFieldValue>
+            <controllingFieldValue>Z5</controllingFieldValue>
+            <controllingFieldValue>Z6</controllingFieldValue>
+            <controllingFieldValue>Z7</controllingFieldValue>
+            <controllingFieldValue>Z9</controllingFieldValue>
+            <controllingFieldValue>RS</controllingFieldValue>
+            <controllingFieldValue>Z8</controllingFieldValue>
+            <controllingFieldValue>RT</controllingFieldValue>
+            <controllingFieldValue>Media</controllingFieldValue>
+            <controllingFieldValue>Non Contactable</controllingFieldValue>
+            <controllingFieldValue>R6</controllingFieldValue>
+            <controllingFieldValue>R7</controllingFieldValue>
+            <controllingFieldValue>Z4</controllingFieldValue>
+            <controllingFieldValue>Z3</controllingFieldValue>
+            <controllingFieldValue>Z2</controllingFieldValue>
+            <controllingFieldValue>Z1</controllingFieldValue>
+            <controllingFieldValue>R1</controllingFieldValue>
+            <controllingFieldValue>R2</controllingFieldValue>
+            <controllingFieldValue>R3</controllingFieldValue>
+            <controllingFieldValue>RH</controllingFieldValue>
+            <controllingFieldValue>RO</controllingFieldValue>
+            <controllingFieldValue>Competitor</controllingFieldValue>
+            <controllingFieldValue>RA</controllingFieldValue>
+            <valueName>Voluntary</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>RI</controllingFieldValue>
+            <controllingFieldValue>RQ</controllingFieldValue>
+            <controllingFieldValue>RR</controllingFieldValue>
+            <controllingFieldValue>RJ</controllingFieldValue>
+            <valueName>Involuntary</valueName>
+        </valueSettings>
     </valueSet>
 </CustomField>

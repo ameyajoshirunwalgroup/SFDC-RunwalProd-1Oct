@@ -42,7 +42,7 @@ public class CPDashboardControllerTest {
         CPDashboardController.getUnprocessedCases('', '', '', '');
         CPDashboardController.getCaseDataBasedonCustomLabel('', '', '', '');
         CPDashboardController.getCaseData();         
-        CPDashboardController.dummy();
+        //CPDashboardController.dummy();
         Test.stopTest();
         
         
@@ -212,6 +212,7 @@ public class CPDashboardControllerTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.SAP_CUstomer_Number__c='0020009875';
         oppRec.SalesOrder_Number__c ='3262627';
@@ -365,6 +366,7 @@ public class CPDashboardControllerTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.SAP_CUstomer_Number__c='0020009875';
         oppRec.SalesOrder_Number__c ='3262627';

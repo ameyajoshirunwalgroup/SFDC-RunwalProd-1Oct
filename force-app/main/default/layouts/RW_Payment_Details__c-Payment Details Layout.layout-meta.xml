@@ -62,10 +62,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RW_Booking__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>RW_Payment_Item_Number__c</field>
             </layoutItems>
             <layoutItems>
@@ -83,6 +79,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Cheque_Bounced_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>ADF_Interest_Accrued__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Balanced_ADF_Amount__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -124,11 +128,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RW_Payment_Amount__c</field>
+                <field>RW_Booking__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>SAP_Customer_Number__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RW_Payment_Amount__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

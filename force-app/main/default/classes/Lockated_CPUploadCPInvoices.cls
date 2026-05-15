@@ -6,6 +6,9 @@ global without sharing class Lockated_CPUploadCPInvoices {
         public String fileData;     // The Base64 encoded string
         public String fileName;     // Name of the file
     }
+    
+    
+
 
     @HttpPost
     global static void uploadInvoice() {

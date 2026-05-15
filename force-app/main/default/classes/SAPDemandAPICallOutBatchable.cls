@@ -64,7 +64,7 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
              }
          }
      }
-     system.debug('response-- size-> '+ sfdcpayDemandResponse.item.size());
+     //system.debug('response-- size-> '+ sfdcpayDemandResponse.item.size());
      
      system.debug('response-- cutomerIds-> '+ cutomerIds);
      system.debug('response--- demandNoIds> '+ demandNoIds);
@@ -82,7 +82,7 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
          mapOfDemandNumber.put(dm.RW_Billing_Document_Number__c,dm);
      }
      
-     
+     cutomerIds.add('0020027702');
      String soqlQuery = 'Select Id, Name, SAP_Customer_Number__c, Booking__c from Opportunity where SAP_Customer_Number__c IN:cutomerIds and stagename=\'Unit Booked\' and Booking__c != null ';
      
      return Database.getQueryLocator(soqlQuery);
@@ -90,6 +90,12 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
     global void execute( Database.BatchableContext BC,     List<Opportunity> scope)
     {
         Map<String,demandWrapper> mapOfDemandWrapper = new Map<String,demandWrapper>();
+        
+        RW_Demand__c dem = new RW_Demand__c();
+        dem.Booking__c = 'a0s9I000000Aqi5QAC';
+        dem.Due_Date__c = Date.today() + 10;
+        dem.RW_Customer_Number__c = '0020027702';
+        insert dem;
         
         try{
             Map<string, String> BookingMap = new Map<string,String>();
@@ -114,6 +120,8 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
                 { // check if the BookingMap has customer id in response, i.e  booking is present in the system && the demand is not present in the system
                     if(BookingMap.containsKey(response.CUSTOMER) && !mapOfDemandNumber.ContainsKey(response.B_DOC_NO))
                     {
+                        system.debug('If response.CUSTOMER -> '+response.CUSTOMER);
+                        system.debug('If response.B_DOC_NO -> '+response.B_DOC_NO);
                         // if there are 1 demand items for the demand then there will be already entry in the mapOfDemandWrapper
                         if(mapOfDemandWrapper.containsKey(response.B_DOC_NO))
                         {     
@@ -204,6 +212,8 @@ Database.Batchable<sObject>, Database.Stateful ,Database.AllowsCallouts
                         }             
                     }else if(BookingMap.containsKey(response.CUSTOMER) && mapOfDemandNumber.ContainsKey(response.B_DOC_NO))
                     {
+                        system.debug('Else if response.CUSTOMER -> '+response.CUSTOMER);
+                        system.debug('Else if response.B_DOC_NO -> '+response.B_DOC_NO);
                         //if the demand is already present in the system
                         
                         RW_Demand__c demandupd =   mapOfDemandNumber.get(response.B_DOC_NO);

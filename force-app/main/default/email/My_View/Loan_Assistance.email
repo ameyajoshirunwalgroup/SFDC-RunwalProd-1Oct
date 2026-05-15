@@ -1,0 +1,66 @@
+<messaging:emailTemplate subject="Home Loan Information" recipientType="User" relatedToType="Booking__c">
+<messaging:plainTextEmailBody >
+
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody >
+Dear {!relatedTo.Primary_Applicant_Name__c},<br/><br/>
+
+We request you to co-ordinate with the Home Loans support team if you are availing for a bank loan for payment of the balance Agreement value. This is to ensure that we have the loan disbursement related documents ready as well which can be handed over at the time of agreement handover. Please ensure disbursement of the due payment from bank within 7 days on the receipt of demand letter.<br/>
+For Home Loan related requirement contact details are as follows: <br/><br/>
+
+<table style="border:1px solid black;border-collapse:collapse;width:100%">
+    <tr>
+        <td style="border:1px solid black;"><b>HL RM</b></td>
+        <td style="border:1px solid black;"><b>Bank Relationships</b></td>
+        <td style="border:1px solid black;"><b>Contact Number</b></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Shweta Yadav</td>
+        <td style="border:1px solid black;">HDFC</td>
+        <td style="border:1px solid black;">8591004061</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Sonali Mane</td>
+        <td style="border:1px solid black;">AXIS Bank, ICICI Bank, ICICIHFC</td>
+        <td style="border:1px solid black;">9324908227</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Anuja Parandkar</td>
+        <td style="border:1px solid black;">Yes bank, SBI, Bank Of Baroda, Godrej, Bajaj Finance, Saraswat Bank</td>
+        <td style="border:1px solid black;">8591983562</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Kunal Kate</td>
+        <td style="border:1px solid black;">LICHFL,LNTHFL,IIFL Bank, PNBHFL, Piramal</td>
+        <td style="border:1px solid black;">8104961481</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;">Suhas Murage</td>
+        <td style="border:1px solid black;">Canara, Indian, Sahkari Banks/Co-operative Banks, UCO,IDFC, PNB Bank, IDBI</td>
+        <td style="border:1px solid black;">9833540059</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Escalation Level 1</b></td>
+        <td style="border:1px solid black;"><b>Labhanshi Srivastava ( Senior Manager- Home Loans)</b></td>
+        <td style="border:1px solid black;"><a href="labhanshi.srivastava@runwal.com">labhanshi.srivastava@runwal.com</a></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid black;"><b>Escalation Level 2</b></td>
+        <td style="border:1px solid black;"><b>Apeksha Sathe (AGM- Home Loans)</b></td>
+        <td style="border:1px solid black;"><a href="apeksha.sathe@runwal.com">apeksha.sathe@runwal.com</a></td>
+    </tr>
+    
+
+</table>
+<br/><br/>
+
+Kindly note you can also write to the home loan team for your requirement for home loan support on <a href="HLGARDENS@RUNWAL.COM">HLGARDENS@RUNWAL.COM</a>
+<br/><br/>
+
+
+<b>Regards</b><br/>
+<b>Customer Care Team</b>
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

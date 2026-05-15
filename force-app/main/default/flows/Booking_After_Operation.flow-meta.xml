@@ -1,68 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <actionCalls>
-        <name>Agreement_collection_reminder_for_self_funded_customer</name>
-        <label>Agreement collection reminder for self-funded customer</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>emailSimple</actionName>
-        <actionType>emailSimple</actionType>
-        <connector>
-            <targetReference>Update_Registered_Agreement_Email_Sent_Date</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>recipientAddresses</name>
-            <value>
-                <collectionElements>
-                    <elementReference>$Record.Customer__r.RW_Email__c</elementReference>
-                </collectionElements>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>senderType</name>
-            <value>
-                <stringValue>OrgWideEmailAddress</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>senderAddress</name>
-            <value>
-                <stringValue>customer.care@runwalgroup.in</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>composeEmailContent</name>
-            <value>
-                <stringValue>True</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>emailSubject</name>
-            <value>
-                <stringValue>Agreement Collection Reminder</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>emailBody</name>
-            <value>
-                <stringValue>Dear {!$Record.Customer__r.Name}
-
-We hope you are doing well. Our records show that your property registration for {!$Record.Project__r.Name} was completed on {!$Record.RW_Registration_Date__c}.
-
-As per our process, we request you to kindly collect your original registered agreement from our office at your earliest convenience.
-
-Please reach out to your Relationship Manager,  {!$Record.Unit_No__r.Relationship_Manager__r.Name} {!$Record.Unit_No__r.Relationship_Manager__r.User__r.MobilePhone} to schedule a suitable time for collection.
-
-Warm regards,
-
-[Runwal team]</stringValue>
-            </value>
-        </inputParameters>
-        <nameSegment>emailSimple</nameSegment>
-        <offset>0</offset>
-        <versionString>2.0.1</versionString>
-    </actionCalls>
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
@@ -307,56 +244,6 @@ Warm regards,
                 <targetReference>Is_ROC_Conditions</targetReference>
             </connector>
             <label>is ROC Conditions Changed</label>
-        </rules>
-        <rules>
-            <name>Check_Signed_Agreement_handover_Date</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.RW_Signed_Agreement_to_Customer_Date__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RW_Signed_Agreement_to_Customer_Date__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Funding_Status__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Self Funded</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RW_Registration_Status__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Registration Completed</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RW_Signed_Agreement__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Not yet shared</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RW_Signed_Agreement_to_Customer_Date__c</leftValueReference>
-                <operator>GreaterThanOrEqualTo</operator>
-                <rightValue>
-                    <elementReference>fiveDaysFromRegistrationDate</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Agreement_collection_reminder_for_self_funded_customer</targetReference>
-            </connector>
-            <label>Check Signed Agreement handover Date</label>
         </rules>
     </decisions>
     <decisions>
@@ -603,6 +490,11 @@ Warm regards,
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>dueDateForRMAndSM</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()+2</expression>
+    </formulas>
+    <formulas>
         <name>fiveDaysFromRegistrationDate</name>
         <dataType>Date</dataType>
         <expression>{!$Record.RW_Registration_Date__c} +  5</expression>
@@ -688,12 +580,6 @@ Warm regards,
                 <stringValue>Pending</stringValue>
             </value>
         </inputAssignments>
-        <inputAssignments>
-            <field>ROC_Submitted_Date__c</field>
-            <value>
-                <elementReference>$Flow.CurrentDate</elementReference>
-            </value>
-        </inputAssignments>
         <object>Release_Of_Charge__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
@@ -770,19 +656,6 @@ Warm regards,
         <locationY>0</locationY>
         <inputReference>ROCrecordVariableList_ROCreceived_ROCRaised_ROCreRaised</inputReference>
     </recordUpdates>
-    <recordUpdates>
-        <name>Update_Registered_Agreement_Email_Sent_Date</name>
-        <label>Update Registered Agreement Email Sent Date</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <inputAssignments>
-            <field>Registered_Agreement_Email_Sent_Date__c</field>
-            <value>
-                <elementReference>$Flow.CurrentDate</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
@@ -794,6 +667,16 @@ Warm regards,
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Obsolete</status>
+    <textTemplates>
+        <name>taskSubjectForRM</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Retention Review: {!$Record.Opportunity__r.Name} - RM Action Required</text>
+    </textTemplates>
+    <textTemplates>
+        <name>taskSubjectForSM</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Retention Review: {!$Record.Opportunity__r.Name} - SM Action Required</text>
+    </textTemplates>
     <variables>
         <name>ActiveCheckbox</name>
         <dataType>Boolean</dataType>
@@ -841,6 +724,22 @@ Warm regards,
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Release_Of_Charge__c</objectType>
+    </variables>
+    <variables>
+        <name>taskForRM</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Task</objectType>
+    </variables>
+    <variables>
+        <name>taskListToCreated</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Task</objectType>
     </variables>
     <variables>
         <name>TotalSumofTotalInterestWaivedonDemand</name>

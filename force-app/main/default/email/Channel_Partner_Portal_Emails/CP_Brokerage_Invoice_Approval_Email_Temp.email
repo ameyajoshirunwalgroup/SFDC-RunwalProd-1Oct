@@ -1,0 +1,10 @@
+<messaging:emailTemplate subject="Required Approval for CP Brokerage invoice billing  - ( {!relatedto.Channel_Partner__r.Name} )." recipientType="User" relatedToType="CP_Brokerage__c">
+
+<messaging:htmlEmailBody >
+<table id="main" border="0" width="50%" border-collapse="collapse">
+            <tr><td> Dear {!recipient.Name}, </td></tr>
+            <tr><td> &nbsp; </td></tr>
+            </table>
+<c:CPBrokerageInvoiceDueUploadEmail CPBrokerageInvoiceId="{!relatedto.Id}"></c:CPBrokerageInvoiceDueUploadEmail>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Birthday Wishes</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Booking__r.Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!!
+
+On this special day, we would like to extend our warmest birthday wishes to you.
+
+May your day be filled with good health, happiness, and continued success. We truly appreciate you being a valued part of the Runwal family and look forward to continuing this journey with you.
+
+Wishing you a wonderful year ahead!
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Warm Birthday Wishes from Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Happy Birthday from Runwal 🎉
+
+Wishing you a wonderful year ahead filled with happiness, health, and success!</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">my_account</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Applicant_Details__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">BIRTHDAY WISHES</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Birthday Wish</value>
+    </values>
+</CustomMetadata>

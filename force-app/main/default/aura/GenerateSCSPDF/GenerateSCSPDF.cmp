@@ -1,0 +1,56 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader,force:hasSObjectName"
+    access="global" controller="SavePdfController">
+    <aura:attribute name="modalHeader" type="String" />
+    <aura:attribute name="objectApiName" type="String" />
+    <aura:attribute name="documentType" type="String" />
+    <aura:attribute name="pdfUniqueName" type="String" />
+    <aura:attribute name="PDF_URL" type="String" />
+    <aura:attribute name="hasContent" type="Boolean" default="false" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="isSaveAndSend" type="Boolean" default="false" />
+    <aura:attribute name="isSave" type="Boolean" default="false" />
+    <aura:attribute name="recordId" type="String" />
+    <lightning:quickActionAPI aura:id="quickActionAPI" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- ======================== Content =================================== -->
+    <div class="slds-modal__header">
+        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.modalHeader}</h1>
+    </div>
+    <!-- ======================== Content =================================== -->
+    <div class="slds-modal__content slds-p-around--x-small  slds-size_1-of-1 slds-is-relative" aura:id="modalbody" id="modalbody">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner variant="brand" alternativeText="Loading" />
+        </aura:if>
+        <form class="slds-form--stacked">
+            <iframe src="{!v.PDF_URL}" width="100%" height="500px;" frameBorder="0" />
+        </form>
+    </div>
+    <!-- ======================== Footer =================================== -->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <div class="forceChangeRecordTypeFooter">
+            <ui:button class="slds-button slds-button_neutral" label="Cancel" press="{!c.closeModal}" />
+            <ui:button class="slds-button slds-button--brand" label="Save" press="{!c.saveQuote}" />
+          
+        </div>
+    </div>
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .slds-modal__container{
+        width: 80% !important;
+        max-width: 80% !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+</aura:component>

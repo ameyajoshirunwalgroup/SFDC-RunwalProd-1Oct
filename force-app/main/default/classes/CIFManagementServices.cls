@@ -42,7 +42,7 @@ public class CIFManagementServices {
             }
             
         }
-
+        
         Map<String, String> agentIdVsName = new Map<String, String>();//Added by Vinay 19-01-2026
         if(inboundDeskAgents.size() > 0){ //Added by Vinay 19-01-2026
             for(User usr : [SELECT Id, Name, CTI_Agent_ID__c FROM User WHERE CTI_Agent_ID__c =: inboundDeskAgents]){
@@ -76,7 +76,7 @@ system.debug('recentCases'+recentCases);
         
     for (Case c : recentCases) {
         recentCaseMap.put(c.AccountId, c);
-        system.debug('Inside for recentCases');
+        /*system.debug('Inside for recentCases'); //Commented by Vinay 26-02-2026
         system.debug('Inside for recentCases'+c.CreatedDate);
       
         For(opportunity opp:oppList){
@@ -88,7 +88,7 @@ system.debug('recentCases'+recentCases);
         duplicatetask.OwnerId = AdminId;
             
             duplicatetasktoUpdate.add(duplicatetask);
-        }
+        }*/
         
     }
         if(!duplicatetasktoUpdate.isEmpty()){

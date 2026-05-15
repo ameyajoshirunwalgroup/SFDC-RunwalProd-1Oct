@@ -1,7 +1,7 @@
 @RestResource(urlMapping='/userDeviceDetails/*')
 global class LockatedApp_UserDeviceDetails {
     
-    @HttpPost
+    /*@HttpPost
     global static void doPost(){
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
@@ -60,5 +60,148 @@ global class LockatedApp_UserDeviceDetails {
         public String Customer;
         public String Opportunity;
         public String FCM_ID_Action;
+    }*/
+    
+    
+    /*@HttpPost
+    global static void doPost(){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        res.addHeader('Content-Type', 'application/json');
+        Map<String, Object> errorResult = new Map<String, Object>();
+        try{
+            system.debug('req: ' + req.requestBody);
+            String jsonBody = req.requestBody.toString();
+            Device dev = (Device)JSON.deserialize(jsonBody, Device.class);
+            List<Opportunity> opp = new List<Opportunity>();
+            if(String.isBlank(dev.bookingNumber)){
+                errorResult.put('status', 'error');
+                errorResult.put('message', 'Booking Number should not be blank');
+                res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+                res.statusCode = 400;
+            }else{
+                List<Booking__c> bkg = [SELECT Id, Opportunity__r.AccountId FROM Booking__c WHERE Id =: dev.bookingNumber];
+                if(bkg.size() == 0){
+                    errorResult.put('status', 'error');
+                    errorResult.put('message', 'Customer not available in SFDC with this booking number');
+                    res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+                    res.statusCode = 400;
+                }else{
+                    Account acc = [SELECT Id, Lockated_User_Custom_Device_ID__c FROM Account WHERE Id =: bkg[0].Opportunity__r.AccountId];
+                    if(dev.addOrDelete == 'Add'){
+                        if(String.isBlank(acc.Lockated_User_Custom_Device_ID__c)){
+                            acc.Lockated_User_Custom_Device_ID__c = dev.deviceToken;
+                        }else{
+                            acc.Lockated_User_Custom_Device_ID__c = acc.Lockated_User_Custom_Device_ID__c + ',' + dev.deviceToken;
+                        }
+                        update acc;
+                        res.responseBody = Blob.valueOf('Device details updated successfully');
+                		res.statusCode = 200;
+                    }else if(dev.addOrDelete == 'Delete'){
+                        if(String.isBlank(acc.Lockated_User_Custom_Device_ID__c) || !acc.Lockated_User_Custom_Device_ID__c.contains(dev.deviceToken)){
+                            errorResult.put('status', 'error');
+                            errorResult.put('message', 'Customer did not registered with this device token');
+                            res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+                            res.statusCode = 400;
+                            return;
+                        }else{
+                            if(acc.Lockated_User_Custom_Device_ID__c.contains(',')){
+                                String result = acc.Lockated_User_Custom_Device_ID__c.replace(','+dev.deviceToken, '').replace(dev.deviceToken+',', '');
+                            	acc.Lockated_User_Custom_Device_ID__c = result;
+                            }else{
+                                String result = acc.Lockated_User_Custom_Device_ID__c.replace(dev.deviceToken, '');
+                            	acc.Lockated_User_Custom_Device_ID__c = result;
+                            }
+                            
+                        }
+                        update acc;
+                        res.responseBody = Blob.valueOf('Device details deleted successfully');
+                		res.statusCode = 200;
+                    }
+                }
+            }
+        }catch(exception e){
+            errorResult.put('status', 'error');
+            errorResult.put('message', e.getMessage() + ';  ' + e.getStackTraceString());
+            res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+            res.statusCode = 400;
+        }
+        
+    }*/
+    
+    
+    @HttpPost
+    global static void doPost(){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        res.addHeader('Content-Type', 'application/json');
+        Map<String, Object> errorResult = new Map<String, Object>();
+        try{
+            system.debug('req: ' + req.requestBody);
+            String jsonBody = req.requestBody.toString();
+            Device dev = (Device)JSON.deserialize(jsonBody, Device.class);
+            List<Opportunity> opp = new List<Opportunity>();
+            if(String.isBlank(dev.bookingNumber)){
+                errorResult.put('status', 'error');
+                errorResult.put('message', 'Booking Number should not be blank');
+                res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+                res.statusCode = 400;
+            }else{
+                List<Booking__c> bkgs = [SELECT Id, Opportunity__r.AccountId,Lockated_User_Device_ID__c FROM Booking__c WHERE Id =: dev.bookingNumber];
+                if(bkgs.size() == 0){
+                    errorResult.put('status', 'error');
+                    errorResult.put('message', 'Customer not available in SFDC with this booking number');
+                    res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+                    res.statusCode = 400;
+                }else{
+                    Booking__c bkg = bkgs[0];
+                    if(dev.addOrDelete == 'Add'){
+                        if(String.isBlank(bkg.Lockated_User_Device_ID__c)){
+                            bkg.Lockated_User_Device_ID__c = dev.deviceToken;
+                        }else{
+                            List<String> tokens = bkg.Lockated_User_Device_ID__c.split(';');
+                            if(!tokens.contains(dev.deviceToken)){
+                                bkg.Lockated_User_Device_ID__c = bkg.Lockated_User_Device_ID__c + ';' + dev.deviceToken;
+                            }
+                        }
+                        update bkg;
+                        res.responseBody = Blob.valueOf('Device details updated successfully');
+                		res.statusCode = 200;
+                    }else if(dev.addOrDelete == 'Delete'){
+                        if(String.isBlank(bkg.Lockated_User_Device_ID__c) || !bkg.Lockated_User_Device_ID__c.contains(dev.deviceToken)){
+                            errorResult.put('status', 'error');
+                            errorResult.put('message', 'Customer did not registered with this device token');
+                            res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+                            res.statusCode = 400;
+                            return;
+                        }else{
+                            if(bkg.Lockated_User_Device_ID__c.contains(';')){
+                                String result = bkg.Lockated_User_Device_ID__c.replace(';'+dev.deviceToken, '').replace(dev.deviceToken+';', '');
+                            	bkg.Lockated_User_Device_ID__c = result;
+                            }else{
+                                String result = bkg.Lockated_User_Device_ID__c.replace(dev.deviceToken, '');
+                            	bkg.Lockated_User_Device_ID__c = result;
+                            }
+                            
+                        }
+                        update bkg;
+                        res.responseBody = Blob.valueOf('Device details deleted successfully');
+                		res.statusCode = 200;
+                    }
+                }
+            }
+        }catch(exception e){
+            errorResult.put('status', 'error');
+            errorResult.put('message', e.getMessage() + ';  ' + e.getStackTraceString());
+            res.responseBody = Blob.valueOf(JSON.serialize(errorResult));
+            res.statusCode = 400;
+        }
+        
+    }
+    
+    global class Device{
+        public String deviceToken;
+        public String bookingNumber;
+        public String addOrDelete;
     }
 }
