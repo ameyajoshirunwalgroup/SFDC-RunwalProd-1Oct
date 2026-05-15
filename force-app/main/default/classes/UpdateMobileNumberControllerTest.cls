@@ -47,6 +47,8 @@ public class UpdateMobileNumberControllerTest {
         objLead.Country__c = 'India';
         objLead.State__c = 'Odisha';
         objLead.City__c = 'Bhubaneshwar';
+        objLead.Country_Code_2__c = '+91';
+        objLead.RW_Secondary_Mobile_No__c = '8898787878';
         objLead.RW_Budget__c = '< 1Cr';
         objLead.RW_Configuration__c = '1.5 BHK';
         objLead.RW_Location__c = 'MANGLAUR';

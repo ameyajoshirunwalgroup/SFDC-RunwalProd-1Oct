@@ -35,11 +35,17 @@ public with sharing class MarketingDashboardController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<ProjectWrapper> getProjects() {
+    public static List<ProjectWrapper> getProjects(String table) {
         List<ProjectWrapper> projectList = new List<ProjectWrapper>();
         projectList.add(new ProjectWrapper('All', 'All'));
-        for(Project__c proj : [SELECT Id, Name FROM Project__c WHERE RW_Status__c = 'Active' AND Name != 'Runwal Garden City' ORDER BY Name]){
-            projectList.add(new ProjectWrapper(proj.Name, proj.Name));
+        for(Project__c proj : [SELECT Id, Name FROM Project__c WHERE RW_Status__c = 'Active' ORDER BY Name]){
+            if(table == 'table5'){
+                projectList.add(new ProjectWrapper(proj.Name, proj.Name));
+            }else{
+                if(proj.Name != 'Runwal Garden City'){
+                    projectList.add(new ProjectWrapper(proj.Name, proj.Name));
+                }
+            }
         }
         return projectList;
     }
@@ -54,35 +60,37 @@ public with sharing class MarketingDashboardController {
     }
 
     @AuraEnabled
-    public static List<Map<String, Object>> getTableData(String tableType, String year, List<String> months, String source, String dateRange, String project) {
+    public static List<Map<String, Object>> getTableData(String tableType, String year, List<String> months, List<String> sources, String dateRange, String project) {
         Integer selYear;
         Integer selMonth;
 
         System.debug('months: ' + months);
+        System.debug('sources: ' + sources);
         String month = (months != null && months.size() > 0)? months[0] : '';
+        String source = (sources != null && sources.size() > 0)? sources[0] : '';
         
-        try {
+        /*try {
             selYear = parseYear(year);
             selMonth = parseMonth(month);
         } catch (Exception e) {
             return new List<Map<String, Object>>();
-        }
+        }*/
         
 
         switch on tableType {
             when 'table1' { return getLeadWalkinBookingLogic(year, months, source, project); }
-            when 'table2' { return getLeadStatusLogic(year, month, source, dateRange, project); }
-            when 'table3' { return getJunkPercentageLogic(source, dateRange, project, year, month); }
-            when 'table4' { return getWalkinToBookingConversionLogic(source, dateRange, project, year, month); }
-            when 'table5' { return getDigitalBudgetLogic(year, month, project); }
-            when 'table6' { return getMediaSummaryLogic(year, month, source, dateRange, project); }
-            when 'table7' { return spendsTable(year, month, source, dateRange, project); }
+            when 'table2' { return getLeadStatusLogic(year, months, sources, dateRange, project); }
+            when 'table3' { return getJunkPercentageLogic(sources, dateRange, project, year, months); }
+            when 'table4' { return getWalkinToBookingConversionLogic(sources, dateRange, project, year, months); }
+            when 'table5' { return getDigitalBudgetLogic(year, months, project); }
+            when 'table6' { return getMediaSummaryLogic(year, months, sources, dateRange, project); }
+            when 'table7' { return spendsTable(year, months, sources, dateRange, project); }
             when else { return new List<Map<String, Object>>(); }
         }
     }
 
     private static String queryFilterBuilder(String table, String objName, String source, String project, String dateRange, String year, List<String> months){
-        Integer year_Int = Integer.valueOf(year);
+        Integer year_Int = (year != '')? Integer.valueOf(year) : null;
         List<Integer> months_Int = new List<Integer>();
         for(String mnth : months){
             months_Int.add(Integer.valueOf(mnth));
@@ -105,7 +113,7 @@ public with sharing class MarketingDashboardController {
                 if(source != null && source != ''){
                     qry += ' AND Verticals__c =: vertical';
                 }
-                if(year != null){
+                if(year != null && year != ''){
                     qry += ' AND Year__c =: year';
                     if(months.size() > 0){
                         qry += ' AND Month__c IN: months';
@@ -120,7 +128,7 @@ public with sharing class MarketingDashboardController {
                 if(leadSources != null && leadSources.size() > 0){
                     qry += ' AND LeadSource IN: leadSources';
                 }
-                if(year != null){
+                if(year != null && year != ''){
                     qry += ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
                     if(months != null && months.size() > 0){
                         qry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
@@ -135,7 +143,7 @@ public with sharing class MarketingDashboardController {
                 if(leadSources != null && leadSources.size() > 0){
                     qry += ' AND LeadSource IN: leadSources';
                 }
-                if(year != null){
+                if(year != null && year != ''){
                     qry += ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
                     if(months != null && months.size() > 0){
                         qry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
@@ -150,7 +158,7 @@ public with sharing class MarketingDashboardController {
                 if(leadSources != null && leadSources.size() > 0){
                     qry += ' AND Opportunity__r.LeadSource IN: leadSources';
                 }
-                if(year != null){
+                if(year != null && year != ''){
                     qry += ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
                     if(months != null && months.size() > 0){
                         qry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
@@ -183,7 +191,7 @@ public with sharing class MarketingDashboardController {
         Decimal totalBookingUnitTarget = 0, totalBookingUnitAchieved = 0;
         Decimal totalBookingRevTarget = 0, totalBookingRevAchieved = 0;
     
-        Integer year_Int = Integer.valueOf(year);
+        Integer year_Int = (year != '')? Integer.valueOf(year) : null;
         //Integer month_Int = String.isBlank(month) ? null : Integer.valueOf(month);
         List<Integer> months_Int = new List<Integer>();
         for(String mnth : months){
@@ -535,13 +543,19 @@ public with sharing class MarketingDashboardController {
         return finalResult;
     }   
     
-    private static List<Map<String, Object>> getLeadStatusLogic(String year, String month, String source, String dateRange, String project) {
+    private static List<Map<String, Object>> getLeadStatusLogic(String year, List<String> months, List<String> sources, String dateRange, String project) {
 
-        Integer year_Int = Integer.valueOf(year);
-        Integer month_Int;
+        System.debug('sources:  ' + sources);
+        System.debug('months:  ' + months);
+        Integer year_Int = (year != '')? Integer.valueOf(year) : null; 
+        /*Integer month_Int;
         if(month != null && month != ''){
             month_Int = Integer.valueOf(month);
-        }        
+        }*/
+        List<Integer> months_Int = new List<Integer>();
+        for(String mnth : months){
+            months_Int.add(Integer.valueOf(mnth));
+        }
         List<String> allStatuses = new List<String>();
         Schema.DescribeFieldResult fieldResult = Lead.Status.getDescribe();
         for (Schema.PicklistEntry entry : fieldResult.getPicklistValues()) {
@@ -549,18 +563,18 @@ public with sharing class MarketingDashboardController {
         }
 
       
-        String qry = 'SELECT RW_Project__r.Name proj, Status st, COUNT(Id) total FROM Lead WHERE IsConverted = false AND RW_Project__c != null AND RW_Project__r.Name != \'Runwal Garden City\'';
+        String qry = 'SELECT RW_Project__r.Name proj, Status st, COUNT(Id) total FROM Lead WHERE RW_Project__c != null AND RW_Project__r.Name != \'Runwal Garden City\'';
         //qry += ' AND LeadSource =: source';
         qry += ' AND Status =: allStatuses';
-        if(source != ''){
-            qry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            qry += ' AND LeadSource IN: sources';
         }
         if(dateRange != 'Custom'){
             qry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             qry += ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
-            if(month != null && month != ''){
-                qry += ' AND CALENDAR_MONTH(CreatedDate) =: month_Int';
+            if(months != null && months.size() > 0){
+                qry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
             }
         }
         if(project != 'All'){
@@ -628,14 +642,14 @@ public with sharing class MarketingDashboardController {
     }
 
 
-    private static List<Map<String, Object>> getJunkPercentageLogic(String source, String dateRange, String project, String year, String month){
-        if(dateRange == ''){
-            return getJunkPercentageLast12Months(source, dateRange, project, year, month);
+    private static List<Map<String, Object>> getJunkPercentageLogic(List<String> sources, String dateRange, String project, String year, List<String> months){
+        if(year == ''){
+            return getJunkPercentageLast12Months(sources, dateRange, project, year, months);
         }else{
-            return getJunkPercentageForDateRange(source, dateRange, project, year, month);
+            return getJunkPercentageForDateRange(sources, dateRange, project, year, months);
         }
     }
-    private static List<Map<String, Object>> getJunkPercentageLast12Months(String source, String dateRange, String project, String year, String month) {
+    private static List<Map<String, Object>> getJunkPercentageLast12Months(List<String> sources, String dateRange, String project, String year, List<String> months) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
         Map<String, Map<String, Decimal>> projectMonthlyData = new Map<String, Map<String, Decimal>>();
         Map<String, Decimal> grandTotalJunk = new Map<String, Decimal>();
@@ -647,12 +661,12 @@ public with sharing class MarketingDashboardController {
         
        
         String leadQry = 'SELECT Id,CreatedDate,RW_Project__r.Name,Status FROM Lead';
-        leadQry += ' WHERE IsConverted = false AND CreatedDate >= :startDate AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
+        leadQry += ' WHERE CreatedDate >= :startDate AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
         String leadHistoryQry = 'SELECT LeadId, Field, OldValue, NewValue, CreatedDate FROM LeadHistory';
         leadHistoryQry += '  WHERE Field = \'Status\' AND CreatedDate >: startDate';
-        if(source != ''){
-            leadQry += ' AND LeadSource =: source';
-            leadHistoryQry += ' AND Lead.LeadSource =: source';
+        if(sources !=  null && sources.size() > 0){
+            leadQry += ' AND LeadSource IN: sources';
+            leadHistoryQry += ' AND Lead.LeadSource IN: sources';
         }
         if(project != 'All'){
             leadQry += ' AND RW_Project__r.Name =: project'; 
@@ -778,44 +792,41 @@ public with sharing class MarketingDashboardController {
         return finalResult;
     }
 
-    private static List<Map<String, Object>> getJunkPercentageForDateRange(String source, String dateRange, String project, String year, String month) {
+    private static List<Map<String, Object>> getJunkPercentageForDateRange(List<String> sources, String dateRange, String project, String year, List<String> months) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
         Map<String, Map<String, Decimal>> projectMonthlyData = new Map<String, Map<String, Decimal>>();
         Map<String, Decimal> grandTotalJunk = new Map<String, Decimal>();
         Map<String, Decimal> grandTotalLeads = new Map<String, Decimal>();
         
-        Integer selYear = Integer.valueOf(year);
-        Integer selMonth;
-        if(month != null && month != ''){
-            selMonth = Integer.valueOf(month);
+        Integer year_Int = (year != '')? Integer.valueOf(year) : null;
+        List<Integer> months_Int = new List<Integer>();
+        for(String mnth : months){
+            months_Int.add(Integer.valueOf(mnth));
         }
 
         
-        List<String> monthKeys = new List<String>();
-        Date startDate = Date.today().addMonths(-11).toStartOfMonth();
+        //List<String> monthKeys = new List<String>();
+        //Date startDate = Date.today().addMonths(-11).toStartOfMonth();
         
        
         String leadQry = 'SELECT Id,CreatedDate,RW_Project__r.Name,Status FROM Lead';
-        leadQry += ' WHERE IsConverted = false AND CreatedDate >= :startDate AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
+        leadQry += ' WHERE RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
         String leadHistoryQry = 'SELECT LeadId, Field, OldValue, NewValue, CreatedDate FROM LeadHistory';
-        leadHistoryQry += '  WHERE Field = \'Status\' AND CreatedDate >: startDate';
-        if(source != ''){
-            leadQry += ' AND LeadSource =: source';
-            leadHistoryQry += ' AND Lead.LeadSource =: source';
+        leadHistoryQry += '  WHERE Field = \'Status\'';
+        if(sources != null && sources.size() > 0){
+            leadQry += ' AND LeadSource IN: sources';
+            leadHistoryQry += ' AND Lead.LeadSource IN: sources';
         }
         if(project != 'All'){
             leadQry += ' AND RW_Project__r.Name =: project'; 
             leadHistoryQry += ' AND Lead.RW_Project__r.Name =: project'; 
         }
-        if(dateRange != 'Custom'){
-            leadQry += ' AND CreatedDate = ' + daterange;
-            leadHistoryQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
-            leadQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            leadHistoryQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                leadQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
-                leadHistoryQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+        if(year != null && year != ''){
+            leadQry += ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
+            leadHistoryQry += ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
+            if(months != null && months.size() > 0){
+                leadQry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
+                leadHistoryQry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
             }
         }
         List<Lead> leads = Database.query(leadQry);
@@ -856,7 +867,16 @@ public with sharing class MarketingDashboardController {
                     Integer leadYear  = ld.CreatedDate.year();
                     Integer junkMonth = junkDateMap.get(ld.Id).month();
                     Integer junkYear  = junkDateMap.get(ld.Id).year();
-                    if(leadYear == junkYear && leadMonth == junkMonth){
+                    /*if(leadYear == junkYear && leadMonth == junkMonth){
+                        junkCount += 1;
+                        totalJunkLeads += 1;
+                    }*/
+                    if(months != null && months.size() > 0){
+                        if(leadYear == junkYear && months.contains(String.valueOf(junkMonth))){
+                            junkCount += 1;
+                            totalJunkLeads += 1;
+                        }
+                    }else if(leadYear == junkYear){
                         junkCount += 1;
                         totalJunkLeads += 1;
                     }
@@ -892,23 +912,21 @@ public with sharing class MarketingDashboardController {
         System.debug('finalResult: ' + finalResult);
         return finalResult;
     }
-
-   
-
     
-
-    
-    private static List<Map<String, Object>> getDigitalBudgetLogic(String year, String month, String project) {
+    private static List<Map<String, Object>> getDigitalBudgetLogic(String year, List<String> months, String project) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
         Map<String,String> monthMap = new Map<String, String>{'1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'};
     
         
         String budgetQuery = 'SELECT Spends_Planned__c, Budget_in_Cr__c, Balance_Amount__c, Balance_Days__c, Project__r.Name, Month__c, Year__c,Actual_Expenses_EIPL__c,Actual_Expenses_EREPL__c,Actual_Expenses_HHPL__c,Actual_Expenses_HHPL_2__c,Actual_Expenses_Horizon__c,Actual_Expenses_REPL__c,Actual_Expenses_RREPL__c,Actual_Expenses_RRPL__c,Actual_Expenses_SIPL__c,Actual_Expenses_WACL__c,Actual_Expenses_WRPL__c ' +
-                         'FROM Budget_vs_Expenses__c WHERE Project__c != null AND Project__r.Name != \'Runwal Garden City\' AND Project__r.RW_Status__c = \'Active\' AND Year__c =: year';
+                         'FROM Budget_vs_Expenses__c WHERE WBS_name_as_per_SAP__c = \'Digital advertising\' AND Project__c != null AND Project__r.RW_Status__c = \'Active\' AND Year__c =: year';
         
-        if (month != null && month != ''){ 
-            String mnth = monthMap.get(month);
-            budgetQuery += ' AND Month__c = : mnth '; 
+        if (months != null && months.size() > 0){ 
+            List<String> mnths = new List<String>();
+            for(String m : months){
+                mnths.add(monthMap.get(m));
+            }
+            budgetQuery += ' AND Month__c IN: mnths'; 
         }
         if(project != 'All'){
             budgetQuery += ' AND Project__r.Name =: project';
@@ -984,25 +1002,27 @@ public with sharing class MarketingDashboardController {
     }
     
 
-    private static List<Map<String, Object>> getMediaSummaryLogic(String year, String month, String source, String dateRange, String project) {
+    private static List<Map<String, Object>> getMediaSummaryLogic(String year, List<String> months, List<String> sources, String dateRange, String project) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
     
-        Integer selYear = Integer.valueOf(year);
-        Integer selMonth;
-        if(month != null && month != ''){
-            selMonth = Integer.valueOf(month);
+        Integer selYear = (year != '')? Integer.valueOf(year) : null;
+        List<Integer> selMonths = new List<Integer>();
+        if(months != null && months.size() > 0){
+            for(String month : months){
+                selMonths.add(Integer.valueOf(month));
+            }
         }
 
 
         List<String> mediaCategories;
-        if(source == ''){
+        if(sources != null && sources.size() > 0){
+            mediaCategories = sources;
+        }else{
             mediaCategories = new List<String>{
                 'Hoarding', 'Newspapers', 'Digital', 'Presales', 'Channel Partner', 'Referral', 'Loyalty', 'Employee / Managemen'
             };
-        }else{
-            mediaCategories = new List<String>{source};
         }
-        System.debug('source: ' + source);
+        System.debug('sources: ' + sources);
         System.debug('mediaCategories: ' + mediaCategories);
         
         Map<String, Map<String, Decimal>> mediaMap = new Map<String, Map<String, Decimal>>();
@@ -1015,17 +1035,17 @@ public with sharing class MarketingDashboardController {
         
         String leadQry = 'SELECT LeadSource src, COUNT(Id) total FROM Lead WHERE IsConverted = false AND LeadSource != null AND CALENDAR_YEAR(CreatedDate) = :selYear';
         leadQry += ' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source == ''){
-            leadQry += ' AND LeadSource =: mediaCategories';
+        if(sources.size() > 0){
+            leadQry += ' AND LeadSource IN: sources';
         }else{
-            leadQry += ' AND LeadSource =: source';
+            leadQry += ' AND LeadSource IN: mediaCategories';
         }
         if(dateRange != 'Custom'){
             leadQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             leadQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                leadQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                leadQry += ' AND CALENDAR_MONTH(CreatedDate) IN: selMonths';
             }
         }
         if(project != 'All'){
@@ -1044,17 +1064,17 @@ public with sharing class MarketingDashboardController {
        
         String oppQry = 'SELECT LeadSource src, COUNT(Id) total FROM Opportunity WHERE LeadSource != null AND CALENDAR_YEAR(CreatedDate) = :selYear';
         oppQry += ' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source == ''){
-            oppQry += ' AND LeadSource IN :mediaCategories';
+        if(sources.size() > 0){
+            oppQry += ' AND LeadSource IN: sources';
         }else{
-            oppQry += ' AND LeadSource =: source';
+            oppQry += ' AND LeadSource IN: mediaCategories';
         }
         if(dateRange != 'Custom'){
             oppQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             oppQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                oppQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                oppQry += ' AND CALENDAR_MONTH(CreatedDate) IN: selMonths';
             }
         }
         if(project != 'All'){
@@ -1073,17 +1093,17 @@ public with sharing class MarketingDashboardController {
         
         String bkgQry = 'SELECT Opportunity__r.LeadSource src, COUNT(Id) total, SUM(Allotment_Premium__c) rev FROM Booking__c WHERE Opportunity__r.LeadSource != null';
         bkgQry += ' AND Project__r.Name != \'Runwal Garden City\'';
-        if(source == ''){
-            bkgQry += ' AND Opportunity__r.LeadSource IN :mediaCategories';
+        if(sources.size() > 0){
+            bkgQry += ' AND Opportunity__r.LeadSource IN: sources';
         }else{
-            bkgQry += ' AND Opportunity__r.LeadSource =: source';
+            bkgQry += ' AND Opportunity__r.LeadSource IN: mediaCategories';
         }
         if(dateRange != 'Custom'){
             bkgQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             bkgQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                bkgQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                bkgQry += ' AND CALENDAR_MONTH(CreatedDate) IN: selMonths';
             }
         }
         if(project != 'All'){
@@ -1106,7 +1126,7 @@ public with sharing class MarketingDashboardController {
 
         
         
-        Decimal totalSpends = Decimal.valueOf(calculateSpends(project, dateRange, year, month, 'table6')); 
+        Decimal totalSpends = Decimal.valueOf(calculateSpends(project, dateRange, year, months, 'table6')); 
         
         
         
@@ -1127,7 +1147,7 @@ public with sharing class MarketingDashboardController {
         return finalResult;
     }
 
-    public static String calculateSpends(String project, String dateRange, String year, String month, String table){
+    public static String calculateSpends(String project, String dateRange, String year, List<String> months, String table){
         Map<Integer,String> monthMap = new Map<Integer, String>{1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'};
         Map<Integer, Integer> monthDaysMap = new Map<Integer, Integer>{1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31, 6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31};
         Map<String, Integer> monthStrDaysMap = new Map<String, Integer>{'January' => 31, 'February' => 28, 'March' => 31, 'April' => 30, 'May' => 31, 'June' => 30, 'July' => 31, 'August' => 31, 'September' => 30, 'October' => 31, 'November' => 30, 'December' => 31};
@@ -1334,11 +1354,15 @@ public with sharing class MarketingDashboardController {
                 }
                 qry += ' AND Year__c =: yearList AND Month__c =: monthList';
             }
-        }else if(year != null){
+        }else if(year != null && year != ''){
             qry += ' AND Year__c =: year';
-            if(month != null && month != ''){
-                String mnth = monthMap.get(Integer.valueOf(month));
-                qry += ' AND Month__c =: mnth';
+            if(months != null && months.size() > 0){
+                List<String> mnths = new List<String>();
+                for(String month : months){
+                    mnths.add(monthMap.get(Integer.valueOf(month)));
+                }
+                //String mnth = monthMap.get(Integer.valueOf(month));
+                qry += ' AND Month__c IN: mnths';
             }
         }
         if(project != 'All'){
@@ -1347,7 +1371,7 @@ public with sharing class MarketingDashboardController {
         System.debug('project: ' + project);
         System.debug('dateRange: ' + dateRange);
         System.debug('year: ' + year);
-        System.debug('month: ' + month);
+        System.debug('months: ' + months);
         System.debug('yearList: ' + yearList);
         System.debug('monthList: ' + monthList);
         System.debug('multiplierMap: ' + multiplierMap);
@@ -1388,28 +1412,31 @@ public with sharing class MarketingDashboardController {
     }
     
 
-    private static List<Map<String, Object>> spendsTable(String year, String month, String source, String dateRange, String project) {
+    private static List<Map<String, Object>> spendsTable(String year, List<String> months, List<String> sources, String dateRange, String project) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
         Map<Integer,String> monthMap = new Map<Integer, String>{1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'};
-        String mnth = monthMap.get(Integer.valueOf(month));
-        Integer selYear = Integer.valueOf(year);
+        //String mnth = monthMap.get(Integer.valueOf(month));
+        Integer selYear = (year != '')? Integer.valueOf(year) : null;
         Integer selMonth;
-        if(month != null && month != ''){
-            selMonth = Integer.valueOf(month);
+        List<Integer> months_Int = new List<Integer>();
+        if(months != null && months.size() > 0){
+            for(String month : months){
+                months_Int.add(Integer.valueOf(month));
+            }
         }
         Map<String, Map<String, Decimal>> mediaMap = new Map<String, Map<String, Decimal>>();
         
         String leadQry = 'SELECT RW_Project__r.Name proj, COUNT(Id) total FROM Lead WHERE IsConverted = false AND LeadSource != null';
         leadQry += ' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source != ''){
-            leadQry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            leadQry += ' AND LeadSource IN: sources';
         }
         if(dateRange != 'Custom'){
             leadQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             leadQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                leadQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                leadQry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
             }
         }
         if(project != 'All'){
@@ -1430,15 +1457,15 @@ public with sharing class MarketingDashboardController {
         
         String oppQry = 'SELECT RW_Project__r.Name proj, COUNT(Id) total FROM Opportunity WHERE LeadSource != null';
         oppQry += ' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source != ''){
-            oppQry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            oppQry += ' AND LeadSource IN: sources';
         }
         if(dateRange != 'Custom'){
             oppQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             oppQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                oppQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                oppQry += ' AND CALENDAR_MONTH(CreatedDate) =: months_Int';
             }
         }
         if(project != 'All'){
@@ -1459,15 +1486,15 @@ public with sharing class MarketingDashboardController {
         
         String bkgQry = 'SELECT Project__r.Name proj, COUNT(Id) total, SUM(Allotment_Premium__c) rev FROM Booking__c WHERE Opportunity__r.LeadSource != null';
         bkgQry += ' AND Project__r.Name != \'Runwal Garden City\'';
-        if(source != ''){
-            bkgQry += ' AND Opportunity__r.LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            bkgQry += ' AND Opportunity__r.LeadSource IN: sources';
         }
         if(dateRange != 'Custom'){
             bkgQry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             bkgQry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                bkgQry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                bkgQry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
             }
         }
         if(project != 'All'){
@@ -1486,7 +1513,7 @@ public with sharing class MarketingDashboardController {
             }
         }
 
-        String spendsQry = calculateSpends(project, dateRange, year, month, 'table7'); 
+        String spendsQry = calculateSpends(project, dateRange, year, months, 'table7'); 
         List<String> splitstr = spendsQry.split('#');
         System.debug('spendsQry: ' + spendsQry);
         String qry = splitstr[0];
@@ -1502,6 +1529,12 @@ public with sharing class MarketingDashboardController {
         for(String m : monthStr.split(',')) {
             monthList.add(m.trim());
         }
+        List<String> mnths = new List<String>();
+        if(months != null && months.size() > 0){
+            for(String month : months){
+                mnths.add(monthMap.get(Integer.valueOf(month)));
+            }
+        }
         List<Budget_vs_Expenses__c> spends = Database.query(qry);
         Map<String, Decimal> projSpendsMap = new Map<String, Decimal>();
         for(Budget_vs_Expenses__c spend :  spends){
@@ -1514,7 +1547,7 @@ public with sharing class MarketingDashboardController {
         }
         
         
-        List<ProjectWrapper> projects = getProjects();
+        List<ProjectWrapper> projects = getProjects('table7');
         List<String> projList = new List<String>();
         for(ProjectWrapper proj : projects){
             projList.add(proj.label);
@@ -1556,15 +1589,15 @@ public with sharing class MarketingDashboardController {
         return finalResult;
     }
 
-    private static List<Map<String, Object>> getWalkinToBookingConversionLogic(String source,  String dateRange, String project, String year, String month){
+    private static List<Map<String, Object>> getWalkinToBookingConversionLogic(List<String> sources,  String dateRange, String project, String year, List<String> months){
         if(dateRange == ''){
-            return walkinToBookingLast12Months(source, project);
+            return walkinToBookingLast12Months(sources, project);
         }else{
-            return walkinToBookingForDateRange(source, dateRange, project, year, month);
+            return walkinToBookingForDateRange(sources, dateRange, project, year, months);
         }
     }
 
-    private static List<Map<String, Object>> walkinToBookingLast12Months(String source, String project) {
+    private static List<Map<String, Object>> walkinToBookingLast12Months(List<String> sources, String project) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
         Map<String, Map<String, Decimal>> projectMonthlyData = new Map<String, Map<String, Decimal>>();
         
@@ -1574,11 +1607,11 @@ public with sharing class MarketingDashboardController {
         
         Date startDate = Date.today().addMonths(-11).toStartOfMonth();
         List<String> leadSources = new List<String>{'Presales','Digital'};
-        System.debug('source: ' + source);
-        String qry = 'SELECT Id,CreatedDate,RW_Project__r.Name,Booking__c,Booking__r.CreatedDate FROM Opportunity';
+        System.debug('sources: ' + sources);
+        String qry = 'SELECT Id,CreatedDate,RW_Project__r.Name,Booking__c,Booking__r.CreatedDate,Booking__r.RW_Booking_Confirmed_Date__c,Booking__r.Status__c FROM Opportunity';
         qry += ' WHERE CreatedDate >= :startDate AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source != ''){
-            qry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            qry += ' AND LeadSource IN: sources';
         }
         if(project != 'All'){
             qry += ' AND RW_Project__r.Name =: project';
@@ -1613,11 +1646,11 @@ public with sharing class MarketingDashboardController {
                 }
                 System.debug('monthlyOppMap: ' + monthlyOppMap);
                 System.debug('monthlyMap _walkin: ' + monthlyMap);
-                if(opp.Booking__c != null){
+                if(opp.Booking__c != null &&  opp.Booking__r.Status__c == 'Booking Confirmed' && opp.Booking__r.RW_Booking_Confirmed_Date__c != null){
                     Integer oppMonth = opp.CreatedDate.month();
                     Integer oppYear  = opp.CreatedDate.year();
-                    Integer bkgMonth = opp.Booking__r.CreatedDate.month();
-                    Integer bkgYear  = opp.Booking__r.CreatedDate.year();
+                    Integer bkgMonth = opp.Booking__r.RW_Booking_Confirmed_Date__c.month();
+                    Integer bkgYear  = opp.Booking__r.RW_Booking_Confirmed_Date__c.year();
                     if(oppYear == bkgYear && oppMonth == bkgMonth){
                         if(!monthlyMap.containsKey(opp.CreatedDate.month() + '-' + opp.CreatedDate.year() + '_booking')){
                             monthlyMap.put(opp.CreatedDate.month() + '-' + opp.CreatedDate.year() + '_booking', 1);
@@ -1674,34 +1707,37 @@ public with sharing class MarketingDashboardController {
         return finalResult;
         
     }
-    private static List<Map<String, Object>> walkinToBookingForDateRange(String source, String dateRange, String project, String year, String month) {
+    private static List<Map<String, Object>> walkinToBookingForDateRange(List<String> sources, String dateRange, String project, String year, List<String> months) {
         List<Map<String, Object>> finalResult = new List<Map<String, Object>>();
         Map<String, Map<String, Decimal>> projectMonthlyData = new Map<String, Map<String, Decimal>>();
-        Integer selYear = Integer.valueOf(year);
+        Integer selYear = (year != '')? Integer.valueOf(year) : null;
         Integer selMonth;
-        if(month != null && month != ''){
-            selMonth = Integer.valueOf(month);
+        List<Integer> months_Int = new List<Integer>();
+        if(months != null && months.size() > 0){
+            for(String m : months){
+                months_Int.add(Integer.valueOf(m));
+            }
         }
         Map<String, Decimal> globalWalkinCount = new Map<String, Decimal>();
         Map<String, Decimal> globalBookingCount = new Map<String, Decimal>();
         
         Date startDate = Date.today().addMonths(-11).toStartOfMonth();
         List<String> leadSources = new List<String>{'Presales','Digital'};
-        System.debug('source: ' + source);
+        System.debug('source: ' + sources);
         String qry = 'SELECT Id,CreatedDate,RW_Project__r.Name,Booking__c,Booking__r.CreatedDate FROM Opportunity';
         qry += ' WHERE CreatedDate >= :startDate AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source != ''){
-            qry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            qry += ' AND LeadSource IN: sources';
         }
         if(project != 'All'){
             qry += ' AND RW_Project__r.Name =: project';
         }
         if(dateRange != 'Custom'){
             qry += ' AND CreatedDate = ' + daterange;
-        }else if(year != null){
+        }else if(year != null && year != ''){
             qry += ' AND CALENDAR_YEAR(CreatedDate) =: selYear';
-            if(month != null && month != ''){
-                qry += ' AND CALENDAR_MONTH(CreatedDate) =: selMonth';
+            if(months != null && months.size() > 0){
+                qry += ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
             }
         }
         List<Opportunity> oppList = Database.query(qry);
@@ -1767,17 +1803,18 @@ public with sharing class MarketingDashboardController {
     
 
     @AuraEnabled
-    public static Map<String, String> generateCSV(String tableType, String year, List<String> months, String source, String dateRange, String project){
+    public static Map<String, String> generateCSV(String tableType, String year, List<String> months, List<String> sources, String dateRange, String project){
         Map<String, String> csvFiles = new Map<String, String>();
+        String vertical = (sources != null && sources.size() > 0)? sources[0] : '';
         List<String> leadSources;
-        if(source == 'Digital'){
+        if(vertical == 'Digital'){
             leadSources = new List<String>{'Digital','Facebook','Property Portals'};
-        }else if(source == 'Direct'){
+        }else if(vertical == 'Direct'){
             leadSources = new List<String>{'Direct','Events','Exhibitions','Hoarding','Magazines','Newspapers','Paper Inserts','Radio','Surround Marketing','TV'};
-        }else if(source == 'Presales/Direct'){
+        }else if(vertical == 'Presales/Direct'){
             leadSources = new List<String>{'Presales','Individual calling','Corporate' };
         }
-        Integer year_Int = Integer.valueOf(year);
+        Integer year_Int = (year != null && year != '')? Integer.valueOf(year) : null;
         //Integer month_Int = String.isBlank(month) ? null : Integer.valueOf(month);
         List<Integer> months_Int = new List<Integer>();
         for(String mnth : months){
@@ -1785,7 +1822,7 @@ public with sharing class MarketingDashboardController {
         }
         if(tableType == 'table1'){
             String leadQry1 = 'SELECT Id, FirstName, LastName, Status, CreatedDate, RW_Project__r.Name, LeadSource, IsConverted, ConvertedOpportunityId, ConvertedDate, ConvertedOpportunity.StageName, ConvertedOpportunity.Booking__c, ConvertedOpportunity.Booking__r.Status__c, ConvertedOpportunity.Booking__r.RW_Booking_Confirmed_Date__c, ConvertedOpportunity.Booking__r.Allotment_Premium__c FROM Lead';
-            leadQry1 += queryFilterBuilder('table1', 'Lead', source, project, '', year, months);
+            leadQry1 += queryFilterBuilder('table1', 'Lead', vertical, project, '', year, months);
             System.debug('leadQry1: ' + leadQry1);
             List<Lead> leadList =  Database.query(leadQry1);
 
@@ -1810,12 +1847,58 @@ public with sharing class MarketingDashboardController {
                 }
                 csvFiles.put('Leads.csv', EncodingUtil.base64Encode(Blob.valueOf(leadCSV)));
             }
-        }  
+        }
+        if(tableType == 'table2'){
+            String leadCSV = 'Id,FirstName,LastName,LeadSource,Status,Project Name\n';
+        
+            String qry = 'SELECT Id, FirstName, LastName, LeadSource, Status, RW_Project__r.Name FROM Lead WHERE RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\'';
+            if(project != 'All'){
+                qry += ' AND RW_Project__r.Name =: project';
+            }
+            if(year != null && year != ''){
+                qry +=  ' AND CALENDAR_YEAR(CreatedDate) =: year_Int';
+            }
+            if(months != null && months.size() > 0){
+                qry +=  ' AND CALENDAR_MONTH(CreatedDate) IN: months_Int';
+            }
+            if(sources != null && sources.size() > 0){
+                qry += ' AND LeadSource IN: source';
+            }
+            System.debug('qry: ' + qry);
+            List<Lead> leads = Database.query(qry);
+            if(leads.size() > 0){
+                for(Lead ld : leads){
+                    leadCSV += escapeCSV(ld.Id) + ',' +
+                            escapeCSV(ld.FirstName) + ',' +
+                            escapeCSV(ld.LastName) + ',' +
+                            escapeCSV(ld.LeadSource) + ',' +
+                            escapeCSV(ld.Status) + ',' +
+                            escapeCSV(ld.RW_Project__r.Name) + '\n';
+                }
+                csvFiles.put('Leads.csv', EncodingUtil.base64Encode(Blob.valueOf(leadCSV)));
+            }
+        }else if(tableType == 'table3'){
+            String leadCSV = table3Data(tableType, year_Int, months_Int, sources, dateRange, project);
+            if(leadCSV != null){
+                csvFiles.put('Leads.csv', EncodingUtil.base64Encode(Blob.valueOf(leadCSV)));
+            }
+        }else if(tableType == 'table4'){
+            String opportunityCSV = table4Data(tableType, year_Int, months_Int, sources, dateRange, project);
+            if(opportunityCSV != null){
+                csvFiles.put('Opportunities.csv', EncodingUtil.base64Encode(Blob.valueOf(opportunityCSV)));
+            }
+        }else if(tableType == 'table5'){
+            String budgetCSV = budgetData(tableType, year, months, dateRange, project);
+            if(budgetCSV != null){
+                csvFiles.put('Budget Vs Expenses.csv', EncodingUtil.base64Encode(Blob.valueOf(budgetCSV)));
+            }
+        }
+
         return csvFiles;      
     }
     
 
-    @AuraEnabled
+   /* @AuraEnabled
     public static Map<String, String> generateCSV1(String tableType, String year, String month, String source, String dateRange, String project) {
         Integer year_Int = (year != null && year != '')? Integer.valueOf(year) : null;
         Integer month_Int = (month != null && month != '')? Integer.valueOf(month) : null;
@@ -1855,38 +1938,35 @@ public with sharing class MarketingDashboardController {
             }
         }
         return csvFiles;
-    }
+    }*/
 
     
 
-    private static String table3Data(String tableType, Integer year, Integer month, String source, String dateRange, String project){
+    private static String table3Data(String tableType, Integer year, List<Integer> months, List<String> sources, String dateRange, String project){
         
         Date startDate = Date.today().addMonths(-11).toStartOfMonth();
         String leadQry = 'SELECT Id,FirstName,LastName,LeadSource,CreatedDate,RW_Project__r.Name,Status FROM Lead';
-        leadQry += ' WHERE IsConverted = false AND RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\' AND Status = \'Junk\'';
+        leadQry += ' WHERE RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
         String leadHistoryQry = 'SELECT LeadId, Field, OldValue, NewValue, CreatedDate FROM LeadHistory';
-        leadHistoryQry += '  WHERE Field = \'Status\' AND Lead.LeadSource =: source';
-        if(source != ''){
-            leadQry += ' AND LeadSource =: source';
-            leadHistoryQry += ' AND Lead.LeadSource =: source';
+        leadHistoryQry += '  WHERE Field = \'Status\'';
+        if(sources != null && sources.size() > 0){
+            leadQry += ' AND LeadSource IN: sources';
+            leadHistoryQry += ' AND Lead.LeadSource IN: sources';
         }
         if(project != 'All'){
             leadQry += ' AND RW_Project__r.Name =: project'; 
             leadHistoryQry += ' AND Lead.RW_Project__r.Name =: project'; 
-        }
-        if(dateRange != 'Custom' && dateRange != ''){
-            leadQry += ' AND CreatedDate = ' + daterange;
-            leadHistoryQry += ' AND CreatedDate = ' + daterange;
-        }else if(dateRange == ''){
-            leadQry += ' AND CreatedDate >=: startDate';
-            leadHistoryQry += ' AND CreatedDate >=: startDate';
-        }else if(year != null){
+        } 
+        if(year != null){
             leadQry += ' AND CALENDAR_YEAR(CreatedDate) =: year';
             leadHistoryQry += ' AND CALENDAR_YEAR(CreatedDate) =: year';
-            if(month != null){
-                leadQry += ' AND CALENDAR_MONTH(CreatedDate) =: month';
-                leadHistoryQry += ' AND CALENDAR_MONTH(CreatedDate) =: month';
+            if(months != null && months.size() > 0){
+                leadQry += ' AND CALENDAR_MONTH(CreatedDate) IN: months';
+                leadHistoryQry += ' AND CALENDAR_MONTH(CreatedDate) IN: months';
             }
+        }else{
+            leadQry += ' AND CreatedDate >=: startDate';
+            leadHistoryQry += ' AND Lead.CreatedDate >=: startDate';
         }
         List<Lead> leads = Database.query(leadQry);
         List<LeadHistory> historyList = Database.query(leadHistoryQry);
@@ -1907,14 +1987,21 @@ public with sharing class MarketingDashboardController {
                 Integer leadYear  = ld.CreatedDate.year();
                 Integer junkMonth = junkDateMap.get(ld.Id).month();
                 Integer junkYear  = junkDateMap.get(ld.Id).year();
-                if(leadYear == junkYear && leadMonth == junkMonth){
+                /*if(leadYear == junkYear && leadMonth == junkMonth){
+                    filteredLeads.add(ld);
+                }*/
+                if(months != null && months.size() > 0){
+                    if(leadYear == junkYear && months.contains(junkMonth)){
+                        filteredLeads.add(ld);
+                    }
+                }else if(leadYear == junkYear){
                     filteredLeads.add(ld);
                 }
             }
         }
         String leadCSV = 'Id,FirstName,LastName,LeadSource,Status,Project Name,Created Date,Converted Date\n';
-        if(filteredLeads.size() > 0){
-            for(Lead ld : filteredLeads){
+        if(leads.size() > 0){
+            for(Lead ld : leads){
                 leadCSV += escapeCSV(ld.Id) + ',' +
                            escapeCSV(ld.FirstName) + ',' +
                            escapeCSV(ld.LastName) + ',' +
@@ -1930,14 +2017,14 @@ public with sharing class MarketingDashboardController {
         }
     }
 
-    private static String table4Data(String tableType, Integer year, Integer month, String source, String dateRange, String project){
+    private static String table4Data(String tableType, Integer year, List<Integer> months, List<String> sources, String dateRange, String project){
         Date startDate = Date.today().addMonths(-11).toStartOfMonth();
         List<String> leadSources = new List<String>{'Presales','Digital'};
-        System.debug('source: ' + source);
-        String qry = 'SELECT Id,Name,CreatedDate,StageName,LeadSource,RW_Project__r.Name,Booking__c,Booking__r.CreatedDate FROM Opportunity';
+        System.debug('sources: ' + sources);
+        String qry = 'SELECT Id,Name,CreatedDate,StageName,LeadSource,RW_Project__r.Name,Booking__c,Booking__r.CreatedDate,Booking__r.RW_Booking_Confirmed_Date__c,Booking__r.Status__c FROM Opportunity';
         qry += ' WHERE RW_Project__c != null AND RW_Project__r.RW_Status__c = \'Active\' AND RW_Project__r.Name != \'Runwal Garden City\'';
-        if(source != ''){
-            qry += ' AND LeadSource =: source';
+        if(sources != null && sources.size() > 0){
+            qry += ' AND LeadSource IN: sources';
         }
         if(project != 'All'){
             qry += ' AND RW_Project__r.Name =: project';
@@ -1948,33 +2035,33 @@ public with sharing class MarketingDashboardController {
             qry += ' AND CreatedDate >=: startDate';
         }else if(year != null){
             qry += ' AND CALENDAR_YEAR(CreatedDate) =: year';
-            if(month != null){
-                qry += ' AND CALENDAR_MONTH(CreatedDate) =: month';
+            if(months != null && months.size() > 0){
+                qry += ' AND CALENDAR_MONTH(CreatedDate) IN: months';
             }
         }
         List<Opportunity> oppList = Database.query(qry);
         List<Opportunity> filteredOpps = new List<Opportunity>();
         for(Opportunity opp : oppList){
-            if(opp.Booking__c != null){
+            if(opp.Booking__c != null && opp.Booking__r.Status__c == 'Booking Confirmed' && opp.Booking__r.RW_Booking_Confirmed_Date__c != null){
                 Integer oppMonth = opp.CreatedDate.month();
                 Integer oppYear  = opp.CreatedDate.year();
-                Integer bkgMonth = opp.Booking__r.CreatedDate.month();
-                Integer bkgYear  = opp.Booking__r.CreatedDate.year();
+                Integer bkgMonth = opp.Booking__r.RW_Booking_Confirmed_Date__c.month();
+                Integer bkgYear  = opp.Booking__r.RW_Booking_Confirmed_Date__c.year();
                 if(oppYear == bkgYear && oppMonth == bkgMonth){
                     filteredOpps.add(opp);
                 }
             }
         }
-        String opportunityCSV = 'Id,Name,StageName,LeadSource,Project Name,Opportunity Created Date,Booking Created Date\n';
-        if(filteredOpps.size() > 0){
-            for(Opportunity opp : filteredOpps){
+        String opportunityCSV = 'Id,Name,StageName,LeadSource,Project Name,Opportunity Created Date,Booking Confirmed Date\n';
+        if(oppList.size() > 0){
+            for(Opportunity opp : oppList){
                 opportunityCSV += escapeCSV(opp.Id) + ',' +
                            escapeCSV(opp.Name) + ',' +
                            escapeCSV(opp.StageName) + ',' +
                            escapeCSV(opp.LeadSource) + ',' +
                            escapeCSV(opp.RW_Project__r.Name) + ',' +
                            escapeCSV(String.valueOf(opp.CreatedDate)) + ',' +
-                           escapeCSV(String.valueOf(opp.Booking__r.CreatedDate)) + '\n';
+                           escapeCSV(String.valueOf(opp.Booking__r.RW_Booking_Confirmed_Date__c)) + '\n';
             }
             return opportunityCSV;
         }else{
@@ -2097,14 +2184,17 @@ public with sharing class MarketingDashboardController {
         }
     }
 
-    private static String budgetData(String tableType, String year, String month, String dateRange, String project){
+    private static String budgetData(String tableType, String year, List<String> months, String dateRange, String project){
         Map<String,String> monthMap = new Map<String, String>{'1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'};
         String budgetCSV = 'Id,Name,Project Name,Year,Month,Spends Planned,BUdget(Cr),Balance Amount(Cr),Balance Days,Actual Expenses EIPL,Actual Expenses EREPL,Actula Expenses HHPL,Actula Expenses HHPL 2,Actula Expenses Horizon,Actual Expenses REPL,Actual Expenses RREPL,Actual Expenses RRPL,Actual Expenses SIPL,Actual Expenses WACL,Actual Expenses WRPL\n';
         String qry = 'SELECT Id,Name,Spends_Planned__c, Budget_in_Cr__c, Balance_Amount__c, Balance_Days__c, Project__r.Name, Month__c, Year__c,Actual_Expenses_EIPL__c,Actual_Expenses_EREPL__c,Actual_Expenses_HHPL__c,Actual_Expenses_HHPL_2__c,Actual_Expenses_Horizon__c,Actual_Expenses_REPL__c,Actual_Expenses_RREPL__c,Actual_Expenses_RRPL__c,Actual_Expenses_SIPL__c,Actual_Expenses_WACL__c,Actual_Expenses_WRPL__c ' +
-                         'FROM Budget_vs_Expenses__c WHERE Project__c != null AND Project__r.RW_Status__c = \'Active\' AND Year__c =: year ';
-        if (month != null && month != ''){ 
-            String mnth = monthMap.get(month);
-            qry += ' AND Month__c = : mnth '; 
+                         'FROM Budget_vs_Expenses__c WHERE WBS_name_as_per_SAP__c = \'Digital advertising\' AND Project__c != null AND Project__r.RW_Status__c = \'Active\' AND Year__c =: year ';
+        if (months != null && months.size() > 0){ 
+            List<String> mnths = new List<String>();
+            for(String m : months){
+                mnths.add(monthMap.get(m));
+            }
+            qry += ' AND Month__c IN: mnths'; 
         }
         List<Budget_vs_Expenses__c> budgetList = Database.query(qry);
         
