@@ -1604,6 +1604,22 @@ private void setCarParkAvailability(String type, Boolean isAvailable){
         System.debug('offerDiscountedAV**'+offerDiscountedAV);
         system.debug('agreement===>'+ agreementValue);
         disableDiscount = true;//CHange from false to true for Quotation Offer
+        // recalculate the project cost
+        // if(discountLumpsum != 0) {
+            InventoryCostServices.baseRateVal = baseRate;
+            InventoryCostServices.premiumRateVal = premiumRate;
+            InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
+            InventoryCostServices.sdPaidByRunwalContext = false;// Added by Aditya
+            InventoryCostServices.regPaidByRunwalContext = false;// Added by Aditya
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId, allotmentCharges, 0.0, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId, q);// Added by Aditya
+            InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;// Added by Aditya
+            InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;// Added by Aditya
+            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
+        // } else {
+        //     quoteUIMapDisc = null;
+        // }
+        
+        disableDiscount = true;
         editSchedule = false;
         showAddCarPark = false;//Commented for Quotation Offer
         isSelectedOfferApplied = true;//Added for QUotation Offer
@@ -3256,6 +3272,9 @@ public class FixedDiscountWrapper2 {
         InventoryCostServices.sdPaidByRunwalContext = false;// Added by Aditya
         InventoryCostServices.regPaidByRunwalContext = false;// Added by Aditya
         quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId, allotmentCharges, 0.0, addCarParks, subPlanId, q);// Added by Aditya
+        InventoryCostServices.sdPaidByRunwalContext = false;// Added by Aditya
+        InventoryCostServices.regPaidByRunwalContext = false;// Added by Aditya
+        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,0.0,addCarParks,subPlanId,q);
         // --- FIX: Restore contexts for the Discounted Column ---
         InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;// Added by Aditya
         InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;// Added by Aditya
