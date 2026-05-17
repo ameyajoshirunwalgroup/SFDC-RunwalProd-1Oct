@@ -1,7 +1,6 @@
 public with sharing class QuotationManagementServices {
     
-    public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId) {
-        
+    public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId,Quotation__c q) {
         Map<String,Decimal> allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum, subPlanId);
         Project_Unit__c u = InventoryCostServices.getUnitDetails(unitId);
         Map<String,List<QuoteUIWrapper>> UIMap = new Map<String,List<QuoteUIWrapper>>();

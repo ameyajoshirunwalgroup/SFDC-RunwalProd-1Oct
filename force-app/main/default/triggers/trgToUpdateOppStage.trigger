@@ -42,6 +42,7 @@ trigger trgToUpdateOppStage on Project_Unit__c (after update, before update , af
  {
      List<Id> unitIds = new List<Id>();  //Added by Vinay 18-02-2025
      list<Id> unitIdstoUpdate = new list<Id>();//Added by Prashant 5-3-25
+     List<Id> unitIdsLst = new List<Id>();//Added for SDR/ROC Management
      List<Project_Unit__c> serviceRoomsToUpdate = new List<Project_Unit__c>();  //Added by Vinay 20-05-2025
      for(Project_Unit__c pid : Trigger.New)
      {     system.debug(pid.RW_Unit_Status__c);
@@ -70,6 +71,11 @@ trigger trgToUpdateOppStage on Project_Unit__c (after update, before update , af
               unit.RW_Unit_Status__c = 'Sold';
               serviceRoomsToUpdate.add(unit);
           }
+          /**Added for SDR Changes starts */
+          if(Trigger.oldmap.get(pid.id).SD_Paid_By_Runwal__c != Trigger.newmap.get(pid.id).SD_Paid_By_Runwal__c){
+            unitIdsLst.add(pid.Id);
+          }
+          /**Added for SDR Changes ends */
       }else{
                  unitIdstoUpdate.add(pid.Id);//Added by Prashant 5-3-25
                  projectUnitIds.add(pid.id);
@@ -82,6 +88,11 @@ trigger trgToUpdateOppStage on Project_Unit__c (after update, before update , af
      if(!unitIdstoUpdate.isEmpty()){
          objHandler.updateTypeLabel(unitIdstoUpdate);
      }
+     /**Added for SDR Changes starts */
+     if(!unitIdsLst.isEmpty()){
+            objHandler.calculateRRR(unitIdsLst);
+     }
+     /**Added for SDR Changes ends */
      if(serviceRoomsToUpdate.size() > 0){ //Added by Vinay 20-05-2025
         update serviceRoomsToUpdate;
      }

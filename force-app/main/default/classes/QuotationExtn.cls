@@ -1,5 +1,6 @@
 public with sharing class QuotationExtn
 {
+    public Decimal carParkAmt{get; set;}
     public Project_Unit__c u {get; set;}
     public Opportunity o {get; set;}
     public Quotation__c q {get;set;}
@@ -20,6 +21,14 @@ public with sharing class QuotationExtn
     public Decimal discountPSF {get;set;}
     public Decimal discountLumpsum {get;set;}
     public Decimal agreementValue {get;set;}
+    public Integer addCarParks {get;set;}//Added for SDR ROC Management
+    public Boolean sdPaidByRunwal {get;set;}//Added for SDR ROC Management
+    public Boolean regChargesByRunwal {get;set;}//Added for SDR ROC Management
+    public Decimal stampDutyValue {get;set;}//Added for SDR ROC Management
+   
+    public Boolean isCalculateDiscountClicked {get;set;}//Added for Quotation Offer
+    public Boolean disablePremium {get;set;}//Added for SDR Changes
+    public Boolean isPremiumApplied {get;set;}//Added for SDR Changes
     public List<InventoryCostServices.PlanDetailWrapper> payplanDetails;
     public List<InventoryCostServices.PlanDetailWrapper> subventionPayplanDetails;
     public List<QPlanDetailWrapper> qplanWrapperList = new List<QPlanDetailWrapper>();
@@ -131,7 +140,7 @@ public with sharing class QuotationExtn
             //{
             system.debug('((((((((((((((((((((((((((('+unitId+subPlanId);
                 allChargesMap = InventoryCostServices.getAllCharges(unitId,0.0,0.0,subPlanId);
-                quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,0.0,0.0, selectedCarpark1 + selectedcarPark2, subPlanId);
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,0.0,0.0, selectedCarpark1 + selectedcarPark2, subPlanId,q);
                 System.Debug('Quote UI Map : '+quoteUIMap);
                 quoteUIMapDisc = null;
                 payPlanList = InventoryCostServices.getPlanList(u.RW_Project__r.Id, u.TowerName__r.Id, subPlanId);
@@ -187,6 +196,7 @@ public with sharing class QuotationExtn
         selectedCarPark9 = 0; //Added by Vinay 28-03-2025
         selectedCarPark10 = 0; //Added by Vinay 21-11-2025
        if(proj != null) {
+        isPremiumApplied = false; //Added for SDR Changes
             checkCarParkAvailablity();
             quoteValidity = (System.today().addDays(Integer.valueOf(proj.Quotation_Validity__c))).format();
             quoteDate = System.today().format();
@@ -406,7 +416,9 @@ public with sharing class QuotationExtn
         InventoryCostServices.baseRateVal = baseRate;
         InventoryCostServices.premiumRateVal = premiumRate;
         InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
-        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7 , subPlanId);        
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
+        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7 , subPlanId,q);      
         allChargesMap = allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum,subPlanId);
         agreementValue = allChargesMap.get('AGREEMENTVALUE');
         StotalRateCardPSF = QuotationManagementServices.INFormat(allChargesMap.get('TOTALRATECARDPSF'));
@@ -434,6 +446,8 @@ public with sharing class QuotationExtn
    
     
     public void QueryPlanDetails(){
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;//Added for SDR
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;//Added for SDR
         allChargesMapDisc = new Map<String, Decimal>();
         qplanWrapperListC = new List<QPlanDetailWrapper>();
         Standard_Customer_Pay_Plan_Detail__c scppd = new Standard_Customer_Pay_Plan_Detail__c();
@@ -651,11 +665,23 @@ public with sharing class QuotationExtn
         
     
     public PageReference openDiscountPage(){
+        /**Added for SDR Changes starts */
+        if(isPremiumApplied == false){
+            ApexPages.addMessage(
+                    new ApexPages.Message(
+                        ApexPages.Severity.ERROR,
+                        'Please Apply Premium before navigating to Discount Page.'
+                    )
+                );
+                return null;
+        }
+        /**Added for SDR Changes ends */
         PageReference pageRef = new PageReference('/apex/QuotationDiscount');
         pageRef.getParameters().put('id',u.Id);
         return pageRef;
     }
     public PageReference backtoQuotePage(){
+        disablePremium = true;//Added for SDR Changes
         PageReference pageRef = new PageReference('/apex/Quotation2');
         pageRef.getParameters().put('subPlanId',selectedPlan);
         pageRef.getParameters().put('id',unitId);
@@ -806,7 +832,7 @@ public with sharing class QuotationExtn
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
-            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId);
+            quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6 + selectedCarPark7, subPlanId,q);
         } else {
             quoteUIMapDisc = null;
         }
@@ -1231,7 +1257,7 @@ public with sharing class QuotationExtn
             q.MVAT__c = allChargesMap.get('MVAT');
          if(allChargesMap.get('MVAT TOTAL TAX AMT') != null)
             q.MVAT_ST__c = allChargesMap.get('MVAT TOTAL TAX AMT');
-        
+        q.SD_By_Runwal__c = stampDutyValue;//Added for SDR
         System.debug('Stamp Duty: '+ allChargesMap.get('Stamp Duty'));
         System.debug('Add SD in AV: '+ allChargesMap.get('Add SD in AV'));
         //Added by coServe 18-12-2023
@@ -1242,7 +1268,7 @@ public with sharing class QuotationExtn
                 allowForSD = true;
             }
         }
-        if(!allowForSD && (allChargesMap.get('Stamp Duty') == null || allChargesMap.get('Stamp Duty') == 0) && (allChargesMap.get('Add SD in AV') == null || allChargesMap.get('Add SD in AV') == 0) && !Test.isRunningTest()){
+        if(!allowForSD && allChargesMap.get('Stamp Duty') == null /**|| allChargesMap.get('Stamp Duty') == 0)**commented for SDR/ROC**/ && (allChargesMap.get('Add SD in AV') == null || allChargesMap.get('Add SD in AV') == 0) && !Test.isRunningTest()){
             ApexPages.addMessage((new ApexPages.message(ApexPages.severity.FATAL,'Stamp duty value is missing, please contact Sales Strategy.')));
             return null;
         }
@@ -1581,6 +1607,9 @@ public with sharing class QuotationExtn
         if(qId != null) {
             Quotation__c qNew = [Select Id, Name from Quotation__c where Id = : qId];
             System.debug('q.Single_Covered_Additional_Amount__c: ' + q.Single_Covered_Additional_Amount__c);
+            u.SD_Paid_By_Runwal__c = sdPaidByRunwal;//Added for SDR ROC Management
+            u.Registration_Charges_Paid_By_Runwal__c = regChargesByRunwal;//Added for SDR ROC Management
+            update u;
             // call the save method of inventory cost services here
             List<InventoryCostServices.PlanDetailWrapper> pdList  = new List<InventoryCostServices.PlanDetailWrapper>();
             for(QPlanDetailWrapper q : qPlanWrapperC) {
@@ -1813,17 +1842,18 @@ public with sharing class QuotationExtn
             q.Podium__c = car8;
             q.Puzzle_Car_Park__c = car9; //Added by Vinay 28-03-2025
             q.Stack_Additional_1__c = car10; //Added by Vinay 21-11-2025
-            Decimal carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
+            carParkAmt = carParkAmount1 + carParkAmount2 + carParkAmount3 + carParkAmount4 + carParkAmount5 + carParkAmount6 + carParkAmount7 + carParkAmount8 + carParkAmount9 + carParkAmount10;
             
             InventoryCostServices.baseRateVal = baseRate;
             InventoryCostServices.premiumRateVal = premiumRate;
             
             InventoryCostServices.allotmentChargeVal = allotmentChargeLumsum;
             allChargesMap = InventoryCostServices.getAllCharges(unitId,carParkAmt,0.0,subPlanId);
-             quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,0.0, selectedCarPark1+selectedCarPark2+selectedCarPark3+selectedCarPark4+selectedCarPark5+selectedCarPark6+selectedCarPark7+selectedCarPark8+selectedCarPark9,subPlanId);
+            quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,0.0, selectedCarPark1+selectedCarPark2+selectedCarPark3+selectedCarPark4+selectedCarPark5+selectedCarPark6+selectedCarPark7+selectedCarPark8+selectedCarPark9,subPlanId,q);
              
+            agreementValue = allChargesMap.get('AGREEMENTVALUE');//Added for SDR Changes
              if(discountVal != null && discountVal > 0){
-                 quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,discountVal, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6+selectedCarPark7+selectedCarPark8, subPlanId);
+                quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,carParkAmt,discountVal, selectedCarPark1 + selectedCarPark2 + selectedCarPark3 + selectedCarPark4 + selectedCarPark5 + selectedCarPark6+selectedCarPark7+selectedCarPark8, subPlanId,q);
              }
              else{
                  quoteUIMapDisc = null;
@@ -1918,6 +1948,7 @@ public with sharing class QuotationExtn
              q.Opportunity__c = o.Id;
                
           }
+        isPremiumApplied = true;//Added for SDR Changes
           
           
     }
@@ -3592,4 +3623,35 @@ public with sharing class QuotationExtn
     }
     
    /* ---------------------------------------------- Vikas Added End here  -------------------------------------------*/ 
+    //Added for SDR/ROC Management
+    public PageReference updateCalculations(){
+
+        if((sdPaidByRunwal== true || regChargesByRunwal == true) && isCalculateDiscountClicked != true){
+            if(sdPaidByRunwal== true){
+              sdPaidByRunwal = false;
+            }
+            else {
+              regChargesByRunwal = false;
+            }
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please navigate to the Calculate Discount page and select or deselect the required discounts.'));
+            return null;
+        }
+
+        InventoryCostServices.sdPaidByRunwalContext = sdPaidByRunwal;
+        InventoryCostServices.regPaidByRunwalContext = regChargesByRunwal;
+        
+        InventoryCostServices.premiumRateVal = premiumRate;
+        allChargesMap = InventoryCostServices.getAllCharges(unitId, carParkAmt, discountLumpsum,subPlanId);
+        
+        agreementValue = allChargesMap.put('AGREEMENTVALUE',agreementValue);
+        quoteUIMap = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
+        quoteUIMapDisc = QuotationManagementServices.getQuotationUIFormat(unitId,allotmentCharges,discountLumpsum,addCarParks,subPlanId,q);
+
+          stampDutyValue = InventoryCostServices.paidByRunwalSD;
+         if(selectedPlan != null) {
+            Apexpages.currentPage().getParameters().put('subPlanId',selectedPlan);
+            QueryPlanDetails();
+        }
+        return null;
+    }
  }
