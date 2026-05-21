@@ -104,10 +104,26 @@ public with sharing class CPBrokerageService {
             String customerName = String.join(new List<String>(customerNames), ', ');
             String towerName = String.join(new List<String>(towerUnits), ', ');
             String schemeName = String.join(new List<String>(schemeNames), ', ');
-
+            
+            // Safe truncation to prevent STRING_TOO_LONG error
+            if (projectName.length() > 255) {
+                projectName = projectName.substring(0, 251) + '...';
+            }
             cpb.Project__c = projectName;
+            // Safe truncation to prevent STRING_TOO_LONG error
+            if (customerName.length() > 255) {
+                customerName = customerName.substring(0, 251) + '...';
+            }
             cpb.Customer_Name__c = customerName;
+            // Safe truncation to prevent STRING_TOO_LONG error
+            if (towerName.length() > 255) {
+                towerName = towerName.substring(0, 251) + '...';
+            }
             cpb.Tower_Unit__c = towerName;
+            // Safe truncation to prevent STRING_TOO_LONG error
+            if (schemeName.length() > 255) {
+                schemeName = schemeName.substring(0, 251) + '...';
+            }
             cpb.Brokerage_Scheme_Name__c = schemeName;         
             
             // Approver fields
