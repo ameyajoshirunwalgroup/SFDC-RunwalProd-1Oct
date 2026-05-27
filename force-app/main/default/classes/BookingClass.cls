@@ -1598,7 +1598,7 @@ i=1;
         //////////////////Error Messages for Future Correspondence///////////////////////
         if (boookingObj.Future_Correspondence_Contact__c == '2nd Applicant') {
             
-            if (applicant2.Name == null) {
+            if (applicant2.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (2nd Applicant) Applicant 2 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1607,7 +1607,7 @@ i=1;
         }
         if (boookingObj.Future_Correspondence_Contact__c == '3rd Applicant') {
             
-            if (applicant3.Name == null) {
+            if (applicant3.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (3rd Applicant) Applicant 3 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1616,7 +1616,7 @@ i=1;
         }
         if (boookingObj.Future_Correspondence_Contact__c == '4th Applicant') {
             
-            if (applicant4.Name == null) {
+            if (applicant4.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (4th Applicant) Applicant 4 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1625,7 +1625,7 @@ i=1;
         }
         if (boookingObj.Future_Correspondence_Contact__c == '5th Applicant') {
             
-            if (applicant5.Name == null) {
+            if (applicant5.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (5th Applicant) Applicant 5 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
