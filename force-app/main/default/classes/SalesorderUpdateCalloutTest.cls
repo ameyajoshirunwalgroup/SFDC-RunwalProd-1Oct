@@ -132,7 +132,6 @@ public class SalesorderUpdateCalloutTest {
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
-        	oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -386,7 +385,6 @@ public class SalesorderUpdateCalloutTest {
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
-        	oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 09-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -455,7 +453,7 @@ public class SalesorderUpdateCalloutTest {
             objBking.Booking_Date__c = Date.today().addDays(-1);
             //objBking.Sales_Manager__c= tuser.Id;
             objBking.Status__c ='Cancelled';
-        	objBking.Cancellation_Reason__c = 'Cancel & Re-book';
+        	objBking.Cancellation_Reason__c = 'Unit transfer';
             objBking.RW_SDR_Status__c = 'SDR Pending';
             objBking.RW_Last_SDR_Received__c = system.today().addDays(-4);
             objBking.RW_Total_Interest_Amount_Waived__c=6736;
