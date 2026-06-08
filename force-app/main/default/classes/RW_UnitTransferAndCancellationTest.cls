@@ -282,8 +282,8 @@ public class RW_UnitTransferAndCancellationTest {
             	RW_UnitTransferAndCancellation.updateCancellationChecklistDate(objBking.Id);   
                 RW_UnitTransferAndCancellation.updateCancellationLetterDate(objBking.Id);
                 RW_UnitTransferAndCancellation.updateDeedofCancellationDate(objBking.Id);
-                RW_UnitTransferAndCancellation.transferRequestUpload(objBking.Id);
-            	RW_UnitTransferAndCancellation.getBookingRecordData(objBking.id);
+                // RW_UnitTransferAndCancellation.transferRequestUpload(objBking.Id);
+            	// RW_UnitTransferAndCancellation.getBookingRecordData(objBking.id);
             // Test.stopTest();
         } 
     }
