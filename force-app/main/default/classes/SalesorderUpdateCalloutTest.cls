@@ -453,7 +453,7 @@ public class SalesorderUpdateCalloutTest {
             objBking.Booking_Date__c = Date.today().addDays(-1);
             //objBking.Sales_Manager__c= tuser.Id;
             objBking.Status__c ='Cancelled';
-        	objBking.Cancellation_Reason__c = 'Unit transfer';
+        	objBking.Cancellation_Reason__c = 'Product/Project related';
             objBking.RW_SDR_Status__c = 'SDR Pending';
             objBking.RW_Last_SDR_Received__c = system.today().addDays(-4);
             objBking.RW_Total_Interest_Amount_Waived__c=6736;

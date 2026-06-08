@@ -11,7 +11,7 @@ public class SalesOrderUpdateCallout {
         // check if customer is present, if not call CC API and SO API.
         if(oList.size()>0 && oList[0].SAP_Customer_Number__c!=null && oList[0].SalesOrder_Number__c!=null){
           system.debug(oList[0].StageName );
-            if(oList[0].StageName == 'Cancelled' || oList[0].StageName =='Booking Cancelled – Refund Pending'){
+            if(oList[0].StageName == 'Cancelled' || oList[0].StageName =='Booking Cancelled – Refund Pending' || oList[0].StageName =='Transfer Completed' || oList[0].StageName == 'Upgrade/Downgrade Completed'){
                 cancelsalesorder(oIdSet);
             }else{
                 updatesalesorder(oIdSet,oList[0].SAP_Customer_Number__c);
@@ -77,7 +77,7 @@ public class SalesOrderUpdateCallout {
             bookingId = oList[0].Booking__c;
             bList = [Select Id,Status__c,RW_Cancellation_initiated_by__c,Cancellation_Sub_reason__c,Cancellation_Reason__c	, Booking_Date__c,Funding_Status__c, Source_Of_Booking__c, Name,RW_Last_SDR_Received__c,
                   RW_Index_2__c,   RW_Registration_Date__c,RW_BRL_Number__c,RW_Release_of_Charge_issue_status__c,RW_ROC_Date__c,RW_Signed_Agreement_to_Customer_Date__c,ADF_Opted__c, //added by digicloud
-                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c, Project__r.Name, Interest_to_be_Applied__c,
+                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c, Project__r.Name, Interest_to_be_Applied__c, 
                     RW_Noc_Generated_Date__c,RW_Loan_Sanction_Date__c, RW_Loan_Account_Number__c,RW_Loan_Amount__c,RW_Loan_Bank__c,Loan_Bank__c,RW_Nominee_Name__c	,Date_of_Occupation_Certificate__c	,Date_of_Cancellation__c,RW_Key_handover_date__c
                      
                      from Booking__c where Id = : bookingId];
@@ -708,20 +708,20 @@ billPlanList.item.add(billPlan);
                     orderCondition.CondType = 'ZGST';
                     orderConditionsList.item.add(orderCondition);
                     GSTDiscount = qList[0].Discount_1_L__c;
-                }
+            }
                 // this means there are other discounts as well, apart from the GST discount as well.
                 if(qList[0].Total_Discount_L__c - GSTDiscount > 0) {
                     // order condition for other charges
-                    SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
-                    orderCondition.ItmNumber = '10';
+                        SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
+                        orderCondition.ItmNumber = '10';
                     //Commented by vinay 22-12-2021
                     //orderCondition.CondValue = String.valueOf((qList[0].Total_Discount_L__c - GSTDiscount).setscale(2,RoundingMode.HALF_UP));
                     orderCondition.CondValue = String.valueOf((qList[0].Customer_Total_Discount_L__c - GSTDiscount).setscale(2,RoundingMode.HALF_UP));
-                    orderCondition.CondType = 'ZDS1';
-                    orderConditionsList.item.add(orderCondition);
-                }
+                        orderCondition.CondType = 'ZDS1';
+                        orderConditionsList.item.add(orderCondition);
+                    }
                 
-            }
+                }
             // check for Additional Premium [ZPRM]
             if(qList[0].Premium_Charges_Amount_1__c != null && qList[0].Premium_Charges_Amount_1__c != 0) {
                 SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
@@ -825,7 +825,7 @@ billPlanList.item.add(billPlan);
            // SalesOrderLogger.TableOfZsdstCondition orderConditionsLogList = new SalesOrderLogger.TableOfZsdstCondition();
             //orderConditionsLogList.item = new List<SalesOrderLogger.ZsdstCondition>();
             SalesOrderSAPAPIMCS.TableOfZsdstBillPlan billPlanList = new SalesOrderSAPAPIMCS.TableOfZsdstBillPlan();
-            billPlanList.item = new List<   SalesOrderSAPAPIMCS.ZsdstBillPlan>();
+            billPlanList.item = new List<SalesOrderSAPAPIMCS.ZsdstBillPlan>();
             
             SalesOrderSAPAPIMCS.TableOfBapiret2 bapiRet2List = new SalesOrderSAPAPIMCS.TableOfBapiret2();
             bapiRet2List.item = new List<SalesOrderSAPAPIMCS.Bapiret2>();
@@ -875,10 +875,16 @@ billPlanList.item.add(billPlan);
                 if(salesOrderResponse.Status != null){
                     bList[0].Cancellation_in_SAP__c = salesOrderResponse.Status;
                     if(salesOrderResponse.Status == 'Success'){
-                        if(bList[0].Cancellation_Reason__c == 'Unit cancelled'){
+                        if(bList[0].Cancellation_Reason__c != 'Transfer' && bList[0].Cancellation_Reason__c != 'Upgrade/Downgrade'){
                             bList[0].Status__c = 'Booking Cancelled – Refund Pending';
-                        }else if(bList[0].Cancellation_Reason__c ==	'Unit transfer'){
-                            bList[0].Status__c = 'Cancelled';
+                        }else if(bList[0].Cancellation_Reason__c ==	'Transfer'){
+                            bList[0].Status__c = 'Transfer Completed';
+                        }
+                        else if(bList[0].Cancellation_Reason__c == 'Upgrade/Downgrade'){
+                            bList[0].Status__c = 'Upgrade/Downgrade Completed';
+                        }
+                        else if(bList[0].Cancellation_Reason__c == 'Unit Transfer'){
+                            bList[0].Status__c = 'Cancelled'; // To Handle old Cases which are already In Process
                         }
                     }
                     update bList[0];
