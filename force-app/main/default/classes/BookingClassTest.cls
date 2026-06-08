@@ -885,6 +885,28 @@ public class BookingClassTest {
         Test.stopTest();    
     }
    
+    @isTest
+    public static void BookingTest9(){
+        List<SelectOption> towerOptions = new List<SelectOption>();
+        List<SelectOption> unitOptions = new List<SelectOption>();
+        Booking__c boookingObj = new Booking__c();
+        try{
+            BookingClass2.loadTowers(towerOptions, boookingObj);
+        }catch(Exception ex){
+            
+        }
+        try{
+            BookingClass2.loadUnits(unitOptions, boookingObj);
+        }catch(Exception ex){
+            
+        }
+        try{
+            BookingClass2.Dummy();
+        }catch(Exception ex){
+            
+        }
+    }
+   
 
     
 }

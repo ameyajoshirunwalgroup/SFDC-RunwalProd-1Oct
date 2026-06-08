@@ -47,79 +47,96 @@ public with sharing class RW_UnitTransferAndCancellation {
     
    // Unit Cancelled
     @AuraEnabled
-    public static void bookingcancelled(string BookingId , string cancelReason ,string cancellationSubReason ,string ForfeitureAmount ,string BrokerageAmount , string InterestValue , string Taxesifany ,string ForfeitureAmounttype , string Otherforfeitureamount , string ForfeiPercentage ,string TotalForfeitureAmount, string TotalRefundAmount , string FinalRefundAmount, string MVAT , string TDS , string cancellationdescription , string CGST , string SGST, string TotalRecievedAmount, String cancSubType, String modeofCanc, String payRefAmt, String ResaleStatus, String newRate, String newFlatAgrVal, String recvAmt, String referralAmt, String swipeCharges, String brokeragePaid, String totalAmtToBeTransfrd, String note, String gst){
+    public static void bookingcancelled(Map<String,String> cancDetails){
         BookingTriggerHandler.byPass =true;
-        Booking__c boookingRecord = [Select Id , GST_Tax_G__c,Checklist_download_date__c ,Cancellation_initiation_date__c ,Forfeiture_Amount__c , Brokerage_Amount__c , Opportunity__r.StageName,Interest_Value__c , Taxes_if_any__c ,Forfeiture_Amount_Type__c ,Other_Forfeiture_Amount__c , Forfeit_Percentage__c , Total_Forfeiture_Amount__c ,Cancellation_Reason__c , Cancellation_Sub_reason__c ,Date_of_Cancellation__c , Opportunity__r.Status__c , Cancellation_Requested_Status__c , Status__c, Old_Opp_Status__c , Old_status__c , RW_Total_TDS_Outstanding__c , MVAT__c , Reason_For_Cancellation__c ,CGST__c , SGST__c , Total_Refund_Amount__c , Final_Refund_Amount__c, RW_Total_Receipt_Amount_Received__c  FROM Booking__c Where id = : BookingId];
-        if(ForfeitureAmount != null){
-            boookingRecord.Forfeiture_Amount__c    = Decimal.ValueOf(ForfeitureAmount);
+        Booking__c boookingRecord = [Select Id , GST_Tax_G__c,Checklist_download_date__c ,
+                                     Cancellation_initiation_date__c ,Forfeiture_Amount__c , Brokerage_Amount__c ,
+                                     Opportunity__r.StageName,Interest_Value__c , Taxes_if_any__c ,Forfeiture_Amount_Type__c ,
+                                     Other_Forfeiture_Amount__c , Forfeit_Percentage__c , Total_Forfeiture_Amount__c ,Cancellation_Reason__c ,
+                                     Cancellation_Sub_reason__c ,Date_of_Cancellation__c , Opportunity__r.Status__c , Cancellation_Requested_Status__c , 
+                                     Status__c, Old_Opp_Status__c , Old_status__c , RW_Total_TDS_Outstanding__c , MVAT__c , Reason_For_Cancellation__c ,
+                                     CGST__c , SGST__c , Total_Refund_Amount__c , Final_Refund_Amount__c, RW_Total_Receipt_Amount_Received__c,
+                                     Meeting_Date__c,Other_Reason__c  FROM Booking__c Where id = :  cancDetails.get('BookingId')];
+        if(cancDetails.get('ForfeitureAmount') != null){
+            boookingRecord.Forfeiture_Amount__c    = Decimal.ValueOf(cancDetails.get('ForfeitureAmount'));
         }
-        if(BrokerageAmount != null){
-            boookingRecord.Brokerage_Amount__c    = Decimal.ValueOf(BrokerageAmount);
+        if(cancDetails.get('BrokerageAmount') != null){
+            boookingRecord.Brokerage_Amount__c    = Decimal.ValueOf(cancDetails.get('BrokerageAmount'));
         }
-        if(InterestValue != null && cancelReason == 'Unit cancelled' && (cancellationSubReason == 'R3' || cancellationSubReason == 'Z8')){
-            boookingRecord.Interest_with_GST__c    = Decimal.ValueOf(InterestValue);
+        if(cancDetails.get('InterestValue') != null && (cancDetails.get('Cancellation_Reason__c') == 'Transfer' || cancDetails.get('Cancellation_Reason__c') == 'Upgrade/Downgrade')){
+            boookingRecord.Interest_with_GST__c    = Decimal.ValueOf(cancDetails.get('InterestValue'));
         }else{
-            boookingRecord.Interest_Value__c    = Decimal.ValueOf(InterestValue);
+            boookingRecord.Interest_Value__c    = Decimal.ValueOf(cancDetails.get('InterestValue'));
         }
-        if(Taxesifany != null){
-            boookingRecord.Taxes_if_any__c    = Decimal.ValueOf(Taxesifany);
+        if(cancDetails.get('Taxesifany') != null){
+            boookingRecord.Taxes_if_any__c    = Decimal.ValueOf(cancDetails.get('Taxesifany'));
         }
-        if(Otherforfeitureamount != null){
-            boookingRecord.GST_Tax_G__c    = Decimal.ValueOf(Otherforfeitureamount);
+        if(cancDetails.get('Otherforfeitureamount') != null){
+            boookingRecord.GST_Tax_G__c    = Decimal.ValueOf(cancDetails.get('Otherforfeitureamount'));
         }
-        if(ForfeiPercentage != null){
-            boookingRecord.Forfeit_Percentage__c    = Decimal.ValueOf(ForfeiPercentage);
+        if(cancDetails.get('ForfeiPercentage') != null){
+            boookingRecord.Forfeit_Percentage__c    = Decimal.ValueOf(cancDetails.get('ForfeiPercentage'));
         }
-        if(TotalForfeitureAmount != null){
-            boookingRecord.Total_Forfeiture_Amount__c    = Decimal.ValueOf(TotalForfeitureAmount);
+        if(cancDetails.get('TotalForfeitureAmount') != null){
+            boookingRecord.Total_Forfeiture_Amount__c    = Decimal.ValueOf(cancDetails.get('TotalForfeitureAmount'));
         }
-        boookingRecord.Cancellation_Reason__c = cancelReason;
-        boookingRecord.Cancellation_Sub_reason__c =  cancellationSubReason;
+        boookingRecord.Cancellation_Reason__c = cancDetails.get('cancelReason');
+        boookingRecord.Cancellation_Sub_reason__c =  cancDetails.get('cancellationSubReason');
+        if(cancDetails.get('meetingSatus')!=null){
+        	boookingRecord.Meeting_Status__c = cancDetails.get('meetingSatus');
+        }
+        System.debug('MeetingDate---->'+cancDetails.get('meetingDate'));
+        if(cancDetails.get('meetingDate')!=null){
+        	boookingRecord.Meeting_Date__c = Date.valueOf(cancDetails.get('meetingDate'));
+        }
         if(boookingRecord.Old_status__c == null){
             boookingRecord.Old_status__c = boookingRecord.Status__c;
             boookingRecord.Old_Opp_Status__c = boookingRecord.Opportunity__r.StageName; 
         } 
         boookingRecord.Status__c =  'Cancellation Initiated';
         //boookingRecord.Opportunity__r.Status__c = 'Cancellation Initiated'; 
-        if(TDS != null){
-            boookingRecord.Total_TDS_Amount_Paid_In_Rs__c = Decimal.ValueOf(TDS);
+        if(cancDetails.get('TDS') != null){
+            boookingRecord.Total_TDS_Amount_Paid_In_Rs__c = Decimal.ValueOf(cancDetails.get('TDS'));
         }
-        if(MVAT != null){
-            boookingRecord.MVAT__c =     Decimal.ValueOf(MVAT);
+        if(cancDetails.get('MVAT') != null){
+            boookingRecord.MVAT__c =     Decimal.ValueOf(cancDetails.get('MVAT'));
         }
-        if(TotalRefundAmount != null){
-            boookingRecord.Total_Refund_Amount__c = Decimal.ValueOf(TotalRefundAmount);
+        if(cancDetails.get('TotalRefundAmount') != null){
+            boookingRecord.Total_Refund_Amount__c = Decimal.ValueOf(cancDetails.get('TotalRefundAmount'));
         }
-        if(FinalRefundAmount != null){
-            boookingRecord.Final_Refund_Amount__c  = Decimal.ValueOf(FinalRefundAmount);
+        if(cancDetails.get('FinalRefundAmount') != null){
+            boookingRecord.Final_Refund_Amount__c  = Decimal.ValueOf(cancDetails.get('FinalRefundAmount'));
         }
-        boookingRecord.Reason_For_Cancellation__c =  cancellationdescription;  
-        if(CGST != null){
-            boookingRecord.CGST__c = Decimal.ValueOf(CGST);
+        boookingRecord.Reason_For_Cancellation__c =  cancDetails.get('cancellationdescription');  
+        if(cancDetails.get('CGST') != null){
+            boookingRecord.CGST__c = Decimal.ValueOf(cancDetails.get('CGST'));
         }
-        if(SGST != null){
-            boookingRecord.SGST__c = Decimal.ValueOf(SGST);
+        if(cancDetails.get('SGST') != null){
+            boookingRecord.SGST__c = Decimal.ValueOf(cancDetails.get('SGST'));
         }
         boookingRecord.Cancellation_initiation_date__c = system.today();
         boookingRecord.Checklist_download_date__c = system.today();  
-        boookingRecord.RW_Total_Receipt_Amount_Received__c = Decimal.ValueOf(TotalRecievedAmount);
-        boookingRecord.Cancellation_Subtype__c = cancSubType;
-        boookingRecord.Mode_of_Cancellation__c = modeofCanc;
-        boookingRecord.Payment_Refund_Amount__c = payRefAmt;
-        boookingRecord.Resale_Status__c = ResaleStatus;
-        if(newRate != null){
-            boookingRecord.New_Rate__c = Decimal.ValueOf(newRate);
+        boookingRecord.RW_Total_Receipt_Amount_Received__c = Decimal.ValueOf(cancDetails.get('TotalRecievedAmount'));
+        boookingRecord.Cancellation_Subtype__c = cancDetails.get('cancSubType');
+        boookingRecord.Mode_of_Cancellation__c = cancDetails.get('modeofCanc');
+        boookingRecord.Payment_Refund_Amount__c = cancDetails.get('payRefAmt');
+        boookingRecord.Resale_Status__c = cancDetails.get('ResaleStatus');
+        if(cancDetails.get('newRate') != null){
+            boookingRecord.New_Rate__c = Decimal.ValueOf(cancDetails.get('newRate'));
         }
-        if(newFlatAgrVal != null){
-            boookingRecord.New_Flat_Agreement_Value__c = Decimal.ValueOf(newFlatAgrVal);
+        if(cancDetails.get('newFlatAgrVal') != null){
+            boookingRecord.New_Flat_Agreement_Value__c = Decimal.ValueOf(cancDetails.get('newFlatAgrVal'));
         }
-        if(recvAmt != null){
-            boookingRecord.Received_Amtount__c = Decimal.ValueOf(recvAmt);
+        if(cancDetails.get('recvAmt') != null){
+            boookingRecord.Received_Amtount__c = Decimal.ValueOf(cancDetails.get('recvAmt'));
         }
-        if(referralAmt != null){
-            boookingRecord.Referral_Amount_Cancellation_Checklist__c = Decimal.ValueOf(referralAmt);
+        if(cancDetails.get('referralAmt') != null){
+            boookingRecord.Referral_Amount_Cancellation_Checklist__c = Decimal.ValueOf(cancDetails.get('referralAmt'));
         }
-        if(swipeCharges != null){
+        if(cancDetails.get('otherReason')!=null){
+            boookingRecord.Other_Reason__c = cancDetails.get('otherReason');
+        }
+        /*if(swipeCharges != null){
             boookingRecord.Swipe_Charges__c = Decimal.ValueOf(swipeCharges);
         }
         if(brokeragePaid != null){
@@ -130,14 +147,14 @@ public with sharing class RW_UnitTransferAndCancellation {
         }
         if(gst != null){
             boookingRecord.GST__c = Decimal.ValueOf(gst);
-        }
+        }*/
         /*if(cancelReason == 'Unit cancelled' && (cancellationSubReason == 'R3' || cancellationSubReason == 'Z8')){
             boookingRecord.TAX__c = Decimal.ValueOf(Taxesifany);
         }*/
-        boookingRecord.NOTE__c = note;
+        // boookingRecord.NOTE__c = note;
         Update boookingRecord;
         BookingTriggerHandler.byPass =false;
-        sendEmail(BookingId);
+        sendEmail(cancDetails.get('BookingId'));
     }
     
     @AuraEnabled
@@ -163,7 +180,15 @@ public with sharing class RW_UnitTransferAndCancellation {
             boookingRecord.Old_status__c = boookingRecord.Status__c;
             boookingRecord.Old_Opp_Status__c = boookingRecord.Opportunity__r.StageName; 
         } 
-        boookingRecord.Status__c =  'Cancellation Initiated';
+        if(cancDetails.get('cancelReason') == 'Transfer'){
+        	boookingRecord.Status__c =  'Transfer In Progress';
+        }
+        else if(cancDetails.get('cancelReason') == 'Upgrade/Downgrade'){
+            boookingRecord.Status__c = 'Upgrade In Progress';
+        }
+        else{
+            boookingRecord.Status__c = 'Cancellation Initiated';
+        }
         //boookingRecord.Opportunity__r.Status__c = 'Cancellation Initiated'; 
         if(cancDetails.get('TDS') != null){
             boookingRecord.Total_TDS_Amount_Paid_In_Rs__c = Decimal.ValueOf(cancDetails.get('TDS'));
@@ -211,6 +236,16 @@ public with sharing class RW_UnitTransferAndCancellation {
         if(cancDetails.get('gst') != null){
             boookingRecord.GST__c = Decimal.ValueOf(cancDetails.get('gst'));
         }
+        if(cancDetails.get('meetingSatus')!=null){
+        	boookingRecord.Meeting_Status__c = cancDetails.get('meetingSatus');
+        }
+        if(cancDetails.get('meetingDate')!=null){
+        	boookingRecord.Meeting_Date__c = Date.valueOf(cancDetails.get('meetingDate'));
+        }
+        if(cancDetails.get('otherReason')!=null){
+            boookingRecord.Other_Reason__c = cancDetails.get('otherReason');
+        }
+        
         /*if(cancelReason == 'Unit cancelled' && (cancellationSubReason == 'R3' || cancellationSubReason == 'Z8')){
             boookingRecord.TAX__c = Decimal.ValueOf(Taxesifany);
         }*/
@@ -370,12 +405,12 @@ public with sharing class RW_UnitTransferAndCancellation {
      emailMessage.setHtmlBody(body);    
      mails.add(emailMessage);
      Messaging.SendEmailResult[] results = Messaging.sendEmail(mails);   
-	 if (results[0].success){
-                        System.debug('The email was sent successfully.');
+        if (results[0].success){
+            System.debug('The email was sent successfully.');
      }
     else{
-    	System.debug('The email failed to send: ' + results[0].errors[0].message);
-    }
+            System.debug('The email failed to send: ' + results[0].errors[0].message);
+        }
     }
     
     @InvocableMethod(label='CloningOpportunity' description='cloning the opportunity record when booking is unit transfer')
@@ -426,51 +461,42 @@ public with sharing class RW_UnitTransferAndCancellation {
     
      @AuraEnabled
     public static void updateCancellationChecklistDate(string recordId) {
-    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Cancellation_checklist_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Cancellation_checklist_Upload_Date__c = system.today();
     update obj;
      BookingTriggerHandler.byPass =false;   
-    system.debug(obj);
     }
     
     @AuraEnabled
     public static void updateCancellationLetterDate(string recordId) {
-    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Cancellation_Letter_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Cancellation_Letter_Upload_Date__c = system.today();
     update obj;
     BookingTriggerHandler.byPass =false;    
-    system.debug(obj);
     }
     
     @AuraEnabled
     public static void updateDeedofCancellationDate(string recordId) {
     BookingTriggerHandler.byPass =true;    
-    system.debug('Booking ID is to' + recordId);
     Booking__c obj = [Select Id, Deed_of_Cancellation_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Deed_of_Cancellation_Upload_Date__c = system.today();
     update obj;
     BookingTriggerHandler.byPass =false;    
-    system.debug(obj);
     }
     
     @AuraEnabled
     public static void transferRequestUpload(string recordId) {
-    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Unit_Transfer_Request_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Unit_Transfer_Request_Upload_Date__c = system.today();
     update obj;
     BookingTriggerHandler.byPass =false;    
-    system.debug(obj);
     }
         
     @AuraEnabled
     public static void updateRefundHandoverDocument(string recordId) {
-    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Update_Refund_Handover_Date__c , status__c from Booking__c  WHere id=:recordId];
    // obj.Update_Refund_Handover_Date__c = Date.valueof(handoverDocumentDate);
@@ -478,7 +504,6 @@ public with sharing class RW_UnitTransferAndCancellation {
     update obj;
     BookingTriggerHandler.byPass =false;    
     sendEmail(recordId);
-    system.debug(obj);
     }
     
     @AuraEnabled
@@ -489,36 +514,34 @@ public with sharing class RW_UnitTransferAndCancellation {
     
     @AuraEnabled
     public static void updateRetainBooking(string recordId) {        
-    Booking__c boookingRecord = [Select Id , Cancellation_Reason__c, Cancellation_Sub_reason__c , Opportunity__c  , Status__c , Cancellation_Requested_Status__c,Opportunity__r.StageName , Old_Opp_Status__c , Old_status__c, Is_Retained__c , Retention_Date__c from Booking__c  WHere id=:recordId];
-            string oldstatus = boookingRecord.Old_Opp_Status__c;
-        	boookingRecord.Reason_For_Cancellation__c = null;
-            boookingRecord.Cancellation_Sub_reason__c =  null;
-        	boookingRecord.Cancellation_Reason__c = null;
-        	boookingRecord.Cancellation_Requested_Status__c = 'Retained';
-            boookingRecord.Status__c =  boookingRecord.Old_status__c;
-        	boookingRecord.Is_Retained__c = true;
-            boookingRecord.Retention_Date__c = system.today();    
-            //boookingRecord.Opportunity__r.Status__c = boookingRecord.Old_Opp_Status__c;  
-        	boookingRecord.Old_status__c = null;
-        	Opportunity opp = new Opportunity();
-            opp.Id = boookingRecord.Opportunity__c;
-        	opp.StageName = oldstatus;
-            update opp;
-            BookingTriggerHandler.byPass =true;
-    		update boookingRecord;
-        	BookingTriggerHandler.byPass =false;
+        Booking__c boookingRecord = [Select Id , Cancellation_Reason__c, Cancellation_Sub_reason__c , Opportunity__c  , Status__c , Cancellation_Requested_Status__c,Opportunity__r.StageName , Old_Opp_Status__c , Old_status__c, Is_Retained__c , Retention_Date__c from Booking__c  WHere id=:recordId];
+        string oldstatus = boookingRecord.Old_Opp_Status__c;
+        boookingRecord.Reason_For_Cancellation__c = null;
+        boookingRecord.Cancellation_Sub_reason__c =  null;
+        boookingRecord.Cancellation_Reason__c = null;
+        boookingRecord.Cancellation_Requested_Status__c = 'Retained';
+        boookingRecord.Status__c =  boookingRecord.Old_status__c;
+        boookingRecord.Is_Retained__c = true;
+        boookingRecord.Retention_Date__c = system.today();    
+        //boookingRecord.Opportunity__r.Status__c = boookingRecord.Old_Opp_Status__c;  
+        // boookingRecord.Old_status__c = null;
+        Opportunity opp = new Opportunity();
+        opp.Id = boookingRecord.Opportunity__c;
+        opp.StageName = oldstatus;
+        update opp;
+        BookingTriggerHandler.byPass =true;
+        update boookingRecord;
+        BookingTriggerHandler.byPass =false;
     }
     
     @AuraEnabled
     public static Booking__c getRefundHandoverInfo(string bookingId) {
-    Booking__c boookingRecord = [Select Id ,  Status__c , Opportunity__r.Status__c , Cancellation_Requested_Status__c from Booking__c  WHere id=:bookingId Limit 1];
-    system.debug(boookingRecord);
+    Booking__c boookingRecord = [Select Id,Status__c,Opportunity__r.Status__c,Cancellation_Requested_Status__c from Booking__c  WHere id=:bookingId Limit 1];
     return boookingRecord;
     }
        
     @AuraEnabled
-    public  static void sendApprovalRequest(String recordId)
-    {
+    public  static void sendApprovalRequest(String recordId){
         Booking__c obj = [select Project__r.CRMHead__c , Project__r.Overall_CRM_Head__c , Level_Two_Approver__c , Level_Three_Approver__c from Booking__c Where Id =:recordId];
         if(obj !=null && (obj.Project__r.CRMHead__c != obj.Level_Two_Approver__c || obj.Project__r.Overall_CRM_Head__c != obj.Level_Three_Approver__c)){
             BookingTriggerHandler.byPass =true;
@@ -527,17 +550,16 @@ public with sharing class RW_UnitTransferAndCancellation {
             update obj;
             BookingTriggerHandler.byPass =false;
         }
-        try
-        {
-        Approval.ProcessSubmitRequest req1 = 
-        new Approval.ProcessSubmitRequest();
+        try{
+        Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
         req1.setComments('Request for Booking Cancellation');
         req1.setObjectId(recordId);
         
         // Submit on behalf of a specific submitter
         
         // Submit the record to specific process and skip the criteria evaluation
-        req1.setProcessDefinitionNameOrId('Booking_Cancellation_1'); //Commented by Vinay 21-03-2025
+       // req1.setProcessDefinitionNameOrId('Booking_Cancellation_1'); //Commented by Prashant 22-05-2025
+        req1.setProcessDefinitionNameOrId('Booking_Cancellation_1_New'); //Added by Prashant 22-05-2025
         //req1.setSkipEntryCriteria(true);
         
         // Submit the approval request for the account
@@ -545,16 +567,13 @@ public with sharing class RW_UnitTransferAndCancellation {
         
         // Verify the result
         //System.assert(result.isSuccess());
-    }
-        catch(Exception e)
-        {
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
 }
     
     @AuraEnabled
-    public  static void sendApprovalRequestforUnitTransfer(String recordId)
-    {
+    public  static void sendApprovalRequestforUnitTransfer(String recordId){
         Booking__c obj = [select Project__r.CRMHead__c , Project__r.Overall_CRM_Head__c , Level_Two_Approver__c , Level_Three_Approver__c from Booking__c Where Id =:recordId];
         if(obj !=null && (obj.Project__r.CRMHead__c != obj.Level_Two_Approver__c || obj.Project__r.Overall_CRM_Head__c != obj.Level_Three_Approver__c)){
             BookingTriggerHandler.byPass =true;
@@ -563,17 +582,16 @@ public with sharing class RW_UnitTransferAndCancellation {
             update obj;
             BookingTriggerHandler.byPass =false;
         }
-        try
-        {
-        Approval.ProcessSubmitRequest req1 = 
-        new Approval.ProcessSubmitRequest();
+        try{
+        Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
         req1.setComments('Request for Booking Cancellation');
         req1.setObjectId(recordId);
         
         // Submit on behalf of a specific submitter
         
         // Submit the record to specific process and skip the criteria evaluation
-        req1.setProcessDefinitionNameOrId('Booking_Unit_Transfer');
+        //req1.setProcessDefinitionNameOrId('Booking_Unit_Transfer');//Commented by Prashant 22-05-26
+        req1.setProcessDefinitionNameOrId('Booking_Unit_Transfer_New');//Added by Prashant 22-05-26 
         //req1.setSkipEntryCriteria(true);
         
         // Submit the approval request for the account
@@ -581,25 +599,178 @@ public with sharing class RW_UnitTransferAndCancellation {
         
         // Verify the result
         //System.assert(result.isSuccess());
-    }
-        catch(Exception e)
-        {
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
 }
     
     @AuraEnabled
     public static Project_Unit__c getUnitInfo(string unitId, String bkgId){
-        Project_Unit__c unitInfo = [SELECT Id, Booking__c, Booking__r.Name, Booking__r.Opportunity__r.SAP_Customer_Number__c, 
-                                   Booking__r.Primary_Applicant_Name__c, Booking__r.Allotment_Premium__c, Saleable_Area__c, 
-                                   Booking__r.Net_Rate__c, Booking__r.Booking_Date__c, RW_Param1__c, RW_Param2__c, RW_Param4__c
-                                   FROM Project_Unit__c WHERE Id =: unitId]; 
+        Project_Unit__c unitInfo = [SELECT Id, Booking__c, Booking__r.Name, Booking__r.Opportunity__r.SAP_Customer_Number__c,Booking__r.Primary_Applicant_Name__c, Booking__r.Allotment_Premium__c, Saleable_Area__c,Booking__r.Net_Rate__c, Booking__r.Booking_Date__c, RW_Param1__c, RW_Param2__c, RW_Param4__c FROM Project_Unit__c WHERE Id =: unitId]; 
         Booking__c bkg = new Booking__c();
         bkg.Id = bkgId;
-        /*BookingTriggerHandler.byPass = true; // Commented by Vinay 01-10-2025 as there is no use of updating the record since we removed the line ;
+        bkg.New_Unit__c = unitId;
+        BookingTriggerHandler.byPass = true;
         update bkg;
-        BookingTriggerHandler.byPass = false;*/
+        BookingTriggerHandler.byPass = false;
         return unitInfo;
+    }
+    
+    @AuraEnabled
+    public static List<String> getCancellationReasons() {
+        List<String> options = new List<String>();
+        Schema.DescribeFieldResult fieldResult = Booking__c.Cancellation_Reason__c.getDescribe();
+        List<Schema.PicklistEntry> pList = fieldResult.getPicklistValues();
+        for (Schema.PicklistEntry p : pList) {
+            options.add(p.getLabel());
+        }
+        System.debug('Cancellation Reason Options---->'+options);
+        return options;
+    }
+    /*@AuraEnabled
+    public static Map<String, List<String>> getDependentMap() {
+        Map<String, List<String>> objResults = new Map<String, List<String>>();
+        
+        // Get the object type and field describes
+        Schema.sObjectType objType = Booking__c.getSObjectType();
+        Schema.DescribeSObjectResult objDescribe = objType.getDescribe();
+        Map<String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
+        
+        // Get the dependent field (Sub-Reason)
+        Schema.DescribeFieldResult dependToken = fieldMap.get('Cancellation_Sub_reason__c').getDescribe();
+        Schema.DescribeFieldResult controlToken = fieldMap.get('Cancellation_Reason__c').getDescribe();
+        
+        List<Schema.PicklistEntry> controlValues = controlToken.getPicklistValues();
+        List<Schema.PicklistEntry> dependValues = dependToken.getPicklistValues();
+        
+        // This is a simplified version. For a true bitmask-based dependent picklist,
+        // you would normally use a Utility class, but for this specific logic:
+        for (Schema.PicklistEntry ctrl : controlValues) {
+            objResults.put(ctrl.getLabel(), new List<String>());
+        }
+        SYstem.debug('Check Map---->'+objResults);
+        
+        // Manual mapping or Utility mapping goes here. 
+        // If you have many values, use a Bitmask Utility. 
+        // For now, let's assume you fetch all and filter in JS for simplicity, 
+        // OR return a hardcoded map if the metadata is complex.
+        return objResults; 
+    }*/
+    // Add this inner class to your Apex Controller
+    public class PicklistWrapper {
+        @AuraEnabled public String label;
+        @AuraEnabled public String value;
+        public PicklistWrapper(String l, String v) {
+            this.label = l;
+            this.value = v;
+        }
+    }
+    
+    @AuraEnabled
+    public static Map<String, List<PicklistWrapper>> getDependentMap() {
+        Map<String, List<PicklistWrapper>> objResults = new Map<String, List<PicklistWrapper>>();
+        
+        Schema.DescribeFieldResult controlToken = Booking__c.Cancellation_Reason__c.getDescribe();
+        Schema.DescribeFieldResult dependToken = Booking__c.Cancellation_Sub_reason__c.getDescribe();
+        
+        List<Schema.PicklistEntry> controlValues = controlToken.getPicklistValues();
+        List<Schema.PicklistEntry> dependValues = dependToken.getPicklistValues();
+        
+        // Initialize with API Names as keys
+        for (Schema.PicklistEntry ctrl : controlValues) {
+            objResults.put(ctrl.getValue(), new List<PicklistWrapper>());
+        }
+        
+        for (Schema.PicklistEntry dep : dependValues) {
+            String jsonStr = JSON.serialize(dep);
+            Map<String, Object> entry = (Map<String, Object>)JSON.deserializeUntyped(jsonStr);
+            String validFor = (String)entry.get('validFor');
+            
+            if (String.isNotBlank(validFor)) {
+                String base64Bits = decimalToBinary(validFor);
+                for (Integer i = 0; i < controlValues.size(); i++) {
+                    if (base64Bits.substring(i, i+1) == '1') {
+                        // Store BOTH Label and Value (API Name)
+                        objResults.get(controlValues[i].getValue()).add(
+                            new PicklistWrapper(dep.getLabel(), dep.getValue())
+                        );
+                    }
+                }
+            }
+        }
+        System.debug('Check objResults---->'+objResults);
+        return objResults;
+    }
+    
+    // Helper method to convert Base64 validFor to a Binary String
+    private static String decimalToBinary(String validFor) {
+        String base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+        String bits = '';
+        for (Integer i = 0; i < validFor.length(); i++) {
+            Integer val = base64.indexOf(validFor.substring(i, i+1));
+            String s = '';
+            for (Integer j = 0; j < 6; j++) {
+                s = String.valueOf(Math.mod(val, 2)) + s;
+                val /= 2;
+            }
+            bits += s;
+        }
+        return bits;
+    }
+    
+    @AuraEnabled
+    public static Map<String, List<Map<String, String>>> getMultiplePicklistOptions(List<String> fieldNames) {
+        Map<String, List<Map<String, String>>> allOptions = new Map<String, List<Map<String, String>>>();
+        
+        Schema.SObjectType objType = Booking__c.getSObjectType();
+        Map<String, Schema.SObjectField> fieldMap = objType.getDescribe().fields.getMap();
+        
+        for (String fieldName : fieldNames) {
+            if (fieldMap.containsKey(fieldName)) {
+                List<Map<String, String>> options = new List<Map<String, String>>();
+                Schema.DescribeFieldResult fieldResult = fieldMap.get(fieldName).getDescribe();
+                
+                for (Schema.PicklistEntry p : fieldResult.getPicklistValues()) {
+                    if (p.isActive()) {
+                        Map<String, String> option = new Map<String, String>();
+                        option.put('label', p.getLabel());
+                        option.put('value', p.getValue());
+                        options.add(option);
+                    }
+                }
+                allOptions.put(fieldName, options);
+            }
+        }
+        return allOptions;
+    }
+    
+    @AuraEnabled
+    public static Map<String, String> getSubReasonToTypeMap() {
+        Map<String, String> subToType = new Map<String, String>();
+        
+        // Get describes for the relationship
+        Schema.DescribeFieldResult subReasonField = Booking__c.Cancellation_Sub_reason__c.getDescribe();
+        Schema.DescribeFieldResult subTypeField = Booking__c.Cancellation_Subtype__c.getDescribe();
+        
+        List<Schema.PicklistEntry> subReasonValues = subReasonField.getPicklistValues();
+        List<Schema.PicklistEntry> subTypeValues = subTypeField.getPicklistValues();
+        
+        for (Schema.PicklistEntry typeEntry : subTypeValues) {
+            String jsonStr = JSON.serialize(typeEntry);
+            Map<String, Object> entry = (Map<String, Object>)JSON.deserializeUntyped(jsonStr);
+            String validFor = (String)entry.get('validFor');
+            
+            if (String.isNotBlank(validFor)) {
+                String bits = decimalToBinary(validFor); // Use your existing binary helper
+                for (Integer i = 0; i < subReasonValues.size(); i++) {
+                    if (bits.substring(i, i+1) == '1') {
+                        // Map Sub-Reason Value to Sub-Type Value
+                        subToType.put(subReasonValues[i].getValue(), typeEntry.getValue());
+                    }
+                }
+            }
+        }
+        return subToType;
     }
 
 }
