@@ -272,7 +272,7 @@ public class RW_UnitTransferAndCancellationTest {
                 objBking.Transfer_Request_Uploaded__c = true;
                 update  objBking;
             
-            Test.startTest();
+            // Test.startTest();
             	Test.setMock(WebServiceMock.class, new SAPInventoryCallMock());
             	RW_UnitTransferAndCancellation.updateRefundHandoverDocument(objBking.id);
         		RW_UnitTransferAndCancellation.getRefundHandoverInfo(objBking.Id);
@@ -284,7 +284,7 @@ public class RW_UnitTransferAndCancellationTest {
                 RW_UnitTransferAndCancellation.updateDeedofCancellationDate(objBking.Id);
                 RW_UnitTransferAndCancellation.transferRequestUpload(objBking.Id);
             	RW_UnitTransferAndCancellation.getBookingRecordData(objBking.id);
-            Test.stopTest();
+            // Test.stopTest();
         } 
     }
     
