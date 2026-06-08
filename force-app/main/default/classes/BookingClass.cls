@@ -282,8 +282,6 @@ public with sharing class BookingClass {
     Receipt_Details__c objReceiptDetails = new Receipt_Details__c();
     Receipt_Details__c objReceiptDetailsST = new Receipt_Details__c();
     List < Project_Charges__c > listglobalcharges = new List < Project_Charges__c > ();
-    public List<Opportunity> oppList {get; set;}//Added for Cancellation Changes
-    public Decimal originalAV ;//Added for Cancellation Changes
     public List < Receipt__c > ListOldReceipt {
         get;
         set;
@@ -306,8 +304,6 @@ public with sharing class BookingClass {
         set;
     }
     List<Brokerage_Scheme__c> brokerageScheme = new List<Brokerage_Scheme__c>();
-    public String sapCustomerCode {get; set;}//Added for Cancellation Changes
-
     //Added by coServe 23-03-2023 Start
     /* public Document document {
 get {
@@ -325,21 +321,6 @@ set;
     public Boolean disabelBookingDate {get;set;}
     //Added by coServe 23-03-2023 End
     public Account acc {get;set;} //Added by Vinay 03-06-2025    
-
-    /**Added for Cancellation Changes starts */
-
-    public List<SelectOption> projectOptions {get; set;}
-    public List<SelectOption> towerOptions {get; set;}
-    public List<SelectOption> unitOptions {get; set;}
-    public List<Project__c> projectLst {get; set;}
-    public List<Tower__c> towerLst {get; set;}
-    public List<Project_Unit__c> unitLst {get; set;}
-    public Opportunity opp {get; set;}
-    public String oldTypeOfSale {get; set;}
-    public Boolean disableCancelledDetails {get; set;}
-
-    /**Added for Cancellation Changes starts */
-
     
     public BookingClass() {
         
@@ -431,76 +412,7 @@ set;
         if (ApexPages.currentPage().getParameters().get('optyid') != null && ApexPages.currentPage().getParameters().get('optyid') != '') {
             boookingObj.Opportunity__c = ApexPages.currentPage().getParameters().get('optyid');
             // Added For Unidentified Payment RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c
-            opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c,
-                               SAP_Customer_Number__c,Cancelled_Booking__c,Cancelled_Project__c,Cancelled_Tower__c,Cancelled_Unit__c,Type_Of_sale__c,Cancelled_SAP_Customer_Number__c
-                                FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025, Added Cancelled_SAP_Customer_Number__c,SAP_Customer_Code__c,Cancelled_Booking__c,Cancelled_Project__c,Type_Of_sale__c,Cancelled_Tower__c,Cancelled_Unit__c for Cancellation Changes
-              
-
-             /**Added for Cancellation Changes starts */
-
-             if(opp.Type_Of_sale__c!=null){
-                disableCancelledDetails = true;
-             }
-            Id matchedProjectId = null;
-            projectOptions = new List<SelectOption>();
-            towerOptions = new List<SelectOption>();
-            unitOptions = new List<SelectOption>();
-            BookingClass2.initializeCancellation(projectOptions,towerOptions,unitOptions,projectLst,matchedProjectId,boookingObj,opp);
-            System.debug('initializeCancellation projectOptions---->'+projectOptions);
-            /*Id matchedProjectId = null;
-            projectOptions = new List<SelectOption>();
-            projectOptions.add(new SelectOption('', '--Select Project--'));
-
-            towerOptions = new List<SelectOption>();
-            towerOptions.add(new SelectOption('', '--Select Tower--'));
-
-            unitOptions = new List<SelectOption>();
-            unitOptions.add(new SelectOption('', '--Select Unit--'));
-
-                projectLst = [Select Id,Name from Project__c where RW_Status__c = 'Active' ORDER BY Name];
-                for(Project__c proj : projectLst) {
-                    projectOptions.add(new SelectOption(proj.Id, proj.Name));
-                    if(proj.Name == opp.Cancelled_Project__c) {
-                        matchedProjectId = proj.Name;
-                    }
-                }
-                if(matchedProjectId != null) {
-                    boookingObj.Cancelled_Project__c = matchedProjectId;
-                } else {
-                    System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Project__c);
-                }
-                if(boookingObj.Cancelled_Project__c != null) {
-                  loadTowers();
-                  
-                }
-                if(opp.Cancelled_Tower__c != null) {
-                    List<Tower__c> towers = [SELECT Id,Name FROM Tower__c 
-                                    WHERE Name = :opp.Cancelled_Tower__c 
-                                    AND ProjectName__c = :boookingObj.Cancelled_Project__c LIMIT 1];
-                    if(!towers.isEmpty()) {
-                        boookingObj.Cancelled_Tower__c = towers[0].Name;
-                        loadUnits();
-                    }
-                }
-                
-                if(opp.Cancelled_Unit__c != null) {
-                    List<Project_Unit__c> units = [SELECT Id,Name FROM Project_Unit__c 
-                                        WHERE Name = :opp.Cancelled_Unit__c 
-                                        LIMIT 1];
-                    if(!units.isEmpty()) {
-                        boookingObj.Cancelled_Unit_No__c = units[0].Name;
-                    }
-               sal }
-
-            boookingObj.Cancelled_SAP_Customer_Number__c = opp.Cancelled_SAP_Customer_Number__c;
-            boookingObj.Type_Of_sale__c = opp.Type_Of_sale__c;
-            if(opp.Cancelled_Booking__c!=null){
-                    boookingObj.Old_Booking__c = opp.Cancelled_Booking__c;
-            }*/
-            oldTypeOfSale = opp.Type_Of_sale__c;//Added for Cancellation Changes
-            System.debug('oldTypeOfSale**'+oldTypeOfSale);
-            /**Added for Cancellation Changes ends */
-
+            Opportunity opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025
             // Added For Unidentified Payment End
             acc = [SELECT Id, Salutation, FirstName, LastName, RW_Zip_Code__c, RW_Company_Name__c, RW_Other_Company_Name__c, RW_Designation__c, No_of_family_members__c, RW_Occupation__c, Distance_To_Office__c, Family_Income__c, Purpose__c, Vehicles_owned__c, Industry, Current_Residential_Address__c, Four_Wheeler__c FROM Account WHERE Id =: opp.AccountId]; //Added by Vinay 03-06-2025
             if(opp.RW_Type_of_Client__c == null && !Test.isRunningTest()){
@@ -1486,89 +1398,6 @@ boookingObj.Booking_Date__c = System.Now();
             i = 1;
             System.debug('--i: ' + i); 
         }
-
-        /**Added for Cancellation Changes starts */
-            if (boookingObj.Type_Of_sale__c == null) { //Added by Vinay 13-03-2026
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select Type Of Booking');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        	List<Opportunity> cancelOpp = new List<Opportunity>();
-            if (boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c =='Upgrade of unit' || boookingObj.Type_Of_sale__c =='Cancel & Rebook') {
-                // if (boookingObj.Cancelled_Project__c == null) { //Added by Vinay 13-03-2026
-                //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Project Name in the Existing Unit Details Section');
-                //     ApexPages.addMessage(myMsg);
-                //     i = 1;
-                //     System.debug('--i: ' + i);
-                // }
-
-                // if (boookingObj.Cancelled_Unit_No__c == null) { //Added by Vinay 13-03-2026
-                //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Unit in the Existing Unit Details Section');
-                //     ApexPages.addMessage(myMsg);
-                //     i = 1;
-                //     System.debug('--i: ' + i);
-                // }
-                if(String.isNotBlank(opp.Cancelled_SAP_Customer_Number__c)){
-                    cancelOpp = [Select Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,SAP_Customer_Number__c,Booking__r.RW_Total_Receipt_Amount_Received__c from Opportunity where SAP_Customer_Number__c =: opp.Cancelled_SAP_Customer_Number__c];
-                }
-                if(String.isBlank(opp.Cancelled_SAP_Customer_Number__c) && String.isNotBlank(opp.Cancelled_Project__c)){
-                    cancelOpp = [Select Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,SAP_Customer_Number__c,Booking__r.RW_Total_Receipt_Amount_Received__c from Opportunity where RW_Project__c =: opp.Cancelled_Project__c 
-                                 AND RW_Project_Unit__r.TowerName__c =:opp.Cancelled_Tower__c AND RW_Project_Unit__c =:opp.Cancelled_Unit__c];
-                }
-                System.debug('opp.Cancelled_Project__c'+opp.Cancelled_Project__c);
-                System.debug('opp.Cancelled_Tower__c'+opp.Cancelled_Tower__c);
-                System.debug('opp.Cancelled_Unit__c'+opp.Cancelled_Unit__c);
-                System.debug('opp.Cancelled_SAP_Customer_Number__c'+opp.Cancelled_SAP_Customer_Number__c);
-                System.debug('CancelOpp ----->'+cancelOpp);
-                if (String.isBlank(boookingObj.Reason_For_Change__c) && oldTypeOfSale!=null && oldTypeOfSale != boookingObj.Type_Of_Sale__c){
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                }
-                if (oldTypeOfSale != boookingObj.Type_Of_Sale__c && boookingObj.Type_Of_Sale__c == 'Transfer of unit' || boookingObj.Type_Of_Sale__c =='Upgrade of unit')  { 
-                       
-                    System.debug('oldTypeOfSale**'+oldTypeOfSale);
-                    System.debug('boookingObj.Type_Of_Sale__c**'+boookingObj.Type_Of_Sale__c);
-
-                    System.debug('boookingObj.Cancelled_SAP_Customer_Number__c**'+boookingObj.Cancelled_SAP_Customer_Number__c);
-                    if ( (String.isBlank(boookingObj.Cancelled_SAP_Customer_Number__c) && String.isBlank(boookingObj.Cancelled_Project__c)) ||
-                         (String.isNotBlank(boookingObj.Cancelled_SAP_Customer_Number__c) && String.isNotBlank(boookingObj.Cancelled_Project__c))) { 
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add either SAP Customer Number or Project Details');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                    // if (String.isBlank(boookingObj.Reason_For_Change__c) ){
-                    //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
-                    //     ApexPages.addMessage(myMsg);
-                    //     i = 1;
-                    // }
-                    if(String.isNotBlank(boookingObj.Cancelled_Project__c)){
-
-                        if(String.isBlank(boookingObj.Cancelled_Tower__c)){
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please add Tower for the selected Project');
-                        ApexPages.addMessage(myMsg); 
-                        i = 1;
-                        }
-                    
-                        if(String.isNotBlank(boookingObj.Cancelled_Tower__c) && String.isBlank(boookingObj.Cancelled_Unit_No__c)){
-                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please add Unit for the selected Project and Tower');
-                            ApexPages.addMessage(myMsg); 
-                           i = 1;  
-                        }
-                    }
-                }
-
-                // if (boookingObj.Cancelled_Booking_Date__c == null ) { 
-                //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Booking Date in the Existing Unit Details Section');
-                //     ApexPages.addMessage(myMsg);
-                //     i = 1;
-                //     System.debug('--i: ' + i);
-                // }
-                
-            } 
-
-            /**Added for Cancellation Changes ends */
         
         ///tandem Open////
         if (QuoteDetails != null && QuoteDetails.size() > 0 && TandemOPENParkingList.size() < QuoteDetails[0].Tandem_Open_Additional__c) {
@@ -3174,63 +3003,12 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
         
         //////////////////////////////////////Added BY Aniket Ends Here on 29-09-2022////////////////////////////////////////
         //////////////////////////////////////Receipt Mandatory Checks//////////////////////////////////////////
-        Decimal requiredTokenAmount = 0;
-        if(QuoteDetails != null && !QuoteDetails.isEmpty()){
-        	requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
-        }
-        System.debug(' requiredTokenAmount'+ requiredTokenAmount);
-        System.debug(' boookingObj.Type_Of_sale__c**'+ boookingObj.Type_Of_sale__c);
-        
-        /**Added for Cancellation Changes starts */
-        if(boookingObj.Type_Of_sale__c =='Transfer of unit' || boookingObj.Type_Of_sale__c =='Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') {
-            if(String.isNotBlank(boookingObj.Cancelled_SAP_Customer_Number__c)){
-                oppList = [
-                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,
-                    Booking__r.RW_Total_Receipt_Amount_Received__c
-                    FROM Opportunity 
-                    WHERE SAP_Customer_Number__c = :boookingObj.Cancelled_SAP_Customer_Number__c
-                    LIMIT 1
-                ];
-            }
-            else if(String.isNotBlank(boookingObj.Cancelled_Project__c)&& String.isNotBlank(boookingObj.Cancelled_Tower__c) &&String.isNotBlank(boookingObj.Cancelled_Unit_No__c)){
-                oppList = [
-                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,SAP_Customer_Number__c,
-                    Booking__r.RW_Total_Receipt_Amount_Received__c
-                    FROM Opportunity 
-                    WHERE RW_Project__c =:boookingObj.Cancelled_Project__c AND RW_Project_Unit__r.TowerName__c =: boookingObj.Cancelled_Tower__c 
-                    AND RW_Project_Unit__c =:boookingObj.Cancelled_Unit_No__c
-                    LIMIT 1
-                ];
-            } 
-        }
-        Decimal amountFromOriginalUnit = 0;
-        if(oppList != null && !oppList.isEmpty() && oppList[0].Booking__c != null && oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c != null){
-            amountFromOriginalUnit = oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c;
-        }
-        Boolean skipReceiptChecks = false;
-        if((boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit >= requiredTokenAmount) {
-            skipReceiptChecks = true;
-        }
         system.debug('ReceiptDetails.size():::: ' + ReceiptDetails.size());
         if (ReceiptDetails.size() == 0 && STReceiptDetails.size()==0) {
             System.Debug('insert receipt ' + ReceiptObj);
             System.Debug('receiptlist.size() ' + receiptlist.size());
             
-            Boolean isReceiptRowEmpty = true;
-            if(receiptlist != null && receiptlist.size() > 0) {
-                for(Receipt__c rce : receiptlist) {
-                    if(rce.Mode__c != null || rce.Cheque_DD__c != null || (rce.Total_Amount__c != null && rce.Total_Amount__c > 0) || rce.DraweeBank__c != null) {
-                        isReceiptRowEmpty = false;
-                        break;
-                    }
-                }
-            }
             
-            if (skipReceiptChecks && isReceiptRowEmpty) {
-                // Requirements met for bypass & no receipt data entered. Clear empty row to skip validations.
-                receiptlist.clear();
-            }
-            else{
             System.Debug('--receiptlist :' + receiptlist);
             for(Receipt__c rce : receiptlist)
             {
@@ -3273,7 +3051,6 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
                 }
                 
                 
-                }
             }
             
             System.debug('Step oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
@@ -3416,17 +3193,13 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                     ReceiptLstTobeUpdate.add(receiptOBJTobeUpdate);
             }
 
-            // Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
-            if((boookingObj.Type_Of_sale__c == 'New Sale') ||(oppList != null && !oppList.isEmpty() && (boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit < requiredTokenAmount)){
-                          /**Added for Cancellation Changes ends */
+            Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
             if(totalAmount < requiredTokenAmount){ //Added by Vinay 14-08-2025
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Total Amount is less than the Token Amount, you cannot book this unit.  Token Amount is:'+requiredTokenAmount);
                 ApexPages.addMessage(myMsg); 
                 i = 1;
                 return null;
             }
-            }
-            
             
             try {
                 if (!ReceiptLstTobeUpdate.isEmpty()) {
@@ -4074,70 +3847,33 @@ insert listReceiptDetails;
         return pageRef;
     }
     
-    /**Added for Cancellation Changes starts */
-
-    public void loadTowers() {
-        BookingClass2.loadTowers(towerOptions, boookingObj);
-        /*towerOptions.clear();
-        //Id matchedTowerId = null;
-        towerOptions.add(new SelectOption('', '--Select Tower--'));
-        List<Tower__c> towerLst = [SELECT Id, Name 
-                FROM Tower__c 
-                WHERE ProjectName__c = :boookingObj.Cancelled_Project__c ORDER BY Name];
-
-        System.debug('towerLst**'+towerLst);
-        if(String.isNotBlank(boookingObj.Cancelled_Project__c)) {
-            for(Tower__c t : towerLst) {
-                towerOptions.add(new SelectOption(t.Id, t.Name));
-            }
-        }*/
-    }
-
-    public void loadUnits() {
-        BookingClass2.loadUnits(unitOptions, boookingObj);
-        /*unitOptions.clear();
-        //Id matchedUnitId = null;
-        unitOptions.add(new SelectOption('', '--Select Unit--'));
-        List<Project_Unit__c> projectList = [SELECT Id, Name 
-                FROM Project_Unit__c 
-                WHERE TowerName__c = :boookingObj.Cancelled_Tower__c ORDER BY Name];
-        System.debug('projectList**'+projectList);
-        if(String.isNotBlank(boookingObj.Cancelled_Tower__c)) {
-            for(Project_Unit__c unit : projectList) {
-                unitOptions.add(new SelectOption(unit.Id, unit.Name));
-                // if(unit.Name == opp.Cancelled_Unit__c) {
-                //     matchedUnitId = unit.Id;
-                // }
-            }
-            // if(matchedUnitId != null) {
-            //     boookingObj.Cancelled_Unit_No__c = matchedUnitId;
-            // }
-            // else {
-            //     System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Unit__c);
-            // }
-        }
-        System.debug('unitOptions**'+unitOptions);*/
-    }
-    /**Added for Cancellation Changes ends */
-
-    /**Addded for Cancellation Changes starts */
-    public void typeOfSaleChanged() {
-        
-        boookingObj.Cancelled_Project__c = null;
-        boookingObj.Cancelled_Tower__c = null;
-        boookingObj.Cancelled_Unit_No__c = null;
-        boookingObj.Cancelled_SAP_Customer_Number__c = null;
-        disableCancelledDetails = false;
     
-        
-        if (String.isBlank(boookingObj.Reason_For_Change__c) && oldTypeOfSale!=null ){
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
-                        ApexPages.addMessage(myMsg);
-                       // i = 1;
-        }
-        
+    //Added by coServe 23-03-2023 Start
+    /* public PageReference upload() {
+try {
+document.AuthorId = UserInfo.getUserId();
+document.FolderId = UserInfo.getUserId();
+insert document;
+
+} catch (DMLException e) {
+this.fileUploaded = false;
+ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Kindly upload Booking Application Form'));
+return null;
+} 
+System.debug('document: ' + document.Id);
+this.docId = document.Id;
+String baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
+String fileUrl = baseUrl + '/servlet/servlet.FileDownload?file=' + docId;
+System.debug('fileUrl: ' + fileUrl);
+this.fileUrl = fileUrl;
+this.document = document;
+this.selectedvalue = selectedvalue;
+this.fileUploaded = true;
+ApexPages.addMessage(new ApexPages.message(ApexPages.severity.INFO,'Document uploaded successfully'));
+return null;
 }
-    /**Addded for Cancellation Changes ends */
+//Added by coServe 23-03-2023 End*/
+    
   
     Public static void Dummy(){
         integer i=0;
