@@ -14,71 +14,6 @@ public with sharing class RW_UnitTransferAndCancellation {
         get;
         private set;
     }
-    public Map<String,Team_Members__c> members {
-        get;
-        private set;
-    }
-    
-    public String salesSM {
-        get {
-            if (info.Opportunity__r.Sales_Manager_User__c != null) {
-                return info.Opportunity__r.Sales_Manager_User__r.Name;
-            } else if (info.Opportunity__r.Sales_Manager__c != null) {
-                return info.Opportunity__r.Sales_Manager__c;
-            }
-            return ''; 
-        }
-    }
-    
-    public String CRMAccounts {
-        get {
-            if (info.Project__r.IW_CRM_Head__c != null) {
-                return info.Project__r.IW_CRM_Head__r.Name;
-            } 
-            return ''; 
-        }
-    }
-    
-    public String SalesHead {
-        get {
-            if (info.Project__r.Sales_Head__c != null) {
-                return info.Project__r.Sales_Head__r.Name;
-            } 
-            return ''; 
-        }
-    }
-    
-    public String CRMProjectTeamLead {
-        get;
-        private set;
-    }
-    
-    public String CRMProjectHead {
-        get {
-            if (info.Project__r.CRMHead__c != null) {
-                return info.Project__r.CRMHead__r.Name;
-            } 
-            return ''; 
-        }
-    }
-    
-    public String CRMHead {
-        get {
-            if (info.Project__r.Overall_CRM_Head__c != null) {
-                return info.Project__r.Overall_CRM_Head__r.Name;
-            } 
-            return ''; 
-        }
-    }
-    
-    public String CEO {
-        get {
-            if (info.Project__r.IW_CEO__c != null) {
-                return info.Project__r.IW_CEO__r.Name;
-            } 
-            return ''; 
-        }
-    }
     
     public Decimal brokerageAmount {get; set;}
     public String oldAppNames {get;set;}
@@ -88,7 +23,11 @@ public with sharing class RW_UnitTransferAndCancellation {
     
     @AuraEnabled
     public static Booking__c getBookingInformation(string bookingId){
-        Booking__c bookingInfo= [select Project__r.Name ,Allotment_Premium__c, GST_Tax_G__c ,RM_Name__c, Project__r.CRMHead__r.Name, Project__r.Overall_CRM_Head__r.Name, Unit_No__r.RW_Param4__c,Unit_No__r.TowerName__r.Name, Unit_No__r.Name, Opportunity__r.Primary_Name__c, Opportunity__r.Applicant_Name__c, Opportunity__r.Other_Applicants_Name__c, Status__c, Source_of_Booking__c, Opportunity__r.StageName, Basic_Booking_Amount__c, RW_GST_On_Interest__c, Credited_Amount__c, RW_Total_GST_Amount__c, RW_Total_TDS_Outstanding__c, Total_TDS_Amount_Paid_In_Rs__c, Reason_For_Cancellation__c, Date_of_Cancellation__c, Cancellation_Requested_Status__c, Cancellation_Reason__c,Cancellation_Sub_reason__c, Forfeiture_Amount__c, Brokerage_Amount__c, Interest_Value__c, Taxes_if_any__c, Forfeiture_Amount_Type__c,Other_Forfeiture_Amount__c, Forfeit_Percentage__c, Total_Forfeiture_Amount__c, CGST__c, SGST__c, Booking_Date__c, RW_Registration_Status__c, Primary_Applicant_Name__c,  MVAT__c, Total_Refund_Amount__c, Final_Refund_Amount__c, Quotation__r.Agreement_Value__c, Quotation__r.Agreement_Value_D__c,  RW_Total_Receipt_Amount_Received__c, Opportunity__r.SAP_Customer_Number__c, Cancellation_Subtype__c, Mode_of_Cancellation__c,Payment_Refund_Amount__c,Resale_Status__c,New_Rate__c,New_Flat_Agreement_Value__c,Received_Amtount__c,Scheme_of_Customer__r.Name, Referral_Amount_Cancellation_Checklist__c,Referral_Amount__c, Interest_with_GST__c,TAX__c, GST__c, Total_Amount_to_be_Transferred__c, Swipe_Charges__c, NOTE__c, New_Unit__c, RW_Total_Interest__c,RW_Total_Amount_Collected__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c,Other_Reason__c,Meeting_Date__c,Meeting_Status__c FROM Booking__c  Where id = : bookingId ];        
+        Booking__c bookingInfo= [select Project__r.Name ,Allotment_Premium__c, GST_Tax_G__c ,RM_Name__c, Project__r.CRMHead__r.Name, Project__r.Overall_CRM_Head__r.Name, Unit_No__r.RW_Param4__c,Unit_No__r.TowerName__r.Name, Unit_No__r.Name, Opportunity__r.Primary_Name__c, Opportunity__r.Applicant_Name__c, Opportunity__r.Other_Applicants_Name__c, Status__c, Source_of_Booking__c, Opportunity__r.StageName, Basic_Booking_Amount__c, RW_GST_On_Interest__c, Credited_Amount__c, RW_Total_GST_Amount__c, RW_Total_TDS_Outstanding__c, Total_TDS_Amount_Paid_In_Rs__c, Reason_For_Cancellation__c, Date_of_Cancellation__c, Cancellation_Requested_Status__c, Cancellation_Reason__c,Cancellation_Sub_reason__c, Forfeiture_Amount__c, Brokerage_Amount__c, Interest_Value__c, Taxes_if_any__c, Forfeiture_Amount_Type__c,Other_Forfeiture_Amount__c, Forfeit_Percentage__c, Total_Forfeiture_Amount__c, CGST__c, SGST__c, Booking_Date__c, RW_Registration_Status__c, Primary_Applicant_Name__c,  MVAT__c, Total_Refund_Amount__c, Final_Refund_Amount__c, Quotation__r.Agreement_Value__c, Quotation__r.Agreement_Value_D__c,  RW_Total_Receipt_Amount_Received__c, Opportunity__r.SAP_Customer_Number__c, Cancellation_Subtype__c, Mode_of_Cancellation__c,Payment_Refund_Amount__c,Resale_Status__c,New_Rate__c,New_Flat_Agreement_Value__c,Received_Amtount__c,
+                                 Scheme_of_Customer__r.Name, Referral_Amount_Cancellation_Checklist__c,Referral_Amount__c, Interest_with_GST__c, 
+                                 TAX__c, GST__c, Total_Amount_to_be_Transferred__c, Swipe_Charges__c, NOTE__c, RW_Total_Interest__c, 
+                                 RW_Total_Amount_Collected__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c
+                                 FROM Booking__c  Where id = : bookingId ];   // Removed the field New Unit from SOQL by Vinay 01-10-2025
         
         List<Brokerage_Invoice__c> brokInvoices = [SELECT Id, Total_Amount_Paid__c FROM Brokerage_Invoice__c WHERE Booking__c =: bookingId];
         Decimal brokerageAmount = 0;
@@ -108,96 +47,79 @@ public with sharing class RW_UnitTransferAndCancellation {
     
    // Unit Cancelled
     @AuraEnabled
-    public static void bookingcancelled(Map<String,String> cancDetails){
+    public static void bookingcancelled(string BookingId , string cancelReason ,string cancellationSubReason ,string ForfeitureAmount ,string BrokerageAmount , string InterestValue , string Taxesifany ,string ForfeitureAmounttype , string Otherforfeitureamount , string ForfeiPercentage ,string TotalForfeitureAmount, string TotalRefundAmount , string FinalRefundAmount, string MVAT , string TDS , string cancellationdescription , string CGST , string SGST, string TotalRecievedAmount, String cancSubType, String modeofCanc, String payRefAmt, String ResaleStatus, String newRate, String newFlatAgrVal, String recvAmt, String referralAmt, String swipeCharges, String brokeragePaid, String totalAmtToBeTransfrd, String note, String gst){
         BookingTriggerHandler.byPass =true;
-        Booking__c boookingRecord = [Select Id , GST_Tax_G__c,Checklist_download_date__c ,
-                                     Cancellation_initiation_date__c ,Forfeiture_Amount__c , Brokerage_Amount__c ,
-                                     Opportunity__r.StageName,Interest_Value__c , Taxes_if_any__c ,Forfeiture_Amount_Type__c ,
-                                     Other_Forfeiture_Amount__c , Forfeit_Percentage__c , Total_Forfeiture_Amount__c ,Cancellation_Reason__c ,
-                                     Cancellation_Sub_reason__c ,Date_of_Cancellation__c , Opportunity__r.Status__c , Cancellation_Requested_Status__c , 
-                                     Status__c, Old_Opp_Status__c , Old_status__c , RW_Total_TDS_Outstanding__c , MVAT__c , Reason_For_Cancellation__c ,
-                                     CGST__c , SGST__c , Total_Refund_Amount__c , Final_Refund_Amount__c, RW_Total_Receipt_Amount_Received__c,
-                                     Meeting_Date__c,Other_Reason__c  FROM Booking__c Where id = :  cancDetails.get('BookingId')];
-        if(cancDetails.get('ForfeitureAmount') != null){
-            boookingRecord.Forfeiture_Amount__c    = Decimal.ValueOf(cancDetails.get('ForfeitureAmount'));
+        Booking__c boookingRecord = [Select Id , GST_Tax_G__c,Checklist_download_date__c ,Cancellation_initiation_date__c ,Forfeiture_Amount__c , Brokerage_Amount__c , Opportunity__r.StageName,Interest_Value__c , Taxes_if_any__c ,Forfeiture_Amount_Type__c ,Other_Forfeiture_Amount__c , Forfeit_Percentage__c , Total_Forfeiture_Amount__c ,Cancellation_Reason__c , Cancellation_Sub_reason__c ,Date_of_Cancellation__c , Opportunity__r.Status__c , Cancellation_Requested_Status__c , Status__c, Old_Opp_Status__c , Old_status__c , RW_Total_TDS_Outstanding__c , MVAT__c , Reason_For_Cancellation__c ,CGST__c , SGST__c , Total_Refund_Amount__c , Final_Refund_Amount__c, RW_Total_Receipt_Amount_Received__c  FROM Booking__c Where id = : BookingId];
+        if(ForfeitureAmount != null){
+            boookingRecord.Forfeiture_Amount__c    = Decimal.ValueOf(ForfeitureAmount);
         }
-        if(cancDetails.get('BrokerageAmount') != null){
-            boookingRecord.Brokerage_Amount__c    = Decimal.ValueOf(cancDetails.get('BrokerageAmount'));
+        if(BrokerageAmount != null){
+            boookingRecord.Brokerage_Amount__c    = Decimal.ValueOf(BrokerageAmount);
         }
-        if(cancDetails.get('InterestValue') != null && (cancDetails.get('Cancellation_Reason__c') == 'Transfer' || cancDetails.get('Cancellation_Reason__c') == 'Upgrade/Downgrade')){
-            boookingRecord.Interest_with_GST__c    = Decimal.ValueOf(cancDetails.get('InterestValue'));
+        if(InterestValue != null && cancelReason == 'Unit cancelled' && (cancellationSubReason == 'R3' || cancellationSubReason == 'Z8')){
+            boookingRecord.Interest_with_GST__c    = Decimal.ValueOf(InterestValue);
         }else{
-            boookingRecord.Interest_Value__c    = Decimal.ValueOf(cancDetails.get('InterestValue'));
+            boookingRecord.Interest_Value__c    = Decimal.ValueOf(InterestValue);
         }
-        if(cancDetails.get('Taxesifany') != null){
-            boookingRecord.Taxes_if_any__c    = Decimal.ValueOf(cancDetails.get('Taxesifany'));
+        if(Taxesifany != null){
+            boookingRecord.Taxes_if_any__c    = Decimal.ValueOf(Taxesifany);
         }
-        if(cancDetails.get('Otherforfeitureamount') != null){
-            boookingRecord.GST_Tax_G__c    = Decimal.ValueOf(cancDetails.get('Otherforfeitureamount'));
+        if(Otherforfeitureamount != null){
+            boookingRecord.GST_Tax_G__c    = Decimal.ValueOf(Otherforfeitureamount);
         }
-        if(cancDetails.get('ForfeiPercentage') != null){
-            boookingRecord.Forfeit_Percentage__c    = Decimal.ValueOf(cancDetails.get('ForfeiPercentage'));
+        if(ForfeiPercentage != null){
+            boookingRecord.Forfeit_Percentage__c    = Decimal.ValueOf(ForfeiPercentage);
         }
-        if(cancDetails.get('TotalForfeitureAmount') != null){
-            boookingRecord.Total_Forfeiture_Amount__c    = Decimal.ValueOf(cancDetails.get('TotalForfeitureAmount'));
+        if(TotalForfeitureAmount != null){
+            boookingRecord.Total_Forfeiture_Amount__c    = Decimal.ValueOf(TotalForfeitureAmount);
         }
-        boookingRecord.Cancellation_Reason__c = cancDetails.get('cancelReason');
-        boookingRecord.Cancellation_Sub_reason__c =  cancDetails.get('cancellationSubReason');
-        if(cancDetails.get('meetingSatus')!=null){
-        	boookingRecord.Meeting_Status__c = cancDetails.get('meetingSatus');
-        }
-        System.debug('MeetingDate---->'+cancDetails.get('meetingDate'));
-        if(cancDetails.get('meetingDate')!=null){
-        	boookingRecord.Meeting_Date__c = Date.valueOf(cancDetails.get('meetingDate'));
-        }
+        boookingRecord.Cancellation_Reason__c = cancelReason;
+        boookingRecord.Cancellation_Sub_reason__c =  cancellationSubReason;
         if(boookingRecord.Old_status__c == null){
             boookingRecord.Old_status__c = boookingRecord.Status__c;
             boookingRecord.Old_Opp_Status__c = boookingRecord.Opportunity__r.StageName; 
         } 
         boookingRecord.Status__c =  'Cancellation Initiated';
         //boookingRecord.Opportunity__r.Status__c = 'Cancellation Initiated'; 
-        if(cancDetails.get('TDS') != null){
-            boookingRecord.Total_TDS_Amount_Paid_In_Rs__c = Decimal.ValueOf(cancDetails.get('TDS'));
+        if(TDS != null){
+            boookingRecord.Total_TDS_Amount_Paid_In_Rs__c = Decimal.ValueOf(TDS);
         }
-        if(cancDetails.get('MVAT') != null){
-            boookingRecord.MVAT__c =     Decimal.ValueOf(cancDetails.get('MVAT'));
+        if(MVAT != null){
+            boookingRecord.MVAT__c =     Decimal.ValueOf(MVAT);
         }
-        if(cancDetails.get('TotalRefundAmount') != null){
-            boookingRecord.Total_Refund_Amount__c = Decimal.ValueOf(cancDetails.get('TotalRefundAmount'));
+        if(TotalRefundAmount != null){
+            boookingRecord.Total_Refund_Amount__c = Decimal.ValueOf(TotalRefundAmount);
         }
-        if(cancDetails.get('FinalRefundAmount') != null){
-            boookingRecord.Final_Refund_Amount__c  = Decimal.ValueOf(cancDetails.get('FinalRefundAmount'));
+        if(FinalRefundAmount != null){
+            boookingRecord.Final_Refund_Amount__c  = Decimal.ValueOf(FinalRefundAmount);
         }
-        boookingRecord.Reason_For_Cancellation__c =  cancDetails.get('cancellationdescription');  
-        if(cancDetails.get('CGST') != null){
-            boookingRecord.CGST__c = Decimal.ValueOf(cancDetails.get('CGST'));
+        boookingRecord.Reason_For_Cancellation__c =  cancellationdescription;  
+        if(CGST != null){
+            boookingRecord.CGST__c = Decimal.ValueOf(CGST);
         }
-        if(cancDetails.get('SGST') != null){
-            boookingRecord.SGST__c = Decimal.ValueOf(cancDetails.get('SGST'));
+        if(SGST != null){
+            boookingRecord.SGST__c = Decimal.ValueOf(SGST);
         }
         boookingRecord.Cancellation_initiation_date__c = system.today();
         boookingRecord.Checklist_download_date__c = system.today();  
-        boookingRecord.RW_Total_Receipt_Amount_Received__c = Decimal.ValueOf(cancDetails.get('TotalRecievedAmount'));
-        boookingRecord.Cancellation_Subtype__c = cancDetails.get('cancSubType');
-        boookingRecord.Mode_of_Cancellation__c = cancDetails.get('modeofCanc');
-        boookingRecord.Payment_Refund_Amount__c = cancDetails.get('payRefAmt');
-        boookingRecord.Resale_Status__c = cancDetails.get('ResaleStatus');
-        if(cancDetails.get('newRate') != null){
-            boookingRecord.New_Rate__c = Decimal.ValueOf(cancDetails.get('newRate'));
+        boookingRecord.RW_Total_Receipt_Amount_Received__c = Decimal.ValueOf(TotalRecievedAmount);
+        boookingRecord.Cancellation_Subtype__c = cancSubType;
+        boookingRecord.Mode_of_Cancellation__c = modeofCanc;
+        boookingRecord.Payment_Refund_Amount__c = payRefAmt;
+        boookingRecord.Resale_Status__c = ResaleStatus;
+        if(newRate != null){
+            boookingRecord.New_Rate__c = Decimal.ValueOf(newRate);
         }
-        if(cancDetails.get('newFlatAgrVal') != null){
-            boookingRecord.New_Flat_Agreement_Value__c = Decimal.ValueOf(cancDetails.get('newFlatAgrVal'));
+        if(newFlatAgrVal != null){
+            boookingRecord.New_Flat_Agreement_Value__c = Decimal.ValueOf(newFlatAgrVal);
         }
-        if(cancDetails.get('recvAmt') != null){
-            boookingRecord.Received_Amtount__c = Decimal.ValueOf(cancDetails.get('recvAmt'));
+        if(recvAmt != null){
+            boookingRecord.Received_Amtount__c = Decimal.ValueOf(recvAmt);
         }
-        if(cancDetails.get('referralAmt') != null){
-            boookingRecord.Referral_Amount_Cancellation_Checklist__c = Decimal.ValueOf(cancDetails.get('referralAmt'));
+        if(referralAmt != null){
+            boookingRecord.Referral_Amount_Cancellation_Checklist__c = Decimal.ValueOf(referralAmt);
         }
-        if(cancDetails.get('otherReason')!=null){
-            boookingRecord.Other_Reason__c = cancDetails.get('otherReason');
-        }
-        /*if(swipeCharges != null){
+        if(swipeCharges != null){
             boookingRecord.Swipe_Charges__c = Decimal.ValueOf(swipeCharges);
         }
         if(brokeragePaid != null){
@@ -208,14 +130,14 @@ public with sharing class RW_UnitTransferAndCancellation {
         }
         if(gst != null){
             boookingRecord.GST__c = Decimal.ValueOf(gst);
-        }*/
+        }
         /*if(cancelReason == 'Unit cancelled' && (cancellationSubReason == 'R3' || cancellationSubReason == 'Z8')){
             boookingRecord.TAX__c = Decimal.ValueOf(Taxesifany);
         }*/
-        // boookingRecord.NOTE__c = note;
+        boookingRecord.NOTE__c = note;
         Update boookingRecord;
         BookingTriggerHandler.byPass =false;
-        sendEmail(cancDetails.get('BookingId'));
+        sendEmail(BookingId);
     }
     
     @AuraEnabled
@@ -241,15 +163,7 @@ public with sharing class RW_UnitTransferAndCancellation {
             boookingRecord.Old_status__c = boookingRecord.Status__c;
             boookingRecord.Old_Opp_Status__c = boookingRecord.Opportunity__r.StageName; 
         } 
-        if(cancDetails.get('cancelReason') == 'Transfer'){
-        	boookingRecord.Status__c =  'Transfer In Progress';
-        }
-        else if(cancDetails.get('cancelReason') == 'Upgrade/Downgrade'){
-            boookingRecord.Status__c = 'Upgrade In Progress';
-        }
-        else{
-            boookingRecord.Status__c = 'Cancellation Initiated';
-        }
+        boookingRecord.Status__c =  'Cancellation Initiated';
         //boookingRecord.Opportunity__r.Status__c = 'Cancellation Initiated'; 
         if(cancDetails.get('TDS') != null){
             boookingRecord.Total_TDS_Amount_Paid_In_Rs__c = Decimal.ValueOf(cancDetails.get('TDS'));
@@ -297,16 +211,6 @@ public with sharing class RW_UnitTransferAndCancellation {
         if(cancDetails.get('gst') != null){
             boookingRecord.GST__c = Decimal.ValueOf(cancDetails.get('gst'));
         }
-        if(cancDetails.get('meetingSatus')!=null){
-        	boookingRecord.Meeting_Status__c = cancDetails.get('meetingSatus');
-        }
-        if(cancDetails.get('meetingDate')!=null){
-        	boookingRecord.Meeting_Date__c = Date.valueOf(cancDetails.get('meetingDate'));
-        }
-        if(cancDetails.get('otherReason')!=null){
-            boookingRecord.Other_Reason__c = cancDetails.get('otherReason');
-        }
-        
         /*if(cancelReason == 'Unit cancelled' && (cancellationSubReason == 'R3' || cancellationSubReason == 'Z8')){
             boookingRecord.TAX__c = Decimal.ValueOf(Taxesifany);
         }*/
@@ -355,39 +259,16 @@ public with sharing class RW_UnitTransferAndCancellation {
                 Total_Demand_Raised_Principal__c,RW_Total_Interest__c,Total_Brokerage_Amount__c,RW_Registration_Date__c,Net_Rate__c, Unit_No__r.RW_Param1__c,
                 Unit_No__r.RW_Param2__c,TAX__c,FBL5N__c,Swipe_Charges__c,RW_Total_Amount_Received_Without_GST__c,GST__c,Interest_with_GST__c,
                 Total_Amount_to_be_Transferred__c,Project__r.Accounts_Head__c, Unit_No__r.Relationship_Manager__r.TL_Name__c,NOTE__c,Brokerage_Paid__c,
-                Project__r.CRM_MIS_Head__r.Name, New_Unit__c, New_Unit__r.Booking__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c,
-                /*Added by Prashant..08-05-26*/Project__r.IW_CRM_Head__c,Project__r.IW_CRM_Head__r.Name,Project__r.IW_Project_Lead__c,Project__r.IW_Project_Lead__r.Name,Opportunity__r.Sales_Manager__c,Opportunity__r.Sales_Manager_User__c,Opportunity__r.Sales_Manager_User__r.Name,Project__r.Sales_Head__c,Project__r.Sales_Head__r.Name,Project__r.CRMHead__c,Project__r.IW_CEO__c,Project__r.IW_CEO__r.Name,Project__r.Overall_CRM_Head__c,
-                Unit_No__c,Unit_No__r.Relationship_Manager__c
-                From Booking__c Where Id=:recordId LIMIT 1];
+                Project__r.CRM_MIS_Head__r.Name, New_Unit__r.Booking__c, Stamp_Duty_Cheque_Exchang_Amt_to_be_paid__c
+                From Booking__c Where Id=:recordId LIMIT 1]; // Removed the field New Unit from SOQL by Vinay 01-10-2025
         
-        List<Booking__c> newBkg = [SELECT Id, Net_Rate__c, Allotment_Premium__c, Unit_No__r.Saleable_Area__c, Primary_Applicant_Name__c,Opportunity__r.SAP_Customer_Number__c, Booking_Date__c, Unit_No__r.RW_Param1__c,Unit_No__r.RW_Param2__c, Unit_No__r.RW_Param4__c FROM Booking__c WHERE Id =: info.New_Unit__r.Booking__c];
+        List<Booking__c> newBkg = [SELECT Id, Net_Rate__c, Allotment_Premium__c, Unit_No__r.Saleable_Area__c, Primary_Applicant_Name__c,
+                   Opportunity__r.SAP_Customer_Number__c, Booking_Date__c, Unit_No__r.RW_Param1__c,
+                   Unit_No__r.RW_Param2__c, Unit_No__r.RW_Param4__c
+                   FROM Booking__c WHERE Id =: info.New_Unit__r.Booking__c];
         if(newBkg.size() > 0){
             newInfo = newBkg[0];
         }
-        
-        //Added by Prashant to fetch Back office team from project teams.//Added on 08-05-26..
-        list<Team__c> teamlist =  new list<Team__c>();
-        members = new Map<String,Team_Members__c>();
-        if(info.Project__c != null){
-            teamlist = [Select Id,(Select Id,User__r.Name,Approver_Type__c,IsActive__c from Team_Members__r) from Team__c where Project__c =: info.Project__c and Team_Type__c  = 'Cancellation Team' ];
-            if(!teamlist.isEmpty()){
-                if(teamlist[0].Team_Members__r != null){
-                    for(Team_Members__c tm : teamlist[0].Team_Members__r){
-                        members.put(tm.Approver_Type__c,tm);
-                    }
-                }
-            }            
-        }
-        //Added by Prashant to fetch Back office team from project teams.//Added on 08-05-26..END
-        //Added by Prashant to assign CRMProjectTeamLead.//Added on 08-05-26..
-        CRMProjectTeamLead = '';
-        if(info.Unit_No__c != null && info.Unit_No__r.Relationship_Manager__c  != null ){
-            list<Relationship_Manager__c > rmtl = [Select id,User__r.Manager.Name,User__r.ManagerId from Relationship_Manager__c where id =: info.Unit_No__r.Relationship_Manager__c  ];
-            if(!rmtl.isEmpty() && rmtl[0].User__r.ManagerId != null){
-                CRMProjectTeamLead = rmtl[0].User__r.Manager.Name;
-            }
-        }
-        //Added by Prashant to assign CRMProjectTeamLead.//Added on 08-05-26..End
          
         /*List<Brokerage_Invoice__c> brokInvoices = [SELECT Id, Total_Amount_Paid__c FROM Brokerage_Invoice__c WHERE Booking__c =: recordId];
         brokerageAmount = 0;
@@ -399,7 +280,8 @@ public with sharing class RW_UnitTransferAndCancellation {
             bkgIds.add(newInfo.Id);
         }
         
-        List<Applicant_Details__c> apps = [SELECT Id,Booking__c, Name FROM Applicant_Details__c WHERE Booking__c =: bkgIds AND Applicant_Number__c = 'Second Applicant'];
+        List<Applicant_Details__c> apps = [SELECT Id,Booking__c, Name FROM Applicant_Details__c WHERE Booking__c =: bkgIds AND 
+                                           Applicant_Number__c = 'Second Applicant'];
         
         Map<String, String> appMap = new Map<String, String>();
         for(Applicant_Details__c app : apps){
@@ -439,23 +321,28 @@ public with sharing class RW_UnitTransferAndCancellation {
         string CRMHead = null;
         string CRMLead = null;
         string MISTeam = null ;   
-        if(bookingRecord.Unit_No__r.Relationship_Manager__r.RM_Email__c!=null && bookingRecord.Unit_No__r.Relationship_Manager__c != System.label.System_Administrator_User_Id){   
+        if(bookingRecord.Unit_No__r.Relationship_Manager__r.RM_Email__c!=null && bookingRecord.Unit_No__r.Relationship_Manager__c != System.label.System_Administrator_User_Id)
+        {   
             Rmanager =bookingRecord.Unit_No__r.Relationship_Manager__r.RM_Email__c;
             emailsToSend.add(Rmanager);
         }
-        if(bookingRecord.Sales_Manager__r.Email!=null && bookingRecord.Sales_Manager__c != System.label.System_Administrator_User_Id){
+        if(bookingRecord.Sales_Manager__r.Email!=null && bookingRecord.Sales_Manager__c != System.label.System_Administrator_User_Id)
+        {
             SManger = bookingRecord.Sales_Manager__r.Email;
             emailsToSend.add(SManger);
         }
-        if(bookingRecord.Project__r.CRMHead__r.Email!=null && bookingRecord.Project__r.CRMHead__c != System.label.System_Administrator_User_Id){
+        if(bookingRecord.Project__r.CRMHead__r.Email!=null && bookingRecord.Project__r.CRMHead__c != System.label.System_Administrator_User_Id)
+        {
             CRMHead = bookingRecord.Project__r.CRMHead__r.Email;
             emailsToSend.add(CRMHead);  
         }
-        if(bookingRecord.Project__r.Project_CRM_Lead__r.Email!=null && bookingRecord.Status__c  == 'Booking Cancelled - Refunded' && bookingRecord.Project__r.Project_CRM_Lead__c != System.label.System_Administrator_User_Id){
+        if(bookingRecord.Project__r.Project_CRM_Lead__r.Email!=null && bookingRecord.Status__c  == 'Booking Cancelled - Refunded' && bookingRecord.Project__r.Project_CRM_Lead__c != System.label.System_Administrator_User_Id)
+        {
             CRMLead = bookingRecord.Project__r.Project_CRM_Lead__r.Email;
             emailsToSend.add(CRMLead);  
         }
-        if(bookingRecord.Project__r.Sales_MIS__r.Email !=null && bookingRecord.Status__c  == 'Booking Cancelled - Refunded' && bookingRecord.Project__r.Sales_MIS__c != System.label.System_Administrator_User_Id){
+        if(bookingRecord.Project__r.Sales_MIS__r.Email !=null && bookingRecord.Status__c  == 'Booking Cancelled - Refunded' && bookingRecord.Project__r.Sales_MIS__c != System.label.System_Administrator_User_Id)
+        {
             MISTeam = bookingRecord.Project__r.Sales_MIS__r.Email;
             emailsToSend.add(MISTeam);  
         }
@@ -483,17 +370,21 @@ public with sharing class RW_UnitTransferAndCancellation {
      emailMessage.setHtmlBody(body);    
      mails.add(emailMessage);
      Messaging.SendEmailResult[] results = Messaging.sendEmail(mails);   
-        if (results[0].success){
-            System.debug('The email was sent successfully.');
-        }else{
-            System.debug('The email failed to send: ' + results[0].errors[0].message);
-        }
+	 if (results[0].success){
+                        System.debug('The email was sent successfully.');
+     }
+    else{
+    	System.debug('The email failed to send: ' + results[0].errors[0].message);
+    }
     }
     
     @InvocableMethod(label='CloningOpportunity' description='cloning the opportunity record when booking is unit transfer')
     public static void cloneOpportunityRecord(List<ID> ids){
         system.debug(ids);
-        Opportunity opp = [Select Id ,Name , SAP_Customer_Number__c , RW_Project__c ,AccountId ,StageName ,Account_Mobile_Number__c , Customer_Reference__c , RW_Mobile_No__c , RW_Previous_Opportunity__c ,Walkin_Source__c,Walk_in_Sub_Source__c,RW_Walkin_Channel_Partner__c ,Sales_Manager__c, Booking__c,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, Sourcing_Manager__c, RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name from Opportunity Where Id =: ids LIMIT 1]; // Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 04-12-2025
+        Opportunity opp = [Select Id ,Name , SAP_Customer_Number__c , RW_Project__c ,AccountId ,StageName , 
+                           Account_Mobile_Number__c , Customer_Reference__c , RW_Mobile_No__c , RW_Previous_Opportunity__c , 
+                           Walkin_Source__c,Walk_in_Sub_Source__c,RW_Walkin_Channel_Partner__c ,Sales_Manager__c, Booking__c, 
+                           RW_Sales_Associate__c, Sourcing_Manager__c, RW_Sourcing_Manager__c from Opportunity Where Id =: ids LIMIT 1];
         Opportunity clonedRecord = opp.clone();
         clonedRecord.Name = opp.Name;
         clonedRecord.StageName = 'Qualification';
@@ -504,7 +395,6 @@ public with sharing class RW_UnitTransferAndCancellation {
         clonedRecord.Sales_Manager__c = opp.Sales_Manager__c;
         clonedRecord.SAP_Customer_Number__c = opp.SAP_Customer_Number__c;
         clonedRecord.RW_Project__c = opp.RW_Project__c;
-        clonedRecord.Booking__c = null; //Added by Vinay 27-04-2026
         Map<String, Opp_Close_Date__c> oppClsDateMap = Opp_Close_Date__c.getall();
         if(oppClsDateMap.keySet().size() > 0){
             clonedRecord.CloseDate = System.today().addDays(Integer.valueOf(oppClsDateMap.get(clonedRecord.RW_project__c).No_of_Days__c)); 
@@ -516,6 +406,7 @@ public with sharing class RW_UnitTransferAndCancellation {
         clonedRecord.RW_Sales_Associate__c = opp.RW_Sales_Associate__c; //Added by Vinay 04-02-2022
         clonedRecord.Sourcing_Manager__c = opp.Sourcing_Manager__c; //Added by Vinay 04-02-2022
         clonedRecord.RW_Sourcing_Manager__c = opp.RW_Sourcing_Manager__c; //Added by Vinay 04-02-2022*/
+        system.debug('Cloned Record' + clonedRecord);
         Insert clonedRecord;
         List<RW_EOI__c> eoi = [Select Id ,Opportunity__c from RW_EOI__c WHere  Opportunity__c =:opp.Id];
             for(RW_EOI__c eoiId : eoi){
@@ -535,42 +426,51 @@ public with sharing class RW_UnitTransferAndCancellation {
     
      @AuraEnabled
     public static void updateCancellationChecklistDate(string recordId) {
+    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Cancellation_checklist_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Cancellation_checklist_Upload_Date__c = system.today();
     update obj;
      BookingTriggerHandler.byPass =false;   
+    system.debug(obj);
     }
     
     @AuraEnabled
     public static void updateCancellationLetterDate(string recordId) {
+    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Cancellation_Letter_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Cancellation_Letter_Upload_Date__c = system.today();
     update obj;
     BookingTriggerHandler.byPass =false;    
+    system.debug(obj);
     }
     
     @AuraEnabled
     public static void updateDeedofCancellationDate(string recordId) {
     BookingTriggerHandler.byPass =true;    
+    system.debug('Booking ID is to' + recordId);
     Booking__c obj = [Select Id, Deed_of_Cancellation_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Deed_of_Cancellation_Upload_Date__c = system.today();
     update obj;
     BookingTriggerHandler.byPass =false;    
+    system.debug(obj);
     }
     
     @AuraEnabled
     public static void transferRequestUpload(string recordId) {
+    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Unit_Transfer_Request_Upload_Date__c from Booking__c  WHere id=:recordId];
     obj.Unit_Transfer_Request_Upload_Date__c = system.today();
     update obj;
     BookingTriggerHandler.byPass =false;    
+    system.debug(obj);
     }
         
     @AuraEnabled
     public static void updateRefundHandoverDocument(string recordId) {
+    system.debug('Booking ID is to' + recordId);
     BookingTriggerHandler.byPass =true;    
     Booking__c obj = [Select Id, Update_Refund_Handover_Date__c , status__c from Booking__c  WHere id=:recordId];
    // obj.Update_Refund_Handover_Date__c = Date.valueof(handoverDocumentDate);
@@ -578,6 +478,7 @@ public with sharing class RW_UnitTransferAndCancellation {
     update obj;
     BookingTriggerHandler.byPass =false;    
     sendEmail(recordId);
+    system.debug(obj);
     }
     
     @AuraEnabled
@@ -588,34 +489,36 @@ public with sharing class RW_UnitTransferAndCancellation {
     
     @AuraEnabled
     public static void updateRetainBooking(string recordId) {        
-        Booking__c boookingRecord = [Select Id , Cancellation_Reason__c, Cancellation_Sub_reason__c , Opportunity__c  , Status__c , Cancellation_Requested_Status__c,Opportunity__r.StageName , Old_Opp_Status__c , Old_status__c, Is_Retained__c , Retention_Date__c from Booking__c  WHere id=:recordId];
-        string oldstatus = boookingRecord.Old_Opp_Status__c;
-        boookingRecord.Reason_For_Cancellation__c = null;
-        boookingRecord.Cancellation_Sub_reason__c =  null;
-        boookingRecord.Cancellation_Reason__c = null;
-        boookingRecord.Cancellation_Requested_Status__c = 'Retained';
-        boookingRecord.Status__c =  boookingRecord.Old_status__c;
-        boookingRecord.Is_Retained__c = true;
-        boookingRecord.Retention_Date__c = system.today();    
-        //boookingRecord.Opportunity__r.Status__c = boookingRecord.Old_Opp_Status__c;  
-        boookingRecord.Old_status__c = null;
-        Opportunity opp = new Opportunity();
-        opp.Id = boookingRecord.Opportunity__c;
-        opp.StageName = oldstatus;
-        update opp;
-        BookingTriggerHandler.byPass =true;
-        update boookingRecord;
-        BookingTriggerHandler.byPass =false;
+    Booking__c boookingRecord = [Select Id , Cancellation_Reason__c, Cancellation_Sub_reason__c , Opportunity__c  , Status__c , Cancellation_Requested_Status__c,Opportunity__r.StageName , Old_Opp_Status__c , Old_status__c, Is_Retained__c , Retention_Date__c from Booking__c  WHere id=:recordId];
+            string oldstatus = boookingRecord.Old_Opp_Status__c;
+        	boookingRecord.Reason_For_Cancellation__c = null;
+            boookingRecord.Cancellation_Sub_reason__c =  null;
+        	boookingRecord.Cancellation_Reason__c = null;
+        	boookingRecord.Cancellation_Requested_Status__c = 'Retained';
+            boookingRecord.Status__c =  boookingRecord.Old_status__c;
+        	boookingRecord.Is_Retained__c = true;
+            boookingRecord.Retention_Date__c = system.today();    
+            //boookingRecord.Opportunity__r.Status__c = boookingRecord.Old_Opp_Status__c;  
+        	boookingRecord.Old_status__c = null;
+        	Opportunity opp = new Opportunity();
+            opp.Id = boookingRecord.Opportunity__c;
+        	opp.StageName = oldstatus;
+            update opp;
+            BookingTriggerHandler.byPass =true;
+    		update boookingRecord;
+        	BookingTriggerHandler.byPass =false;
     }
     
     @AuraEnabled
     public static Booking__c getRefundHandoverInfo(string bookingId) {
-    Booking__c boookingRecord = [Select Id,Status__c,Opportunity__r.Status__c,Cancellation_Requested_Status__c from Booking__c  WHere id=:bookingId Limit 1];
+    Booking__c boookingRecord = [Select Id ,  Status__c , Opportunity__r.Status__c , Cancellation_Requested_Status__c from Booking__c  WHere id=:bookingId Limit 1];
+    system.debug(boookingRecord);
     return boookingRecord;
     }
        
     @AuraEnabled
-    public  static void sendApprovalRequest(String recordId){
+    public  static void sendApprovalRequest(String recordId)
+    {
         Booking__c obj = [select Project__r.CRMHead__c , Project__r.Overall_CRM_Head__c , Level_Two_Approver__c , Level_Three_Approver__c from Booking__c Where Id =:recordId];
         if(obj !=null && (obj.Project__r.CRMHead__c != obj.Level_Two_Approver__c || obj.Project__r.Overall_CRM_Head__c != obj.Level_Three_Approver__c)){
             BookingTriggerHandler.byPass =true;
@@ -624,15 +527,17 @@ public with sharing class RW_UnitTransferAndCancellation {
             update obj;
             BookingTriggerHandler.byPass =false;
         }
-        try{
-        Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
+        try
+        {
+        Approval.ProcessSubmitRequest req1 = 
+        new Approval.ProcessSubmitRequest();
         req1.setComments('Request for Booking Cancellation');
         req1.setObjectId(recordId);
         
         // Submit on behalf of a specific submitter
         
         // Submit the record to specific process and skip the criteria evaluation
-        req1.setProcessDefinitionNameOrId('Booking_Cancellation_4'); //Commented by Vinay 21-03-2025
+        req1.setProcessDefinitionNameOrId('Booking_Cancellation_1'); //Commented by Vinay 21-03-2025
         //req1.setSkipEntryCriteria(true);
         
         // Submit the approval request for the account
@@ -640,13 +545,16 @@ public with sharing class RW_UnitTransferAndCancellation {
         
         // Verify the result
         //System.assert(result.isSuccess());
-        }catch(Exception e){
+    }
+        catch(Exception e)
+        {
             throw new AuraHandledException(e.getMessage());
         }
 }
     
     @AuraEnabled
-    public  static void sendApprovalRequestforUnitTransfer(String recordId){
+    public  static void sendApprovalRequestforUnitTransfer(String recordId)
+    {
         Booking__c obj = [select Project__r.CRMHead__c , Project__r.Overall_CRM_Head__c , Level_Two_Approver__c , Level_Three_Approver__c from Booking__c Where Id =:recordId];
         if(obj !=null && (obj.Project__r.CRMHead__c != obj.Level_Two_Approver__c || obj.Project__r.Overall_CRM_Head__c != obj.Level_Three_Approver__c)){
             BookingTriggerHandler.byPass =true;
@@ -655,8 +563,10 @@ public with sharing class RW_UnitTransferAndCancellation {
             update obj;
             BookingTriggerHandler.byPass =false;
         }
-        try{
-        Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
+        try
+        {
+        Approval.ProcessSubmitRequest req1 = 
+        new Approval.ProcessSubmitRequest();
         req1.setComments('Request for Booking Cancellation');
         req1.setObjectId(recordId);
         
@@ -671,178 +581,25 @@ public with sharing class RW_UnitTransferAndCancellation {
         
         // Verify the result
         //System.assert(result.isSuccess());
-        }catch(Exception e){
+    }
+        catch(Exception e)
+        {
             throw new AuraHandledException(e.getMessage());
         }
 }
     
     @AuraEnabled
     public static Project_Unit__c getUnitInfo(string unitId, String bkgId){
-        Project_Unit__c unitInfo = [SELECT Id, Booking__c, Booking__r.Name, Booking__r.Opportunity__r.SAP_Customer_Number__c,Booking__r.Primary_Applicant_Name__c, Booking__r.Allotment_Premium__c, Saleable_Area__c,Booking__r.Net_Rate__c, Booking__r.Booking_Date__c, RW_Param1__c, RW_Param2__c, RW_Param4__c FROM Project_Unit__c WHERE Id =: unitId]; 
+        Project_Unit__c unitInfo = [SELECT Id, Booking__c, Booking__r.Name, Booking__r.Opportunity__r.SAP_Customer_Number__c, 
+                                   Booking__r.Primary_Applicant_Name__c, Booking__r.Allotment_Premium__c, Saleable_Area__c, 
+                                   Booking__r.Net_Rate__c, Booking__r.Booking_Date__c, RW_Param1__c, RW_Param2__c, RW_Param4__c
+                                   FROM Project_Unit__c WHERE Id =: unitId]; 
         Booking__c bkg = new Booking__c();
         bkg.Id = bkgId;
-        bkg.New_Unit__c = unitId;
-        BookingTriggerHandler.byPass = true;
+        /*BookingTriggerHandler.byPass = true; // Commented by Vinay 01-10-2025 as there is no use of updating the record since we removed the line ;
         update bkg;
-        BookingTriggerHandler.byPass = false;
+        BookingTriggerHandler.byPass = false;*/
         return unitInfo;
-    }
-    
-    @AuraEnabled
-    public static List<String> getCancellationReasons() {
-        List<String> options = new List<String>();
-        Schema.DescribeFieldResult fieldResult = Booking__c.Cancellation_Reason__c.getDescribe();
-        List<Schema.PicklistEntry> pList = fieldResult.getPicklistValues();
-        for (Schema.PicklistEntry p : pList) {
-            options.add(p.getLabel());
-        }
-        System.debug('Cancellation Reason Options---->'+options);
-        return options;
-    }
-    /*@AuraEnabled
-    public static Map<String, List<String>> getDependentMap() {
-        Map<String, List<String>> objResults = new Map<String, List<String>>();
-        
-        // Get the object type and field describes
-        Schema.sObjectType objType = Booking__c.getSObjectType();
-        Schema.DescribeSObjectResult objDescribe = objType.getDescribe();
-        Map<String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
-        
-        // Get the dependent field (Sub-Reason)
-        Schema.DescribeFieldResult dependToken = fieldMap.get('Cancellation_Sub_reason__c').getDescribe();
-        Schema.DescribeFieldResult controlToken = fieldMap.get('Cancellation_Reason__c').getDescribe();
-        
-        List<Schema.PicklistEntry> controlValues = controlToken.getPicklistValues();
-        List<Schema.PicklistEntry> dependValues = dependToken.getPicklistValues();
-        
-        // This is a simplified version. For a true bitmask-based dependent picklist,
-        // you would normally use a Utility class, but for this specific logic:
-        for (Schema.PicklistEntry ctrl : controlValues) {
-            objResults.put(ctrl.getLabel(), new List<String>());
-        }
-        SYstem.debug('Check Map---->'+objResults);
-        
-        // Manual mapping or Utility mapping goes here. 
-        // If you have many values, use a Bitmask Utility. 
-        // For now, let's assume you fetch all and filter in JS for simplicity, 
-        // OR return a hardcoded map if the metadata is complex.
-        return objResults; 
-    }*/
-    // Add this inner class to your Apex Controller
-    public class PicklistWrapper {
-        @AuraEnabled public String label;
-        @AuraEnabled public String value;
-        public PicklistWrapper(String l, String v) {
-            this.label = l;
-            this.value = v;
-        }
-    }
-    
-    @AuraEnabled
-    public static Map<String, List<PicklistWrapper>> getDependentMap() {
-        Map<String, List<PicklistWrapper>> objResults = new Map<String, List<PicklistWrapper>>();
-        
-        Schema.DescribeFieldResult controlToken = Booking__c.Cancellation_Reason__c.getDescribe();
-        Schema.DescribeFieldResult dependToken = Booking__c.Cancellation_Sub_reason__c.getDescribe();
-        
-        List<Schema.PicklistEntry> controlValues = controlToken.getPicklistValues();
-        List<Schema.PicklistEntry> dependValues = dependToken.getPicklistValues();
-        
-        // Initialize with API Names as keys
-        for (Schema.PicklistEntry ctrl : controlValues) {
-            objResults.put(ctrl.getValue(), new List<PicklistWrapper>());
-        }
-        
-        for (Schema.PicklistEntry dep : dependValues) {
-            String jsonStr = JSON.serialize(dep);
-            Map<String, Object> entry = (Map<String, Object>)JSON.deserializeUntyped(jsonStr);
-            String validFor = (String)entry.get('validFor');
-            
-            if (String.isNotBlank(validFor)) {
-                String base64Bits = decimalToBinary(validFor);
-                for (Integer i = 0; i < controlValues.size(); i++) {
-                    if (base64Bits.substring(i, i+1) == '1') {
-                        // Store BOTH Label and Value (API Name)
-                        objResults.get(controlValues[i].getValue()).add(
-                            new PicklistWrapper(dep.getLabel(), dep.getValue())
-                        );
-                    }
-                }
-            }
-        }
-        System.debug('Check objResults---->'+objResults);
-        return objResults;
-    }
-    
-    // Helper method to convert Base64 validFor to a Binary String
-    private static String decimalToBinary(String validFor) {
-        String base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-        String bits = '';
-        for (Integer i = 0; i < validFor.length(); i++) {
-            Integer val = base64.indexOf(validFor.substring(i, i+1));
-            String s = '';
-            for (Integer j = 0; j < 6; j++) {
-                s = String.valueOf(Math.mod(val, 2)) + s;
-                val /= 2;
-            }
-            bits += s;
-        }
-        return bits;
-    }
-    
-    @AuraEnabled
-    public static Map<String, List<Map<String, String>>> getMultiplePicklistOptions(List<String> fieldNames) {
-        Map<String, List<Map<String, String>>> allOptions = new Map<String, List<Map<String, String>>>();
-        
-        Schema.SObjectType objType = Booking__c.getSObjectType();
-        Map<String, Schema.SObjectField> fieldMap = objType.getDescribe().fields.getMap();
-        
-        for (String fieldName : fieldNames) {
-            if (fieldMap.containsKey(fieldName)) {
-                List<Map<String, String>> options = new List<Map<String, String>>();
-                Schema.DescribeFieldResult fieldResult = fieldMap.get(fieldName).getDescribe();
-                
-                for (Schema.PicklistEntry p : fieldResult.getPicklistValues()) {
-                    if (p.isActive()) {
-                        Map<String, String> option = new Map<String, String>();
-                        option.put('label', p.getLabel());
-                        option.put('value', p.getValue());
-                        options.add(option);
-                    }
-                }
-                allOptions.put(fieldName, options);
-            }
-        }
-        return allOptions;
-    }
-    
-    @AuraEnabled
-    public static Map<String, String> getSubReasonToTypeMap() {
-        Map<String, String> subToType = new Map<String, String>();
-        
-        // Get describes for the relationship
-        Schema.DescribeFieldResult subReasonField = Booking__c.Cancellation_Sub_reason__c.getDescribe();
-        Schema.DescribeFieldResult subTypeField = Booking__c.Cancellation_Subtype__c.getDescribe();
-        
-        List<Schema.PicklistEntry> subReasonValues = subReasonField.getPicklistValues();
-        List<Schema.PicklistEntry> subTypeValues = subTypeField.getPicklistValues();
-        
-        for (Schema.PicklistEntry typeEntry : subTypeValues) {
-            String jsonStr = JSON.serialize(typeEntry);
-            Map<String, Object> entry = (Map<String, Object>)JSON.deserializeUntyped(jsonStr);
-            String validFor = (String)entry.get('validFor');
-            
-            if (String.isNotBlank(validFor)) {
-                String bits = decimalToBinary(validFor); // Use your existing binary helper
-                for (Integer i = 0; i < subReasonValues.size(); i++) {
-                    if (bits.substring(i, i+1) == '1') {
-                        // Map Sub-Reason Value to Sub-Type Value
-                        subToType.put(subReasonValues[i].getValue(), typeEntry.getValue());
-                    }
-                }
-            }
-        }
-        return subToType;
     }
 
 }
