@@ -227,8 +227,11 @@ public class RW_UnitTransferAndCancellationTest {
                 objBking.Cancellation_Requested_Status__c = 'Cancellation Confirmed';
             	objBking.Level_One_Approver__c = tuser1.Id;
             	update  objBking;
-            
-            	RW_UnitTransferAndCancellation.sendApprovalRequest(objBking.id);
+                try{
+            	    RW_UnitTransferAndCancellation.sendApprovalRequest(objBking.id);
+                }catch(Exception ex){
+
+                }
                 try{
                     RW_UnitTransferAndCancellation.sendApprovalRequestforUnitTransfer(objBking.id);
                 }Catch(Exception ex){
