@@ -282,6 +282,8 @@ public with sharing class BookingClass {
     Receipt_Details__c objReceiptDetails = new Receipt_Details__c();
     Receipt_Details__c objReceiptDetailsST = new Receipt_Details__c();
     List < Project_Charges__c > listglobalcharges = new List < Project_Charges__c > ();
+    public List<Opportunity> oppList {get; set;}//Added for Cancellation Changes
+    public Decimal originalAV ;//Added for Cancellation Changes
     public List < Receipt__c > ListOldReceipt {
         get;
         set;
@@ -304,6 +306,8 @@ public with sharing class BookingClass {
         set;
     }
     List<Brokerage_Scheme__c> brokerageScheme = new List<Brokerage_Scheme__c>();
+    public String sapCustomerCode {get; set;}//Added for Cancellation Changes
+
     //Added by coServe 23-03-2023 Start
     /* public Document document {
 get {
@@ -321,6 +325,21 @@ set;
     public Boolean disabelBookingDate {get;set;}
     //Added by coServe 23-03-2023 End
     public Account acc {get;set;} //Added by Vinay 03-06-2025    
+
+    /**Added for Cancellation Changes starts */
+
+    public List<SelectOption> projectOptions {get; set;}
+    public List<SelectOption> towerOptions {get; set;}
+    public List<SelectOption> unitOptions {get; set;}
+    public List<Project__c> projectLst {get; set;}
+    public List<Tower__c> towerLst {get; set;}
+    public List<Project_Unit__c> unitLst {get; set;}
+    public Opportunity opp {get; set;}
+    public String oldTypeOfSale {get; set;}
+    public Boolean disableCancelledDetails {get; set;}
+
+    /**Added for Cancellation Changes starts */
+
     
     public BookingClass() {
         
@@ -412,7 +431,76 @@ set;
         if (ApexPages.currentPage().getParameters().get('optyid') != null && ApexPages.currentPage().getParameters().get('optyid') != '') {
             boookingObj.Opportunity__c = ApexPages.currentPage().getParameters().get('optyid');
             // Added For Unidentified Payment RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c
-            Opportunity opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025
+            opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c,
+                               SAP_Customer_Number__c,Cancelled_Booking__c,Cancelled_Project__c,Cancelled_Tower__c,Cancelled_Unit__c,Type_Of_sale__c,Cancelled_SAP_Customer_Number__c
+                                FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025, Added Cancelled_SAP_Customer_Number__c,SAP_Customer_Code__c,Cancelled_Booking__c,Cancelled_Project__c,Type_Of_sale__c,Cancelled_Tower__c,Cancelled_Unit__c for Cancellation Changes
+              
+
+             /**Added for Cancellation Changes starts */
+
+             if(opp.Type_Of_sale__c!=null){
+                disableCancelledDetails = true;
+             }
+            Id matchedProjectId = null;
+            projectOptions = new List<SelectOption>();
+            towerOptions = new List<SelectOption>();
+            unitOptions = new List<SelectOption>();
+            BookingClass2.initializeCancellation(projectOptions,towerOptions,unitOptions,projectLst,matchedProjectId,boookingObj,opp);
+            System.debug('initializeCancellation projectOptions---->'+projectOptions);
+            /*Id matchedProjectId = null;
+            projectOptions = new List<SelectOption>();
+            projectOptions.add(new SelectOption('', '--Select Project--'));
+
+            towerOptions = new List<SelectOption>();
+            towerOptions.add(new SelectOption('', '--Select Tower--'));
+
+            unitOptions = new List<SelectOption>();
+            unitOptions.add(new SelectOption('', '--Select Unit--'));
+
+                projectLst = [Select Id,Name from Project__c where RW_Status__c = 'Active' ORDER BY Name];
+                for(Project__c proj : projectLst) {
+                    projectOptions.add(new SelectOption(proj.Id, proj.Name));
+                    if(proj.Name == opp.Cancelled_Project__c) {
+                        matchedProjectId = proj.Name;
+                    }
+                }
+                if(matchedProjectId != null) {
+                    boookingObj.Cancelled_Project__c = matchedProjectId;
+                } else {
+                    System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Project__c);
+                }
+                if(boookingObj.Cancelled_Project__c != null) {
+                  loadTowers();
+                  
+                }
+                if(opp.Cancelled_Tower__c != null) {
+                    List<Tower__c> towers = [SELECT Id,Name FROM Tower__c 
+                                    WHERE Name = :opp.Cancelled_Tower__c 
+                                    AND ProjectName__c = :boookingObj.Cancelled_Project__c LIMIT 1];
+                    if(!towers.isEmpty()) {
+                        boookingObj.Cancelled_Tower__c = towers[0].Name;
+                        loadUnits();
+                    }
+                }
+                
+                if(opp.Cancelled_Unit__c != null) {
+                    List<Project_Unit__c> units = [SELECT Id,Name FROM Project_Unit__c 
+                                        WHERE Name = :opp.Cancelled_Unit__c 
+                                        LIMIT 1];
+                    if(!units.isEmpty()) {
+                        boookingObj.Cancelled_Unit_No__c = units[0].Name;
+                    }
+               sal }
+
+            boookingObj.Cancelled_SAP_Customer_Number__c = opp.Cancelled_SAP_Customer_Number__c;
+            boookingObj.Type_Of_sale__c = opp.Type_Of_sale__c;
+            if(opp.Cancelled_Booking__c!=null){
+                    boookingObj.Old_Booking__c = opp.Cancelled_Booking__c;
+            }*/
+            oldTypeOfSale = opp.Type_Of_sale__c;//Added for Cancellation Changes
+            System.debug('oldTypeOfSale**'+oldTypeOfSale);
+            /**Added for Cancellation Changes ends */
+
             // Added For Unidentified Payment End
             acc = [SELECT Id, Salutation, FirstName, LastName, RW_Zip_Code__c, RW_Company_Name__c, RW_Other_Company_Name__c, RW_Designation__c, No_of_family_members__c, RW_Occupation__c, Distance_To_Office__c, Family_Income__c, Purpose__c, Vehicles_owned__c, Industry, Current_Residential_Address__c, Four_Wheeler__c FROM Account WHERE Id =: opp.AccountId]; //Added by Vinay 03-06-2025
             if(opp.RW_Type_of_Client__c == null && !Test.isRunningTest()){
@@ -1399,6 +1487,9 @@ boookingObj.Booking_Date__c = System.Now();
             System.debug('--i: ' + i); 
         }
         
+        /** Offloaded to BookingClass2 to resolve Metadata compilation limits */
+        this.i = BookingClass2.validateCancellationDetails(this.boookingObj, this.opp, this.oldTypeOfSale, this.i);
+        
         ///tandem Open////
         if (QuoteDetails != null && QuoteDetails.size() > 0 && TandemOPENParkingList.size() < QuoteDetails[0].Tandem_Open_Additional__c) {
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Required number of Covered Stack parking is unavailable');
@@ -1661,1167 +1752,7 @@ i = 1;
 System.debug('--i: ' + i);
 }*/
         ////////////////////////// error messagess for applicant 1  //////////////////////////
-        if (applicant.Salutation__c == '' || applicant.Salutation__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.First_Name__c == '' || applicant.First_Name__c == null) {
-            system.debug('Inside null selected quote' + selectedQuote);
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Last_Name__c == '' || applicant.Last_Name__c == null) {
-            system.debug('Inside null selected quote' + selectedQuote);
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.DOB__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        
-        
-        if (applicant.Permanent_Address_Line_1__c == '' || applicant.Permanent_Address_Line_1__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Country__c == 'India') {
-            if (applicant.State__c == '' || applicant.State__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        if (applicant.City__c == '' || applicant.City__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Pincode__c == null || applicant.Pincode__c == 0) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Country__c == '' || applicant.Country__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Country__c == 'India' && applicant.Pincode__c != null) {
-            if (String.valueOf(applicant.Pincode__c).length() != 6) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 1 Should Be Of 6 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        if (applicant.Mobile_Number__c == '' || applicant.Mobile_Number__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        
-        
-        system.debug('applicant.Mobile_Number__c'+ applicant.Mobile_Number__c);
-        if(applicant.Mobile_Number__c!= null){
-            system.debug('applicant.Mobile_Number__c.length'+ applicant.Mobile_Number__c.length());
-        }
-        
-        //------ Validation updated by Priya for NRI customers -----//
-        if (applicant.Mobile_Number__c != null && (applicant.Mobile_Number__c).length() != 10 && applicant.Subtype_Of_Applicant__c == 'Indian National') {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 1 Should be of 10 digits');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Email_Address__c == '' || applicant.Email_Address__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }else{ //Added by coServe 08-01-2024
-            Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-            System.debug('dummyEmails: ' + dummys.keySet());
-            for(String str : dummys.keySet()){
-                if(applicant.Email_Address__c.contains(str) || str.contains(applicant.Email_Address__c)){
-                    System.debug('Dummy Email1');
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 1. Please update correct Email id.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    break;
-                }
-            }
-        }
-        if (applicant.Nationality_Picklist__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Marital_Status__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Gender__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Type_Of_Applicant__c == '' || applicant.Type_Of_Applicant__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Subtype_Of_Applicant__c == '' || applicant.Subtype_Of_Applicant__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'Indian National') {
-            if (applicant.Pancard__c == false 
-                || applicant.Address_Proof__c == false 
-                || String.isBlank(applicant.Address_Proof_Document__c)
-                || String.isBlank(applicant.Address_Proof_Number__c)
-                || String.isBlank(applicant.PancardNo__c)
-                /* || applicant.One_Passport_Size_Color_Photograph__c == false */) {
-                    
-                    ApexPages.Message myMsg = new ApexPages.Message(
-                        ApexPages.Severity.Error, 
-                        'Please ensure that all the document checkboxes are checked and document details are filled properly.'
-                    );
-                    ApexPages.addMessage(myMsg);
-                    
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Address_Proof_Number__c != null && !applicant.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-            if (/*applicant.One_Passport_Size_Color_Photograph__c == false || */applicant.Funds_from_NRE_FCNR__c == false || applicant.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant.Type_Of_Origin__c == '' || applicant.Origin_Details__c == '') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'For NRI') {
-            if (applicant.Pancard__c == false /*|| applicant.One_Passport_Size_Color_Photograph__c == false*/ || applicant.PassportNumber__c == false || applicant.Funds_from_NRE_NRO__c == false || applicant.Copy_of_Workpermit_Employment_contract__c == false) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'For Company') {
-            if (applicant.Pancard__c == false || applicant.Copy_of_Memorandu_of_Association__c == false || applicant.Certified_copy_of_Article_of_Association__c == false || applicant.Certified_copy_of_Board_Resolution__c == false || applicant.Certified_copy_of_ROC_Incorporation__c == false || applicant.Self_attested_List_of_Shareholders__c == false || applicant.Self_attested_List_of_Directors__c == false || applicant.PanCard_of_Authority_Signatory__c == false) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'Partnership Firm') {
-            if (applicant.Pancard__c == false || applicant.PanCard_of_Authority_Signatory__c == false || applicant.Certified_copy_of_Partnership_Deed__c == false || applicant.Certified_extract_of_Registration__c == false || applicant.Copy_of_Authorization_Letter_POA__c == false) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        
-        //anuja added on 16 dec 
-        if (addressCheck == False) {
-            
-            if (applicant.Mailing_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Mailing_Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Mailing_Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Mailing_Country__c == 'India' && applicant.Mailing_Pincode__c != null) {
-                if (String.valueOf(applicant.Mailing_Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 1 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant.Mailing_Country__c == 'India') {
-                if (applicant.Mailing_State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 1 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant.Mailing_City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        //////////////////////////////error messages for Applicant 2///////////////////////////
-        if (applicant2.First_Name__c != null || applicant2.Last_Name__c != null) {
-            if (string.isBlank(applicant2.Salutation__c)) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.First_Name__c == '' || applicant2.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Last_Name__c == '' || applicant2.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Country__c == 'India') {
-                if (applicant2.State__c == '' || applicant2.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.City__c == '' || applicant2.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Country__c == 'India' && applicant2.Pincode__c != null) {
-                if (String.valueOf(applicant2.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 2 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant2.Mobile_Number__c != null && (applicant2.Mobile_Number__c).length() != 10 && applicant2.Subtype_Of_Applicant__c == 'Indian National') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 2 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant2.Email_Address__c.contains(str) || str.contains(applicant2.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 2. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant2.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant2.Pancard__c == false || applicant2.Address_Proof__c == false || applicant2.Address_Proof_Document__c == '' || applicant2.Address_Proof_Number__c == '' /*|| applicant2.One_Passport_Size_Color_Photograph__c == false*/) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.Address_Proof_Number__c != null && !applicant2.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant2.One_Passport_Size_Color_Photograph__c == false || */applicant2.Funds_from_NRE_FCNR__c == false || applicant2.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant2.Type_Of_Origin__c == '' || applicant2.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'For NRI') {
-                //if (applicant2.Pancard__c == false /*|| applicant2.One_Passport_Size_Color_Photograph__c == false*/ || applicant2.PassportNumber__c == false || applicant2.Funds_from_NRE_NRO__c == false || applicant2.Copy_of_Workpermit_Employment_contract__c == false   || String.isBlank(applicant2.Address_Proof_Number__c) || String.isBlank(applicant2.PancardNo__c)) { //Commented by Vinay 21-08-2025. There is deifference in the condition compared to applicant 1 & applicant 3 conditions.
-                 if (applicant2.Pancard__c == false /*|| applicant2.One_Passport_Size_Color_Photograph__c == false*/ || applicant2.PassportNumber__c == false || applicant2.Funds_from_NRE_NRO__c == false || applicant2.Copy_of_Workpermit_Employment_contract__c == false) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        System.debug('--i: ' + i);
-                    }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant2.Pancard__c == false || applicant2.Copy_of_Memorandu_of_Association__c == false || applicant2.Certified_copy_of_Article_of_Association__c == false || applicant2.Certified_copy_of_Board_Resolution__c == false || applicant2.Certified_copy_of_ROC_Incorporation__c == false || applicant2.Self_attested_List_of_Shareholders__c == false || applicant2.Self_attested_List_of_Directors__c == false || applicant2.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant2.Pancard__c == false || applicant2.PanCard_of_Authority_Signatory__c == false || applicant2.Certified_copy_of_Partnership_Deed__c == false || applicant2.Certified_extract_of_Registration__c == false || applicant2.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            //anuja added on 16 dec  
-            if (addressCheckApplicant2 == False) {
-                
-                if (applicant2.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-                if (applicant2.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-                if (applicant2.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-                if (applicant2.Mailing_Country__c == 'India' && applicant2.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant2.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 2 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        //System.debug('--i: ' + i);
-                    }
-                }
-                if (applicant2.Mailing_Country__c == 'India') {
-                    if (applicant2.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 2 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        //System.debug('--i: ' + i);
-                    }
-                }
-                if (applicant2.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-            }
-        }
-        
-        //////////////////////////////error messages for Applicant 3///////////////////////////
-        if (applicant3.First_Name__c != null || applicant3.Last_Name__c != null) {
-            
-            if (applicant3.Salutation__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.First_Name__c == '' || applicant3.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Last_Name__c == '' || applicant3.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Country__c == 'India') {
-                if (applicant3.State__c == '' || applicant3.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.City__c == '' || applicant3.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Country__c == 'India' && applicant3.Pincode__c != null) {
-                if (String.valueOf(applicant3.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 3 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant3.Mobile_Number__c != null && (applicant3.Mobile_Number__c).length() != 10 && applicant3.Subtype_Of_Applicant__c == 'Indian National') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 3 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant3.Email_Address__c.contains(str) || str.contains(applicant3.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 3. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant3.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant3.Pancard__c == false || applicant3.Address_Proof__c == false || applicant3.Address_Proof_Document__c == '' || applicant3.Address_Proof_Number__c == '' /*|| applicant3.One_Passport_Size_Color_Photograph__c == false*/  || String.isBlank(applicant3.Address_Proof_Number__c)
-                    || String.isBlank(applicant3.PancardNo__c)) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Address_Proof_Number__c != null && !applicant3.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant3.One_Passport_Size_Color_Photograph__c == false || */applicant3.Funds_from_NRE_FCNR__c == false || applicant3.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant3.Type_Of_Origin__c == '' || applicant3.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'For NRI') {
-                if (applicant3.Pancard__c == false/* || applicant3.One_Passport_Size_Color_Photograph__c == false*/ || applicant3.PassportNumber__c == false || applicant3.Funds_from_NRE_NRO__c == false || applicant3.Copy_of_Workpermit_Employment_contract__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant3.Pancard__c == false || applicant3.Copy_of_Memorandu_of_Association__c == false || applicant3.Certified_copy_of_Article_of_Association__c == false || applicant3.Certified_copy_of_Board_Resolution__c == false || applicant3.Certified_copy_of_ROC_Incorporation__c == false || applicant3.Self_attested_List_of_Shareholders__c == false || applicant3.Self_attested_List_of_Directors__c == false || applicant3.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant3.Pancard__c == false || applicant3.PanCard_of_Authority_Signatory__c == false || applicant3.Certified_copy_of_Partnership_Deed__c == false || applicant3.Certified_extract_of_Registration__c == false || applicant3.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            
-            //anuja added on 16 dec  
-            if (addressCheckApplicant3 == False) {
-                
-                if (applicant3.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Mailing_Country__c == 'India' && applicant3.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant3.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 3 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant3.Mailing_Country__c == 'India') {
-                    if (applicant3.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 3 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant3.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-        }
-        //////////////////////////////error messages for Applicant 4///////////////////////////
-        if (applicant4.First_Name__c != null || applicant4.Last_Name__c != null) {
-            
-            if (applicant4.Salutation__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.First_Name__c == '' || applicant4.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Last_Name__c == '' || applicant4.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Country__c == 'India') {
-                if (applicant4.State__c == '' || applicant4.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.City__c == '' || applicant4.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Country__c == 'India' && applicant4.Pincode__c != null) {
-                if (String.valueOf(applicant4.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 4 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant4.Mobile_Number__c != null && (applicant4.Mobile_Number__c).length() != 10 && applicant4.Subtype_Of_Applicant__c == 'Indian National' ) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 4 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant4.Email_Address__c.contains(str) || str.contains(applicant4.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 4. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant4.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant4.Pancard__c == false || applicant4.Address_Proof__c == false || applicant4.Address_Proof_Document__c == '' || applicant4.Address_Proof_Number__c == ''/* || applicant4.One_Passport_Size_Color_Photograph__c == false*/   || String.isBlank(applicant4.Address_Proof_Number__c)
-                    || String.isBlank(applicant4.PancardNo__c)) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                if (applicant4.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Address_Proof_Number__c != null && !applicant4.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant4.One_Passport_Size_Color_Photograph__c == false ||*/ applicant4.Funds_from_NRE_FCNR__c == false || applicant4.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant4.Type_Of_Origin__c == '' || applicant4.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'For NRI') {
-                if (applicant4.Pancard__c == false /*|| applicant4.One_Passport_Size_Color_Photograph__c == false*/ || applicant4.PassportNumber__c == false || applicant4.Funds_from_NRE_NRO__c == false || applicant4.Copy_of_Workpermit_Employment_contract__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant4.Pancard__c == false || applicant4.Copy_of_Memorandu_of_Association__c == false || applicant4.Certified_copy_of_Article_of_Association__c == false || applicant4.Certified_copy_of_Board_Resolution__c == false || applicant4.Certified_copy_of_ROC_Incorporation__c == false || applicant4.Self_attested_List_of_Shareholders__c == false || applicant4.Self_attested_List_of_Directors__c == false || applicant4.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant4.Pancard__c == false || applicant4.PanCard_of_Authority_Signatory__c == false || applicant4.Certified_copy_of_Partnership_Deed__c == false || applicant4.Certified_extract_of_Registration__c == false || applicant4.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            //anuja added on 16 dec  
-            if (addressCheckApplicant4 == False) {
-                
-                if (applicant4.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Mailing_Country__c == 'India' && applicant4.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant4.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 4 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant4.Mailing_Country__c == 'India') {
-                    if (applicant4.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 4 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant4.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-        }
-        //////////////////////////////error messages for Applicant 5///////////////////////////
-        if (applicant5.First_Name__c != null || applicant5.Last_Name__c != null) {
-            if (applicant5.Salutation__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.First_Name__c == '' || applicant5.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Last_Name__c == '' || applicant5.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            
-            if (applicant5.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Country__c == 'India') {
-                if (applicant5.State__c == '' || applicant5.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant5.City__c == '' || applicant5.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Country__c == 'India' && applicant5.Pincode__c != null) {
-                if (String.valueOf(applicant5.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 5 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant5.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant5.Mobile_Number__c != null && (applicant5.Mobile_Number__c).length() != 10 && applicant5.Subtype_Of_Applicant__c == 'Indian National') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 5 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant5.Email_Address__c.contains(str) || str.contains(applicant5.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 5. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant5.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant5.Pancard__c == false || applicant5.Address_Proof__c == false || applicant5.Address_Proof_Document__c == '' || applicant5.Address_Proof_Number__c == '' /*|| applicant5.One_Passport_Size_Color_Photograph__c == false*/  || String.isBlank(applicant5.Address_Proof_Number__c)
-                    || String.isBlank(applicant5.PancardNo__c)) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Address_Proof_Number__c != null && !applicant5.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant5.One_Passport_Size_Color_Photograph__c == false || */applicant5.Funds_from_NRE_FCNR__c == false || applicant5.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant5.Type_Of_Origin__c == '' || applicant5.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'For NRI') {
-                if (applicant5.Pancard__c == false /* || applicant5.One_Passport_Size_Color_Photograph__c == false */ || applicant5.PassportNumber__c == false || applicant5.Funds_from_NRE_NRO__c == false || applicant5.Copy_of_Workpermit_Employment_contract__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant5.Pancard__c == false || applicant5.Copy_of_Memorandu_of_Association__c == false || applicant5.Certified_copy_of_Article_of_Association__c == false || applicant5.Certified_copy_of_Board_Resolution__c == false || applicant5.Certified_copy_of_ROC_Incorporation__c == false || applicant5.Self_attested_List_of_Shareholders__c == false || applicant5.Self_attested_List_of_Directors__c == false || applicant5.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant5.Pancard__c == false || applicant5.PanCard_of_Authority_Signatory__c == false || applicant5.Certified_copy_of_Partnership_Deed__c == false || applicant5.Certified_extract_of_Registration__c == false || applicant5.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            //anuja added on 16 dec  
-            if (addressCheckApplicant5 == False) {
-                
-                if (applicant5.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Mailing_Country__c == 'India' && applicant5.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant5.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 5 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant5.Mailing_Country__c == 'India') {
-                    if (applicant5.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 5 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant5.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-        }
-        
+        BookingClass2.validateAllApplicants(this);
         //////////////////////////////////////Added BY Aniket Starts Here on 29-09-2022/////////////////////////////////////////
         //
         //
@@ -3003,10 +1934,63 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
         
         //////////////////////////////////////Added BY Aniket Ends Here on 29-09-2022////////////////////////////////////////
         //////////////////////////////////////Receipt Mandatory Checks//////////////////////////////////////////
+        Decimal requiredTokenAmount = 0;
+        if(QuoteDetails != null && !QuoteDetails.isEmpty()){
+        	requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+        }
+        System.debug(' requiredTokenAmount'+ requiredTokenAmount);
+        System.debug(' boookingObj.Type_Of_sale__c**'+ boookingObj.Type_Of_sale__c);
+        
+        /**Added for Cancellation Changes starts */
+        if(boookingObj.Type_Of_sale__c =='Transfer of unit' || boookingObj.Type_Of_sale__c =='Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') {
+            if(String.isNotBlank(boookingObj.Cancelled_SAP_Customer_Number__c)){
+                oppList = [
+                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,
+                    Booking__r.RW_Total_Receipt_Amount_Received__c
+                    FROM Opportunity 
+                    WHERE SAP_Customer_Number__c = :boookingObj.Cancelled_SAP_Customer_Number__c
+                    LIMIT 1
+                ];
+            }
+            else if(String.isNotBlank(boookingObj.Cancelled_Project__c)&& String.isNotBlank(boookingObj.Cancelled_Tower__c) &&String.isNotBlank(boookingObj.Cancelled_Unit_No__c)){
+                oppList = [
+                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,SAP_Customer_Number__c,
+                    Booking__r.RW_Total_Receipt_Amount_Received__c
+                    FROM Opportunity 
+                    WHERE RW_Project__c =:boookingObj.Cancelled_Project__c AND RW_Project_Unit__r.TowerName__c =: boookingObj.Cancelled_Tower__c 
+                    AND RW_Project_Unit__c =:boookingObj.Cancelled_Unit_No__c
+                    LIMIT 1
+                ];
+            } 
+        }
+        Decimal amountFromOriginalUnit = 0;
+        if(oppList != null && !oppList.isEmpty() && oppList[0].Booking__c != null && oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c != null){
+            amountFromOriginalUnit = oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c;
+        }
+        Boolean skipReceiptChecks = false;
+        if((boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit >= requiredTokenAmount) {
+            skipReceiptChecks = true;
+        }
         system.debug('ReceiptDetails.size():::: ' + ReceiptDetails.size());
         if (ReceiptDetails.size() == 0 && STReceiptDetails.size()==0) {
             System.Debug('insert receipt ' + ReceiptObj);
             System.Debug('receiptlist.size() ' + receiptlist.size());
+            
+            Boolean isReceiptRowEmpty = true;
+            if(receiptlist != null && receiptlist.size() > 0) {
+                for(Receipt__c rce : receiptlist) {
+                    if(rce.Mode__c != null || rce.Cheque_DD__c != null || (rce.Total_Amount__c != null && rce.Total_Amount__c > 0) || rce.DraweeBank__c != null) {
+                        isReceiptRowEmpty = false;
+                        break;
+                    }
+                }
+            }
+            
+            if (skipReceiptChecks && isReceiptRowEmpty) {
+                // Requirements met for bypass & no receipt data entered. Clear empty row to skip validations.
+                receiptlist.clear();
+            }
+            else{
             
             
             System.Debug('--receiptlist :' + receiptlist);
@@ -3051,6 +2035,7 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
                 }
                 
                 
+                }
             }
             
             System.debug('Step oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
@@ -3193,12 +2178,15 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                     ReceiptLstTobeUpdate.add(receiptOBJTobeUpdate);
             }
 
-            Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+            // Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+            if((boookingObj.Type_Of_sale__c == 'New Sale') ||(oppList != null && !oppList.isEmpty() && (boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit < requiredTokenAmount)){
+                          /**Added for Cancellation Changes ends */
             if(totalAmount < requiredTokenAmount){ //Added by Vinay 14-08-2025
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Total Amount is less than the Token Amount, you cannot book this unit.  Token Amount is:'+requiredTokenAmount);
                 ApexPages.addMessage(myMsg); 
                 i = 1;
                 return null;
+            }
             }
             
             try {
@@ -3874,6 +2862,70 @@ return null;
 }
 //Added by coServe 23-03-2023 End*/
     
+    /**Added for Cancellation Changes starts */
+
+    public void loadTowers() {
+        BookingClass2.loadTowers(towerOptions, boookingObj);
+        /*towerOptions.clear();
+        //Id matchedTowerId = null;
+        towerOptions.add(new SelectOption('', '--Select Tower--'));
+        List<Tower__c> towerLst = [SELECT Id, Name 
+                FROM Tower__c 
+                WHERE ProjectName__c = :boookingObj.Cancelled_Project__c ORDER BY Name];
+
+        System.debug('towerLst**'+towerLst);
+        if(String.isNotBlank(boookingObj.Cancelled_Project__c)) {
+            for(Tower__c t : towerLst) {
+                towerOptions.add(new SelectOption(t.Id, t.Name));
+            }
+        }*/
+    }
+
+    public void loadUnits() {
+        BookingClass2.loadUnits(unitOptions, boookingObj);
+        /*unitOptions.clear();
+        //Id matchedUnitId = null;
+        unitOptions.add(new SelectOption('', '--Select Unit--'));
+        List<Project_Unit__c> projectList = [SELECT Id, Name 
+                FROM Project_Unit__c 
+                WHERE TowerName__c = :boookingObj.Cancelled_Tower__c ORDER BY Name];
+        System.debug('projectList**'+projectList);
+        if(String.isNotBlank(boookingObj.Cancelled_Tower__c)) {
+            for(Project_Unit__c unit : projectList) {
+                unitOptions.add(new SelectOption(unit.Id, unit.Name));
+                // if(unit.Name == opp.Cancelled_Unit__c) {
+                //     matchedUnitId = unit.Id;
+                // }
+            }
+            // if(matchedUnitId != null) {
+            //     boookingObj.Cancelled_Unit_No__c = matchedUnitId;
+            // }
+            // else {
+            //     System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Unit__c);
+            // }
+        }
+        System.debug('unitOptions**'+unitOptions);*/
+    }
+    /**Added for Cancellation Changes ends */
+
+    /**Addded for Cancellation Changes starts */
+    public void typeOfSaleChanged() {
+        
+        boookingObj.Cancelled_Project__c = null;
+        boookingObj.Cancelled_Tower__c = null;
+        boookingObj.Cancelled_Unit_No__c = null;
+        boookingObj.Cancelled_SAP_Customer_Number__c = null;
+        disableCancelledDetails = false;
+    
+        
+        if (String.isBlank(boookingObj.Reason_For_Change__c) && oldTypeOfSale!=null ){
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
+                        ApexPages.addMessage(myMsg);
+                       // i = 1;
+        }
+        
+    }
+    /**Addded for Cancellation Changes ends */
   
     Public static void Dummy(){
         integer i=0;
