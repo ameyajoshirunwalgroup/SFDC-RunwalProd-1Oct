@@ -161,4 +161,24 @@ public class CreateUserWhenUnitBookedTest {
         System.enqueueJob(del);
         Test.stopTest();
     }
+    
+    @isTest
+    private static void testRemoveUserWhenCancelled() {
+        // Query the cancelled opportunity generated during setup
+        Opportunity cancelledOpp = [SELECT Id FROM Opportunity WHERE StageName = 'Cancelled' LIMIT 1];
+        Set<Id> oppIds = new Set<Id>{cancelledOpp.Id};
+
+        Test.startTest();
+        // Provide the mock interface instance for the HTTP callout
+        Test.setMock(HttpCalloutMock.class, new CreateUserWhenUnitBookedMock());
+        
+        // Execute the targeted method
+        CreateUserWhenUnitBooked.removeUserWhenCancelled(oppIds);
+        
+        Test.stopTest();
+
+        // Verification Assert: Check if no error logs were created indicating a successful status code 200 process
+        List<ERP_Integration_Log__c> logs = [SELECT Id FROM ERP_Integration_Log__c WHERE Opportunity__c = :cancelledOpp.Id];
+        System.assertEquals(0, logs.size(), 'There should be no integration error logs for a successful response code 200');
+    }
 }
