@@ -430,6 +430,8 @@ public with sharing class RW_UnitTransferAndCancellation {
         clonedRecord.Sales_Manager__c = opp.Sales_Manager__c;
         clonedRecord.SAP_Customer_Number__c = opp.SAP_Customer_Number__c;
         clonedRecord.RW_Project__c = opp.RW_Project__c;
+        clonedRecord.Booking__c = null; //Added by Vinay 11-06-2026
+        clonedRecord.Cancelled_Booking__c = opp.Booking__c; //Added by Vinay 11-06-2026
         Map<String, Opp_Close_Date__c> oppClsDateMap = Opp_Close_Date__c.getall();
         if(oppClsDateMap.keySet().size() > 0){
             clonedRecord.CloseDate = System.today().addDays(Integer.valueOf(oppClsDateMap.get(clonedRecord.RW_project__c).No_of_Days__c)); 
