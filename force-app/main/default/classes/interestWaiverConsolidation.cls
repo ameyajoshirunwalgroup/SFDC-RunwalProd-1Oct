@@ -18,19 +18,6 @@ public class interestWaiverConsolidation {
         }
     }
     
-    @AuraEnabled(cacheable=false)
-    public static List<Interest_Waiver__c> getIWRecords(String bookingId) {
-        System.debug('Id::'+bookingId);
-        System.debug('inside new Interest_Waiver__c method');
-        List<Booking__c> blist = [Select Id,Name From Booking__c where Id=:bookingId limit 1];
-        if(!blist.isEmpty()){
-            system.debug('blist -> '+[SELECT Id,Name,Demand__r.Name,Waiver_Amount__c  FROM Interest_Waiver__c WHERE Booking__c = :blist[0].id]);
-            return [SELECT Id,Name,Demand__r.Name,Waiver_Amount__c,Approval_Status__c  FROM Interest_Waiver__c WHERE Approval_Status__c ='Draft' and  Booking__c = :blist[0].id ORDER BY CreatedDate DESC, Demand__r.Name ASC];
-        }else{
-            return null;
-        }
-    }
-    
     @AuraEnabled(cacheable=true)
     public static Decimal interestWaiverAmtLimit(String demandId) {
         System.debug('demandId::'+demandId);
@@ -47,17 +34,6 @@ public class interestWaiverConsolidation {
         }
     }
     
-    
-    @AuraEnabled
-    public static Id createInterestWaiver(Interest_Waiver__c interestWaiverRecord) {
-        System.debug('interestWaiverRecord::'+interestWaiverRecord);
-        try{
-            upsert interestWaiverRecord;
-            return interestWaiverRecord.Id;
-        }catch(Exception e){
-            throw new AuraHandledException(e.getMessage());
-        } 
-    }
     
     @AuraEnabled
     public static Boolean submitSelectedWaivers(Id bookingId, List<Id> waivers,Boolean iomUploaded, Decimal totalWaiverRequested) {
@@ -87,14 +63,10 @@ public class interestWaiverConsolidation {
             }
             
             try {
-                //if(!Test.isRunningTest()){
                     update waiverlist;
-                //}
-                
                 
                 Decimal totalWaiverAmtApprovedTillNow =
-                    (waiverlist[0].Booking__r.Total_Waiver_Amount_Approved_Till_Now__c != null)
-                    ? waiverlist[0].Booking__r.Total_Waiver_Amount_Approved_Till_Now__c: 0;
+                    (waiverlist[0].Booking__r.Total_Waiver_Amount_Approved_Till_Now__c != null) ? waiverlist[0].Booking__r.Total_Waiver_Amount_Approved_Till_Now__c: 0;
                 
                 if (waiverlist[0].Booking__r.Total_Waiver_Amount_to_be_Approved__c != null) {
                     totalWaiverAmtApprovedTillNow += waiverlist[0].Booking__r.Total_Waiver_Amount_to_be_Approved__c;
@@ -110,16 +82,16 @@ public class interestWaiverConsolidation {
                 }else{
                     b.Latest_IOM_Link__c = null; // clear link
                 }
+
                 b.Id = bookingId;
+
                 if(!Test.isRunningTest()){
-                update b;
+                    update b;
                 }
                 
-                Decimal waiverlimit = waiverlist[0].Booking__r.Project_Waived_Limit__c != null
-                    ? waiverlist[0].Booking__r.Project_Waived_Limit__c: 0;
+                Decimal waiverlimit = waiverlist[0].Booking__r.Project_Waived_Limit__c != null ? waiverlist[0].Booking__r.Project_Waived_Limit__c: 0;
                 return true;
                 
-                //return (totalIWAmttobeApproved > waiverlimit) ? 'Upload IOM' : 'Submit';
             }
             catch (Exception e) {
                 throw new AuraHandledException(e.getMessage());
@@ -128,47 +100,6 @@ public class interestWaiverConsolidation {
         
         return false;
     }
-    
-    @AuraEnabled(cacheable=false)
-    public static List<ContentDocumentLink> fetchFiles(String recordId){
-        return [SELECT LinkedEntityId, ContentDocument.CreatedDate,
-                ContentDocument.Title, ContentDocumentId,
-                ContentDocument.ContentSize, ContentDocument.FileType,ContentDocument.LastModifiedDate
-                 FROM ContentDocumentLink  
-                WHERE LinkedEntityId  =:recordId Order by ContentDocument.LastModifiedDate DESC limit 1];
-    }
-    
-    
-    
-   /* public static Boolean SendForApproval(String comment, Id bookingId){
-        
-        try{
-            system.debug('comment::'+comment);
-            system.debug('bookingId::'+bookingId);
-            Approval.ProcessSubmitRequest req1 = new Approval.ProcessSubmitRequest();
-            req1.setComments(comment);
-            req1.setObjectId(bookingId);
-            req1.setProcessDefinitionNameOrId('Interest_Waiver_Approval');
-            req1.setSkipEntryCriteria(true);
-            Approval.ProcessResult result = Approval.process(req1);
-            return true;
-        }catch(Exception e){
-            throw new AuraHandledException(e.getMessage());
-        }
-    }*/
-    // @AuraEnabled
-    // public static void deleteFile(Id contentDocumentId){
-
-    //     List<ContentDocument> docs = [
-    //         SELECT Id
-    //         FROM ContentDocument
-    //         WHERE Id = :contentDocumentId
-    //     ];
-
-    //     if(!docs.isEmpty()){
-    //         delete docs;
-    //     }
-    // }
 
     @AuraEnabled
     public static void uploadMultipleIOMFiles(List<Map<String,String>> files, Id bookingId){
@@ -230,5 +161,52 @@ public class interestWaiverConsolidation {
         );
 
         update bk;
+    }
+
+    @AuraEnabled
+    public static Boolean createAndSubmitWaivers(
+        Id bookingId,
+        List<Interest_Waiver__c> waivers,
+        Boolean iomUploaded
+        ){
+        try{
+
+            System.debug('waivers => ' + JSON.serializePretty(waivers));
+
+            for(Interest_Waiver__c iw : waivers){
+                iw.Approval_Status__c = 'Submitted for Approval';
+                iw.Sent_for_Approval__c = true;
+
+                if(iomUploaded){
+                    iw.IOM_Uploaded__c = true;
+                }
+            }
+
+            insert waivers;
+
+            Decimal totalIWAmttobeApproved = 0;
+
+            for(Interest_Waiver__c iw : waivers){
+                totalIWAmttobeApproved += iw.Waiver_Amount__c;
+            }
+
+            Booking__c b = new Booking__c(
+                Id = bookingId,
+                Total_Waiver_Amount_to_be_Approved__c = totalIWAmttobeApproved,
+                Interest_Waiver_Approval_Status__c = 'Submitted for Approval',
+                is_IOM_Uploaded__c = iomUploaded
+            );
+
+            update b;
+
+            return true;
+
+        }catch(Exception e){
+
+            System.debug('ERROR => ' + e.getMessage());
+            System.debug('STACK => ' + e.getStackTraceString());
+
+            throw new AuraHandledException(e.getMessage());
+        }
     }
 }

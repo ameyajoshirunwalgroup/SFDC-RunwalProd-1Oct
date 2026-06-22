@@ -32,7 +32,7 @@ public class InterestWaiverApprovalTemplateController {
             approverComments = approvalStep[0].Comments;
         }                                                                                                                                                                                                                                                                                                                 
         showPendingApprSec = true;
-        bklist = [select id,name,Interest_Waiver_Approval_Status__c,(Select id,Name,Sent_for_Approval__c,Approval_Status__c,Sub_Reason__c,Waiver_Reason__c,Waiver_Amount__c,Remarks__c,Demand__c,Demand__r.Name,IOM_Uploaded__c from Interest_Waivers__r where Sent_for_Approval__c = true )  from Booking__c where id =: BkId];
+        bklist = [select id,name,Interest_Waiver_Approval_Status__c,(Select id,Name,Sent_for_Approval__c,Approval_Status__c,Sub_Reason__c,Waiver_Reason__c,Waiver_Amount__c,Remarks__c,Demand__c,Project_Name__c,Unit__c,Customer_Name__c,Demand__r.Name,Demand__r.RW_Demand_Milestone__c,Demand__r.RW_Demand_Amount__c,Demand__r.RW_Customer_Number__c,IOM_Uploaded__c from Interest_Waivers__r where Sent_for_Approval__c = true )  from Booking__c where id =: BkId];
         if(!bklist.isEmpty()){
             iwlist = bklist[0].Interest_Waivers__r;
             if(bklist[0].Interest_Waiver_Approval_Status__c == 'Approved' ){                                                                                                                                                                                                                                                         

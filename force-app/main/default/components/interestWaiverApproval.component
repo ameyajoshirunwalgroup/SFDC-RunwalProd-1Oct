@@ -13,14 +13,19 @@
             <apex:outputText rendered="{!AND(NOT(ISNULL(iwlist)), iwlist.size > 0)}">
                 <table border="1"
                        style="font-family: Lato,verdana, arial, sans-serif;
-                              font-size: 12px;
+                              font-size: 11px;
                               border-width: 1px;
                               border-collapse: collapse;
                               width: 100%;">
                     <tr>
                         <th>Sr. No.</th>
                         <th>Waiver Name</th>
-                        <th>Demand</th> 
+                        <th>Project</th>
+                        <th>Unit No.</th>
+                        <th>Customer Name</th>
+                        <th>CRN</th>
+                        <th>Milestone Name</th>
+                        <th>Demand</th>
                         <th>Waiver Reason</th>
                         <th>Sub Reason</th>
                         <th>Waiver Amount</th>
@@ -34,7 +39,13 @@
                         <tr>
                             <td style="text-align:center;">{!i}</td>
                             <td>{!iw.Name}</td>
-                            <td>{!iw.Demand__r.Name}</td>
+                            <td>{!iw.Project_Name__c}</td>
+                            <td>{!iw.Unit__c}</td>
+                            <td>{!iw.Customer_Name__c}</td>
+                            <td>{!iw.Demand__r.RW_Customer_Number__c}</td>
+                            <td>{!iw.Demand__r.RW_Demand_Milestone__c}</td>
+                            <!--<td style="text-align:right;">{!iw.Demand__r.RW_Demand_Amount__c}</td>-->
+                            <td style="text-align:right;">{!iw.Demand__r.Name}</td>
                             <td>{!iw.Waiver_Reason__c}</td>
                             <!-- <td>{!iw.Sub_Reason__c}</td> -->
                             <td>{!subReasonPicklistMap[iw.Sub_Reason__c]}</td>
@@ -80,17 +91,7 @@
                 If replying via email, you can also add comments on the second line.
                 Comments will be stored with the approval request in Salesforce CRM.<br/><br/>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!NOT(ISNULL(latestIOMFile))}">
-
-    <b>IOM Document:</b><br/>
-
-    <a href="{!iomFileUrl}">
-        {!latestIOMFile.Title}.{!latestIOMFile.FileExtension}
-    </a>
-
-    <br/><br/>
-
-</apex:outputPanel>
+            
             Thanks and Regards,<br/>
             Runwal Team
         </body>

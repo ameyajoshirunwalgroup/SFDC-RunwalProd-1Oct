@@ -297,7 +297,6 @@ ln.TL_Email__c = projRMMap.get(bkg.RW_Project_Name__c).TL_Email__c;
             Opportunity o = new Opportunity();
             o.Id = bkg.Customer__c;
             o.Booking_Date__c = Date.valueOf(bkg.Booking_Date__c);
-            o.RW_Booking_Date_Opp__c = Date.valueOf(bkg.Booking_Date__c);//Added by Prashant to Map RW_Booking_Date_Opp__c date as well along with Booking_Date__c//Added on 07-05-26..
             opps.add(o);
         }
         try{
@@ -583,11 +582,11 @@ update bkgs;
                 */
                 
                 if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'Local') && (b.Type_of_Client__c == 'Local' || b.Type_of_Client__c == 'Corporate' )){
-                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - ((((passbackAmt!= null)?passbackAmt : 0 /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
                     b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
                     b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
-                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - ((((passbackAmt!= null)?passbackAmt : 0 / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                 }else if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'NRI') && (b.Type_of_Client__c == 'NRI') /*|| b.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2*/){
                     b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                     b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c;
@@ -689,53 +688,44 @@ update bkgs;
         if (!toUpdateCPPH.isEmpty()) update toUpdateCPPH;
         
         // Parking Allocation
-        // ================= NEW PARKING ALLOCATION (Optimized) =================
-
+        List<Car_Parking_Charge__c> toUpdateParking = new List<Car_Parking_Charge__c>();
         for (Quotation__c q : quoteMap.values()) {
-
             Booking__c booking = quoteToBooking.get(q.Id);
             if (booking == null) continue;
-            //BookingClass.handleParkingAllocation(q, booking.Id);
-        }
-
-        // List<Car_Parking_Charge__c> toUpdateParking = new List<Car_Parking_Charge__c>();
-        // for (Quotation__c q : quoteMap.values()) {
-        //     Booking__c booking = quoteToBooking.get(q.Id);
-        //     if (booking == null) continue;
             
-        //     Map<String, Integer> parkingCounts = new Map<String, Integer>{
-        //         'Tandem Covered' => (q.Tandem_car_park_Additional__c == null ? 0 : Integer.valueOf(q.Tandem_car_park_Additional__c)),
-        //             'Covered Stack' => (q.Tandem_Open_Additional__c == null ? 0 : Integer.valueOf(q.Tandem_Open_Additional__c)),
-        //             'Single Open' => (q.Single_Open_Additional__c == null ? 0 : Integer.valueOf(q.Single_Open_Additional__c)),
-        //             'Single Covered' => (q.Single_car_park_Additional__c == null ? 0 : Integer.valueOf(q.Single_car_park_Additional__c)),
-        //             'Stilt' => (q.Stack_Additional__c == null ? 0 : Integer.valueOf(q.Stack_Additional__c)),
-        //             'MLCP' => (q.MLCP_Additional__c == null ? 0 : Integer.valueOf(q.MLCP_Additional__c)),
-        //             'Basement' => (q.Basement_Additional__c == null ? 0 : Integer.valueOf(q.Basement_Additional__c)),
-        //             'Podium' => (q.Podium__c == null ? 0 : Integer.valueOf(q.Podium__c)),
-        //             'Puzzle Car Park' => (q.Puzzle_Car_Park__c == null ? 0 : Integer.valueOf(q.Puzzle_Car_Park__c)),
-        //             'Stack Car Park' => (q.Stack_Additional_1__c == null ? 0 : Integer.valueOf(q.Stack_Additional_1__c))
-        //             };
+            Map<String, Integer> parkingCounts = new Map<String, Integer>{
+                'Tandem Covered' => (q.Tandem_car_park_Additional__c == null ? 0 : Integer.valueOf(q.Tandem_car_park_Additional__c)),
+                    'Covered Stack' => (q.Tandem_Open_Additional__c == null ? 0 : Integer.valueOf(q.Tandem_Open_Additional__c)),
+                    'Single Open' => (q.Single_Open_Additional__c == null ? 0 : Integer.valueOf(q.Single_Open_Additional__c)),
+                    'Single Covered' => (q.Single_car_park_Additional__c == null ? 0 : Integer.valueOf(q.Single_car_park_Additional__c)),
+                    'Stilt' => (q.Stack_Additional__c == null ? 0 : Integer.valueOf(q.Stack_Additional__c)),
+                    'MLCP' => (q.MLCP_Additional__c == null ? 0 : Integer.valueOf(q.MLCP_Additional__c)),
+                    'Basement' => (q.Basement_Additional__c == null ? 0 : Integer.valueOf(q.Basement_Additional__c)),
+                    'Podium' => (q.Podium__c == null ? 0 : Integer.valueOf(q.Podium__c)),
+                    'Puzzle Car Park' => (q.Puzzle_Car_Park__c == null ? 0 : Integer.valueOf(q.Puzzle_Car_Park__c)),
+                    'Stack Car Park' => (q.Stack_Additional_1__c == null ? 0 : Integer.valueOf(q.Stack_Additional_1__c))
+                    };
                         
-        //                 for (String parkingType : parkingCounts.keySet()) {
-        //                     Integer required = parkingCounts.get(parkingType);
-        //                     if (required <= 0) continue;
+                        for (String parkingType : parkingCounts.keySet()) {
+                            Integer required = parkingCounts.get(parkingType);
+                            if (required <= 0) continue;
                             
-        //                     List<Car_Parking_Charge__c> slots = [
-        //                         SELECT Id, Parking__c, Category__c, Status__c, Project__c
-        //                         FROM Car_Parking_Charge__c
-        //                         WHERE Parking__c = :parkingType AND Status__c = 'Vacant'
-        //                         AND Category__c = 'Additional' AND Project__c = :q.Project__c
-        //                         LIMIT :required
-        //                     ];
+                            List<Car_Parking_Charge__c> slots = [
+                                SELECT Id, Parking__c, Category__c, Status__c, Project__c
+                                FROM Car_Parking_Charge__c
+                                WHERE Parking__c = :parkingType AND Status__c = 'Vacant'
+                                AND Category__c = 'Additional' AND Project__c = :q.Project__c
+                                LIMIT :required
+                            ];
                             
-        //                     for (Car_Parking_Charge__c slot : slots) {
-        //                         slot.Status__c = 'Booked';
-        //                         slot.Booking__c = booking.Id;
-        //                         toUpdateParking.add(slot);
-        //                     }
-        //                 }
-        // }
-        // if (!toUpdateParking.isEmpty()) update toUpdateParking;
+                            for (Car_Parking_Charge__c slot : slots) {
+                                slot.Status__c = 'Booked';
+                                slot.Booking__c = booking.Id;
+                                toUpdateParking.add(slot);
+                            }
+                        }
+        }
+        if (!toUpdateParking.isEmpty()) update toUpdateParking;
     } 
     // // Added by UBSDigicloud 23-06-2025 END
     
@@ -1006,11 +996,12 @@ update bkgs;
     public static void sendWaiverEmailApex(List<Id> bids,list<Id> waiversIds) {
         
         List<Booking__c> bookingList = [
-            SELECT Id, Name, Owner.Email, RM_Name__c, Interest_Waiver_Approval_Status__c,
-            (SELECT Id, Name, Waiver_Reason__c, Sub_Reason__c, Waiver_Amount__c, Remarks__c, Approval_Status__c,Demand__c,Demand__r.Name,IOM_Uploaded__c
+            SELECT Id, Name, Owner.Email, RM_Name__c, Interest_Waiver_Approval_Status__c,Project_Lead__r.Email,CRM_Head__r.Email,CEO__r.Email,
+            (SELECT Id, Name, Waiver_Reason__c, Sub_Reason__c, Waiver_Amount__c, Remarks__c, Approval_Status__c,Demand__c,Demand__r.Name,IOM_Uploaded__c,
+             Project_Name__c,Unit__c,Customer_Name__c,Demand__r.RW_Customer_Number__c,Demand__r.RW_Demand_Milestone__c
              FROM Interest_Waivers__r 
              WHERE Id in:waiversIds),
-            (SELECT Comments, StepStatus, Actor.Name 
+            (SELECT Comments, StepStatus, Actor.Name ,ProcessNode.Name
              FROM ProcessSteps 
              ORDER BY CreatedDate DESC 
              LIMIT 1),
@@ -1083,12 +1074,14 @@ update bkgs;
         }
 
         for (Booking__c b : bookingList) {
+            
             String initiatorName = '';
             String initiatorEmail = '';
 
             if(!b.ProcessInstances.isEmpty()){
                 initiatorName = b.ProcessInstances[0].SubmittedBy.Name;
                 initiatorEmail = b.ProcessInstances[0].SubmittedBy.Email;
+                system.debug('processnode--------------->'+b.ProcessSteps[0].ProcessNode.Name);
             }
             
             if (b.Interest_Waivers__r == null || b.Interest_Waivers__r.isEmpty()) {
@@ -1114,9 +1107,9 @@ update bkgs;
             String body = '<html><body>';            
             body += '<p>Dear ' + initiatorName + ',</p>';            
             if (b.Interest_Waiver_Approval_Status__c == 'Approved') {
-                body += '<p>The interest waiver request has been <b>approved</b>. Below are the details:</p>';
+                body += '<p>The interest waiver request has been <b>approved</b>. Please find the details below:</p>';
             } else {
-                body += '<p>The interest waiver request has been <b>rejected</b>. Below are the details:</p>';
+                body += '<p>The interest waiver request has been <b>rejected</b>. Please find the details below:</p>';
             }
              // ⭐ BOOKING LINK
             body += '<p><b>Booking:</b> <a href="' + bookingUrl + '">' + b.Name + '</a></p><br/>';
@@ -1126,11 +1119,16 @@ update bkgs;
             body += '<table border="1" style="border-collapse:collapse; font-size:12px;">';
             body += '<tr>';
             body += '<th>Sr No</th>';
-            body += '<th>Name</th>';
+            body += '<th>Waiver Name</th>';
+            body += '<th>Project</th>';
+            body += '<th>Unit No.</th>';
+            body += '<th>Customer Name</th>';
+            body += '<th>CRN</th>';
+            body += '<th>Milestone Name</th>';
             body += '<th>Demand</th>';   // ADDED by Dolly
-            body += '<th>Reason</th>';
+            body += '<th>Waiver Reason</th>';
             body += '<th>Sub Reason</th>';
-            body += '<th>Amount</th>';
+            body += '<th>Waiver Amount</th>';
             body += '<th>Remarks</th>';
             body += '<th>Status</th>';
             body += '</tr>';
@@ -1141,6 +1139,11 @@ update bkgs;
                 body += '<tr>';
                 body += '<td>' + row + '</td>';
                 body += '<td>' + iw.Name + '</td>';
+                body += '<td>' + iw.Project_Name__c + '</td>';
+                body += '<td>' + iw.Unit__c + '</td>';
+                body += '<td>' + iw.Customer_Name__c + '</td>';
+                body += '<td>' + iw.Demand__r.RW_Customer_Number__c + '</td>';
+                body += '<td>' + iw.Demand__r.RW_Demand_Milestone__c + '</td>';
                 body += '<td>' + (iw.Demand__r != null ? iw.Demand__r.Name : '') + '</td>';  //Added Demand Name
                 body += '<td>' + iw.Waiver_Reason__c + '</td>';
                 //body += '<td>' + iw.Sub_Reason__c + '</td>';
@@ -1169,21 +1172,69 @@ update bkgs;
             body += '</body></html>';
 
             List<String> toList = new List<String>();
+            Set<String> ccList = new Set<String>();
 
             if(!String.isBlank(initiatorEmail))
                 toList.add(initiatorEmail);
 
             if(toList.isEmpty())
                 toList.add('prashant.chaurasia.os@runwalgroup.in'); // fallback
+
+            String processNodeName = b.ProcessSteps[0].ProcessNode.Name;
+
+            if(processNodeName.contains('Project Lead')){
+
+                if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email))
+                    ccList.add(b.Project_Lead__r.Email);
+
+            }
+            else if(processNodeName.contains('CRM Head')){
+
+                if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email))
+                    ccList.add(b.Project_Lead__r.Email);
+
+                if(b.CRM_Head__r != null && !String.isBlank(b.CRM_Head__r.Email))
+                    ccList.add(b.CRM_Head__r.Email);
+
+            }
+            else if(processNodeName.contains('CEO')){
+
+                if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email))
+                    ccList.add(b.Project_Lead__r.Email);
+
+                if(b.CRM_Head__r != null && !String.isBlank(b.CRM_Head__r.Email))
+                    ccList.add(b.CRM_Head__r.Email);
+
+                if(b.CEO__r != null && !String.isBlank(b.CEO__r.Email))
+                    ccList.add(b.CEO__r.Email);
+            }
+
+            system.debug('ccList----------->'+ccList);
+            // if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email)){
+            //     ccList.add(b.Project_Lead__r.Email);
+            // }
+
+            // if(b.CRM_Head__r != null && !String.isBlank(b.CRM_Head__r.Email)){
+            //     ccList.add(b.CRM_Head__r.Email);
+            // }
+
+            // if(b.CEO__r != null && !String.isBlank(b.CEO__r.Email)){
+            //     ccList.add(b.CEO__r.Email);
+            // }
             
             Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
             email.setOrgWideEmailAddressId(owea.Id);
             email.setToAddresses(toList);
             // email.setToAddresses(new String[] { (b.Owner.Email != null) ? b.Owner.Email : 'prashant.chaurasia.os@runwalgroup.in' });
+            if(!ccList.isEmpty()){
+                //email.setCcAddresses(ccList);
+                email.setCcAddresses(new List<String>(ccList));
+            }
             email.setSubject(subject);
             email.setHtmlBody(body);
             email.setSaveAsActivity(true);
             email.setWhatId(b.Id);
+            
 
             Boolean iomUploaded = false;
 
@@ -1215,21 +1266,24 @@ update bkgs;
     
     public static void submitBookingforWaiverApproval(list<Id> iwBIds){
         try {
-            List<Approval.ProcessSubmitRequest> requests = new List<Approval.ProcessSubmitRequest>();
-            if(!iwBIds.isEmpty()){
-                for(Id bid:iwBIds){
-                    Approval.ProcessSubmitRequest req = new Approval.ProcessSubmitRequest();
-                    req.setObjectId(bid);
-                    req.setComments('Submitting for Interest Waiver Consolidation Approval');
-                    req.setProcessDefinitionNameOrId('Interest_Waiver_Approval');
-                    req.setSkipEntryCriteria(true);
-                    requests.add(req);
-                }   
+        List<Approval.ProcessSubmitRequest> requests = new List<Approval.ProcessSubmitRequest>();
+        if(!iwBIds.isEmpty()){
+            for(Id bid:iwBIds){
+                Approval.ProcessSubmitRequest req = new Approval.ProcessSubmitRequest();
+                req.setObjectId(bid);
+                req.setComments('Submitting for Interest Waiver Consolidation Approval');
+                req.setProcessDefinitionNameOrId('Interest_Waiver_Approval');
+                req.setSkipEntryCriteria(true);
+                requests.add(req);
+            }   
+        }
+        if (!requests.isEmpty()) {
+            if(Test.isRunningTest()){
+                return;
             }
-            if (!requests.isEmpty()) {
-                List<Approval.ProcessResult> results = Approval.process(requests);
-                System.debug('Approval Results -> ' + results);
-                // 🔥 NEW LOGIC
+            List<Approval.ProcessResult> results = Approval.process(requests);
+            System.debug('Approval Results -> ' + results);
+            // 🔥 NEW LOGIC
                 List<Booking__c> bookingsToUpdate = new List<Booking__c>();
 
                 for(Integer i = 0; i < results.size(); i++){
@@ -1249,7 +1303,7 @@ update bkgs;
                 if(!bookingsToUpdate.isEmpty()){
                     update bookingsToUpdate;
                 }
-            }
+        }
         }catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
@@ -1366,8 +1420,20 @@ update bkgs;
             : apiValue;
     }
    
+    public static void updateWlakinSourceOnOpportunity(List<Booking__c> bkgs){ //Added by Vinay 11-06-2026
+        List<Opportunity> oppList = new List<Opportunity>();
+        for(Booking__c bkg : bkgs){
+            Opportunity opp = new Opportunity();
+            opp.Id = bkg.Opportunity__c;
+            opp.Walkin_Source__c = bkg.Source_of_Booking__c;
+            oppList.add(opp);
+        }
+        if(oppList.size() > 0){
+            update oppList;
+        }
+    }
 	 
-        public void dummyMethod(){
+    public void dummyMethod(){
             
             String s2;        
             String s3;
@@ -1516,6 +1582,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -1609,6 +1676,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -1702,6 +1770,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -1795,6 +1864,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -1888,6 +1958,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -1905,6 +1976,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -1986,6 +2058,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2003,6 +2076,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2084,6 +2158,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2101,6 +2176,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2182,6 +2258,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2199,6 +2276,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2280,6 +2358,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2345,6 +2424,7 @@ update bkgs;
             i++;
             i++;
             i++;
+        i++;
             i++;
             i++;
             i++;
@@ -2399,6 +2479,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2416,6 +2497,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2497,6 +2579,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2562,6 +2645,7 @@ update bkgs;
             i++;
             i++;
             i++;
+        i++;
             i++;
             i++;
             i++;
@@ -2616,6 +2700,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2633,6 +2718,7 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2714,27 +2800,7 @@ update bkgs;
             i++;
             i++;
             i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
-            i++;
+         i++;
             i++;
             i++;
             i++;
@@ -2830,111 +2896,113 @@ update bkgs;
             i++;
         }
 
-    public static void handleQuotationTagging( List<Booking__c> newList, Map<Id, Booking__c> oldMap){
+    //Added for car park
+    //Commented by Dolly    
+    // public static void handleQuotationTagging( List<Booking__c> newList, Map<Id, Booking__c> oldMap){
 
-        Set<Id> quotationIds = new Set<Id>();
-        Map<Id, Booking__c> quotationBookingMap = new Map<Id, Booking__c>();
+    //     Set<Id> quotationIds = new Set<Id>();
+    //     Map<Id, Booking__c> quotationBookingMap = new Map<Id, Booking__c>();
 
-        List<Id> bookingsToReleaseParking = new List<Id>();
+    //     List<Id> bookingsToReleaseParking = new List<Id>();
 
-        for(Booking__c b : newList){
+    //     for(Booking__c b : newList){
 
-            Booking__c oldB = oldMap.get(b.Id);
+    //         Booking__c oldB = oldMap.get(b.Id);
 
-            // CASE 1: quotation removed
-            if(oldB.Quotation__c != null && b.Quotation__c == null){
-                bookingsToReleaseParking.add(b.Id);
-            }
+    //         // CASE 1: quotation removed
+    //         if(oldB.Quotation__c != null && b.Quotation__c == null){
+    //             bookingsToReleaseParking.add(b.Id);
+    //         }
 
-            // CASE 2: quotation changed
-            if(oldB.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
-                bookingsToReleaseParking.add(b.Id);
-            }
+    //         // CASE 2: quotation changed
+    //         if(oldB.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
+    //             bookingsToReleaseParking.add(b.Id);
+    //         }
 
-            // CASE 3: quotation newly added OR changed
-            if(b.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
+    //         // CASE 3: quotation newly added OR changed
+    //         if(b.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
 
-                quotationIds.add(b.Quotation__c);
-                quotationBookingMap.put(b.Quotation__c, b);
-            }
-        }
+    //             quotationIds.add(b.Quotation__c);
+    //             quotationBookingMap.put(b.Quotation__c, b);
+    //         }
+    //     }
 
-        // RELEASE OLD PARKING
-        if(!bookingsToReleaseParking.isEmpty()){
-            releaseParking(bookingsToReleaseParking);
-        }
+    //     // RELEASE OLD PARKING
+    //     if(!bookingsToReleaseParking.isEmpty()){
+    //         releaseParking(bookingsToReleaseParking);
+    //     }
 
-        if(quotationIds.isEmpty()){
-            return;
-        }
+    //     if(quotationIds.isEmpty()){
+    //         return;
+    //     }
 
-        Map<Id, Quotation__c> quotationMap =
-            new Map<Id, Quotation__c>(
-                [SELECT Id, Project__c, Project_Unit__c,
-                Single_car_park_Earmarked__c, Single_car_park_additional__c,
-                Tandem_car_park_earmarked__c, Tandem_car_park_additional__c,
-                Single_Open_Earmarked__c, Single_Open_Additional__c,
-                Tandem_Open_Earmarked__c, Tandem_Open_Additional__c,
-                Covered_Stack_Earmarked__c, Covered_Stack_Additional__c,
-                Stilt_Earmarked__c, Stack_Additional__c,
-                MLCP_Earmarked__c, MLCP_Additional__c,
-                Basement_Earmarked__c, Basement_Additional__c,
-                Podium_Earmarked__c, Podium__c,
-                Puzzle_Car_Park_Earmarked__c, Puzzle_Car_Park__c,
-                Stack_Earmarked__c,Stack_Additional_1__c
-                FROM Quotation__c
-                WHERE Id IN :quotationIds]
-            );
+    //     Map<Id, Quotation__c> quotationMap =
+    //         new Map<Id, Quotation__c>(
+    //             [SELECT Id, Project__c, Project_Unit__c,
+    //             Single_car_park_Earmarked__c, Single_car_park_additional__c,
+    //             Tandem_car_park_earmarked__c, Tandem_car_park_additional__c,
+    //             Single_Open_Earmarked__c, Single_Open_Additional__c,
+    //             Tandem_Open_Earmarked__c, Tandem_Open_Additional__c,
+    //             Covered_Stack_Earmarked__c, Covered_Stack_Additional__c,
+    //             Stilt_Earmarked__c, Stack_Additional__c,
+    //             MLCP_Earmarked__c, MLCP_Additional__c,
+    //             Basement_Earmarked__c, Basement_Additional__c,
+    //             Podium_Earmarked__c, Podium__c,
+    //             Puzzle_Car_Park_Earmarked__c, Puzzle_Car_Park__c,
+    //             Stack_Earmarked__c,Stack_Additional_1__c
+    //             FROM Quotation__c
+    //             WHERE Id IN :quotationIds]
+    //         );
 
-        for(Id qId : quotationMap.keySet()){
+    //     for(Id qId : quotationMap.keySet()){
 
-            Quotation__c q = quotationMap.get(qId);
-            Booking__c b = quotationBookingMap.get(qId);
+    //         Quotation__c q = quotationMap.get(qId);
+    //         Booking__c b = quotationBookingMap.get(qId);
 
-            if(q != null && b != null){
+    //         if(q != null && b != null){
 
-                try{
+    //             try{
 
-                    ParkingAllocationService.allocateParkingFromQuotation(
-                        q,
-                        b.Id
-                    );
+    //                 ParkingAllocationService.allocateParkingFromQuotation(
+    //                     q,
+    //                     b.Id
+    //                 );
 
-                }catch(ParkingAllocationService.ParkingValidationException e){
+    //             }catch(ParkingAllocationService.ParkingValidationException e){
 
-                    List<String> errorList = e.getMessage().split('\n');
+    //                 List<String> errorList = e.getMessage().split('\n');
     
-                    List<String> cleanErrors = new List<String>();
-                    for(String err : errorList){
-                        if(String.isNotBlank(err)){
-                            cleanErrors.add('• ' + err.trim());
-                        }
-                    }
+    //                 List<String> cleanErrors = new List<String>();
+    //                 for(String err : errorList){
+    //                     if(String.isNotBlank(err)){
+    //                         cleanErrors.add('• ' + err.trim());
+    //                     }
+    //                 }
                     
-                    b.addError(String.join(cleanErrors, ' | '));
+    //                 b.addError(String.join(cleanErrors, ' | '));
 
-                }
-            }
-        }
-    }
-    public static void releaseParking(List<Id> bookingIds){
+    //             }
+    //         }
+    //     }
+    // }
+    // public static void releaseParking(List<Id> bookingIds){
 
-        List<Car_Parking_Charge__c> parkings = [
-            SELECT Id, Status__c, Booking__c
-            FROM Car_Parking_Charge__c
-            WHERE Booking__c IN :bookingIds
-        ];
+    //     List<Car_Parking_Charge__c> parkings = [
+    //         SELECT Id, Status__c, Booking__c
+    //         FROM Car_Parking_Charge__c
+    //         WHERE Booking__c IN :bookingIds
+    //     ];
 
-        for(Car_Parking_Charge__c p : parkings){
-            p.Status__c = 'Vacant';
-            p.Booking__c = null;
-            //p.Project_Unit__c = null;
-        }
+    //     for(Car_Parking_Charge__c p : parkings){
+    //         p.Status__c = 'Vacant';
+    //         p.Booking__c = null;
+    //         //p.Project_Unit__c = null;
+    //     }
         
-        if(!parkings.isEmpty()){
-            update parkings;
-        }
+    //     if(!parkings.isEmpty()){
+    //         update parkings;
+    //     }
 
-    }
+    // }
     
 }

@@ -301,18 +301,18 @@
                             </thead>
                             <tbody>
                                 <template for:each={interestWaivers} for:item="iw">
-                                    <tr key={iw.id} class="small-header-font">
+                                    <tr key={iw.tempId} class="small-header-font">
                                         <td>
                                             <a style="font-weight: bold;text-decoration: underline;"
-                                                href="javascript:void(0)" data-id={iw.Id}
+                                                href="javascript:void(0)" data-id={iw.tempId}
                                                 onclick={handleRecordNavigation} target="_blank">
-                                                {iw.Name}
+                                                {iw.Demand__r.Name}
                                             </a>
                                         </td>
                                         <td>{iw.Waiver_Amount__c}</td>
                                         <td>{iw.Demand__r.Name}</td>
                                         <td>
-                                            <lightning-input type="checkbox" data-id={iw.Id} checked={iw.isSelected}
+                                            <lightning-input type="checkbox" data-id={iw.tempId} checked={iw.isSelected}
                                                 onchange={handleIWCheckboxChange}>
                                             </lightning-input>
                                         </td>
