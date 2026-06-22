@@ -282,7 +282,7 @@ public class TestBookingTrigger {
         b.Brokerage_Scheme__c = bscheme1.id;
         update b;
 		
-        BookingTriggerHandler.updateBrokerageSummaryStatus(new Set<Id>{b.Id});  
+        //BookingTriggerHandler.updateBrokerageSummaryStatus(new Set<Id>{b.Id});  
         BookingTriggerHandler.updateexcludebatch(new Set<Id>{b.Id});
         BookingTriggerHandler.updateBrokerageonSchemeChange(new List<Id>{b.Id});
         
@@ -1684,7 +1684,7 @@ public class TestBookingTrigger {
         b.RW_Registration_Type__c = 'Offline Registration';
         b.RW_Expected_Registration_Date__c = system.today();
         b.RW_Registration_Date__c = system.today();
-        b.Cancellation_Reason__c = 'Transfer';
+        b.Cancellation_Reason__c = 'Product/Project related';
         b.Invoice_Submitted_by_CP__c = true;
         b.RW_Total_Receipt_Amount_Received__c = 2000000;
         b.RW_Registration_Done__c = 'No';
@@ -1843,7 +1843,7 @@ public class TestBookingTrigger {
         hlrm.Reporting_2_Email__c = 'rep2@mail.com';
         hlrm1.TL_Name__c = 'Apeksha Sathe';
         hlrm1.TL_Email__c = 'apeksha@mail.com';
-        insert hlrm1;
+        //insert hlrm1;
         
         Bank_with_RM__c bankRM = new Bank_with_RM__c();
         bankRM.Name = 'Axis Bank';

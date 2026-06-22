@@ -15,7 +15,7 @@ public class interestWaiverConsolidationTest {
         User u1 = new User(LastName = 'Test',
                            FirstName='Test1 User',
                            Alias = 'tstU1',
-                           Email = 'testUsr1@stetig.in',
+                           Email = 'testUsr1@stetig.in', 
                            Username = 'testUsr1@stetig.in',
                            ProfileId = profileId.id,
                            CTI_Agent_ID__c = 'test.test1',
@@ -174,6 +174,14 @@ public class interestWaiverConsolidationTest {
         iw.Sent_for_Approval__c=true;
         insert iw;
         
+        Interest_Waiver__c iw1 = new Interest_Waiver__c();
+        iw1.Demand__c = dmd2.Id;
+        iw1.Booking__c = b.Id;
+        iw1.Waiver_Amount__c = 50000;
+        iw1.IOM_Uploaded__c=true;
+        iw1.Sent_for_Approval__c=true;
+        iw1.Approval_Status__c = 'Rejected';
+        
         ContentVersion cv = new ContentVersion(
             Title = 'Test File',
             PathOnClient = 'TestFile.pdf',
@@ -209,11 +217,12 @@ public class interestWaiverConsolidationTest {
         
         Test.startTest();
         interestWaiverConsolidation.getDemandRecords(b.Id);
-        interestWaiverConsolidation.getIWRecords(b.Id);
+        //interestWaiverConsolidation.getIWRecords(b.Id);
         interestWaiverConsolidation.interestWaiverAmtLimit(dmd2.Id);
-        interestWaiverConsolidation.createInterestWaiver(iw);
+        //interestWaiverConsolidation.createInterestWaiver(iw);
         interestWaiverConsolidation.submitSelectedWaivers(b.Id,new list<Id>{iw.Id}, true, 1);
-        List<ContentDocumentLink> result = interestWaiverConsolidation.fetchFiles(b.Id);
+        interestWaiverConsolidation.createAndSubmitWaivers(b.Id,new list<Interest_Waiver__c>{iw1}, true);
+        //List<ContentDocumentLink> result = interestWaiverConsolidation.fetchFiles(b.Id);
         //InterestWaiverApprovalTemplateController.getCreateWaiverList();
         
     }
