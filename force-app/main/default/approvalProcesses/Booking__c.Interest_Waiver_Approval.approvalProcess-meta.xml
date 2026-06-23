@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
     <active>true</active>
-    <allowRecall>true</allowRecall>
+    <allowRecall>false</allowRecall>
     <allowedSubmitters>
         <type>allInternalUsers</type>
     </allowedSubmitters>
@@ -29,10 +29,6 @@
         <type>roleSubordinatesInternal</type>
     </allowedSubmitters>
     <allowedSubmitters>
-        <submitter>CRM_Head_Gardens</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
         <submitter>CRM_Head_Mumbai_Projects</submitter>
         <type>roleSubordinatesInternal</type>
     </allowedSubmitters>
@@ -45,51 +41,7 @@
         <type>roleSubordinatesInternal</type>
     </allowedSubmitters>
     <allowedSubmitters>
-        <submitter>CRM_Team_Lead_Bliss</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
         <submitter>CRM_Team_Lead_Forests</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Lead_Gardens</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Lead_Greens</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Lead_Mahalaxmi</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Lead_Pinnacle</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Member_Avenue</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Member_Bliss</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Member_Forests</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Member_Gardens</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Member_Greens</submitter>
-        <type>roleSubordinatesInternal</type>
-    </allowedSubmitters>
-    <allowedSubmitters>
-        <submitter>CRM_Team_Member_Mahalaxmi</submitter>
         <type>roleSubordinatesInternal</type>
     </allowedSubmitters>
     <allowedSubmitters>
@@ -156,12 +108,6 @@
     </approvalPageFields>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
-        <approvalActions>
-            <action>
-                <name>Pending_at_CRM_Head</name>
-                <type>FieldUpdate</type>
-            </action>
-        </approvalActions>
         <assignedApprover>
             <approver>
                 <name>Project_Lead__c</name>
@@ -193,12 +139,6 @@
     </approvalStep>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
-        <approvalActions>
-            <action>
-                <name>Pending_at_CEO</name>
-                <type>FieldUpdate</type>
-            </action>
-        </approvalActions>
         <assignedApprover>
             <approver>
                 <name>CRM_Head__c</name>
