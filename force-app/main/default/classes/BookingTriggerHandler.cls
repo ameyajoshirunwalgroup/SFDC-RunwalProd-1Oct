@@ -1022,7 +1022,7 @@ update bkgs;
             LIMIT 1
         ];
         
-       Map<Id, ContentVersion> latestFilePerBooking = new Map<Id, ContentVersion>();
+        Map<Id, Id> latestFilePerBooking = new Map<Id, Id>();
 
         List<ContentDocumentLink> docLinks = [
             SELECT LinkedEntityId, ContentDocumentId
@@ -1039,12 +1039,15 @@ update bkgs;
         }
 
         List<ContentVersion> versions = [
-            SELECT Title, FileExtension, VersionData, ContentDocumentId
+            SELECT Title, FileExtension, ContentDocumentId
             FROM ContentVersion
             WHERE ContentDocumentId IN :docIds
             AND IsLatest = true
+            AND Title LIKE '%IWR%'
             ORDER BY CreatedDate DESC
         ];
+        system.debug('versions------>'+versions);
+        system.debug('versions.size------>'+versions.size());
 
         // for(ContentVersion cv : versions){
 
@@ -1068,9 +1071,20 @@ update bkgs;
 
                 // ✅ pick ONLY latest
                 if(!latestFilePerBooking.containsKey(bookingId)){
-                    latestFilePerBooking.put(bookingId, cv);
+                    latestFilePerBooking.put(bookingId, cv.Id);
                 }
             }
+        }
+
+        Map<Id, ContentVersion> versionMap = new Map<Id, ContentVersion>();
+
+        if(!latestFilePerBooking.isEmpty()){
+
+            versionMap = new Map<Id, ContentVersion>([
+                SELECT Id, Title, FileExtension, VersionData
+                FROM ContentVersion
+                WHERE Id IN :latestFilePerBooking.values()
+            ]);
         }
 
         for (Booking__c b : bookingList) {
@@ -1248,13 +1262,18 @@ update bkgs;
 
             if(iomUploaded && latestFilePerBooking.containsKey(b.Id)){
 
-                ContentVersion cv = latestFilePerBooking.get(b.Id);
+                Id versionId = latestFilePerBooking.get(b.Id);
 
-                Messaging.EmailFileAttachment efa = new Messaging.EmailFileAttachment();
-                efa.setFileName(cv.Title + '.' + cv.FileExtension);
-                efa.setBody(cv.VersionData);
+                if(versionMap.containsKey(versionId)){
 
-                attachments.add(efa);
+                    ContentVersion cv = versionMap.get(versionId);
+
+                    Messaging.EmailFileAttachment efa = new Messaging.EmailFileAttachment();
+                    efa.setFileName(cv.Title + '.' + cv.FileExtension);
+                    efa.setBody(cv.VersionData);
+
+                    attachments.add(efa);
+                }
             }
 
             email.setFileAttachments(attachments);
