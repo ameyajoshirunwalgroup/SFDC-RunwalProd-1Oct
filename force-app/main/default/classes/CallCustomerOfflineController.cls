@@ -2,7 +2,7 @@ public class CallCustomerOfflineController {
     
     @AuraEnabled(cacheable=true)
     public static Opportunity oppData(String recId){
-        return [SELECT Id, Account.Mobile_No__c, Account.RW_Country__c, Account.Country_Code__c, Account.Dialing_Country_2__c, Account.Country_Code_2__c, Account.RW_Secondary_Mobile_No__pc, Account.Alternate_Mobile_No__c FROM Opportunity WHERE Id =: recId];
+        return [SELECT Id, Account.Mobile_No__c, Account.RW_Country__c, Account.Country_Code__c, Account.Dialing_Country_2__c, Account.Country_Code_2__c, Account.RW_Secondary_Mobile_No__pc, Account.Alternate_Mobile_No__c,Is_DND__c FROM Opportunity WHERE Id =: recId];
     }
 
     //Added by Dolly
@@ -136,7 +136,7 @@ public class CallCustomerOfflineController {
         
         if(uList[0].Tata_CTI_Agent_Number__c != null){
             System.debug('Tata_CTI_Agent_Number__c: ' + uList[0].Tata_CTI_Agent_Number__c);
-            String resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, RecordId);
+            String resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, RecordId, uList[0].DID__c); //Added uList[0].DID__c by Vinay 24-06-2026
             /*String resp;
 if(countryCode != '+91' && countryCode != '91' && countryCode != '0091' && countryCode != '091'){
 resp = CallCustomerController.tataCallAPI(mobileNum,uList[0].Tata_CTI_Agent_Number__c, RecordId);
@@ -146,10 +146,11 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
             return resp;
         }else{
             //Commented by coServe 22-08-2024 
-            String queryString = 'apiKey='+apiKey+'&userName='+username+'&custNumber='+customerPh+'&phoneName='+PhoneName+'&did='+DID+'&uui='+RecordId;
+            
+            /*String queryString = 'apiKey='+apiKey+'&userName='+username+'&custNumber='+customerPh+'&phoneName='+PhoneName+'&did='+DID+'&uui='+RecordId;
             
             //String endpoint = 'https://api1.cloudagent.in/CAServices/PhoneManualDial.php?'+queryString;
-            String endpoint = 'https://in1-ccaas-api.ozonetel.com/CAServices/PhoneManualDial.php?'+queryString;//(.invalid) Added by Prashant
+            String endpoint = 'https://in1-ccaas-api.ozonetel.com/CAServices/PhoneManualDial.php?'+queryString;//(.invalid) Added by Prashant 
             System.debug('click2call URL:' + endpoint);
             Http httpProtocol = new Http();
             
@@ -167,59 +168,81 @@ resp = CallCustomerController.tataCallAPI(mobileNumWithCountryCode,uList[0].Tata
             } else {
                 response.setBody('DUMMY');
             }
-            System.debug(response.getBody());
-            string tempResponse = response.getBody();
-            return tempResponse; 
+            System.debug(response.getBody());*/
+            //Added by Vinay 20-03-2026 Start
+            Id objId = RecordId;
+            String objName = objId.getSObjectType().getDescribe().getName();
+            Task tsk = new Task();
+            if(objName == 'Lead'){
+                tsk.WhoId = objId;
+                tsk.Task_Type__c = 'Presales Call';
+                tsk.Subject = 'Presales Call';
+            }else{
+                tsk.WhatId = objId;
+                tsk.Task_Type__c = 'CRM Call';
+                tsk.Subject = 'CRM Call';
+            }
+            tsk.Communication_Type__c = 'Outbound Call';
+            tsk.Campaign_Name_from_CTI__c = campaignName;
+            tsk.Status = 'In-Progress';
+            //insert tsk;
+            //Added by Vinay 20-03-2026 End
+            /*string tempResponse = response.getBody();
+            return tempResponse; */
+
+            //Added by Vinay 15-04-2026 Start
+            ReqData rd = new ReqData();
+            rd.userName = username;
+            rd.phoneName = agentId;
+            rd.campaignName = campaignName;
+            rd.custNumber = customerPh;
+            rd.did = DID;
+            rd.checkStatus = true;
+            rd.uui = RecordId;
+            String jsonData = JSON.serialize(rd);
+            
+            apiKey = System.label.Ozonetel_API_Key;
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/PhoneManualDial');
+            req.setMethod('POST');
+            req.setHeader('Content-Type', 'application/json');
+            req.setHeader('apiKey', apiKey);
+            req.setBody(jsonData);
+            Http http = new Http();
+            HTTPResponse res = new HttpResponse();
+            if(!Test.isRunningTest()){
+                res = http.send(req);
+            } else {
+                res.setBody('{"status" : "queued successfully", "UCID" : "", "message" : ""}');
+            }
+            System.debug(res.getBody());
+            
+            RespData resp = new RespData();
+            resp = (RespData)JSON.deserialize(res.getBody(), RespData.class);
+            string tempResponse;
+            if(resp.status == 'queued successfully'){
+                tempResponse = resp.status + '!  UCID - ' + resp.UCID;
+                tsk.CallObject = resp.UCID;
+                insert tsk;
+            }else if(resp.status == 'Fail' || resp.status == 'false'){
+                tempResponse = resp.status + ' : ' + resp.message;
+            }
+            return tempResponse;
+            //Added by Vinay 15-04-2026 End 
         }
         
         
-        //Added by coServe 22-08-2024 Start
-        /*ReqData rd = new ReqData();
-rd.userName = username;
-rd.agentID = agentId;
-rd.campaignName = campaignName;
-rd.customerNumber = customerPh;
-rd.UCID = String.valueOf(true);
-rd.uui = RecordId;
-String jsonData = JSON.serialize(rd);
-
-apiKey = System.label.Ozonetel_API_Key;
-HttpRequest req = new HttpRequest();
-req.setEndpoint('https://in1-ccaas-api.ozonetel.com/ca_apis/AgentManualDial');
-req.setMethod('POST');
-req.setHeader('Content-Type', 'application/json');
-req.setHeader('apiKey', apiKey);
-req.setBody(jsonData);
-
-Http http = new Http();
-//HTTPResponse res = http.send(req);
-HTTPResponse res = new HttpResponse();
-if(!Test.isRunningTest()){
-res = http.send(req);
-} else {
-res.setBody('{"status" : "queued successfully", "UCID" : "", "message" : ""}');
-}
-System.debug(res.getBody());
-
-RespData resp = new RespData();
-resp = (RespData)JSON.deserialize(res.getBody(), RespData.class);
-string tempResponse;
-if(resp.status == 'queued successfully'){
-tempResponse = resp.status + '!  UCID - ' + resp.UCID;
-}else if(resp.status == 'Fail' || resp.status == 'false'){
-tempResponse = resp.status + ' : ' + resp.message;
-}
-return tempResponse;*/
-        //Added by coServe 22-08-2024 End   
+          
     }
     
     public class ReqData{
         public String userName;
-        public String agentID;
+        public String custNumber;
+        public String phoneName;
         public String campaignName;
-        public String customerNumber;
-        public String UCID;
+        public String did;
         public String uui;
+        public Boolean checkStatus;
     }
     
     public class RespData{
