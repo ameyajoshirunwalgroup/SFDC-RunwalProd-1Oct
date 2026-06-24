@@ -7,13 +7,26 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>Edit</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Submit</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Clone</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Credit_Note__c.Send_to_SAP</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Sent_to_SAP__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Approval_Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -35,7 +48,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>numVisibleActions</name>
-                    <value>3</value>
+                    <value>4</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
                 <identifier>force_highlightsPanel</identifier>
@@ -82,35 +95,22 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Interest_Amounts_Payable1__c</fieldItem>
-                <identifier>RecordInterest_Amounts_Payable1_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Payment_Done__c</fieldItem>
-                <identifier>RecordPayment_Done_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.ADF_Balance__c</fieldItem>
                 <identifier>RecordADF_Balance_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.CN_type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ADF</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Sent_to_SAP__c</fieldItem>
                 <identifier>RecordSent_to_SAP__cField</identifier>
@@ -126,10 +126,120 @@
                 <identifier>RecordProject__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L3_Approval_Date__c</fieldItem>
+                <identifier>RecordL3_Approval_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L4_Approval_Date__c</fieldItem>
+                <identifier>RecordL4_Approval_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Approval_Submitted_Date__c</fieldItem>
+                <identifier>RecordApproval_Submitted_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L1_Ageing__c</fieldItem>
+                <identifier>RecordL1_Ageing__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L2_Ageing__c</fieldItem>
+                <identifier>RecordL2_Ageing__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L3_Ageing__c</fieldItem>
+                <identifier>RecordL3_Ageing__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L4_Ageing__c</fieldItem>
+                <identifier>RecordL4_Ageing__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CRN__c</fieldItem>
+                <identifier>RecordCRN__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ADF_Interest_Balance__c</fieldItem>
+                <identifier>RecordADF_Interest_Balance__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.TDS_Amount__c</fieldItem>
+                <identifier>RecordTDS_Amount__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-92672b68-a2c7-43d7-ab3d-d83777cdd121</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CN_type__c</fieldItem>
+                <identifier>RecordCN_type_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -166,16 +276,6 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Customer_Email__c</fieldItem>
-                <identifier>RecordCustomer_Email_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Total_AV_Value__c</fieldItem>
                 <identifier>RecordTotal_AV_Value_cField</identifier>
             </fieldInstance>
@@ -186,18 +286,15 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Paymet_Due__c</fieldItem>
-                <identifier>RecordPaymet_Due_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.ADF_Final_Approval_Date__c</fieldItem>
                 <identifier>RecordADF_Final_Approval_Date_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.CN_type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ADF</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-fe2c1a9d-2999-42bb-9c36-969787169054</name>
@@ -225,6 +322,192 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-711f3e62-7e47-472b-8b63-61a8831a73e8</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Vendor_Code__c</fieldItem>
+                <identifier>RecordVendor_Code_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SAP_Document_Number__c</fieldItem>
+                <identifier>RecordSAP_Document_Number__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SAP_Document_Date__c</fieldItem>
+                <identifier>RecordSAP_Document_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Financial_Year__c</fieldItem>
+                <identifier>RecordFinancial_Year_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-13989fa1-7f64-4ed3-8580-f2633e88b8a1</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Invoice_Document_Number__c</fieldItem>
+                <identifier>RecordInvoice_Document_Number_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CLR_Document_Number__c</fieldItem>
+                <identifier>RecordCLR_Document_Number_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Date_Error_Fixed__c</fieldItem>
+                <identifier>RecordDate_Error_Fixed_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.SAP_Document_Number__c}</leftValue>
+                        <operator>NE</operator>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-5a1fd545-cd18-43f0-8a06-08d6d6abb76d</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-13989fa1-7f64-4ed3-8580-f2633e88b8a1</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column12</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-5a1fd545-cd18-43f0-8a06-08d6d6abb76d</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column13</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-c5ce8ba3-d1f5-48b4-a993-13ce115b25fd</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Quote_Applied_Discounts__c</fieldItem>
+                <identifier>RecordQuote_Applied_Discounts_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L2_Approval_Date__c</fieldItem>
+                <identifier>RecordL2_Approval_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.L1_Approvel_Date__c</fieldItem>
+                <identifier>RecordL1_Approvel_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-291a6cc2-f74d-4e4c-b2ec-89168f88615a</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Quote_Applied_Discounts__r.Offer_Value__c</fieldItem>
+                <identifier>RecordQuote_Applied_Discounts_rOffer_Value_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Credit_Note_Approver_L1__c</fieldItem>
+                <identifier>RecordCredit_Note_Approver_L1_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-bd05a165-4400-4c7c-9d30-c870d1be7112</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-291a6cc2-f74d-4e4c-b2ec-89168f88615a</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-bd05a165-4400-4c7c-9d30-c870d1be7112</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column7</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-2315ff8d-a359-4ba8-adae-53d4572214da</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -304,7 +587,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.TL__c</fieldItem>
                 <identifier>RecordTL_cField</identifier>
@@ -314,7 +597,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CRM_Accounts_Head__c</fieldItem>
                 <identifier>RecordCRM_Accounts_Head_cField</identifier>
@@ -328,7 +611,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CRM_Head__c</fieldItem>
                 <identifier>RecordCRM_Head_cField</identifier>
@@ -338,7 +621,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CEO__c</fieldItem>
                 <identifier>RecordCEO_cField</identifier>
@@ -376,7 +659,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Reason_For_Settlement__c</fieldItem>
                 <identifier>RecordReason_For_Settlement_cField</identifier>
@@ -474,6 +757,49 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
+                    <value>Facet-c5ce8ba3-d1f5-48b4-a993-13ce115b25fd</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>SAP Details</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection7</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-2315ff8d-a359-4ba8-adae-53d4572214da</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Non Monetary Offer/Voucher</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection4</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.CN_type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Offer / Voucher</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
                     <value>Facet-b7d28ae1-e78f-44b7-8ed3-9073d4c48c04</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -486,6 +812,13 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.CN_type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ADF</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -611,6 +944,16 @@
                 </componentInstanceProperties>
                 <componentName>force:relatedListContainer</componentName>
                 <identifier>force_relatedListContainer</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>showLegacyActivityComposer</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>runtime_sales_activities:activityPanel</componentName>
+                <identifier>runtime_sales_activities_activityPanel</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-5d022623-7921-42f5-a282-8480c5c1e79f</name>

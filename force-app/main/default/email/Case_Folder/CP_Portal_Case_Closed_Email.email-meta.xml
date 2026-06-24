@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>CP Portal Case Closed Email</name>
+    <style>none</style>
+    <subject>{!Case.RW_Project__r} | Case no. {!Case.CaseNumber} closed regarding “{!Case.Case_Category__c}({!Case.Case_Sub_Category__c})</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

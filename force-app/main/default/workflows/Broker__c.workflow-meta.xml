@@ -9,7 +9,7 @@
             <type>email</type>
         </recipients>
         <senderType>CurrentUser</senderType>
-        <template>Channel_Partner_Portal_Emails/CP_registration_Rejection_Email</template>
+        <template>Channel_Partner_Portal_Emails/CP_registration_Rejection_Email_2</template>
     </alerts>
     <alerts>
         <fullName>Successful_broker_register</fullName>
@@ -20,7 +20,7 @@
             <type>email</type>
         </recipients>
         <senderType>CurrentUser</senderType>
-        <template>unfiled$public/Successful_Broker</template>
+        <template>My_View/Successful_Broker</template>
     </alerts>
     <fieldUpdates>
         <fullName>Approval_Status_Update_Rejected</fullName>
@@ -177,6 +177,26 @@
         <field>Approval_Status__c</field>
         <literalValue>Rejected By L1</literalValue>
         <name>Rejected by L1 - CP Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted_for_Approval</fullName>
+        <field>Latest_RERA_Upload_Status__c</field>
+        <literalValue>Approval Pending</literalValue>
+        <name>Submitted for Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted_for_Approval1</fullName>
+        <field>Latest_CC_Upload_Status__c</field>
+        <literalValue>Approval Pending</literalValue>
+        <name>Submitted for Approval</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>

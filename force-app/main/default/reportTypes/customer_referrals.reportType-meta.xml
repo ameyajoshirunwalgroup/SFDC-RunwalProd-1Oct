@@ -140,6 +140,11 @@
             <field>Duplicate_Lead_Mobile__c</field>
             <table>RW_Referral__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opt_for_Referral__c</field>
+            <table>RW_Referral__c</table>
+        </columns>
         <masterLabel>Referral</masterLabel>
     </sections>
     <sections>
@@ -1706,6 +1711,21 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Lead_Sourcing_Manager__c</field>
+            <table>RW_Referral__c.Leads__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cool_Off__c</field>
+            <table>RW_Referral__c.Leads__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CoolOff_Date__c</field>
+            <table>RW_Referral__c.Leads__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Auto_Call_Completed__c</field>
             <table>RW_Referral__c.Leads__r</table>
         </columns>
         <masterLabel>Leads</masterLabel>

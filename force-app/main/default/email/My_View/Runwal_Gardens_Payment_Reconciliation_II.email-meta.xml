@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Runwal Gardens Payment Reconciliation II</name>
+    <style>none</style>
+    <subject>Possession Intimation email</subject>
+    <textOnly>Dear {!Booking__c.Primary_Applicant_Name__c},
+
+Greetings from Runwal Gardens!!
+ 
+We are happy to inform you that your Flat at Runwal Gardens is in final stage of completion, and we will be initiating the possession formalities towards your Dream Home Shortly.
+ 
+As a precursor to possessions, we are starting with the reconciliation of your accounts.
+ 
+We hereby request you to provide us your details of payment made towards your unit till date.
+ 
+This includes the following:
+ 
+1 Bank Statements of payments made to Runwal (Highlighted) towards your unit.
+2 TDS Certificates
+3 Online Payments detail (NEFT / RTGS / IMPS)
+4 Loan Statement of payments made to Runwal through Bank Loan
+ 
+Request you to kindly share the same at the earliest for us to initiate the reconciliation process of your payments made towards your unit.
+ 
+Please ignore this email if statements / proofs have been already shared.
+ 
+You can either reply to this email or write to us on possessiongardens@runwalgroup.in
+ 
+Warm Regards,
+Runwal Gardens Possessions Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

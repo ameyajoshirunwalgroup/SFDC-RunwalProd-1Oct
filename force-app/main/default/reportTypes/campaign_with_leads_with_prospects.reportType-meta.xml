@@ -296,7 +296,17 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Type__c</field>
+            <field>Marketing_Executive_Campaign__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Send_Notification_to_VDNB_Opportunities__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Approval_Status__c</field>
             <table>Campaign</table>
         </columns>
         <columns>
@@ -321,12 +331,42 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Campaign_Spend_per_Won_Opportunity__c</field>
+            <field>Type__c</field>
             <table>Campaign</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Opportunity_Conversion_Rate__c</field>
+            <field>Origin__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Event_Date_Time__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Registration_Count1__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Event_Location__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Attended_CP_Count__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Attended_People_Count__c</field>
+            <table>Campaign</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Project_Segment__c</field>
             <table>Campaign</table>
         </columns>
         <masterLabel>Campaigns</masterLabel>
@@ -2088,6 +2128,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Project_Name__c</field>
+            <table>Campaign.LeadCampaignMembers.Prospects__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sourcing_Manager_LU__c</field>
             <table>Campaign.LeadCampaignMembers.Prospects__r</table>
         </columns>
         <masterLabel>Prospects</masterLabel>

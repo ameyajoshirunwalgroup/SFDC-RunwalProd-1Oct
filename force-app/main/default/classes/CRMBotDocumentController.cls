@@ -29,6 +29,8 @@ public class CRMBotDocumentController {
             
             Quotation__c q = [SELECT Id, Cost_Sheet_pdf_data__c FROM Quotation__c where Id  =: docId];
             pdfData = q.Cost_Sheet_pdf_data__c;
+        }else if(docName == 'ncf'){  //Added by Vinay 16-10-2025
+            pdfData = NameConfirmationController.generateAndSendForm(docId);
         }
 
 		System.debug('pdfData: ' + pdfData);

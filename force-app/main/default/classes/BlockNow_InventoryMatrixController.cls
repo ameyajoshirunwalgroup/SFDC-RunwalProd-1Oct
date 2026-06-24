@@ -122,13 +122,20 @@ public with sharing class BlockNow_InventoryMatrixController {
 		    ApexPages.addMessage(myMsg);
             hideSelection = true;
         }
-        List<Opportunity> opps = [SELECT Id, RW_Opportunity_Status__c, RW_Project__c, RW_Project__r.Allow_Blocking_on_Non_Active_Opportunity__c FROM Opportunity WHERE Id =: oppId];
+        List<Opportunity> opps = [SELECT Id, RW_Opportunity_Status__c, RW_Project__c, RW_Project__r.Allow_Blocking_on_Non_Active_Opportunity__c,Sales_Manager_User__c FROM Opportunity WHERE Id =: oppId];//Added Sales_Manager_User__c by Prakshi
         if(opps.size() > 0){
             if(opps[0].RW_Project__r.Allow_Blocking_on_Non_Active_Opportunity__c == false && opps[0].RW_Opportunity_Status__c != 'Active'){
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'You can only Block the Active Opportunity');
                 ApexPages.addMessage(myMsg);
                 hideSelection = true;
             }
+            /**Added by Prakshi starts */
+            if(opps[0].Sales_Manager_User__c == null){
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Sales Manager for opportunity is empty');
+                ApexPages.addMessage(myMsg);
+                hideSelection = true;
+            }
+            /**Added by Prakshi ends */
             selectedVal = opps[0].RW_Project__c;
             projId = opps[0].RW_Project__c;
         }
@@ -524,6 +531,7 @@ public with sharing class BlockNow_InventoryMatrixController {
         return '';
     }
     
+
     public PageReference checkOpportunityStatus()
     {
         
@@ -562,6 +570,11 @@ public with sharing class BlockNow_InventoryMatrixController {
              return null;
         }
     }
+    
+    public PageReference cancelButton() {
+    return new PageReference('/' + oppId);
+}
+
               
     
 }

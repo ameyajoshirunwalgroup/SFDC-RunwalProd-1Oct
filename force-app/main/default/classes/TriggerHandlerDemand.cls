@@ -29,7 +29,7 @@ public class TriggerHandlerDemand {
                 objTask.Demand__c = objDemand.Id;
                 objTask.WhatId = objDemand.Id;
                 objTask.Booking__c = objBooking.Id;
-                system.debug('objTask.WhatId >>>' +objTask.WhatId);
+                //system.debug('objTask.WhatId >>>' +objTask.WhatId);
                /* if(objBooking.Customer__r.AccountId != null){
                     objTask.WhoId = objBooking.Customer__r.AccountId;
                 }

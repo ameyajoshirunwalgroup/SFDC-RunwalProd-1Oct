@@ -8,12 +8,8 @@ public class SendReceiptDetailsForCRMBot implements Queueable, Database.AllowsCa
     
     public void execute(QueueableContext context) {
         
-        List<RW_Payment_Details__c> recps = [SELECT Id, Name, RW_Booking__r.Opportunity__r.RW_Email__c, RW_Booking__r.Primary_Applicant_Name__c,
-                                             RW_Booking__r.Opportunity__r.Name, RW_Booking__r.Project__c, RW_Booking__r.Unit_No__r.Relationship_Manager__r.User__c,
-                                             RW_Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Id
-                                             FROM RW_Payment_Details__c WHERE Id =: recpIds];
+        List<RW_Payment_Details__c> recps = [SELECT Id,Name,RW_Booking__r.Opportunity__r.RW_Email__c,RW_Booking__r.Primary_Applicant_Name__c,RW_Booking__r.Opportunity__r.Name,RW_Booking__r.Project__c,RW_Booking__r.Unit_No__r.Relationship_Manager__r.User__c,RW_Booking__r.Unit_No__r.Relationship_Manager__r.User__r.Id FROM RW_Payment_Details__c WHERE Id =: recpIds];
         
-        System.debug('recps: ' + recps);
         /*if(recps.size() > 1){
             last3ReceiptLetter(recps);
         }else if(recps.size() == 1){
@@ -114,7 +110,6 @@ public class SendReceiptDetailsForCRMBot implements Queueable, Database.AllowsCa
                 body = 'Test';
             } 
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             isError = true;
             tsk.Description = 'Error: ' + e.getMessage();
         }
@@ -140,7 +135,6 @@ public class SendReceiptDetailsForCRMBot implements Queueable, Database.AllowsCa
             }
             tsk.Status = 'Completed';
         }catch(Exception e){
-            System.debug('--Error--'+e.getMessage());
             tsk.Description = 'Error: ' + e.getMessage();
         }
         update tsk;

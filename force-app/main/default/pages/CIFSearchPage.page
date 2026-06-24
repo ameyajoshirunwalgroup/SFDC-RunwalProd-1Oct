@@ -50,7 +50,9 @@
                 //let popUpVal = confirm("Do you want to create a lead with Direct Source!");
                 alert("Do you want to create a lead with Direct Source!");
                 }
+
             </script>
+        	
         
             <apex:form styleclass="form">
                 <apex:actionstatus id="spinnerStatus">
@@ -118,8 +120,8 @@
                    <div class="row">
                             <div class="col-md-4 col-md-offset-4">
                                 <div class="text-center">
-                                    <apex:inputcheckbox value="{!isNRI}" /> &nbsp;
-                                    <label>Is NRI Customer </label>  &nbsp; &nbsp;
+                                    <!--<apex:inputcheckbox value="{!isNRI}" /> &nbsp;
+                                    <label>Is NRI Customer </label>  &nbsp; &nbsp;-->  <!--Commented by Prashant as per Business Requirement.//Added on 11-05-26-->
                                     <apex:inputcheckbox value="{!isDirect}" id="isDirectChk" onchange="toggleDirectSectionVF()" /> &nbsp;
                                     <label>Is Direct/Revisit </label>
                                 </div>
@@ -150,19 +152,21 @@
                         </div>
                     </div>
                    
-                    <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
-                            <div class="form-group text-center">
-                                <label class="frmlabel">Email: </label>
-                                <div class="frmElem">
-                                    <!-- <input type="text" id="nothing" class="form-control" /> -->
-                                    <apex:inputtext value="{!NewLead.Email}" styleclass="form-control"/>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="form-group text-center">
+                                    <label class="frmlabel">Email: </label>
+                                    <div class="frmElem">
+                                        <apex:inputtext id="emailField" 
+                                                        value="{!NewLead.Email}" 
+                                                        styleclass="form-control"/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>                                                   
-                    <div class="row">
-                        <div class="col-md-12 text-center">
+                        </div>    
+                        
+                        <div class="row">
+                            <div class="col-md-12 text-center">
                             <!--<apex:actionFunction action="{!directLead}" name="directLeadCreation" rerender="none" />-->
                             <apex:actionFunction action="{!dummy}" name="searchLeads" rerender="none" />
                             <apex:commandbutton action="{!goBack}" value="Cancel" styleclass="btn btn-danger" /> &nbsp;

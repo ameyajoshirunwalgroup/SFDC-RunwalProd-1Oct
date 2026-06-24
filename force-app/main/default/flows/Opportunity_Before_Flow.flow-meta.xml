@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Pre_Block_Now</name>
+        <label>Assign Pre Block Now</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cancellation_Initiated_Stage__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Pre-Block Now</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Pre_Book_Now</name>
+        <label>Assign Pre Book Now</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cancellation_Initiated_Stage__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Pre-Book Now</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assignment_Of_Cancellation_Initiated_Stages</name>
+        <label>Assignment Of Cancellation Initiated Stages</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cancellation_Initiated_Stage__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Post-Registration</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assignment_Of_Pre_Book_Now</name>
+        <label>Assignment Of Pre Book Now</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cancellation_Initiated_Stage__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Post-Book Now</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assignment_Of_Source_Of_Cancellation</name>
+        <label>Assignment Of Source Of Cancellation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Source_of_Cancellation__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Sales Initiated</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Block_Now</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assignment_Of_Source_Of_Cancellation_CRM_Intiated</name>
+        <label>Assignment Of Source Of Cancellation CRM Intiated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Source_of_Cancellation__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>CRM Initiated</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Registration_Completed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assignment_Of_Source_Of_Cancellation_Sales_Initiated</name>
+        <label>Assignment Of Source Of Cancellation Sales Initiated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Source_of_Cancellation__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Sales Initiated</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Registration_Completed</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_Block_Now</name>
+        <label>Check Block Now</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Pre_Book_Now</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Block_Now_Not_Dones</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Site Visit</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Pre_Block_Now</targetReference>
+            </connector>
+            <label>Block Now Not Dones</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Booking_Present_Or_Not</name>
+        <label>Check Booking Present Or Not</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assignment_Of_Source_Of_Cancellation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Booking_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Source_Of_Cancellation</targetReference>
+            </connector>
+            <label>Booking Present</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_New_Or_Updated</name>
+        <label>Check New Or Updated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>New</label>
+        </rules>
+        <rules>
+            <name>Updated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Status_Changes</targetReference>
+            </connector>
+            <label>Updated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Registration_Completed</name>
+        <label>Check Registration Completed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assignment_Of_Pre_Book_Now</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Registration_Completed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.RW_Registration_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Registration Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Of_Cancellation_Initiated_Stages</targetReference>
+            </connector>
+            <label>Registration Completed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Source_Of_Cancellation</name>
+        <label>Check Source Of Cancellation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assignment_Of_Source_Of_Cancellation_Sales_Initiated</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CRM_Initiated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Source_of_Cancellation__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CRM Initiated</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Of_Source_Of_Cancellation_CRM_Intiated</targetReference>
+            </connector>
+            <label>CRM Initiated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Status_Changes</name>
+        <label>Check Status Changes</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Status_Cancelled</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Cancellation Initiated</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Booking_Present_Or_Not</targetReference>
+            </connector>
+            <label>Status Cancelled</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>ISNEW</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <interviewLabel>Opportunity(Before Flow) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity(Before Flow)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_New_Or_Updated</targetReference>
+        </connector>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

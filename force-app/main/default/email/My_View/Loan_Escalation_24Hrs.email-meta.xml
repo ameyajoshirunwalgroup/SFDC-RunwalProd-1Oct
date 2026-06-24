@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Loan Escalation 24Hrs</name>
+    <style>none</style>
+    <subject>RM not assigned for the Loan {!Loan__c.Name}</subject>
+    <textOnly>Dear {!Loan__c.HL_TL_Name__c},  
+
+Please assign RM for the Loan {!Loan__c.Name}.  
+
+Link: {!Loan__c.Link}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

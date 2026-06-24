@@ -43,7 +43,7 @@ export default class CustomSelfRegister extends LightningElement {
     @track mobileno = null;
     @track companyname = null;
     // @track isreraapplicable = null;
-    @track isccapplicable = null;
+    // @track isccapplicable = null;
     @track istempcppresent = null;
     @track istempcpvalid = null;
     @track isgstapplicable = null;
@@ -57,8 +57,8 @@ export default class CustomSelfRegister extends LightningElement {
     @track isnri = null;
     @track pos = null;
     @track showrerano = false;
-    @track showccyes = false;
-    @track showccno = false;
+    // @track showccyes = false;
+    // @track showccno = false;
     @track showtempsec = null;
     @track teamsize = null;
     @track developerworked = null;
@@ -74,9 +74,9 @@ export default class CustomSelfRegister extends LightningElement {
     @track errorCheck;
     @track optionsbankname;
     @track errorMessage;
-    @track competencycertificate = false;
-    @track isDeclarationFormReq = false;
-    @track declarationform = false;
+    // @track competencycertificate = false;
+    // @track isDeclarationFormReq = false;
+    // @track declarationform = false;
     @track chequescannedcopy = false;
     @track gstcertificate = false;
     @track docofcompany = false;
@@ -120,8 +120,8 @@ export default class CustomSelfRegister extends LightningElement {
     panno;
     rerano;
     reraexpDate;
-    ccexpDate;
-    ccschexmDate;
+    // ccexpDate;
+    // ccschexmDate;
     today = new Date().toISOString().split('T')[0];
     tempcpno;
     ifsccode;
@@ -315,17 +315,17 @@ export default class CustomSelfRegister extends LightningElement {
                     this.isgstapplicable = this.cpData.RW_Is_GST_Applicable__c ? 'Yes' : 'No';
                     this.showgst = this.cpData.RW_Is_GST_Applicable__c;
 
-                    if (this.cpData.RW_Is_CC_Applicable__c) {
-                        this.isccapplicable = 'Yes';
-                        this.showccyes = true;
-                        this.showccno = false;
-                        this.isDeclarationFormReq = false;
-                    } else {
-                        this.isccapplicable = 'No';
-                        this.showccyes = false;
-                        this.showccno = true;
-                        this.isDeclarationFormReq = true;
-                    }
+                    // if (this.cpData.RW_Is_CC_Applicable__c) {
+                    //     this.isccapplicable = 'Yes';
+                    //     this.showccyes = true;
+                    //     this.showccno = false;
+                    //     this.isDeclarationFormReq = false;
+                    // } else {
+                    //     this.isccapplicable = 'No';
+                    //     this.showccyes = false;
+                    //     this.showccno = true;
+                    //     this.isDeclarationFormReq = true;
+                    // }
 
 
                     if (this.cpData.Is_NRI_CP__c) {
@@ -421,41 +421,42 @@ export default class CustomSelfRegister extends LightningElement {
     }*/
 
     get docoptionslocal() {
-        if (this.isgstapplicable == 'Yes' && this.isccapplicable == 'Yes') {
+        if (this.isgstapplicable == 'Yes' /*&& this.isccapplicable == 'Yes'*/) {
             return [
                 { label: '--Select Type--', value: '--Select Type--' },
                 { label: 'PAN Card', value: 'PAN Card' },
                 { label: 'RERA Certificate', value: 'RERA Certificate' },
-                { label: 'Competency Certificate', value: 'Competency Certificate' },
+                // { label: 'Competency Certificate', value: 'Competency Certificate' },
                 { label: 'Cheque Scanned Copy', value: 'Cheque Scanned Copy' },
                 { label: 'GST Certificate', value: 'GST Certificate' }
             ];
-        } else if (this.isgstapplicable == 'No' && this.isccapplicable == 'No') {
+        } else if (this.isgstapplicable == 'No' /*&& this.isccapplicable == 'No'*/) {
             return [
                 { label: '--Select Type--', value: '--Select Type--' },
                 { label: 'PAN Card', value: 'PAN Card' },
                 { label: 'RERA Certificate', value: 'RERA Certificate' },
                 { label: 'Cheque Scanned Copy', value: 'Cheque Scanned Copy' },
-                { label: 'Declaration Form', value: 'Declaration Form' }
+                // { label: 'Declaration Form', value: 'Declaration Form' }
             ];
-        } else if (this.isgstapplicable == 'Yes' && this.isccapplicable == 'No') {
-            return [
-                { label: '--Select Type--', value: '--Select Type--' },
-                { label: 'PAN Card', value: 'PAN Card' },
-                { label: 'RERA Certificate', value: 'RERA Certificate' },
-                { label: 'Cheque Scanned Copy', value: 'Cheque Scanned Copy' },
-                { label: 'GST Certificate', value: 'GST Certificate' },
-                { label: 'Declaration Form', value: 'Declaration Form' }
-            ];
-        } else if (this.isgstapplicable == 'No' && this.isccapplicable == 'Yes') {
-            return [
-                { label: '--Select Type--', value: '--Select Type--' },
-                { label: 'PAN Card', value: 'PAN Card' },
-                { label: 'RERA Certificate', value: 'RERA Certificate' },
-                { label: 'Competency Certificate', value: 'Competency Certificate' },
-                { label: 'Cheque Scanned Copy', value: 'Cheque Scanned Copy' }
-            ];
-        }
+        } 
+        // else if (this.isgstapplicable == 'Yes' && this.isccapplicable == 'No') {
+        //     return [
+        //         { label: '--Select Type--', value: '--Select Type--' },
+        //         { label: 'PAN Card', value: 'PAN Card' },
+        //         { label: 'RERA Certificate', value: 'RERA Certificate' },
+        //         { label: 'Cheque Scanned Copy', value: 'Cheque Scanned Copy' },
+        //         { label: 'GST Certificate', value: 'GST Certificate' },
+        //         { label: 'Declaration Form', value: 'Declaration Form' }
+        //     ];
+        // } else if (this.isgstapplicable == 'No' && this.isccapplicable == 'Yes') {
+        //     return [
+        //         { label: '--Select Type--', value: '--Select Type--' },
+        //         { label: 'PAN Card', value: 'PAN Card' },
+        //         { label: 'RERA Certificate', value: 'RERA Certificate' },
+        //         { label: 'Competency Certificate', value: 'Competency Certificate' },
+        //         { label: 'Cheque Scanned Copy', value: 'Cheque Scanned Copy' }
+        //     ];
+        // }
         // if (this.isgstapplicable == 'Yes' && this.isreraapplicable == 'Yes' && this.isccapplicable == 'Yes') {
         //     return [
         //         { label: '--Select Type--', value: '--Select Type--' },
@@ -691,21 +692,21 @@ export default class CustomSelfRegister extends LightningElement {
     //     }
     // }
 
-    handleChangeisCC(event) {
-        this.isccapplicable = event.detail.value;
-        if (this.isccapplicable == 'Yes') {
-            this.showccyes = true;
-            this.showccno = false;
-            this.isDeclarationFormReq = false;
-            this.cpData = { ...this.cpData, RW_Is_CC_Applicable__c: true };
-        } else if (this.isccapplicable == 'No') {
-            this.showccno = true;
-            this.showccyes = false;
-            this.isDeclarationFormReq = true;
-            this.cpData = { ...this.cpData, RW_Is_CC_Applicable__c: false };
-        }
+    // handleChangeisCC(event) {
+    //     this.isccapplicable = event.detail.value;
+    //     if (this.isccapplicable == 'Yes') {
+    //         this.showccyes = true;
+    //         this.showccno = false;
+    //         this.isDeclarationFormReq = false;
+    //         this.cpData = { ...this.cpData, RW_Is_CC_Applicable__c: true };
+    //     } else if (this.isccapplicable == 'No') {
+    //         this.showccno = true;
+    //         this.showccyes = false;
+    //         this.isDeclarationFormReq = true;
+    //         this.cpData = { ...this.cpData, RW_Is_CC_Applicable__c: false };
+    //     }
 
-    }
+    // }
 
     handleChangeisTemp(event) {
         this.istempcppresent = event.detail.value;
@@ -1030,10 +1031,11 @@ export default class CustomSelfRegister extends LightningElement {
         console.log('Is Temp cp present - > ' + this.istempcppresent)
         console.log('Temp cp number - > ' + this.tempcpno)
         console.log('Pan -> ', this.cpData.Broker_Pan_No__c)
+        console.log('istempcpvalid - > ',this.istempcpvalid)
         console.log('CP Data -> ', this.cpData)
         console.log('CP Data to Submit - > ', JSON.stringify(this.cpData));
         console.log('Br Id -> ', this.brId)
-        if (!this.istempcpvalid && this.istempcppresent == 'Yes' && this.cpData.RW_Broker_Number__c != null) {
+        if (!this.istempcpvalid && this.istempcppresent == 'Yes' && this.cpData.RW_Broker_Number__c != null && this.brId == null) {
             this.showToast('Error!!', 'Please select a valid Temp CP record before submitting.', 'error');
             return;
         }
@@ -1070,10 +1072,7 @@ export default class CustomSelfRegister extends LightningElement {
                             //this.selfreg.Dialing_Country_Code1__c = this.gstno;
                             //alert('2'+this.email+'::PAN::'+this.panno)  
                             selfregister({
-                                sf: this.cpData,
-                                isnri: this.NRI,
-                                istempcppresent: this.istempcppresent,
-                                isccapplicable: this.isccapplicable
+                                sf: this.cpData
                             })
                                 .then((result) => {
 
@@ -1098,17 +1097,17 @@ export default class CustomSelfRegister extends LightningElement {
                                         this.isgstapplicable = this.cpData.RW_Is_GST_Applicable__c ? 'Yes' : 'No';
                                         this.showgst = this.cpData.RW_Is_GST_Applicable__c;
 
-                                        if (this.cpData.RW_Is_CC_Applicable__c) {
-                                            this.isccapplicable = 'Yes';
-                                            this.showccyes = true;
-                                            this.showccno = false;
-                                            this.isDeclarationFormReq = false;
-                                        } else {
-                                            this.isccapplicable = 'No';
-                                            this.showccyes = false;
-                                            this.showccno = true;
-                                            this.isDeclarationFormReq = true;
-                                        }
+                                        // if (this.cpData.RW_Is_CC_Applicable__c) {
+                                        //     this.isccapplicable = 'Yes';
+                                        //     this.showccyes = true;
+                                        //     this.showccno = false;
+                                        //     this.isDeclarationFormReq = false;
+                                        // } else {
+                                        //     this.isccapplicable = 'No';
+                                        //     this.showccyes = false;
+                                        //     this.showccno = true;
+                                        //     this.isDeclarationFormReq = true;
+                                        // }
 
                                         if (this.cpData.Is_NRI_CP__c) {
                                             this.NRI = true;
@@ -1286,14 +1285,14 @@ export default class CustomSelfRegister extends LightningElement {
         this.reraexpDate = event.target.value;
         console.log('reraexpDate -> ', this.reraexpDate)
     }
-    handleCCExpDateChange(event) {
-        this.cpData = { ...this.cpData, CC_Valid_till__c: event.target.value };
-        this.ccexpDate = event.target.value;
-    }
-    handleCCSchExmDateChange(event) {
-        this.cpData = { ...this.cpData, CC_Scheduled_Exam_Date__c: event.target.value };
-        this.ccschexmDate = event.target.value;
-    }
+    // handleCCExpDateChange(event) {
+    //     this.cpData = { ...this.cpData, CC_Valid_till__c: event.target.value };
+    //     this.ccexpDate = event.target.value;
+    // }
+    // handleCCSchExmDateChange(event) {
+    //     this.cpData = { ...this.cpData, CC_Scheduled_Exam_Date__c: event.target.value };
+    //     this.ccschexmDate = event.target.value;
+    // }
     handleConfirmPasswordChange(event) {
         this.cpData = { ...this.cpData, RW_GST_Number__c: event.target.value };
         this.confirmPassword = event.target.value;
@@ -1533,7 +1532,7 @@ export default class CustomSelfRegister extends LightningElement {
     lastnextbuttonfuc() {
         // if (!this.isUpdate) {
             if (this.local) {
-                if (this.isgstapplicable == 'Yes' && this.isccapplicable == 'Yes') {
+                if (this.isgstapplicable == 'Yes' /*&& this.isccapplicable == 'Yes'*/) {
                     if (this.chequescannedcopy == false) {
                         this.errortoast('Cheque Scanned Copy')
                     } else if (this.panuploaded == false) {
@@ -1542,43 +1541,47 @@ export default class CustomSelfRegister extends LightningElement {
                         this.errortoast('RERA Certificate')
                     } else if (this.gstcertificate == false) {
                         this.errortoast('GST Certificate')
-                    } else if (this.competencycertificate == false) {
-                        this.errortoast('Competency Certificate')
-                    }
-                } else if (this.isgstapplicable == 'Yes' && this.isccapplicable == 'No') {
+                    } 
+                    // else if (this.competencycertificate == false) {
+                    //     this.errortoast('Competency Certificate')
+                    // }
+                } 
+                // else if (this.isgstapplicable == 'Yes' && this.isccapplicable == 'No') {
+                //     if (this.chequescannedcopy == false) {
+                //         this.errortoast('Cheque Scanned Copy')
+                //     } else if (this.panuploaded == false) {
+                //         this.errortoast('PAN Card')
+                //     } else if (this.rerauploaded == false) {
+                //         this.errortoast('RERA Certificate')
+                //     } else if (this.gstcertificate == false) {
+                //         this.errortoast('GST Certificate')
+                //     } else if (this.declarationform == false) {
+                //         this.errortoast('Declaration Form')
+                //     }
+                // }
+                else if (this.isgstapplicable == 'No' /*&& this.isccapplicable == 'Yes'*/) {
                     if (this.chequescannedcopy == false) {
                         this.errortoast('Cheque Scanned Copy')
                     } else if (this.panuploaded == false) {
                         this.errortoast('PAN Card')
                     } else if (this.rerauploaded == false) {
                         this.errortoast('RERA Certificate')
-                    } else if (this.gstcertificate == false) {
-                        this.errortoast('GST Certificate')
-                    } else if (this.declarationform == false) {
-                        this.errortoast('Declaration Form')
-                    }
-                }
-                else if (this.isgstapplicable == 'No' && this.isccapplicable == 'Yes') {
-                    if (this.chequescannedcopy == false) {
-                        this.errortoast('Cheque Scanned Copy')
-                    } else if (this.panuploaded == false) {
-                        this.errortoast('PAN Card')
-                    } else if (this.rerauploaded == false) {
-                        this.errortoast('RERA Certificate')
-                    } else if (this.competencycertificate == false) {
-                        this.errortoast('Competency Certificate')
-                    }
-                } else if (this.isgstapplicable == 'No' && this.isccapplicable == 'No') {
-                    if (this.chequescannedcopy == false) {
-                        this.errortoast('Cheque Scanned Copy')
-                    } else if (this.panuploaded == false) {
-                        this.errortoast('PAN Card')
-                    } else if (this.rerauploaded == false) {
-                        this.errortoast('RERA Certificate')
-                    } else if (this.declarationform == false) {
-                        this.errortoast('Declaration Form')
-                    }
-                }
+                    } 
+                    // else if (this.competencycertificate == false) {
+                    //     this.errortoast('Competency Certificate')
+                    // }
+                } 
+                // else if (this.isgstapplicable == 'No' && this.isccapplicable == 'No') {
+                //     if (this.chequescannedcopy == false) {
+                //         this.errortoast('Cheque Scanned Copy')
+                //     } else if (this.panuploaded == false) {
+                //         this.errortoast('PAN Card')
+                //     } else if (this.rerauploaded == false) {
+                //         this.errortoast('RERA Certificate')
+                //     } else if (this.declarationform == false) {
+                //         this.errortoast('Declaration Form')
+                //     }
+                // }
 
                 // if (this.isgstapplicable == 'Yes' && this.isreraapplicable == 'Yes' && this.isccapplicable == 'Yes') {
                 //     if (this.chequescannedcopy == false) {
@@ -1668,49 +1671,50 @@ export default class CustomSelfRegister extends LightningElement {
                 console.log('this.panuploaded::' + this.panuploaded)
                 console.log('this.rerauploaded::' + this.rerauploaded)
                 console.log('this.gstcertificate::' + this.gstcertificate)
-                console.log('this.competencycertificate::' + this.competencycertificate)
-                console.log('this.declarationform::' + this.declarationform)
-                if (this.chequescannedcopy && this.panuploaded && this.rerauploaded && this.gstcertificate && this.competencycertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'Yes'*/ && this.isccapplicable == 'Yes') {
+                // console.log('this.competencycertificate::' + this.competencycertificate)
+                // console.log('this.declarationform::' + this.declarationform)
+                if (this.chequescannedcopy && this.panuploaded && this.rerauploaded && this.gstcertificate /*&& this.competencycertificate*/ && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'Yes'*/ /*&& this.isccapplicable == 'Yes'*/) {
                     this.lastmessage = true;
                     this.showuploadmodal = false;
                     console.log('1')
                     this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.competencycertificate && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'No' */ && this.isccapplicable == 'Yes') {
+                } else if (this.chequescannedcopy && this.panuploaded && this.rerauploaded /*&& this.competencycertificate*/ && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'No' */ /*&& this.isccapplicable == 'Yes'*/) {
                     this.lastmessage = true;
                     this.showuploadmodal = false;
                     console.log('2')
                     this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.competencycertificate && this.rerauploaded && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'Yes'*/ && this.isccapplicable == 'Yes') {
-                    this.lastmessage = true;
-                    this.showuploadmodal = false;
-                    console.log('3')
-                    this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.competencycertificate && this.gstcertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'No'*/ && this.isccapplicable == 'Yes') {
-                    this.lastmessage = true;
-                    this.showuploadmodal = false;
-                    console.log('4')
-                    this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.rerauploaded && this.gstcertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'Yes'*/ && this.isccapplicable == 'No') {
-                    this.lastmessage = true;
-                    this.showuploadmodal = false;
-                    console.log('5')
-                    this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'No' */ && this.isccapplicable == 'No') {
-                    this.lastmessage = true;
-                    this.showuploadmodal = false;
-                    console.log('6')
-                    this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.rerauploaded && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'Yes'*/ && this.isccapplicable == 'No') {
-                    this.lastmessage = true;
-                    this.showuploadmodal = false;
-                    console.log('7')
-                    this.completeregister();
-                } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.gstcertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'No' */ && this.isccapplicable == 'No') {
-                    this.lastmessage = true;
-                    this.showuploadmodal = false;
-                    console.log('8')
-                    this.completeregister();
                 }
+                // } else if (this.chequescannedcopy && this.panuploaded && this.competencycertificate && this.rerauploaded && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'Yes'*/ /*&& this.isccapplicable == 'Yes'*/) {
+                //     this.lastmessage = true;
+                //     this.showuploadmodal = false;
+                //     console.log('3')
+                //     this.completeregister();
+                // } else if (this.chequescannedcopy && this.panuploaded && this.competencycertificate && this.gstcertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'No'*/ /*&& this.isccapplicable == 'Yes') {
+                //     this.lastmessage = true;
+                //     this.showuploadmodal = false;
+                //     console.log('4')
+                //     this.completeregister();
+                // } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.rerauploaded && this.gstcertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'Yes'*/ && this.isccapplicable == 'No') {
+                //     this.lastmessage = true;
+                //     this.showuploadmodal = false;
+                //     console.log('5')
+                //     this.completeregister();
+                // } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'No' */ && this.isccapplicable == 'No') {
+                //     this.lastmessage = true;
+                //     this.showuploadmodal = false;
+                //     console.log('6')
+                //     this.completeregister();
+                // } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.rerauploaded && this.isgstapplicable == 'No' /*&& this.isreraapplicable == 'Yes'*/ && this.isccapplicable == 'No') {
+                //     this.lastmessage = true;
+                //     this.showuploadmodal = false;
+                //     console.log('7')
+                //     this.completeregister();
+                // } else if (this.chequescannedcopy && this.panuploaded && this.declarationform && this.gstcertificate && this.isgstapplicable == 'Yes' /*&& this.isreraapplicable == 'No' */ && this.isccapplicable == 'No') {
+                //     this.lastmessage = true;
+                //     this.showuploadmodal = false;
+                //     console.log('8')
+                //     this.completeregister();
+                // }
             } else {
                 console.log('this.trc::' + this.trc);
                 console.log('this.docofcompany::' + this.docofcompany);
@@ -1896,12 +1900,12 @@ export default class CustomSelfRegister extends LightningElement {
                         case 'GST Certificate':
                             this.gstcertificate = true;
                             break;
-                        case 'Competency Certificate':
-                            this.competencycertificate = true;
-                            break;
-                        case 'Declaration Form':
-                            this.declarationform = true;
-                            break;
+                        // case 'Competency Certificate':
+                        //     this.competencycertificate = true;
+                        //     break;
+                        // case 'Declaration Form':
+                        //     this.declarationform = true;
+                        //     break;
                     }
                     this.typeofdoclocal = '--Select Type--';
                 } else {
@@ -2005,13 +2009,16 @@ export default class CustomSelfRegister extends LightningElement {
                 } else if (file.Title.includes('GST Certificate')) {
                     this.gstcertificate = true;
                     console.log('✅ GST Certificate uploaded');
-                } else if (file.Title.includes('Competency Certificate')) {
-                    this.competencycertificate = true;
-                    console.log('✅ Competency Certificate uploaded');
-                } else if (file.Title.includes('Declaration Form')) {
-                    this.declarationform = true;
-                    console.log('✅ Declaration Form uploaded');
-                } else if (file.Title.includes('TRC ( Tax Residency Certificate )')) {
+                }
+                // else if (file.Title.includes('Competency Certificate')) {
+                //     this.competencycertificate = true;
+                //     console.log('✅ Competency Certificate uploaded');
+                // } 
+                // else if (file.Title.includes('Declaration Form')) {
+                //     this.declarationform = true;
+                //     console.log('✅ Declaration Form uploaded');
+                // } 
+                else if (file.Title.includes('TRC ( Tax Residency Certificate )')) {
                     this.trc = true;
                     console.log('✅ TRC uploaded');
                 } else if (file.Title.includes('Documents of the company')) {

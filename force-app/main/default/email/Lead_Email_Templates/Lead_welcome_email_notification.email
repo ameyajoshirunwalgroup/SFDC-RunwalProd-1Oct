@@ -1,0 +1,18 @@
+<messaging:emailTemplate subject="Welcome to Runwal Group!" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>Hi {!relatedTo.Name},</p>
+                
+                <p>Thank you for showing interest in <b>{!relatedTo.RW_Project__r.Name}</b>.</p>
+                
+                <p>Our property advisors will get in touch with you soon.</p>
+                
+                <p>For more information, visit <a href="{!relatedTo.RW_Project__r.Project_site_URL__c}">{!relatedTo.RW_Project__r.Project_site_URL__c}</a>.</p>
+                
+                
+                <p>Warm Regards,<br/>Team Presales,<br/>Runwal Group</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

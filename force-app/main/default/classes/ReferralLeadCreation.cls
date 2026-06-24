@@ -17,11 +17,11 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
         //string query = 'Select Id, Name, Account__c, RW_Last_Name__c, RW_First_Name__c, RW_Email_Address__c, RW_Contact_Phone__c, RW_How_do_you_know_this_person__c, RW_Project__c, RW_Status__c, RW_Mode__c, RW_LeadCreated__c , RW_Referral_Id__c,RW_Duplicate_Lead__c,Project_Unit__c,Account__r.Name,Account__r.Id,Project_Unit__r.Name From RW_Referral__c where RW_Referral_Processed__c = false';
         //return Database.getQueryLocator(query);
         if(referralIds.size() > 0){
-            return Database.getQueryLocator([Select Id, Name, Account__c, RW_Last_Name__c, RW_First_Name__c, RW_Email_Address__c, RW_Contact_Phone__c, RW_How_do_you_know_this_person__c, RW_Project__c, RW_Status__c, RW_Mode__c, RW_LeadCreated__c , RW_Referral_Id__c,RW_Duplicate_Lead__c,Project_Unit__c,Account__r.Name,Account__r.Id,Project_Unit__r.Name From RW_Referral__c where Id =: referralIds]);
+            return Database.getQueryLocator([Select Id, Name, Account__c, RW_Last_Name__c, RW_First_Name__c, RW_Email_Address__c, RW_Contact_Phone__c, RW_How_do_you_know_this_person__c, RW_Project__c, RW_Status__c, RW_Mode__c, RW_LeadCreated__c ,Opt_for_Referral__c, RW_Referral_Id__c,RW_Duplicate_Lead__c,Project_Unit__c,Account__r.Name,Account__r.Id,Project_Unit__r.Name From RW_Referral__c where Id =: referralIds]);
         }else{
-            string query = 'Select Id, Name, Account__c, RW_Last_Name__c, RW_First_Name__c, RW_Email_Address__c, RW_Contact_Phone__c, RW_How_do_you_know_this_person__c, RW_Project__c, RW_Status__c, RW_Mode__c, RW_LeadCreated__c , RW_Referral_Id__c,RW_Duplicate_Lead__c,Project_Unit__c,Account__r.Name,Account__r.Id,Project_Unit__r.Name From RW_Referral__c where RW_Referral_Processed__c = false';
+            string query = 'Select Id, Name, Account__c, RW_Last_Name__c, RW_First_Name__c, RW_Email_Address__c, RW_Contact_Phone__c, RW_How_do_you_know_this_person__c, RW_Project__c, RW_Status__c, RW_Mode__c, RW_LeadCreated__c , RW_Referral_Id__c,RW_Duplicate_Lead__c,Project_Unit__c,Account__r.Name,Account__r.Id,Project_Unit__r.Name, Opt_for_Referral__c From RW_Referral__c where RW_Referral_Processed__c = false';
         	return Database.getQueryLocator(query);
-        }
+        } 
         
     }
     
@@ -50,13 +50,13 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
             mobVsLeadMap.put(ld.RW_Mobile_No__c, ld);
         }
         
-        Map<String, Prospect__c> mobVsProspect = new Map<String, Prospect__c>();
+       /* Map<String, Prospect__c> mobVsProspect = new Map<String, Prospect__c>();
         Map<String, Prospect__c> mobProjVsProspect = new Map<String, Prospect__c>();
         List<Prospect__c> prospects = [SELECT Id, Mobile_No__c, Project__r.Name, Lead__c, Opportunity__c FROM Prospect__c WHERE Mobile_No__c =: refContactPhone];
         for(Prospect__c pros : prospects){
             mobVsProspect.put(pros.Mobile_No__c, pros);
             mobProjVsProspect.put(pros.Mobile_No__c+':'+pros.Project__r.Name, pros);
-        }
+        }*/
         
         List<Project__c> prjList = [SELECT Id, Name, CRMHead__c, CRMHead__r.Email, Loyalty_Head__c, Loyalty_Head__r.Username FROM Project__c];   
         Map<String, Project__c> projMap = new Map<String, Project__c>();
@@ -64,7 +64,7 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
             projMap.put(prj.Name, prj); 
         }
         List<Lead> leadsToInsert = new List<Lead>();
-        List<Prospect__c> prospectsToInsert = new List<Prospect__c>();
+      //  List<Prospect__c> prospectsToInsert = new List<Prospect__c>();
         List<Task> tasksToInsert = new List<Task>();
         
         List<Lead> leadsToCreateTasks = new List<Lead>();
@@ -94,15 +94,26 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                     lead.LastName = ref.RW_Last_Name__c;
                     lead.FirstName = ref.RW_First_Name__c;
                     lead.Customer_Reference__c = ref.Account__c;
+                    system.debug('ref.RW_Project__c -> '+ref.RW_Project__c);
+                    //system.debug('ref.RW_Project__c -> '+projMap.get(ref.RW_Project__c).Id);
+                    //system.debug('ref.RW_Project__c -> '+projMap.get(ref.RW_Project__c).Loyalty_Head__c);
                     if(ref.RW_Project__c!=null){
-                        lead.RW_Project__c =  projMap.get(ref.RW_Project__c).Id;
-                        If(projMap.get(ref.RW_Project__c).Loyalty_Head__c != null){
+                        //lead.RW_Project__c =  projMap.get(ref.RW_Project__c).Id; //Commented by Vinay 27-01-2026
+                        lead.RW_Project__c = (projMap.get(ref.RW_Project__c) != null)?  projMap.get(ref.RW_Project__c).Id : null; //Added by Vinay 27-01-2026
+                        If(projMap.get(ref.RW_Project__c) != null && projMap.get(ref.RW_Project__c).Loyalty_Head__c != null){ //Added projMap.get(ref.RW_Project__c) by Vinay 27-01-2026
                             lead.OwnerId = projMap.get(ref.RW_Project__c).Loyalty_Head__c;
                         }
                     }
+                    system.debug('Owner id - >'+lead.OwnerId);
                     lead.LeadSource = 'Referral';
                     lead.RW_Lead_Sub_Source__c = 'Existing client reference'; 
+                    lead.Walkin_Source__c = 'Referral';
+                    lead.Walkin_SubSource__c = 'Existing client reference'; 
                     lead.Referral_Batch_Lead__c = true;
+                    // Mapping opt for referral field from referral lead to lead - digicloud
+                    system.debug('in LeadCreation Batch eachRef.Opt_for_Referral__c__'+ ref.Opt_for_Referral__c);
+                    lead.Opt_for_Referral__c = ref.Opt_for_Referral__c; 
+                    system.debug('in LeadCreation Batch eachRef.Opt_for_Referral__c__2'+ lead.Opt_for_Referral__c);
                     leadsToInsert.add(lead);
                     if(!Test.isRunningTest()){
                         SendWhatsAppMsg.methodToSendWhatsAppMsgBatch(null,ref.RW_Project__c,null,null, null,null,null,null,null,'+91',mobile,'Loyalty Lead Creation');
@@ -121,6 +132,7 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                         tasksToInsert.add(tsk);
                         ref.RW_Duplicate_Lead__c = true;
                     }else{
+                        /*
                         if(mobVsProspect.keySet().contains(mobile) && mobVsProspect.get(mobile).Project__r.Name == ref.RW_Project__c){
                             //Task for Loyalty TL
                             prospectsToCreateTasks.add(mobVsProspect.get(mobile));
@@ -156,10 +168,11 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                             pros.OwnerId = projMap.get(ref.RW_Project__c).Loyalty_Head__c;
                             prospectsToInsert.add(pros);
                             ref.RW_LeadCreated__c = true;
-                        }
+                        }*/
                     }
                 }
-            }else{
+            }
+            else{
                 //if(mobVsOppMap.get(ref.RW_Contact_Phone__c).RW_Project__r.Name == ref.RW_Project__c){
                 if(mobProjVsOppMap.get(mobile+':'+ref.RW_Project__c) != null){
                     //if(mobVsOppMap.get(ref.RW_Contact_Phone__c).StageName == 'Unit Booked'){
@@ -190,6 +203,7 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                             tasksToInsert.add(tsk);
                             ref.RW_Duplicate_Lead__c = true;
                         }else{
+                            /*
                             //Create prospect with Task for Loyalty TL
                             Prospect__c pros = new Prospect__c();
                             //pros.Name = mobVsOppMap.get(ref.RW_Contact_Phone__c).Name;
@@ -201,9 +215,11 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                             pros.OwnerId = projMap.get(ref.RW_Project__c).Loyalty_Head__c;
                             prospectsToInsert.add(pros);
                             ref.RW_LeadCreated__c = true;
+*/
                         }
                     }
                 }else{
+                    /*
                     //if(mobVsProspect.keySet().contains(ref.RW_Contact_Phone__c) && mobVsProspect.get(ref.RW_Contact_Phone__c).Project__r.Name == ref.RW_Project__c){
                     if(mobProjVsProspect.get(mobile+':'+ref.RW_Project__c) != null){
                         //Task for Loyalty TL
@@ -230,6 +246,7 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                         ref.RW_LeadCreated__c = true;
                         prospectsToInsert.add(pros);
                     }
+                    */
                 }
             }
             ref.RW_Status__c = 'Processed';
@@ -245,7 +262,10 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                 tsk.WhoId = ld.Id;
                 //tsk.Description = 'New Referral Lead created';
                 tsk.Subject = 'New Referral Lead created';
-                tsk.OwnerId = projMap.get(ld.RW_Project__r.Name).Loyalty_Head__c;
+                //tsk.OwnerId = projMap.get(ld.RW_Project__r.Name).Loyalty_Head__c; //Commented by Vinay 27-01-2026
+                if(projMap.get(ld.RW_Project__r.Name) != null && projMap.get(ld.RW_Project__r.Name).Loyalty_Head__c != null){ //Added by Vinay 27-01-2026
+                    tsk.OwnerId = projMap.get(ld.RW_Project__r.Name).Loyalty_Head__c; 
+                }
                 tsk.RecordTypeId = LoyaltyRecordTypeId;
                 tasksToInsert.add(tsk);
             }
@@ -255,7 +275,7 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
             createTask(leadsToCreateTasks, null);
         }*/
         
-        if(prospectsToInsert.size() > 0 ){
+        /*if(prospectsToInsert.size() > 0 ){
             insert prospectsToInsert;
             List<Prospect__c> prospectList = [SELECT Id, Project__r.Name FROM Prospect__c WHERE Id =: prospectsToInsert];
             for(Prospect__c pros : prospectList){
@@ -272,7 +292,7 @@ public class ReferralLeadCreation implements Database.Batchable<sObject>, Databa
                 tsk.RecordTypeId = LoyaltyRecordTypeId;
                 tasksToInsert.add(tsk);
             }
-        }
+        }*/
         if(tasksToInsert.size() > 0){
             insert tasksToInsert;
         }

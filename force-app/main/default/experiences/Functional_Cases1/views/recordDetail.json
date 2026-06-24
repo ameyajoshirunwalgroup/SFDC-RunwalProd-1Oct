@@ -1,0 +1,73 @@
+{
+  "appPageId" : "6850ae93-d9e6-41bf-a1b3-6b2f3c657ebf",
+  "componentName" : "siteforce:sldsTwoCol66Layout",
+  "dataProviders" : [ ],
+  "id" : "d9cdea9a-4c53-4f90-a0f4-d98090df0c3b",
+  "label" : "Record Detail",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "6989d8cb-f175-40af-8c23-91605a143e6f",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "b32a13a2-d50b-4f29-8984-a9ab597f9aa5",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordDetail",
+      "id" : "608653cc-1a61-47fc-90d4-5919abe3f8e3",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "04a6d0b9-50c9-4384-8f32-b8037a42a3af",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "d542ab57-17f4-41d4-bb47-90574a6b154b",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "866728a6-8c6c-40b0-9863-bf69e98f2433",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "2793c3ac-70d7-4449-b15c-da68c58e3c08",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}",
+        "width" : "MEDIUM"
+      },
+      "componentName" : "forceCommunity:relatedRecords",
+      "id" : "ea4dea8b-cfeb-4aae-88c5-b2c6d8e65517",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "94b323cb-b52b-4527-846b-f3b657efb02d",
+    "regionName" : "sidebar",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail"
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_Activity_is_required_event</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISBLANK(CP_Meeting_Address__c)), ISBLANK( CP_Activity__c ), ISPICKVAL( Event_Status__c , &apos;Completed&apos;) )</errorConditionFormula>
+    <errorDisplayField>CP_Activity__c</errorDisplayField>
+    <errorMessage>Update the CP Activity Is Mandatory Before Marking Event As Closed!!</errorMessage>
+</ValidationRule>

@@ -54,10 +54,11 @@ opp.AOP_Type__c = newCP[0].AOP_Type__c;
         
         if(Trigger.isBefore &&Trigger.isInsert || Trigger.isBefore &&Trigger.isUpdate )
         {
+            SYSTEM.debug('Inside Before and Insert Update Trigger ');
+            List<Opportunity> refOpps = new List<Opportunity>(); // Added by Vinay 20-01-2025.////
             
-            List<Opportunity> refOpps = new List<Opportunity>(); // Added by Vinay 20-01-2025
             for(Opportunity opp : trigger.new){
-                if(opp.Walkin_Source__c == 'Referral' &&  opp.RW_Walkin_Customer_Reference__c != NULL){
+                //if(opp.Walkin_Source__c == 'Referral' &&  opp.RW_Walkin_Customer_Reference__c != NULL){
                     //Commented by Vinay 20-01-2025
                     /*List<Opportunity> lstopp = [Select Id,StageName,RW_Booking_Date_Opp__c, Name,SAP_Customer_Number__c,AccountId,RW_Project_Unit__c  From Opportunity Where AccountId=:opp.RW_Walkin_Customer_Reference__c AND StageName =:'Unit Booked'  ORDER BY RW_Booking_Date_Opp__c DESC ];
 system.debug('Opportunity List ::'+lstopp);
@@ -68,8 +69,7 @@ opp.Customer_reference_Booked_Unit__c = lstopp[0].RW_Project_Unit__c;
 opp.Customer_Reference_Opportunity__c = lstopp[0].id;
 //  system.debug('Customer Reference Opportunity::'+opp.Customer_Reference_Opportunity__c);
 }*/
-                    refOpps.add(opp); // Added by Vinay 20-01-2025
-                }
+                //}
                 //Added by Prashant 04-06-2025 Start..///// Update Total Referral Incentive as Referral incentive %(1.5% for now) of AV.
                 if(opp.Walkin_Source__c == 'Loyalty' || (opp.Walkin_Source__c == 'Referral' &&  opp.RW_Walkin_Customer_Reference__c != NULL)){
                     system.debug('Inside Loyalty and Referral If');
@@ -90,9 +90,15 @@ opp.Customer_Reference_Opportunity__c = lstopp[0].id;
                     }
                 }
                 //Added by Prashant 04-06-2025 End..///// Update Total Referral Incentive as Referral incentive %(1.5% for now) of AV.
+                if(opp.Walkin_Source__c == 'Referral' &&  opp.RW_Walkin_Customer_Reference__c != NULL && opp.StageName != 'Cancelled'){
+                    system.debug('Inside Referral Trigger');
+                    if((trigger.oldMap == null && opp.RW_Walkin_Customer_Reference__c!=null) ||(trigger.oldMap!=null && trigger.oldMap.get(opp.Id).RW_Walkin_Customer_Reference__c != trigger.newMap.get(opp.Id).RW_Walkin_Customer_Reference__c)){
+                        refOpps.add(opp);
+                    }
+                }
             }
             if(refOpps.size() > 0){ // Added by Vinay 20-01-2025
-                trgOppHandler.updateReferralCustDetails(refOpps);
+                OppTriggerHandler.updateReferralCustDetails(refOpps);
             }
             
         }
@@ -110,6 +116,7 @@ opp.Customer_Reference_Opportunity__c = lstopp[0].id;
         if(Trigger.isUpdate && Trigger.isBefore)
         {
             List<Opportunity> oppsToUpdate = new List<Opportunity>();
+            //Map<Id,Id> oppIdVsrefBookedUnitIds = new Map<Id,Id>();// Added by Prashant 01-08-2025
             for(Opportunity opp : Trigger.New)
             {
                 if(opp.RW_Project_Unit__c != null &&  opp.StageName =='Unit Booked' )
@@ -119,6 +126,15 @@ opp.Customer_Reference_Opportunity__c = lstopp[0].id;
                         oppUnitMap.put(opp.Id, opp.RW_Project_Unit__c);
                     }
                 }
+                
+                //Added by Prashant to Map Customer Reference Oportunity.///01-08-2025.///Start
+                /*if(trigger.oldMap.get(opp.Id).Customer_reference_Booked_Unit__c != trigger.newMap.get(opp.Id).Customer_reference_Booked_Unit__c && opp.Customer_reference_Booked_Unit__c != null && opp.Customer_reference_SAP_Code__c != null){
+                    //refOpps.add(opp); // Added by Vinay 20-01-2025
+                    system.debug('oppIdVsrefBookedUnitIds'+oppIdVsrefBookedUnitIds);
+                    oppIdVsrefBookedUnitIds.put(opp.Id,opp.Customer_reference_Booked_Unit__c);
+                } */
+                //Added by Prashant to Map Customer Reference Oportunity.///01-08-2025.///END
+                
                 //Added by coServe 12-01-2024 Start
                 /*if(opp.Mobile_Email_Update_Approval_Status__c == 'Approved' && Trigger.newMap.get(opp.Id).Mobile_Email_Update_Approval_Status__c != Trigger.oldMap.get(opp.Id).Mobile_Email_Update_Approval_Status__c){
 oppsToUpdate.add(opp);
@@ -130,6 +146,13 @@ UpdateMobileAndEmailController.updateOriginalFields(oppsToUpdate);
 }*/
                 //Added by coServe 12-01-2024 End
             }
+            
+            // Added by Prashant 01-08-2025 START
+           /* if(oppIdVsrefBookedUnitIds.size() > 0){ // Added by Prashant 01-08-2025
+                system.debug('Inside oppIdVsrefBookedUnitIds');
+                trgOppHandler.updateCustRefOpp(oppIdVsrefBookedUnitIds,trigger.newMap);
+            }*/
+            // Added by Prashant 01-08-2025 END
             
             Map<Id,String> unitRMMap = new Map<Id,String>();
             Set<Id> unitWithoutRM = new Set<Id>();
@@ -231,7 +254,7 @@ opp.CP_Category__c = cpCategoryList[0].Category__c;
             if(cpOpps.size() > 0 ){ // Added by Vinay 20-01-2025
                 trgOppHandler.addAopTypeAndCpCategory(cpOpps);
             }
-            
+            System.debug('Trigger.New**'+Trigger.New);
             objTrigger.BeforeUpdate(Trigger.new, Trigger.OldMap);
         }
         if(Trigger.isUpdate && Trigger.isafter)
@@ -239,9 +262,15 @@ opp.CP_Category__c = cpCategoryList[0].Category__c;
             Set<Id> oSet = new Set<Id>();
             Set<Id> oppIds = new Set<Id>();
             List<String> oppIdsProspectDay1WhatsApp = new List<String>();//Added by coServe 26-07-2024
+            System.debug('Check Before Recursion Update New--->'+Trigger.New);
+            System.debug('Check Before Recursion Update Old Map--->'+Trigger.oldMap);
             if(checkRecursion.isFirstRunA()) 
             {system.debug('MK');
+             System.debug('Check Before Update New--->'+Trigger.New);
+             System.debug('Check Before Update Old Map--->'+Trigger.oldMap);
              objTrigger.AfterUpdate(Trigger.new, Trigger.OldMap);
+             System.debug('Check After Update New--->'+Trigger.New);
+             System.debug('Check After Update Old Map--->'+Trigger.oldMap);
              objTrigger.AfterUpdateSAP(Trigger.new, Trigger.OldMap);
              objTrigger.UpdateCPAccount(trigger.new);
             }
@@ -314,7 +343,7 @@ UpdateMobileAndEmailController.clearTempFields(oppIdsListReject);
                 
                 //Added by Prashant to assign the date on which the RM is updated.
                 //Set<Id> oppIdstoUpdate = new Set<Id>(); // Commented by Vinay 21-01-2025
-                if((Trigger.oldmap.get(o.Id).RW_Sourcing_Manager__c != Trigger.newmap.get(o.Id).RW_Sourcing_Manager__c && o.RW_Sourcing_Manager__c != null) || (Trigger.oldmap.get(o.Id).RW_Closing_Head__c != Trigger.newmap.get(o.Id).RW_Closing_Head__c && o.RW_Closing_Head__c != null) ){                    
+                if((Trigger.oldmap.get(o.Id).Sourcing_Manager_User__c != Trigger.newmap.get(o.Id).Sourcing_Manager_User__c && o.Sourcing_Manager_User__c != null) || (Trigger.oldmap.get(o.Id).RW_Closing_Head__c != Trigger.newmap.get(o.Id).RW_Closing_Head__c && o.RW_Closing_Head__c != null) ){   // Replaced RW_Sourcing_Manager__c with Sourcing_Manager_User__c by Vinay 04-12-2025                 
                     oppIdstoUpdate.add(o.Id);
                 }
                 //Call the Logic cls

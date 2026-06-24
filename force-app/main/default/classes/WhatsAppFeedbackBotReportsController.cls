@@ -290,6 +290,7 @@ global class WhatsAppFeedbackBotReportsController {
             qry = qry.replace(' 00:00:00', '');
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         System.debug('qry: ' + qry);
         return qry;
     }
@@ -339,6 +340,7 @@ global class WhatsAppFeedbackBotReportsController {
             Integer monthInt = Integer.valueOf(month);
             qry += ' AND Month__c = ' + monthInt + ' AND Year__c = ' + yearInt;
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         System.debug('qry: ' + qry);
         fbList = Database.query(qry);
         List<eventData> dataList = new List<eventData>();
@@ -478,6 +480,7 @@ global class WhatsAppFeedbackBotReportsController {
         }else{
             qry = 'SELECT Id, Name, Project__c, CRN__c, Opportunity_Name__c, Feedback_Type__c, NPS__c  FROM WhatsApp_Feedback__c WHERE Project__c =: project AND Feedback_Type__c =: feedbackType AND NPS__c =: npsValue';
         }
+        
         System.debug('qry: ' + qry);
         if(dateRange != null && dateRange != '' && dateRange != 'Custom'){
             if(dateRange == 'LAST_N_MONTHS:3'){
@@ -496,6 +499,7 @@ global class WhatsAppFeedbackBotReportsController {
             Integer monthInt = Integer.valueOf(month);
             qry += ' AND Month__c = ' + monthInt + ' AND Year__c = ' + yearInt;
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> feedbacks = Database.query(qry);
         return feedbacks;
     }
@@ -550,6 +554,7 @@ global class WhatsAppFeedbackBotReportsController {
             Integer monthInt = Integer.valueOf(month);
             qry += ' AND Month__c = ' + monthInt + ' AND Year__c = ' + yearInt;
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> feedbacks = Database.query(qry);
         return feedbacks;
     }
@@ -572,6 +577,7 @@ global class WhatsAppFeedbackBotReportsController {
         if(report == 'Event' && isExport == false){
             qry += ' AND Question_Set__c = null';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         System.debug('qry: ' + qry);
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
@@ -731,6 +737,7 @@ return fbList;
             }
             qry = qry.replace(' 00:00:00', '');
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         qry += ' ORDER BY Feedback_Type__c, Project__c DESC';
         System.debug('qry: ' + qry);
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
@@ -847,6 +854,7 @@ return fbList;
             qry += ' AND Project__c =: proj';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         System.debug('qry: ' + qry);
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         System.debug('fbList: ' + fbList);
@@ -871,7 +879,7 @@ return fbList;
         if(report == 'Event' && isExport == false){
             qry += ' AND Question_Set__c = null';
         }
-        
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -903,6 +911,7 @@ return fbList;
             qry += ' AND Project__c =: proj';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -925,6 +934,7 @@ return fbList;
         if(report == 'Event' && isExport == false){
             qry += ' AND Question_Set__c = null';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -955,6 +965,7 @@ return fbList;
             qry += ' AND Project__c =: proj';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -977,6 +988,7 @@ return fbList;
         if(report == 'Event' && isExport == false){
             qry += ' AND Question_Set__c = null';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -1024,6 +1036,7 @@ return fbList;
             qry += ' AND Project__c =: proj';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -1053,6 +1066,7 @@ return fbList;
             qry += ' AND Project__c =: proj ';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -1081,6 +1095,7 @@ return fbList;
             qry += ' AND Project__c =: proj ';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         system.debug('qry: ' + qry);
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
@@ -1101,6 +1116,7 @@ return fbList;
             qry += ' AND Project__c =: proj ';
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -1569,7 +1585,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         
         List<WhatsApp_Feedback__c> campFBs = [SELECT Id, Name, Camp_Question_1__c, Camp_Question_2__c, Camp_Question_3__c, Camp_Question_4__c, Camp_Question_5__c, Camp_Question_6__c, Camp_Question_7__c, Camp_Question_8__c, Camp_Question_9__c, Camp_Question_10__c, Camp_Question_11__c, Camp_Question_12__c, Camp_Question_13__c, Camp_Question_14__c, Camp_Question_15__c, Camp_Question_16__c, Camp_Question_17__c, Camp_Question_18__c, Camp_Question_19__c, Camp_Question_20__c, 
                                               Camp_Answer_1__c, Camp_Answer_2__c, Camp_Answer_3__c, Camp_Answer_4__c, Camp_Answer_5__c, Camp_Answer_6__c, Camp_Answer_7__c, Camp_Answer_8__c, Camp_Answer_9__c, Camp_Answer_10__c, Camp_Answer_11__c, Camp_Answer_12__c, Camp_Answer_13__c, Camp_Answer_14__c, Camp_Answer_15__c, Camp_Answer_16__c, Camp_Answer_17__c, Camp_Answer_18__c, Camp_Answer_19__c, Camp_Answer_20__c, 
-                                              Campaign_Name__c, NPS__c, Feedback_Type__c, Opportunity__c, Project__c, CRN__c FROM WhatsApp_Feedback__c WHERE Campaign_Name__c =: camp];
+                                              Campaign_Name__c, NPS__c, Feedback_Type__c, Opportunity__c, Project__c, CRN__c FROM WhatsApp_Feedback__c WHERE Campaign_Name__c =: camp AND Project__c != 'Primrose MHADA' AND Project__c != 'Eden MHADA'];
         Map<String, Integer> countMap = new Map<String, Integer>();
         countMap.put('Excellent',0);
         countMap.put('Very Good',0);
@@ -1618,7 +1634,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         List<WhatsApp_Feedback__c> fbList  = [SELECT Id, Name, Camp_Question_1__c, Camp_Question_2__c, Camp_Question_3__c, Camp_Question_4__c, Camp_Question_5__c, Camp_Question_6__c, Camp_Question_7__c, Camp_Question_8__c, Camp_Question_9__c, Camp_Question_10__c, Camp_Question_11__c, Camp_Question_12__c, Camp_Question_13__c, Camp_Question_14__c, Camp_Question_15__c, Camp_Question_16__c, Camp_Question_17__c, Camp_Question_18__c, Camp_Question_19__c, Camp_Question_20__c, 
                                               Camp_Answer_1__c, Camp_Answer_2__c, Camp_Answer_3__c, Camp_Answer_4__c, Camp_Answer_5__c, Camp_Answer_6__c, Camp_Answer_7__c, Camp_Answer_8__c, Camp_Answer_9__c, Camp_Answer_10__c, Camp_Answer_11__c, Camp_Answer_12__c, Camp_Answer_13__c, Camp_Answer_14__c, Camp_Answer_15__c, Camp_Answer_16__c, Camp_Answer_17__c, Camp_Answer_18__c, Camp_Answer_19__c, Camp_Answer_20__c, 
                                               Campaign_Name__c, NPS__c, Feedback_Type__c, Opportunity__c, Opportunity__r.Name, Project__c, CRN__c FROM WhatsApp_Feedback__c 
-                                              WHERE Campaign_Name__c =: camp];
+                                              WHERE Campaign_Name__c =: camp AND Project__c != 'Primrose MHADA' AND Project__c != 'Eden MHADA'];
         List<eventData> dataList = new List<eventData>();
         Integer count = 0;
         for(WhatsApp_Feedback__c fb : fbList){
@@ -1715,7 +1731,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         List<WhatsApp_Feedback__c> fbList  = [SELECT Id, Name, Camp_Question_1__c, Camp_Question_2__c, Camp_Question_3__c, Camp_Question_4__c, Camp_Question_5__c, Camp_Question_6__c, Camp_Question_7__c, Camp_Question_8__c, Camp_Question_9__c, Camp_Question_10__c, Camp_Question_11__c, Camp_Question_12__c, Camp_Question_13__c, Camp_Question_14__c, Camp_Question_15__c, Camp_Question_16__c, Camp_Question_17__c, Camp_Question_18__c, Camp_Question_19__c, Camp_Question_20__c, 
                                               Camp_Answer_1__c, Camp_Answer_2__c, Camp_Answer_3__c, Camp_Answer_4__c, Camp_Answer_5__c, Camp_Answer_6__c, Camp_Answer_7__c, Camp_Answer_8__c, Camp_Answer_9__c, Camp_Answer_10__c, Camp_Answer_11__c, Camp_Answer_12__c, Camp_Answer_13__c, Camp_Answer_14__c, Camp_Answer_15__c, Camp_Answer_16__c, Camp_Answer_17__c, Camp_Answer_18__c, Camp_Answer_19__c, Camp_Answer_20__c, 
                                               Campaign_Name__c, NPS__c, Feedback_Type__c, Opportunity__c, Opportunity__r.Name, Project__c, CRN__c FROM WhatsApp_Feedback__c 
-                                              WHERE Campaign_Name__c =: camp];
+                                              WHERE Campaign_Name__c =: camp AND Project__c != 'Primrose MHADA' AND Project__c != 'Eden MHADA'];
         if(fbList.size() == 0){
             return null;
         }
@@ -1838,6 +1854,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         }else{
             qry += ' AND NPS__c =: npsValue';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> feedbacks = Database.query(qry);
         return feedbacks;
     }
@@ -1875,6 +1892,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
             qry = qry.replace(' 00:00:00', '');
         }
         //qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         return qry;
     }
     
@@ -1962,6 +1980,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         }else{
             qry += ' AND Project__c =: proj';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -1980,6 +1999,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         }else{
             qry += ' AND Project__c =: proj';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -1998,6 +2018,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         }else{
             qry += ' AND Project__c =: proj';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -2017,6 +2038,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         }else{
             qry += ' AND Project__c =: proj';
         }
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<WhatsApp_Feedback__c> fbList = Database.query(qry);
         return fbList;
     }
@@ -2040,6 +2062,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
             qry += 'WHERE Month__c = ' + monthInt + ' AND Year__c = ' + yearInt;
         }
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         return qry;
     }
     
@@ -2063,6 +2086,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
         }
         qry += ' AND CreatedDate >=: lastYearDate';
         qry += ' AND NPS__c != null';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         List<Integer> yearList = new List<Integer>();
         List<Integer> monthList = new List<Integer>();
         for(Integer i=0;i<12;i++){
@@ -2544,6 +2568,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
             qry += ' WHERE ' + teamQry;   
         }
         qry += ' AND CreatedDate >=: lastYearDate';
+        qry += ' AND Project__c != \'Primrose MHADA\' AND Project__c != \'Eden MHADA\''; //Added by Vinay 23-04-2026
         System.debug('qry: ' + qry);
         
         List<Integer> yearList = new List<Integer>();
@@ -3248,428 +3273,7 @@ fbTypeVsFbList.put('Post Possession Handover', new List<WhatsApp_Feedback__c>{})
     }
     return feedbackList;
 }
- public static void dummyMethod(){
-        
-        String s2;        
-        String s3;
-        String s4;                
-        String s5;
-        String s6;        
-        String s7;
-        String s8;                
-        String s9;
-        String s10;        
-        String s11;
-        String s12;                
-        String s13;
-        String s14;        
-        String s15;
-        String s16;                
-        String s110;
-        String s210;        
-        String s310;
-        String s410;                
-        String s510;
-        String s610;        
-        String s710;
-        String s810;                
-        String s910;
-        String s1010;        
-        String s1110;
-        String s1210;                
-        String s1310;
-        String s1410;        
-        String s1510;
-        String s1610;                
-        String s111;
-        String s211;        
-        String s311;
-        String s411;                
-        String s511;
-        String s611;        
-        String s711;
-        String s811;                
-        String s911;
-        String s1011;        
-        String s1111;
-        String s1211;                
-        String s1311;
-        String s1411;        
-        String s1511;
-        String s1611;                
-        String s1101;
-        String s2111;        
-        
-        integer i;
-        i=0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-       i=0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-       i=0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-      i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
- }
+ 
     
     
 

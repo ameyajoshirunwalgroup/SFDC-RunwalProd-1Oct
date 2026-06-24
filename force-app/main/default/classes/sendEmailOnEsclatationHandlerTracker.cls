@@ -1,41 +1,37 @@
 @isTest
-public class sendEmailOnEsclatationHandlerTracker
-{
-    static testMethod void myUnitTest() 
-    {
-        Account objAcc = new Account();
-        objAcc.name = 'test';
+public class sendEmailOnEsclatationHandlerTracker {
+    
+    @isTest
+    static void myUnitTest() {
+        // Create test Account
+        Account objAcc = new Account(Name = 'Test Account');
         insert objAcc;
         
-        Opportunity objopp = new Opportunity();
-        objopp.name = 'test';
-        objopp.AccountId = objAcc.id;
-        objopp.CloseDate = system.today();
-        objopp.StageName = 'Qualification';
-        objopp.RW_Mobile_No__c = '1233211231';
-        objopp.RW_Email__c = 'test1@test2.com';
-        //objopp.RW_Project__c = objProj.id;
-        //objopp.RW_Project_Unit__c = objPU.id;
-        insert objopp;
-        
-        Task objTask = new Task();
-        objTask.Subject = 'Call Customer';
-        objTask.Priority = 'Normal';
-        objTask.OwnerId = UserInfo.getUserId();
-        objTask.WhatId = objopp.id;
-        objTask.Status ='Completed';
-        objTask.RW_Call_Completion__c = true;
+        // Create test Opportunity
+        Opportunity objOpp = new Opportunity(
+            Name = 'Test Opportunity',
+            AccountId = objAcc.Id,
+            CloseDate = System.today(),
+            StageName = 'Qualification',
+            RW_Mobile_No__c = '1233211231',
+            RW_Email__c = 'test1@test2.com'
+        );
+        insert objOpp;
+
+        // Create test Task (this should trigger 'after insert' logic)
+        Task objTask = new Task(
+            Subject = 'Call Customer',
+            Priority = 'Normal',
+            OwnerId = UserInfo.getUserId(),
+            WhatId = objOpp.Id,
+            Status = 'Completed',
+            RW_Call_Completion__c = true
+        );
         insert objTask;
-        
-        objTask.Priority = 'Normal';
+
+        // Update Task (this should trigger 'after update' logic)
         objTask.Call_Status__c = 'Visit Confirmed';
-        objTask.RW_Call_Timing__c = system.now();
+        objTask.RW_Call_Timing__c = System.now();
         update objTask;
-
-
-        //objTask.RW_Call_Completion__c = true;
-        //update objTask;
-        
     }
-
 }

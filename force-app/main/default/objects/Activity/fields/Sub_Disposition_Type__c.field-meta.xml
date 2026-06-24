@@ -350,6 +350,48 @@
             </value>
         </valueSetDefinition>
         <valueSettings>
+            <controllingFieldValue>Receipts</controllingFieldValue>
+            <controllingFieldValue>Other documents</controllingFieldValue>
+            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
+            <controllingFieldValue>Payment receipt request</controllingFieldValue>
+            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
+            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
+            <controllingFieldValue>Demand Letter</controllingFieldValue>
+            <valueName>Hardcopy available</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Receipts</controllingFieldValue>
+            <controllingFieldValue>Other documents</controllingFieldValue>
+            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
+            <controllingFieldValue>Payment receipt request</controllingFieldValue>
+            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
+            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
+            <controllingFieldValue>Demand Letter</controllingFieldValue>
+            <valueName>Hardcopy unavailable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Receipts</controllingFieldValue>
+            <controllingFieldValue>TDS Challan</controllingFieldValue>
+            <controllingFieldValue>Other documents</controllingFieldValue>
+            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
+            <controllingFieldValue>Payment receipt request</controllingFieldValue>
+            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
+            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
+            <controllingFieldValue>Demand Letter</controllingFieldValue>
+            <valueName>Softcopy available</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Receipts</controllingFieldValue>
+            <controllingFieldValue>TDS Challan</controllingFieldValue>
+            <controllingFieldValue>Other documents</controllingFieldValue>
+            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
+            <controllingFieldValue>Payment receipt request</controllingFieldValue>
+            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
+            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
+            <controllingFieldValue>Demand Letter</controllingFieldValue>
+            <valueName>Softcopy unavailable</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>I can&apos;t be present for registration (POA)</controllingFieldValue>
             <controllingFieldValue>Cancellation process</controllingFieldValue>
             <controllingFieldValue>Parking related</controllingFieldValue>
@@ -371,9 +413,54 @@
             <valueName>VET POA</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>TDS Challan</controllingFieldValue>
+            <valueName>Hardcopy (Not on letter head) available</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>TDS Challan</controllingFieldValue>
+            <valueName>Hardcopy (Not on letter head) unavailable</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Getting the registered agreement</controllingFieldValue>
             <controllingFieldValue>TDS Challan/26QB/26AS related</controllingFieldValue>
             <valueName>Not Available</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Clarification of documents received</controllingFieldValue>
+            <controllingFieldValue>Clarification on payment receipt</controllingFieldValue>
+            <controllingFieldValue>Clarification on Demand Letter</controllingFieldValue>
+            <valueName>Complex</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Clarification of documents received</controllingFieldValue>
+            <controllingFieldValue>Pricing or Payment schedule related</controllingFieldValue>
+            <controllingFieldValue>Offers given at the time of booking</controllingFieldValue>
+            <controllingFieldValue>Unit orientation/layout related</controllingFieldValue>
+            <controllingFieldValue>Parking related</controllingFieldValue>
+            <controllingFieldValue>Referral benefit related</controllingFieldValue>
+            <valueName>Dispute</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Clarification of documents received</controllingFieldValue>
+            <controllingFieldValue>Clarification on payment receipt</controllingFieldValue>
+            <controllingFieldValue>Clarification on Demand Letter</controllingFieldValue>
+            <valueName>Simple</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment modes available</controllingFieldValue>
+            <valueName>Cheque Pick up</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payment modes available</controllingFieldValue>
+            <valueName>Payment Option</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Bank Account details for making payment</controllingFieldValue>
+            <valueName>Bank Details Available</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Bank Account details for making payment</controllingFieldValue>
+            <valueName>Bank Details Not Available</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Home loan services provided by Runwal</controllingFieldValue>
@@ -413,17 +500,13 @@
             <valueName>ROC Request</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Request call back from LFC</controllingFieldValue>
-            <valueName>Callback</valueName>
+            <controllingFieldValue>Amount paid not reflecting/incorrect</controllingFieldValue>
+            <controllingFieldValue>Unable to access info/wrong/missing info</controllingFieldValue>
+            <valueName>Incorrect Entry</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Pricing or Payment schedule related</controllingFieldValue>
-            <controllingFieldValue>Offers given at the time of booking</controllingFieldValue>
-            <controllingFieldValue>Unit orientation/layout related</controllingFieldValue>
-            <controllingFieldValue>Parking related</controllingFieldValue>
-            <controllingFieldValue>Clarification of documents received</controllingFieldValue>
-            <controllingFieldValue>Referral benefit related</controllingFieldValue>
-            <valueName>Dispute</valueName>
+            <controllingFieldValue>Request call back from LFC</controllingFieldValue>
+            <valueName>Callback</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Pricing or Payment schedule related</controllingFieldValue>
@@ -444,137 +527,6 @@
             <valueName>Query Yes</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Sanction letter</controllingFieldValue>
-            <valueName>Sanction declined</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Sanction letter</controllingFieldValue>
-            <valueName>Status of Sanction  letter</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Customer informed</controllingFieldValue>
-            <valueName>completed</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>customer not contactable</controllingFieldValue>
-            <valueName>on hold</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Waiver Request</controllingFieldValue>
-            <valueName>Company Significant</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Waiver Request</controllingFieldValue>
-            <valueName>DPAC Approval</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Waiver Request</controllingFieldValue>
-            <valueName>RM TL</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Interest waiver receipt</controllingFieldValue>
-            <valueName>Hardcopy</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Interest waiver receipt</controllingFieldValue>
-            <valueName>Softcopy</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Loan documents - sanction/disbursal</controllingFieldValue>
-            <valueName>Loan Document Request</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>ROC</controllingFieldValue>
-            <valueName>Incorrect ROC/Amendment</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>ROC</controllingFieldValue>
-            <valueName>ROC Status</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Demand Letter</controllingFieldValue>
-            <controllingFieldValue>Receipts</controllingFieldValue>
-            <controllingFieldValue>Other documents</controllingFieldValue>
-            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
-            <controllingFieldValue>Payment receipt request</controllingFieldValue>
-            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
-            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
-            <valueName>Hardcopy available</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Demand Letter</controllingFieldValue>
-            <controllingFieldValue>Receipts</controllingFieldValue>
-            <controllingFieldValue>Other documents</controllingFieldValue>
-            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
-            <controllingFieldValue>Payment receipt request</controllingFieldValue>
-            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
-            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
-            <valueName>Hardcopy unavailable</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Demand Letter</controllingFieldValue>
-            <controllingFieldValue>Receipts</controllingFieldValue>
-            <controllingFieldValue>TDS Challan</controllingFieldValue>
-            <controllingFieldValue>Other documents</controllingFieldValue>
-            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
-            <controllingFieldValue>Payment receipt request</controllingFieldValue>
-            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
-            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
-            <valueName>Softcopy available</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Demand Letter</controllingFieldValue>
-            <controllingFieldValue>Receipts</controllingFieldValue>
-            <controllingFieldValue>TDS Challan</controllingFieldValue>
-            <controllingFieldValue>Other documents</controllingFieldValue>
-            <controllingFieldValue>Account/ADF/Tax Statement</controllingFieldValue>
-            <controllingFieldValue>Payment receipt request</controllingFieldValue>
-            <controllingFieldValue>Duplicate demand letter</controllingFieldValue>
-            <controllingFieldValue>Revised demand without interest</controllingFieldValue>
-            <valueName>Softcopy unavailable</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>TDS Challan</controllingFieldValue>
-            <valueName>Hardcopy (Not on letter head) available</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>TDS Challan</controllingFieldValue>
-            <valueName>Hardcopy (Not on letter head) unavailable</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Clarification of documents received</controllingFieldValue>
-            <controllingFieldValue>Clarification on payment receipt</controllingFieldValue>
-            <controllingFieldValue>Clarification on Demand Letter</controllingFieldValue>
-            <valueName>Complex</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Clarification of documents received</controllingFieldValue>
-            <controllingFieldValue>Clarification on payment receipt</controllingFieldValue>
-            <controllingFieldValue>Clarification on Demand Letter</controllingFieldValue>
-            <valueName>Simple</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Payment modes available</controllingFieldValue>
-            <valueName>Cheque Pick up</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Payment modes available</controllingFieldValue>
-            <valueName>Payment Option</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Bank Account details for making payment</controllingFieldValue>
-            <valueName>Bank Details Available</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Bank Account details for making payment</controllingFieldValue>
-            <valueName>Bank Details Not Available</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Amount paid not reflecting/incorrect</controllingFieldValue>
-            <controllingFieldValue>Unable to access info/wrong/missing info</controllingFieldValue>
-            <valueName>Incorrect Entry</valueName>
-        </valueSettings>
-        <valueSettings>
             <controllingFieldValue>Clarification on Demand Letter</controllingFieldValue>
             <valueName>PDL Dispute</valueName>
         </valueSettings>
@@ -583,8 +535,24 @@
             <valueName>PDL without Interest</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>Sanction letter</controllingFieldValue>
+            <valueName>Sanction declined</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanction letter</controllingFieldValue>
+            <valueName>Status of Sanction  letter</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Flat readiness for possession (fully paid)</controllingFieldValue>
             <valueName>(KHO snags highlighted / KHO failure)Dispute</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer informed</controllingFieldValue>
+            <valueName>completed</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>customer not contactable</controllingFieldValue>
+            <valueName>on hold</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Compensation for delay in possession</controllingFieldValue>
@@ -632,6 +600,18 @@
             <valueName>Not Registered</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>Waiver Request</controllingFieldValue>
+            <valueName>Company Significant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Waiver Request</controllingFieldValue>
+            <valueName>DPAC Approval</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Waiver Request</controllingFieldValue>
+            <valueName>RM TL</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Error while login</controllingFieldValue>
             <valueName>Login Error</valueName>
         </valueSettings>
@@ -648,12 +628,32 @@
             <valueName>Executable version</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>Interest waiver receipt</controllingFieldValue>
+            <valueName>Hardcopy</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Interest waiver receipt</controllingFieldValue>
+            <valueName>Softcopy</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Agreement clauses</controllingFieldValue>
             <valueName>Basic</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Agreement clauses</controllingFieldValue>
             <valueName>Clarity on Agreement Clauses</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Loan documents - sanction/disbursal</controllingFieldValue>
+            <valueName>Loan Document Request</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ROC</controllingFieldValue>
+            <valueName>Incorrect ROC/Amendment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ROC</controllingFieldValue>
+            <valueName>ROC Status</valueName>
         </valueSettings>
     </valueSet>
 </CustomField>

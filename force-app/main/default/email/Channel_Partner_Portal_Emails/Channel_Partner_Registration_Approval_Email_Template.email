@@ -1,0 +1,590 @@
+<html><body>
+<p>Dear {!ApprovalRequest.Process_Approver},</p>
+<p>We required your approval for below Channel Partner Registration<br/>
+
+To approve or reject this item, click this link :- {!ApprovalRequest.Internal_URL}</p>
+<table border="0" cellspacing="0" cellpadding="0" width="658" style="width:493.75pt;margin-left:.1pt;border-collapse:collapse">
+            <tbody>
+                <tr>
+                    <td width="494" nowrap="" colspan="3" style="width:370.3pt;border-top:solid windowtext 1.0pt;border-left:solid windowtext 1.0pt;border-bottom:none;border-right:solid black 1.0pt;">
+                        <p align="center" style="text-align:center"><b><u><span style="font-size:18.0pt;font-family:Montserrat;color:black">Personal Information<u></u><u></u></span></u></b></p>
+                    </td>
+                    
+                </tr>
+               <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Channel Partner Type<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;border:none;border-top:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Project<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;border-right:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Broker_Type__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p align="center" style="text-align:center"><span style="color:black">{!Broker__c.Project__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Salutation<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p align="center" style="text-align:center"><span style="color:black">First Name<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.TITLE__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.NAME_FIRST__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Middle Name<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Last Name<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.NAME_MIDDLE__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.NAME_LAST__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">PAN No.<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Email<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Broker_Pan_No__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.RW_Email__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Country Code<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Mobile No<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Dialing_Country_Code1__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.RW_Mobile_No__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Company Name (As per RERA)<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Developer Worked For<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.7pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Company_Name_As_per_RERA__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;border:none;border-bottom:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Developers_Worked_For__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Is RERA Applicable<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">RERA NO.<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Unregistered_Channel_Partner__c}
+                            <u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt; height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.RW_RERA_Registration_Number__c}
+                            <u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Is GST Applicable<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">GST NO.<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.RW_Is_GST_Applicable__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.RW_GST_Number__c}
+                            <u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Place of Supply<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Experience<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Place_of_Supply__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Experience__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Team Size<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Expertise<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Team_Size__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Expertise__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                
+                
+               
+                <tr style="height:26.6pt">
+                    <td width="658" nowrap="" colspan="4" style="width:493.75pt;border:solid windowtext 1.0pt;border-right:solid black 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:26.6pt">
+                        <p  align="center" style="text-align:center"><b><u><span style="font-size:18.0pt;font-family:Montserrat;color:black">Address Details<u></u><u></u></span></u></b></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">House/Flat/Company<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Street Address 1<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:solid windowtext 1.0pt;border-left:none;border-bottom:none;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Street Address 2<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.House_Flat_Company__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.STR_SUPPL1__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.STR_SUPPL2__c}<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Street Address 3<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Zip / Pin Code<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:solid windowtext 1.0pt;border-left:none;border-bottom:none;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">City<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.STR_SUPPL3__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Pin_Code__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.City__c}<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">State / Region<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Country<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.7pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.State__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" style="width:6.85pt;border:none;border-bottom:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Country__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:none;border-left:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.7pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                </tr>
+<tr style="height:26.6pt">
+                    <td width="658" nowrap="" colspan="4" style="width:493.75pt;border:solid windowtext 1.0pt;border-right:solid black 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:26.6pt">
+                        <p  align="center" style="text-align:center"><b><u><span style="font-size:18.0pt;font-family:Montserrat;color:black">Bank Details<u></u><u></u></span></u></b></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Bank Name<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Bank Branch <u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:solid windowtext 1.0pt;border-left:none;border-bottom:none;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Branch Code <u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Bank_Name__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Bank_Branch__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Branch_Code__c}<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:none;border-left:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p ><span style="color:black">&nbsp;<u></u><u></u></span></p>
+                    </td>
+                    
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Account Number <u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-bottom:none;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">IFSC Code<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:solid windowtext 1.0pt;border-left:none;border-bottom:none;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;background:gray;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">Cheque/DD Favouring Name<u></u><u></u></span></p>
+                    </td>
+                </tr>
+                <tr style="height:14.0pt">
+                    <td width="313" nowrap="" style="width:234.4pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Account_Number__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="9" nowrap="" valign="bottom" style="width:6.85pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                    </td>
+                    <td width="172" nowrap="" style="width:129.0pt;border:solid windowtext 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.IFSC_Code__c}<u></u><u></u></span></p>
+                    </td>
+                    <td width="165" nowrap="" style="width:123.4pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt">
+                        <p  align="center" style="text-align:center"><span style="color:black">{!Broker__c.Cheque_DD_Favouring_Name__c}<u></u><u></u></span></p>
+                    </td>
+                </tr>
+               
+            </tbody>
+            </table>
+<p>Regards,</p>
+<p><b>Runwal Group</b></p>
+            </body>
+        </html>

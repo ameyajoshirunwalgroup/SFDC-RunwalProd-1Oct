@@ -5,7 +5,9 @@
     <errorConditionFormula>AND( 
 !ISBLANK( TEXT (PRIORVALUE(LeadSource))), 
 ISCHANGED( LeadSource),$Profile.Name &lt;&gt; &quot;System Administrator&quot;, 
-$Profile.Name &lt;&gt; &quot;Sales Strategy&quot; ,$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
+$Profile.Name &lt;&gt; &quot;Sales Strategy&quot; ,
+$Profile.Name &lt;&gt; &quot;Channel Partner Portal Profile&quot;/*Added by Prashant to edit cp source from temp cp to cp from cp portal - 15-10-25*/
+,$Label.Disable_all_validations_from_lead == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/)</errorConditionFormula>
     <errorDisplayField>LeadSource</errorDisplayField>
     <errorMessage>Lead source cannot be changed</errorMessage>
 </ValidationRule>

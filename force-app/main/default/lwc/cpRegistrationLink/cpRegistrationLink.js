@@ -6,7 +6,7 @@ import USER_ID from '@salesforce/user/Id';
 export default class CpRegistrationLink extends LightningElement {
     
     generateLink() {
-        const url = `${SITE_URL}/s/customregisterpage?smId=${USER_ID}`;
+        const url = `${SITE_URL}/channelpartner/s/customregisterpage?smId=${USER_ID}`;
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(url).then(() => {

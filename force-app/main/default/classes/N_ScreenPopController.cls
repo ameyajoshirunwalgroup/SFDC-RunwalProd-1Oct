@@ -185,11 +185,9 @@ public class N_ScreenPopController{
                 mobilePhone = mobilePhone.substring(mobilePhone.length() - 10);
             }
             
-            
             leadList = [SELECT Id, Name, Campaign_Code__c, LeadSource, Lead_Sub_Source__c, RW_Project__c, RDS_Country__c, RDS_Country_Code__c FROM Lead WHERE (RW_Mobile_No__c = :mobilePhone OR Phone = :mobilePhone) AND isConverted= false];
             
           
-            /////////// For Opportunity 
              if(optyList != null && optyList.size() == 1 && !optyList.isEmpty()) {                  
                 pageRef = new PageReference('/' + optyList[0].Id);                           
             }

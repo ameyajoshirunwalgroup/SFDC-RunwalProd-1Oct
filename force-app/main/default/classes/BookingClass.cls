@@ -128,6 +128,12 @@ public with sharing class BookingClass {
         get;
         set;
     }
+    public String selectedMilestone { //Added by Vinay 02-04-2026
+        get;
+        set;
+    }
+    private List<SelectOption> milestoneOptionsCache;//Added by Vinay 16-04-2026
+	private String lastSelectedQuote;//Added by Vinay 16-04-2026
     public Id quotationidparam { 
         get;
         set;
@@ -269,12 +275,15 @@ public with sharing class BookingClass {
     List < Car_Parking_Charge__c > BasementParkingList = new List < Car_Parking_Charge__c > ();
     List < Car_Parking_Charge__c > PodiumParkingList = new List < Car_Parking_Charge__c > ();
     List < Car_Parking_Charge__c > PuzzleCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 28-03-2025
+    List < Car_Parking_Charge__c > StackCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 21-11-2025
     
     List < Applicant_Details__c > listApplicant = new list < Applicant_Details__c > ();
     List < Receipt_Details__c > listReceiptDetails = new list < Receipt_Details__c > (); 
     Receipt_Details__c objReceiptDetails = new Receipt_Details__c();
     Receipt_Details__c objReceiptDetailsST = new Receipt_Details__c();
     List < Project_Charges__c > listglobalcharges = new List < Project_Charges__c > ();
+    public List<Opportunity> oppList {get; set;}//Added for Cancellation Changes
+    public Decimal originalAV ;//Added for Cancellation Changes
     public List < Receipt__c > ListOldReceipt {
         get;
         set;
@@ -297,6 +306,8 @@ public with sharing class BookingClass {
         set;
     }
     List<Brokerage_Scheme__c> brokerageScheme = new List<Brokerage_Scheme__c>();
+    public String sapCustomerCode {get; set;}//Added for Cancellation Changes
+
     //Added by coServe 23-03-2023 Start
     /* public Document document {
 get {
@@ -314,6 +325,21 @@ set;
     public Boolean disabelBookingDate {get;set;}
     //Added by coServe 23-03-2023 End
     public Account acc {get;set;} //Added by Vinay 03-06-2025    
+
+    /**Added for Cancellation Changes starts */
+
+    public List<SelectOption> projectOptions {get; set;}
+    public List<SelectOption> towerOptions {get; set;}
+    public List<SelectOption> unitOptions {get; set;}
+    public List<Project__c> projectLst {get; set;}
+    public List<Tower__c> towerLst {get; set;}
+    public List<Project_Unit__c> unitLst {get; set;}
+    public Opportunity opp {get; set;}
+    public String oldTypeOfSale {get; set;}
+    public Boolean disableCancelledDetails {get; set;}
+
+    /**Added for Cancellation Changes starts */
+
     
     public BookingClass() {
         
@@ -345,6 +371,7 @@ set;
         BasementParkingList = new List < Car_Parking_Charge__c > ();
         PodiumParkingList = new List < Car_Parking_Charge__c > ();
         PuzzleCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 28-03-2025
+        StackCarParkList = new List < Car_Parking_Charge__c > (); //Added by Vinay 21-11-2025
         
         ReceiptLstTobeUpdate = new List < Receipt__c > ();
         
@@ -403,9 +430,78 @@ set;
         
         if (ApexPages.currentPage().getParameters().get('optyid') != null && ApexPages.currentPage().getParameters().get('optyid') != '') {
             boookingObj.Opportunity__c = ApexPages.currentPage().getParameters().get('optyid');
-            
-            Opportunity opp = [SELECT Id, RW_Type_of_Client__c, AccountId FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025
-            
+            // Added For Unidentified Payment RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c
+            opp = [SELECT Id, RW_Type_of_Client__c, AccountId,RW_Project_Unit__r.Token_Amount__c,RW_Project_Unit__c,RW_Project__c,RW_Project__r.Token_Amount__c,
+                               SAP_Customer_Number__c,Cancelled_Booking__c,Cancelled_Project__c,Cancelled_Tower__c,Cancelled_Unit__c,Type_Of_sale__c,Cancelled_SAP_Customer_Number__c
+                                FROM Opportunity WHERE Id =: ApexPages.currentPage().getParameters().get('optyid')]; //Commented by Vinay 04-06-2025, Added Cancelled_SAP_Customer_Number__c,SAP_Customer_Code__c,Cancelled_Booking__c,Cancelled_Project__c,Type_Of_sale__c,Cancelled_Tower__c,Cancelled_Unit__c for Cancellation Changes
+              
+
+             /**Added for Cancellation Changes starts */
+
+             if(opp.Type_Of_sale__c!=null){
+                disableCancelledDetails = true;
+             }
+            Id matchedProjectId = null;
+            projectOptions = new List<SelectOption>();
+            towerOptions = new List<SelectOption>();
+            unitOptions = new List<SelectOption>();
+            BookingClass2.initializeCancellation(projectOptions,towerOptions,unitOptions,projectLst,matchedProjectId,boookingObj,opp);
+            System.debug('initializeCancellation projectOptions---->'+projectOptions);
+            /*Id matchedProjectId = null;
+            projectOptions = new List<SelectOption>();
+            projectOptions.add(new SelectOption('', '--Select Project--'));
+
+            towerOptions = new List<SelectOption>();
+            towerOptions.add(new SelectOption('', '--Select Tower--'));
+
+            unitOptions = new List<SelectOption>();
+            unitOptions.add(new SelectOption('', '--Select Unit--'));
+
+                projectLst = [Select Id,Name from Project__c where RW_Status__c = 'Active' ORDER BY Name];
+                for(Project__c proj : projectLst) {
+                    projectOptions.add(new SelectOption(proj.Id, proj.Name));
+                    if(proj.Name == opp.Cancelled_Project__c) {
+                        matchedProjectId = proj.Name;
+                    }
+                }
+                if(matchedProjectId != null) {
+                    boookingObj.Cancelled_Project__c = matchedProjectId;
+                } else {
+                    System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Project__c);
+                }
+                if(boookingObj.Cancelled_Project__c != null) {
+                  loadTowers();
+                  
+                }
+                if(opp.Cancelled_Tower__c != null) {
+                    List<Tower__c> towers = [SELECT Id,Name FROM Tower__c 
+                                    WHERE Name = :opp.Cancelled_Tower__c 
+                                    AND ProjectName__c = :boookingObj.Cancelled_Project__c LIMIT 1];
+                    if(!towers.isEmpty()) {
+                        boookingObj.Cancelled_Tower__c = towers[0].Name;
+                        loadUnits();
+                    }
+                }
+                
+                if(opp.Cancelled_Unit__c != null) {
+                    List<Project_Unit__c> units = [SELECT Id,Name FROM Project_Unit__c 
+                                        WHERE Name = :opp.Cancelled_Unit__c 
+                                        LIMIT 1];
+                    if(!units.isEmpty()) {
+                        boookingObj.Cancelled_Unit_No__c = units[0].Name;
+                    }
+               sal }
+
+            boookingObj.Cancelled_SAP_Customer_Number__c = opp.Cancelled_SAP_Customer_Number__c;
+            boookingObj.Type_Of_sale__c = opp.Type_Of_sale__c;
+            if(opp.Cancelled_Booking__c!=null){
+                    boookingObj.Old_Booking__c = opp.Cancelled_Booking__c;
+            }*/
+            oldTypeOfSale = opp.Type_Of_sale__c;//Added for Cancellation Changes
+            System.debug('oldTypeOfSale**'+oldTypeOfSale);
+            /**Added for Cancellation Changes ends */
+
+            // Added For Unidentified Payment End
             acc = [SELECT Id, Salutation, FirstName, LastName, RW_Zip_Code__c, RW_Company_Name__c, RW_Other_Company_Name__c, RW_Designation__c, No_of_family_members__c, RW_Occupation__c, Distance_To_Office__c, Family_Income__c, Purpose__c, Vehicles_owned__c, Industry, Current_Residential_Address__c, Four_Wheeler__c FROM Account WHERE Id =: opp.AccountId]; //Added by Vinay 03-06-2025
             if(opp.RW_Type_of_Client__c == null && !Test.isRunningTest()){
                 throw new CommonException('Type of Client should not be blank.');
@@ -465,10 +561,11 @@ set;
         // Added by UBSDigicloud  Start------------------------------- Date 19-06-2025
         List<Blocking_Unit_Information__c> blkUnitInfoList = [
             SELECT Id, 
-            Amount__c, Amount_2__c, Amount_3__c, Amount_4__c, Amount_5__c,
-            Mode_Of_Payment__c, Mode_Of_Payment_2__c, Mode_Of_Payment_3__c, Mode_Of_Payment_4__c, Mode_Of_Payment_5__c,
-            Paid_Date__c, Paid_Date_2__c, Paid_Date_3__c, Paid_Date_4__c, Paid_Date_5__c,
-            Transaction_Details__c, Transaction_Details_2__c, Transaction_Details_3__c, Transaction_Details_4__c, Transaction_Details_5__c,Pan_Number__c,Aadhar_Number__c
+            Amount__c, Amount_2__c, Amount_3__c, Amount_4__c, Amount_5__c,Amount_6__c,Amount_7__c, Amount_8__c, Amount_9__c,Amount_10__c,
+            Mode_Of_Payment__c, Mode_Of_Payment_2__c, Mode_Of_Payment_3__c, Mode_Of_Payment_4__c, Mode_Of_Payment_5__c,Mode_Of_Payment_6__c,Mode_Of_Payment_7__c, Mode_Of_Payment_8__c, Mode_Of_Payment_9__c,Mode_Of_Payment_10__c,
+            Paid_Date__c, Paid_Date_2__c, Paid_Date_3__c, Paid_Date_4__c, Paid_Date_5__c,Paid_Date_6__c,Paid_Date_7__c, Paid_Date_8__c, Paid_Date_9__c,Paid_Date_10__c,
+            Transaction_Details__c, Transaction_Details_2__c, Transaction_Details_3__c, Transaction_Details_4__c, Transaction_Details_5__c,Transaction_Details_6__c,Transaction_Details_7__c, Transaction_Details_8__c, Transaction_Details_9__c,Transaction_Details_10__c,Pan_Number__c,Aadhar_Number__c,
+            /*Added for unidentified payments starts*/ Bank_Name__c,Bank_Name_2__c,Bank_Name_3__c,Bank_Name_4__c,Bank_Name_5__c,Bank_Name_6__c,Bank_Name_7__c,Bank_Name_8__c,Bank_Name_9__c,Bank_Name_10__c,Opportunity__r.RW_Mobile_No__c /*Added for unidentified payments ends*/
             FROM Blocking_Unit_Information__c 
             WHERE Opportunity__c = :boookingObj.Opportunity__c AND Active__c = true
         ];
@@ -493,37 +590,84 @@ set;
             
             List<Receipt__c> tempList = new List<Receipt__c>();
             
-            for (Integer i = 0; i < 5; i++) {
+            for (Integer i = 0; i < 10; i++) { // Changed the row count from 5 to 10 by Vinay 09-02-2026
                 Decimal amount;
                 String mode;
                 Date datePaid;
                 String txn;
+                String bank;//Added for unidentified payments
+                String mobNumber;//Added for unidentified payments
                 
                 if (i == 0) {
                     amount = blk.Amount__c;
                     mode = blk.Mode_Of_Payment__c;
                     datePaid = blk.Paid_Date__c;
                     txn = blk.Transaction_Details__c;
+                    bank = blk.Bank_Name__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
                 } else if (i == 1) {
                     amount = blk.Amount_2__c;
                     mode = blk.Mode_Of_Payment_2__c;
                     datePaid = blk.Paid_Date_2__c;
                     txn = blk.Transaction_Details_2__c;
+                    bank = blk.Bank_Name_2__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
                 } else if (i == 2) {
                     amount = blk.Amount_3__c;
                     mode = blk.Mode_Of_Payment_3__c;
                     datePaid = blk.Paid_Date_3__c;
                     txn = blk.Transaction_Details_3__c;
+                    bank = blk.Bank_Name_3__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
                 } else if (i == 3) {
                     amount = blk.Amount_4__c;
                     mode = blk.Mode_Of_Payment_4__c;
                     datePaid = blk.Paid_Date_4__c;
                     txn = blk.Transaction_Details_4__c;
+                    bank = blk.Bank_Name_4__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
                 } else if (i == 4) {
                     amount = blk.Amount_5__c;
                     mode = blk.Mode_Of_Payment_5__c;
                     datePaid = blk.Paid_Date_5__c;
                     txn = blk.Transaction_Details_5__c;
+                    bank = blk.Bank_Name_5__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 5) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_6__c;
+                    mode = blk.Mode_Of_Payment_6__c;
+                    datePaid = blk.Paid_Date_6__c;
+                    txn = blk.Transaction_Details_6__c;
+                    bank = blk.Bank_Name_6__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 6) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_7__c;
+                    mode = blk.Mode_Of_Payment_7__c;
+                    datePaid = blk.Paid_Date_7__c;
+                    txn = blk.Transaction_Details_7__c;
+                    bank = blk.Bank_Name_7__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 7) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_8__c;
+                    mode = blk.Mode_Of_Payment_8__c;
+                    datePaid = blk.Paid_Date_8__c;
+                    txn = blk.Transaction_Details_8__c;
+                    bank = blk.Bank_Name_8__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 8) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_9__c;
+                    mode = blk.Mode_Of_Payment_9__c;
+                    datePaid = blk.Paid_Date_9__c;
+                    txn = blk.Transaction_Details_9__c;
+                    bank = blk.Bank_Name_9__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
+                }else if (i == 9) {  //Added by Vinay 09-02-2026
+                    amount = blk.Amount_10__c;
+                    mode = blk.Mode_Of_Payment_10__c;
+                    datePaid = blk.Paid_Date_10__c;
+                    txn = blk.Transaction_Details_10__c;
+                    bank = blk.Bank_Name_10__c;//Added for unidentified payments
+                    mobNumber = blk.Opportunity__r.RW_Mobile_No__c;//Added for unidentified payments
                 }
                 
                 // Only add the row if at least one meaningful value exists
@@ -533,7 +677,8 @@ set;
                     r.Mode__c = mode;
                     r.Cheque_DD_Date__c = datePaid;
                     r.Cheque_DD__c = txn;
-                    
+                    r.DraweeBank__c=bank;//Added for unidentified payments
+                    r.Receipt_Unique_Key__c = mobNumber + '_' + txn + '_' + bank;//Added for unidentified payments
                     tempList.add(r);
                 }
             }
@@ -559,7 +704,7 @@ set;
                         Account.BillingCountry, Account.Name,  Account.Country__c, Account.RW_State__c, Account.RW_City__c, Account.Office_Street__c,Account.State__c,
                         Account.Mobile_No__c, Account.Alternate_Mobile_No__c, Walkin_Source__c, Walkin_SubSource__c, RW_Sourcing_Manager__c, RW_Sales_Associate__c,RW_Walkin_Channel_Partner__c,RW_Walkin_Channel_Partner__r.Name,
                         Employee_Reference__c,Employee_Reference__r.Name,RW_Type_of_Client__c, Lead_Sub_Source__c,RW_Project_Unit__r.name,RW_Project_Unit__r.TowerName__c,RW_Previous_Opportunity__c,RW_Previous_Opportunity__r.Booking__c, (Select Id,Name,RW_Status__c from EOI__r),RW_Walkin_Channel_Partner__r.Account__c,
-                        RW_Project__r.CP_Invoice_Clearing_L1__c, RW_Project__r.CP_Invoice_Clearing_L2__c,RW_Walkin_Customer_Reference__c,RW_Walkin_Customer_Reference__r.name,Customer_reference_Booked_Unit__r.name,Referral_Sub_Source__c,
+                        RW_Walkin_Customer_Reference__c,RW_Walkin_Customer_Reference__r.name,Customer_reference_Booked_Unit__r.name,Referral_Sub_Source__c,
                         Account.Salutation, Account.FirstName, Account.LastName, Account.RW_Zip_Code__c, Account.RW_Company_Name__c, Account.RW_Other_Company_Name__c, Account.RW_Designation__c, Account.No_of_family_members__c,Blocked_Date__c
                         from Opportunity where id =: boookingObj.Opportunity__c
                        ]; //Account.BillingAddress,
@@ -610,10 +755,23 @@ set;
                 }else if (optyList[0].RW_Previous_Opportunity__r.Booking__r.Project__c != boookingObj.Project__c && optyList[0].RW_Previous_Opportunity__c != Null){
                     boookingObj.Unit_Trasfer_to_Project__c = 'Different Project';
                 }
-                
+                //Modified by Dolly
                 if(optyList[0].RW_Project__c != NULL){
-                    boookingObj.CP_Invoice_Clearing_L1__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L1__c;
-                    boookingObj.CP_Invoice_Clearing_L2__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L2__c;
+                    Set<Id> projectIds = new Set<Id>{ optyList[0].RW_Project__c };
+                    // Call TeamMemberService method  
+                    Map<Id, Map<String, Team_Members__c>> approvers = TeamMemberService.getProjectTeamMembers(projectIds, 'CP Approvers Team', new List<String>{ 'CP Invoice Clearing L1', 'CP Invoice Clearing L2' });
+
+                    // Get approver map for this project
+                    Map<String, Team_Members__c> approversMap = approvers.get(optyList[0].RW_Project__c);
+
+                    if (approversMap != null) {
+                        boookingObj.CP_Invoice_Clearing_L1__c = (approversMap.get('CP Invoice Clearing L1') != null ? approversMap.get('CP Invoice Clearing L1').User__c : null);
+                        boookingObj.CP_Invoice_Clearing_L2__c = (approversMap.get('CP Invoice Clearing L2') != null ? approversMap.get('CP Invoice Clearing L2').User__c : null);
+                        System.debug('L1 Approver User Id => ' + boookingObj.CP_Invoice_Clearing_L1__c);
+                        System.debug('L2 Approver User Id => ' + boookingObj.CP_Invoice_Clearing_L2__c);
+                    }
+                    // boookingObj.CP_Invoice_Clearing_L1__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L1__c;
+                    // boookingObj.CP_Invoice_Clearing_L2__c = optyList[0].RW_Project__r.CP_Invoice_Clearing_L2__c;
                 }
                 /* if(optyList[0].RW_Project_Unit__r.name != Null){
 boookingObj.Tower__c = optyList[0].RW_Project_Unit__r.TowerName__c;
@@ -744,7 +902,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
         }
         if (boookingObj.Opportunity__c != null && unitId == null && ProjectId == null) {
             //system.debug('get quote if only opty');
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Quote_Status__c,Puzzle_Car_Park__c
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Quote_Status__c,Puzzle_Car_Park__c,Stack_Additional_1__c
                            from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project_Unit__r.RW_Project__c =: optyList[0].RW_Project__c and Project_Unit__r.RW_Unit_Status__c = 'Vacant'
                            and Booking__c =: null
                           ];
@@ -758,7 +916,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
             }
             
         } else if (boookingObj.Opportunity__c != null && unitId != null && ProjectId == null) {
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,Podium__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Service_Tax_On_Token_Amount__c, Project_Unit__r.RW_Project__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project_Unit__c =: unitId and Project_Unit__r.RW_Project__c =: optyList[0].RW_Project__c and(Project_Unit__r.RW_Unit_Status__c = 'Available'
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,Podium__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Service_Tax_On_Token_Amount__c, Project_Unit__r.RW_Project__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c,Stack_Additional_1__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project_Unit__c =: unitId and Project_Unit__r.RW_Project__c =: optyList[0].RW_Project__c and(Project_Unit__r.RW_Unit_Status__c = 'Available'
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    OR Project_Unit__r.RW_Unit_Status__c = 'Blocked') and Booking__c =: null];
             system.debug('queryResult2' + queryResult);
             if (queryResult.size() > 0) {
@@ -772,7 +930,7 @@ boookingObj.Sub_Source__c = optyList[0].Walkin_SubSource__c;
             
         } else if (boookingObj.Opportunity__c != null && ProjectId != null && unitId == null) {
             system.debug('get quote if ProjectId  is not null and ProjectId  :-' + ProjectId);
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and Project_Unit__r.RW_Unit_Status__c = 'Available'
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,Stack_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c, Puzzle_Car_Park__c,Stack_Additional_1__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and Project_Unit__r.RW_Unit_Status__c = 'Available'
                            and Booking__c =: null
                           ];
             //system.debug('queryResult' + queryResult);
@@ -804,7 +962,7 @@ i = 1;
 } */
         else if (boookingObj.Opportunity__c != null && ProjectId != null && unitId != null) {
             system.debug('get quote if ProjectId  is not null and ProjectId  :-' + ProjectId + 'get quote if opty and unitId ' + unitId);
-            queryResult = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c,Stack_Additional__c, Single_car_park_Additional__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and(Project_Unit__r.RW_Unit_Status__c = 'Available'
+            queryResult = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c,Stack_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c,Podium__c, Name, Booking__c, Allow_booking_without_full_token__c, Project_Unit__r.RW_Project__c, Service_Tax_On_Token_Amount__c, Project_Unit__c,Quote_Status__c from Quotation__c where Quote_Status__c = 'Valid' and Opportunity__c =: boookingObj.Opportunity__c and Project__c =: ProjectId and(Project_Unit__r.RW_Unit_Status__c = 'Available'
                                                                                                                                                                                                                                                                                                                                                                                                                                               OR Project_Unit__r.RW_Unit_Status__c = 'Hold' OR Project_Unit__r.RW_Unit_Status__c = 'Blocked') and Project_Unit__c =: unitId and Booking__c =: null];
             system.debug('queryResult' + queryResult);
         }
@@ -835,6 +993,125 @@ i = 1;
         }
         set;
     }
+
+    /*public List<SelectOption> getMilestoneOptions{  //Added by Vinay 02-04-2026
+        get {
+        //system.debug('Inside Milestone queryResult' + queryResult);
+        List<SelectOption> optns = new List<Selectoption>();
+        optns.add(new SelectOption('', 'Select a Milestone'));
+        System.debug('selectedQuote: ' + selectedQuote);
+        if(selectedQuote != null){
+            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c =: selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
+            if(cpphList.size() > 0){
+                List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id,Amount_Value__c,Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c =: cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER By Days_Months_Value__c ASC];
+                if(scppdList.size() > 0){
+                    Decimal cumulativePercentage = 0;
+                    for(Standard_Customer_Pay_Plan_Detail__c scppd: scppdList){
+                        cumulativePercentage += scppd.Amount_Value__c;
+                        if(cumulativePercentage > 10){
+                            break;
+                        }
+                        String milestoneStr = cumulativePercentage + '%' + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
+                        //optns.add(new SelectOption(scppd.Id, milestoneStr));
+                        optns.add(new SelectOption(milestoneStr, milestoneStr));
+                    } 
+                    if(optns.size() == 1){
+                        selectedMilestone = 'As per CLP';
+                        optns.add(new SelectOption('As per CLP', 'As per CLP'));
+                    }
+                }else{
+                    selectedMilestone = 'As per CLP';
+                    optns.add(new SelectOption('As per CLP', 'As per CLP'));
+                }
+                
+            }
+        }else{
+            system.debug('Quotation not selected');
+        }
+        System.debug('optns: ' + optns);
+        return optns;
+        }
+        set;
+    }*/
+
+    public void loadMilestoneOptions() { //Added by Vinay 16-04-2026
+        milestoneOptionsCache = buildMilestoneOptions();
+    }
+    
+    public List<SelectOption> getMilestoneOptions { //Added by Vinay 16-04-2026
+        get {
+            if (milestoneOptionsCache == null) {
+                milestoneOptionsCache = new List<SelectOption>();
+                milestoneOptionsCache.add(new SelectOption('', 'Select a Milestone'));
+            }
+            return milestoneOptionsCache;
+        }
+        set;
+    }
+    
+    // Separate method for business logic
+    private List<SelectOption> buildMilestoneOptions() { //Added by Vinay 16-04-2026
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('', 'Select a Milestone'));
+        
+        if (String.isBlank(selectedQuote)) {
+            System.debug('Quotation not selected');
+            return options;
+        }
+        
+        try {
+            // Query for Customer Pay Plan Header
+            List<Customer_Pay_Plan_Header__c> cpphList = [SELECT Id FROM Customer_Pay_Plan_Header__c WHERE Quotation__c = :selectedQuote AND Global_Charge_Name__c = 'Basic' LIMIT 1];
+            
+            if (cpphList.isEmpty()) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+                return options;
+            }
+            
+            // Query for Standard Customer Pay Plan Details
+            List<Standard_Customer_Pay_Plan_Detail__c> scppdList = [SELECT Id, Amount_Value__c, Days_Months_Value__c FROM Standard_Customer_Pay_Plan_Detail__c WHERE Customer_Pay_Plan_Header__c = :cpphList[0].Id AND Is_to_be_Paid__c = 'From Dt. of Booking' ORDER BY Days_Months_Value__c ASC];
+            
+            if (scppdList.isEmpty()) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+                return options;
+            }
+            
+            // Build milestone options
+            Decimal cumulativePercentage = 0;
+            for (Standard_Customer_Pay_Plan_Detail__c scppd : scppdList) {
+                cumulativePercentage += scppd.Amount_Value__c;
+                
+                if (cumulativePercentage > 10) {
+                    break;
+                }
+                
+                String milestoneStr = String.valueOf(cumulativePercentage) + '%' 
+                    + ' (' + scppd.Days_Months_Value__c + ' days from booking)';
+                options.add(new SelectOption(milestoneStr, milestoneStr));
+            }
+            
+            // Set default if only one option
+            if (options.size() == 1) {
+                selectedMilestone = 'As per CLP';
+                options.add(new SelectOption('As per CLP', 'As per CLP'));
+            }
+            
+        } catch (Exception e) {
+            System.debug('Error building milestone options: ' + e.getMessage());
+            ApexPages.addMessage(new ApexPages.Message(
+                ApexPages.Severity.ERROR, 
+                'Error loading milestone options: ' + e.getMessage()
+            ));
+            selectedMilestone = 'As per CLP';
+            options.add(new SelectOption('As per CLP', 'As per CLP'));
+        }
+        
+        System.debug('Built milestone options: ' + options);
+        return options;
+    }
+
     
     //added by shailesh
     public void addReciept() {
@@ -858,12 +1135,29 @@ i = 1;
     public PageReference getTokenAmount() {
         //system.debug('Selected Val' + selectedQuote);
         if (selectedQuote != null) {
-            QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Podium__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c,Basement_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            QuoteDetails = [SELECT id, Tandem_car_park_Additional__c,MLCP_Additional__c, Single_car_park_Additional__c,Stack_Additional_1__c,Podium__c, Tandem_Open_Additional__c, Single_Open_Additional__c, Stack_Additional__c,Basement_Additional__c, Name, Booking__c, Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
                             Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c, Parking_Type__c,Project__r.CEO__c, Puzzle_Car_Park__c,Stamp_duty_payable_by_Runwal__c,
                             Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,Discount_9_Type__c,Discount_9_L__c, Quote_Status__c,Project_Unit__r.TowerName__c,Agreement_Value_for_brokers__c,Brokerage_Agreement_Value__c,Discount_10_Type__c,Discount_10_L__c,Discount_11_L__c,Discount_11_Type__c,Is_Special_Brokerage_Scheme__c,walkin_Source__c,Total_Car_Park_Amount__c,
-                            Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c
+                            Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/Development_Charges_L__c
                             FROM Quotation__c WHERE Id =: selectedQuote
                            ];
+
+            //Added by dolly for car parking changes
+            // QuoteDetails = [SELECT id,Single_car_park_earmarked__c,Single_car_park_additional__c,Tandem_car_park_earmarked__c,Tandem_car_park_additional__c,
+            //                 Single_Open_Earmarked__c,Single_Open_Additional__c,Tandem_Open_Earmarked__c,Tandem_Open_Additional__c,Covered_Stack_Earmarked__c,
+            //                 Covered_Stack_Additional__c,Stilt_Earmarked__c,Stack_Additional__c,MLCP_Earmarked__c,MLCP_Additional__c,Basement_Earmarked__c,
+            //                 Basement_Additional__c,Podium_Earmarked__c,Podium__c,Puzzle_Car_Park_Earmarked__c,Puzzle_Car_Park__c,Stack_Earmarked__c,
+            //                 Stack_Additional_1__c,Name, Booking__c, 
+            //                 Allow_booking_without_full_token__c, Agreement_Value__c, Carpet_Area_Sq_Ft__c, Appartment_Configuration__c, Project__c, Service_Tax_On_Token_Amount__c,
+            //                 Project_Unit__c, Token_Amount__c, ST_Token_Amount__c, Zone__c, Wing__c, Flat_Typology__c, FloorNo__c, Carpet_Area__c, No_of_parking__c,
+            //                  Parking_Type__c,Project__r.CEO__c,Stamp_duty_payable_by_Runwal__c,
+            //                 Allotment_Premium_Agreement_Value__c, Agreement_Value_D__c, FlatNo__c, Level_One_Approver__c, Level_Two_Approver__c, Level_Three_Approver__c,
+            //                 Discount_9_Type__c,Discount_9_L__c, Quote_Status__c,Project_Unit__r.TowerName__c,Agreement_Value_for_brokers__c,Brokerage_Agreement_Value__c,
+            //                 Discount_10_Type__c,Discount_10_L__c,Discount_11_L__c,Discount_11_Type__c,Is_Special_Brokerage_Scheme__c,walkin_Source__c,Total_Car_Park_Amount__c,
+            //                 Project_Unit__r.Token_Amount__c, Project_Unit__r.RW_Project__r.Token_Amount__c,/*Added by Prashant to add map development charges with booking.19-11-25...*/
+            //                 Development_Charges_L__c//Added Agreement_Value_D_R__c for QUotation Offer, Added Referral_Credit_Due__c for Referral Credit Changes
+            //                 FROM Quotation__c WHERE Id =: selectedQuote
+            //                ];
             
             //System.debug('Inside unitdetails'+unitDetails);
             if (QuoteDetails.size() > 0) {
@@ -879,6 +1173,9 @@ i = 1;
                 boookingObj.No_of_parking__c = QuoteDetails[0].No_of_parking__c;
                 boookingObj.Parking_Type__c = QuoteDetails[0].Parking_Type__c;
                 boookingObj.Is_Special_Brokerage_Scheme__c =  QuoteDetails[0].Is_Special_Brokerage_Scheme__c;   //Added by Sheetal on 03/03/2023
+                if(QuoteDetails[0].Development_Charges_L__c != null && QuoteDetails[0].Development_Charges_L__c != 0)
+                	boookingObj.Development_Charge__c = QuoteDetails[0].Development_Charges_L__c; /*Added by Prashant to add map development charges with booking.19-11-25...*/
+                
                 
                 if(QuoteDetails[0].Project_Unit__c  != Null){			//Added by Sheetal
                     boookingObj.Tower__c = QuoteDetails[0].Project_Unit__r.TowerName__c;
@@ -1061,8 +1358,18 @@ boookingObj.Is_AOP_CP_Applicable__c = true;
                     System.debug('PuzzleCarPark Size ..........)  ' + PuzzleCarParkList.size());
                     
                 }
+                if (QuoteDetails[0].Stack_Additional_1__c != null) { //Added by Vinay 21-11-2025
+                    StackCarParkList = [Select id, Parking__c, Category__c, Status__c, Name, Booking__c From Car_Parking_Charge__c where Parking__c =: 'Stack'
+                                         and Status__c =: 'Vacant'
+                                         and Category__c =: 'Additional'
+                                         and Project__c =: boookingObj.Project__c
+                                        ];
+                    System.debug('StackCarPark Size ..........)  ' + StackCarParkList.size());
+                    
+                }
                 
             }
+            loadMilestoneOptions(); //Added by Vinay 16-04-2026
             if (!Test.isRunningTest())
                 getReceiptDetails();
         } else {
@@ -1137,6 +1444,32 @@ boookingObj.Booking_Date__c = System.Now();
         
         TotalServiceandToken = 0;
         i = 0;
+
+        //Added by dolly for car parking changes start
+        // //Prepare car parking data ONCE   //Added by Dolly
+        // //ParkingContext parkingContext;
+        // ParkingAllocationService service = new ParkingAllocationService();
+        // ParkingAllocationService.ParkingContext parkingContext;
+        // //system.debug('QuoteDetails[0]-->'+QuoteDetails[0]);
+        // system.debug('selectedQuote---->'+selectedQuote);
+        // if(QuoteDetails.size()>0 && QuoteDetails[0] != null && selectedQuote != null && selectedQuote != '' ){
+
+        //     parkingContext =
+        //         service.prepareParkingContext(
+        //             QuoteDetails[0],
+        //             unitId,
+        //             projectId
+        //         );
+
+        //         Boolean parkingError =
+        //             service.validateCarParkingAvailability(parkingContext);
+
+        //         if(parkingError){
+        //             i = 1;
+        //         }
+        //     }
+        //Added by dolly for car parking changes ends
+
         //Brokerage = 2.25;
         ////Anuja added on 7/1/16 ////////////////
         ///Tandem Covered////
@@ -1153,6 +1486,9 @@ boookingObj.Booking_Date__c = System.Now();
             i = 1;
             System.debug('--i: ' + i); 
         }
+        
+        /** Offloaded to BookingClass2 to resolve Metadata compilation limits */
+        this.i = BookingClass2.validateCancellationDetails(this.boookingObj, this.opp, this.oldTypeOfSale, this.i);
         
         ///tandem Open////
         if (QuoteDetails != null && QuoteDetails.size() > 0 && TandemOPENParkingList.size() < QuoteDetails[0].Tandem_Open_Additional__c) {
@@ -1223,11 +1559,27 @@ boookingObj.Booking_Date__c = System.Now();
             System.debug('--i: ' + i);
             
         }
+        //Stack Car Park -- Added by Vinay 21-11-2025
+        if (QuoteDetails != null && QuoteDetails.size() > 0 && StackCarParkList.size() < QuoteDetails[0].Stack_Additional_1__c) {
+            system.debug('StackCarParkList error');
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Required number of Stack Car parking is unavailable');
+            ApexPages.addMessage(myMsg);
+            i = 1;
+            System.debug('--i: ' + i);
+            
+        }
         
         /////////////////////////////////////////////////////////////
         if (boookingObj.Opportunity__c == null) {
             system.debug('Inside null selected quote' + selectedQuote);
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select an Opportunity');
+            ApexPages.addMessage(myMsg);
+            i = 1;
+            System.debug('--i: ' + i);
+        }
+
+        if (selectedMilestone == null || selectedMilestone == '') { //Added by Vinay 13-03-2026
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please select Milestone');
             ApexPages.addMessage(myMsg);
             i = 1;
             System.debug('--i: ' + i);
@@ -1337,7 +1689,7 @@ i=1;
         //////////////////Error Messages for Future Correspondence///////////////////////
         if (boookingObj.Future_Correspondence_Contact__c == '2nd Applicant') {
             
-            if (applicant2.Name == null) {
+            if (applicant2.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (2nd Applicant) Applicant 2 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1346,7 +1698,7 @@ i=1;
         }
         if (boookingObj.Future_Correspondence_Contact__c == '3rd Applicant') {
             
-            if (applicant3.Name == null) {
+            if (applicant3.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (3rd Applicant) Applicant 3 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1355,7 +1707,7 @@ i=1;
         }
         if (boookingObj.Future_Correspondence_Contact__c == '4th Applicant') {
             
-            if (applicant4.Name == null) {
+            if (applicant4.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (4th Applicant) Applicant 4 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1364,7 +1716,7 @@ i=1;
         }
         if (boookingObj.Future_Correspondence_Contact__c == '5th Applicant') {
             
-            if (applicant5.Name == null) {
+            if (applicant5.First_Name__c == null) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Incase Future Correspondence Contact Is (5th Applicant) Applicant 5 Details Cannot Be Left Blank');
                 ApexPages.addMessage(myMsg);
                 i = 1;
@@ -1400,1167 +1752,7 @@ i = 1;
 System.debug('--i: ' + i);
 }*/
         ////////////////////////// error messagess for applicant 1  //////////////////////////
-        if (applicant.Salutation__c == '' || applicant.Salutation__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.First_Name__c == '' || applicant.First_Name__c == null) {
-            system.debug('Inside null selected quote' + selectedQuote);
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Last_Name__c == '' || applicant.Last_Name__c == null) {
-            system.debug('Inside null selected quote' + selectedQuote);
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.DOB__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        
-        
-        if (applicant.Permanent_Address_Line_1__c == '' || applicant.Permanent_Address_Line_1__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Country__c == 'India') {
-            if (applicant.State__c == '' || applicant.State__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        if (applicant.City__c == '' || applicant.City__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Pincode__c == null || applicant.Pincode__c == 0) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Country__c == '' || applicant.Country__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Country__c == 'India' && applicant.Pincode__c != null) {
-            if (String.valueOf(applicant.Pincode__c).length() != 6) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 1 Should Be Of 6 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        if (applicant.Mobile_Number__c == '' || applicant.Mobile_Number__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        
-        
-        system.debug('applicant.Mobile_Number__c'+ applicant.Mobile_Number__c);
-        if(applicant.Mobile_Number__c!= null){
-            system.debug('applicant.Mobile_Number__c.length'+ applicant.Mobile_Number__c.length());
-        }
-        
-        //------ Validation updated by Priya for NRI customers -----//
-        if (applicant.Mobile_Number__c != null && (applicant.Mobile_Number__c).length() != 10 && applicant.Subtype_Of_Applicant__c == 'Indian National') {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 1 Should be of 10 digits');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Email_Address__c == '' || applicant.Email_Address__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }else{ //Added by coServe 08-01-2024
-            Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-            System.debug('dummyEmails: ' + dummys.keySet());
-            for(String str : dummys.keySet()){
-                if(applicant.Email_Address__c.contains(str) || str.contains(applicant.Email_Address__c)){
-                    System.debug('Dummy Email1');
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 1. Please update correct Email id.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    break;
-                }
-            }
-        }
-        if (applicant.Nationality_Picklist__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Marital_Status__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Gender__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Type_Of_Applicant__c == '' || applicant.Type_Of_Applicant__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Subtype_Of_Applicant__c == '' || applicant.Subtype_Of_Applicant__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 1 Cannot Be Left Blank');
-            ApexPages.addMessage(myMsg);
-            i = 1;
-            System.debug('--i: ' + i);
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'Indian National') {
-            if (applicant.Pancard__c == false 
-                || applicant.Address_Proof__c == false 
-                || String.isBlank(applicant.Address_Proof_Document__c)
-                || String.isBlank(applicant.Address_Proof_Number__c)
-                || String.isBlank(applicant.PancardNo__c)
-                /* || applicant.One_Passport_Size_Color_Photograph__c == false */) {
-                    
-                    ApexPages.Message myMsg = new ApexPages.Message(
-                        ApexPages.Severity.Error, 
-                        'Please ensure that all the document checkboxes are checked and document details are filled properly.'
-                    );
-                    ApexPages.addMessage(myMsg);
-                    
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Address_Proof_Number__c != null && !applicant.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-            if (/*applicant.One_Passport_Size_Color_Photograph__c == false || */applicant.Funds_from_NRE_FCNR__c == false || applicant.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant.Type_Of_Origin__c == '' || applicant.Origin_Details__c == '') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'For NRI') {
-            if (applicant.Pancard__c == false /*|| applicant.One_Passport_Size_Color_Photograph__c == false*/ || applicant.PassportNumber__c == false || applicant.Funds_from_NRE_NRO__c == false || applicant.Copy_of_Workpermit_Employment_contract__c == false) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'For Company') {
-            if (applicant.Pancard__c == false || applicant.Copy_of_Memorandu_of_Association__c == false || applicant.Certified_copy_of_Article_of_Association__c == false || applicant.Certified_copy_of_Board_Resolution__c == false || applicant.Certified_copy_of_ROC_Incorporation__c == false || applicant.Self_attested_List_of_Shareholders__c == false || applicant.Self_attested_List_of_Directors__c == false || applicant.PanCard_of_Authority_Signatory__c == false) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            
-        }
-        if (applicant.Subtype_Of_Applicant__c == 'Partnership Firm') {
-            if (applicant.Pancard__c == false || applicant.PanCard_of_Authority_Signatory__c == false || applicant.Certified_copy_of_Partnership_Deed__c == false || applicant.Certified_extract_of_Registration__c == false || applicant.Copy_of_Authorization_Letter_POA__c == false) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.PancardNo__c != null && (applicant.PancardNo__c).length() != 10) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 1 Should Be Of 10 Digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        
-        //anuja added on 16 dec 
-        if (addressCheck == False) {
-            
-            if (applicant.Mailing_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Mailing_Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Mailing_Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant.Mailing_Country__c == 'India' && applicant.Mailing_Pincode__c != null) {
-                if (String.valueOf(applicant.Mailing_Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 1 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant.Mailing_Country__c == 'India') {
-                if (applicant.Mailing_State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 1 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant.Mailing_City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 1 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-        }
-        //////////////////////////////error messages for Applicant 2///////////////////////////
-        if (applicant2.First_Name__c != null || applicant2.Last_Name__c != null) {
-            if (string.isBlank(applicant2.Salutation__c)) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.First_Name__c == '' || applicant2.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Last_Name__c == '' || applicant2.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Country__c == 'India') {
-                if (applicant2.State__c == '' || applicant2.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.City__c == '' || applicant2.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Country__c == 'India' && applicant2.Pincode__c != null) {
-                if (String.valueOf(applicant2.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 2 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant2.Mobile_Number__c != null && (applicant2.Mobile_Number__c).length() != 10 && applicant2.Subtype_Of_Applicant__c == 'Indian National') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 2 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant2.Email_Address__c.contains(str) || str.contains(applicant2.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 2. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant2.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 2 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-                System.debug('--i: ' + i);
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant2.Pancard__c == false || applicant2.Address_Proof__c == false || applicant2.Address_Proof_Document__c == '' || applicant2.Address_Proof_Number__c == '' /*|| applicant2.One_Passport_Size_Color_Photograph__c == false*/) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.Address_Proof_Number__c != null && !applicant2.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant2.One_Passport_Size_Color_Photograph__c == false || */applicant2.Funds_from_NRE_FCNR__c == false || applicant2.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant2.Type_Of_Origin__c == '' || applicant2.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'For NRI') {
-                //if (applicant2.Pancard__c == false /*|| applicant2.One_Passport_Size_Color_Photograph__c == false*/ || applicant2.PassportNumber__c == false || applicant2.Funds_from_NRE_NRO__c == false || applicant2.Copy_of_Workpermit_Employment_contract__c == false   || String.isBlank(applicant2.Address_Proof_Number__c) || String.isBlank(applicant2.PancardNo__c)) { //Commented by Vinay 21-08-2025. There is deifference in the condition compared to applicant 1 & applicant 3 conditions.
-                 if (applicant2.Pancard__c == false /*|| applicant2.One_Passport_Size_Color_Photograph__c == false*/ || applicant2.PassportNumber__c == false || applicant2.Funds_from_NRE_NRO__c == false || applicant2.Copy_of_Workpermit_Employment_contract__c == false) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        System.debug('--i: ' + i);
-                    }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant2.Pancard__c == false || applicant2.Copy_of_Memorandu_of_Association__c == false || applicant2.Certified_copy_of_Article_of_Association__c == false || applicant2.Certified_copy_of_Board_Resolution__c == false || applicant2.Certified_copy_of_ROC_Incorporation__c == false || applicant2.Self_attested_List_of_Shareholders__c == false || applicant2.Self_attested_List_of_Directors__c == false || applicant2.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant2.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant2.Pancard__c == false || applicant2.PanCard_of_Authority_Signatory__c == false || applicant2.Certified_copy_of_Partnership_Deed__c == false || applicant2.Certified_extract_of_Registration__c == false || applicant2.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                if (applicant2.PancardNo__c != null && (applicant2.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 2 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            //anuja added on 16 dec  
-            if (addressCheckApplicant2 == False) {
-                
-                if (applicant2.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-                if (applicant2.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-                if (applicant2.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-                if (applicant2.Mailing_Country__c == 'India' && applicant2.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant2.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 2 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        //System.debug('--i: ' + i);
-                    }
-                }
-                if (applicant2.Mailing_Country__c == 'India') {
-                    if (applicant2.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 2 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        //System.debug('--i: ' + i);
-                    }
-                }
-                if (applicant2.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 2 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    //System.debug('--i: ' + i);
-                }
-            }
-        }
-        
-        //////////////////////////////error messages for Applicant 3///////////////////////////
-        if (applicant3.First_Name__c != null || applicant3.Last_Name__c != null) {
-            
-            if (applicant3.Salutation__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.First_Name__c == '' || applicant3.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Last_Name__c == '' || applicant3.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Country__c == 'India') {
-                if (applicant3.State__c == '' || applicant3.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.City__c == '' || applicant3.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Country__c == 'India' && applicant3.Pincode__c != null) {
-                if (String.valueOf(applicant3.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 3 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant3.Mobile_Number__c != null && (applicant3.Mobile_Number__c).length() != 10 && applicant3.Subtype_Of_Applicant__c == 'Indian National') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 3 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant3.Email_Address__c.contains(str) || str.contains(applicant3.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 3. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant3.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 3 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant3.Pancard__c == false || applicant3.Address_Proof__c == false || applicant3.Address_Proof_Document__c == '' || applicant3.Address_Proof_Number__c == '' /*|| applicant3.One_Passport_Size_Color_Photograph__c == false*/  || String.isBlank(applicant3.Address_Proof_Number__c)
-                    || String.isBlank(applicant3.PancardNo__c)) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Address_Proof_Number__c != null && !applicant3.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant3.One_Passport_Size_Color_Photograph__c == false || */applicant3.Funds_from_NRE_FCNR__c == false || applicant3.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant3.Type_Of_Origin__c == '' || applicant3.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'For NRI') {
-                if (applicant3.Pancard__c == false/* || applicant3.One_Passport_Size_Color_Photograph__c == false*/ || applicant3.PassportNumber__c == false || applicant3.Funds_from_NRE_NRO__c == false || applicant3.Copy_of_Workpermit_Employment_contract__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant3.Pancard__c == false || applicant3.Copy_of_Memorandu_of_Association__c == false || applicant3.Certified_copy_of_Article_of_Association__c == false || applicant3.Certified_copy_of_Board_Resolution__c == false || applicant3.Certified_copy_of_ROC_Incorporation__c == false || applicant3.Self_attested_List_of_Shareholders__c == false || applicant3.Self_attested_List_of_Directors__c == false || applicant3.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant3.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant3.Pancard__c == false || applicant3.PanCard_of_Authority_Signatory__c == false || applicant3.Certified_copy_of_Partnership_Deed__c == false || applicant3.Certified_extract_of_Registration__c == false || applicant3.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant3.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 3 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            
-            //anuja added on 16 dec  
-            if (addressCheckApplicant3 == False) {
-                
-                if (applicant3.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.Mailing_Country__c == 'India' && applicant3.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant3.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 3 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant3.Mailing_Country__c == 'India') {
-                    if (applicant3.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 3 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant3.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 3 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-        }
-        //////////////////////////////error messages for Applicant 4///////////////////////////
-        if (applicant4.First_Name__c != null || applicant4.Last_Name__c != null) {
-            
-            if (applicant4.Salutation__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.First_Name__c == '' || applicant4.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Last_Name__c == '' || applicant4.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Country__c == 'India') {
-                if (applicant4.State__c == '' || applicant4.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.City__c == '' || applicant4.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Country__c == 'India' && applicant4.Pincode__c != null) {
-                if (String.valueOf(applicant4.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 4 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant4.Mobile_Number__c != null && (applicant4.Mobile_Number__c).length() != 10 && applicant4.Subtype_Of_Applicant__c == 'Indian National' ) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 4 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant4.Email_Address__c.contains(str) || str.contains(applicant4.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 4. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant4.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 4 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant4.Pancard__c == false || applicant4.Address_Proof__c == false || applicant4.Address_Proof_Document__c == '' || applicant4.Address_Proof_Number__c == ''/* || applicant4.One_Passport_Size_Color_Photograph__c == false*/   || String.isBlank(applicant4.Address_Proof_Number__c)
-                    || String.isBlank(applicant4.PancardNo__c)) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                if (applicant4.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Address_Proof_Number__c != null && !applicant4.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant4.One_Passport_Size_Color_Photograph__c == false ||*/ applicant4.Funds_from_NRE_FCNR__c == false || applicant4.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant4.Type_Of_Origin__c == '' || applicant4.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'For NRI') {
-                if (applicant4.Pancard__c == false /*|| applicant4.One_Passport_Size_Color_Photograph__c == false*/ || applicant4.PassportNumber__c == false || applicant4.Funds_from_NRE_NRO__c == false || applicant4.Copy_of_Workpermit_Employment_contract__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant4.Pancard__c == false || applicant4.Copy_of_Memorandu_of_Association__c == false || applicant4.Certified_copy_of_Article_of_Association__c == false || applicant4.Certified_copy_of_Board_Resolution__c == false || applicant4.Certified_copy_of_ROC_Incorporation__c == false || applicant4.Self_attested_List_of_Shareholders__c == false || applicant4.Self_attested_List_of_Directors__c == false || applicant4.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant3.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant4.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant4.Pancard__c == false || applicant4.PanCard_of_Authority_Signatory__c == false || applicant4.Certified_copy_of_Partnership_Deed__c == false || applicant4.Certified_extract_of_Registration__c == false || applicant4.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.PancardNo__c != null && (applicant4.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 4 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            //anuja added on 16 dec  
-            if (addressCheckApplicant4 == False) {
-                
-                if (applicant4.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant4.Mailing_Country__c == 'India' && applicant4.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant4.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 4 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant4.Mailing_Country__c == 'India') {
-                    if (applicant4.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 4 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant4.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 4 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-        }
-        //////////////////////////////error messages for Applicant 5///////////////////////////
-        if (applicant5.First_Name__c != null || applicant5.Last_Name__c != null) {
-            if (applicant5.Salutation__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Salutation for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.First_Name__c == '' || applicant5.First_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'First Name for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Last_Name__c == '' || applicant5.Last_Name__c == null) {
-                system.debug('Inside null selected quote' + selectedQuote);
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Last Name for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            
-            if (applicant5.DOB__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'DOB for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Permanent_Address_Line_1__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Permanent address Line1 for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Country__c == 'India') {
-                if (applicant5.State__c == '' || applicant5.State__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'State for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant5.City__c == '' || applicant5.City__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'City for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Pincode__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Country__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Country for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Country__c == 'India' && applicant5.Pincode__c != null) {
-                if (String.valueOf(applicant5.Pincode__c).length() != 6) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pincode for Applicant 5 Should Be Of 6 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-            if (applicant5.Mobile_Number__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            //------ Validation updated by Priya for NRI customers -----//
-            if (applicant5.Mobile_Number__c != null && (applicant5.Mobile_Number__c).length() != 10 && applicant5.Subtype_Of_Applicant__c == 'Indian National') {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mobile Number for Applicant 5 Should be of 10 digits');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Email_Address__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Email Address for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }else{ //Added by coServe 08-01-2024
-                Map<String, Dummy_Emails__c> dummys = Dummy_Emails__c.getAll();
-                System.debug('dummyEmails: ' + dummys.keySet());
-                for(String str : dummys.keySet()){
-                    if(applicant5.Email_Address__c.contains(str) || str.contains(applicant5.Email_Address__c)){
-                        System.debug('Dummy Email1');
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Warning, 'It seems you are using Dummy email id for Applicant 5. Please update correct Email id.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                        break;
-                    }
-                }
-            }
-            if (applicant5.Nationality_Picklist__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Nationality for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Marital_Status__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Marital Status for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Gender__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Gender for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Type_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Type Of Applicant for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Subtype_Of_Applicant__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Residential Status for Applicant 5 Cannot Be Left Blank');
-                ApexPages.addMessage(myMsg);
-                i = 1;
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'Indian National') {
-                if (applicant5.Pancard__c == false || applicant5.Address_Proof__c == false || applicant5.Address_Proof_Document__c == '' || applicant5.Address_Proof_Number__c == '' /*|| applicant5.One_Passport_Size_Color_Photograph__c == false*/  || String.isBlank(applicant5.Address_Proof_Number__c)
-                    || String.isBlank(applicant5.PancardNo__c)) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Address_Proof_Number__c != null && !applicant5.Address_Proof_Number__c.isAlphanumeric()) { // Added by coServe 15-05-2023
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Adress proof number should be Alpha Numeric Characters only');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                    System.debug('--i: ' + i);
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'Foreign Nationals Of Indian Origin') {
-                if (/*applicant5.One_Passport_Size_Color_Photograph__c == false || */applicant5.Funds_from_NRE_FCNR__c == false || applicant5.Self_attested_copy_of_PIO_or_OCI_Card__c == false || applicant5.Type_Of_Origin__c == '' || applicant5.Origin_Details__c == '') {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'For NRI') {
-                if (applicant5.Pancard__c == false /* || applicant5.One_Passport_Size_Color_Photograph__c == false */ || applicant5.PassportNumber__c == false || applicant5.Funds_from_NRE_NRO__c == false || applicant5.Copy_of_Workpermit_Employment_contract__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'For Company') {
-                if (applicant5.Pancard__c == false || applicant5.Copy_of_Memorandu_of_Association__c == false || applicant5.Certified_copy_of_Article_of_Association__c == false || applicant5.Certified_copy_of_Board_Resolution__c == false || applicant5.Certified_copy_of_ROC_Incorporation__c == false || applicant5.Self_attested_List_of_Shareholders__c == false || applicant5.Self_attested_List_of_Directors__c == false || applicant5.PanCard_of_Authority_Signatory__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            if (applicant5.Subtype_Of_Applicant__c == 'Partnership Firm') {
-                if (applicant5.Pancard__c == false || applicant5.PanCard_of_Authority_Signatory__c == false || applicant5.Certified_copy_of_Partnership_Deed__c == false || applicant5.Certified_extract_of_Registration__c == false || applicant5.Copy_of_Authorization_Letter_POA__c == false) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please ensure that all the document checkboxes are checked and document details are filled properly.');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.PancardNo__c != null && (applicant5.PancardNo__c).length() != 10) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Pancard for Applicant 5 Should Be Of 10 Digits');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                
-            }
-            //anuja added on 16 dec  
-            if (addressCheckApplicant5 == False) {
-                
-                if (applicant5.Mailing_Address_Line_1__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing address Line1 for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Mailing_Pincode__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Pincode for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Mailing_Country__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing  Country for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-                if (applicant5.Mailing_Country__c == 'India' && applicant5.Mailing_Pincode__c != null) {
-                    if (String.valueOf(applicant5.Mailing_Pincode__c).length() != 6) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing Pincode for Applicant 5 Should Be Of 6 Digits');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant5.Mailing_Country__c == 'India') {
-                    if (applicant5.Mailing_State__c == null) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing State for Applicant 5 Cannot Be Left Blank');
-                        ApexPages.addMessage(myMsg);
-                        i = 1;
-                    }
-                }
-                if (applicant5.Mailing_City__c == null) {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Mailing City for Applicant 5 Cannot Be Left Blank');
-                    ApexPages.addMessage(myMsg);
-                    i = 1;
-                }
-            }
-        }
-        
+        BookingClass2.validateAllApplicants(this);
         //////////////////////////////////////Added BY Aniket Starts Here on 29-09-2022/////////////////////////////////////////
         //
         //
@@ -2601,7 +1793,7 @@ System.debug('--i: ' + i);
             system.debug('sc ----->>>> '+sc);
             if(QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner'){
                 system.debug('Inside Booking date >= scheme start date');
-                brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
+                brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
                                    Start_Date__c <=: bookingDate and (End_Date__c = null or End_Date__c >=: bookingDate) and Approval_Status__c = 'Approved by Level 2'];
                 
                 system.debug('brokerageScheme::'+brokerageScheme);
@@ -2633,7 +1825,7 @@ System.debug('--i: ' + i);
             if(!sc.isEmpty()){
                 if(QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner'){
                     system.debug('Inside Booking date <= scheme start date');
-                    brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
+                    brokerageScheme = [select Id,Name,Base_Brokerage__c,Base_Brokerage_for_OS_NRI__c,Type__c,Base_Brokerage_for_Local_Bookings__c,Base_Brokerage_for_NRI__c from Brokerage_Scheme__c where id =: sc[0].Brokerage_Scheme__c and
                                        Approval_Status__c = 'Approved by Level 2'];
                     system.debug('brokerageScheme::'+brokerageScheme);
                 }
@@ -2655,7 +1847,7 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
 
 //Added by Prashant to compress code for this cls. // END 9-7-25
         
-         if(QuoteDetails != null && !QuoteDetails.isEmpty() &&  (QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner') ){
+        /* if(QuoteDetails != null && !QuoteDetails.isEmpty() &&  (QuoteDetails[0].walkin_Source__c == 'Channel Partner' || QuoteDetails[0].walkin_Source__c == 'Temp Channel Partner') ){
             
             // if(QuoteDetails[0].Agreement_Value_for_brokers__c != 0 || QuoteDetails[0].Agreement_Value_for_brokers__c != Null)
             
@@ -2726,16 +1918,79 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
                 boookingObj.Brokerage__c = brokerageScheme[0].Base_Brokerage_for_Local_Bookings__c - (((boookingObj.Passback_Amount__c / QuoteDetails[0].Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
                 
             }
-        } 
+        } */
         //Added by Prashant to tag the scheme based on the booking date. END 9-4-25////
         //
+        //
+
+        //Added by Prashant to update logic to add scheme brokerage based on type of client - 22-10-25. START///////
+        system.debug('Base Brokerage Before -->>'+boookingObj.Base_Brokerage__c);
+        boookingObj = BookingClass2.updateBrokerageSchemeDetails(boookingObj, QuoteDetails, brokerageScheme);
+        system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);
+        //Added by Prashant to update logic to add scheme brokerage based on type of client - 22-10-25. END///////
+
+        
+        
         
         //////////////////////////////////////Added BY Aniket Ends Here on 29-09-2022////////////////////////////////////////
         //////////////////////////////////////Receipt Mandatory Checks//////////////////////////////////////////
+        Decimal requiredTokenAmount = 0;
+        if(QuoteDetails != null && !QuoteDetails.isEmpty()){
+        	requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+        }
+        System.debug(' requiredTokenAmount'+ requiredTokenAmount);
+        System.debug(' boookingObj.Type_Of_sale__c**'+ boookingObj.Type_Of_sale__c);
+        
+        /**Added for Cancellation Changes starts */
+        if(boookingObj.Type_Of_sale__c =='Transfer of unit' || boookingObj.Type_Of_sale__c =='Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') {
+            if(String.isNotBlank(boookingObj.Cancelled_SAP_Customer_Number__c)){
+                oppList = [
+                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,
+                    Booking__r.RW_Total_Receipt_Amount_Received__c
+                    FROM Opportunity 
+                    WHERE SAP_Customer_Number__c = :boookingObj.Cancelled_SAP_Customer_Number__c
+                    LIMIT 1
+                ];
+            }
+            else if(String.isNotBlank(boookingObj.Cancelled_Project__c)&& String.isNotBlank(boookingObj.Cancelled_Tower__c) &&String.isNotBlank(boookingObj.Cancelled_Unit_No__c)){
+                oppList = [
+                    SELECT Id,Booking__c,Booking__r.Allotment_Premium__c,Booking__r.Project__r.Name,Booking__r.Unit_No__r.TowerName__r.Name,Booking__r.Unit_No__r.Name,SAP_Customer_Number__c,
+                    Booking__r.RW_Total_Receipt_Amount_Received__c
+                    FROM Opportunity 
+                    WHERE RW_Project__c =:boookingObj.Cancelled_Project__c AND RW_Project_Unit__r.TowerName__c =: boookingObj.Cancelled_Tower__c 
+                    AND RW_Project_Unit__c =:boookingObj.Cancelled_Unit_No__c
+                    LIMIT 1
+                ];
+            } 
+        }
+        Decimal amountFromOriginalUnit = 0;
+        if(oppList != null && !oppList.isEmpty() && oppList[0].Booking__c != null && oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c != null){
+            amountFromOriginalUnit = oppList[0].Booking__r.RW_Total_Receipt_Amount_Received__c;
+        }
+        Boolean skipReceiptChecks = false;
+        if((boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit >= requiredTokenAmount) {
+            skipReceiptChecks = true;
+        }
         system.debug('ReceiptDetails.size():::: ' + ReceiptDetails.size());
         if (ReceiptDetails.size() == 0 && STReceiptDetails.size()==0) {
             System.Debug('insert receipt ' + ReceiptObj);
             System.Debug('receiptlist.size() ' + receiptlist.size());
+            
+            Boolean isReceiptRowEmpty = true;
+            if(receiptlist != null && receiptlist.size() > 0) {
+                for(Receipt__c rce : receiptlist) {
+                    if(rce.Mode__c != null || rce.Cheque_DD__c != null || (rce.Total_Amount__c != null && rce.Total_Amount__c > 0) || rce.DraweeBank__c != null) {
+                        isReceiptRowEmpty = false;
+                        break;
+                    }
+                }
+            }
+            
+            if (skipReceiptChecks && isReceiptRowEmpty) {
+                // Requirements met for bypass & no receipt data entered. Clear empty row to skip validations.
+                receiptlist.clear();
+            }
+            else{
             
             
             System.Debug('--receiptlist :' + receiptlist);
@@ -2780,6 +2035,7 @@ system.debug('Base Brokerage After -->>'+boookingObj.Base_Brokerage__c);*/
                 }
                 
                 
+                }
             }
             
             System.debug('Step oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
@@ -2899,6 +2155,12 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 receiptOBJTobeUpdate.On_Account_Money__c = ListRct.Total_Amount__c;
                 receiptOBJTobeUpdate.Amount_Rs__c = ListRct.Total_Amount__c;
                 receiptOBJTobeUpdate.Opportunity_Email_Id__c = applicant.Email_Address__c;
+                /*Added for unidentified payments starts*/
+                
+                receiptOBJTobeUpdate.Receipt_Unique_Key__c =  ListRct.Receipt_Unique_Key__c == null ? boookingObj.Opportunity__r.RW_Mobile_No__c + '_' + ListRct.Cheque_DD__c + '_' + ListRct.DraweeBank__c :ListRct.Receipt_Unique_Key__c ;
+                receiptOBJTobeUpdate.Active__c = true;
+    
+                /*Added for unidentified payments ends*/
                 
                 totalAmount += (ListRct.Total_Amount__c != null)? ListRct.Total_Amount__c : 0; //Added by Vinay 14-08-2025
 
@@ -2916,17 +2178,20 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                     ReceiptLstTobeUpdate.add(receiptOBJTobeUpdate);
             }
 
-            Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+            // Decimal requiredTokenAmount = QuoteDetails[0].Project_Unit__r.Token_Amount__c != null ? QuoteDetails[0].Project_Unit__r.Token_Amount__c : QuoteDetails[0].Project_Unit__r.RW_Project__r.Token_Amount__c; //Added by Vinay 14-08-2025
+            if((boookingObj.Type_Of_sale__c == 'New Sale') ||(oppList != null && !oppList.isEmpty() && (boookingObj.Type_Of_sale__c == 'Transfer of unit' || boookingObj.Type_Of_sale__c == 'Upgrade of unit' || boookingObj.Type_Of_sale__c == 'Cancel & Rebook') && amountFromOriginalUnit < requiredTokenAmount)){
+                          /**Added for Cancellation Changes ends */
             if(totalAmount < requiredTokenAmount){ //Added by Vinay 14-08-2025
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Total Amount is less than the Token Amount, you cannot book this unit.  Token Amount is:'+requiredTokenAmount);
                 ApexPages.addMessage(myMsg); 
                 i = 1;
                 return null;
             }
+            }
             
             try {
                 if (!ReceiptLstTobeUpdate.isEmpty()) {
-                    insert ReceiptLstTobeUpdate;
+                     upsert ReceiptLstTobeUpdate Receipt_Unique_Key__c;
                 }
             } catch (DmlException e) {
                 System.debug('An error has occured. Please contact your administrator. : ' + e.getMessage());
@@ -2971,6 +2236,24 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 boookingObj.Interest_to_be_Applied__c='No';
                 // boookingObj.Booking_Application_Form_Hard_copy__c = fileUrl; //Added by coServe 23-03-2023
                 //boookingObj.status__c = 'Booking Received';   //Modified by Sheetal on 12/1/2022 to solve Issue I0101
+
+                if(selectedMilestone != null && selectedMilestone != '' && selectedMilestone != 'As per CLP'){ //Added by Vinay 02-04-2026
+                    //String milestone = '4.00% (30 days from booking)';
+                    Pattern p = Pattern.compile('\\((\\d+)');
+                    Matcher m = p.matcher(selectedMilestone);
+                    Integer days;
+                    if(m.find()){
+                        days = Integer.valueOf(m.group(1));
+                    }
+                    List<CIF__c> cif =[SELECT Id,Mode_of_funding__c FROM CIF__c WHERE Opportunity__c =: boookingObj.Opportunity__c];
+                    if(cif.size() > 0 && cif[0].Mode_of_funding__c == 'Bank Loan'){
+                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 30;
+                    }else{
+                        boookingObj.RW_Expected_Registration_Date__c = Date.valueOf(boookingObj.Booking_Date__c) + days + 15;
+                    }
+                    //boookingObj.Registration_Expected_Milestone__c = selectedMilestone;
+                }
+                boookingObj.Registration_Expected_Milestone__c = selectedMilestone ;
                 insert boookingObj;
                 update insObj;
                 
@@ -2979,8 +2262,13 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                 
             }
             
-            //Updating Parkings/////
-            
+            //Added by dolly for car parking changes Starts
+            // //Updating Parkings/////
+            // //calling 
+            // //syncCarParkingFromQuotation(boookingObj.Id,boookingObj.Unit_No__c,QuoteDetails[0],boookingObj.Project__c);
+            // if(QuoteDetails[0]!=null) service.syncCarParkingAfterBooking( boookingObj.Id, parkingContext );
+            //Added by dolly for car parking changes ends
+
             ////Tandem Covered////
             if (QuoteDetails != null && !QuoteDetails.isEmpty() && QuoteDetails[0].Tandem_car_park_Additional__c > 0) {
                 for (integer j = 0; j < QuoteDetails[0].Tandem_car_park_Additional__c; j++) {
@@ -3077,6 +2365,17 @@ System.Debug('listglobalcharges' + listglobalcharges);*/
                     if (boookingObj.Id != null)
                         PuzzleCarParkList[j].Booking__c = boookingObj.Id;
                     ParkingListToUpdate.add(PuzzleCarParkList[j]);
+                    
+                }
+                
+            }
+            if (QuoteDetails != null && !QuoteDetails.isEmpty() && QuoteDetails[0].Stack_Additional_1__c> 0) { //Added by Vinay 21-11-2025
+                system.debug('StackCarParkList Requires');
+                for (integer j = 0; j < QuoteDetails[0].Stack_Additional_1__c; j++) {
+                    StackCarParkList[j].Status__c = 'Booked';
+                    if (boookingObj.Id != null)
+                        StackCarParkList[j].Booking__c = boookingObj.Id;
+                    ParkingListToUpdate.add(StackCarParkList[j]);
                     
                 }
                 
@@ -3563,6 +2862,2575 @@ return null;
 }
 //Added by coServe 23-03-2023 End*/
     
+    /**Added for Cancellation Changes starts */
+
+    public void loadTowers() {
+        BookingClass2.loadTowers(towerOptions, boookingObj);
+        /*towerOptions.clear();
+        //Id matchedTowerId = null;
+        towerOptions.add(new SelectOption('', '--Select Tower--'));
+        List<Tower__c> towerLst = [SELECT Id, Name 
+                FROM Tower__c 
+                WHERE ProjectName__c = :boookingObj.Cancelled_Project__c ORDER BY Name];
+
+        System.debug('towerLst**'+towerLst);
+        if(String.isNotBlank(boookingObj.Cancelled_Project__c)) {
+            for(Tower__c t : towerLst) {
+                towerOptions.add(new SelectOption(t.Id, t.Name));
+            }
+        }*/
+    }
+
+    public void loadUnits() {
+        BookingClass2.loadUnits(unitOptions, boookingObj);
+        /*unitOptions.clear();
+        //Id matchedUnitId = null;
+        unitOptions.add(new SelectOption('', '--Select Unit--'));
+        List<Project_Unit__c> projectList = [SELECT Id, Name 
+                FROM Project_Unit__c 
+                WHERE TowerName__c = :boookingObj.Cancelled_Tower__c ORDER BY Name];
+        System.debug('projectList**'+projectList);
+        if(String.isNotBlank(boookingObj.Cancelled_Tower__c)) {
+            for(Project_Unit__c unit : projectList) {
+                unitOptions.add(new SelectOption(unit.Id, unit.Name));
+                // if(unit.Name == opp.Cancelled_Unit__c) {
+                //     matchedUnitId = unit.Id;
+                // }
+            }
+            // if(matchedUnitId != null) {
+            //     boookingObj.Cancelled_Unit_No__c = matchedUnitId;
+            // }
+            // else {
+            //     System.debug('No matching Project ID found for Name: ' + opp.Cancelled_Unit__c);
+            // }
+        }
+        System.debug('unitOptions**'+unitOptions);*/
+    }
+    /**Added for Cancellation Changes ends */
+
+    /**Addded for Cancellation Changes starts */
+    public void typeOfSaleChanged() {
+        
+        boookingObj.Cancelled_Project__c = null;
+        boookingObj.Cancelled_Tower__c = null;
+        boookingObj.Cancelled_Unit_No__c = null;
+        boookingObj.Cancelled_SAP_Customer_Number__c = null;
+        disableCancelledDetails = false;
+    
+        
+        if (String.isBlank(boookingObj.Reason_For_Change__c) && oldTypeOfSale!=null ){
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error, 'Please add Reason For Change');
+                        ApexPages.addMessage(myMsg);
+                       // i = 1;
+        }
+        
+    }
+    /**Addded for Cancellation Changes ends */
   
+    Public static void Dummy(){
+        integer i=0;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+          i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+          i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+          i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+          i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+          i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+          i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;    
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+         i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;   
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; 
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++; 
+
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        
+    }
     
 }

@@ -3,6 +3,7 @@
     <excludeButtons>ChangeOwnerOne</excludeButtons>
     <excludeButtons>ChangeRecordType</excludeButtons>
     <excludeButtons>Delete</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -68,7 +69,23 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sourcing_Manager__c</field>
+                <field>Channel_Partner_From_CP_Portal__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Valid_RERA_certificate__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RERA_Valid_till__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Latest_RERA_Upload_Status__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Created_from_Lockated__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -126,11 +143,23 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Channel_Partner_From_CP_Portal__c</field>
+                <field>Activate_CP_Portal__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>days_from_creation__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Valid_competency_certificate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Activate_CP_Portal__c</field>
+                <field>CC_Valid_till__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Latest_CC_Upload_Status__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -474,17 +503,15 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Prospect__c.Channel_Partner__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
         <relatedList>ERP_Integration_Log__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Brokerage_Scheme_Name__c</fields>
         <fields>Brokerage__c</fields>
         <fields>Total_Brokerage__c</fields>
         <fields>RECORDTYPE</fields>
+        <fields>CREATED_DATE</fields>
         <relatedList>Brokerage_Summary__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -515,11 +542,11 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Temp_Channel_Partner__c.Channel_Partner__c</relatedList>
+        <relatedList>CP_Brokerage__c.Channel_Partner__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Temp_Channel_Partner__c.Original_Channel_Partner__c</relatedList>
+        <relatedList>CP_Meeting_Targets__c.CP_Name__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

@@ -3,7 +3,6 @@ public class CustomerPortalBannersController {
     @AuraEnabled
     public static string banners(List<String> documentIds, String bannerType){
         try {
-            System.debug('Doc Ids: ' + documentIds);
             //List<cloudx_cms__SS_Carousel__c> carousels = [SELECT Id, cloudx_cms__Name__c, cloudx_cms__No_of_Slides__c FROM cloudx_cms__SS_Carousel__c WHERE cloudx_cms__Name__c =: bannerType];
             List<cloudx_cms__SS_Carousel__c> carousels = [SELECT Id, cloudx_cms__Name__c, cloudx_cms__No_of_Slides__c FROM cloudx_cms__SS_Carousel__c];
             Map<String, cloudx_cms__SS_Carousel__c> carousalMap = new Map<String, cloudx_cms__SS_Carousel__c>();
@@ -38,7 +37,6 @@ public class CustomerPortalBannersController {
 
 
             for(ContentDistribution dist : distributionList){
-                System.debug('Public Link: ' + dist.DistributionPublicUrl);
                 cloudx_cms__SS_Carousel_Slide__c slide = new cloudx_cms__SS_Carousel_Slide__c();
                 slide.cloudx_cms__Carousel__c = carousalMap.get(bannerType).Id;
                 slide.cloudx_cms__Image_URL__c = dist.ContentDownloadUrl;

@@ -19,6 +19,7 @@ public class LoanDisbTrgHandlerTest {
     private static Loan__c createLoan(Id projectId) {
         Loan__c loan = new Loan__c(
             RW_Project_Name__c = projectId,
+            RW_Bank_Name__c = 'HDFC Bank Ltd',
             RW_Bank_Preference_1__c = 'HDFC Bank Ltd',
             Home_Loan_Taken_From__c = 'Runwal',
             RW_Sanction_Amount__c = 2000000,

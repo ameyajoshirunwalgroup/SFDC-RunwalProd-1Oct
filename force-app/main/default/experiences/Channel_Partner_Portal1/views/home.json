@@ -7,25 +7,6 @@
   "regions" : [ {
     "components" : [ {
       "componentAttributes" : {
-        "autoPlay" : true,
-        "autoPlayInterval" : 2000,
-        "controlsAlignment" : "center",
-        "controlsPosition" : "bottom",
-        "datasource" : "carousel-object",
-        "datasourceInput" : "PartnerPortalHeader",
-        "showControls" : true,
-        "slidesPerPage" : 1,
-        "title" : "",
-        "titleAlign" : "left",
-        "titleSize" : "large"
-      },
-      "componentName" : "cloudx_cms:SS_cmsCarousel",
-      "id" : "3f6c6aee-cf3b-4b20-9aef-9e3824aa1ba4",
-      "renderPriority" : "NEUTRAL",
-      "renditionMap" : { },
-      "type" : "component"
-    }, {
-      "componentAttributes" : {
         "richTextValue" : "<h1><center>Welcome!</center></h1>\n<h1><center>{!CurrentUser.firstName} {!CurrentUser.lastName}</center></h1>"
       },
       "componentName" : "forceCommunity:htmlBlock",
@@ -33,7 +14,12 @@
       "renderPriority" : "NEUTRAL",
       "renditionMap" : { },
       "type" : "component"
-    }, {
+    } ],
+    "id" : "54c28e8c-b406-43ca-a362-d01cac3a6c70",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
       "componentAttributes" : {
         "bannerBackgroundColor" : "",
         "bannerPosition" : "bottom",
@@ -56,11 +42,14 @@
       "renderPriority" : "NEUTRAL",
       "renditionMap" : { },
       "type" : "component"
+    }, {
+      "componentAttributes" : { },
+      "componentName" : "c:cp_Calender",
+      "id" : "6fcfb16e-3ffa-4c1c-a635-5e5ebeb72782",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
     } ],
-    "id" : "54c28e8c-b406-43ca-a362-d01cac3a6c70",
-    "regionName" : "header",
-    "type" : "region"
-  }, {
     "id" : "85ffd59c-2339-4399-b598-1db39e29020e",
     "regionName" : "content",
     "type" : "region"

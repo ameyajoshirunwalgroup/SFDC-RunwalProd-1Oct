@@ -1,0 +1,13 @@
+<html>
+            <body style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                <p>Dear Mr / Mrs {!Credit_Note__c.Customer_Name__c},</p>
+
+                <p>We are pleased to inform you that a credit amount of <strong>Rs.  {!TEXT(Credit_Note__c.Interest_To_Be_Settled__c)} </strong> has been completed towards your purchased Runwal unit  <strong>{!Credit_Note__c.Unit_No__c}</strong>,  <strong>{!Credit_Note__c.Project__c}</strong> in lieu of the advance payment made by you towards your  unit.</p>
+
+                <p>We thank you for being a part of the Runwal Family .</p>
+
+
+                <p>Best regards,<br/>
+                <strong>Runwal Group</strong></p>
+            </body>
+        </html>

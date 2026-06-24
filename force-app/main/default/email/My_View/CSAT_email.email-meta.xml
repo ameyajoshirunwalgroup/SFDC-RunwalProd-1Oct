@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>CSAT email</name>
+    <style>none</style>
+    <subject>CSAT</subject>
+    <textOnly>Dear {!CSAT__c.Account__c},
+
+Please click the below link and give your feedback for the case: {!CSAT__c.Case__c}
+
+Link: https://runwalhomes.secure.force.com/csat?id={!CSAT__c.Id}
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

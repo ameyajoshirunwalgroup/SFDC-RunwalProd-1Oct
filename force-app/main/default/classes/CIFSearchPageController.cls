@@ -151,7 +151,8 @@ public class CIFSearchPageController {
                 //Pagereference objReference = new Pagereference('/apex/CIFFormPage?id=' + lstLead[0].id + '&projectId=' + strProjectId +'&show='+show);//Commented by coServe 17-06-2024
                 objReference.setRedirect(true);
                 return objReference;
-            } else if (lstAccount != null && lstAccount.size() > 0) {
+            } 
+            else if (lstAccount != null && lstAccount.size() > 0) {
                 /*lstOpp = [select id, Name, OwnerId, RW_Project__c, CloseDate, Walkin_Source__c, AccountId
 from Opportunity
 where AccountId =: lstAccount[0].Id and
@@ -379,7 +380,7 @@ mergeAcc(lstAccount, lstOpp[0]);
                 if (isNRI) {
                     NewLead.RW_Customer_Type__c = 'NRI';
                 }
-                
+                system.debug('NewLead - > '+NewLead.Reason_to_Purchase__c);
                 insert NewLead;
                 
                 //Pagereference objReference = new Pagereference('/apex/CIFFormPage?id=' + NewLead.id + '&projectId=' + strProjectId +'&show='+show);//Commented by coServe 12-06-2024
@@ -787,10 +788,28 @@ show = false;
         strError = '';
         showDirectLead = true;
         
-        if (NewLead.Email == null || NewLead.Email == '' || NewLead.LastName == null || NewLead.LastName == '') {
-            strError = 'Please enter the Last Name & Email to proceed.';
+        if (NewLead.LastName == null || NewLead.LastName == '') {
+            strError = 'Please enter the Last Name.';
             System.debug('strError: ' + strError);
+            return;
         }
+        
+        //Added by Prashant to Add Email Validation./.. Added on 07-05-26...START
+        if (NewLead.Email == null || NewLead.Email == '') {
+            strError = 'Please enter an Email to proceed.';
+            return;
+        } else {
+            String emailRegex = '^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$';
+            Pattern MyPattern = Pattern.compile(emailRegex);
+            Matcher MyMatcher = MyPattern.matcher(NewLead.Email);
+            
+            if (!MyMatcher.matches()) {
+                strError = 'The email address format is invalid. Please check and try again.';
+                return;
+            }
+        }     
+        //Added by Prashant to Add Email Validation./.. Added on 07-05-26...END
+        
         /*if (NewLead.LastName == null || NewLead.LastName == '') {
 strError = 'Please enter Last Name to proceed.';
 //return null;

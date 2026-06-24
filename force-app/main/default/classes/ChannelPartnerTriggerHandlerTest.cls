@@ -273,9 +273,11 @@ public class ChannelPartnerTriggerHandlerTest {
         insert cp;
         
         cp.RW_RERA_Registration_Number__c = '223256789012';
+        cp.STREET__c = '4783';
         Update cp; 
         
         ChannelPartnerTriggerHandler.sendBrokerlist(cp.id);
+        ChannelPartnerTriggerHandler.createTempCPTasks(new list<Broker__c>{cp});
         
     }    
 }

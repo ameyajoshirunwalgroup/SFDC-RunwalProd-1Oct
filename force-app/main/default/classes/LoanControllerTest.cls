@@ -74,6 +74,30 @@ public class LoanControllerTest
             insert tuser;
             system.debug('*1*');
             
+            Profile p2 = [Select Id, Name from Profile where Name = 'System Administrator'];
+            
+            /*User u = new User(firstName = 'TestUser1', lastName = 'TestUser2', email='test@gmail.com',Username= 'username1@gmail.com', ProfileId = p.Id, alias= 'alias',EmailEncodingKey='UTF-8', 
+LocaleSidKey='en_US',TimeZoneSidKey='America/Los_Angeles', LanguageLocaleKey='en_US', Phone='9874561230');
+insert u;*/
+            
+            String orgId2 = UserInfo.getOrganizationId();
+            String dateString2 = String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+            Integer randomInt2 = Integer.valueOf(math.rint(math.random()*1000000));
+            String uniqueName2 = orgId2 + dateString2 + randomInt2;
+            User tuser2 = new User(  firstname = 'TestUser',
+                                   lastName = 'TestUser',
+                                   email = uniqueName2 + '@gmail' +'.com',
+                                   Username = uniqueName2 + '@test' + orgId2 + '.org',
+                                   EmailEncodingKey = 'ISO-8859-1',
+                                   Alias = uniqueName1.substring(18, 23),
+                                   TimeZoneSidKey = 'America/Los_Angeles',
+                                   LocaleSidKey = 'en_US',
+                                   LanguageLocaleKey = 'en_US',
+                                   ProfileId = p2.id,
+                                   UserRoleId = obj.Id
+                                  );
+            insert tuser2;
+            
             //inserting legal Entity
             Legal_Entity__c legalEnt = new Legal_Entity__c();
             legalEnt.Name = 'Test Company Code';
@@ -130,6 +154,7 @@ public class LoanControllerTest
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_CUstomer_Number__c='0020009875';
@@ -155,7 +180,7 @@ public class LoanControllerTest
             Relationship_Manager__c ObjRm = new Relationship_Manager__c();
             ObjRm.Tower__c = objTwr.Id;
             ObjRm.Project__c = objpr.Id;
-            ObjRm.User__c = tuser.Id;
+            ObjRm.User__c = tuser1.Id;
             ObjRm.Contact_Number__c='9987654323';
             //ObjRm.Name = 'Bliss RM';
             ObjRm.Name = 'Sudhakar Nair';
@@ -279,6 +304,7 @@ public class LoanControllerTest
             bankRM.RM_Email__c = 'kunal@mail.com';
             bankRM.TL_Name__c = 'Apeksha Sathe';
             bankRM.TL_Email__c = 'apksha@mail.com';
+            bankRM.Inactive__c = false;
             insert bankRM;
             
             Project_Shortforms__c proShort = new Project_Shortforms__c();
@@ -297,18 +323,7 @@ public class LoanControllerTest
             //Added by Vinay 16-03-2022 end
             
             
-            RW_Welcome_Call__c wcObj = new RW_Welcome_Call__c();
-            wcObj.RW_Booking__c = objBking.Id;
-            wcObj.RW_Welcome_Call_Status__c = 'Accept';
-            //wcObj.Name = 'Test';
-            wcObj.RW_Is_welcome_Letter_sent__c = True;
-            wcObj.RW_Welcome_Call_Completed__c = false;
-            wcObj.RW_Welcome_Call_Initiation_date__c = null;
-            wcObj.RW_Welcome_Call_Accepted_date__c = system.today();
-            wcObj.RW_Discrepancy_list_shared_via_email__c = True;
-            wcObj.RM_email__c = 'mounika.ramagoni@in.ey.com';
             
-            insert wcObj;
             
             
             Team__c tem = new Team__c();
@@ -329,7 +344,7 @@ public class LoanControllerTest
              apf.RW_Tower__c = objTwr.Id;
              apf.RW_Relationship_Manager__c = ObjRm.Id;
 
-             insert apf; 
+             //insert apf; 
             system.debug('insert apf ****' + apf);
         }
         
@@ -357,8 +372,12 @@ public class LoanControllerTest
         l1.RW_Loan_Record_Status__c = 'Loan Process Initiated';
         l1.RW_Loan_Account_Number__c = '1234';
         l1.RW_Project_Name__c = proj[0].id;
-        l1.HL_RM_Name__c = 'Kunal Kate';
+        // l1.HL_RM_Name__c = 'Kunal Kate';
         l1.HL_TL_Name__c = 'Apeksha Sathe';
+        l1.RW_Sanction_Date__c = null;         
+        l1.RW_Loan_Account_Number__c = null;             
+        l1.RW_Sanction_Amount__c = null;
+        //l1.RW_Sanction_Status__c = 'Rejected';
         
         Loan__c l2 = new Loan__c();
         l2.RW_Bank_Name__c = 'Bank Of Baroda';
@@ -370,8 +389,12 @@ public class LoanControllerTest
         l2.RW_Loan_Record_Status__c = 'Loan Process Initiated';
         l2.RW_Loan_Account_Number__c = '12345';
         l2.RW_Project_Name__c = proj[0].id;
-        l2.HL_RM_Name__c = 'Kunal Kate';
+        // l2.HL_RM_Name__c = 'Kunal Kate';
         l2.HL_TL_Name__c = 'Apeksha Sathe';
+        l2.RW_Sanction_Date__c = null;         
+        l2.RW_Loan_Account_Number__c = null;             
+        l2.RW_Sanction_Amount__c = null;
+        //l2.RW_Sanction_Status__c = 'Rejected';
         
         testloan.add(l1);
         testloan.add(l2);
@@ -380,24 +403,14 @@ public class LoanControllerTest
        insert testloan;
         
         l1.RW_Bank_Preference_1__c = 'Axis Bank Ltd';
-        l1.RW_Sanction_Status__c = 'Received';
+        
         update l1;
         l2.RW_Loan_Record_Status__c = 'Loan Closed';
         update l2;
         
         l2.RW_Loan_Record_Status__c = 'NOC Generated';
+        l2.RW_NOC_Generated_Date__c = Date.today();
         update l2;
-        
-        /*l2.HL_Status__c = 'Self- funding';
-        update l2;*/
-                
-        LoanController.sendEmailLoanCreated(new List<Loan__c>{l1});
-        LoanController.sendEmail(new List<Loan__c>{l1});
-        
-        
-        
-        
-      //  LoanController.loanInsert(testloan);
         
     }
 

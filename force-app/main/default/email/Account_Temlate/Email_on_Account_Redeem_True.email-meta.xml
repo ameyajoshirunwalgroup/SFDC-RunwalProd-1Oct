@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Email on Account Redeem True</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Email on Account Redeem True</name>
+    <style>none</style>
+    <subject>Account Has Been Redeemed</subject>
+    <textOnly>Hi {!Account.OwnerFullName},
+
+The following Account has been redeemed:
+{!Account.Name}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

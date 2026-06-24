@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Demand Raised Notification</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Booking__r.Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!!
+
+We would like to inform you that a payment demand has been raised for your unit. Please find the details below for your reference:
+
+Project: {!Booking__r.Project__r.Name}
+Unit Number: {!Booking__r.Unit_No__r.Name}
+Demand Number: {!RW_Billing_Document_Number__c}
+Demand Amount: {!Demand_Amount__c}
+Due Date: {!Due_Date__c}
+
+Please find the demand letter attached for detailed breakup. We request you to kindly arrange the payment on or before the due date.
+
+If the payment is bank-funded, please coordinate with your banker to initiate the disbursement and complete the required consent/formalities as per the bank’s process to ensure the funds are released before the due date.
+
+Once the payment is made, kindly upload the transaction details on the Runwal Connect App or alternatively share the details with your Relationship Manager to help us trace the payment and issue the payment receipt within 3 working days.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Payment Demand Raised for Your Unit</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Payment Demand Raised 💳
+
+A new payment demand has been generated with amount and due date. Please pay on or before the due date. If bank-funded, coordinate with your banker for timely disbursement.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">payments_due</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">RW_Demand__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Demand Raised Notification</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Demand Raised Notification</value>
+    </values>
+</CustomMetadata>

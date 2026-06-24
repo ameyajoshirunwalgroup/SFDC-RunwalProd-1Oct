@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Location_is_required_if_Others</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+TEXT(CP_location_MMR__c) = &apos;Others&apos;,
+RecordType.DeveloperName = &quot;Channel_Partner_Corporates_Event&quot;,
+ISBLANK(Other_Location__c)
+)</errorConditionFormula>
+    <errorDisplayField>Other_Location__c</errorDisplayField>
+    <errorMessage>Other Location is required</errorMessage>
+</ValidationRule>

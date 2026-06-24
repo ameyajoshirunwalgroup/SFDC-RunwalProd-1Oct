@@ -250,6 +250,7 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
         Set<Id> retentionOppIds = new Set<Id>(); // Added by coServe 20-01-2023
         list<Event> lstEventInsert = new list<Event>();  
         List<String> oppIds = new List<String>(); // Added by coServe 27-06-2024
+        List<Opportunity> referralOpps = new List<Opportunity>(); //Added by Vinay 28-02-2026
         if(lstOpp.size() > 0)
         {
             for(Opportunity eachOpp : lstOpp)
@@ -265,11 +266,17 @@ eachOpp.Customer_reference_SAP_Code__c = lstotp[0].Customer_reference_SAP_Code__
                     retentionOppIds.add(eachOpp.Id);
                 }
                 // Added by coServe 20-01-2023 End
-                
+                if(eachOpp.StageName == 'Site Visit' && eachOpp.LeadSource == 'Referral' && eachOpp.Customer_Reference__c != null){ //Added by Vinay 28-02-2026
+                    referralOpps.add(eachOpp);
+                }
                 
             }
             if(oppIds.size() > 0){ // Added by coServe 27-06-2024
                 //sendProspectDay1WhatsApp(oppIds);
+            }
+            if(referralOpps.size() > 0){ //Added by Vinay 28-02-2026
+                LockatedApp_LoyaltyEngine.referralSiteVisits(referralOpps); 
+                LockatedApp_Notifications.referralVisitDoneNotification(referralOpps); 
             }
         }
         if(setofOppId.size() > 0)
@@ -486,9 +493,12 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
         Set<Id> setofOppIdForCallCompletion = new Set<Id>();
         Set<Id> setofOppIdForMissedCall = new Set<Id>();
         Set<Id> retentionOppIds = new Set<Id>();
+        Set<Id> cancelledOppIds = new Set<Id>(); //Added by Vinay 11-06-2026
         
         List<String> oppIdsToUpdate = new List<String>();
         List<String> oppIdsToSendWhatsApp = new List<String>();
+        List<String> bkgIdsToUpdateSODate = new List<String>();
+        
         if(lstOpp.size() > 0)
         {
             for(Opportunity eachOpp : lstOpp)
@@ -527,9 +537,24 @@ cp.Channel_Partner_Account__c = lstCP[0].Account__c;
                 
                 if(eachOpp.SalesOrder_Number__c != null && mapOldOppId.get(eachOpp.Id).SalesOrder_Number__c == null && eachOpp.StageName == 'Unit Booked'){ // Added by coServe 15-07-2024
                     oppIdsToSendWhatsApp.add(eachOpp.Id);
+                    if(eachOpp.Booking__c != null){ //Added by Vinay 08-06-2026
+                        bkgIdsToUpdateSODate.add(eachOpp.Booking__c);
+                    }
+                }
+                
+                if(eachOpp.StageName == 'Cancelled' && eachOpp.StageName != mapOldOppId.get(eachOpp.Id).StageName){ //Added by Vinay 11-06-2026
+                    cancelledOppIds.add(eachOpp.Id);
                 }
                 
             }
+        }
+        
+        if(cancelledOppIds.size() > 0){ //Added by Vinay 11-06-2026
+            CreateUserWhenUnitBooked.removeUserWhenCancelled(cancelledOppIds);
+        }
+        
+        if(bkgIdsToUpdateSODate.size() > 0){ //Added by Vinay 08-06-2026
+            updateSODate(bkgIdsToUpdateSODate);
         }
         
         if(oppIdsToSendWhatsApp.size() > 0){ // Added by coServe 15-07-2024
@@ -634,9 +659,38 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
         
     }
     
+    //Added by Prashant to populate Referral customer details.
+    public static void updateReferralCustDetails(List<Opportunity> refOppList){
+        system.debug('Inside updateReferralCustDetails');
+        Set<String> custRefs = new Set<String>();
+        for(Opportunity opp : refOppList){
+            custRefs.add(opp.RW_Walkin_Customer_Reference__c);
+        }
+        
+        List<Opportunity> lstOpp = [Select Id,StageName,RW_Booking_Date_Opp__c, Name,SAP_Customer_Number__c,AccountId,RW_Project_Unit__c /*Customer_Reference_Opportunity__c*/ From Opportunity Where AccountId=: custRefs AND StageName =:'Unit Booked'  ORDER BY RW_Booking_Date_Opp__c DESC limit 1 ];
+        if(!lstOpp.isEmpty()){
+            Map<String, Opportunity> refOppMap = new Map<String, Opportunity>();
+            if(custRefs.size() > 0){
+                for(Opportunity opp : lstOpp){
+                    refOppMap.put(opp.AccountId, opp);
+                }
+            }
+            
+            for(Opportunity opp : refOppList){
+                if(refOppMap.get(opp.RW_Walkin_Customer_Reference__c) != null){
+                    opp.Customer_reference_SAP_Code__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).SAP_Customer_Number__c;
+                    opp.Customer_reference_Booked_Unit__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).RW_Project_Unit__c;
+                    opp.Customer_Reference_Opportunity__c = refOppMap.get(opp.RW_Walkin_Customer_Reference__c).Id;
+                }
+            }
+        }
+    }
+    //Added by Prashant to populate Referral customer details.
+    
+    
     public void afterUpdateSAP(List<Opportunity> lstOpp, Map<Id, Opportunity> mapOldOppId) {
         set<Id> lstOppBookedIds = new set<Id>();
-        system.debug(lstOpp);
+        set<Id> lstBlockedOppIds = new set<Id>();/*Added for unidentified payments starts */
         system.debug(lstOpp.size() );
         if(lstOpp.size() > 0)
         {
@@ -649,6 +703,15 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
                 {
                     lstOppBookedIds.add(objOpportunity.Id);
                 }
+                /*Added for unidentified payments starts */
+                if((objOpportunity.StageName == 'Unit Blocked' || objOpportunity.StageName =='Negotiation') && 
+                   (mapOldOppId.get(objOpportunity.id).StageName != 'Unit Blocked' && mapOldOppId.get(objOpportunity.id).StageName =='Site Visit' 
+                   || (objOpportunity.Data_Error_Fixed__c == true && mapOldOppId.get(objOpportunity.id).Data_Error_Fixed__c != true) ))
+                {
+                    lstBlockedOppIds.add(objOpportunity.Id);
+                }
+                /*Added for unidentified payments ends */
+           
             }
         }
         
@@ -657,6 +720,12 @@ eachProjUnit.Booking_Source1__c = eachOpp.LeadSource;*/
         {   
             //SAPIntegrationServices.createSO(lstOppBookedIds);
         }
+        /*Added for unidentified payments starts */
+        if(lstBlockedOppIds.size() > 0)
+        {       
+            OpportunityCustomerCreation.createOppCustomer(lstBlockedOppIds);
+        }
+        /*Added for unidentified payments ends */
     }
     
     //After stage booked then save applicante in farvision
@@ -1173,12 +1242,35 @@ update OppMap.values();*/
             for(String oppId : oppMap.keySet()){
                 if(oppVsCifMap.get(oppId) != null && !Test.isRunningTest()){
                     //SendWhatsAppMsg.methodToSendWhatsAppMsg(null, oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
-                    SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Commented by Vinay 11-09-2025
-                    //SendWhatsAppMsg.methodToSendWhatsAppMsgNew(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Added by Vinay 11-09-2025
+                    //SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1'); //Commented by Vinay 13-10-2025
+                    
+                    if(System.label.Haptik_API_Version == 'New'){ //Added by Vinay 13-10-2025
+                        SendWhatsAppMsg.methodToSendWhatsAppMsgNew(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).Account.Country_Code__c, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
+                    }else{
+                        SendWhatsAppMsg.genaricMethodToSendWhatsAppMsg(oppMap.get(oppId).Name, oppMap.get(oppId).RW_Project__r.Name, oppMap.get(oppId).RW_Project__r.Day_1_Whatsapp_Content__c, oppMap.get(oppId).RW_Project__r.WhatsApp_Bot_Project_Brochure_Url__c, oppMap.get(oppId).RW_Project__r.Prospect_Engagement_Team__c, null, null, null, null, oppMap.get(oppId).RW_Mobile_No__c, 'Prospect Engagement Day 1');
+                    }
                 }
             }
         }
         
+    }
+    
+    public static void updateSODate(List<String> bkgIds){ //Added by Vinay 08-06-2026
+        System.debug('--reTriggerSODateUpdate--');
+        List<Booking__c> bkgsToUpdate = new List<Booking__c>();
+        for(ERP_Integration_Log__c log : [SELECT Id,Booking__c,Booking__r.SO_Release_Date_in_SAP__c,Response__c FROM ERP_Integration_Log__c WHERE Booking__c =: bkgIds AND Status__c = 'Failure' AND API_Name__c = 'SO Release Date Update']){
+            if(log.Response__c != null && log.Booking__r.SO_Release_Date_in_SAP__c == null){
+                String relDate = log.Response__c.split('REL_DATE=')[1];
+                relDate = relDate.subString(0,10);
+                Booking__c bkg = new Booking__c();
+                bkg.Id = log.Booking__c;
+                bkg.SO_Release_Date_in_SAP__c = Date.valueof(relDate.substring(6, 10)+'-'+relDate.substring(3, 5)+'-'+relDate.substring(0, 2));
+                bkgsToUpdate.add(bkg);
+            }
+        }
+        if(bkgsToUpdate.size() > 0){
+            update bkgsToUpdate;
+        }
     }
     
     /*@future(callout=true)

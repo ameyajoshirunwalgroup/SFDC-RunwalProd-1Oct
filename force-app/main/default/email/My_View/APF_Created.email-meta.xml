@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>APF Created</name>
+    <style>none</style>
+    <subject>APF Created</subject>
+    <textOnly>Dear {!APF__c.RW_Relationship_Manager__r.RM_Name__c }
+
+This is to notify you that APF - {!APF__c.APF_Number__c} is created for the Project - {!APF__c.RW_Project__c}.
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

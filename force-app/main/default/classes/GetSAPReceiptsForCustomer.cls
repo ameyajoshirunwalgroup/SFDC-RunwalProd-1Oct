@@ -108,7 +108,7 @@ public class GetSAPReceiptsForCustomer {
                 update ListToUpdatePayment;
             }
             System.debug('ListToUpdatePayment: ' + ListToUpdatePayment);
-            List<Opportunity> oppList = [Select Id, Name,SAP_Customer_Number__c,Booking__c, (Select id,Name FROM EOI__r) from Opportunity where SAP_Customer_Number__c =: crn and StageName IN ('Unit Booked','EOI Received')];
+            List<Opportunity> oppList = [Select Id, Name,SAP_Customer_Number__c,Booking__c, (Select id,Name FROM EOI__r) from Opportunity where SAP_Customer_Number__c =: crn and StageName IN ('Unit Booked','EOI Received','Negotiation')];
             
             
             Map<String,receiptWrapper> mapOfReceiptWrapper = new Map<String,receiptWrapper>();

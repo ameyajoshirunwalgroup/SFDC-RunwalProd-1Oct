@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
@@ -22,6 +23,14 @@
                 <behavior>Edit</behavior>
                 <field>Disbursement_Amount__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Total_Achieved_Disbursemment_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Achieve_Disbursement_Percentage__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -38,6 +47,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Sanction_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Total_Achieved_Sanction_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Achieve_Sanction_Percentage__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -73,11 +90,11 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Loan__c.Targets_Sanction__c</relatedList>
+        <relatedList>Loan_Disbursement_Details__c.Targets_Disbursement__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Loan_Disbursement_Details__c.Targets_Disbursement__c</relatedList>
+        <relatedList>Loan__c.Targets_Sanction__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
@@ -85,7 +102,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hfu000005UGyv</masterLabel>
+        <masterLabel>00h9I000002KH1y</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

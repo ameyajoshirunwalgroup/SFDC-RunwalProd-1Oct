@@ -1,0 +1,493 @@
+<apex:component controller="CPBrkInvoiceEmailToSubmitterController" access="global" allowDML="true">
+    <apex:attribute name="ChannelPartnerId" type="String" description="Channel Partner Id" access="global" assignTo="{!cpId}"/>
+    <head>        
+        <style>
+            @page {
+            size: A4;
+            margin: 8mm;
+            @bottom-center {
+            content: "Page " counter(page) " of " counter(pages);
+            }
+            }
+            
+            body{
+            margin:0;
+            padding:0;            
+            font-family:"Google Sans", Roboto, arial, sans-serif !important;
+            font-family: 'cambria';
+            }                
+            .table1{
+            width:100%;
+            border-collapse:collapse;
+            }
+            .table1 tr th{
+            border:1px solid #000;
+            text-align:center;
+            font-size:12px;
+            padding:3px 5px;
+            }
+            .table1 tr td{
+            text-align:center;
+            font-size:12px;
+            border:1px solid #000;
+            padding:3px 5px;
+            }
+            
+            @page {
+            margin-bottom: 64px;
+            margin-top: 64px;
+            
+            @top-center {
+            content: element(header,first-except);
+            }
+            @bottom-center {
+            content: element(footer,first-except);
+            }
+            }            
+            .header{
+            position: running(header);
+            }
+            .footer {
+            display:block;
+            position: running(footer);
+            z-index:-999;
+            }         
+        </style>
+    </head>
+    <body >
+        <apex:outputPanel rendered="{!NOT(ISNULL(CPInv)) && CPInv.size > 0}" layout="none">
+            <apex:repeat value="{!CPInv}" var="inv" rows="1">
+                <table id="main" border="0" width="90%" border-collapse="collapse">
+                    <tr><td>Greeting From Runwal Group !!!.</td></tr>
+                    <tr><td> &nbsp; </td></tr>
+                    <tr><td>Channel Partner ( {!inv.CP_Name__c} ) submitted Invoice bill for clearance. Below are the details for the same</td></tr>
+                    <tr><td> &nbsp; </td></tr>
+                    <tr><td>Record Link : {!Recordurl}</td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                </table>
+                <br/>
+                
+                <div>
+                    <apex:repeat value="{!brokerageScheme}" var="sch" rows="1">
+                            <table style="width:50%;border-collapse: collapse;border:1px solid black;">
+                                <tr>
+                                    <td Style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">Ladder Scheme</td>
+                                    <td Style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">{!sch.Name}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Start Date</td>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!sch.Start_Date__c}" /> </apex:outputText></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">End Date</td>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!sch.End_Date__c}" /> </apex:outputText></td>
+                                    <td></td>
+                                </tr>
+                                <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="brk" rows="1">
+                                    <tr>
+                                        <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Eligible Slab</td>
+                                        <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">{!brk.RW_Eligible_Slab__c}</td>
+                                        <td></td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                            <br/>
+                        </apex:repeat>
+                    
+					<apex:outputPanel rendered="{!Base}">   
+
+                        
+                        <!--<apex:repeat value="{!bklist}" var="bk" >-->
+                            
+                            <apex:outputPanel rendered="{!showgst && istaxapplicable}">
+                                <table style="width:100%;border-collapse: collapse;">
+                                    <tr>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:18%;height:25px;font-size:11px">Customer Name </th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CGST @ 9%</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">SGST @ 9%</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                    </tr>
+                                    <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="bk" >
+                                    <tr style="border:1px solid black;">
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:18%;height:25px;font-size:13px;">{!bk.Opportunity__r.Name}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bk.Booking__r.Booking_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Booking__r.Unit_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!AVValueStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!CgstStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!SgstStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                    </tr>
+                                    </apex:repeat>
+                                    <tr>
+                                        <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="12">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel rendered="{!showigst && istaxapplicable}">
+                                <table style="width:100%;border-collapse: collapse;">
+                                    <tr>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:18%;height:25px;font-size:11px">Customer Name </th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">IGST 18%</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                    </tr>
+                                    <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="bk" >
+                                    <tr style="border:1px solid black;">
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:18%;height:25px;font-size:13px;">{!bk.Opportunity__r.Name}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bk.Booking__r.Booking_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Booking__r.Unit_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!AVValueStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.Brokerage__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!IgstStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                    </tr>
+                                    </apex:repeat>
+                                    <tr>
+                                        <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="11">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                            
+                        
+                            <apex:outputPanel rendered="{!istaxapplicable == false}">
+                                <table style="width:100%;border-collapse: collapse;">
+                                    <tr>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:18%;height:25px;font-size:11px">Customer Name </th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                    </tr>
+                                    <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="bk" >
+                                    <tr style="border:1px solid black;">
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:18%;height:25px;font-size:13px;">{!bk.Opportunity__r.Name}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bk.Booking__r.Booking_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Booking__r.Unit_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!AVValueStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                    </tr>
+                                    </apex:repeat>
+                                    <tr>
+                                        <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="10">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        <!--</apex:repeat>-->
+                    
+                    </apex:outputPanel> 
+                                        
+                    <apex:outputPanel rendered="{!Additional}">   
+                        
+                        <!--<apex:repeat value="{!bklist}" var="bk" >-->
+                        
+                        <apex:outputPanel rendered="{!showgst && istaxapplicable}">
+                            <table style="width:100%;border-collapse: collapse;">
+                                <tr>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:18%;height:25px;font-size:11px">Customer Name </th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CGST @ 9%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">SGST @ 9%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                </tr>
+                                <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="bk" >
+                                    <tr style="border:1px solid black;">
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:18%;height:25px;font-size:13px;">{!bk.Opportunity__r.Name}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bk.Booking__r.Booking_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Booking__r.Unit_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!bk.Total_Agreement_Value__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage_In_Rs__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.CGST__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!bk.SGST__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Invoice_Amount__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                    </tr>
+                                </apex:repeat>
+                                <tr style="border:1px solid black;">
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">Total</td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;"></td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;"></td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!AVValueStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"></td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!BrokerageAmtStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!CgstStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!SgstStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!TotalwithTaxStr}</td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="12">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                </tr>
+                            </table> 
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel rendered="{!showigst && istaxapplicable}">
+                            <table style="width:100%;border-collapse: collapse;">
+                                <tr>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:18%;height:25px;font-size:11px">Customer Name </th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">IGST 18%</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                    <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                </tr>
+                                <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="bk" >
+                                    <tr style="border:1px solid black;">
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:18%;height:25px;font-size:13px;">{!bk.Opportunity__r.Name}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bk.Booking__r.Booking_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Booking__r.Unit_Number__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!bk.Total_Agreement_Value__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage_In_Rs__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.IGST__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Invoice_Amount__c}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                    </tr>
+                                </apex:repeat>
+                                <tr style="border:1px solid black;">
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">Total</td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;"></td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;"></td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!AVValueStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"></td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!BrokerageAmtStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!IgstStr}</td>
+                                    <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!TotalwithTaxStr}</td>
+                                    <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="11">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                </tr>
+                            </table> 
+                        </apex:outputPanel>
+                            
+                        <apex:outputPanel rendered="{!istaxapplicable == false}">
+                                <table style="width:100%;border-collapse: collapse;">
+                                    <tr>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;width:18%;height:25px;font-size:11px">Customer Name </th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Booking Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Tower - Unit No</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Final AV Value</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage %</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Brokerage Amount</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                        <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                    </tr>
+                                    <apex:repeat value="{!inv.Brokerage_Invoices__r}" var="bk" >
+                                        <tr style="border:1px solid black;">
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;width:18%;height:25px;font-size:13px;">{!bk.Opportunity__r.Name}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!bk.Booking__r.Booking_Date__c}" /> </apex:outputText></td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Booking__r.Unit_Number__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!bk.Total_Agreement_Value__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Brokerage_In_Rs__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!bk.Invoice_Amount__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                    <tr style="border:1px solid black;">
+                                        <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">Total</td>
+                                        <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;"></td>
+                                        <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;"></td>
+                                        <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                        <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!AVValueStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"></td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!BrokerageAmtStr}</td>
+                                        <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;font-weight: bold;">{!TotalwithTaxStr}</td>
+                                        <td style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="10">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                            <!--</apex:repeat>-->
+                        
+                    </apex:outputPanel> 
+                    
+                    
+                <apex:outputPanel rendered="{!Kicker}">    
+                    <div>
+                        <br/>
+                        <apex:repeat value="{!KickerScheme}" var="ksch" rows="1">
+                            <table style="width:50%;border-collapse: collapse;border:1px solid black;">
+                                <tr>
+                                    <td Style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">Kicker Incentive</td>
+                                    <td Style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">{!ksch.Name}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Start Date</td>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!ksch.Start_Date__c}" /> </apex:outputText></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">End Date</td>
+                                    <td Style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!ksch.End_Date__c}" /> </apex:outputText></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <br/>
+                        </apex:repeat>
+                        
+                        <apex:repeat value="{!ChannelPartner}" var="cp" rows="1">
+                            <apex:repeat value="{!bklist}" var="bk" rows="1">
+                                <apex:outputPanel rendered="{!showgst && istaxapplicable}">
+                                    <table style="width:100%;border-collapse: collapse;">
+                                        <tr>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height: 31px;font-size:11px">CP Name </th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height: 31px;font-size:11px">Brokerage Amount</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height: 31px;font-size:11px">CGST @ 9%</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height: 31px;font-size:11px">SGST @ 9%</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height: 31px;font-size:11px">Total Brokerage</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                        </tr>
+                                        <tr>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height: 31px;font-size:13px;">{!cp.Name}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height: 31px;font-size:13px">{!BrokerageAmtStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height: 31px;font-size:13px">{!CgstStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height: 31px;font-size:13px;">{!SgstStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height: 31px;font-size:13px">{!TotalwithTaxStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                        </tr>
+                                        <tr>
+                                            <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height: 31px;font-size:13px" colspan="8">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                        </tr>
+                                    </table> 
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!showigst && istaxapplicable}">
+                                    <table style="width:100%;border-collapse: collapse;">
+                                        <tr>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">CP Name </th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Amount</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">IGST 18%</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Eligible for GST</th>
+                                        </tr>
+                                        <tr>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!cp.Name}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!IgstStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!inv.If_GST_is_applicable__c}</td>
+                                        </tr>
+                                        <tr>
+                                            <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="7">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                        </tr>
+                                    </table> 
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!istaxapplicable == false}">
+                                    <table style="width:100%;border-collapse: collapse;">
+                                        <tr>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Customer Name </th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Invoice No</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:10.6px;font-size:11px">Invoice Date</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Amount</th>
+                                            <th Style="text-align:center;background-color:#e6e6ff;border:1px solid black;height:25px;font-size:11px">Total Brokerage</th>
+                                        </tr>
+                                        <tr>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!cp.Name}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px;">{!inv.Invoice_Number__c}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px"><apex:outputText value="{0,date,dd/MM/yy}"> <apex:param value="{!inv.Invoice_Date__c}" /> </apex:outputText></td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                                            <td Style="text-align:center;border-left:1px solid black;border-right:1px solid black;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td Style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;height:30px;font-size:13px" colspan="5">Amount in Words :{!NoToWord}&nbsp;Only</td>
+                                        </tr>
+                                    </table> 
+                                </apex:outputPanel>
+                            </apex:repeat>
+                        </apex:repeat>
+                    </div>
+                </apex:outputPanel> 
+                    
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                <br/>
+                <table id="main" border="0" width="50%" border-collapse="collapse">
+                    <tr><td>Regards,</td></tr>
+                    <tr><td>Runwal Group</td></tr>
+                </table>
+            </apex:repeat>
+        </apex:outputPanel>
+    </body>
+</apex:component>

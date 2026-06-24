@@ -29,13 +29,19 @@ public class WhatsAppMSGForNewLeadTriggerHandler implements Queueable, Database.
         templateName = objMeta.RW_element_name__c;
         
         // Query leads
-        List<Lead> lstLeads = [SELECT Id, Name, RW_Mobile_No__c, RW_Project__r.Name, RW_Project__r.RW_LocalityName__c 
+        List<Lead> lstLeads = [SELECT Id, Name, RW_Mobile_No__c, RW_Project__r.Name, RW_Project__r.RW_LocalityName__c, Owners_Team__c,LeadSource
                                FROM Lead 
                                WHERE Id IN :leadIds];
         system.debug('lstLeads>>>>>' +lstLeads);
         Http http = new Http();
-        
+        List<Id> digitalLeadIds = new List<Id>(); //Added by Vinay 26-09-2025
         for (Lead objLead : lstLeads) {
+            
+            
+            
+            //if(objLead.Owners_Team__c == 'Presales' || objLead.LeadSource == 'Channel Partner'){ // Added if condition by Vinay 18-07-2025
+                
+            
             if (String.isBlank(objLead.RW_Mobile_No__c)) {
                 System.debug('Skipping lead ' + objLead.Id + ' due to missing mobile number.');
                 continue;
@@ -83,8 +89,18 @@ public class WhatsAppMSGForNewLeadTriggerHandler implements Queueable, Database.
                 System.debug('Welcome Lead Email::::::');
             } catch (Exception e) {
                 System.debug('Error sending WhatsApp message: ' + e.getMessage());
+            }finally{
+                if(objLead.LeadSource == 'Digital'){ //Added by Vinay 26-09-2025
+                    digitalLeadIds.add(objLead.Id);
+                }
             }
+        //}
         }        
+        System.debug('digitalLeadIds: ' + digitalLeadIds);
+        if(digitalLeadIds.size() > 0){ //Added by Vinay 26-09-2025
+            System.debug('digitalLeadIds: ' + digitalLeadIds);
+            system.enqueuejob(new DigitalLeadAssignment(digitalLeadIds));
+        }
     }
     
   /*  @future(callout=true)

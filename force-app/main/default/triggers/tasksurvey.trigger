@@ -1,5 +1,6 @@
 trigger tasksurvey on Task (After insert,After update) 
 {
+    
     list<Opportunity> opplist = new List<opportunity>();
     list<Opportunity> o =  new List<opportunity>();
     set <id> taskset = new set <id>();
@@ -14,6 +15,20 @@ trigger tasksurvey on Task (After insert,After update)
     Map<id,id> idsMap = new Map<id,id>(); 
     string siteVisitType = '';
     string salesMangerId = '';
+    
+    //Added by Prashant to bypass trigger in prod. /////// 19-05-25.
+    ByPassTriggers__mdt[] byPasstrigMappings = [SELECT Id,Label, ByPassTrigger__c,Object_Name__c FROM ByPassTriggers__mdt];
+    Boolean byPassTriggerExceution = false;
+    for(ByPassTriggers__mdt bypass : byPasstrigMappings)
+    {
+        if(bypass.Object_Name__c == 'Task' && bypass.ByPassTrigger__c)
+        {
+            byPassTriggerExceution = true;
+        }
+    }
+    
+    if(!byPassTriggerExceution)
+    {
     
     if(Trigger.isUpdate || trigger.isInsert) 
     {
@@ -250,5 +265,5 @@ trigger tasksurvey on Task (After insert,After update)
             
    
                   }*/
-    
+    }
 }

@@ -10,8 +10,7 @@ ISBLANK(Next_Action_Date__c),
 				/*Added by Prashant to avoid the validation for Revisit-- START*/
 				NOT(Revisit__c) ,
 				/*Added by Prashant to avoid the validation for Revisit-- END*/
-$Profile.Name !=&apos;System Administrator&apos;,
-$Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/
+$Profile.Name !=&apos;System Administrator&apos;
 )</errorConditionFormula>
     <errorMessage>Please enter next action date</errorMessage>
 </ValidationRule>

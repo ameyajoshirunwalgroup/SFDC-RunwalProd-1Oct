@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Attended_CP_Count__c</fullName>
+    <label>Attended CP Count</label>
+    <summaryFilterItems>
+        <field>CampaignMember.Is_Attended__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryForeignKey>CampaignMember.CampaignId</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <type>Summary</type>
+</CustomField>

@@ -2,9 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Puzzle_Car_Park_Available__c</fullName>
     <externalId>false</externalId>
-    <formula>Puzzle_Car_Park_Total__c - ( Puzzle_Car_Park_Booked__c + Puzzle_Car_Park_Sold__c )</formula>
+    <formula>Puzzle_Car_Park_Total__c - ( Puzzle_Car_Park_Booked__c + Puzzle_Car_Park_Sold__c +Puzzle_Car_Park_Earmarked_Available__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Puzzle Car Park (Available)</label>
+    <label>Puzzle Car Park Additional (Available)</label>
     <precision>18</precision>
     <required>false</required>
     <scale>0</scale>

@@ -24,7 +24,7 @@ public class LoanDisbTrgHandler {
     if (loanIds.isEmpty()) return;
 
     // Step 1: Fetch Loans with Project + Bank
-    Map<Id, Loan__c> loanMap = new Map<Id, Loan__c>([ SELECT Id, RW_Bank_Preference_1__c, RW_Project_Name__c,RW_Project_Name__r.RDS_Company_Code__c
+    Map<Id, Loan__c> loanMap = new Map<Id, Loan__c>([ SELECT Id, RW_Bank_Name__c,RW_Bank_Preference_1__c, RW_Project_Name__c,RW_Project_Name__r.RDS_Company_Code__c
                                                       FROM Loan__c WHERE Id IN :loanIds and Home_Loan_Taken_From__c = 'Runwal']);
 
     // Step 2: Collect Legal Entities & Banks (bank is text field)
@@ -35,8 +35,8 @@ public class LoanDisbTrgHandler {
         if (loanRec.RW_Project_Name__c != null && loanRec.RW_Project_Name__r.RDS_Company_Code__c != null) {
             legalEntityIds.add(loanRec.RW_Project_Name__r.RDS_Company_Code__c);
         }
-        if (loanRec.RW_Bank_Preference_1__c != null) {
-            bankNames.add(loanRec.RW_Bank_Preference_1__c);
+        if (loanRec.RW_Bank_Name__c != null) {
+            bankNames.add(loanRec.RW_Bank_Name__c);
         }
     }
 
@@ -57,8 +57,8 @@ public class LoanDisbTrgHandler {
     Decimal oneCR = 10000000;
     for (Loan_Disbursement_Details__c ld : newList) {
         Loan__c loanRec = loanMap.get(ld.Loan__c);
-        if (loanRec!=null && loanRec.RW_Project_Name__r.RDS_Company_Code__c != null && loanRec.RW_Bank_Preference_1__c != null){
-        	String key = loanRec.RW_Project_Name__r.RDS_Company_Code__c + '_' + loanRec.RW_Bank_Preference_1__c;
+        if (loanRec!=null && loanRec.RW_Project_Name__r.RDS_Company_Code__c != null && loanRec.RW_Bank_Name__c != null){
+        	String key = loanRec.RW_Project_Name__r.RDS_Company_Code__c + '_' + loanRec.RW_Bank_Name__c;
         	List<APF__c> slabs = apfMap.get(key);
         	if (slabs == null) continue;
         	List<APF__c> matches = new List<APF__c>();

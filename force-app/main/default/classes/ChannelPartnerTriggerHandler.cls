@@ -294,5 +294,114 @@ update bb;*/
     }
     //Added by Prashant ../// 21-08-25 End
     
+    //Added by Prashant 06-10-2025. Start
+    public static void createTempCPTasks(list<Broker__c> tempcplist){
+        list<Task> tlist = new list<Task>();
+        Id cpRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        for(Broker__c bk : tempcplist){
+            Task t = new Task();
+            t.WhatId = bk.id;
+            t.OwnerId = bk.OwnerId;
+            Date todayDate = System.today();
+            DateTime createTime = DateTime.now();                
+            t.ActivityDate = system.today().addDays(15);                    
+            t.Status = 'In-progress';
+            String subject = 'Temporary CP Registration Pending – '+ bk.Name;
+            t.Subject = subject;
+            //t.Task_Type__c = '';
+            t.Type = 'Other';
+            t.Task_Type__c = 'CP Call';
+            t.RecordTypeId = cpRecordTypeId;
+            t.Priority = 'Normal';                    
+            String nbody1 = 'Kindly ensure that the registration is completed at the earliest to avoid delays in onboarding, payment, or portal access.\nRegards,';
+            t.Description = nbody1; 
+            t.ReminderDateTime = System.now();
+            t.IsReminderSet = true; 
+            tlist.add(t);
+        }
+        if(!tlist.isEmpty()){
+            Database.SaveResult[] wiList = Database.insert(tlist, false);
+
+            for(Database.SaveResult sr : wiList){
+                if(!sr.isSuccess()){
+                    for(Database.Error err : sr.getErrors()){
+                        System.debug(err.getStatusCode() + ':' + err.getMessage());
+                    }
+                }
+            }
+        }
+    }
+    //Added by Prashant 06-10-2025. End
+    
+    
+    @AuraEnabled
+    public static Map<Id, String> checkDuplicateCPs(List<Broker__c> brokers) {
+        Map<Id, String> resultMap = new Map<Id, String>();
+        if (brokers == null || brokers.isEmpty()) {
+            return resultMap;
+        }
+        
+        // Step 1: Collect all mobile, email, and PAN values from input brokers
+        Set<String> mobileSet = new Set<String>();
+        Set<String> emailSet = new Set<String>();
+        Set<String> panSet = new Set<String>();
+        
+        for (Broker__c bk : brokers) {
+            if (bk.RW_Mobile_No__c != null) mobileSet.add(bk.RW_Mobile_No__c);
+            if (bk.RW_Email__c != null) emailSet.add(bk.RW_Email__c);
+            if (bk.Broker_Pan_No__c != null) panSet.add(bk.Broker_Pan_No__c);
+        }
+        
+        // Step 2: Query existing brokers with any of the same mobile/email/PAN (excluding current ones)
+        List<Broker__c> existing = [
+            SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
+            FROM Broker__c
+            WHERE (
+                (RW_Mobile_No__c IN :mobileSet AND RW_Mobile_No__c != null)
+                OR (RW_Email__c IN :emailSet AND RW_Email__c != null)
+                OR (Broker_Pan_No__c IN :panSet AND Broker_Pan_No__c != null)
+            )
+        ];
+        
+        // Step 3: For faster lookups, create maps by unique fields
+        Map<String, Broker__c> mobileMap = new Map<String, Broker__c>();
+        Map<String, Broker__c> emailMap = new Map<String, Broker__c>();
+        Map<String, Broker__c> panMap = new Map<String, Broker__c>();
+        
+        for (Broker__c e : existing) {
+            if (e.RW_Mobile_No__c != null) mobileMap.put(e.RW_Mobile_No__c, e);
+            if (e.RW_Email__c != null) emailMap.put(e.RW_Email__c, e);
+            if (e.Broker_Pan_No__c != null) panMap.put(e.Broker_Pan_No__c, e);
+        }
+        
+        // Step 4: Compare each input broker with existing
+        for (Broker__c bk : brokers) {
+            if (bk == null) continue;
+            
+            Broker__c byMobile = bk.RW_Mobile_No__c != null ? mobileMap.get(bk.RW_Mobile_No__c) : null;
+            Broker__c byEmail = bk.RW_Email__c != null ? emailMap.get(bk.RW_Email__c) : null;
+            Broker__c byPan = bk.Broker_Pan_No__c != null ? panMap.get(bk.Broker_Pan_No__c) : null;
+            
+            Boolean mobileMatch = byMobile != null && byMobile.Id != bk.Id;
+            Boolean emailMatch = byEmail != null && byEmail.Id != bk.Id;
+            Boolean panMatch = byPan != null && byPan.Id != bk.Id;
+            
+            if (mobileMatch || emailMatch || panMatch) { 
+                String msg = 'Duplicate exists with ';
+                List<String> matches = new List<String>();
+                
+                if (mobileMatch) matches.add('Mobile: ' + bk.RW_Mobile_No__c);
+                if (panMatch) matches.add('PAN: ' + bk.Broker_Pan_No__c);
+                if (emailMatch) matches.add('Email: ' + bk.RW_Email__c);
+                
+                msg += String.join(matches, ' and ');
+                resultMap.put(bk.Id, msg);
+            }
+        }
+        
+        return resultMap;
+    }
+    
+    
     
 }

@@ -24,10 +24,11 @@
         "discussionsTabLabel" : "Feed",
         "recordId" : "{!recordId}",
         "relatedTabLabel" : "Related",
+        "showLegacyActivityComposer" : true,
         "tab1Type" : "details",
-        "tab2Type" : "related",
-        "tab3Type" : "chatter",
-        "tab4Type" : "none",
+        "tab2Type" : "none",
+        "tab3Type" : "none",
+        "tab4Type" : "related",
         "timelineTabLabel" : "Activity"
       },
       "componentName" : "forceCommunity:recordHomeTabs",
@@ -40,6 +41,23 @@
     "regionName" : "content",
     "type" : "region"
   }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "accept" : ".csv,.doc,.xsl,.pdf,.png,.jpg,.jpeg,.docx,.doc",
+        "recordId" : "{!recordId}",
+        "showDetails" : true,
+        "showFileUpload" : true,
+        "showFilters" : true,
+        "showsync" : true,
+        "title" : "Content Manager",
+        "usedInCommunity" : true
+      },
+      "componentName" : "c:showAttachements",
+      "id" : "b4b45d38-e528-4140-99cf-057359e4545b",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
     "id" : "b548fc9a-5527-4036-b8b3-732007498be0",
     "regionName" : "footer",
     "type" : "region"

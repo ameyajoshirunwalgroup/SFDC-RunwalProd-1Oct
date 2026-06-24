@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Survey Link for Customer after Site Visit is Done</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Survey Notification After Site Visit</name>
+    <style>none</style>
+    <subject>Site Visit Feedback Survey - Runwal Homes</subject>
+    <textOnly>Dear {!Survey__c.Account_Name__c},
+
+Thank you for taking the time to visit us at {!Survey__c.Project__c}.
+
+We hope that your visit was a pleasant one. In our quest to improve our services we would like to know your views on what you liked and what needs to improve at the {!Survey__c.Project__c} site. You are requested to please fill in this quick feedback form that will help us improve the experience at your next visit.
+
+The feedback form can be accessed at the link blow:
+
+{!Survey__c.Survey_Link__c}
+
+Looking forward to your valuable feedback and hoping to see you as a customer with us soon.
+
+Warm regards,
+Team {!Survey__c.Project__c}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -7,7 +7,7 @@ public class MobileAppControllerTest {
         UserRole objRole=new UserRole(Name= 'ABC'); 
 		insert objRole;
         
-		Profile p = [Select Id, Name from Profile where Name = 'System Administrator'];
+		//Profile p = [Select Id, Name from Profile where Name = 'System Administrator'];
         String orgId = UserInfo.getOrganizationId();
         String dateString = String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
         Integer randomInt = Integer.valueOf(math.rint(math.random()*1000000));
@@ -21,13 +21,14 @@ public class MobileAppControllerTest {
                                 TimeZoneSidKey = 'America/Los_Angeles',
                                 LocaleSidKey = 'en_US',
                                 LanguageLocaleKey = 'en_US',
-                                ProfileId = p.id,
+                                ProfileId = System.label.System_Administrator_Profile_Id,
                               	UserRoleId = objRole.Id
                                 );
         insert tuser;
         
-        List<User> u1 = [Select id from User where firstname='TestUser'];
-        system.runAs(u1[0]){
+        //List<User> u1 = [Select id from User where firstname='TestUser'];
+        //system.runAs(u1[0]){
+        system.runAs(tuser){
             String recordTypeId  = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Person Account').getRecordTypeId();
             Account a = new Account();
             a.RecordTypeID=recordTypeId ;
@@ -141,6 +142,7 @@ public class MobileAppControllerTest {
             oppRec.Sourcing_Manager__c='Aniket Sapre';
             oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
             oppRec.RW_Closing_Head__c='Karthik Chettiar';
             oppRec.Walkin_Source__c='Direct';
             oppRec.SAP_Customer_Number__c='0020006618';
@@ -159,6 +161,7 @@ public class MobileAppControllerTest {
             oppRec1.Sourcing_Manager__c='Aniket Sapre';
             oppRec1.RW_Sourcing_Head__c='Adrian Dsouza';
             oppRec1.RW_Sales_Associate__c='Karthik Chettiar';
+            oppRec1.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 05-12-2025
             oppRec1.RW_Closing_Head__c='Karthik Chettiar';
             oppRec1.Walkin_Source__c='Direct';
             oppRec1.SAP_Customer_Number__c='0020006619';
@@ -167,7 +170,7 @@ public class MobileAppControllerTest {
             
             Quotation__c q = new Quotation__c();
             q.Name = 'Q010101';
-            q.Quote_Status__c = 'Valid';
+            q.Quote_Status__c = 'Unit Blocked';
             q.Prepared_Date__c = System.today();
             q.Project__c = objpr.Id;
             q.Project_Unit__c = objPU1.Id;
@@ -580,7 +583,7 @@ public class MobileAppControllerTest {
             RestContext.response = res15;
             CustomerLedgerRest.doGet();
             
-            
+            trgToUpdateOppStageHandler.dummy();
             
             Test.stopTest();
         }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Lifecycle__c</fullName>
+    <label>Customer Lifecycle</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Onboarding Team</fullName>
+                <default>true</default>
+                <label>Onboarding Team</label>
+            </value>
+            <value>
+                <fullName>Sustenance Team</fullName>
+                <default>false</default>
+                <label>Sustenance Team</label>
+            </value>
+            <value>
+                <fullName>Possession Team</fullName>
+                <default>false</default>
+                <label>Possession Team</label>
+            </value>
+            <value>
+                <fullName>Home Loan Team</fullName>
+                <default>false</default>
+                <label>Home Loan Team</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

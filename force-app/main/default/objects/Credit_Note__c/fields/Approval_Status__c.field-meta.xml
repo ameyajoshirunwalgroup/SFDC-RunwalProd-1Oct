@@ -3,7 +3,7 @@
     <fullName>Approval_Status__c</fullName>
     <label>Approval Status</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>
@@ -69,6 +69,31 @@
                 <fullName>Rejected</fullName>
                 <default>false</default>
                 <label>Rejected</label>
+            </value>
+            <value>
+                <fullName>Approved By L1</fullName>
+                <default>false</default>
+                <label>Approved By L1</label>
+            </value>
+            <value>
+                <fullName>Rejected By L1</fullName>
+                <default>false</default>
+                <label>Rejected By L1</label>
+            </value>
+            <value>
+                <fullName>Approved by L2</fullName>
+                <default>false</default>
+                <label>Approved by L2</label>
+            </value>
+            <value>
+                <fullName>Rejected by L2</fullName>
+                <default>false</default>
+                <label>Rejected by L2</label>
+            </value>
+            <value>
+                <fullName>Submitted for L2 Approval</fullName>
+                <default>false</default>
+                <label>Submitted for L2 Approval</label>
             </value>
         </valueSetDefinition>
     </valueSet>

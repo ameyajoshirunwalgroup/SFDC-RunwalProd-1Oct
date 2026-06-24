@@ -77,12 +77,137 @@
                 <label>Critical Retention Effort (Difficult-to-Sell Unit)</label>
             </value>
             <value>
+                <fullName>01</fullName>
+                <default>false</default>
+                <label>Work Incompletion</label>
+            </value>
+            <value>
+                <fullName>02</fullName>
+                <default>false</default>
+                <label>Delay in documentation</label>
+            </value>
+            <value>
+                <fullName>04</fullName>
+                <default>false</default>
+                <label>Job loss</label>
+            </value>
+            <value>
+                <fullName>06</fullName>
+                <default>false</default>
+                <label>Bereavement</label>
+            </value>
+            <value>
+                <fullName>07</fullName>
+                <default>false</default>
+                <label>Delay in credit notes</label>
+            </value>
+            <value>
+                <fullName>08</fullName>
+                <default>false</default>
+                <label>Customer Cancelled</label>
+            </value>
+            <value>
+                <fullName>10</fullName>
+                <default>false</default>
+                <label>Extension of payment</label>
+            </value>
+            <value>
+                <fullName>11</fullName>
+                <default>false</default>
+                <label>Change in payment plan</label>
+            </value>
+            <value>
+                <fullName>12</fullName>
+                <default>false</default>
+                <label>Special Interest Waiver</label>
+            </value>
+            <value>
+                <fullName>13</fullName>
+                <default>false</default>
+                <label>Less than 50K</label>
+            </value>
+            <value>
+                <fullName>14</fullName>
+                <default>false</default>
+                <label>Taxes Mismatch</label>
+            </value>
+            <value>
+                <fullName>24</fullName>
+                <default>false</default>
+                <label>Approval related</label>
+            </value>
+            <value>
+                <fullName>25</fullName>
+                <default>false</default>
+                <label>Bank Delay</label>
+            </value>
+            <value>
+                <fullName>26</fullName>
+                <default>false</default>
+                <label>Conditional Sale of Property</label>
+            </value>
+            <value>
+                <fullName>27</fullName>
+                <default>false</default>
+                <label>Financial constraints</label>
+            </value>
+            <value>
+                <fullName>28</fullName>
+                <default>false</default>
+                <label>Delay in Funds transfer</label>
+            </value>
+            <value>
+                <fullName>29</fullName>
+                <default>false</default>
+                <label>Construction mismatch</label>
+            </value>
+            <value>
+                <fullName>30</fullName>
+                <default>false</default>
+                <label>Aggressive payment plan</label>
+            </value>
+            <value>
+                <fullName>31</fullName>
+                <default>false</default>
+                <label>Miscommunication during Sales</label>
+            </value>
+            <value>
+                <fullName>32</fullName>
+                <default>false</default>
+                <label>Delay in payment due to Unit not ready</label>
+            </value>
+            <value>
+                <fullName>33</fullName>
+                <default>false</default>
+                <label>Delay in Book Now by Sales</label>
+            </value>
+            <value>
+                <fullName>34</fullName>
+                <default>false</default>
+                <label>Delay in ROC</label>
+            </value>
+            <value>
+                <fullName>35</fullName>
+                <default>false</default>
+                <label>SDR payment release for Registration</label>
+            </value>
+            <value>
+                <fullName>36</fullName>
+                <default>false</default>
+                <label>Delay in NOC issuance by Society (for sale of RTMI units</label>
+            </value>
+            <value>
                 <fullName>Delayed</fullName>
                 <default>false</default>
                 <isActive>false</isActive>
                 <label>Delayed</label>
             </value>
         </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <controllingFieldValue>Customer Delay</controllingFieldValue>
+            <valueName>05</valueName>
+        </valueSettings>
         <valueSettings>
             <controllingFieldValue>Runwal Delay</controllingFieldValue>
             <controllingFieldValue>Customer Delay</controllingFieldValue>
@@ -110,6 +235,58 @@
             <valueName>23</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>02</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>07</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>11</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>24</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>28</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>29</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>30</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>31</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>32</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>33</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>34</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>35</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Runwal Delay</controllingFieldValue>
+            <valueName>36</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Customer Delay</controllingFieldValue>
             <valueName>15</valueName>
         </valueSettings>
@@ -123,10 +300,6 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Customer Delay</controllingFieldValue>
-            <valueName>05</valueName>
-        </valueSettings>
-        <valueSettings>
-            <controllingFieldValue>Customer Delay</controllingFieldValue>
             <valueName>17</valueName>
         </valueSettings>
         <valueSettings>
@@ -136,6 +309,22 @@
         <valueSettings>
             <controllingFieldValue>Customer Delay</controllingFieldValue>
             <valueName>19</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Delay</controllingFieldValue>
+            <valueName>04</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Delay</controllingFieldValue>
+            <valueName>25</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Delay</controllingFieldValue>
+            <valueName>26</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Delay</controllingFieldValue>
+            <valueName>27</valueName>
         </valueSettings>
     </valueSet>
 </CustomField>

@@ -92,8 +92,9 @@ public class CallCustomerOfflineController {
         }
         
         List<User> uList = [Select Id, CTI_Agent_ID__c,	DID__c,Offline_Agent_Name__c, Campaign_name__c, api_key__c,Ozontel_UserName__c, Schedule_Campaign_Name__c, Profile.Name, Backup_Campaign__c, Tata_CTI_Agent_Number__c, International_Campaign__c, International_DID__c From User Where Id = :UserInfo.getUserId()];
+        Boolean agentLogin = false; //Added by Vinay 22-04-2026
         if(uList != null && !uList.isEmpty()) {
-            
+            agentLogin = Ozonetel_AgentLoginCheck.agentLoginCheck(uList[0].CTI_Agent_ID__c); //Added by Vinay 22-04-2026
             if(System.label.Conditional_Campaign_Assignment == 'true'){
                 List<String> profilesList = new List<String>{'Relationship Manager','Team Leader'};
                     //if(uList[0].Profile.Name == 'Relationship Manager' || uList[0].Profile.Name == 'Team Leader'){

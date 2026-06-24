@@ -17,6 +17,7 @@ public class RWCaseTriggerHandler
         // Method will be called to handle After Insert events
         if (Trigger.isAfter && Trigger.isInsert)
         {
+            
             onAfterInsert((list<Case>) trigger.new, (map<id, Case>) trigger.OldMap);
         }
         
@@ -28,15 +29,16 @@ public class RWCaseTriggerHandler
             
         }
         
-        if (Trigger.isAfter && Trigger.isUpdate) 
+        /*if (Trigger.isAfter && Trigger.isUpdate) 
         {
             onAfterUpdate((list<Case>) trigger.new, (map<id, Case>) trigger.OldMap);
             
-        }
+        }*/
         
     }
     public void onBeforeInsert(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
     {
+        
         updateProjectWeb(lstTriggerNew);
         updateProjectField(lstTriggerNew,mapTriggerOld);   
         //updateOwnerByRMSelected(lstTriggerNew, null);
@@ -45,14 +47,38 @@ public class RWCaseTriggerHandler
         updateEntitlementOnCase(lstTriggerNew, null);
         caseownerUpdateForsingleOppo(lstTriggerNew, null);
         updatecasestatus(lstTriggerNew);
-        updateAccountId(lstTriggerNew); //Added by coServe 28-12-2023
+        //updateAccountId(lstTriggerNew); //Added by coServe 28-12-2023
+        accIdOppIdTaggingForEmailCases(lstTriggerNew);
         //updateOwnersfieldonCase(lstTriggerNew,mapTriggerOld);
         updateEscalationTAT(lstTriggerNew, null); // Added by coServe 13-11-2024
         updateRMNameasOwnerforWalkinCases(lstTriggerNew);
         //LocobuzzCaseAssignment.assignToProjectSpoc(lstTriggerNew); // Added by Vinay 16-01-2025
-        assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 07-03-2025
-        checkForCancelledCustomer(lstTriggerNew); //Added by Vinay 10-06-2025
+        //assigneOwnerPostPossession(lstTriggerNew); //Added by Vinay 07-03-2025
+        checkForCancelledCustomer(lstTriggerNew); //Added by Vinay 04-04-2025
         //changeOwnerFromSysAdminToRM(lstTriggerNew); //Added by Vinay 18-04-2025 to reassign the owner from System Admin to RM
+        
+    }
+    
+    public static void ownerAssignment(List<Case> caseList){
+        List<Id> oppIds = new List<Id>();
+        for(Case cs : caseList){
+            if(cs.Opportunity__c != null){
+                oppIds.add(cs.Opportunity__c);
+            }
+        }
+        if(oppIds != null){
+            Map<Id,Opportunity> oppMap = new Map<Id, Opportunity>([SELECT Id,Booking__c,Booking__r.RW_Key_handover_date__c FROM Opportunity WHERE Id =: oppIds]);
+            for(Case cs : caseList){
+                
+                if(cs.Opportunity__c != null && oppMap.get(cs.Opportunity__c).Booking__c != null && oppMap.get(cs.Opportunity__c).Booking__r.RW_Key_handover_date__c != null){
+                    if(cs.CreatedDate > (oppMap.get(cs.Opportunity__c).Booking__r.RW_Key_handover_date__c + 90)){
+                        cs.OwnerId = System.label.Default_Facility_Management_User;
+                        cs.FM_Team_Assigned__c = true; 
+                    }
+                }
+            }
+        }
+        
     }
 
     //Added by Vinay 18-04-2025 Start
@@ -78,7 +104,7 @@ public class RWCaseTriggerHandler
     }*/
     //Added by Vinay 18-04-2025 End
     
-    public void checkForCancelledCustomer(list<Case> lstCase){ //Added by Vinay 10-06-2025
+    public void checkForCancelledCustomer(list<Case> lstCase){ //Added by Vinay 04-04-2025
         Map<Id,Id> caseIdVsAccId = new Map<Id, Id>();
         Set<Id> accIds = new Set<Id>();
         Set<Id> oppIds = new Set<Id>();
@@ -99,19 +125,32 @@ public class RWCaseTriggerHandler
                     Integer oppCount = accMap.get(cs.AccountId).Opportunities.size();
                     Integer cancelledOppCount = 0;
                     for(Opportunity opp : accMap.get(cs.AccountId).Opportunities){
-                        if(opp.StageName == 'Cancelled')
+                        if(opp.StageName == 'Cancelled'){
                             cancelledOppCount += 1;
+                            //cs.addError('Case can not be created for Cancelled Customer');
+                        }
                     }
-                    if(oppCount == cancelledOppCount)
+                    System.debug('oppCount: ' +  oppCount);
+                    System.debug('cancelledOppCount: ' +  cancelledOppCount);
+                    if(oppCount == cancelledOppCount){
+                        //cs.addError('Case can not be created for Cancelled Customer');
                         cs.Stop_Emails__c = true;
+                        //cs.Status = 'Case Closed';
+                        //cs.RW_RM_Remarks__c = 'Cancelled Customer';
+                    }
                 }
+                /*if(accMap.get(cs.AccountId).No_of_Opportunities__c > 0 && accMap.get(cs.AccountId).Active_Opportunities__c == 0){
+                    cs.addError('Case can not be created for Cancelled Customer');
+                }*/
             }
         }
+        
         if(oppIds.size() > 0){
             Map<Id, Opportunity> oppMap = new Map<Id, Opportunity>([SELECT Id, StageName FROM Opportunity WHERE Id =: oppIds]);
             for(Case cs : lstCase){
-                if(cs.Opportunity__c != null && oppMap.get(cs.Opportunity__c).StageName == 'Cancelled')
+                if(cs.Opportunity__c != null && oppMap.get(cs.Opportunity__c).StageName == 'Cancelled'){
                     cs.Stop_Emails__c = true;
+                }
             }
         }
     }
@@ -166,7 +205,8 @@ public class RWCaseTriggerHandler
             List<Case> caseWithOpportunity = new List<Case>();
             List<Id> caseIds = new list<Id>();
             for(Case cs : lstCase){
-                if(cs.Opportunity__c != null && cs.FM_Team_Assigned__c == false && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
+                //if(cs.Opportunity__c != null && cs.FM_Team_Assigned__c == false && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
+                if(cs.Opportunity__c != null && cs.FM_Team_Assigned__c == false){
                     oppIds.add(cs.Opportunity__c);
                     caseWithOpportunity.add(cs);
                     caseIds.add(cs.Id);
@@ -216,24 +256,29 @@ public class RWCaseTriggerHandler
             }
         }
         list<Account> lstAccount = [SELECT Id, RW_Email__c, IsPersonAccount, PersonEmail, PersonContactId, Stop_Case_Emails__c, (SELECT Id, AccountId, StageName, Booking__r.Booking_Date__c, CreatedDate, Booking__r.RW_Key_handover_date__c FROM Opportunities WHERE StageName = 'Unit Booked' ORDER BY Booking__r.Booking_Date__c DESC) FROM Account WHERE PersonEmail =: emailVsCase.keySet() AND IsPersonAccount = true];
+        
         //Added by Prashant to tag Opportunity on case for CRN. 11-2-25 //START
         String OppId;
+        Opportunity firstOpp; // Added by Vinay 09-01-2026
         if (!lstAccount.isEmpty()) {
     		Account acc = lstAccount[0];
     
     		if (!acc.Opportunities.isEmpty()) {
-                Opportunity firstOpp = acc.Opportunities[0];
+                //Opportunity firstOpp = acc.Opportunities[0]; // Commented by Vinay 09-01-2026
+                firstOpp = acc.Opportunities[0]; // Added by Vinay 09-01-2026
         		System.debug('First Opportunity ID: ' + firstOpp.Id);
                 OppId = firstOpp.Id;
             }
         }
+        //Map<String,List<String>> emailVsAccIdOppId = opportunityForEmailCases(lstAccount); //Added by Vinay 23-03-2026
+        
         //Added by Prashant to tag Opportunity on case for CRN. 11-2-25 //END
         Map<String, List<Account>> emailVsAccounts = new Map<String, List<Account>>();
         Map<String, String> accIdVsContId = new Map<String, String>();
-        Map<String, Boolean> accIdVsStopEmails = new Map<String, Boolean>(); //Added by Vinay 10-06-2025
+        Map<String, Boolean> accIdVsStopEmails = new Map<String, Boolean>(); //Added by Vinay 26-05-2025
         for(Account acc : lstAccount){
             accIdVsContId.put(acc.Id, acc.PersonContactId);
-            accIdVsStopEmails.put(acc.Id, acc.Stop_Case_Emails__c); //Added by Vinay 10-06-2025
+            accIdVsStopEmails.put(acc.Id, acc.Stop_Case_Emails__c); //Added by Vinay 26-05-2025
             if(emailVsAccounts.get(acc.PersonEmail) == null){
                 emailVsAccounts.put(acc.PersonEmail, new List<Account>{acc});
             }else{
@@ -260,7 +305,7 @@ public class RWCaseTriggerHandler
                     emailVsCase.get(email).AccountId = accId;
                     emailVsCase.get(email).ContactId = accIdVsContId.get(accId);
                     emailVsCase.get(email).Opportunity__c = OppId;//Added by Prashant - 11-2-25.
-                    emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(accId); //Added by Vinay 10-06-2025
+                    emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(accId); //Added by Vinay 26-05-2025
                 }else if(oppDtVsAccId.keySet().size() > 0){
                     List<Datetime> oppDates = new List<Datetime>(oppDtVsAccId.keySet());
                     oppDates.sort();
@@ -268,40 +313,29 @@ public class RWCaseTriggerHandler
                     emailVsCase.get(email).AccountId = accId;
                     emailVsCase.get(email).ContactId = accIdVsContId.get(accId);
                     emailVsCase.get(email).Opportunity__c = OppId;//Added by Prashant - 11-2-25.
-                    emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(accId); //Added by Vinay 10-06-2025
+                    emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(accId); //Added by Vinay 26-05-2025
                 }
             }else if(emailVsAccounts.get(email).size() == 1){
                 emailVsCase.get(email).AccountId = emailVsAccounts.get(email)[0].Id;
                 emailVsCase.get(email).ContactId = accIdVsContId.get(emailVsAccounts.get(email)[0].Id);
                 emailVsCase.get(email).Opportunity__c = OppId;//Added by Prashant - 11-2-25.
-                emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(emailVsAccounts.get(email)[0].Id); //Added by Vinay 10-06-2025
+                emailVsCase.get(email).Stop_Emails__c = accIdVsStopEmails.get(emailVsAccounts.get(email)[0].Id); //Added by Vinay 26-05-2025
             }
+            //if(firstOpp != null && firstOpp.Booking__r.RW_Key_handover_date__c != null){  // Added by Vinay 09-01-2026  //Commented by Vinay 07-02-2026 to stop the FM team assignment for post possession cases.
+             //   emailVsCase.get(email).Post_Possession_Customer__c = true;
+            //    emailVsCase.get(email).OwnerId = System.label.Default_Facility_Management_User;
+            //    emailVsCase.get(email).FM_Team_Assigned__c = true;
+            //}
+            /*if(emailVsAccIdOppId != null && emailVsAccIdOppId.get(email) != null){  //Added by Vinay 23-03-2026
+                emailVsCase.get(email).AccountId = emailVsAccIdOppId.get(email)[0];
+                emailVsCase.get(email).Opportunity__c = emailVsAccIdOppId.get(email)[1];
+            }*/
         }
         
-        //Added by Vinay 15-01-2025 Start
-        List<Opportunity> opps = [SELECT Id, Name, AccountId, Account.PersonEmail, Booking__r.RW_Key_handover_date__c, RW_RM_Name__c FROM Opportunity WHERE Account.PersonEmail =: emailVsCase.keySet()];
-        Set<String> postPossCustomers = new Set<String>();
-        Map<String, String> rmsMap = new Map<String, String>();
-        for(Opportunity opp : opps){
-            System.debug('postPossCustomers: ' + opp.Name);
-            if(opp.Booking__r.RW_Key_handover_date__c != null){
-                postPossCustomers.add(opp.Account.PersonEmail);
-                rmsMap.put(opp.Account.PersonEmail, opp.RW_RM_Name__c);
-            }
-        }
         
-        Database.DMLOptions options = new Database.DMLOptions(); //Added by Vinay 16-04-2025
-		options.assignmentRuleHeader.useDefaultRule = false; //Added by Vinay 16-04-2025
-        for(Case cs : emailVsCase.values()){
-            if(postPossCustomers.contains(cs.SuppliedEmail) && cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){ // Added cs.Customer_Lifecycle_Touchpoint__c == 'Post-Possession' by Vinay 18-04-2025
-                cs.Post_Possession_Customer__c = true;
-                cs.OwnerId = System.label.Default_Facility_Management_User;
-                cs.FM_Team_Assigned__c = true;
-                //cs.RW_RM_Name__c = null; //Commented to fix the RM Name null issue 17-04-2025 by Vinay
-            }
-        }
-        //Added by Vinay 15-01-2025 End
     }
+    
+    
     
     // Added by Vinay 28-02-2025
     public void updateProjectUnit(list<Case> lstCase){
@@ -315,7 +349,7 @@ public class RWCaseTriggerHandler
         }
         if(accIds.size() > 0){
             Map<String, List<Opportunity>> accVsOppMap = new Map<String, List<Opportunity>>();
-            List<Opportunity> bookedOppList = [SELECT Id, AccountId, RW_Project_Unit__c, RW_Project__c, RW_RM_Name__c, Booking__r.RW_Key_handover_date__c FROM Opportunity WHERE AccountId =: accIds AND StageName = 'Unit Booked' AND RW_Project_Unit__c != null ORDER BY Booking__r.Booking_Date__c DESC];
+            List<Opportunity> bookedOppList = [SELECT Id, AccountId, RW_Project_Unit__c, RW_Project__c, RW_RM_Name__c, Booking__r.RW_Key_handover_date__c, RW_Project_Unit__r.Relationship_Manager__r.user__c FROM Opportunity WHERE AccountId =: accIds AND StageName = 'Unit Booked' AND RW_Project_Unit__c != null ORDER BY Booking__r.Booking_Date__c DESC];
             for(Opportunity opp : bookedOppList){
                 if(accVsOppMap.get(opp.AccountId) != null){
                     accVsOppMap.get(opp.AccountId).add(opp);
@@ -325,13 +359,18 @@ public class RWCaseTriggerHandler
             }
             
             List<Case> caseList = new List<Case>();
-            for(Case c : [SELECT Id, AccountId, RW_Project__c, locobuzz__Locobuzz_ID__c, Post_Possession_Customer__c  FROM Case WHERE Id =: caseIds]){
+            for(Case c : [SELECT Id, AccountId, RW_Project__c, locobuzz__Locobuzz_ID__c, Post_Possession_Customer__c, RW_RM_Name__c, FM_Team_Assigned__c  FROM Case WHERE Id =: caseIds AND Origin != 'Email']){ //Added Origin != 'Email' by Vinay 01-04-2026
                 if(accVsOppMap.get(c.AccountId) != null && accVsOppMap.get(c.AccountId).size() > 0){
                     c.RW_Project_Unit__c = accVsOppMap.get(c.AccountId)[0].RW_Project_Unit__c;
                     c.RW_Project__c = accVsOppMap.get(c.AccountId)[0].RW_Project__c;
                     c.Opportunity__c = accVsOppMap.get(c.AccountId)[0].Id;
-                    if(String.isBlank(c.locobuzz__Locobuzz_ID__c) && !c.Post_Possession_Customer__c){
+                    if(String.isBlank(c.locobuzz__Locobuzz_ID__c) && !c.Post_Possession_Customer__c && c.RW_RM_Name__c == null){  //Added c.RW_RM_Name__c == null by Vinay 19-01-2026
                         c.RW_RM_Name__c = accVsOppMap.get(c.AccountId)[0].RW_RM_Name__c;
+                    }
+                    if(accVsOppMap.get(c.AccountId)[0].Booking__r.RW_Key_handover_date__c == null && c.FM_Team_Assigned__c == true){  // Added by Vinay 12-01-2026
+                        c.Post_Possession_Customer__c = false;
+                        c.OwnerId = accVsOppMap.get(c.AccountId)[0].RW_Project_Unit__r.Relationship_Manager__r.user__c;
+                        c.FM_Team_Assigned__c = false;
                     }
                     caseList.add(c);
                 }
@@ -346,7 +385,7 @@ public class RWCaseTriggerHandler
         list<Id> lstAccIds = new list<Id>();
         Id CustomerId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Customer').getRecordTypeId();
         for(Case objCase : lstCase){
-            if(objCase.AccountId != null && objCase.RecordTypeId == CustomerId){
+            if(objCase.AccountId != null && objCase.RecordTypeId == CustomerId && objCase.Origin != 'Email'){ //Added objCase.Origin != 'Email' by Vinay 01-04-2026
                 lstAccIds.add(objCase.AccountId);
             }
         }
@@ -379,12 +418,12 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         for(Case objCase : lstCase)
         {
             system.debug('#### objCase '+objCase.Id);
-            if(mapOfoppoties.containsKey(objCase.AccountId) && objCase.RecordTypeId == CustomerId && objCase.Origin != 'Walk-in' && !objCase.Post_Possession_Customer__c && (objCase.locobuzz__Locobuzz_ID__c == null || objCase.locobuzz__Locobuzz_ID__c == '')){
+            if(mapOfoppoties.containsKey(objCase.AccountId) && objCase.RecordTypeId == CustomerId && objCase.Origin != 'Walk-in' && !objCase.Post_Possession_Customer__c && (objCase.locobuzz__Locobuzz_ID__c == null || objCase.locobuzz__Locobuzz_ID__c == '') && objCase.Origin != 'Email'){ //Added objCase.Origin != 'Email' by Vinay 01-04-2026
                 List<Opportunity> listOfoppoties = mapOfoppoties.get(objCase.AccountId);
                 system.debug('#### listOfoppoties '+listOfoppoties.size());
                 if(listOfoppoties.size() == 1){//auto email wont go when rm is the case owner?
                     system.debug('listOfoppoties '+listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c);
-                    if(listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c != null){
+                    if(listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c != null && objCase.FM_Team_Assigned__c == false){ //Added objCase.FM_Team_Assigned__c == false by Vinay 07-01-2026
                         system.debug('listOpportunities____Unit Blocked '+listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__c != null);
                         objCase.OwnerId = listOfoppoties[0].RW_Project_Unit__r.Relationship_Manager__r.user__c;
                     }
@@ -394,7 +433,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
     }
     public void onBeforeUpdate(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
     { 
-        checkForCancelledCustomer(lstTriggerNew); //Added by Vinay 10-06-2025
+        checkForCancelledCustomer(lstTriggerNew); //Added by Vinay 29-05-2025
         updateOwnerAsRmOrQueue(lstTriggerNew, mapTriggerOld); //Added by Vinay 21-01-2025
         //updateOwnerByRMSelected(lstTriggerNew, mapTriggerOld); //Commneted by Vinay 21-01-2025
         updateManagerEmail(lstTriggerNew, mapTriggerOld);
@@ -406,10 +445,13 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         //LocobuzzCaseAssignment.assignToProjectSpoc(lstTriggerNew); // Added by Vinay 16-01-2025 //Commented by Vinay 23-04-2025
         updateUnitWhenProjectChanged(lstTriggerNew, mapTriggerOld); // Added by Vinay 03-03-2025
         //assigneOwnerPostPossession(lstTriggerNew,mapTriggerOld); //Added by Vinay 07-03-2025
+        //assigneOwnerPostPossession(lstTriggerNew); //Commented by Vinay 07-02-2026 to stop the FM team assignment for post possession cases.
+        ownerAssignment(lstTriggerNew); //Added by Vinay 10-02-2026
     }
     
-    private void onAfterInsert(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
+    public void onAfterInsert(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
     {
+        
         updateProjectUnit(lstTriggerNew); // Added by Vinay 28-02-2025
         //AutoClosePostPossessionCases.closePostPossessionCase(lstTriggerNew); // Added by Vinay 10-01-2025
         //shareCaseToPortalUser(lstTriggerNew);
@@ -419,12 +461,13 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         //LocobuzzCaseAssignment.assignToProjectSpoc(lstTriggerNew); // Added by Vinay 16-01-2025
         
     }
-    private void onAfterUpdate(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
+    public void onAfterUpdate(list<Case> lstTriggerNew, map<id, Case> mapTriggerOld)
     {
         
         //CreateTask(lstTriggerNew, mapTriggerOld);  //Commented by Vinay 04-05-2025 to stop multiple tasks creation
         updateTaskOwner(lstTriggerNew, mapTriggerOld);
         List<String> projectChangedCaseIds = new List<String>();
+        List<Id> oppUpdatedCaseIds = new List<Id>(); //Added by Vinay 27-11-2025
         if(checkRecursion.isFirstRun()){ 
             for(Case objCase : lstTriggerNew){
                 if(objCase.Status != 'Case Closed'){
@@ -433,7 +476,23 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 if(objCase.RW_Project__c != mapTriggerOld.get(objCase.Id).RW_Project__c){
                     projectChangedCaseIds.add(objCase.Id);
                 }
+                if(objCase.Opportunity__c != null && mapTriggerOld.get(objCase.Id).Opportunity__c != objCase.Opportunity__c){ //Added by Vinay 27-11-2025
+                    oppUpdatedCaseIds.add(objCase.Id);
+                }
             }
+            
+            //Added by Vinay 27-11-2025 Start
+			System.debug('oppUpdatedCaseIds: ' + oppUpdatedCaseIds);
+            if(oppUpdatedCaseIds.size() > 0){
+                //Commented by Vinay 07-02-2026 to stop the FM team assignment for post possession cases.
+                /*List<Case> cases = [SELECT Id,Opportunity__c,Opportunity__r.Booking__c,Opportunity__r.Booking__r.RW_Key_handover_date__c FROM Case WHERE Id =: oppUpdatedCaseIds AND Opportunity__r.Booking__r.RW_Key_handover_date__c != null AND FM_Team_Assigned__c = false];
+                for(Case cs : cases){
+                    cs.OwnerId = System.label.Default_Facility_Management_User;
+                    cs.FM_Team_Assigned__c = true;
+                }
+                update cases;*/
+            }
+            //Added by Vinay 27-11-2025 End
             
            // sendWhatsAppFeedbackLink(lstTriggerNew,mapTriggerOld); // Added by coServe 30-10-2023
         }
@@ -948,8 +1007,8 @@ objCase.RW_Reporting_4_Email__c = mapOfUser.get(objCase.ownerId).manager.manager
         
         System.debug('#### lstAccIds '+lstAccIds);
         // Added by Mounika - Complaint Module - FRD-4
-        List<Account> listOfAccs = [Select Id, Stop_Case_Emails__c, (Select Id,RW_Project_Unit__r.Relationship_Manager__r.user__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.RM_Email__c,StageName, Account.Stop_Case_Emails__c 
-                                               From Opportunities where StageName = 'Unit Booked') FROM Account  Where Id IN: lstAccIds]; 
+        List<Account> listOfAccs = [Select Id, Stop_Case_Emails__c, (Select Id,RW_Project_Unit__r.Relationship_Manager__r.user__c,RW_Project_Unit__r.Relationship_Manager__c,RW_Project_Unit__r.Relationship_Manager__r.RM_Email__c,StageName, Account.Stop_Case_Emails__c
+                                               From Opportunities where StageName = 'Unit Booked') FROM Account  Where Id IN: lstAccIds];
         System.debug('#### listOfAccs '+listOfAccs);
         /*List<Opportunity> listOpportunities = [Select Id,RW_Project_Unit__r.Relationship_Manager__c,StageName 
 From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ];*/
@@ -1180,7 +1239,7 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
         Id ChannelPartnerId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Channel Partner Portal').getRecordTypeId();
         String Username;
         Id loggeduserId = UserInfo.getUserId();
-        List<User> user = [SELECT Id, ContactId FROM User WHERE Id =:loggeduserId];
+        List<User> user = [SELECT Id, ContactId FROM User WHERE Id ='0059I0000078nh3QAA'];
         system.debug('@user::'+user);
         if(!user.isEmpty()){
             contact =[select id,Name,Email,AccountId from Contact where id =: user[0].ContactId];
@@ -1198,21 +1257,26 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
             }
             Map<Id, Project__c> projMap;
             if(oppIds.size() > 0){
-                opp = [Select Id,Name,RW_Sourcing_Manager__c,RW_Project__c from Opportunity where Id=: oppIds];
+                opp = [Select Id,Name,RW_Sourcing_Manager__c,Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name,RW_Project__c from Opportunity where Id=: oppIds]; // Added Sourcing_Manager_User__c,Sourcing_Manager_User__r.Name  by Vinay 04-12-2025
                 for(Opportunity op : opp){
                     projIds.add(op.RW_Project__c);
                     oppIdVsProjId.put(op.Id, op.RW_Project__c);
                 }
                 if(projIds.size() > 0){
-                    projMap = new Map<Id, Project__c>([Select Id,Name,CP_Case_L1_Escalation__r.Email,CP_Case_L2_Escalation__r.Email,CP_Case_L3_Escalation__r.Email,
-                            CP_Case_L4_Escalation__r.Email,CP_Case_L5_Escalation__r.Email,CP_Case_L6_Escalation__r.Email, MIS_User__r.Email,
+                    projMap = new Map<Id, Project__c>([Select Id,Name,MIS_User__r.Email,
                             MIS_User__r.Name,MIS_User__c from Project__c where id=: projIds]);
+                    
+                    
                 }
             }
+            //Fetch Team Members 
+            Map<Id, Map<String, Team_Members__c>> projToApproverMap = TeamMemberService.getProjectTeamMembers( projIds, 'CP Case Escalation Team',  new List<String>{ 'CP Case L1 Escalation',  'CP Case L2 Escalation', 'CP Case L3 Escalation', 'CP Case L4 Escalation', 'CP Case L5 Escalation', 'CP Case L6 Escalation'});
             for(Case objCase : lstCase){
                 if(objCase.Origin == 'Channel Partner Portal' && objCase.RecordTypeId == ChannelPartnerId){
+                    system.debug('objCase.Origin------->'+objCase.Origin);
+                    system.debug('objCase.RecordTypeId------->'+objCase.RecordTypeId);
                     Case c = new Case();
-                    if(contact[0].Id != null){
+                    if(!contact.isEmpty() && contact[0].Id != null){
                         c.ContactId = contact[0].Id;
                         c.Account_Channel_Partner__c = contact[0].AccountId;
                     }
@@ -1225,24 +1289,50 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                             if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).Name != null){
                                 c.RW_Project_Text__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).Name;
                             }
-                            if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L1_Escalation__r.Email != null){
-                                c.RW_Immediate_Manager_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L1_Escalation__r.Email;
+                            Id projId = oppIdVsProjId.get(objCase.Opportunity__c);
+                            if(projId!=null){
+                                Map<String, Team_Members__c> approverMap = projToApproverMap.get(projId);
+                                if (approverMap != null) {
+                                    c.RW_Immediate_Manager_Email__c = approverMap.get('CP Case L1 Escalation')?.User__r.Email;
+                                    c.RW_Reporting_2_Email__c      = approverMap.get('CP Case L2 Escalation')?.User__r.Email;
+                                    c.RW_Reporting_3_Email__c      = approverMap.get('CP Case L3 Escalation')?.User__r.Email;
+                                    c.RW_Reporting_4_Email__c      = approverMap.get('CP Case L4 Escalation')?.User__r.Email;
+                                    c.RW_Reporting_5_Email__c      = approverMap.get('CP Case L5 Escalation')?.User__r.Email;
+                                    c.RW_Reporting_6_Email__c      = approverMap.get('CP Case L6 Escalation')?.User__r.Email;
+                                    system.debug('case l1--->'+approverMap.get('CP Case L1 Escalation').User__r.Email);
+                                    system.debug('case l1--->'+approverMap.get('CP Case L1 Escalation').User__r.Name);
+                                    system.debug('case l2--->'+approverMap.get('CP Case L2 Escalation').User__r.Email);
+                                    system.debug('case l2--->'+approverMap.get('CP Case L2 Escalation').User__r.Name);
+                                    system.debug('case l3--->'+approverMap.get('CP Case L3 Escalation').User__r.Email);
+                                    system.debug('case l3--->'+approverMap.get('CP Case L3 Escalation').User__r.Name);
+                                    system.debug('case l4--->'+approverMap.get('CP Case L4 Escalation').User__r.Email);
+                                    system.debug('case l4--->'+approverMap.get('CP Case L4 Escalation').User__r.Name);
+                                    system.debug('case l5--->'+approverMap.get('CP Case L5 Escalation').User__r.Email);
+                                    system.debug('case l5--->'+approverMap.get('CP Case L5 Escalation').User__r.Name);
+                                    system.debug('case l6--->'+approverMap.get('CP Case L6 Escalation').User__r.Email);
+                                    system.debug('case l6--->'+approverMap.get('CP Case L6 Escalation').User__r.Name);
+                                }
+                       
                             }
-                            if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L2_Escalation__r.Email != null){
-                                c.RW_Reporting_2_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L2_Escalation__r.Email;
-                            }
-                            if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L3_Escalation__r.Email != null){
-                                c.RW_Reporting_3_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L3_Escalation__r.Email;
-                            }
-                            if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L4_Escalation__r.Email != null){
-                                c.RW_Reporting_4_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L4_Escalation__r.Email;
-                            }
-                            if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L5_Escalation__r.Email != null){
-                                c.RW_Reporting_5_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L5_Escalation__r.Email;
-                            }
-                            if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L6_Escalation__r.Email != null){
-                                c.RW_Reporting_6_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L6_Escalation__r.Email;
-                            }
+                            
+                            // if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L1_Escalation__r.Email != null){  // Commented by Vinay 07-11-2025
+                            //     c.RW_Immediate_Manager_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L1_Escalation__r.Email;
+                            // }
+                            // if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L2_Escalation__r.Email != null){
+                            //     c.RW_Reporting_2_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L2_Escalation__r.Email;
+                            // }
+                            // if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L3_Escalation__r.Email != null){
+                            //     c.RW_Reporting_3_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L3_Escalation__r.Email;
+                            // }
+                            // if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L4_Escalation__r.Email != null){
+                            //     c.RW_Reporting_4_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L4_Escalation__r.Email;
+                            // }
+                            // if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L5_Escalation__r.Email != null){
+                            //     c.RW_Reporting_5_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L5_Escalation__r.Email;
+                            // }
+                            // if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L6_Escalation__r.Email != null){
+                            //     c.RW_Reporting_6_Email__c = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).CP_Case_L6_Escalation__r.Email;
+                            // }
                             if(projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).MIS_User__c != null){
                                 c.OwnerId = projMap.get(oppIdVsProjId.get(objCase.Opportunity__c)).MIS_User__c;
                             }
@@ -1349,11 +1439,17 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
             }
             Map<Id, Project__c> projMap;
             if(projectIds.size() > 0){
-                projMap = new Map<Id, Project__c>([Select Id,Name,CP_Case_L1_Escalation__r.Email,CP_Case_L2_Escalation__r.Email,CP_Case_L3_Escalation__r.Email,
-                                   CP_Case_L4_Escalation__r.Email,CP_Case_L5_Escalation__r.Email,CP_Case_L6_Escalation__r.Email,
+                projMap = new Map<Id, Project__c>([Select Id,Name,
                                    MIS_User__r.Email,MIS_User__r.Name,MIS_User__c from Project__c where id =: projectIds]);
             }
-            
+            //Fetch Team Members 
+            Map<Id, Map<String, Team_Members__c>> projToApproverMap =
+                TeamMemberService.getProjectTeamMembers(
+                    projectIds,
+                    'CP Case Escalation Team',
+                    new List<String>{ 'CP Case L1 Escalation',  'CP Case L2 Escalation', 'CP Case L3 Escalation', 'CP Case L4 Escalation', 'CP Case L5 Escalation', 'CP Case L6 Escalation'}
+                );
+
             for(Case objCase : lstCase){
                 Case c = new Case();
                 if(contactMap.get(objCase.SuppliedEmail) != null){
@@ -1366,24 +1462,86 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                     if(projMap.get(objCase.RW_Project__c).Name != null){
                         c.RW_Project_Text__c = projMap.get(objCase.RW_Project__c).Name;
                     }
-                    if(projMap.get(objCase.RW_Project__c).CP_Case_L1_Escalation__r.Email != null){
-                        c.RW_Immediate_Manager_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L1_Escalation__r.Email;
+                    Id projId = objCase.RW_Project__c;
+                    if(projId!=null){
+                        system.debug('CPPortalEmailToCaseMethod----->projId----->'+projId);
+                        Map<String, Team_Members__c> approverMap = projToApproverMap.get(projId);
+                        if (approverMap != null) {
+                            c.RW_Immediate_Manager_Email__c = approverMap.get('CP Case L1 Escalation')?.User__r.Email;
+                            c.RW_Reporting_2_Email__c      = approverMap.get('CP Case L2 Escalation')?.User__r.Email;
+                            c.RW_Reporting_3_Email__c      = approverMap.get('CP Case L3 Escalation')?.User__r.Email;
+                            c.RW_Reporting_4_Email__c      = approverMap.get('CP Case L4 Escalation')?.User__r.Email;
+                            c.RW_Reporting_5_Email__c      = approverMap.get('CP Case L5 Escalation')?.User__r.Email;
+                            c.RW_Reporting_6_Email__c      = approverMap.get('CP Case L6 Escalation')?.User__r.Email;
+                            system.debug('case l1--->'+approverMap.get('CP Case L1 Escalation').User__r.Email);
+                            system.debug('case l1--->'+approverMap.get('CP Case L1 Escalation').User__r.Name);
+                            system.debug('case l2--->'+approverMap.get('CP Case L2 Escalation').User__r.Email);
+                            system.debug('case l2--->'+approverMap.get('CP Case L2 Escalation').User__r.Name);
+                            system.debug('case l3--->'+approverMap.get('CP Case L3 Escalation').User__r.Email);
+                            system.debug('case l3--->'+approverMap.get('CP Case L3 Escalation').User__r.Name);
+                            system.debug('case l4--->'+approverMap.get('CP Case L4 Escalation').User__r.Email);
+                            system.debug('case l4--->'+approverMap.get('CP Case L4 Escalation').User__r.Name);
+                            system.debug('case l5--->'+approverMap.get('CP Case L5 Escalation').User__r.Email);
+                            system.debug('case l5--->'+approverMap.get('CP Case L5 Escalation').User__r.Name);
+                            system.debug('case l6--->'+approverMap.get('CP Case L6 Escalation').User__r.Email);
+                            system.debug('case l6--->'+approverMap.get('CP Case L6 Escalation').User__r.Name);
+                        }
+                        // List<Team_Members__c> tmList = projIdToTeam.get(projId);
+                        // if (tmList != null && !tmList.isEmpty()) {
+                        //             for (Team_Members__c tm : tmList) {
+                        //                 if (tm.User__r != null && tm.User__r.Email != null) {
+                        //                     if (tm.Approver_Type__c == 'CP Case L1 Escalation') {
+                        //                         system.debug('tm.User__r.Name-------->1'+tm.User__r.Name);
+                        //                         system.debug('tm.User__r.Email-------->1'+tm.User__r.Email);
+                        //                         c.RW_Immediate_Manager_Email__c = tm.User__r.Email;
+                        //                     }
+                        //                     if (tm.Approver_Type__c == 'CP Case L2 Escalation') {
+                        //                         system.debug('tm.User__r.Name-------->2'+tm.User__r.Name);
+                        //                         system.debug('tm.User__r.Email-------->2'+tm.User__r.Email);
+                        //                         c.RW_Reporting_2_Email__c = tm.User__r.Email;
+                        //                     }
+                        //                     if (tm.Approver_Type__c == 'CP Case L3 Escalation') {
+                        //                         system.debug('tm.User__r.Name-------->3'+tm.User__r.Name);
+                        //                         system.debug('tm.User__r.Email-------->3'+tm.User__r.Email);
+                        //                         c.RW_Reporting_3_Email__c = tm.User__r.Email;
+                        //                     }
+                        //                     if (tm.Approver_Type__c == 'CP Case L4 Escalation') {
+                        //                         system.debug('tm.User__r.Name-------->4'+tm.User__r.Name);
+                        //                         system.debug('tm.User__r.Email-------->4'+tm.User__r.Email);
+                        //                         c.RW_Reporting_4_Email__c = tm.User__r.Email;
+                        //                     }
+                        //                     if (tm.Approver_Type__c == 'CP Case L5 Escalation') {
+                        //                         system.debug('tm.User__r.Name-------->5'+tm.User__r.Name);
+                        //                         system.debug('tm.User__r.Email-------->5'+tm.User__r.Email);
+                        //                         c.RW_Reporting_5_Email__c = tm.User__r.Email;
+                        //                     }
+                        //                     if (tm.Approver_Type__c == 'CP Case L6 Escalation') {
+                        //                         system.debug('tm.User__r.Name-------->6'+tm.User__r.Name);
+                        //                         system.debug('tm.User__r.Email-------->6'+tm.User__r.Email);
+                        //                         c.RW_Reporting_6_Email__c = tm.User__r.Email;
+                        //                     }
+                        //                 }
+                        //             }
+                        // }
                     }
-                    if(projMap.get(objCase.RW_Project__c).CP_Case_L2_Escalation__r.Email != null){
-                        c.RW_Reporting_2_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L2_Escalation__r.Email;
-                    }
-                    if(projMap.get(objCase.RW_Project__c).CP_Case_L3_Escalation__r.Email != null){
-                        c.RW_Reporting_3_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L3_Escalation__r.Email;
-                    }
-                    if(projMap.get(objCase.RW_Project__c).CP_Case_L4_Escalation__r.Email != null){
-                        c.RW_Reporting_4_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L4_Escalation__r.Email;
-                    }
-                    if(projMap.get(objCase.RW_Project__c).CP_Case_L5_Escalation__r.Email != null){
-                        c.RW_Reporting_5_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L5_Escalation__r.Email;
-                    }
-                    if(projMap.get(objCase.RW_Project__c).CP_Case_L6_Escalation__r.Email != null){
-                        c.RW_Reporting_6_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L6_Escalation__r.Email;
-                    }
+                    // if(projMap.get(objCase.RW_Project__c).CP_Case_L1_Escalation__r.Email != null){
+                    //     c.RW_Immediate_Manager_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L1_Escalation__r.Email;
+                    // }
+                    // if(projMap.get(objCase.RW_Project__c).CP_Case_L2_Escalation__r.Email != null){
+                    //     c.RW_Reporting_2_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L2_Escalation__r.Email;
+                    // }
+                    // if(projMap.get(objCase.RW_Project__c).CP_Case_L3_Escalation__r.Email != null){
+                    //     c.RW_Reporting_3_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L3_Escalation__r.Email;
+                    // }
+                    // if(projMap.get(objCase.RW_Project__c).CP_Case_L4_Escalation__r.Email != null){
+                    //     c.RW_Reporting_4_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L4_Escalation__r.Email;
+                    // }
+                    // if(projMap.get(objCase.RW_Project__c).CP_Case_L5_Escalation__r.Email != null){
+                    //     c.RW_Reporting_5_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L5_Escalation__r.Email;
+                    // }
+                    // if(projMap.get(objCase.RW_Project__c).CP_Case_L6_Escalation__r.Email != null){
+                    //     c.RW_Reporting_6_Email__c = projMap.get(objCase.RW_Project__c).CP_Case_L6_Escalation__r.Email;
+                    // }
                     if(projMap.get(objCase.RW_Project__c).MIS_User__c != null){
                         c.OwnerId = projMap.get(objCase.RW_Project__c).MIS_User__c;
                     }
@@ -1467,6 +1625,11 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 {
                     objCase.Status = 'Open';
                 }
+                /*if(objCase.Subject != null && objCase.Subject.contains('Undeliverable:') || objCase.SuppliedName == 'microsoftexchange'){ //Added by Vinay 26-05-2025
+                    objCase.Status = 'Case Closed';
+                    objCase.Stop_Emails__c = true;
+                    objCase.RW_RM_Remarks__c = 'Undeliverable';
+                }*/
             }
         }	
     }
@@ -1533,8 +1696,10 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 
                 for(Case objCase: casesToUpdate){
                     System.debug('objCase.Post_Possession_Customer__c: ' + objCase.Post_Possession_Customer__c);
-                    if(mapOfUser.containsKey(objCase.RW_RM_Name__c) && !objCase.Post_Possession_Customer__c){
-                        objCase.ownerId = mapOfUser.get(objCase.RW_RM_Name__c).id;
+                    if(mapOfUser.containsKey(objCase.RW_RM_Name__c) && !objCase.Post_Possession_Customer__c){ 
+                        if(objCase.RW_RM_Remarks__c != 'Unregistered Customer'){
+                            objCase.ownerId = mapOfUser.get(objCase.RW_RM_Name__c).id;
+                        }
                         casesWithRmAsOwner.add(objCase.id);
                     }
                 }
@@ -1558,18 +1723,287 @@ From Opportunities where AccountId IN: lstAccIds And StageName = 'Unit Booked' ]
                 for(group EachGrp : lstQueue){
                     mapOfQueue.put(EachGrp.name, EachGrp.id);
                 }
+                //Added by Vinay 02-03-2026 Start. To suppress standard "Case transferred to you" email when assigning to Queue
+                Database.DMLOptions dmo = new Database.DMLOptions();
+                dmo.EmailHeader.triggerUserEmail = false;          
+                dmo.EmailHeader.triggerAutoResponseEmail = false;   
+                dmo.assignmentRuleHeader.useDefaultRule = false;  
+                //Added by Vinay 02-03-2026 End
                 for(Case cs : cases){
                     if(cs.RW_Project__c != null && mapOfQueue.containsKey(mapOfProj.get(cs.RW_Project__c).name+'-Queue')){
                         cs.ownerid = mapOfQueue.get(mapOfProj.get(cs.RW_Project__c).name+'-Queue');
                     }
                     else{
-                        cs.ownerid = mapofQueue.get(label.Generic_Queue_Name);  
+                        if(cs.Origin == 'Email' && cs.RW_RM_Remarks__c == 'Unregistered Customer'){
+                            cs.ownerid = mapofQueue.get('email to case queue'); 
+                        }else{
+                            cs.ownerid = mapofQueue.get(label.Generic_Queue_Name); 
+                        }
+                        //cs.ownerid = mapofQueue.get(label.Generic_Queue_Name);  
                     }
+                    cs.setOptions(dmo); //Added by Vinay 02-03-2026
                 }
             }
         }
     }
     //Added by Vinay 20-01-2025 End
+    
+    /*public static Map<String,List<String>> opportunityForEmailCases(List<Account> lstAccount){
+        List<Opportunity> oppList = [SELECT Id,AccountId,Account.PersonEmail,Booking__c,Booking__r.RW_Key_handover_date__c,RW_Email__c FROM Opportunity WHERE AccountId =: lstAccount ORDER By CreatedDate DESC];
+        Date todayDate = Date.today();
+        String accIdOppId;
+        Opportunity opportunity;
+        Map<String, List<Opportunity>> oppMap = new Map<String, List<Opportunity>>();
+        oppMap.put('Same Email', new List<Opportunity>{});
+        oppMap.put('Other Email', new List<Opportunity>{});
+        for(Opportunity opp : oppList){
+            if(opp.RW_Email__c == opp.Account.PersonEmail){
+                oppMap.get('Same Email').add(opp);
+            }else{
+                oppMap.get('Other Email').add(opp);
+            }
+        }
+        if(oppMap.get('Same Email').size() > 0){
+            Map<String, List<Opportunity>> sameEmailOppMap = new Map<String, List<Opportunity>>();
+            sameEmailOppMap.put('No Booking', new List<Opportunity>{});
+            sameEmailOppMap.put('No KHO', new List<Opportunity>{});
+            sameEmailOppMap.put('under KHO + 90', new List<Opportunity>{});
+            sameEmailOppMap.put('over KHO + 90', new List<Opportunity>{});
+            for(Opportunity opp : oppMap.get('Same Email')){
+                if(opp.Booking__c == null){
+                    sameEmailOppMap.get('No Booking').add(opp);
+                }else if(opp.Booking__c != null && opp.Booking__r.RW_Key_handover_date__c == null){
+                    sameEmailOppMap.get('No KHO').add(opp);
+                }else if(opp.Booking__c != null && opp.Booking__r.RW_Key_handover_date__c != null){
+                    if(todayDate < (opp.Booking__r.RW_Key_handover_date__c + 90)){
+                        sameEmailOppMap.get('under KHO + 90').add(opp);
+                    }else if(todayDate >= (opp.Booking__r.RW_Key_handover_date__c + 90)){
+                        sameEmailOppMap.get('over KHO + 90').add(opp);
+                    }
+                }
+            }
+            if(sameEmailOppMap.get('No KHO').size() > 0){
+                accIdOppId = sameEmailOppMap.get('No KHO')[0].AccountId+'-'+sameEmailOppMap.get('No KHO')[0].Id;
+                opportunity = sameEmailOppMap.get('No KHO')[0];
+            }else if(sameEmailOppMap.get('under KHO + 90').size() > 0){  
+                accIdOppId = sameEmailOppMap.get('under KHO + 90')[0].AccountId+'-'+sameEmailOppMap.get('under KHO + 90')[0].Id;
+                opportunity = sameEmailOppMap.get('under KHO + 90')[0];
+            }else if(sameEmailOppMap.get('over KHO + 90').size() > 0){  
+                accIdOppId = sameEmailOppMap.get('over KHO + 90')[0].AccountId+'-'+sameEmailOppMap.get('over KHO + 90')[0].Id;
+                opportunity = sameEmailOppMap.get('over KHO + 90')[0];
+            }
+        }else if(oppMap.get('Other Email').size() > 0){
+            Map<String, List<Opportunity>> otherEmailOppMap = new Map<String, List<Opportunity>>();
+            otherEmailOppMap.put('No Booking', new List<Opportunity>{});
+            otherEmailOppMap.put('No KHO', new List<Opportunity>{});
+            otherEmailOppMap.put('under KHO + 90', new List<Opportunity>{});
+            otherEmailOppMap.put('over KHO + 90', new List<Opportunity>{});
+            for(Opportunity opp : oppMap.get('Other Email')){
+                if(opp.Booking__c == null){
+                    otherEmailOppMap.get('No Booking').add(opp);
+                }else if(opp.Booking__c != null && opp.Booking__r.RW_Key_handover_date__c == null){
+                    otherEmailOppMap.get('No KHO').add(opp);
+                }else if(opp.Booking__c != null && opp.Booking__r.RW_Key_handover_date__c != null){
+                    if(todayDate < (opp.Booking__r.RW_Key_handover_date__c + 90)){
+                        otherEmailOppMap.get('under KHO + 90').add(opp);
+                    }else if(todayDate >= (opp.Booking__r.RW_Key_handover_date__c + 90)){
+                        otherEmailOppMap.get('over KHO + 90').add(opp);
+                    }
+                }
+            }
+            if(otherEmailOppMap.get('No KHO').size() > 0){
+                accIdOppId = otherEmailOppMap.get('No KHO')[0].AccountId+'-'+otherEmailOppMap.get('No KHO')[0].Id;
+                opportunity = otherEmailOppMap.get('No KHO')[0];
+            }else if(otherEmailOppMap.get('under KHO + 90').size() > 0){  
+                accIdOppId = otherEmailOppMap.get('under KHO + 90')[0].AccountId+'-'+otherEmailOppMap.get('under KHO + 90')[0].Id;
+                opportunity = otherEmailOppMap.get('under KHO + 90')[0];
+            }else if(otherEmailOppMap.get('over KHO + 90').size() > 0){  
+                accIdOppId = otherEmailOppMap.get('over KHO + 90')[0].AccountId+'-'+otherEmailOppMap.get('over KHO + 90')[0].Id;
+                opportunity = otherEmailOppMap.get('over KHO + 90')[0];
+            }
+        }
+        if(opportunity != null){
+            Map<String,List<String>> retMap = new Map<String,List<String>>();
+            retMap.put(opportunity.Account.PersonEmail, new List<String>{opportunity.AccountId, opportunity.Id});
+            return retMap;
+        }else{
+            return null;
+        }
+        //return accIdOppId;
+    }*/      
+    
+   public static void accIdOppIdTaggingForEmailCases(List<Case> caseList){
+       Set<String> emailSet = new Set<String>();
+       for(Case cs : caseList){
+           if(cs.SuppliedEmail != null && cs.Origin == 'Email'){
+               emailSet.add(cs.SuppliedEmail);
+           }
+       }
+       if(emailSet.isEmpty()) return;
+       
+       List<Account> accountList = [SELECT Id,PersonEmail FROM Account WHERE PersonEmail =: emailSet];
+       Map<String,List<Account>> emailAccountMap = new Map<String,List<Account>>();
+       Set<Id> accIds = new Set<Id>();
+       for(Account acc : accountList){
+           if(!emailAccountMap.containsKey(acc.PersonEmail)){
+               emailAccountMap.put(acc.PersonEmail,new List<Account>());
+           }
+           emailAccountMap.get(acc.PersonEmail).add(acc);
+           accIds.add(acc.Id);
+       }
+       List<Opportunity> opportunityList = [SELECT Id,AccountId,RW_Email__c,Booking__r.RW_Key_handover_date__c FROM Opportunity WHERE (RW_Email__c =: emailSet OR AccountId =: accIds) AND StageName = 'Unit Booked' ORDER By Booking__r.Booking_Date__c DESC];
+       Map<String,List<Opportunity>> emailOpportunityMap = new Map<String,List<Opportunity>>();
+       Map<String,List<Opportunity>> accIdOpportunityMap = new Map<String,List<Opportunity>>();
+       for(Opportunity opp : opportunityList){
+           if(!emailOpportunityMap.containsKey(opp.RW_Email__c)){
+               emailOpportunityMap.put(opp.RW_Email__c,new List<Opportunity>());
+           }
+           emailOpportunityMap.get(opp.RW_Email__c).add(opp);
+           if(!accIdOpportunityMap.containsKey(opp.AccountId)){
+               accIdOpportunityMap.put(opp.AccountId,new List<Opportunity>());
+           }
+           accIdOpportunityMap.get(opp.AccountId).add(opp);
+       }
+       List<Applicant_Details__c> applicantList = [SELECT Id,Email_Address__c,Booking__r.Opportunity__c,Booking__r.Opportunity__r.AccountId FROM Applicant_Details__c WHERE Email_Address__c =: emailSet AND Applicant_Number__c = 'Primary Applicant'];
+       Map<String,List<Applicant_Details__c>> emailApplicantMap = new Map<String,List<Applicant_Details__c>>();
+       for(Applicant_Details__c app : applicantList){
+           if(!emailApplicantMap.containsKey(app.Email_Address__c)){
+                emailApplicantMap.put(app.Email_Address__c,new List<Applicant_Details__c>());
+            }
+            emailApplicantMap.get(app.Email_Address__c).add(app);
+       }
+       List<Case> casesToUpdate = new List<Case>();	
+       for(Case cs : caseList){
+           String email = cs.SuppliedEmail != null ? cs.SuppliedEmail.toLowerCase() : null;
+           List<Account> accWithEmailList = emailAccountMap.get(email);
+           List<Opportunity> oppWithEmailList = emailOpportunityMap.get(email);
+           List<Applicant_Details__c> appWithEmailList = emailApplicantMap.get(email);
+           //No Account & Opportunity & Primary Applicant found with the email
+           if((accWithEmailList == null || accWithEmailList.isEmpty()) && (oppWithEmailList == null || oppWithEmailList.isEmpty()) && (appWithEmailList == null || appWithEmailList.isEmpty())){
+               cs.Status = 'Case Closed';
+               cs.RW_RM_Remarks__c = 'Unregistered Customer';
+               casesToUpdate.add(cs);
+               continue;
+           }
+           // Account with email and no opportunity and applicant with email
+           if(accWithEmailList != null && !accWithEmailList.isEmpty() && (oppWithEmailList == null || oppWithEmailList.isEmpty()) && (appWithEmailList == null || appWithEmailList.isEmpty())){
+               if(accWithEmailList.size() == 1){
+                   if(accIdOpportunityMap.get(accWithEmailList[0].Id) == null){
+                       cs.Status = 'Case Closed';
+                       cs.RW_RM_Remarks__c = 'Unregistered Customer';
+                       casesToUpdate.add(cs);
+                       continue;
+                   }else{
+                       if(accIdOpportunityMap.get(accWithEmailList[0].Id).size() == 1){
+                           cs.AccountId = accWithEmailList[0].Id;
+                           cs.Opportunity__c = accIdOpportunityMap.get(accWithEmailList[0].Id)[0].Id;
+                       }else{
+                           Opportunity finalOpp = applyKHOLogic(accIdOpportunityMap.get(accWithEmailList[0].Id));
+                           cs.AccountId = finalOpp.AccountId;
+                           cs.Opportunity__c = finalOpp.Id;
+                       }
+                   }
+               }else{
+                   List<Opportunity> oppList = new List<Opportunity>();
+                   for(Account acc : accWithEmailList){
+                       if(accIdOpportunityMap.get(acc.Id) != null){
+                           oppList.addAll(accIdOpportunityMap.get(acc.Id));
+                       }
+                   }
+                   if(oppList.size() > 0){
+                       Opportunity finalOpp = applyKHOLogic(oppList);
+                       cs.AccountId = finalOpp.AccountId;
+                       cs.Opportunity__c = finalOpp.Id;
+                   }else{
+                       cs.Status = 'Case Closed';
+                       cs.RW_RM_Remarks__c = 'Unregistered Customer';
+                       casesToUpdate.add(cs);
+                       continue;
+                   }
+                   
+               }
+               casesToUpdate.add(cs);
+               continue;
+           }else if(accWithEmailList != null && !accWithEmailList.isEmpty() && oppWithEmailList != null && !oppWithEmailList.isEmpty()){
+               Opportunity finalOpp = applyKHOLogic(oppWithEmailList);
+               cs.AccountId = finalOpp.AccountId;
+               cs.Opportunity__c = finalOpp.Id;
+           }
+           // Opportunity with email and no account and applicant with email
+           //if(oppWithEmailList != null && !oppWithEmailList.isEmpty() && (accWithEmailList == null || accWithEmailList.isEmpty()) && (appWithEmailList == null || appWithEmailList.isEmpty())){ //Commented by Vinay 05-05-2026
+           if(oppWithEmailList != null && !oppWithEmailList.isEmpty() && (accWithEmailList == null || accWithEmailList.isEmpty())){ //Added by Vinay 05-05-2026
+               if(oppWithEmailList.size() == 1){
+                   cs.AccountId = oppWithEmailList[0].AccountId;
+                   cs.Opportunity__c = oppWithEmailList[0].Id;
+               }else{
+                   Opportunity finalOpp = applyKHOLogic(oppWithEmailList);
+                   cs.AccountId = finalOpp.AccountId;
+                   cs.Opportunity__c = finalOpp.Id;
+               }
+               casesToUpdate.add(cs);
+               continue;
+           }
+           // Applicant with email and no account and opportunity with email
+           if(appWithEmailList != null && !appWithEmailList.isEmpty() && (accWithEmailList == null || accWithEmailList.isEmpty()) && (oppWithEmailList == null || oppWithEmailList.isEmpty())){
+               cs.AccountId = appWithEmailList[0].Booking__r.Opportunity__r.AccountId;
+               cs.Opportunity__c = appWithEmailList[0].Booking__r.Opportunity__c;
+           }
+       }
+       if(!casesToUpdate.isEmpty()){
+            //update casesToUpdate;
+        }
+   }
+
+	
+    public static Opportunity applyKHOLogic(List<Opportunity> oppList){
+        
+        List<Opportunity> noKHO = new List<Opportunity>();
+        
+        for(Opportunity opp : oppList){
+            if(opp.Booking__r.RW_Key_handover_date__c == null){
+                noKHO.add(opp);
+            }
+        }
+        
+        if(!noKHO.isEmpty()){
+            return noKHO[0];
+        }
+        
+        Date today = Date.today();
+        
+        List<Opportunity> under90 = new List<Opportunity>();
+        List<Opportunity> over90 = new List<Opportunity>();
+        
+        for(Opportunity opp : oppList){
+            
+            Date kho90 = opp.Booking__r.RW_Key_handover_date__c.addDays(90);
+            
+            if(today <= kho90){
+                under90.add(opp);
+            }
+            else{
+                over90.add(opp);
+            }
+        }
+        
+        if(!under90.isEmpty()){
+            under90.sort(new BookingDateComparator());
+            return under90[under90.size()-1];
+        }
+        
+        over90.sort(new BookingDateComparator());
+        return over90[over90.size()-1];
+    }
+    
+    public class BookingDateComparator implements Comparator<Opportunity>{
+        
+        public Integer compare(Opportunity a, Opportunity b){
+            
+            if(a.Booking__r.Booking_Date__c == b.Booking__r.Booking_Date__c) return 0;
+            return a.Booking__r.Booking_Date__c > b.Booking__r.Booking_Date__c ? 1 : -1;
+        }
+    }
+    
     
     public void createTask()
     {

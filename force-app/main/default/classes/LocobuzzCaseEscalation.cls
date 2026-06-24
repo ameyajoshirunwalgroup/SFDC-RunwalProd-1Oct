@@ -37,13 +37,11 @@ global class LocobuzzCaseEscalation implements Database.Batchable <sObject>, Sch
                     mail.sethtmlbody(body);
                     mails.add(mail);
                 }
-                System.debug('Owner: ' + cs.OwnerId);
             }
             update caseList;
             Database.update(caseList, false);
             if(mails.size() > 0){
                 Messaging.SendEmailResult[] result = Messaging.sendEmail(mails);
-        		System.debug('result: ' + result);
             }
         }
     }

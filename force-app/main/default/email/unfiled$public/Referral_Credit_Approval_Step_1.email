@@ -1,0 +1,9 @@
+<messaging:emailTemplate subject="Referrer approved IOM" recipientType="User" relatedToType="Referral_Credits__c">
+<messaging:htmlEmailBody >
+ <html>
+    <body>
+    </body>
+  </html>
+     <c:ReferralCreditComp2 idoff="{!RelatedTo.Id}"/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

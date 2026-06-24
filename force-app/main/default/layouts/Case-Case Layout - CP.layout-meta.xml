@@ -65,6 +65,22 @@
                 <behavior>Edit</behavior>
                 <field>Sourcing_Manager_Email__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Parent_Case__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Case_Ageing_From_Parent__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>TL_Name__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Name_Confirmation_Form__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -462,6 +478,13 @@
         <fields>NAME</fields>
         <fields>Status__c</fields>
         <relatedList>WhatsApp_Message_Status__c.Case__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>CASES.CASE_NUMBER</fields>
+        <fields>CASES.SUBJECT</fields>
+        <fields>CASES.CREATED_DATE</fields>
+        <fields>CASES.PRIORITY</fields>
+        <relatedList>Case.Parent_Case__c</relatedList>
     </relatedLists>
     <relatedObjects>ContactId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

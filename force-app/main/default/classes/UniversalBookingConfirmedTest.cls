@@ -885,6 +885,7 @@ Map<String,String> DocDetails2 = new Map<String,String>();
             bk.bookingDetails.applicants[0].Mailing_Address_Line_1__c = 'addr1';
             bk.bookingDetails.applicants[0].Mailing_Address_Line_2__c = 'addr1';
             bk.bookingDetails.applicants[0].Mailing_Address_Line_3__c = 'addr1';
+             bk.bookingDetails.booking.Booking_Date__c = system.now();
             bk.bookingDetails.applicants[0].Mailing_City__c = 'mumbai';
             bk.bookingDetails.applicants[0].Mailing_State__c = 'maharashtra';
             bk.bookingDetails.applicants[0].Mailing_Country__c = 'India';

@@ -1,6 +1,6 @@
 trigger KserveIntegration on Lead(After insert) {
 
-        Set < Id > leadId = new Set < Id > ();
+        /*Set < Id > leadId = new Set < Id > ();
         system.debug('Inside trigger');
         if (Trigger.isInsert && Trigger.isAfter) {
                 for (lead l: Trigger.New) {
@@ -17,6 +17,6 @@ trigger KserveIntegration on Lead(After insert) {
                         System.enqueueJob(new KserveIntegration(leadId));
 
                 }
-        }
+        }*/
 
 }

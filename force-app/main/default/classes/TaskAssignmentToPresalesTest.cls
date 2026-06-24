@@ -17,8 +17,8 @@ public class TaskAssignmentToPresalesTest {
         t.WhoId = ld.Id;
         insert t;
         
-        TaskAssignmentToPresales.assign(new List<Task>{t});
         TaskAssignmentToPresales.dummyMethod();
+        TaskAssignmentToPresales.assign(new List<Task>{t});
     }
 
 }

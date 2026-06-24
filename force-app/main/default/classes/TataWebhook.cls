@@ -8,42 +8,30 @@ global class TataWebhook {
         String oppId;
         try{
             RestRequest req = RestContext.request;
-            system.debug('req body--: ' + req.requestBody);
             jsonBody = req.requestBody.toString();
-            system.debug('jsonBody: ' + jsonBody);
             //CallData data = new CallData();
             
             Map<String, Object> data = (Map<String, Object>)JSON.deserializeUntyped(jsonBody);
-            System.debug('data: ' + data); 
-            System.debug('customer_no_with_prefix: ' + data.get('customer_no_with_prefix'));
             
             String agentNumber;
-            System.debug('answered_agent: ' + data.get('answered_agent'));
             if(data.get('answered_agent') != null && data.get('answered_agent') != ''){
                 String answeredAgent = JSON.serialize(data.get('answered_agent'));
-                System.debug('answeredAgent: ' + answeredAgent);  
                 Answered_Agent answeredAgentDetails = (Answered_Agent)JSON.deserialize(answeredAgent, Answered_Agent.class );
-                System.debug('agent number: ' + answeredAgentDetails.agent_number);
                 agentNumber = answeredAgentDetails.agent_number;
             }else if(data.get('missed_agent') != null && data.get('missed_agent') != ''){
                 String missedAgent = JSON.serialize(data.get('missed_agent'));
-                System.debug('missedAgent: ' + missedAgent);  
                 missedAgent = missedAgent.replace('[','');
                 missedAgent = missedAgent.replace(']','');
                 Missed_Agent missedAgentDetails = (Missed_Agent)JSON.deserialize(missedAgent, Missed_Agent.class );
-                System.debug('agent number: ' + missedAgentDetails.agent_number);
                 agentNumber = missedAgentDetails.agent_number;
             }
             
             //data = (CallData)JSON.deserialize(jsonBody, CallData.class );
-            System.debug('data: ' + data);
-            System.debug('agentNumber: ' + agentNumber);
             if(agentNumber != null){
                 agentNumber = agentNumber.replace('+','');
                 if(agentNumber.subString(0,1) == '0'){
                     agentNumber = '91' + agentNumber;
                 }
-                System.debug('agentNumber: ' + agentNumber);
             }
             
             String updatedMobile;
@@ -73,28 +61,34 @@ mobileNums.add(updatedMobile.subString(2,12));
             String taskWhoId;
             String leadAccountName;
             String rmName;
+            String projectName; //Added by Vinay 17-12-2025
             if(data.get('recordId') != null && data.get('recordId') != 'null' && data.get('recordId') != '' && data.get('recordId') != '$recordId'){
                 Id recId = String.valueOf(data.get('recordId')); 
                 String objName = recId.getSObjectType().getDescribe().getName();
                 if(objName == 'Opportunity'){
-                    List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE Id =: recId];
+                    List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,StageName,RW_RM_Name__c,RW_Project__r.Name FROM Opportunity WHERE Id =: recId]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
                     taskWhatId = recId;
                     leadAccountName = oppList[0].Name;
                     rmName = oppList[0].RW_RM_Name__c;
                     oppId = recId;
+                    projectName = oppList[0].RW_Project__r.Name; //Added by Vinay 17-12-2025
                 }else if(objName == 'Account'){
-                    List<Account> accList =  [SELECT Id, Name, RM_Name__c From Account WHERE Id =: recId];
+                    List<Account> accList =  [SELECT Id,Name,RM_Name__c,Project_Name__r.Name From Account WHERE Id =: recId];
                     taskWhatId = recId;
                     leadAccountName = accList[0].Name;
                     rmName = accList[0].RM_Name__c;
+                    projectName = accList[0].Project_Name__r.Name; //Added by Vinay 17-12-2025
                 }else if(objName == 'Lead'){
-                    List<Lead> leadList = [SELECT Id, Name, Campaign_Code__c, LeadSource, Lead_Sub_Source__c, RW_Project__c, RDS_Country__c, RDS_Country_Code__c FROM Lead WHERE Id =: recId];
+                    List<Lead> leadList = [SELECT Id,Name,Campaign_Code__c,LeadSource,Lead_Sub_Source__c,RW_Project__c,RDS_Country__c,RDS_Country_Code__c,RW_Project__r.Name FROM Lead WHERE Id =: recId];
                     taskWhoId = recId;
                     leadAccountName = leadList[0].Name;
+                    projectName = leadList[0].RW_Project__r.Name; //Added by Vinay 17-12-2025
                 }
             }else{
+                List<String> projects = System.label.TATA_CTI_Projects.split(','); //Added by Vinay 17-10-2025
                 //List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name = '7 Mahalaxmi' AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile )]; //Commented by Vinay 06-05-2025
-                List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name = '7 Mahalaxmi' AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile )]; //Added by Vinay 06-05-2025
+                //List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,StageName,RW_RM_Name__c FROM Opportunity WHERE RW_Project__r.Name = '7 Mahalaxmi' AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile )]; //Added by Vinay 06-05-2025 //Commented by Vinay 17-10-2025
+                List<Opportunity> oppList = [SELECT Id,AccountId,Name,RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name,StageName,RW_RM_Name__c,RW_Project__r.Name FROM Opportunity WHERE RW_Project__r.Name =: projects AND (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile )]; //Added by Vinay 17-10-2025 //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
                 List<Opportunity> bookedOppList = new List<Opportunity>();
                 if(oppList.size() > 1){
                     for(Opportunity opp : oppList){
@@ -108,26 +102,30 @@ mobileNums.add(updatedMobile.subString(2,12));
                     leadAccountName = bookedOppList[0].Name;
                     rmName = bookedOppList[0].RW_RM_Name__c;
                     oppId = bookedOppList[0].Id;
+                    projectName = bookedOppList[0].RW_Project__r.Name; //Added by Vinay 17-12-2025
                 }else if(oppList.size() > 0){
                     taskWhatId = oppList[0].Id;
                     leadAccountName = oppList[0].Name;
                     rmName = oppList[0].RW_RM_Name__c;
                     oppId = oppList[0].Id;
+                    projectName = oppList[0].RW_Project__r.Name; //Added by Vinay 17-12-2025
                 }
                 
                 if(oppList.size() == 0){
                     //List<Account> accList =  [SELECT Id, Name, RM_Name__c From Account WHERE Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile ORDER BY CreatedDate desc]; //Commented by Vinay 06-05-2025
-                    List<Account> accList =  [SELECT Id, Name, RM_Name__c From Account WHERE Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__pc =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile ORDER BY CreatedDate desc]; //Added by Vinay 06-05-2025
+                    List<Account> accList =  [SELECT Id,Name,RM_Name__c,Project_Name__r.Name From Account WHERE Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__pc =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile ORDER BY CreatedDate desc]; //Added by Vinay 06-05-2025
                     if(accList.size() > 0){
                         taskWhatId = accList[0].Id;
                         leadAccountName = accList[0].Name;
                         rmName = accList[0].RM_Name__c;
+                        projectName = accList[0].Project_Name__r.Name; //Added by Vinay 17-12-2025
                     }else{
                         //List<Lead> leadList = [SELECT Id, Name, Campaign_Code__c, LeadSource, Lead_Sub_Source__c, RW_Project__c, RDS_Country__c, RDS_Country_Code__c FROM Lead WHERE (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile) AND IsConverted= false ORDER BY CreatedDate desc]; //Commented by Vinay 06-05-2025
-                        List<Lead> leadList = [SELECT Id, Name, Campaign_Code__c, LeadSource, Lead_Sub_Source__c, RW_Project__c, RDS_Country__c, RDS_Country_Code__c FROM Lead WHERE (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile) AND IsConverted= false ORDER BY CreatedDate desc]; //Added by Vinay 06-05-2025
+                        List<Lead> leadList = [SELECT Id,Name,Campaign_Code__c,LeadSource,Lead_Sub_Source__c,RW_Project__c,RDS_Country__c,RDS_Country_Code__c,RW_Project__r.Name FROM Lead WHERE (RW_Mobile_No__c =: updatedMobile OR Mobile_No_with_Country_Code__c =: updatedMobile OR RW_Secondary_Mobile_No__c =: updatedMobile OR Secondary_Mobile_No_with_Country_Code__c =: updatedMobile) AND IsConverted= false ORDER BY CreatedDate desc]; //Added by Vinay 06-05-2025
                         if(leadList.size() > 0){
                             taskWhoId = leadList[0].Id;
                             leadAccountName = leadList[0].Name;
+                            projectName = leadList[0].RW_Project__r.Name; //Added by Vinay 17-12-2025
                         }
                     }
                 }
@@ -142,8 +140,6 @@ mobileNums.add(updatedMobile.subString(2,12));
             t.RecordTypeId = CRMRecordTypeId;
             t.CallType__c = String.valueOf(data.get('direction'));
             t.Voice_Log_URL__c = String.valueOf(data.get('recording_url'));
-            System.debug('taskWhatId: ' + taskWhatId);
-            System.debug('taskWhoId: ' + taskWhoId);
             t.WhatId = taskWhatId;
             t.WhoId = taskWhoId;
             if(data.get('call_status') == 'Missed' || data.get('call_status') == 'missed'){
@@ -179,7 +175,12 @@ mobileNums.add(updatedMobile.subString(2,12));
                 }
             }
             if(ownerAssigned == false){
-                t.OwnerId = System.label.Default_Agent_for_TATA;
+                //t.OwnerId = System.label.Default_Agent_for_TATA; //Commented by Vinay 17-12-2025
+                if(projectName == 'Runwal Woods'){  //Added by Vinay 17-12-2025
+                    t.OwnerId = System.label.Default_Agent_for_TATA_Runwal_Woods;
+                }else{
+                    t.OwnerId = System.label.Default_Agent_for_TATA;
+                }
             }
             t.Remarks__c = String.valueOf(data.get('call_to_number'));
             t.CallDurationInSeconds = (data.get('duration') != null && data.get('duration') != '')? Integer.valueOf(data.get('duration')) : null;

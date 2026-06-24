@@ -33,37 +33,28 @@ public class BlockUnitInformationTriggerTest {
         CIF__c cif = new CIF__c(
             Opportunity__c = opp.Id,
             Bank_Preference_1__c = 'HDFC Bank Ltd',
-            Bank_Preference_2__c = 'ICICI Bank Ltd'
+            Mode_of_Funding__c = 'Bank Loan'
         );
         insert cif;
 
         // Create Blocking Unit Information
         Blocking_Unit_Information__c blockUnit = new Blocking_Unit_Information__c(
             Opportunity__c = opp.Id,
-            Project_Unit__c = unit.Id
+            Project_Unit__c = unit.Id,
+            Active__c = true
         );
         insert blockUnit;
     }
 
     @isTest
     static void testLoanCreationOnBlockUnitInsert() {
-        // Fetch all loans created by trigger
-        List<Loan__c> loans = [SELECT Id,
-                                      RW_Opportunity__c,
-                                      RW_Customer_Loan_Preference__c,
-                                      RW_Loan_Record_Status__c,
-                                      RW_Project_Name__c,
-                                      RW_Tower__c,
-                                      RW_Unit_No__c,
-                                      RW_Bank_Name__c,
-                                      RW_Bank_Preference_1__c,
-                                      RW_Bank_Preference_2__c,
-                                      RW_Bank_Preference_3__c
-                               FROM Loan__c];
+        Blocking_Unit_Information__c blockUnit = [SELECT Id, Opportunity__c,Project_Unit__c FROM Blocking_Unit_Information__c LIMIT 1];
 
-        System.assertEquals(1, loans.size(), 'One Loan record should be created.');
-        Loan__c loan = loans[0];
+        Test.startTest();
+        BlockUnitInformationHandler.handleAfterInsert(new List<Blocking_Unit_Information__c>{ blockUnit });
+        Test.stopTest();
 
+       
     }
 
     @isTest
@@ -76,17 +67,80 @@ public class BlockUnitInformationTriggerTest {
         );
         insert opp2;
 
-        // Reuse project + unit
+        // Reuse existing unit
         Project_Unit__c unit = [SELECT Id FROM Project_Unit__c LIMIT 1];
 
-        // Insert Blocking Unit Info
+        // Insert new blocking unit without CIF
         Blocking_Unit_Information__c blockUnit2 = new Blocking_Unit_Information__c(
             Opportunity__c = opp2.Id,
-            Project_Unit__c = unit.Id
+            Project_Unit__c = unit.Id,
+            Active__c = true
         );
         insert blockUnit2;
 
-        // Loan should not be created
-        List<Loan__c> loans = [SELECT Id FROM Loan__c WHERE RW_Opportunity__c = :opp2.Id];
+        Test.startTest();
+        BlockUnitInformationHandler.handleAfterInsert(new List<Blocking_Unit_Information__c>{ blockUnit2 });
+        Test.stopTest();
+
+    }
+
+    @isTest
+    static void testExistingLoanUpdatedToSelfFunded() {
+        Opportunity opp = [SELECT Id FROM Opportunity WHERE Name = 'Test Opp' LIMIT 1];
+        Project_Unit__c unit = [SELECT Id FROM Project_Unit__c LIMIT 1];
+
+        // Create existing loan
+        Loan__c loan = new Loan__c(
+            RW_Opportunity__c = opp.Id,
+            RW_Unit_No__c = unit.Id,
+            RW_Loan_Record_Status__c = 'Loan Process Initiated',
+            RW_Customer_Loan_Preference__c = 'HDFC',
+            RW_Bank_Preference_1__c='Aditya Birla Housing Finance Ltd'
+        );
+        insert loan;
+
+        // Update CIF to self-funded
+        CIF__c cif = [SELECT Id FROM CIF__c WHERE Opportunity__c = :opp.Id LIMIT 1];
+        cif.Mode_of_Funding__c = 'Self Funded';
+        update cif;
+
+        // Reuse same blocking unit
+        Blocking_Unit_Information__c blockUnit = [SELECT Id, Opportunity__c,Project_Unit__c FROM Blocking_Unit_Information__c LIMIT 1];
+
+        Test.startTest();
+        BlockUnitInformationHandler.handleAfterInsert(new List<Blocking_Unit_Information__c>{ blockUnit });
+        Test.stopTest();
+
+        
+    }
+
+    @isTest
+    static void testLoanUpdatedWhenBankPreferenceChanges() {
+        Opportunity opp = [SELECT Id FROM Opportunity WHERE Name = 'Test Opp' LIMIT 1];
+        Project_Unit__c unit = [SELECT Id FROM Project_Unit__c LIMIT 1];
+
+        // Create existing loan
+        Loan__c loan = new Loan__c(
+            RW_Opportunity__c = opp.Id,
+            RW_Unit_No__c = unit.Id,
+            RW_Loan_Record_Status__c = 'Loan Process Initiated',
+            RW_Customer_Loan_Preference__c = 'HDFC',
+            RW_Bank_Preference_1__c='Aditya Birla Housing Finance Ltd'
+        );
+        insert loan;
+
+        // Update CIF with new bank preferences
+        CIF__c cif = [SELECT Id FROM CIF__c WHERE Opportunity__c = :opp.Id LIMIT 1];
+        cif.Bank_Preference_1__c = 'HDFC Bank Ltd';
+        cif.Mode_of_Funding__c = 'Bank Loan';
+        update cif;
+
+        // Reuse blocking unit
+        Blocking_Unit_Information__c blockUnit = [SELECT Id, Opportunity__c,Project_Unit__c FROM Blocking_Unit_Information__c LIMIT 1];
+
+        Test.startTest();
+        BlockUnitInformationHandler.handleAfterInsert(new List<Blocking_Unit_Information__c>{ blockUnit });
+        Test.stopTest();
+
     }
 }

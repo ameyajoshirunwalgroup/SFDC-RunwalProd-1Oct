@@ -1,0 +1,47 @@
+<messaging:emailTemplate subject="{!IF(relatedTo.Project__r.Name == '7 Mahalaxmi', 'Experience the Extraordinary at 7 Mahalaxmi!', 'Welcome to Runwal Group!')}" recipientType="User" relatedToType="Prospect__c">
+<messaging:htmlEmailBody >
+<html>
+<body>
+
+Dear {!relatedTo.Name},<br/> <br/>
+
+<apex:outputPanel rendered="{!relatedTo.Project__r.Name != '7 Mahalaxmi'}"> 
+
+Thank you for your interest in our project {!relatedTo.Project__r.Name} at {!relatedTo.Project__r.RW_LocalityName__c}.<br/> <br/>
+
+We are sending across some more details which will help you in getting a better idea about the project, its location and offerings.<br/> <br/> 
+Here's a link to its location {!relatedTo.Project__r.Site_Address_Map_Link__c}<br/> <br/>
+The ebrochure can be viewed at {!relatedTo.Project__r.RW_Project_Brochure_PublicUrl__c}<br/> <br/>
+and you can go through the walkthrough video at {!relatedTo.Project__r.RW_Project_Location_Videos_Link__c}<br/> <br/>
+Additionally, for any other information, please visit our website {!$Label.Website_URL} <br/> <br/> <br/> 
+
+We look forward to having you as a flat owner at our project soon. Kindly do let us know if you need any further information. <br/>
+You may call us on {!If(relatedTo.Lead_Source__c == 'Channel Partner',$Label.RW_CPContactNumber,$Label.RW_NotCPContactNumber)}.<br/> <br/> <br/> <br/>
+
+
+With Warm Regards,<br/>
+{!If(relatedTo.Lead_Source__c == 'Channel Partner','Team Runwal','Team Presales')}<br/>
+{!If(relatedTo.Lead_Source__c != 'Channel Partner','Runwal Group','')}   
+
+</apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!relatedTo.Project__r.Name == '7 Mahalaxmi'}"> 
+                    Thank you for your interest in <b>{!relatedTo.Project__r.Name}</b>, where you can truly <b>Live Extraordinaire!</b> We’re excited to share more about this remarkable luxury project in South Mumbai.<br/><br/>
+                    To help you discover all that {!relatedTo.Project__r.Name} has to offer, we’ve curated some valuable resources just for you:<br/>
+                    <ul>
+                        <li><b>Explore the Location:</b> <a href="https://view.pixeldo.com/RunwalMahalaxmi/">Discover the vibrant surroundings</a> and exceptional connectivity.</li><br/>
+                        <li><b>View the e-brochure:</b> Dive into the details of our luxurious offerings <a href="https://7mahalaxmi-runwalgroup.com/Brochure.pdf">[here]</a>.</li><br/>
+                        <li><b>Experience the Walkthrough Video:</b> See the beauty and elegance of 7 Mahalaxmi firsthand <a href="https://www.youtube.com/watch?v=IapwxYokuaA">[here]</a>.</li><br/>
+                    </ul>
+                    For additional information, visit our website at <a href="https://7mahalaxmi-runwalgroup.com/">7mahalaxmi-runwalgroup.com</a>.<br/><br/>
+                    We look forward to welcoming you at {!relatedTo.Project__r.Name}, where a life of extraordinary luxury awaits!<br/><br/>
+                    If you have any queries or need assistance, please reach out to us at 02269315145.<br/><br/>
+                    Warm regards,<br/><br/>
+                    Team Presales<br/>
+                    Runwal Group
+                </apex:outputPanel>
+
+</body>
+</html>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

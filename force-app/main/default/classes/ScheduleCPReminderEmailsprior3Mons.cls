@@ -2,13 +2,13 @@ global class ScheduleCPReminderEmailsprior3Mons implements Schedulable {
     global void execute(SchedulableContext sc) {
         Date threeMonthsFromNow = System.today().addMonths(3);
         Id cpRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
-        List<Broker__c> cplist = [SELECT Id,Sourcing_Manager__c,Sourcing_Manager__r.Email,RW_Email__c,CC_Valid_till__c,RERA_Valid_till__c,OwnerId FROM Broker__c WHERE (CC_Valid_till__c =: threeMonthsFromNow or RERA_Valid_till__c =: threeMonthsFromNow) and RecordTypeId =: cpRecordTypeId]; 
+        List<Broker__c> cplist = [SELECT Id,Sourcing_Manager__c,Sourcing_Manager__r.Email,RW_Email__c/*,CC_Valid_till__c*/,RERA_Valid_till__c,OwnerId FROM Broker__c WHERE (/*CC_Valid_till__c =: threeMonthsFromNow or*/ RERA_Valid_till__c =: threeMonthsFromNow) and RecordTypeId =: cpRecordTypeId];//Commented by Prashant as discussed with team to discard use of CC. 12/12/25. 
         system.debug('cplist -> '+cplist);
         
         EmailTemplate etRERA3monstoCP = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Send_Email_to_CP_for_RERA_Expiring_in_3_months' LIMIT 1];
         EmailTemplate etRERA3monstoSM = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Send_Email_to_Sourcing_for_RERA_Expiring_in_3_months' LIMIT 1];
-        EmailTemplate etCC3monstoCP = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Send_Email_to_CP_for_CC_Expiring_in_3_months' LIMIT 1];
-        EmailTemplate etCC3monstoSM = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Send_Email_to_Sourcing_for_CC_Expiring_in_3_months' LIMIT 1];
+        //EmailTemplate etCC3monstoCP = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Send_Email_to_CP_for_CC_Expiring_in_3_months' LIMIT 1];
+        //EmailTemplate etCC3monstoSM = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Send_Email_to_Sourcing_for_CC_Expiring_in_3_months' LIMIT 1];
         list<Contact> dummyContact = [Select id from Contact limit 1];
 		
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
@@ -30,7 +30,7 @@ global class ScheduleCPReminderEmailsprior3Mons implements Schedulable {
                     emails.add(smemail);
                 }
                 
-                if (br.CC_Valid_till__c == threeMonthsFromNow) {
+                /*if (br.CC_Valid_till__c == threeMonthsFromNow) {
                     smemail = new Messaging.SingleEmailMessage();
                     smemail.setTemplateId(etCC3monstoSM.Id);
                     smemail.setTargetObjectId(dummyContact[0].Id);
@@ -41,7 +41,7 @@ global class ScheduleCPReminderEmailsprior3Mons implements Schedulable {
                     smemail.setToAddresses(new String[] { br.Sourcing_Manager__r.Email });
                     smemail.setSaveAsActivity(false);
                     emails.add(smemail);
-                }
+                }*///Commented by Prashant as discussed with team to discard use of CC. 12/12/25.
             } else {
                 System.debug('No Sourcing Manager email');
             }
@@ -62,7 +62,7 @@ global class ScheduleCPReminderEmailsprior3Mons implements Schedulable {
                     emails.add(cpemail);
                 }
                 
-                if (br.CC_Valid_till__c == threeMonthsFromNow) {
+                /*if (br.CC_Valid_till__c == threeMonthsFromNow) {
                     cpemail = new Messaging.SingleEmailMessage();
                     cpemail.setTemplateId(etCC3monstoCP.Id);
                     cpemail.setTargetObjectId(dummyContact[0].Id);
@@ -73,7 +73,7 @@ global class ScheduleCPReminderEmailsprior3Mons implements Schedulable {
                     cpemail.setToAddresses(new String[] { br.RW_Email__c });
                     cpemail.setSaveAsActivity(false);
                     emails.add(cpemail);
-                }
+                }*/
             } else {
                 System.debug('No Channel Partner email');
             }

@@ -11,7 +11,7 @@ public class SalesOrderUpdateCallout {
         // check if customer is present, if not call CC API and SO API.
         if(oList.size()>0 && oList[0].SAP_Customer_Number__c!=null && oList[0].SalesOrder_Number__c!=null){
           system.debug(oList[0].StageName );
-            if(oList[0].StageName == 'Cancelled' || oList[0].StageName =='Booking Cancelled – Refund Pending'){
+            if(oList[0].StageName == 'Cancelled' || oList[0].StageName =='Booking Cancelled – Refund Pending' || oList[0].StageName =='Transfer Completed' || oList[0].StageName == 'Upgrade/Downgrade Completed'){
                 cancelsalesorder(oIdSet);
             }else{
                 updatesalesorder(oIdSet,oList[0].SAP_Customer_Number__c);
@@ -77,7 +77,7 @@ public class SalesOrderUpdateCallout {
             bookingId = oList[0].Booking__c;
             bList = [Select Id,Status__c,RW_Cancellation_initiated_by__c,Cancellation_Sub_reason__c,Cancellation_Reason__c	, Booking_Date__c,Funding_Status__c, Source_Of_Booking__c, Name,RW_Last_SDR_Received__c,
                   RW_Index_2__c,   RW_Registration_Date__c,RW_BRL_Number__c,RW_Release_of_Charge_issue_status__c,RW_ROC_Date__c,RW_Signed_Agreement_to_Customer_Date__c,ADF_Opted__c, //added by digicloud
-                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c, Project__r.Name, Interest_to_be_Applied__c,
+                     RW_Actual_Possession_Date__c,RW_Agreement_Possession_Date__c	,Date_for_offer_of_Possession__c, Project__r.Name, Interest_to_be_Applied__c, 
                     RW_Noc_Generated_Date__c,RW_Loan_Sanction_Date__c, RW_Loan_Account_Number__c,RW_Loan_Amount__c,RW_Loan_Bank__c,Loan_Bank__c,RW_Nominee_Name__c	,Date_of_Occupation_Certificate__c	,Date_of_Cancellation__c,RW_Key_handover_date__c
                      
                      from Booking__c where Id = : bookingId];
@@ -187,9 +187,9 @@ public class SalesOrderUpdateCallout {
             orderHeader.SalesOrdNo=oList[0].SalesOrder_Number__c;
             // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
-                orderHeader.ADF_OPTION = 'Y';
+                orderHeader.AdfOption = 'Y';
             }else{
-                orderHeader.ADF_OPTION = 'N';
+                orderHeader.AdfOption = 'N';
             }
             //orderHeader.ZzpossStrDt = String.ValueOf(bList[0].RW_Actual_Possession_Date__c);
             orderHeader.ZZSTMREGPD = String.ValueOf(bList[0].RW_Last_SDR_Received__c);
@@ -529,7 +529,7 @@ billPlanList.item.add(billPlan);
             
             String unitId = bList[0].Unit_No__c;
             List<Project_Unit__c>     uList = [Select Id, Name,Unit_SAP_Code__c,Saleable_Area__c, Carpet_area__c from Project_Unit__c where Id = :unitId];
-            List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_7__c,allotment_charges_8__c,Allotment_Charges_9__c from Project__c where Id = : bList[0].Project__c];
+            List<Project__c> pRec = [Select Id, Name,Brokerage__c, Project_Property_Type__c,Sales_District__c, allotment_charges_1__c, allotment_charges_2__c,allotment_charges_3__c,allotment_charges_4__c,allotment_charges_5__c,allotment_charges_6__c,allotment_charges_7__c,allotment_charges_8__c,Allotment_Charges_9__c,Stack_Car_Park_Charges__c from Project__c where Id = : bList[0].Project__c];
             List<Project_Charges__c> pList = new List<Project_Charges__c>();
             pList = [Select Id, Name, Charge_Code__c, S_Charge_Bucket__c from Project_charges__c where Project__c = :pRec[0].Id];
             
@@ -563,9 +563,9 @@ billPlanList.item.add(billPlan);
             
               // added by digicloud for ADF Option
             if(bList[0].ADF_Opted__c == true){
-                orderHeader.ADF_OPTION = 'Y';
+                orderHeader.AdfOption = 'Y';
             }else{
-                orderHeader.ADF_OPTION = 'N';
+                orderHeader.AdfOption = 'N';
             }
             orderHeader.ZzbookDt=String.ValueOf( bList[0].Booking_Date__c.date() );
             orderHeader.ZZREGSRNO=bList[0].RW_BRL_Number__c;
@@ -671,7 +671,7 @@ billPlanList.item.add(billPlan);
                                SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                                orderCondition.ItmNumber = orderLine.ItmNumber;
                                orderCondition.CondType = cpph.Global_Charges__r.SAP_Condition_Type__c;
-                               orderCondition.CondValue = String.valueOf(rateMap.get(cpph.Global_Charges__c).Rate__c);
+                               orderCondition.CondValue = String.valueOf(rateMap.get(cpph.Global_Charges__c).Rate__c.setscale(2,RoundingMode.HALF_UP));
                                orderConditionsList.item.add(orderCondition);
                                
                            } else {
@@ -689,7 +689,7 @@ billPlanList.item.add(billPlan);
                                SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
                                orderCondition.ItmNumber = orderLine.ItmNumber;
                                orderCondition.CondType = cpph.Global_Charges__r.SAP_Condition_Type__c;
-                               orderCondition.CondValue = String.valueOf(cpph.Amount__c);
+                               orderCondition.CondValue = (cpph.Amount__c != null)? String.valueOf(cpph.Amount__c.setscale(2,RoundingMode.HALF_UP)) : '';
                                orderConditionsList.item.add(orderCondition);
                            }
                         count++;
@@ -708,20 +708,20 @@ billPlanList.item.add(billPlan);
                     orderCondition.CondType = 'ZGST';
                     orderConditionsList.item.add(orderCondition);
                     GSTDiscount = qList[0].Discount_1_L__c;
-                }
+            }
                 // this means there are other discounts as well, apart from the GST discount as well.
                 if(qList[0].Total_Discount_L__c - GSTDiscount > 0) {
                     // order condition for other charges
-                    SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
-                    orderCondition.ItmNumber = '10';
+                        SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
+                        orderCondition.ItmNumber = '10';
                     //Commented by vinay 22-12-2021
                     //orderCondition.CondValue = String.valueOf((qList[0].Total_Discount_L__c - GSTDiscount).setscale(2,RoundingMode.HALF_UP));
                     orderCondition.CondValue = String.valueOf((qList[0].Customer_Total_Discount_L__c - GSTDiscount).setscale(2,RoundingMode.HALF_UP));
-                    orderCondition.CondType = 'ZDS1';
-                    orderConditionsList.item.add(orderCondition);
-                }
+                        orderCondition.CondType = 'ZDS1';
+                        orderConditionsList.item.add(orderCondition);
+                    }
                 
-            }
+                }
             // check for Additional Premium [ZPRM]
             if(qList[0].Premium_Charges_Amount_1__c != null && qList[0].Premium_Charges_Amount_1__c != 0) {
                 SalesOrderSAPAPIMCS.ZsdstCondition orderCondition = new SalesOrderSAPAPIMCS.ZsdstCondition();
@@ -792,6 +792,9 @@ billPlanList.item.add(billPlan);
                     if(cp.Parking__c.equalsIgnoreCase('Puzzle Car Park')) { //Added by Vinay 28-03-2025
                         allotmentCharges += pRec[0].Allotment_Charges_9__c;
                     }
+                    if(cp.Parking__c.equalsIgnoreCase('Stack')) { //Added by Vinay 13-02-2026
+                        allotmentCharges += pRec[0].Stack_Car_Park_Charges__c;
+                    }
                     count++;
                 }
                 // order condition for parking charges
@@ -822,7 +825,7 @@ billPlanList.item.add(billPlan);
            // SalesOrderLogger.TableOfZsdstCondition orderConditionsLogList = new SalesOrderLogger.TableOfZsdstCondition();
             //orderConditionsLogList.item = new List<SalesOrderLogger.ZsdstCondition>();
             SalesOrderSAPAPIMCS.TableOfZsdstBillPlan billPlanList = new SalesOrderSAPAPIMCS.TableOfZsdstBillPlan();
-            billPlanList.item = new List<   SalesOrderSAPAPIMCS.ZsdstBillPlan>();
+            billPlanList.item = new List<SalesOrderSAPAPIMCS.ZsdstBillPlan>();
             
             SalesOrderSAPAPIMCS.TableOfBapiret2 bapiRet2List = new SalesOrderSAPAPIMCS.TableOfBapiret2();
             bapiRet2List.item = new List<SalesOrderSAPAPIMCS.Bapiret2>();
@@ -872,10 +875,16 @@ billPlanList.item.add(billPlan);
                 if(salesOrderResponse.Status != null){
                     bList[0].Cancellation_in_SAP__c = salesOrderResponse.Status;
                     if(salesOrderResponse.Status == 'Success'){
-                        if(bList[0].Cancellation_Reason__c == 'Unit cancelled'){
+                        if(bList[0].Cancellation_Reason__c != 'Transfer' && bList[0].Cancellation_Reason__c != 'Upgrade/Downgrade'){
                             bList[0].Status__c = 'Booking Cancelled – Refund Pending';
-                        }else if(bList[0].Cancellation_Reason__c ==	'Unit transfer'){
-                            bList[0].Status__c = 'Cancelled';
+                        }else if(bList[0].Cancellation_Reason__c ==	'Transfer'){
+                            bList[0].Status__c = 'Transfer Completed';
+                        }
+                        else if(bList[0].Cancellation_Reason__c == 'Upgrade/Downgrade'){
+                            bList[0].Status__c = 'Upgrade/Downgrade Completed';
+                        }
+                        if(bList[0].Cancellation_Reason__c == 'Unit Transfer'){
+                            bList[0].Status__c = 'Cancelled'; // To Handle old Cases which are already In Process
                         }
                     }
                     update bList[0];

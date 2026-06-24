@@ -1,0 +1,10 @@
+<messaging:emailTemplate subject="CP Submitted Invoice for Billing  - ( {!relatedto.CP_Name__c} )." recipientType="User" relatedToType="Brokerage_Invoice__c">
+
+<messaging:htmlEmailBody >
+<table id="main" border="0" width="50%" border-collapse="collapse">
+            <tr><td> Dear {!relatedto.CP_Invoice_Approver_L1__r.Name}, </td></tr>
+            <tr><td> &nbsp; </td></tr>
+            </table>
+<c:CPInvoiceEmailToSubmitter ChannelPartnerId="{!relatedto.Id}"></c:CPInvoiceEmailToSubmitter>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

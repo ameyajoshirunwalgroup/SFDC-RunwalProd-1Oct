@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interest_Waiver_Approval_Status__c</fullName>
+    <label>Interest Waiver Approval Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Draft</fullName>
+                <default>false</default>
+                <label>Draft</label>
+            </value>
+            <value>
+                <fullName>Submitted for Approval</fullName>
+                <default>false</default>
+                <label>Submitted for Approval</label>
+            </value>
+            <value>
+                <fullName>Approved By Project Lead</fullName>
+                <default>false</default>
+                <label>Approved By Project Lead</label>
+            </value>
+            <value>
+                <fullName>Approved By CRM Head</fullName>
+                <default>false</default>
+                <label>Approved By CRM Head</label>
+            </value>
+            <value>
+                <fullName>Approved By CEO</fullName>
+                <default>false</default>
+                <label>Approved By CEO</label>
+            </value>
+            <value>
+                <fullName>Rejected By Project Lead</fullName>
+                <default>false</default>
+                <label>Rejected By Project Lead</label>
+            </value>
+            <value>
+                <fullName>Rejected By CRM Head</fullName>
+                <default>false</default>
+                <label>Rejected By CRM Head</label>
+            </value>
+            <value>
+                <fullName>Rejected By CEO</fullName>
+                <default>false</default>
+                <label>Rejected By CEO</label>
+            </value>
+            <value>
+                <fullName>Approved</fullName>
+                <default>false</default>
+                <label>Approved</label>
+            </value>
+            <value>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+                <label>Rejected</label>
+            </value>
+            <value>
+                <fullName>Pending at CRM Head</fullName>
+                <default>false</default>
+                <label>Pending at CRM Head</label>
+            </value>
+            <value>
+                <fullName>Pending at CEO</fullName>
+                <default>false</default>
+                <label>Pending at CEO</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

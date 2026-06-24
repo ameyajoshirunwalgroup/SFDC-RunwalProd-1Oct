@@ -1,6 +1,6 @@
 ({
 	doValidityCheck : function(component, event, helper) {
-		console.log('**'+component.find('firstName'));
+		//console.log('**'+component.find('firstName'));
         var controlAuraIds = ["firstName","lastName","dateOfBirth","emailId","mobile","permanentaddr1","pincode"];
         //reducer function iterates over the array and return false if any of the field is invalid otherwise true.
         var isAllValid = controlAuraIds.reduce(function(isValidSoFar, controlAuraId){

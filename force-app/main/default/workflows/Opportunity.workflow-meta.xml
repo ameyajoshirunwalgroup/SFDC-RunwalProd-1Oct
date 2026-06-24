@@ -328,15 +328,6 @@
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
-        <fullName>Expected Date of Closure</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Opportunity.CreatedDate</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
         <fullName>Form 16B%28TDS Certificate%29</fullName>
         <actions>
             <name>Form_16B_TDS_Certificate</name>
@@ -344,24 +335,6 @@
         </actions>
         <active>true</active>
         <formula>AND(!ISNULL(RW_Form_16B_TDS_Certificate_Submitted__c), ISCHANGED(RW_Form_16B_TDS_Certificate_Submitted__c))</formula>
-        <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
-        <fullName>Opportunity Address to Account Billing Address</fullName>
-        <actions>
-            <name>Account_Billing_City</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Account_Billing_Country</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Account_Billing_State</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>false</active>
-        <formula>TRUE</formula>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
@@ -449,38 +422,6 @@
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
-        <fullName>Site visit opp status</fullName>
-        <actions>
-            <name>Stage_site_visit</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>false</active>
-        <criteriaItems>
-            <field>Opportunity.StageName</field>
-            <operation>equals</operation>
-            <value>Qualification</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Opportunity.RW_Number_of_Visits__c</field>
-            <operation>greaterOrEqual</operation>
-            <value>1</value>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
-        <fullName>Task Call Customer</fullName>
-        <actions>
-            <name>Call_Customer</name>
-            <type>Task</type>
-        </actions>
-        <active>false</active>
-        <criteriaItems>
-            <field>Opportunity.CreatedDate</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
         <fullName>Update Opportunity Status</fullName>
         <actions>
             <name>Update_Opportunity_Status</name>
@@ -522,27 +463,6 @@
         <active>true</active>
         <formula>ISCHANGED(  Walkin_SubSource__c )</formula>
         <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
-        <fullName>update closed date</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Opportunity.StageName</field>
-            <operation>notEqual</operation>
-            <value>Unit Booked</value>
-        </criteriaItems>
-        <description>update closed date</description>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-        <workflowTimeTriggers>
-            <offsetFromField>Opportunity.CreatedDate</offsetFromField>
-            <timeLength>45</timeLength>
-            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
-        </workflowTimeTriggers>
-        <workflowTimeTriggers>
-            <offsetFromField>Opportunity.CreatedDate</offsetFromField>
-            <timeLength>180</timeLength>
-            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
-        </workflowTimeTriggers>
     </rules>
     <tasks>
         <fullName>Call_Customer</fullName>

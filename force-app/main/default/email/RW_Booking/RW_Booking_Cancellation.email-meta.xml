@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>this template is used to notify the CRM head about booking cancellation</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>RW Booking Cancellation</name>
+    <style>none</style>
+    <subject>Booking Cancellation</subject>
+    <textOnly>Dear User  
+
+This is to be notify that Booking {!Booking__c.Name} is requested for cancellation. Booking Record Link : {!Booking__c.Link}  
+
+Thanks, Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

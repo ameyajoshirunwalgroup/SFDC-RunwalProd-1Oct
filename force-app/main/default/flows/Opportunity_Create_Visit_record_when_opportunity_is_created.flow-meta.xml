@@ -38,7 +38,7 @@
         <name>Create_Site_visit_record</name>
         <label>Create Site visit record</label>
         <locationX>176</locationX>
-        <locationY>431</locationY>
+        <locationY>323</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -66,7 +66,7 @@
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
-                <elementReference>Get_Record_type.Id</elementReference>
+                <stringValue>0120I000000ycfiQAA</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -108,36 +108,15 @@
         <object>Task</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
-    <recordLookups>
-        <name>Get_Record_type</name>
-        <label>Get Record type</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Create_Site_visit_record</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>DeveloperName</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Site_Visit_task</stringValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>RecordType</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Record_type</targetReference>
+            <targetReference>Create_Site_visit_record</targetReference>
         </connector>
         <object>Opportunity</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
 </Flow>

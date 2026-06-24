@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Block</name>
+    <style>none</style>
+    <subject>EOI Unit Block</subject>
+    <textOnly>Dear Team,
+
+{!EOIName} has been blocked against unit no.{!UnitNumber} in our system. 
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

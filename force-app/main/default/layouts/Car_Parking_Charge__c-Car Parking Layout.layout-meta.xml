@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
@@ -16,7 +17,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Car_Type__c</field>
+                <field>Project_Unit__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -24,15 +25,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Status__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Parking_Amount__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Parking__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -40,15 +33,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Booking__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Car_Parking_Allotment__c</field>
+                <field>Length_of_Car_Park_in_ft__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Car_Park_Level__c</field>
+                <field>Height_of_Car_Park_in_ft__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -58,7 +47,23 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Length_of_Car_Park_in_ft__c</field>
+                <field>Car_Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Status__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Parking__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Level_Floor__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Dependent_Car_Parking__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -66,7 +71,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Height_of_Car_Park_in_ft__c</field>
+                <field>Booking__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -109,6 +114,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>ERP_Integration_Log__c.Car_Parking__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Car_Parking_Charge__c.Dependent_Car_Parking__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

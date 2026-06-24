@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Brokerage__c</fullName>
-    <formula>Brokerage__c -  Cancelled_Brokerage_percentage__c</formula>
+    <formula>IF(TEXT(Brokerage_Type__c)!= &apos;AOP Brokerage&apos;,Brokerage__c -  Cancelled_Brokerage_percentage__c, AOP_Brokerage__c - Cancelled_Brokerage_percentage__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Brokerage %</label>
     <precision>18</precision>

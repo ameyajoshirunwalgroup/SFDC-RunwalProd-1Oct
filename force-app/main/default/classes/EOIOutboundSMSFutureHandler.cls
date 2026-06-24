@@ -7,7 +7,7 @@ public class EOIOutboundSMSFutureHandler
     	if(data!=null && data.size()>0)
     	{
             System.debug('**inside !**'+data);
-    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id =:data[0]];
+    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id =:data[0]]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     		//map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
     		for(Opportunity objOpp: lstOpp)
     		{
@@ -48,19 +48,19 @@ public class EOIOutboundSMSFutureHandler
     	if(data!=null && data.size()>0)
     	{
             System.debug('**inside !**'+data);
-    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id =:data[0]];
+    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id =:data[0]];	//Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     		map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
     		for(Opportunity objOpp: lstOpp)
     		{
     			OutboundSMS objOutboundSMS = new OutboundSMS();
                 OutboundSMS.Booking objBooking = new  OutboundSMS.Booking(); 
                 //objBooking.setOppMobile = objOpp.RW_Mobile_No__c;
-                if(objOpp.RW_Sales_Associate__c!=null)
+                if(objOpp.RW_Sales_Associate__c!=null)  	//Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
                 {
-                	objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+                	objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name;  //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 	
-                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c)!=null)
-                		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c).RW_Phone__c);
+                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+                		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.Sales_Manager_User__r.Name).RW_Phone__c); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             		else
             			objBooking.setOppMobile = 'NA';
                 }

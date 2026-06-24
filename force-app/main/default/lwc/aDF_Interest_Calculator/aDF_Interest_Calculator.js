@@ -25,22 +25,48 @@ export default class SimpleInterestCalculator extends LightningElement {
         }
     }*/
 
-   handlePrincipalChange(event) {
-    this.Principal = parseFloat(event.target.value) || 0;
+//    handlePrincipalChange(event) {
+//     this.Principal = parseFloat(event.target.value) || 0;
 
-    if (this.Principal > 0 && this.recordId) {
-        getProjects({ sBookingId: this.recordId, principalAmount: this.Principal })
-            .then(result => {
-                if (result && result.length > 0) {
-                //    this.ADFThresholdAmount = result[0].ADFThresholdAmount;
-                    this.ROI = result[0].ADFInterestRate;
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching project data: ', error);
-            });
+//     if (this.Principal > 0 && this.recordId) {
+//         getProjects({ sBookingId: this.recordId, principalAmount: this.Principal })
+//             .then(result => {
+//                 if (result && result.length > 0) {
+//                 //    this.ADFThresholdAmount = result[0].ADFThresholdAmount;
+//                     console.log('result[0].ADFInterestRate----->',result[0].ADFInterestRate);
+//                     this.ROI = result[0].ADFInterestRate;
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('Error fetching project data: ', error);
+//             });
+//     }
+// }
+
+    handlePrincipalChange(event) {
+        this.Principal = parseFloat(event.target.value) || 0;
+
+        if (this.Principal > 0 && this.recordId) {
+            getProjects({ sBookingId: this.recordId, principalAmount: this.Principal })
+                .then(res => {
+
+                    if (!res.success) {
+                        //this.showToast('Error', res.message, 'error');
+                        this.ROI = null;
+                        this.ADFThresholdAmount = null;
+                        this.CalculatedInterest = res.message;
+                        return;
+                    }
+
+                    this.ROI = res.ADFInterestRate;
+                })
+                .catch(error => {
+                    //this.showToast('Error', 'Server Error. Contact Admin.', 'error');
+                    console.error('Error fetching project data: ', error);
+                });
+        }
     }
-}
+
 
     /* handleROIChange(event) {
          this.ROI = parseFloat(event.target.value) || 0;
@@ -94,18 +120,28 @@ export default class SimpleInterestCalculator extends LightningElement {
             );*/
             return;
         }
- if (this.Principal > 0 && this.ROI > 0 && this.startDate && this.endDate) {
-        // Perform interest calculation
-        const diffTime = Math.abs(end - start);
-        const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365);
+        if (this.Principal > 0 && this.ROI > 0 && this.startDate && this.endDate) {
+                // Perform interest calculation
+                const diffTime = Math.abs(end - start);
+                const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365);
 
-        const interest = (this.Principal * this.ROI * diffYears) / 100;
-        this.CalculatedInterest = `Interest: Rs. ${interest.toFixed(2)}`;
-        this.TotalAmount = `Total Amount: Rs. ${(this.Principal + interest).toFixed(2)}`;
- }
- else{
-      this.CalculatedInterest = 'Please Enter All Values Correctly.';
+                const interest = (this.Principal * this.ROI * diffYears) / 100;
+                this.CalculatedInterest = `Interest: Rs. ${interest.toFixed(2)}`;
+                this.TotalAmount = `Total Amount: Rs. ${(this.Principal + interest).toFixed(2)}`;
+        }else{
+            this.CalculatedInterest = 'Please Enter All Values Correctly.';
             this.TotalAmount = '';
- }
+        }
     }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title,
+                message,
+                variant
+            })
+        );
+    }
+
 }

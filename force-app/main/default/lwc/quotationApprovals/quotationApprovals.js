@@ -8,7 +8,7 @@ import referralsendapproval from '@salesforce/apex/SubmitForApprovalQuotationLwc
 export default class QuotationApprovals extends LightningElement {
     @api recordId;
     @track cmnt;
-    @track isAttachmentExist= false;
+    @track isAttachmentExist= true;
 
     // get URL Parameter
     currentPageReference = null; 
@@ -30,16 +30,16 @@ export default class QuotationApprovals extends LightningElement {
     }
     connectedCallback(){
         console.log('Rendered::'+this.QId);
-        getApprval({QuotationId : this.QId}).then(result=>{
-            console.log('Result::'+JSON.parse(JSON.stringify(result)));
-            this.isAttachmentExist = JSON.parse(JSON.stringify(result));
-            console.log('isAttachmentExist::'+this.isAttachmentExist);
-            if(this.isAttachmentExist == false){
-                this.notification()
-            }
-        }).catch(error =>{
-            window.alert("error :"+JSON.stringify(error));
-        })
+        // getApprval({QuotationId : this.QId}).then(result=>{
+        //     console.log('Result::'+JSON.parse(JSON.stringify(result)));
+        //     this.isAttachmentExist = JSON.parse(JSON.stringify(result));
+        //     console.log('isAttachmentExist::'+this.isAttachmentExist);
+        //     if(this.isAttachmentExist == false){
+        //         this.notification()
+        //     }
+        // }).catch(error =>{
+        //     window.alert("error :"+JSON.stringify(error));
+        // })
     
     }
 

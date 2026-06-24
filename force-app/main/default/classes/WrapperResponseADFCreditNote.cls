@@ -12,5 +12,6 @@ public class WrapperResponseADFCreditNote {
         public String INV_DOC;
         public String INV_DOC_MSG;
         public String STATUS;
+        public String CLR_DOC; //Added by Vinay 01-04-2026
     }
 }

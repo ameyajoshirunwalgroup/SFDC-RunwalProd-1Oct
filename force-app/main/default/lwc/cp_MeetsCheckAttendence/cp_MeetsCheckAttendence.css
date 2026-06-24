@@ -1,0 +1,25 @@
+.custom-container{
+	color : black;
+}
+.custom-header {
+    background-color: #0070d2;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.dropdown-wrapper {
+    position: relative;        /* anchor for absolute child */
+}
+
+.suggestion-box {
+    position: absolute;
+    top: 100%;                 /* directly under the input */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 10;               /* stay above other content */
+    margin-top: 0.25rem;       /* small gap below input */
+}

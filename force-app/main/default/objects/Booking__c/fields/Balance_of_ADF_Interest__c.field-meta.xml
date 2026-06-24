@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Balance_of_ADF_Interest__c</fullName>
+    <label>Balance of ADF Interest</label>
+    <summarizedField>Credit_Note__c.Interest_To_Be_Settled__c</summarizedField>
+    <summaryForeignKey>Credit_Note__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

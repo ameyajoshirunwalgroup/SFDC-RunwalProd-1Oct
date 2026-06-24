@@ -57,7 +57,8 @@ public class TestBatchForBrokerageCalculation {
             Type_of_Client__c = 'Local',
             Booking_Date__c = Date.today(),
             Allotment_Premium__c = 10000000,
-        	RW_Total_Receipt_Amount_Received__c = 5000000
+        	RW_Total_Receipt_Amount_Received__c = 5000000,
+            Checklist_Approved__c = true
             //X5_Received__c = true
         );
         insert b;

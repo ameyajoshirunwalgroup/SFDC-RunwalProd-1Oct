@@ -21,14 +21,16 @@ System.debug('PA Email Dup: ' + personAccountAltEmailDup);
       //  Map<Lead, List<Lead>> leadMobileDupMap  = DedupeChecker.findLeadDupeforLeads('MOBILE', leadList);
         System.debug('Lead Mobile Dup: ' + leadMobileDupMap);
         
-        Map<Lead,List<Account>>  PAMobileDupMap = DedupeChecker.findPADupeforLeads('MOBILE',leadList);
-        System.debug('PA Mobile Duplicates: ' + PAMobileDupMap);
+        /*Map<Lead,List<Account>>  PAMobileDupMap = DedupeChecker.findPADupeforLeads('MOBILE',leadList); //Commented by Vinay 30-01-2026
+        System.debug('PA Mobile Duplicates: ' + PAMobileDupMap);*/
+        Map<Lead,List<Account>>  PAMobileDupMap = new Map<Lead,List<Account>>(); //Added by Vinay 30-01-2026
         
         Map<Lead, List<Lead>> leadAltMobileDupMap  = DedupeChecker.findLeadDupeforLeads('ALTMOBILE', leadList);
         System.debug('Lead Mobile Dup: ' + leadAltMobileDupMap);
         
-        Map<Lead,List<Account>>  PAAltMobileDupMap = DedupeChecker.findPADupeforLeads('ALTMOBILE',leadList);
-        System.debug('PA Mobile Duplicates: ' + PAAltMobileDupMap);
+        /*Map<Lead,List<Account>>  PAAltMobileDupMap = DedupeChecker.findPADupeforLeads('ALTMOBILE',leadList); //Commented by Vinay 30-01-2026
+        System.debug('PA Mobile Duplicates: ' + PAAltMobileDupMap);*/
+        Map<Lead,List<Account>>  PAAltMobileDupMap = new Map<Lead,List<Account>>(); //Added by Vinay 30-01-2026
         
         Map<Lead, Map<String, List<Id>>> leadDupAgg = DedupeChecker.aggregateLeadDuplicates(leadMobileDupMap, PAMobileDupMap,leadAltMobileDupMap,PAAltMobileDupMap );
         System.debug('AggregatedDuplicates: ' + leadDupAgg);

@@ -5,19 +5,19 @@ public class OutboundSMSFutureHandler
     {
     	if(setOpporunityId!=null && setOpporunityId.size()>0)
     	{
-    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in:setOpporunityId];
+    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in:setOpporunityId]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     		map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
     		for(Opportunity objOpp: lstOpp)
     		{
     			OutboundSMS objOutboundSMS = new OutboundSMS();
                 OutboundSMS.Booking objBooking = new  OutboundSMS.Booking(); 
                 //objBooking.setOppMobile = objOpp.RW_Mobile_No__c;
-                if(objOpp.RW_Sales_Associate__c!=null)
+                if(objOpp.Sales_Manager_User__c!=null)  //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
                 {
-                	objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+                	objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 	
-                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c)!=null)
-                		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c).RW_Phone__c);
+                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+                		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.Sales_Manager_User__r.Name).RW_Phone__c); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
             		else
             			objBooking.setOppMobile = 'NA';
                 }
@@ -26,7 +26,7 @@ public class OutboundSMSFutureHandler
             		objBooking.setSalesManager = 'NA';
             		objBooking.setOppMobile = 'NA';
             	}
-                objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+                objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 objBooking.setProjectName = objOpp.RW_Project__c!=null? objOpp.RW_Project__r.name:null;
                 objBooking.setOppName = objOpp.Name;
                 objBooking.setDate = string.valueOf(objOpp.First_Site_Visit_Date__c);
@@ -48,19 +48,19 @@ public class OutboundSMSFutureHandler
     		{
     			for(event objEvent: lstevent)
     				mapOfOppToStartDate.put(objEvent.WhatId, objEvent.StartDateTime);
-				list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in: mapOfOppToStartDate.keyset()];
+				list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in: mapOfOppToStartDate.keyset()]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
 	    		if(lstOpp!=null && lstOpp.size()>0)
 	    		for(Opportunity objOpp: lstOpp)
 	    		{
 	    			OutboundSMS objOutboundSMS = new OutboundSMS();
 	                OutboundSMS.Booking objBooking = new  OutboundSMS.Booking(); 
 	                objBooking.setOppMobile = objOpp.RW_Mobile_No__c;
-	                if(objOpp.RW_Sales_Associate__c!=null)
+	                if(objOpp.RW_Sales_Associate__c!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
 	                {
-	                	objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+	                	objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
 	                	
-	                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c)!=null)
-	                		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c).RW_Phone__c);
+	                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+	                		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.Sales_Manager_User__r.Name).RW_Phone__c); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 		else
                 			objBooking.setOppMobile = 'NA';
 	                }
@@ -85,20 +85,20 @@ public class OutboundSMSFutureHandler
     {
     	if(setOpporunityId!=null && setOpporunityId.size()>0)
     	{
-    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in:setOpporunityId];
+    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in:setOpporunityId]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     		map<string, Sales_Manager_Cont__c> mapOfCustomSetting = Sales_Manager_Cont__c.getAll();
     		for(Opportunity objOpp: lstOpp)
     		{
     			OutboundSMS objOutboundSMS = new OutboundSMS();
                 OutboundSMS.Booking objBooking = new  OutboundSMS.Booking(); 
                 objBooking.setOppMobile = objOpp.RW_Mobile_No__c;
-                objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
-                if(objOpp.RW_Sales_Associate__c!=null)
+                objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
+                if(objOpp.Sales_Manager_User__c!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
                 {
-                	objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+                	objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 	
-                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c)!=null)
-	            		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.RW_Sales_Associate__c).RW_Phone__c);
+                	if(mapOfCustomSetting!=null && mapOfCustomSetting.size()>0 && mapOfCustomSetting.get(objOpp.Sales_Manager_User__c)!=null) //Replaced RW_Sales_Associate__c with Sales_Manager_User__c by Vinay 05-12-2025
+	            		objBooking.setOppMobile = string.valueOf(mapOfCustomSetting.get(objOpp.Sales_Manager_User__r.Name).RW_Phone__c); //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
 	        		else
 	        			objBooking.setOppMobile = 'NA';
                 }
@@ -121,13 +121,13 @@ public class OutboundSMSFutureHandler
     {
     	if(setOpporunityId!=null && setOpporunityId.size()>0)
     	{
-    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in:setOpporunityId];
+    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where id in:setOpporunityId]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     		for(Opportunity objOpp: lstOpp)
     		{
     			OutboundSMS objOutboundSMS = new OutboundSMS();
                 OutboundSMS.Booking objBooking = new  OutboundSMS.Booking(); 
                 objBooking.setOppMobile = objOpp.RW_Mobile_No__c;
-                objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+                objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 objBooking.setProjectName = objOpp.RW_Project__c!=null? objOpp.RW_Project__r.name:null;
                 objBooking.setOppName = objOpp.Name;
                 objOutboundSMS.To = objOpp.RW_Mobile_No__c;
@@ -141,13 +141,13 @@ public class OutboundSMSFutureHandler
     {
     	if(setUnitId!=null && setUnitId.size()>0)
     	{
-    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where RW_Project_Unit__c in:setUnitId];
+    		list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, First_Site_Visit_Date__c from Opportunity where RW_Project_Unit__c in:setUnitId]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     		for(Opportunity objOpp: lstOpp)
     		{
     			OutboundSMS objOutboundSMS = new OutboundSMS();
                 OutboundSMS.Booking objBooking = new  OutboundSMS.Booking(); 
                 objBooking.setOppMobile = objOpp.RW_Mobile_No__c;
-                objBooking.setSalesManager = objOpp.RW_Sales_Associate__c;
+                objBooking.setSalesManager = objOpp.Sales_Manager_User__r.Name; //Replaced RW_Sales_Associate__c with Sales_Manager_User__r.Name by Vinay 05-12-2025
                 objBooking.setProjectName = objOpp.RW_Project__c!=null? objOpp.RW_Project__r.name:null;
                 objBooking.setOppName = objOpp.Name;
                 objOutboundSMS.To = objOpp.RW_Mobile_No__c;
@@ -172,8 +172,8 @@ public class OutboundSMSFutureHandler
     		}
     		if(mapOfTaskToOpp.size() > 0)
     		{
-    			list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c, RW_Mobile_No__c, 
-    											First_Site_Visit_Date__c from Opportunity where id in:mapOfTaskToOpp.keySet()];
+    			list<Opportunity> lstOpp = [select id, Name, RW_Project__c, RW_Project__r.name, RW_Sales_Associate__c,Sales_Manager_User__c,Sales_Manager_User__r.Name, RW_Mobile_No__c, 
+    											First_Site_Visit_Date__c from Opportunity where id in:mapOfTaskToOpp.keySet()]; //Added Sales_Manager_User__c,Sales_Manager_User__r.Name by Vinay 05-12-2025
     			
     			if(lstOpp != null && lstOpp.size() > 0)
     			{
@@ -196,7 +196,7 @@ public class OutboundSMSFutureHandler
 		            		objBooking.setSalesManager = 'NA';
 		            		objBooking.setOppMobile = 'NA';
 		            	}*/
-		            	if(mapOfTaskToOpp.get(objOpp.id) !=null && mapOfTaskToOpp.get(objOpp.id).RW_Sales_Associate__c !=null)
+		            	if(mapOfTaskToOpp.get(objOpp.id) !=null && mapOfTaskToOpp.get(objOpp.id).RW_Sales_Associate__c !=null) 
 		            	{
 		            		objBooking.setSalesManager = mapOfTaskToOpp.get(objOpp.id).RW_Sales_Associate__c;
 		                	

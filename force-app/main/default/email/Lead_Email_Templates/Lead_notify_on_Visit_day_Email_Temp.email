@@ -1,0 +1,21 @@
+<messaging:emailTemplate subject="Reminder: Your Site Visit is Scheduled for Today" recipientType="Lead" relatedToType="Lead">
+    <messaging:htmlEmailBody >
+        <html>
+            <body>
+                <p>Hi {!relatedTo.Name},</p>
+                
+                <p>This is a reminder for your site visit scheduled for today at <b>{!TEXT(TIMEVALUE(relatedTo.call_proposed_date_of_visit__c))}</b>.</p>
+                
+                <p>We look forward to welcoming you at <b>{!relatedTo.RW_Project__r.Name}</b>.</p>
+                
+                <p><b>Directions:</b> {!relatedTo.RW_project__r.Location_Map_URL__c}</p>
+                
+                <!--<p>In case of any assistance required, please contact us on <b>{!relatedTo.Owner.Phone}</b>.</p>--> <!-- Commented by Vinay 22/01/2026 -->
+                
+                
+               
+                <p>Warm Regards,<br/>Team Presales,<br/>Runwal Group</p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

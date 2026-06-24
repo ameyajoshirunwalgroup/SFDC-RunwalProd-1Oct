@@ -1,0 +1,126 @@
+<template>
+    <!-- Custom Header -->
+    <div class="custom-header">
+        Mark Attendance
+    </div>
+
+    <lightning-card>
+        <div class="slds-m-around_medium">
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-gutters">
+
+                <!-- Campaign Search + Suggestions -->
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="dropdown-wrapper">
+                        <lightning-input type="search" value={searchKey} onchange={handleInput}
+                            placeholder="Type campaign name..." name="campaignSearch" label="Events"
+                             style="background-color: #F0F0F0; border-radius: 0.25rem; padding: 0.25rem;"
+                             class="slds-input slds-box slds-box_xx-small slds-border_radius slds-shadow_small">
+                        </lightning-input>
+
+                        <template if:true={showSuggestions}>
+                            <ul class="suggestion-box slds-box slds-shadow_small slds-border_radius">
+                                <template for:each={suggestions} for:item="s">
+                                    <li key={s.Id} data-name={s.Name} onclick={handleSuggestionSelect}
+                                        class="slds-p-around_x-small slds-text-link">
+                                        {s.Name}
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Member Search + Suggestions -->
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="dropdown-wrapper">
+                        <lightning-input type="search" value={memberSearchKey} onchange={handleMemberInput}
+                            placeholder="Type campaign member name..." name="memberSearch" label="Channel Partners"
+                            style="background-color: #F0F0F0; border-radius: 0.25rem; padding: 0.25rem;"
+                            class="slds-input slds-box slds-box_xx-small slds-border_radius slds-shadow_small">
+                        </lightning-input>
+
+                        <template if:true={showMemberSuggestions}>
+                            <ul class="suggestion-box slds-box slds-shadow_small slds-border_radius">
+                                <template for:each={memberSuggestions} for:item="m">
+                                    <li key={m.Id} data-name={m.Contact.Name} onclick={handleMemberSuggestionSelect}
+                                        class="slds-p-around_x-small slds-text-link">
+                                        {m.Contact.Name}
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Spinner -->
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+<!--
+        <div class="slds-m-top_medium slds-text-align_right">
+            <lightning-button variant="brand" label="Save" onclick={handleSave}>
+            </lightning-button>
+        </div>-->
+        <!-- HTML Table -->
+        <template if:true={members.length}>
+            <div class="slds-m-around_medium slds-scrollable_x">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th>Campaign Name</th>
+                            <th>Name</th>
+                            <th>Mobile No.</th>
+                            <th>Email</th>
+                            <th>Registered Attendees</th>
+                            <th>Is Attended</th>
+                            <th>Total Attendees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={members} for:item="m">
+                            <tr key={m.Id}>
+                                <td>{m.CampaignName}</td>
+                                <td>{m.memberName}</td>
+                                <td>{m.MobilePhone}</td>
+                                <td>{m.memberEmail}</td>
+                                <td>{m.AdditionalAttendees}</td>
+                                <td>
+                                    <!-- <input type="checkbox"
+                                        data-id={m.Id}
+                                        checked={m.isAttended}
+                                        onchange={handleCheckboxChange}/>-->
+                                    <lightning-input type="checkbox" checked={m.isAttended} data-id={m.Id}
+                                        onchange={handleCheckboxChange} disabled={m.isSaved}>
+                                    </lightning-input>
+                                </td>
+                                <td>
+                                    <input type="number"
+                                        class="slds-input"
+                                        data-id={m.Id}
+                                        min="0"
+                                        value={m.totalAttendees}
+                                        onchange={handleAttendeesChange} disabled={m.isSaved}/>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="slds-m-top_medium slds-text-align_right">
+                <lightning-button variant="brand" label="Save" onclick={handleSave}>
+                </lightning-button>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-m-around_medium">
+                {error.body.message}
+            </div>
+        </template>
+    </lightning-card>
+</template>

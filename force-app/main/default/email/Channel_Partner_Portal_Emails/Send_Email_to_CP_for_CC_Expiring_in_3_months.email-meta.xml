@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Send Email to CPs for CC Expiring in 3 months</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Send Email to CP for CC Expiring in 3 months</name>
+    <style>none</style>
+    <subject>Reminder: Competency Certificate Renewal Due in 3 Months</subject>
+    <textOnly>Dear {!Broker__c.CreatedBy}, 
+This is a gentle reminder that 7 days have passed since the creation of Temporary Channel Partner {!Broker__c.Name}, and the registration process is still pending. 
+Kindly ensure that the registration is completed at the earliest to avoid delays in onboarding, payment, or portal access.  
+
+Regards 
+Runwal Enterprises.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,51 @@
+<template>
+    <template for:each={checklist} for:item="item">
+        <div key={item.Id} class="slds-grid slds-gutters slds-p-around_small slds-align-middle">
+
+            <!-- First Column -->
+            <div class="slds-col slds-size_1-of-6">
+                <strong title={item.Checklist_Item__c}>{item.Checklist_Item__c}</strong></br>
+                <strong title={item.Status__c}>Status : {item.Status__c}</strong><br/>
+                <span>{item.fieldDisplayValue}</span>
+            </div>
+
+
+            <!-- Middle Column (Previous + New Remark) -->
+            <div class="slds-col slds-size_4-of-6">
+                <template if:true={item.showPreviousRemark}>
+                    <div class="slds-p-around_small">
+                        <lightning-textarea label="Previous Remark" value={item.previousRemarks} disabled>
+                        </lightning-textarea>
+                    </div>
+                </template>
+
+                <div class="slds-p-around_small">
+                    <lightning-textarea label="Add Remark" value={item.remarkValue} data-id={item.Id}
+                        onchange={handleRemarkChange} disabled={item.isDisabled}>
+                    </lightning-textarea>
+                </div>
+            </div>
+
+            <!-- Third Column (Buttons) -->
+            <template if:true={item.showButtons}>
+                <div class="slds-col slds-grid slds-grid_vertical-align-center slds-gutters">
+                    <lightning-icon icon-name="action:approval" alternative-text="Approve" title="Approve" size="medium"
+                        class="custom-icon-approval" data-id={item.Id} data-action="Approved" variant="brand"
+                        onclick={handleAction} disabled={item.isDisabled}>
+                    </lightning-icon>
+
+                    <lightning-icon icon-name="action:close" size="medium" class="custom-icon-reject"
+                        alternative-text="Reject" title="Reject" data-id={item.Id} data-action="Rejected"
+                        variant="destructive" onclick={handleAction} disabled={item.isDisabled}>
+                    </lightning-icon>
+                </div>
+            </template>
+
+        </div>
+    </template>
+
+
+    <template if:false={checklist}>
+        <p class="slds-p-around_medium">No checklist items found.</p>
+    </template>
+</template>

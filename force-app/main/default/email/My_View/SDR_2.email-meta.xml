@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>SDR 2</name>
+    <style>none</style>
+    <subject>SDR Reminder 2</subject>
+    <textOnly>Dear {!Booking__c.Primary_Applicant_Name__c}
+
+Greetings from Runwal!
+
+This is a gentle reminder to register your unit {!Booking__c.Unit_No__r.Name} in {!Booking__c.Project__r.Name}.
+
+You are requested to kindly transfer the Stamp Duty &amp; Registration payments immediately, along with the Name Confirmation Letter (if not sent already).
+
+In case of availing a home loan kindly share the sanction letter for our reference and preparing the relevant documentation.
+
+Please feel free to revert in case of any further assistance.
+
+Thanks,
+Runwal Team
+
+PS: Please ignore the above if the same has been submitted/paid.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,116 @@
+<template>
+    <div class="eventsCalenderStyle">
+        <div class="backColor">
+            <div class="slds-m-left_medium slds-m-top_x-small slds-float_left">
+                <span>
+                    <lightning-icon icon-name="utility:event" size="small" class="white-icon slds-m-bottom_medium"></lightning-icon>
+                </span>
+                <span class="cust-font slds-m-left_medium">
+                    CP Meets ({numberOfEvents})
+                </span>
+            </div>
+        </div>
+
+        <div class="slds-m-top_large">
+            <template for:each={campaigns} for:item="campaign">
+                <div key={campaign.Id} class="slds-p-around_small">
+                    <div class="slds-var-p-horizontal_small bear-tile bear-tile-body">
+                        <div class="slds-media" style="margin-top:10px;">
+                            <div class="slds-media__figure"></div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-title_caps">
+                                    <a onclick={navigateToCampainDetailsLWC} data-id={campaign.Id}>
+                                        <span class="slds-text-link">{campaign.Name}</span>
+                                    </a>
+                                </div>
+                                <ul class="slds-list_horizontal slds-has-dividers_right">
+                                    <li class="slds-item">
+                                        <lightning-formatted-date-time time-zone="UTC"
+                                            value={campaign.Event_Date_Time__c} year="numeric" month="short"
+                                            day="2-digit" weekday="long" hour="2-digit" minute="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </li>
+                                </ul>
+                                <div class="slds-text-title_caps slds-m-top_x-small">
+                                    <lightning-icon icon-name='standard:address' size="x-small"
+                                        class="slds-p-around_xxx-small custom-icon-address" alternative-text="address">
+                                    </lightning-icon>
+                                    <a data-id={campaign.Id} class="slds-text-link">{campaign.Event_Location__c}</a>
+                                </div>
+                                <div class="slds-text-title_caps slds-m-top_x-small">
+                                    <span class="slds-text-link">{campaign.Description}</span>
+                                </div>
+
+                            </div>
+
+                            <!-- Registration / RSVP Section -->
+                            <div class="slds-m-top_small">
+                                <!-- Show "See You At Event" only after RSVP Yes + Confirm -->
+                                <template if:true={campaign.showSeeYouAtEvent}>
+                                    <lightning-button variant="base" label="See You At Event"
+                                        icon-name="utility:success" class="slds-p-around_xxx-small slds-float_left">
+                                    </lightning-button>
+                                </template>
+
+                                <!-- Show RSVP buttons only if not confirmed yet -->
+                                <template if:false={campaign.showSeeYouAtEvent}>
+                                    <template if:false={campaign.showDeclineMsg}>
+                                        <template if:true={campaign.showRSVPButtons}>
+                                            <div class="slds-m-bottom_small">
+                                                <!--<span class="slds-text-body_regular slds-m-right_small rsvp-label">RSVP:</span>-->
+                                                <lightning-button variant="base" label="RSVP"
+                                                    icon-name="utility:adduser" class="slds-m-right_small">
+                                                </lightning-button></br>
+                                                <lightning-button variant="brand" label="Yes" data-id={campaign.Id}
+                                                    onclick={handleRSVPYes} class="slds-m-right_small">
+                                                </lightning-button>
+                                                <lightning-button variant="brand" label="No" data-id={campaign.Id}
+                                                    onclick={handleRSVPNo}></lightning-button>
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <!-- Show Decline Message with link to show RSVP again -->
+                                    <template if:true={campaign.showDeclineMsg}>
+                                        <div class="slds-text-color_error slds-m-bottom_small">
+                                            You have declined the event –</br>
+                                            <a class="slds-text-link" style="color:#bb8926" data-id={campaign.Id}
+                                                onclick={handleShowRSVPAgain}>
+                                                click here to RSVP
+                                            </a>
+                                        </div>
+                                    </template>
+                                    <!-- Show Additional Attendees input after Yes -->
+                                    <template if:true={campaign.showGuestPrompt}>
+                                        <div class="slds-m-top_small">
+                                            <!--<lightning-input type="number" label="Attendees?" value={campaign.guestCount} data-id={campaign.Id} onchange={handleGuestChange} min="1" step="1">
+                                            </lightning-input>-->
+                                            <label>Expected Attendees?</label><br>
+                                            <input type="number" label="Expected Attendees?"
+                                           class="slds-input_small"
+                                           data-id={campaign.Id}
+                                           field-level-help="Expected Attendees?"
+                                           value={campaign.guestCount}
+                                           onchange={handleGuestChange}/></br>
+                                            <lightning-button class="slds-m-bottom_small" label="Confirm" variant="base"
+                                                data-id={campaign.Id} onclick={confirmRegistration}>
+                                            </lightning-button>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div class="slds-p-top_small slds-p-bottom_small">
+            <div class="slds-clearfix">
+                <lightning-button variant="brand" class="slds-float_left slds-p-around_medium" label="View Past Events"
+                    onclick={navigateToPastEvents}></lightning-button>
+                <lightning-button variant="brand" class="slds-float_right slds-p-around_medium" label="View All Events"
+                    onclick={navigateToAllEvents}></lightning-button>
+            </div>
+        </div>
+    </div>
+</template>

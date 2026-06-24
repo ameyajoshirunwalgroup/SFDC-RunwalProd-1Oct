@@ -14,18 +14,6 @@
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>StartDate</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>EndDate</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>Status</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Type</field>
             </layoutItems>
@@ -39,7 +27,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Type__c</field>
+                <field>NumberSent</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Origin__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -67,16 +59,43 @@
                 <behavior>Edit</behavior>
                 <field>Tollfree_Number__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>NumberSent</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Origin__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Event Details</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>Event_Date_Time__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Attended_CP_Count__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Registration_Count1__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Event_Location__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Attended_People_Count__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -100,10 +119,6 @@
                 <behavior>Readonly</behavior>
                 <field>Campaign_Spend_per_Booked_Opportunity__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>ExpectedRevenue</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -112,11 +127,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>ExpectedResponse</field>
+                <field>ExpectedRevenue</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RW_Expected_Revenue__c</field>
+                <field>ExpectedResponse</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -365,12 +380,12 @@
         </relatedContentItems>
     </relatedContent>
     <relatedLists>
-        <excludeButtons>AddContact</excludeButtons>
         <fields>MEMBER_TYPE</fields>
         <fields>FULL_NAME</fields>
         <fields>EMAIL</fields>
         <fields>MOBILE</fields>
-        <fields>STATUS</fields>
+        <fields>RSVP__c</fields>
+        <fields>Is_Attended__c</fields>
         <fields>COMPANY</fields>
         <relatedList>RelatedCampaignMemberList</relatedList>
     </relatedLists>

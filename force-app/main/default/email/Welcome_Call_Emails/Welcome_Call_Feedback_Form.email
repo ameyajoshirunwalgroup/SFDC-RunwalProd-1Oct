@@ -1,0 +1,261 @@
+<messaging:emailTemplate subject="Feedback Form" recipientType="User" relatedToType="RW_Welcome_Call__c">
+<messaging:plainTextEmailBody >
+</messaging:plainTextEmailBody>
+<messaging:htmlEmailBody >
+
+    
+    <html lang="en">
+            <head>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                
+                <style>                                      
+                    body{
+                    margin: 0;
+                    padding: 0;                    
+                    }
+                    .navbar img{
+                    width:70px;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    label{
+                    font-weight:600;
+                    font-size:20px;
+                    }
+                    .mainDiv{
+                    padding:20px;
+                    border-radius:5px;
+                    -webkit-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    -moz-box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.62);
+                    }
+                    .form-control:focus {
+                    background-color: #fff;
+                    border-color: #bc8b2d;
+                    outline: 0;
+                    box-shadow: 0 0 0 1px rgb(188, 139, 45);
+                    }
+                    .btn{
+                    padding:8px 10px;
+                    color: #fff;
+                    cursor: pointer !important;
+                    border: solid 1px #A8822B;
+                    width: 100%;
+                    display: inline-block;
+                    background-color: #A8822B;
+                    width: 85px;
+                    font-size: 16px;
+                    font-weight:400;
+                    transition:0.2s;
+                    }
+                    .btn:hover{
+                    padding:8px 10px;
+                    color:A8822B;
+                    background-color: #fff;
+                    border:1px solid #A8822B;
+                    }
+                    .custom-control label img{
+                      width: 45px;
+                    }
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.9rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.9rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                   
+                    /*------------ Ipad -----------------*/
+                    @media screen and (max-width: 768px) {
+                    .navbar img{
+                    width:65px;
+                    text-align:center;
+                    }
+                    .custom-control label img{
+                      width: 40px;
+                    }
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.5rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 4.25rem;
+                        left: 0.5rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                    }
+                     /*------------ Mobile -----------------*/
+                    @media screen and (max-width: 480px) {
+                    .navbar img{
+                    width:50px;
+                    text-align:center;
+                    }
+                    .navbar{
+                    background: #000;
+                    }
+                    .custom-control {
+                    padding-bottom: 35px;
+                    }
+                    label{
+                    font-weight:500;
+                    font-size:18px;
+                    }
+                    .custom-control label img{
+                      width: 40px;
+                    }
+                    
+                    .custom-control-label::before {
+                        position: absolute;
+                        top: 3.50rem;
+                        left: 0.7rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        pointer-events: none;
+                        content: "";
+                        background-color: #fff;
+                        border: #adb5bd solid 1px;
+                    }
+                    .custom-control-label::after {
+                        position: absolute;
+                        top: 3.50rem;
+                        left: 0.7rem;
+                        display: block;
+                        width: 1rem;
+                        height: 1rem;
+                        content: "";
+                        background: no-repeat 50%/50% 50%;
+                    }
+                    
+                    }
+                    .spinnerBg {
+                        position: fixed;
+                        width: 100%;
+                        height: 100%;
+                        background-color: #000;
+                        opacity: 0.2;
+                        z-index: 999999;
+                        left: 0;
+                        top: 0;
+                    }
+        
+                    .Assigned {
+                        position: fixed;
+                        background: url('{!URLFOR($Resource.CIFLoading)}');
+                        background-size: 50px 50px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 1004;
+                        left: 0%;
+                        top: 0%;
+                    }    
+                    .center {
+                      margin-left: auto;
+                      margin-right: auto;
+                    }
+                    .bkground {
+                      background-color: #ab812d;
+                    }
+            </style>
+                
+            </head>
+            <body>
+                <div style="border-width:2px;border-style:solid;border-color:black;">
+                    <div class="bkground" style="text-align:center;">
+                    <a >
+                        <!--<img src ="https://www.runwal.com/images/runwal-logo.png"  alt="logo" style="float:center;" width="100" height="100"/>-->
+                        <img src ="https://runwal--fullcopy.sandbox.my.salesforce.com/servlet/servlet.ImageServer?id=015Ip000000DA6i&oid=00DIp0000000Tbg&lastMod=1270576568000"  alt="logo" style="float:center;" width="250" height="100"/>
+                    </a><br/>
+                     </div>
+                <div style="text-align:left;">
+                Dear {!relatedTo.RW_Applicant1_Primary_Applicant_Name__c},<br/><br/>
+    
+                Thanks for choosing Runwal!
+                Please complete this feedback and help us to improve your experience continuously.<br/><br/>
+                </div>
+                
+                <div class="center"  style="text-align:center;border-width:2px;border-style:solid;border-color:black;width:98%">
+                
+                
+                    <p style="text-align:center;"><b>Based on your recent experience, how happy are you recommend Runwal to a friend or colleague?</b></p><br/>
+                    
+                        
+                           <table style="width:100%">
+                             <tr>
+                                     <!-- <td style="position:relative;left:200px;"><apex:image url="https://runwal--uat--c.documentforce.com/servlet/servlet.ImageServer?id=0151e000000K5Dz&oid=00D1e0000008lcK&lastMod=1636702342000" onclick="updatecustomerEx()" styleClass="imageStyle"/></td>
+                                     <td style="position:relative;left:230px;" ><apex:image url="https://runwal--uat--c.documentforce.com/servlet/servlet.ImageServer?id=0151e000000K5E4&oid=00D1e0000008lcK&lastMod=1636702673000" styleClass="imageStyle"/></td>
+                                     <td style="position:relative;left:260px;" ><apex:image url="https://runwal--uat--c.documentforce.com/servlet/servlet.ImageServer?id=0151e000000K5E9&oid=00D1e0000008lcK&lastMod=1636702796000" styleClass="imageStyle"/></td> -->
+                                    <td style="width:35%;text-align:right;"><p><a href="https://runwalhomes.force.com/feedback?id={!relatedTo.RW_Booking__c}&proj={!relatedTo.RW_Project__c}&bknm={!relatedTo.RW_Booking__r.Name}&twr={!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Name}&cust={!relatedTo.RW_Booking__r.Customer__r.Name}&unit={!relatedTo.RW_Booking__r.Unit_No__r.Name}">
+                                    <img src="https://runwal--fullcopy.sandbox.my.salesforce.com/servlet/servlet.ImageServer?id=015Ip000000DA6Y&oid=00DIp0000000Tbg&lastMod=1270576568000" />
+                                    </a>&nbsp;<br/>UnHappy<br/>1 &amp; 2&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
+                                    <td style="width:30%;text-align:center;"><p><a href="https://runwalhomes.force.com/feedback?id={!relatedTo.RW_Booking__c}&proj={!relatedTo.RW_Project__c}&bknm={!relatedTo.RW_Booking__r.Name}&twr={!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Name}&cust={!relatedTo.RW_Booking__r.Customer__r.Name}&unit={!relatedTo.RW_Booking__r.Unit_No__r.Name}">
+                                    <img src="https://runwal--fullcopy.sandbox.my.salesforce.com/servlet/servlet.ImageServer?id=015Ip000000DA6d&oid=00DIp0000000Tbg&lastMod=1270576568000" />
+                                    </a><br/>Neutral<br/>3</p></td>
+                                    <td style="width:35%;text-align:left;"><p><a href="https://runwalhomes.force.com/feedback?id={!relatedTo.RW_Booking__c}&proj={!relatedTo.RW_Project__c}&bknm={!relatedTo.RW_Booking__r.Name}&twr={!relatedTo.RW_Booking__r.Unit_No__r.TowerName__r.Name}&cust={!relatedTo.RW_Booking__r.Customer__r.Name}&unit={!relatedTo.RW_Booking__r.Unit_No__r.Name}">
+                                    <img src="https://runwal--fullcopy.sandbox.my.salesforce.com/servlet/servlet.ImageServer?id=015Ip000000DA6T&oid=00DIp0000000Tbg&lastMod=1270576568000" />
+                                    </a><br/>&nbsp;Happy<br/>&nbsp;&nbsp;4 &amp; 5</p></td>
+                           
+                              </tr>
+                             </table>
+                             
+                        
+                        <script>
+                            function updatecustomerEx()
+                            {
+                                alert('hi');
+                                //$("[Id$='custEx']").val(custX);
+                                //window.open('https://runwal--uat--c.visualforce.com/apex/BookingFeedbackForm?id=a0s1e000000cOXE&proj=Runwal%20Bliss&bknm=B-10167&twr=A', _blank, "height=200,width=200");
+                            }
+                        </script>
+                    </div>
+                <br/><br/>
+                Best regards,<br/>
+                Runwal Team
+                <br/>
+                </div>
+                
+               
+                
+            </body>
+      </html>
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

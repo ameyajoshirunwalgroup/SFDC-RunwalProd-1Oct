@@ -108,6 +108,10 @@ public without sharing class CIFFormPageController {
         get;
         set;
     }
+    //Added by Prashant 13-05-26
+    public List<OccupationWrapper> lstOccupation {get;set;}
+    public String strCurrentOccupation {get;set;}
+    
     //Added by UBS digicloud 29-07-2025
     public string leadOTP;
     Public List<String> countryCodeList {get;set;}
@@ -170,11 +174,31 @@ public without sharing class CIFFormPageController {
         
         System.debug('directLead: ' + directLead);
         
+        //Added by Prashant. 13-05-26
+        // Asssigning Occupation picklist values
+        Schema.DescribeFieldResult occFieldResult = CIF__c.Occupation__c.getDescribe();
+        List<Schema.PicklistEntry> occPicklistValues = occFieldResult.getPicklistValues();
         
+        lstOccupation = new List<OccupationWrapper>();
+        
+        for (Schema.PicklistEntry entry : occPicklistValues) {
+            OccupationWrapper wrapper = new OccupationWrapper();
+            wrapper.strLabel = entry.getLabel();
+            wrapper.strValue = entry.getValue();
+            
+            if (CIFObj.Occupation__c == entry.getValue()) {
+                wrapper.isSelected = true;
+                strCurrentOccupation = entry.getValue();
+            } else {
+                wrapper.isSelected = false;
+            }
+            
+            lstOccupation.add(wrapper);
+        }
         
         
         if (strLeadId != null) {
-            objLead = [SELECT Id, FirstName, LastName, RW_Mobile_No__c, Walkin_Source__c, Generated_OTP_On_Lead__c
+            objLead = [SELECT Id, FirstName, LastName, RW_Mobile_No__c, Walkin_Source__c, Generated_OTP_On_Lead__c,LeadSource
                        FROM Lead WHERE Id = :strLeadId];
             
             if (objLead.Generated_OTP_On_Lead__c != null || leadOTP != null ) {
@@ -194,7 +218,7 @@ LIMIT 1
                 system.debug('lead id-  '+ strLeadId); 
                 system.debug('project id-  '+ strprojectId); 
                 List<OTP__c> matchedOtps1 = [SELECT Id, Generated_OTP__c, Channel_Partner_Lookup__c, Sourcing_Manager__c,
-                                             Customer_Reference_Lookup__c, OTP_Generate_For__c, Referral_Sub_Source__c
+                                             Customer_Reference_Lookup__c, OTP_Generate_For__c, Referral_Sub_Source__c,Sourcing_Manager_LU__c
                                              FROM OTP__c
                                              WHERE 
                                              (Generated_OTP__c = :leadOTP AND 
@@ -213,7 +237,7 @@ LIMIT 1
                     otpobj = matchedOtps1[0];
                     prefillLeadFromOtp(); 
                     System.debug('Otp List ' +matchedOtps1);
-                }else {
+                }else {	
                     strError = 'Invalid OTP. Please generate a new one.';
                     show = 'true'; // or keep it not 'false' so panel stays hidden
                 }
@@ -238,12 +262,13 @@ LIMIT 1
                        RW_Number_of_Cars__c, RW_With_Balcony__c, RW_With_Servant_Room__c, RW_Neighbourhood_Places__c, RW_Date_of_Birth__c, RW_Customer_Type__c,
                        RW_Other_Company_Name__c, RW_Location__c, RW_Ethnicity__c, RW_Referral_Details__c,Broker_Type__c,Marital_Status__c,Cars_Owned__c,
                        Walkin_Sub_Sub_Source__c,Walkin_SubSource__c,Walkin_Channel_Partner__c,Walkin_Apply_Unregistered_ChannelPartner__c,Name_of_Unregistered_Corporate__c,
-                       Unregistered_broker_type__c,Pre_Sales_User__c,RW_Sourcing_Manager__c,Event_Description__C,Lead_Sub_Sub_Source__c,
+                       Unregistered_broker_type__c,Pre_Sales_User__c,Pre_Sales_User_LU__c,RW_Sourcing_Manager__c,Event_Description__C,Lead_Sub_Sub_Source__c,
                        Walkin_Unregistered_ChannelPartner_Email__c,Walkin_UnregisteredChannelPartner_Mobile__c,Walkin_Unregistered_ChannelPartner_Name__c,
-                       Education__c,Client_Type__c,Purpose__c,Name_Of_Walkin_Referee__c,Walk_in_Corporate__c,Spouse_DOB__c,RW_Budget__c,
+                       Education__c,Client_Type__c,Purpose__c,Reason_To_Purchase__c,Name_Of_Walkin_Referee__c,Walk_in_Corporate__c,Spouse_DOB__c,RW_Budget__c,
                        Spouse_Name__c,No_of_Children__c,Age_of_Child_1__c,Age_of_Child_2__c,Age_of_Child_3__c,Age_of_Child_4__c,Spouse_Occupation__c,Spouse_Company_Name__c,Spouse_Designation__c,
-                       Locality__C,Zone__c,Religion__c,Walk_In_Details__c,Employee_Reference__c,Walkin_Employee_Reference__c,RW_Type_of_Client__c,Lead_Sourcing_Manager__c
-                       from Lead where id = : strLeadId];   
+                       Locality__C,Zone__c,Religion__c,Walk_In_Details__c,Employee_Reference__c,Walkin_Employee_Reference__c,RW_Type_of_Client__c,Lead_Sourcing_Manager__c,
+                       Company_Country__c,Company_State__c,Company_City__c
+                       from Lead where id = : strLeadId];    
             
             System.debug('inside lead loop up');
             leadSourcingManager = objLead.Lead_Sourcing_Manager__c; //Added by Vinay 04-08-2025
@@ -269,16 +294,31 @@ LIMIT 1
                     lstLeadSource.add(objWrap);
                 }
                 if(directLead){ //Added by coServe 17-06-2024
-                    List<String> sources = System.label.Editable_walkin_Sources_for_CIF.split(',');
-                    if(sources.contains(f.getLabel())){
+                    List<String> nonEditableSources =System.label.Editable_walkin_Sources_for_CIF.split(',');
+
+                    // List<String> sources = System.label.Editable_walkin_Sources_for_CIF.split(',');
+                    // if(sources.contains(f.getLabel())){
+                    //     objWrap.disable = false;
+                    //     objWrap.strLabel = f.getLabel();
+                    //     objWrap.strLeadSource = f.getValue();
+                    //}else{
+                    if(f.getLabel() == 'Direct') {
+                        objWrap.isSelected = true;           //checked
                         objWrap.disable = false;
-                        objWrap.strLabel = f.getLabel();
-                        objWrap.strLeadSource = f.getValue();
-                    }else{
-                        objWrap.disable = true;
-                        objWrap.strLabel = f.getLabel();
-                        objWrap.strLeadSource = f.getValue();
                     }
+                    else if(nonEditableSources.contains(f.getLabel())){
+                        objWrap.isSelected = false;
+        				objWrap.disable = true;
+                    }
+                    else{
+                        //objWrap.isSelected = false;
+        				objWrap.disable = false; 
+                    }
+                    system.debug('getLabel()------>'+f.getLabel());
+                       
+                    objWrap.strLabel = f.getLabel();
+                    objWrap.strLeadSource = f.getValue();
+                    //}
                 }
                 
             }
@@ -316,18 +356,22 @@ LIMIT 1
             CIFObj.Country__c = objLead.Country__c;
             CIFObj.State__c = objLead.State__c;
             CIFObj.City__c = objLead.City__c;
+            CIFObj.Company_Country__c = objLead.Company_Country__c;//Added by Prashant..11-05-26
+            CIFObj.Company_State__c = objLead.Company_State__c;//Added by Prashant..11-05-26
+            CIFObj.Company_City__c = objLead.Company_City__c;//Added by Prashant..11-05-26
             CIFObj.ZipCode__c = objLead.Zip_Code__c;
             //CIFObj.Street__c = objLead.Street__c;
             CIFObj.Occupation__c = objLead.RW_Occupation__c;
             CIFObj.CompanyName__c = objLead.RW_Company_Name__c;
             CIFObj.CompanyNameOther__c = objLead.RW_Other_Company_Name__c;
-            CIFObj.CompanyLocation__c = objLead.RW_Company_Location__c;
+            //CIFObj.CompanyLocation__c = objLead.RW_Company_Location__c; //Commented by Prashant as per Business Requirement.//Added on 12-05-26
             CIFObj.Designation__c = objLead.RW_Designation__c;
             CIFObj.Ethnicity__c = objLead.RW_Ethnicity__c;
             CIFObj.Marital_Status__c = objLead.Marital_Status__c;
             CIFObj.Configuration__c = objLead.RW_Configuration__c;
             CIFObj.BudgetIn_Cr__c = objLead.RW_Budget_Rs_in_Cr__c;
             CIFObj.Budget_In_Lakh__c = objLead.Budget_In_Lakh__c;
+            //CIFObj.CIF_Budget__c = objLead.CIF_Budget__c;
             // CIFObj.CIF_Budget__c = objLead.RW_Budget__c;
             CIFObj.TimeLine__c = objLead.RW_Time_line__c;
             CIFObj.Preferred_Location__c = objLead.RW_Location__c;
@@ -364,13 +408,19 @@ LIMIT 1
             //CIFObj.CorporateCompany__c = objLead.Corporate_Company__c;
             CIFObj.Broker_Type__c = objLead.Broker_Type__c;
             CIFObj.Unregistered_broker_type__c = objLead.Unregistered_broker_type__c;
-            CIFObj.Pre_Sales_User__c = objLead.Pre_Sales_User__c; 
+            //CIFObj.Pre_Sales_User__c = objLead.Pre_Sales_User__c;  // Commented by Vinay 25-11-2025
+            CIFObj.Pre_Sales_User_LU__c = objLead.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
             
             //CIFObj.Sales_manager__c = objLead.RW_Sourcing_Manager__c; //** taking this from OTP now  //commented by Sheetal on 07/07/2022 to solve issue (I02006) taking sourcing manager from OTP
             
             CIFObj.Event_Description__C = objLead.Event_Description__C;
             CIFObj.Education__c = objLead.Education__c;
             CIFObj.Client_Type__c = objLead.Client_Type__c;
+            system.debug('CIFObj.Reason_To_Purchase__c -> '+CIFObj.Reason_To_Purchase__c);
+            system.debug('objLead.Reason_To_Purchase__c -> '+objLead.Reason_To_Purchase__c);
+            system.debug('CIFObj.Purpose__c -> '+CIFObj.Purpose__c);
+            system.debug('CIFObj.Purpose__c -> '+CIFObj.Purpose__c);
+            CIFObj.Reason_To_Purchase__c = objLead.Reason_To_Purchase__c;//Added by Prashant..11-05-26.
             CIFObj.Purpose__c = objLead.Purpose__c;
             CIFObj.Name_Of_Walkin_Referee__c = objLead.Name_Of_Walkin_Referee__c;
             CIFObj.Walk_in_Corporate__c = objLead.Walk_in_Corporate__c;
@@ -443,7 +493,7 @@ LIMIT 1
             CIFObj.Occupation__c = objAcc.RW_Occupation__c;
             CIFObj.CompanyName__c = objAcc.RW_Company_Name__c;
             CIFObj.CompanyNameOther__c = objAcc.RW_Other_Company_Name__c;
-            CIFObj.CompanyLocation__c = objAcc.RW_Company_Location__c;
+            //CIFObj.CompanyLocation__c = objAcc.RW_Company_Location__c; //Commented by Prashant as per Business Requirement.//Added on 12-05-26
             CIFObj.Designation__c = objAcc.RW_Designation__c;
             CIFObj.Ethnicity__c = objAcc.RW_Ethnicity__c;
             CIFObj.Marital_Status__c = objAcc.Marital_Status__c;
@@ -504,6 +554,13 @@ LIMIT 1
         public  Boolean isNoOTP {get;set;}
         public  Boolean disable {get;set;}
     }
+    //Added by Prashant 12-05-26
+    public class OccupationWrapper {
+        public String strLabel {get;set;}
+        public String strValue {get;set;}
+        public Boolean isSelected {get;set;}
+    }
+    
     
     //this method is used for validating the walkin source
     public void validateLeadSource() 
@@ -663,8 +720,10 @@ lstLeadSource.add(objWrap);
             if (otpobj.Channel_Partner_Lookup__c != null)
                 CIFObj.Broker__c = otpobj.Channel_Partner_Lookup__c;
             system.debug('Broker================'+CIFObj.Broker__c);
-            if (otpobj.Sourcing_Manager__c != null)
-                CIFObj.Sales_manager__c = otpobj.Sourcing_Manager__c;
+            /*if (otpobj.Sourcing_Manager__c != null)
+                CIFObj.Sales_manager__c = otpobj.Sourcing_Manager__c;*/ //Commented by Vinay 25-11-2025
+            if (otpobj.Sourcing_Manager_LU__c != null)  //Added by Vinay 25-11-2025
+                CIFObj.Sales_manager_LU__c = otpobj.Sourcing_Manager_LU__c;
             
             // Referral info
             if (
@@ -715,6 +774,26 @@ lstLeadSource.add(objWrap);
             }
             
             lstLeadSource.add(wrapper);
+        }
+        
+        
+        
+    }
+    
+    //Added by Prashant 12-05-26
+    public void validateOccupation() {
+        if (strCurrentOccupation != null) {
+            for (OccupationWrapper wrap : lstOccupation) {
+                // If the item matches the one just clicked, keep it checked.
+                // Otherwise, set it to false.
+                if (wrap.strValue == strCurrentOccupation) {
+                    wrap.isSelected = true;
+                } else {
+                    wrap.isSelected = false;
+                }
+            }
+            // Sync the result to your main object
+            CIFObj.Occupation__c = strCurrentOccupation;
         }
     }
     
@@ -776,10 +855,32 @@ return null;
                 strError = 'Please fill up Date of Birth to proceed.';
                 return null;
             }
+            if ((CIFObj.Locality__c == null || CIFObj.Locality__c == '') && CIFObj.Type_of_Client__c == 'Local') {//Added by Prashant as per Business Requirement.//Added on 11-05-26-->
+                strError = 'Please fill up the Locality to proceed.';
+                return null;
+            }
             if (CIFObj.Type_of_Client__c == null || CIFObj.Type_of_Client__c == '') {		//Added by Sheetal on 21/04/2022 to solve issue I0143
                 strError = 'Please fill up type of client to proceed.';
                 return null;
             }
+            
+            if (CIFObj.Country__c == 'India' && CIFObj.Type_of_Client__c == 'NRI') {
+                strError = 'Please Select a country other then India for NRI client.';
+                return null;
+            } 
+            if (CIFObj.Country__c != 'India' && CIFObj.Type_of_Client__c == 'Outstation') {
+                strError = 'Country should be India for Outstation client.';
+                return null;
+            } 
+            if (CIFObj.State__c == 'Maharashtra' && CIFObj.Type_of_Client__c == 'Outstation') {
+                strError = 'Please Select a State other then Maharashtra for Outstation client.';
+                return null;
+            } 
+            
+            if (CIFObj.Country__c == 'India' && CIFObj.Type_of_Client__c == 'NRI') {
+                strError = 'Please Select a country other then India for NRI client.';
+                return null;
+            } 
             if (CIFObj.Occupation__c == null || CIFObj.Occupation__c == '') {
                 strError = 'Please fill up the Occupation to proceed.';
                 return null;
@@ -791,15 +892,70 @@ return null;
                 strError = 'Please fill up Other Company Name to proceed.';
                 return null;
             }
+            if (CIFObj.Country__c == null || CIFObj.Country__c == '') {
+                strError = 'Please fill up Country to proceed.';
+                return null;
+            }
+            if (CIFObj.State__c == null || CIFObj.State__c == '') {
+                strError = 'Please fill up State to proceed.';
+                return null;
+            }
+            if (CIFObj.City__c == null || CIFObj.City__c == '') {
+                strError = 'Please fill up City to proceed.';
+                return null;
+            }
+            /*if (CIFObj.CompanyLocation__c == null || CIFObj.CompanyLocation__c == '') {
+                strError = 'Please fill up Company Location to proceed.';
+                return null;
+            }*/ //Commented by Prashant as per Business Requirement.//Added on 12-05-26
             
             if (CIFObj.Ethnicity__c == null || CIFObj.Ethnicity__c == '') {
                 strError = 'Please fill up the Ethnicity to proceed.';
                 return null;
             }
-            if (CIFObj.Marital_Status__c == null || CIFObj.Marital_Status__c == '') {
+            /*if (CIFObj.Marital_Status__c == null || CIFObj.Marital_Status__c == '') {
                 strError = 'Please fill up the Marital Status to proceed.';
                 return null;
+            }*///Commented by Prashant as per Business Requirement.//Added on 07-05-26-->
+            
+            //Added by Prashant to add more mandatory fields...///Added on 07-05-26 START..
+           /* if (CIFObj.CompanyLocation__c == null || CIFObj.CompanyLocation__c == '') {
+                strError = 'Please fill up Company Location to proceed.';
+                return null;
+            }*/ //Commented by Prashant as per Business Requirement.//Added on 12-05-26
+            
+            if (CIFObj.Designation__c == null || CIFObj.Designation__c == '') {
+                strError = 'Please fill up the Designation to proceed.';
+                return null;
             }
+            
+            if (CIFObj.Walk_In_Details__c == null || CIFObj.Walk_In_Details__c == '') {
+                strError = 'Please fill up the Customer Visited with to proceed.';
+                return null;
+            }   
+            
+            if (CIFObj.Education__c == null || CIFObj.Education__c == '') {
+                strError = 'Please fill up the Educational Qualification to proceed.';
+                return null;
+            }  
+             
+            if (CIFObj.Cars_Owned__c == null || CIFObj.Cars_Owned__c == '') {
+                strError = 'Please fill up the cars that you own to proceed.';
+                return null;
+            } 
+            
+            if (CIFObj.Cars_Owned__c == null || CIFObj.Cars_Owned__c == '') {
+                strError = 'Please fill up the cars that you own to proceed.';
+                return null;
+            } 
+            if (CIFObj.Cars_Owned__c == null || CIFObj.Cars_Owned__c == '') {
+                strError = 'Please fill up the cars that you own to proceed.';
+                return null;
+            } 
+            
+            
+            //Added by Prashant to add more mandatory fields...///Added on 07-05-26 STOP..
+            
             
             //else if(CIFObj.Marital_Status__c == 'Married'){
             /* if(CIFObj.Spouse_Name__c == null || CIFObj.Spouse_Name__c == '') {
@@ -835,7 +991,8 @@ if(CIFObj.No_of_Children__c >= 4 && (CIFObj.Age_of_Child_1__c == null || CIFObj.
 CIFObj.Age_of_Child_2__c == null || CIFObj.Age_of_Child_2__c == '' ||
 CIFObj.Age_of_Child_3__c == null || CIFObj.Age_of_Child_3__c == '' ||
 CIFObj.Age_of_Child_4__c == null || CIFObj.Age_of_Child_4__c == '')) {
-strError = 'Please fill up age of four childs to proceed.';
+strError = 'Please fill
+up age of four childs to proceed.';
 return null;
 }
 }
@@ -845,7 +1002,7 @@ return null;
 strError = 'Please fill up Budget to proceed.';
 return null;
 }*/
-            if (CIFObj.Budget_In_Lakh__c == null) {
+            if (CIFObj.CIF_Budget__c == null) {//Replaced Budget_In_Lakh__c with CIF_Budget__c as the mapping is now changes..11-05-26
                 strError = 'Please fill up Budget In Lakh to proceed.';
                 return null;
             }
@@ -862,6 +1019,12 @@ return null;
                 strError = 'Please fill up Timeline to proceed.';
                 return null;
             }
+            //Added by Prashant to add more mandatory fields...///Added on 11-05-26 .
+            if (CIFObj.Reason_to_Purchase__c == null || CIFObj.Reason_to_Purchase__c == '') {
+                strError = 'Please fill up Reason to Purchase to proceed.';
+                return null;
+            }
+            //Added by Prashant to add more mandatory fields...///Added on 07-05-26 .
             if (CIFObj.Purpose__C == null || CIFObj.Purpose__C == '') {
                 strError = 'Please fill up Purpose to proceed.';
                 return null;
@@ -912,6 +1075,8 @@ return null;
 }*/
             //Added by Vinay 19-05-2025 End
             //  System.debug('CIF Budget'+CIFObj.Budget_In_Lakh__c);
+            system.debug('objLead -> '+objLead);
+            system.debug('strLeadId -> '+strLeadId);
             if (objLead != null && strLeadId != null && strLeadId != '') {
                 System.debug('inside lead loop down');
                 //objLead.RW_Project__c = CIFObj.Project__c;
@@ -934,6 +1099,14 @@ return null;
                     objLead.State__c = CIFObj.State__c;
                 if(CIFObj.City__c != null)
                     objLead.City__c = CIFObj.City__c;
+                //Added by Prashant..11-05-26
+                if(CIFObj.Company_Country__c != null)
+                    objLead.Company_Country__c = CIFObj.Company_Country__c;
+                if(CIFObj.Company_State__c != null)
+                    objLead.Company_State__c = CIFObj.Company_State__c;
+                if(CIFObj.Company_City__c != null)
+                    objLead.Company_City__c = CIFObj.Company_City__c;
+                //Added by Prashant..11-05-26
                 if(CIFObj.ZipCode__c != null)
                     objLead.Zip_Code__c = CIFObj.ZipCode__c;
                 //objLead.Street__c = CIFObj.Street__c;
@@ -949,12 +1122,13 @@ return null;
                 objLead.RW_Occupation__c = CIFObj.Occupation__c;
                 objLead.RW_Company_Name__c = CIFObj.CompanyName__c;
                 objLead.RW_Other_Company_Name__c = CIFObj.CompanyNameOther__c;
-                objLead.RW_Company_Location__c = CIFObj.CompanyLocation__c;
+                //objLead.RW_Company_Location__c = CIFObj.CompanyLocation__c; //Commented by Prashant as per Business Requirement.//Added on 12-05-26
                 objLead.RW_Designation__c = CIFObj.Designation__c;
                 objLead.RW_Ethnicity__c = CIFObj.Ethnicity__c;
                 objLead.Marital_Status__c = CIFObj.Marital_Status__c;
                 objLead.RW_Configuration__c = CIFObj.Configuration__c;
-                objLead.Budget_In_Lakh__c = CIFObj.Budget_In_Lakh__c;
+                objLead.RW_Budget__c = CIFObj.CIF_Budget__c;//Added by Prashant..11-05-26.
+                //objLead.Budget_In_Lakh__c = CIFObj.Budget_In_Lakh__c;//Commented by Prashant..11-05-26.
                 objLead.RW_Budget_Rs_in_Cr__c = CIFObj.BudgetIn_Cr__c;
                 objLead.RW_Time_line__c = CIFObj.TimeLine__c;
                 objLead.RW_Location__c = CIFObj.Preferred_Location__c;
@@ -988,12 +1162,21 @@ return null;
                 //objLead.Corporate_Company__c = CIFObj.CorporateCompany__c;
                 objLead.Broker_Type__c = CIFObj.Broker_Type__c;
                 objLead.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
-                objLead.Pre_Sales_User__c = CIFObj.Pre_Sales_User__c;
-                objLead.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c;
+                //objLead.Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; //Commented by Vinay 25-11-2025
+                objLead.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; //Added by Vinay 25-11-2025
+                //objLead.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; //Commented by Vinay 25-11-2025
+                objLead.Lead_Sourcing_Manager__c = CIFObj.Sales_manager_LU__c; //Added by Vinay 25-11-2025
                 objLead.Event_Description__C = CIFObj.Event_Description__C;
                 objLead.Education__c = CIFObj.Education__c;
                 objLead.Client_Type__c = CIFObj.Client_Type__c;
-                objLead.Purpose__C = CIFObj.Purpose__C;
+                system.debug('objLead.Reason_to_Purchase__c -> '+objLead.Reason_to_Purchase__c);
+                system.debug('CIFObj.Reason_to_Purchase__c -> '+CIFObj.Reason_to_Purchase__c);
+                system.debug('objLead.Purpose__c -> '+objLead.Purpose__c);
+                system.debug('CIFObj.Purpose__c -> '+CIFObj.Purpose__c);
+                if(objLead.Reason_to_Purchase__c != null)
+                	objLead.Reason_to_Purchase__c = CIFObj.Reason_to_Purchase__c;//Added by Prashant..11-05-26.
+                if(objLead.Purpose__C != null)
+                	objLead.Purpose__C = CIFObj.Purpose__C;
                 objLead.Name_Of_Walkin_Referee__c = CIFObj.Name_Of_Walkin_Referee__c;
                 objLead.Walk_in_Corporate__c = CIFObj.Walk_in_Corporate__c;
                 objLead.Religion__c = CIFObj.Religion__c;
@@ -1091,6 +1274,7 @@ objLead.Name_of_Unregistered_Corporate__c = null;
                     return null;
                 }
                 
+                system.debug('objLead Reason_To_Purchase__c -> '+objLead.Reason_To_Purchase__c);
                 update objLead;
                 
                 List < Lead > leadListToconvert = new List < Lead > ();
@@ -1232,7 +1416,7 @@ insert p;
                 objAcc.RW_Occupation__c = CIFObj.Occupation__c ;
                 objAcc.RW_Company_Name__c = CIFObj.CompanyName__c ;
                 objAcc.RW_Other_Company_Name__c = CIFObj.CompanyNameOther__c ;
-                objAcc.RW_Company_Location__c = CIFObj.CompanyLocation__c ;
+                //objAcc.RW_Company_Location__c = CIFObj.CompanyLocation__c ; //Commented by Prashant as per Business Requirement.//Added on 12-05-26
                 objAcc.RW_Designation__c = CIFObj.Designation__c ;
                 objAcc.RW_Ethnicity__c = CIFObj.Ethnicity__c;
                 objAcc.Marital_Status__c = CIFObj.Marital_Status__c;
@@ -1289,7 +1473,8 @@ insert p;
                 }
                 objOptyToInsert.RW_Mobile_No__c =  CIFObj.MobileNo1__c;
                 objOptyToInsert.RW_Configuration__c = CIFObj.Configuration__c ; 
-                objOptyToInsert.Budget_In_Lakh__c = CIFObj.Budget_In_Lakh__c; 
+                objOptyToInsert.RW_Budget__c = CIFObj.CIF_Budget__c; //Added by Prashant..11-05-26.
+                //objOptyToInsert.Budget_In_Lakh__c = CIFObj.Budget_In_Lakh__c; //Commented by Prashant..11-05-26.
               //  system.debug('CIFObj.Budget_In_Lakh__c>>>>' +CIFObj.Budget_In_Lakh__c);
                 objOptyToInsert.Budget_In_Cr__c = CIFObj.BudgetIn_Cr__c;
              //   system.debug('CIFObj.BudgetIn_Cr__c>>>>' +CIFObj.BudgetIn_Cr__c);
@@ -1325,6 +1510,11 @@ insert p;
                 //objOptyToInsert.Corporate_Company__c = CIFObj.CorporateCompany__c;
                 objOptyToInsert.RW_Project__c = CIFObj.Project__c ;
                 objOptyToInsert.Client_Type__c = CIFObj.Client_Type__c;
+                system.debug('objOptyToInsert.Reason_To_Purchase__c -> '+objOptyToInsert.Reason_To_Purchase__c);
+                system.debug('CIFObj.Reason_To_Purchase__c -> '+CIFObj.Reason_To_Purchase__c);
+                system.debug('objOptyToInsert.Purpose__c -> '+objOptyToInsert.Purpose__c);
+                system.debug('CIFObj.Purpose__c -> '+CIFObj.Purpose__c);
+                objOptyToInsert.Reason_To_Purchase__c = CIFObj.Reason_To_Purchase__c;//Added by Prashant..11-05-26.
                 objOptyToInsert.Purpose__C = CIFObj.Purpose__C;
                 objOptyToInsert.RW_Type_of_Client__c = CIFObj.Type_of_Client__c;		//Added by Sheetal on 21/04/2022
                 objOptyToInsert.Name_Of_Walkin_Referee__c = CIFObj.Name_Of_Walkin_Referee__c;
@@ -1338,8 +1528,9 @@ insert p;
                 objOptyToInsert.AccountId = objAcc.Id;
                 objOptyToInsert.Broker_Type__c = CIFObj.Broker_Type__c;
                 objOptyToInsert.Unregistered_broker_type__c = CIFObj.Unregistered_broker_type__c;
-                objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c;
-                objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; 
+                //objOptyToInsert.RW_Pre_Sales_User__c = CIFObj.Pre_Sales_User__c; // Commented by Vinay 25-11-2025
+                objOptyToInsert.Pre_Sales_User_LU__c = CIFObj.Pre_Sales_User_LU__c; // Added by Vinay 25-11-2025
+                //objOptyToInsert.RW_Sourcing_Manager__c = CIFObj.Sales_manager__c; // Commented by Vinay 25-11-2025
                 objOptyToInsert.Sourcing_Manager_User__c = leadSourcingManager; //Added by Vinay 04-08-2025
                 objOptyToInsert.Event_Description__C = CIFObj.Event_Description__C;
                 //objOptyToInsert.Lead_Sub_Sub_Source__c = CIFObj.Lead_Sub_Sub_Source__c;
@@ -1349,6 +1540,7 @@ insert p;
                 }
                // system.debug('CIFObj.BudgetIn_Cr__c>>>>' +CIFObj.BudgetIn_Cr__c);
                 objOptyToInsert.Budget_In_Cr__c=CIFObj.BudgetIn_Cr__c;  
+				objOptyToInsert.RW_Budget__c = CIFObj.CIF_Budget__c; //Added by Prashant..11-05-26.                
                 objOptyToInsert.Budget_In_Lakh__c = CIFObj.Budget_In_Lakh__c ;
               //  system.debug('objOptyToInsert.Budget_In_Lakh__c>>>>' +objOptyToInsert.Budget_In_Lakh__c);
                 /*    objOptyToInsert.Budget_In_Cr__C = CIFObj.BudgetIn_Cr__c * 10000000;
@@ -1544,6 +1736,7 @@ objOptyToInsert.Name_of_Unregistered_Corporate__c = null;
                     
                 }
                 update objAcc;
+                system.debug('objOptyToInsert Reason_To_Purchase__c -> '+objOptyToInsert.Reason_To_Purchase__c);
                 insert objOptyToInsert;
                 system.debug('objOptyToInsert>>>>' +objOptyToInsert);
                 //Added by coServe 10-01-2024 Start
@@ -1656,13 +1849,19 @@ return null;
         CIFObj.State__c = null;
         CIFObj.City__c = null;
         CIFObj.ZipCode__c = null;
-        if(CIFObj.Locality__c != 'NRI' && CIFObj.Locality__c != 'Outstation') {
+        if(CIFObj.Type_of_Client__c == 'Local') {
             CIFObj.Country__c = 'India';
             CIFObj.State__c = 'Maharashtra';
             CIFObj.City__c = 'Mumbai';
         }
-        else if(CIFObj.Locality__c == 'Outstation')
+        else if(CIFObj.Type_of_Client__c == 'Outstation') {
             CIFObj.Country__c = 'India';
+         	//CIFObj.Locality__c = 'Outstation';
+        }
+           
+        else if(CIFObj.Type_of_Client__c == 'NRI'){            
+         	//CIFObj.Locality__c = 'NRI';
+        }
         
         random = false;
     }
@@ -1791,6 +1990,13 @@ return null;
                 System.debug('Exception while converting Lead ' + myLead.Id + ': ' + ex.getMessage());
             }
         }
+    }
+     public List<String> getTimelinePicklist() {
+        List<String> pickVals = new List<String>();
+        for (Schema.PicklistEntry p : Lead.RW_Time_line__c.getDescribe().getPicklistValues()) {
+            pickVals.add(p.getValue());
+        }
+        return pickVals;
     }
      public static void dummyMethod(){
 

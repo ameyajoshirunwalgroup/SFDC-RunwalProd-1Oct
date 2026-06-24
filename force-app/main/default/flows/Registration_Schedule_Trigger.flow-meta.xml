@@ -4,7 +4,7 @@
         <name>Registration_Schedule_Email_Action_1</name>
         <label>Registration Schedule Email Action 1</label>
         <locationX>50</locationX>
-        <locationY>431</locationY>
+        <locationY>839</locationY>
         <actionName>Registration_Schedule__c.Registration_Schedule_Email</actionName>
         <actionType>emailAlert</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -18,9 +18,77 @@
         <offset>0</offset>
     </actionCalls>
     <actionCalls>
+        <name>Runwal_City_Centre_registration_Schedule_Email_Action</name>
+        <label>Runwal City Centre registration Schedule Email Action</label>
+        <locationX>1106</locationX>
+        <locationY>839</locationY>
+        <actionName>Registration_Schedule__c.Runwal_City_Centre_Registration_Schedule_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Registration_Schedule__c.Runwal_City_Centre_Registration_Schedule_Email</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Runwal_Forest_Registration_Schedule_Email_Action</name>
+        <label>Runwal Forest Registration Schedule Email Action</label>
+        <locationX>314</locationX>
+        <locationY>839</locationY>
+        <actionName>Registration_Schedule__c.Runwal_Forest_Registration_Schedule_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Registration_Schedule__c.Runwal_Forest_Registration_Schedule_Email</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Runwal_Garen_City_Registration_Schedule_Email_Action</name>
+        <label>Runwal Garen City Registration Schedule Email Action</label>
+        <locationX>578</locationX>
+        <locationY>839</locationY>
+        <actionName>Registration_Schedule__c.Runwal_Garden_City_Registration_Schedule_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Registration_Schedule__c.Runwal_Garden_City_Registration_Schedule_Email</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Runwal_Pinnacle_Registration_Schedule_Email_Action</name>
+        <label>Runwal Pinnacle Registration Schedule Email Action</label>
+        <locationX>842</locationX>
+        <locationY>839</locationY>
+        <actionName>Registration_Schedule__c.Runwal_Pinnacle_Registration_Schedule_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Registration_Schedule__c.Runwal_Pinnacle_Registration_Schedule_Email</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Schedule_email</name>
         <label>Schedule email</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>431</locationY>
         <actionName>Registration_Schedule__c.Registration_Confirmation</actionName>
         <actionType>emailAlert</actionType>
@@ -39,7 +107,7 @@
     <decisions>
         <name>Check_Date</name>
         <label>Check Date</label>
-        <locationX>314</locationX>
+        <locationX>710</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -60,7 +128,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Registration_Schedule_Email_Action_1</targetReference>
+                <targetReference>Check_Project</targetReference>
             </connector>
             <label>2 days or 3 days</label>
         </rules>
@@ -78,6 +146,110 @@
                 <targetReference>Schedule_email</targetReference>
             </connector>
             <label>On the day</label>
+        </rules>
+        <rules>
+            <name>New_Record</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.CreatedDate</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Project</targetReference>
+            </connector>
+            <label>New Record</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Project</name>
+        <label>Check Project</label>
+        <locationX>710</locationX>
+        <locationY>731</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>X7_Mahalaxmi</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Project__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>7 Mahalaxmi</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Registration_Schedule_Email_Action_1</targetReference>
+            </connector>
+            <label>7 Mahalaxmi</label>
+        </rules>
+        <rules>
+            <name>Runwal_Forest</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Project__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Runwal Forests</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Runwal_Forest_Registration_Schedule_Email_Action</targetReference>
+            </connector>
+            <label>Runwal Forest</label>
+        </rules>
+        <rules>
+            <name>Garden_CIty</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Project__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Runwal Garden City</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Runwal_Garen_City_Registration_Schedule_Email_Action</targetReference>
+            </connector>
+            <label>Garden CIty</label>
+        </rules>
+        <rules>
+            <name>Runwal_Runwal_Pinnacle</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Project__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Runwal Pinnacle</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Runwal_Pinnacle_Registration_Schedule_Email_Action</targetReference>
+            </connector>
+            <label>Runwal Runwal Pinnacle</label>
+        </rules>
+        <rules>
+            <name>Runwal_City_Centre</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Project__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Runwal Avenue</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Booking__r.Project__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Runwal Bliss</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Runwal_City_Centre_registration_Schedule_Email_Action</targetReference>
+            </connector>
+            <label>Runwal City Centre</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -118,7 +290,7 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>188</locationX>
+        <locationX>584</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_Date</targetReference>

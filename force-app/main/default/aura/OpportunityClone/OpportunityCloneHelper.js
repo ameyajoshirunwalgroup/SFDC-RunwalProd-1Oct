@@ -17,7 +17,8 @@
                 if(returnValue.startsWith("006")){
                     //if(returnValue){
                     //var url = 'https://runwal--uat.lightning.force.com/lightning/r/Opportunity/'+returnValue+'/view';
-                      var url = 'https://runwal.lightning.force.com/lightning/r/Opportunity/'+returnValue+'/view';
+                    var url = 'https://runwal--fullcopy.sandbox.lightning.force.com/lightning/r/Opportunity/'+returnValue+'/view';
+                    //var url = 'https://runwal.lightning.force.com/lightning/r/Opportunity/'+returnValue+'/view';
                     helper.gotoURL(component, event, helper, url);
                     component.closeModalBox();
                     

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Relationship Manager Change</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!Booking__r.Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!!
+
+We would like to inform you that your Relationship Manager has been updated. Please find the details below for your reference:
+
+Project: {!RW_Project__r.Name}
+Unit Number: {Name}
+New Relationship Manager: {!Relationship_Manager__r.Name}
+Contact Number: {!Relationship_Manager__r.Contact_Number__c}
+Email ID: {!Relationship_Manager__r.RM_Email__c}
+
+Your new Relationship Manager will be your primary point of contact for any assistance regarding your unit, payments, documentation, or service requests.
+
+Should you have any queries or require support, please feel free to reach out to your Relationship Manager directly.
+
+Thank you for your continued trust in Runwal Enterprises.
+
+Warm regards,
+Runwal Enterprises</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Update: Your Relationship Manager Has Been Updated</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Relationship Manager Updated 🤝
+
+Your new Relationship Manager is [New RM Name]. Please reach out for any assistance.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">contact_rm</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Project_Unit__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Relationship Manager Change</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Relationship Manager Change</value>
+    </values>
+</CustomMetadata>

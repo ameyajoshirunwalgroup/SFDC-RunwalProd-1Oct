@@ -1,0 +1,37 @@
+{
+  "version" : "59.0",
+  "nodes" : {
+    "LOAD_DATASET0" : {
+      "action" : "load",
+      "sources" : [ ],
+      "parameters" : {
+        "fields" : [ "Date_Of_Visit__c", "Id", "StageName", "LeadSource", "CreatedDate", "FiscalQuarter", "FiscalYear", "Fiscal", "RW_Agreement_Value__c", "Project_Name__c", "RW_Type_of_Client__c", "RW_Booking_Date_Opp__c" ],
+        "dataset" : {
+          "type" : "connectedDataset",
+          "label" : "Opportunity",
+          "connectionName" : "SFDC_LOCAL",
+          "sourceObjectName" : "Opportunity"
+        },
+        "sampleDetails" : {
+          "type" : "TopN"
+        }
+      }
+    }
+  },
+  "ui" : {
+    "nodes" : {
+      "LOAD_DATASET0" : {
+        "label" : "Opportunity",
+        "type" : "LOAD_DATASET",
+        "top" : 112,
+        "left" : 112,
+        "parameters" : {
+          "sampleSize" : 2000
+        }
+      }
+    },
+    "connectors" : [ ],
+    "hiddenColumns" : [ ]
+  },
+  "runMode" : "full"
+}

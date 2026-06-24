@@ -1,0 +1,173 @@
+<template>
+    <lightning-card title="Cancellation Details" icon-name="action:close">
+        <div class="slds-p-around_medium slds-is-relative">
+            
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </template>
+
+            <template if:true={bookingInfo}>
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small" title="General Information">General Information</span>
+                    </h3>
+                    <div class="slds-grid slds-wrap slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Project Name" value={projectName} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Project Unit" value={unitNo} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Tower Name" value={towerName} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="CRN No" value={crnNo} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Primary Applicant Name" value={primaryApplicantName} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Other Applicant Name" value={otherApplicantName} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Booking Status" value={bookingStatus} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Source Of Booking" value={sourceOfBooking} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Booking Date" value={bookingDate} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_xx-small">
+                            <lightning-input label="Registration Status" value={registrationStatus} disabled></lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open slds-m-top_medium">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small" title="Cancellation Details">Cancellation Details</span>
+                    </h3>
+                    <div class="slds-grid slds-wrap slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                            <lightning-combobox 
+                                name="Cancellation_Reason__c" 
+                                label="Cancellation Reason" 
+                                options={reasonOptions} 
+                                value={bookingInfo.Cancellation_Reason__c} 
+                                onchange={handleReasonChange} 
+                                required>
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                            <lightning-combobox 
+                                name="Cancellation_Sub_reason__c" 
+                                label="Sub Cancellation Reason" 
+                                options={subReasonOptions} 
+                                value={bookingInfo.Cancellation_Sub_reason__c} 
+                                onchange={handleSubReasonChange} 
+                                required>
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                            <lightning-combobox 
+                                name="Cancellation_Subtype__c" 
+                                label="Cancellation Subtype" 
+                                options={cancellationSubtypeOptions} 
+                                value={bookingInfo.Cancellation_Subtype__c}
+                                disabled>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                            <lightning-combobox 
+                                name="Source_of_Cancellation__c" 
+                                label="Source of Cancellation" 
+                                options={sourceOfCancellationOptions} 
+                                value={bookingInfo.Source_of_Cancellation__c} 
+                                onchange={handleInputChange}
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                            <lightning-combobox 
+                                name="Mode_of_Cancellation__c" 
+                                label="Mode of Cancellation" 
+                                options={modeOfCancellationOptions} 
+                                value={bookingInfo.Mode_of_Cancellation__c} 
+                                onchange={handleInputChange} 
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                        <template lwc:if={isMeetingMode}>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                                <lightning-combobox 
+                                    name="Meeting_Status__c" 
+                                    label="Meeting Status" 
+                                    options={meetingStatusOptions} 
+                                    value={bookingInfo.Meeting_Status__c} 
+                                    onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </div>
+                            <template lwc:if={isMeetingDone}>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                                    <lightning-input 
+                                        type="date" 
+                                        label="Date of Meeting" 
+                                        name="Meeting_Date__c"
+                                        value={bookingInfo.Meeting_Date__c} 
+                                        required 
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                </div>
+                            </template>
+                        </template>
+
+                        <template lwc:if={isWrittenMode}>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                                <lightning-file-upload 
+                                    label="Attach Email Screenshot" 
+                                    name="fileUploader" 
+                                    accept={acceptedFormats}
+                                    record-id={recordId} 
+                                    onuploadfinished={handleUploadFinished} 
+                                    >
+                                </lightning-file-upload>
+                            </div>
+                        </template>
+
+                        <template lwc:if={isOtherMode}>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-p-around_xx-small">
+                                <lightning-input
+                                    name="Other_Reason__c"
+                                    label="Additional Communication Details"
+                                    value={bookingInfo.Other_Reason__c}
+                                    required
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1 slds-p-around_xx-small">
+                            <lightning-textarea 
+                                name="Reason_For_Cancellation__c" 
+                                label="Cancellation Description" 
+                                value={bookingInfo.Reason_For_Cancellation__c} 
+                                required 
+                                onchange={handleInputChange}>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-m-top_medium slds-text-align_right">
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Save Details" onclick={handleSave}></lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

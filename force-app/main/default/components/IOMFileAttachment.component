@@ -1,0 +1,9 @@
+<apex:component controller="InterestWaiverApprovalTemplateController" access="global">
+    <apex:attribute name="bookingId"
+        type="Id"
+        assignTo="{!BkId}"
+        description="Booking Id for fetching IOM file"/>
+
+    {!latestIOMFile.Title}
+
+</apex:component>

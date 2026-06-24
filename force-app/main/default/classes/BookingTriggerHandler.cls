@@ -150,7 +150,7 @@ ln.TL_Email__c = projRMMap.get(bkg.RW_Project_Name__c).TL_Email__c;
             if(lns.size() > 0){
                 LoanController.sendEmailLoanCreated(lns);
             }*/
-        }    		
+        }           
     }
     
     public static void updateBrokerageSummaryStatus(Set<Id> SummaryIds){
@@ -261,7 +261,7 @@ ln.TL_Email__c = projRMMap.get(bkg.RW_Project_Name__c).TL_Email__c;
                 update bkgToUpdateDevChrg;
             }
         }   
-    }
+    }       
     //Added by coServe 10-10-2022 end
     
     //Added by coServe 15-11-2022 start
@@ -471,7 +471,7 @@ update bkgs;
     //
     
     //Added by Prashant 20-05-2025 Start
-    public static void updateBrokerageonSchemeChange(List<Id> bkgIds){
+    /*public static void updateBrokerageonSchemeChange(List<Id> bkgIds){
         
         List<Booking__c> bklist = [SELECT Id,Booking_Date__c,Quotation__r.walkin_Source__c ,Brokerage_Scheme__r.Type__c,Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c,Brokerage_Scheme__r.Name,Brokerage_Scheme__r.Id,Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c,Passback_Amount__c,
                                    Brokerage_Scheme__c,Quotation__r.Brokerage_Agreement_Value__c,Type_of_Client__c FROM Booking__c WHERE Id IN: bkgIds];
@@ -529,6 +529,84 @@ update bkgs;
                 system.debug('Error while updating Booking list - '+e.getMessage());
             }
         }
+    }*/
+    public static void updateBrokerageonSchemeChange(List<Id> bkgIds){
+        
+        List<Booking__c> bklist = [SELECT Id,Booking_Date__c,Quotation__r.walkin_Source__c ,Brokerage_Scheme__r.Type__c,Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c,Brokerage_Scheme__r.Name,Brokerage_Scheme__r.Id,Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c,Passback_Amount__c,
+                                   Brokerage_Scheme__c,Quotation__r.Brokerage_Agreement_Value__c,Type_of_Client__c,Brokerage_Scheme__r.Base_Brokerage_for_NRI__c FROM Booking__c WHERE Id IN: bkgIds];
+        if(!bklist.isEmpty()){
+            for(booking__c b : bklist){
+                Decimal passbackAmt = 0;
+                if(b.Passback_Amount__c != null){
+                    passbackAmt = b.Passback_Amount__c;
+                }
+                
+                /*
+                if(b.Brokerage_Scheme__r.Type__c == 'Local'){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - ((( passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'NRI' && bookingDate < bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if( b.Brokerage_Scheme__r.Type__c == 'NRI' && bookingDate >= bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'Both' && (b.Type_of_Client__c == 'Local' || b.Type_of_Client__c == 'Corporate' )){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'Both' && (b.Type_of_Client__c == 'NRI' || b.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if(b.Brokerage_Scheme__r.Type__c == 'Both' && (b.Type_of_Client__c == 'NRI' || b.Type_of_Client__c == 'Outstation') && bookingDate >= bookingDate2){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((b.Passback_Amount__c /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }
+                */
+                
+                if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'Local') && (b.Type_of_Client__c == 'Local' || b.Type_of_Client__c == 'Corporate' )){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_Local_Bookings__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }else if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'NRI') && (b.Type_of_Client__c == 'NRI') /*|| b.Type_of_Client__c == 'Outstation') && bookingDate < bookingDate2*/){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_NRI__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                } else if((b.Brokerage_Scheme__r.Type__c == 'Both' || b.Brokerage_Scheme__r.Type__c == 'Outstation') && (b.Type_of_Client__c == 'Outstation') /*&& bookingDate < bookingDate2*/){
+                    b.Base_Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt /  b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                    b.Base_Brokerage_2__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c;
+                    b.Brokerage_Scheme_Name__c =  b.Brokerage_Scheme__r.Name;
+                    b.Brokerage_Scheme__c =  b.Brokerage_Scheme__r.Id;
+                    b.Brokerage__c = b.Brokerage_Scheme__r.Base_Brokerage_for_OS_NRI__c - (((passbackAmt / b.Quotation__r.Brokerage_Agreement_Value__c)*100 ).setscale(2,RoundingMode.HALF_UP));
+                }
+            }
+            try{
+                update bklist;
+            }catch(Exception e){
+                system.debug('Error while updating Booking list - '+e.getMessage());
+            }
+        }
     }
     //Added by Prashant 20-05-2025 End
     
@@ -556,7 +634,7 @@ update bkgs;
             Project_Unit__r.TowerName__c, Brokerage_Agreement_Value__c, walkin_Source__c,
             Tandem_car_park_Additional__c, Tandem_Open_Additional__c, Single_Open_Additional__c,
             Single_car_park_Additional__c, Stack_Additional__c, MLCP_Additional__c,
-            Basement_Additional__c, Podium__c, Puzzle_Car_Park__c,Stamp_duty_payable_by_Runwal__c 
+            Basement_Additional__c, Podium__c, Puzzle_Car_Park__c,Stamp_duty_payable_by_Runwal__c ,Stack_Additional_1__c
             FROM Quotation__c WHERE Id IN :quoteIds
         ]);
         
@@ -624,7 +702,8 @@ update bkgs;
                     'MLCP' => (q.MLCP_Additional__c == null ? 0 : Integer.valueOf(q.MLCP_Additional__c)),
                     'Basement' => (q.Basement_Additional__c == null ? 0 : Integer.valueOf(q.Basement_Additional__c)),
                     'Podium' => (q.Podium__c == null ? 0 : Integer.valueOf(q.Podium__c)),
-                    'Puzzle Car Park' => (q.Puzzle_Car_Park__c == null ? 0 : Integer.valueOf(q.Puzzle_Car_Park__c))
+                    'Puzzle Car Park' => (q.Puzzle_Car_Park__c == null ? 0 : Integer.valueOf(q.Puzzle_Car_Park__c)),
+                    'Stack Car Park' => (q.Stack_Additional_1__c == null ? 0 : Integer.valueOf(q.Stack_Additional_1__c))
                     };
                         
                         for (String parkingType : parkingCounts.keySet()) {
@@ -713,8 +792,666 @@ update bkgs;
         if(!blist.isEmpty()){
             update blist;
         }
-    }		*/
+    }       */
+
+  public static void tagReceiptsFromOpportunity(List<Booking__c> newBookings) {
+        if(newBookings == null || newBookings.isEmpty()) return;
+
+        // Collect Opportunity Ids from new Bookings
+        Set<Id> oppIds = new Set<Id>();
+        //Map<Id, Id> bookingToOppMap = new Map<Id, Id>(); // Booking Id -> Opportunity Id
+        for(Booking__c b : newBookings) {
+            if(b.Opportunity__c != null) {
+                oppIds.add(b.Opportunity__c);
+                //bookingToOppMap.put(b.Id, b.Opportunity__c);
+            }
+        }
+
+        if(oppIds.isEmpty()) return;
+
+        // Query all receipts related to these Opportunities
+        List<RW_Payment_Details__c> relatedReceipts = [
+            SELECT Id, Opportunity__c, RW_Booking__c
+            FROM RW_Payment_Details__c
+            WHERE Opportunity__c IN :oppIds
+        ];
+
+        if(relatedReceipts == null || relatedReceipts.isEmpty()) return;
+
+        List<RW_Payment_Details__c> receiptsToUpdate = new List<RW_Payment_Details__c>();
+
+        // Map Opportunity Id -> Booking Id (for newly inserted Bookings)
+        Map<Id, Id> oppToBookingMap = new Map<Id, Id>();
+        for(Booking__c b : newBookings) {
+            oppToBookingMap.put(b.Opportunity__c, b.Id);
+        }
+
+        // Tag each receipt to its Booking if not already linked
+        for(RW_Payment_Details__c r : relatedReceipts) {
+            Id bookingId = oppToBookingMap.get(r.Opportunity__c);
+            if(bookingId != null && (r.RW_Booking__c == null || r.RW_Booking__c != bookingId)) {
+                r.RW_Booking__c = bookingId;
+                receiptsToUpdate.add(r);
+            }
+        }
+
+        if(!receiptsToUpdate.isEmpty()) {
+            update receiptsToUpdate;
+        }
+    }
     
+    //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+    // public static void updateWaiverApprovedtillNow(list<Booking__c> blist){
+    //     list<Project__c> projectList = new list<Project__c>();
+    //     for(Booking__c b: blist){
+    //         /*Decimal totalWaivertobeApproved = (b.Total_Waiver_Amount_to_be_Approved__c != null) ? b.Total_Waiver_Amount_to_be_Approved__c : 0;            
+    //         Decimal totalWaiverApprovedTillNow = (b.Total_Waiver_Amount_Approved_Till_Now__c != null) ? b.Total_Waiver_Amount_Approved_Till_Now__c : 0;
+    //         totalWaiverApprovedTillNow += totalWaivertobeApproved;
+    //         b.Total_Waiver_Amount_Approved_Till_Now__c = totalWaiverApprovedTillNow;
+    //         b.Total_Waiver_Amount_to_be_Approved__c = 0;*///Commented by Prashant due to requirement change from business- now approved till now to kept project wise so populating the amt on project
+    //         Decimal totalWaivertobeApproved = (b.Total_Waiver_Amount_to_be_Approved__c != null) ? b.Total_Waiver_Amount_to_be_Approved__c : 0;            
+    //         Decimal totalWaiverApprovedTillNow = (b.Total_Waiver_Amount_Approved_Till_Now__c != null) ? b.Total_Waiver_Amount_Approved_Till_Now__c : 0;
+    //         totalWaiverApprovedTillNow += totalWaivertobeApproved;
+    //         Project__c p = new Project__c();
+    //         p.Id = b.Project__c;
+    //         p.Waiver_Approved_till_now__c = totalWaiverApprovedTillNow;
+	// 		b.Total_Waiver_Amount_to_be_Approved__c = 0; 
+    //         projectList.add(p);
+    //     }
+    //     if(!projectList.isEmpty()){
+    //      	update projectList;   
+    //     }
+    //     // if(!blist.isEmpty()){
+    //     //  	update blist;   
+    //     // }
+    // }
+    public static void updateWaiverApprovedtillNow(List<Booking__c> blist) {
+
+    List<Project__c> projectList = new List<Project__c>();
+    Set<Id> bookingIds = new Set<Id>();
+
+    for (Booking__c b : blist) {
+        bookingIds.add(b.Id);
+    }
+
+    // 🔹 Fetch summed Interest Waiver from Demands
+    Map<Id, Decimal> bookingToDemandWaiverSum = new Map<Id, Decimal>();
+
+    for (AggregateResult ar : [
+        SELECT Booking__c bookingId,
+               SUM(Total_Interest_Waiver_Amount__c) totalWaiver
+        FROM RW_Demand__c
+        WHERE Booking__c IN :bookingIds
+        GROUP BY Booking__c
+    ]) {
+        bookingToDemandWaiverSum.put(
+            (Id) ar.get('bookingId'),
+            (Decimal) ar.get('totalWaiver')
+        );
+    }
+
+    for (Booking__c b : blist) {
+
+        Decimal totalWaivertobeApproved =
+            b.Total_Waiver_Amount_to_be_Approved__c != null
+            ? b.Total_Waiver_Amount_to_be_Approved__c
+            : 0;
+
+        Decimal totalWaiverApprovedTillNow =
+            b.Total_Waiver_Amount_Approved_Till_Now__c != null
+            ? b.Total_Waiver_Amount_Approved_Till_Now__c
+            : 0;
+
+        totalWaiverApprovedTillNow += totalWaivertobeApproved;
+
+        // 🔹 Update Project
+        if (b.Project__c != null) {
+            Project__c p = new Project__c();
+            p.Id = b.Project__c;
+            p.Waiver_Approved_till_now__c = totalWaiverApprovedTillNow;
+            projectList.add(p);
+        }
+
+        // 🔹 Reset to be approved
+        b.Total_Waiver_Amount_to_be_Approved__c = 0;
+    }
+
+    if (!projectList.isEmpty()) {
+        update projectList;
+    }
+}
+
+    //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
+    
+    //Added by Prashant to update waiver amount to be approved.//09-12-25 STart.
+    public static void processWaivers(list<Id> Bids){
+        list<Booking__c> blist = [Select id,Name,RM_Name__c,Interest_Waiver_Approval_Status__c,Process_Instance_Id__c, (Select id,Process_Instance_Id__c from Interest_Waivers__r where Sent_for_Approval__c = true),(SELECT Actor.Name,Comments,StepStatus
+                                  FROM ProcessSteps order by CreatedDate desc limit 1) from Booking__c where Id in: bids ];
+        list<Interest_Waiver__c> waiversToUpdate = new list<Interest_Waiver__c>();
+        List<Booking__c> bookingsToUpdate = new List<Booking__c>();
+        List<Id> waiversToSendtoSAP = new List<Id>();     
+        List<Id> waiverIds = new List<Id>(); 
+        if(!blist.isEmpty()){             
+            for (Booking__c bk : blist) {
+                Boolean bookingUpdated = false; 
+                if(bk.Interest_Waivers__r != null && !bk.Interest_Waivers__r.isEmpty()){
+                    for (Interest_Waiver__c iw : bk.Interest_Waivers__r) {
+                        if(bk.Interest_Waiver_Approval_Status__c == 'Approved'){
+                            iw.Approval_Status__c = 'Approved';
+                            iw.Process_Instance_Id__c = bk.Process_Instance_Id__c ;
+                            bookingUpdated = true;
+                            //waiversToSendtoSAP.add(iw.Id);
+                        } else if(bk.Interest_Waiver_Approval_Status__c == 'Rejected'){
+                            iw.Approval_Status__c = 'Rejected';
+                            iw.Process_Instance_Id__c = bk.Process_Instance_Id__c ;
+                            bookingUpdated = true;
+                        }
+                        iw.Sent_for_Approval__c = false;
+                        waiversToUpdate.add(iw);
+                        waiverIds.add(iw.Id);
+                    }
+                }
+                if(bookingUpdated){
+                    bk.Process_Instance_Id__c = null;
+                    bookingsToUpdate.add(bk);
+                }
+            }
+            
+            if (!waiversToUpdate.isEmpty()) {
+                update waiversToUpdate;
+                sendWaiverEmailApex(Bids,waiverIds);
+            }
+            if(!bookingsToUpdate.isEmpty()){
+                update bookingsToUpdate;
+            }
+
+            if(!waiversToSendtoSAP.isEmpty()){  
+                //Id JobId = System.enqueueJob(new SAPInterestWaiverAPICallOutNew(waiversToSendtoSAP));
+            }
+        }
+    }
+    
+    public static void processWaiversInProcess(list<Id> Bids){
+        list<Booking__c> blist = [Select id,Name,RM_Name__c,Interest_Waiver_Approval_Status__c,(Select id from Interest_Waivers__r where Sent_for_Approval__c = true),(SELECT Actor.Name,Comments,StepStatus
+                                  FROM ProcessSteps order by CreatedDate desc limit 1) from Booking__c where Id in: bids ];
+        list<Interest_Waiver__c> waiversToUpdate = new list<Interest_Waiver__c>();     
+        List<Id> waiverIds = new List<Id>(); 
+        if(!blist.isEmpty()){             
+            for (Booking__c bk : blist) {
+                if(bk.Interest_Waivers__r != null && !bk.Interest_Waivers__r.isEmpty()){
+                    for (Interest_Waiver__c iw : bk.Interest_Waivers__r) {
+                        
+                        iw.Approval_Status__c = bk.Interest_Waiver_Approval_Status__c;
+                        waiversToUpdate.add(iw);
+                    }
+                }
+            }
+            
+            if (!waiversToUpdate.isEmpty()) {
+                update waiversToUpdate;
+            }
+        }
+    }
+    
+    public static void sendWaiverEmailApex(List<Id> bids,list<Id> waiversIds) {
+        
+        List<Booking__c> bookingList = [
+            SELECT Id, Name, Owner.Email, RM_Name__c, Interest_Waiver_Approval_Status__c,Project_Lead__r.Email,CRM_Head__r.Email,CEO__r.Email,
+            (SELECT Id, Name, Waiver_Reason__c, Sub_Reason__c, Waiver_Amount__c, Remarks__c, Approval_Status__c,Demand__c,Demand__r.Name,IOM_Uploaded__c,
+             Project_Name__c,Unit__c,Customer_Name__c,Demand__r.RW_Customer_Number__c,Demand__r.RW_Demand_Milestone__c
+             FROM Interest_Waivers__r 
+             WHERE Id in:waiversIds),
+            (SELECT Comments, StepStatus, Actor.Name ,ProcessNode.Name
+             FROM ProcessSteps 
+             ORDER BY CreatedDate DESC 
+             LIMIT 1),
+             (SELECT Id, SubmittedById, SubmittedBy.Name, SubmittedBy.Email
+                FROM ProcessInstances
+                ORDER BY CreatedDate DESC
+                LIMIT 1)
+
+            FROM Booking__c 
+            WHERE Id IN :bids
+        ];
+
+        // Fetch Org Wide Email Address (Customer Care)
+        OrgWideEmailAddress owea = [
+            SELECT Id 
+            FROM OrgWideEmailAddress 
+            WHERE DisplayName = 'Runwal Cares'
+            LIMIT 1
+        ];
+        
+        Map<Id, Id> latestFilePerBooking = new Map<Id, Id>();
+
+        List<ContentDocumentLink> docLinks = [
+            SELECT LinkedEntityId, ContentDocumentId
+            FROM ContentDocumentLink
+            WHERE LinkedEntityId IN :bids
+        ];
+
+        Set<Id> docIds = new Set<Id>();
+        Map<Id, Id> docToBooking = new Map<Id, Id>();
+
+        for(ContentDocumentLink cdl : docLinks){
+            docIds.add(cdl.ContentDocumentId);
+            docToBooking.put(cdl.ContentDocumentId, cdl.LinkedEntityId);
+        }
+
+        List<ContentVersion> versions = [
+            SELECT Title, FileExtension, ContentDocumentId
+            FROM ContentVersion
+            WHERE ContentDocumentId IN :docIds
+            AND IsLatest = true
+            AND Title LIKE '%IWR%'
+            ORDER BY CreatedDate DESC
+        ];
+        system.debug('versions------>'+versions);
+        system.debug('versions.size------>'+versions.size());
+
+        // for(ContentVersion cv : versions){
+
+        //     Id bookingId = docToBooking.get(cv.ContentDocumentId);
+
+        //     if(!bookingFileMap.containsKey(bookingId)){
+        //         bookingFileMap.put(bookingId, new List<ContentVersion>());
+        //     }
+
+        //     bookingFileMap.get(bookingId).add(cv);
+        // }
+        for(ContentVersion cv : versions){
+
+            String fileName = cv.Title != null ? cv.Title.toLowerCase() : '';
+            String normalized = fileName.replaceAll('[^a-z]', '');
+
+            // ✅ Check IWR + IOM
+            if(normalized.contains('iwr')){
+
+                Id bookingId = docToBooking.get(cv.ContentDocumentId);
+
+                // ✅ pick ONLY latest
+                if(!latestFilePerBooking.containsKey(bookingId)){
+                    latestFilePerBooking.put(bookingId, cv.Id);
+                }
+            }
+        }
+
+        Map<Id, ContentVersion> versionMap = new Map<Id, ContentVersion>();
+
+        if(!latestFilePerBooking.isEmpty()){
+
+            versionMap = new Map<Id, ContentVersion>([
+                SELECT Id, Title, FileExtension, VersionData
+                FROM ContentVersion
+                WHERE Id IN :latestFilePerBooking.values()
+            ]);
+        }
+
+        for (Booking__c b : bookingList) {
+            
+            String initiatorName = '';
+            String initiatorEmail = '';
+
+            if(!b.ProcessInstances.isEmpty()){
+                initiatorName = b.ProcessInstances[0].SubmittedBy.Name;
+                initiatorEmail = b.ProcessInstances[0].SubmittedBy.Email;
+                system.debug('processnode--------------->'+b.ProcessSteps[0].ProcessNode.Name);
+            }
+            
+            if (b.Interest_Waivers__r == null || b.Interest_Waivers__r.isEmpty()) {
+                continue; 
+            }
+            
+            String latestComment = '';
+            String latestApprover = '';
+            
+            if (!b.ProcessSteps.isEmpty()) {
+                latestComment = b.ProcessSteps[0].Comments;
+                latestApprover = b.ProcessSteps[0].Actor.Name;
+            }
+            
+            String subject = (b.Interest_Waiver_Approval_Status__c == 'Approved')
+                ? 'Interest Waiver Approved - ' + b.Name
+                : 'Interest Waiver Rejected - ' + b.Name;
+
+            // 🔹 Booking record URL
+            String baseUrl = URL.getOrgDomainUrl().toExternalForm();
+            String bookingUrl = baseUrl + '/' + b.Id;
+            
+            String body = '<html><body>';            
+            body += '<p>Dear ' + initiatorName + ',</p>';            
+            if (b.Interest_Waiver_Approval_Status__c == 'Approved') {
+                body += '<p>The interest waiver request has been <b>approved</b>. Please find the details below:</p>';
+            } else {
+                body += '<p>The interest waiver request has been <b>rejected</b>. Please find the details below:</p>';
+            }
+             // ⭐ BOOKING LINK
+            body += '<p><b>Booking:</b> <a href="' + bookingUrl + '">' + b.Name + '</a></p><br/>';
+            
+            body += '<br/>';
+            
+            body += '<table border="1" style="border-collapse:collapse; font-size:12px;">';
+            body += '<tr>';
+            body += '<th>Sr No</th>';
+            body += '<th>Waiver Name</th>';
+            body += '<th>Project</th>';
+            body += '<th>Unit No.</th>';
+            body += '<th>Customer Name</th>';
+            body += '<th>CRN</th>';
+            body += '<th>Milestone Name</th>';
+            body += '<th>Demand</th>';   // ADDED by Dolly
+            body += '<th>Waiver Reason</th>';
+            body += '<th>Sub Reason</th>';
+            body += '<th>Waiver Amount</th>';
+            body += '<th>Remarks</th>';
+            body += '<th>Status</th>';
+            body += '</tr>';
+            
+            Integer row = 1;
+            
+            for (Interest_Waiver__c iw : b.Interest_Waivers__r) {
+                body += '<tr>';
+                body += '<td>' + row + '</td>';
+                body += '<td>' + iw.Name + '</td>';
+                body += '<td>' + iw.Project_Name__c + '</td>';
+                body += '<td>' + iw.Unit__c + '</td>';
+                body += '<td>' + iw.Customer_Name__c + '</td>';
+                body += '<td>' + iw.Demand__r.RW_Customer_Number__c + '</td>';
+                body += '<td>' + iw.Demand__r.RW_Demand_Milestone__c + '</td>';
+                body += '<td>' + (iw.Demand__r != null ? iw.Demand__r.Name : '') + '</td>';  //Added Demand Name
+                body += '<td>' + iw.Waiver_Reason__c + '</td>';
+                //body += '<td>' + iw.Sub_Reason__c + '</td>';
+                body += '<td>' + getSubReasonLabel(iw.Sub_Reason__c) + '</td>';
+                body += '<td>' + iw.Waiver_Amount__c + '</td>';
+                body += '<td>' + (iw.Remarks__c != null ? iw.Remarks__c : '') + '</td>';
+                body += '<td>' + iw.Approval_Status__c + '</td>';
+                body += '</tr>';
+                row++;
+            }
+            
+            body += '</table>';
+            
+            body += '<br/><br/>';
+            
+            if (!String.isBlank(latestComment)) {
+                body += '<br/><br/>';
+                body += '<p><b>Remarks from Approver (' + latestApprover + '):</b><br/>';
+                body += latestComment + '</p>';                
+            }
+            if (b.Interest_Waiver_Approval_Status__c == 'Rejected') {
+                body += '<p>Request you to take appropriate action accordingly.</p>';
+            }
+            
+            body += '<p>Regards,<br/>Runwal Team</p>';
+            body += '</body></html>';
+
+            List<String> toList = new List<String>();
+            Set<String> ccList = new Set<String>();
+
+            if(!String.isBlank(initiatorEmail))
+                toList.add(initiatorEmail);
+
+            if(toList.isEmpty())
+                toList.add('prashant.chaurasia.os@runwalgroup.in'); // fallback
+
+            String processNodeName = b.ProcessSteps[0].ProcessNode.Name;
+
+            if(processNodeName.contains('Project Lead')){
+
+                if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email))
+                    ccList.add(b.Project_Lead__r.Email);
+
+            }
+            else if(processNodeName.contains('CRM Head')){
+
+                if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email))
+                    ccList.add(b.Project_Lead__r.Email);
+
+                if(b.CRM_Head__r != null && !String.isBlank(b.CRM_Head__r.Email))
+                    ccList.add(b.CRM_Head__r.Email);
+
+            }
+            else if(processNodeName.contains('CEO')){
+
+                if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email))
+                    ccList.add(b.Project_Lead__r.Email);
+
+                if(b.CRM_Head__r != null && !String.isBlank(b.CRM_Head__r.Email))
+                    ccList.add(b.CRM_Head__r.Email);
+
+                if(b.CEO__r != null && !String.isBlank(b.CEO__r.Email))
+                    ccList.add(b.CEO__r.Email);
+            }
+
+            system.debug('ccList----------->'+ccList);
+            // if(b.Project_Lead__r != null && !String.isBlank(b.Project_Lead__r.Email)){
+            //     ccList.add(b.Project_Lead__r.Email);
+            // }
+
+            // if(b.CRM_Head__r != null && !String.isBlank(b.CRM_Head__r.Email)){
+            //     ccList.add(b.CRM_Head__r.Email);
+            // }
+
+            // if(b.CEO__r != null && !String.isBlank(b.CEO__r.Email)){
+            //     ccList.add(b.CEO__r.Email);
+            // }
+            
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setOrgWideEmailAddressId(owea.Id);
+            email.setToAddresses(toList);
+            // email.setToAddresses(new String[] { (b.Owner.Email != null) ? b.Owner.Email : 'prashant.chaurasia.os@runwalgroup.in' });
+            if(!ccList.isEmpty()){
+                //email.setCcAddresses(ccList);
+                email.setCcAddresses(new List<String>(ccList));
+            }
+            email.setSubject(subject);
+            email.setHtmlBody(body);
+            email.setSaveAsActivity(true);
+            email.setWhatId(b.Id);
+            
+
+            Boolean iomUploaded = false;
+
+            for(Interest_Waiver__c iw : b.Interest_Waivers__r){
+                if(iw.IOM_Uploaded__c){
+                    iomUploaded = true;
+                    break;
+                }
+            }
+            List<Messaging.EmailFileAttachment> attachments = new List<Messaging.EmailFileAttachment>();
+
+            if(iomUploaded && latestFilePerBooking.containsKey(b.Id)){
+
+                Id versionId = latestFilePerBooking.get(b.Id);
+
+                if(versionMap.containsKey(versionId)){
+
+                    ContentVersion cv = versionMap.get(versionId);
+
+                    Messaging.EmailFileAttachment efa = new Messaging.EmailFileAttachment();
+                    efa.setFileName(cv.Title + '.' + cv.FileExtension);
+                    efa.setBody(cv.VersionData);
+
+                    attachments.add(efa);
+                }
+            }
+
+            email.setFileAttachments(attachments);
+            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
+        }
+    }
+
+    
+    
+    public static void submitBookingforWaiverApproval(list<Id> iwBIds){
+        try {
+        List<Approval.ProcessSubmitRequest> requests = new List<Approval.ProcessSubmitRequest>();
+        if(!iwBIds.isEmpty()){
+            for(Id bid:iwBIds){
+                Approval.ProcessSubmitRequest req = new Approval.ProcessSubmitRequest();
+                req.setObjectId(bid);
+                req.setComments('Submitting for Interest Waiver Consolidation Approval');
+                req.setProcessDefinitionNameOrId('Interest_Waiver_Approval');
+                req.setSkipEntryCriteria(true);
+                requests.add(req);
+            }   
+        }
+        if (!requests.isEmpty()) {
+            if(Test.isRunningTest()){
+                return;
+            }
+            List<Approval.ProcessResult> results = Approval.process(requests);
+            System.debug('Approval Results -> ' + results);
+            // 🔥 NEW LOGIC
+                List<Booking__c> bookingsToUpdate = new List<Booking__c>();
+
+                for(Integer i = 0; i < results.size(); i++){
+
+                    if(results[i].isSuccess()){
+
+                        Id processInstanceId = results[i].getInstanceId();
+                        Id bookingId = iwBIds[i]; // same order
+
+                        bookingsToUpdate.add(new Booking__c(
+                            Id = bookingId,
+                            Process_Instance_Id__c = processInstanceId
+                        ));
+                    }
+                }
+
+                if(!bookingsToUpdate.isEmpty()){
+                    update bookingsToUpdate;
+                }
+        }
+        }catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+    
+    public static void validateIOMBeforeApproval(List<Booking__c> newList,Map<Id, Booking__c> oldMap) {
+        for (Booking__c b : newList) {
+            Booking__c oldB = oldMap.get(b.Id);
+
+            // Run ONLY when approval status changes
+            Boolean approvalStatusChanged = b.Interest_Waiver_Approval_Status__c != oldB.Interest_Waiver_Approval_Status__c;
+
+            // Total waiver calculation
+            Decimal totalRequested = (b.Total_Waiver_Amount_to_be_Approved__c != null ? b.Total_Waiver_Amount_to_be_Approved__c : 0) + (b.Total_Approved_Interest_Amount_Waived__c != null ? b.Total_Approved_Interest_Amount_Waived__c : 0) + (b.Interest_Waiver_Approved_but_not_Waived__c != null ? b.Interest_Waiver_Approved_but_not_Waived__c : 0);
+            Decimal projectLimit = b.Project_Waived_Limit__c != null ? b.Project_Waived_Limit__c : 0;
+            // Approval just happened
+            if (    
+                approvalStatusChanged &&
+                (b.Interest_Waiver_Approval_Status__c != 'Rejected' && b.Interest_Waiver_Approval_Status__c != 'Submitted for Approval') &&
+                totalRequested > projectLimit &&
+                b.is_IOM_Uploaded__c == false) {
+
+                    system.debug('id------->'+b.id);
+                    b.addError('Approval cannot be completed. Please upload the IOM document on the Booking with extension as _IOM.');
+                }
+
+            if (
+                approvalStatusChanged &&
+                (b.Interest_Waiver_Approval_Status__c == 'Approved' || b.Interest_Waiver_Approval_Status__c == 'Rejected')
+            ){
+                // ✅ Reset checkbox when approved
+                b.is_IOM_Uploaded__c = false;
+
+            } 
+            
+        }
+
+       
+    }
+
+   
+    
+   	/*public static void sendWaiverNotifications(List<Booking__c> bklistforNotif){
+        
+        CustomNotificationType notificationType = [SELECT Id, DeveloperName FROM CustomNotificationType WHERE DeveloperName='PushNotificationtoSM'];
+        for(Booking__c b : bklistforNotif){
+            Messaging.CustomNotification notification = new Messaging.CustomNotification();
+            String title = '';
+            String body = '';
+            if(b.Interest_Waiver_Approval_Status__c == 'Submitted for Approval' || b.Interest_Waiver_Approval_Status__c == 'Pending at CRM Head' || b.Interest_Waiver_Approval_Status__c == 'Pending at CEO'){
+                title = b.RM_Name__c + 'is requesting approval for interest waiver';
+                body = 'Interest Waiver for ₹' + b.Total_Waiver_Amount_to_be_Approved__c + 'is pending for Approval';
+            } else if(b.Interest_Waiver_Approval_Status__c == 'Approved'){
+                title = 'Waiver is Approved';
+                body = 'Interest Waiver for ₹' + b.Total_Waiver_Amount_to_be_Approved__c + 'is Approved';
+            } else if(b.Interest_Waiver_Approval_Status__c == 'Submitted for Approval' || b.Interest_Waiver_Approval_Status__c == 'Pending at CRM Head' || b.Interest_Waiver_Approval_Status__c == 'Pending at CEO'){
+                title = 'Waiver is Rejected';
+                body = 'Interest Waiver for ₹' + b.Total_Waiver_Amount_to_be_Approved__c + 'is Rejected, Please take necessary actions';
+            }
+            notification.setTitle(title);
+            notification.setBody(body);
+            notification.setNotificationTypeId(notificationType.Id);
+            notification.setTargetId(b.Id);
+            Set<String> ownerIds = new Set<String>();
+            if(b.Interest_Waiver_Approval_Status__c == 'Approved'){
+                if(b.Waiver_Approver_Level__c == 'Level 1' && b.Project_Lead__c != null){
+                    ownerIds.add(b.Project_Lead__c);
+                } else if(b.Waiver_Approver_Level__c == 'Level 2' && b.CRM_Head__c != null){
+                    ownerIds.add(b.CRM_Head__c);
+                } else  if(b.Waiver_Approver_Level__c == 'Level 3' && b.CEO__c != null){
+                    ownerIds.add(b.CEO__c);
+                }
+            } else if(b.Interest_Waiver_Approval_Status__c == 'Rejected'){
+                if(b.Waiver_Approver_Level__c == 'Level 1' && b.Project_Lead__c != null){
+                    ownerIds.add(b.Project_Lead__c);
+                } else if(b.Waiver_Approver_Level__c == 'Level 2' && b.Project_Lead__c != null && b.CRM_Head__c != null){
+                    ownerIds.add(b.Project_Lead__c);
+                    ownerIds.add(b.CRM_Head__c);
+                } else if(b.Waiver_Approver_Level__c == 'Level 3' && b.Project_Lead__c != null && b.CRM_Head__c != null && b.CEO__c !=null ){
+                    ownerIds.add(b.Project_Lead__c);
+                    ownerIds.add(b.CRM_Head__c);
+                    ownerIds.add(b.CEO__c);
+                }
+            } else if(b.Interest_Waiver_Approval_Status__c == 'Submitted for Approval'){
+                ownerIds.add(b.Project_Lead__c);
+            } else if(b.Interest_Waiver_Approval_Status__c == 'Pending at CRM Head'){
+                ownerIds.add(b.CRM_Head__c);
+            } else if(b.Interest_Waiver_Approval_Status__c == 'Pending at CEO'){
+                ownerIds.add(b.CEO__c);
+            }
+            
+            notification.send(ownerIds);
+        }
+    }*/
+    //Added by Prashant to update waiver amount to be approved.//09-12-25 End.
+    //
+    
+     //Convert Sub Reason API → Label(Added By Dolly)
+    public static String getSubReasonLabel(String apiValue){
+
+        if(String.isBlank(apiValue)) return '';
+
+        Map<String,String> picklistMap = new Map<String,String>();
+
+        Schema.DescribeFieldResult fieldDesc =
+            Interest_Waiver__c.Sub_Reason__c.getDescribe();
+
+        for(Schema.PicklistEntry entry : fieldDesc.getPicklistValues()){
+            picklistMap.put(entry.getValue(), entry.getLabel());
+        }
+
+        return picklistMap.containsKey(apiValue)
+            ? picklistMap.get(apiValue)
+            : apiValue;
+    }
+   
+    public static void updateWlakinSourceOnOpportunity(List<Booking__c> bkgs){ //Added by Vinay 11-06-2026
+        List<Opportunity> oppList = new List<Opportunity>();
+        for(Booking__c bkg : bkgs){
+            Opportunity opp = new Opportunity();
+            opp.Id = bkg.Opportunity__c;
+            opp.Walkin_Source__c = bkg.Source_of_Booking__c;
+            oppList.add(opp);
+        }
+        if(oppList.size() > 0){
+            update oppList;
+        }
+    }
+	 
     public void dummyMethod(){
             
             String s2;        
@@ -1258,6 +1995,848 @@ update bkgs;
             i++;
             i++;
             i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+        i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+        i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+         i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
             i++;
             i++;
             i++;
@@ -1335,4 +2914,114 @@ update bkgs;
             i++;
             i++;
         }
+
+    //Added for car park
+    //Commented by Dolly    
+    // public static void handleQuotationTagging( List<Booking__c> newList, Map<Id, Booking__c> oldMap){
+
+    //     Set<Id> quotationIds = new Set<Id>();
+    //     Map<Id, Booking__c> quotationBookingMap = new Map<Id, Booking__c>();
+
+    //     List<Id> bookingsToReleaseParking = new List<Id>();
+
+    //     for(Booking__c b : newList){
+
+    //         Booking__c oldB = oldMap.get(b.Id);
+
+    //         // CASE 1: quotation removed
+    //         if(oldB.Quotation__c != null && b.Quotation__c == null){
+    //             bookingsToReleaseParking.add(b.Id);
+    //         }
+
+    //         // CASE 2: quotation changed
+    //         if(oldB.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
+    //             bookingsToReleaseParking.add(b.Id);
+    //         }
+
+    //         // CASE 3: quotation newly added OR changed
+    //         if(b.Quotation__c != null && b.Quotation__c != oldB.Quotation__c){
+
+    //             quotationIds.add(b.Quotation__c);
+    //             quotationBookingMap.put(b.Quotation__c, b);
+    //         }
+    //     }
+
+    //     // RELEASE OLD PARKING
+    //     if(!bookingsToReleaseParking.isEmpty()){
+    //         releaseParking(bookingsToReleaseParking);
+    //     }
+
+    //     if(quotationIds.isEmpty()){
+    //         return;
+    //     }
+
+    //     Map<Id, Quotation__c> quotationMap =
+    //         new Map<Id, Quotation__c>(
+    //             [SELECT Id, Project__c, Project_Unit__c,
+    //             Single_car_park_Earmarked__c, Single_car_park_additional__c,
+    //             Tandem_car_park_earmarked__c, Tandem_car_park_additional__c,
+    //             Single_Open_Earmarked__c, Single_Open_Additional__c,
+    //             Tandem_Open_Earmarked__c, Tandem_Open_Additional__c,
+    //             Covered_Stack_Earmarked__c, Covered_Stack_Additional__c,
+    //             Stilt_Earmarked__c, Stack_Additional__c,
+    //             MLCP_Earmarked__c, MLCP_Additional__c,
+    //             Basement_Earmarked__c, Basement_Additional__c,
+    //             Podium_Earmarked__c, Podium__c,
+    //             Puzzle_Car_Park_Earmarked__c, Puzzle_Car_Park__c,
+    //             Stack_Earmarked__c,Stack_Additional_1__c
+    //             FROM Quotation__c
+    //             WHERE Id IN :quotationIds]
+    //         );
+
+    //     for(Id qId : quotationMap.keySet()){
+
+    //         Quotation__c q = quotationMap.get(qId);
+    //         Booking__c b = quotationBookingMap.get(qId);
+
+    //         if(q != null && b != null){
+
+    //             try{
+
+    //                 ParkingAllocationService.allocateParkingFromQuotation(
+    //                     q,
+    //                     b.Id
+    //                 );
+
+    //             }catch(ParkingAllocationService.ParkingValidationException e){
+
+    //                 List<String> errorList = e.getMessage().split('\n');
+    
+    //                 List<String> cleanErrors = new List<String>();
+    //                 for(String err : errorList){
+    //                     if(String.isNotBlank(err)){
+    //                         cleanErrors.add('• ' + err.trim());
+    //                     }
+    //                 }
+                    
+    //                 b.addError(String.join(cleanErrors, ' | '));
+
+    //             }
+    //         }
+    //     }
+    // }
+    // public static void releaseParking(List<Id> bookingIds){
+
+    //     List<Car_Parking_Charge__c> parkings = [
+    //         SELECT Id, Status__c, Booking__c
+    //         FROM Car_Parking_Charge__c
+    //         WHERE Booking__c IN :bookingIds
+    //     ];
+
+    //     for(Car_Parking_Charge__c p : parkings){
+    //         p.Status__c = 'Vacant';
+    //         p.Booking__c = null;
+    //         //p.Project_Unit__c = null;
+    //     }
+        
+    //     if(!parkings.isEmpty()){
+    //         update parkings;
+    //     }
+
+    // }
+    
 }

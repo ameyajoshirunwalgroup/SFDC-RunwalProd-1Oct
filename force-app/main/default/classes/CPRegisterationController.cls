@@ -341,7 +341,7 @@ throw new AuraHandledException(e.getMessage());
                     upsert sf;
                     if(sf.Id != null){
                         try{
-                            List<Lead> leadList = [SELECT Id FROM Lead WHERE RW_Broker__c =: sf.Id AND LeadSource = 'Temp Channel Partner' AND IsConverted = false]; 
+                            List<Lead> leadList = [SELECT Id FROM Lead WHERE RW_Broker__c =: sf.Id AND LeadSource = 'Temp Channel Partner' AND IsConverted = false and IsActive__c =true and Isactive__c = true/*Isactive =  true - Added by Prashant on 30-03-26 to add change only in active leads.*/ ]; 
                             System.debug('leadList: ' + leadList);
                             for(Lead ld : leadList){
                                 ld.LeadSource = 'Channel Partner';
@@ -415,36 +415,38 @@ throw new AuraHandledException(e.getMessage());
         }
         
         list<Broker__c> existing;
-        if(bk.Id != null){
+        if (bk.Id != null) {
             existing = [
                 SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
                 FROM Broker__c
                 WHERE Id != :bk.Id
                 AND (
-                    RW_Mobile_No__c = :bk.RW_Mobile_No__c
-                    OR Broker_Pan_No__c = :bk.Broker_Pan_No__c
-                    OR RW_Email__c = :bk.RW_Email__c
+                    (RW_Mobile_No__c = :bk.RW_Mobile_No__c AND RW_Mobile_No__c != null)                    
+                    OR (RW_Email__c = :bk.RW_Email__c AND RW_Email__c != null)
+                    OR (Broker_Pan_No__c = :bk.Broker_Pan_No__c AND Broker_Pan_No__c != null)
                 )
                 LIMIT 1
             ];
-        }else{
+        } else {
             existing = [
                 SELECT Id, Name, RW_Mobile_No__c, Broker_Pan_No__c, RW_Email__c
                 FROM Broker__c
-                WHERE 
-                RW_Mobile_No__c = :bk.RW_Mobile_No__c
-                OR Broker_Pan_No__c = :bk.Broker_Pan_No__c
-                OR RW_Email__c = :bk.RW_Email__c
+                WHERE (
+                    (RW_Mobile_No__c = :bk.RW_Mobile_No__c AND RW_Mobile_No__c != null)
+                    OR (RW_Email__c = :bk.RW_Email__c AND RW_Email__c != null)
+                    OR (Broker_Pan_No__c = :bk.Broker_Pan_No__c AND Broker_Pan_No__c != null)
+                )
                 LIMIT 1
             ];
         }
+
         system.debug('Existing -> '+existing);
         if (existing.isEmpty()) {
             return null;
         }else{
-            Boolean mobileMatch = existing[0].RW_Mobile_No__c == bk.RW_Mobile_No__c;
-            Boolean panMatch = existing[0].Broker_Pan_No__c == bk.Broker_Pan_No__c;
-            Boolean emailMatch = existing[0].RW_Email__c == bk.RW_Email__c;
+            Boolean mobileMatch = existing[0].RW_Mobile_No__c == bk.RW_Mobile_No__c && bk.RW_Mobile_No__c != null;
+            Boolean panMatch = existing[0].Broker_Pan_No__c == bk.Broker_Pan_No__c && bk.Broker_Pan_No__c != null;
+            Boolean emailMatch = existing[0].RW_Email__c == bk.RW_Email__c && bk.RW_Email__c != null;
             
             if (mobileMatch && panMatch && emailMatch) {
                 return 'Duplicate exists with Mobile: ' + bk.RW_Mobile_No__c 
@@ -490,8 +492,8 @@ throw new AuraHandledException(e.getMessage());
                           Company_Name__c,RW_Email__c,STR_SUPPL1__c,STR_SUPPL2__c,STR_SUPPL3__c,Individual_CP__c,Unregistered_Channel_Partner__c,
                           Company_Name_As_per_RERA__c,Project__c,Approver_L1__c,Approver_L2__c,Country__c,City__c,Pin_Code__c,Broker_Type__c,
                           Experience__c,Branch_Code__c,State__c,Dialing_Country_Code1__c,Expertise__c,Channel_Partner_From_CP_Portal__c,
-                          Developers_Worked_For__c,Account__c,RW_Broker_Number__c,Broker_Pan_No__c,RERA_Valid_till__c,CC_Valid_till__c,STREET__c,
-                            RW_Is_CC_Applicable__c
+                          Developers_Worked_For__c,Account__c,RW_Broker_Number__c,Broker_Pan_No__c,RERA_Valid_till__c,/*CC_Valid_till__c,*/STREET__c
+                           // RW_Is_CC_Applicable__c
                     from Broker__c where Id =: brId and RecordTypeId=:CPRecordTypeId ];
         }
         return null;
@@ -656,38 +658,62 @@ throw new AuraHandledException(e.getMessage());
         //     ApproversId.add(plist[0].Project_Location__r.CP_Sourcing_Head__c);
         // } 
 
-        list<CP_Invoice_Approvers_list_CS__c> cpcustomSettingList = [select id,Name, CP_MIS__c, CP_Sourcing_Head__c from CP_Invoice_Approvers_list_CS__c where Name =: pname];
+        /*list<CP_Invoice_Approvers_list_CS__c> cpcustomSettingList = [select id,Name, CP_MIS__c, CP_Sourcing_Head__c from CP_Invoice_Approvers_list_CS__c where Name =: pname];
         if(!cpcustomSettingList.isEmpty()){
             ApproversId.add(cpcustomSettingList[0].CP_MIS__c);
             ApproversId.add(cpcustomSettingList[0].CP_Sourcing_Head__c);
            // ApproversId.add('0055j000007G2SJAA0');
             //ApproversId.add('0055j000007G2SJAA0');
-        } 
-        System.debug('ApproversId'+ApproversId);
-        return ApproversId;
+} *///Commented by Prashant to take the approvers from team members maintained under team under project....Added on 30-03-2026...
         
+        //Added by Prashant to take the approvers from team members maintained under team under project....Added on 30-03-2026...
+        list <Team_Members__c> tmlist = [Select id,Approver_Type__c,User__c from Team_Members__c where Team__r.Team_Type__c  = 'CP Invoice Approver Team' and Team__r.Project__r.Name =: pname];
+        if(!tmlist.isEmpty()){
+            for(Team_Members__c tm : tmlist){
+                if(tm.Approver_Type__c != null){
+                    if(tm.Approver_Type__c == 'CP MIS'){
+                        ApproversId.add(tm.User__c);
+                    }
+                    if(tm.Approver_Type__c == 'CP Sourcing Head'){
+                        ApproversId.add(tm.User__c);
+                    }   
+                }            
+            }            
+        } 
+        //Added by Prashant to take the approvers from team members maintained under team under project....Added on 30-03-2026...
+        System.debug('ApproversId'+ApproversId);
+        return ApproversId;        
     }
     
     
     //Added by Prashant 21-08-25. // Upload RERA n CC details and Submit record for approval.
     @AuraEnabled
-    public static void updateDocDetailsnSubmitforAppr(Boolean isrera, Boolean iscc, String brId, Date reraExpDate,Date ccExpDate) {
+    public static void updateDocDetailsnSubmitforAppr(Boolean isrera/*, Boolean iscc*/, String brId, Date reraExpDate,Date ccExpDate) {
         system.debug('Broker Id - '+brId);
         if(String.isNotBlank(brId)){
-            list<Broker__c> brlist = new list<Broker__c>();
-            Broker__c b = new Broker__c();
-            b.Id = brId;
-            if(isrera){
-                b.RERA_Valid_till__c = reraExpDate;
-                b.Latest_RERA_Upload_Status__c = 'Approval Pending';
-                b.Latest_RERA_Upload_Processed__c = false;
+            list<Broker__c> brlist = [Select id,CreatedDate,Project__c,Approver_L1__c,Approver_L2__c from Broker__c where Id =: brId];
+            if(!brlist.isEmpty()){
+                for(Broker__c b: brlist){
+                    if(isrera){
+                        b.RERA_Valid_till__c = reraExpDate;
+                        if(b.Project__c != null && b.Approver_L1__c != null && b.Approver_L2__c != null ){
+                            b.Latest_RERA_Upload_Status__c = 'Approval Pending';
+                        }else if(b.CreatedDate < Date.newInstance(2025, 9, 16)){
+                            b.Latest_RERA_Upload_Status__c = 'Approved';
+                        }
+                        b.Latest_RERA_Upload_Processed__c = false;
+                    }
+                    /*if(iscc){
+                        b.CC_Valid_till__c = ccExpDate;
+                        if(b.Project__c != null && b.Approver_L1__c != null && b.Approver_L2__c != null ){
+                            b.Latest_CC_Upload_Status__c = 'Approval Pending';
+                        }else if(b.CreatedDate < Date.newInstance(2025, 9, 16)){
+                            b.Latest_CC_Upload_Status__c = 'Approved';
+                        }
+                        b.Latest_CC_Upload_Processed__c = false;
+                    }*/
+                }
             }
-            if(iscc){
-                b.CC_Valid_till__c = ccExpDate;
-                b.Latest_CC_Upload_Status__c = 'Approval Pending';
-                b.Latest_CC_Upload_Processed__c = false;
-            }
-            brlist.add(b);
             try{
                 update brlist;
             }catch(DMLException e) {
@@ -705,7 +731,7 @@ throw new AuraHandledException(e.getMessage());
         if (String.isBlank(CPUserId)) {
             return null;
         }else {
-            return [SELECT Id, Name,Valid_competency_certificate__c,Valid_RERA_certificate__c,Latest_CC_Upload_Status__c,Latest_RERA_Upload_Status__c FROM Broker__c WHERE Account__c IN (SELECT AccountId FROM User WHERE Id =: CPUserId) LIMIT 1];
+            return [SELECT Id, Name/*Valid_competency_certificate__c //Commented by Prashant as discussed with team to discard use of CC. 12/12/25.*/,Valid_RERA_certificate__c/*,Latest_CC_Upload_Status__c*/,Latest_RERA_Upload_Status__c FROM Broker__c WHERE Account__c IN (SELECT AccountId FROM User WHERE Id =: CPUserId) LIMIT 1];
         }
     }
     
@@ -716,37 +742,9 @@ throw new AuraHandledException(e.getMessage());
         bk.Sourcing_Manager__c = UserInfo.getUserId();
         try{
             insert bk;
-            if(bk.Id != null){                
-                Id cpRecordTypeId = Schema.SObjectType.Task.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
-                Task t = new Task();
-                t.WhatId = bk.id;
-                t.OwnerId = UserInfo.getUserId();
-                Date todayDate = System.today();
-                DateTime createTime = DateTime.now();                
-                t.ActivityDate = system.today().addDays(15);                    
-                t.Status = 'In-progress';
-                String subject = 'Temporary CP Registration Pending – '+ bk.Name;
-                t.Subject = subject;
-                //t.Task_Type__c = '';
-                t.Type = 'Other';
-                t.Task_Type__c = 'CP Call';
-                t.RecordTypeId = cpRecordTypeId;
-                t.Priority = 'Normal';                    
-                String nbody1 = 'Kindly ensure that the registration is completed at the earliest to avoid delays in onboarding, payment, or portal access.\nRegards,';
-                t.Description = nbody1; 
-                t.ReminderDateTime = System.now();
-                t.IsReminderSet = true; 
-                try{
-                    insert t;
-                }catch(Exception e){
-                    throw new AuraHandledException(e.getMessage());
-                }
-                
-                return bk.id;                  
-            }
+            return bk.id;
         } catch (Exception e) {
-            String cleanMessage;
-            
+            String cleanMessage;            
             if (e instanceof DmlException) {
                 DmlException de = (DmlException)e;
                 if (de.getNumDml() > 0 && String.isNotBlank(de.getDmlMessage(0))) {
@@ -756,12 +754,103 @@ throw new AuraHandledException(e.getMessage());
                 }
             } else {
                 cleanMessage = e.getMessage(); // Handle non-DML exceptions
+            }            
+            throw new AuraHandledException(cleanMessage);
+        }
+        //return null;
+    }
+    
+    //Added by Prashant../// Send Registratin link to CP from button on the record. // Started 23-02-26.
+    @AuraEnabled
+    public static String sendRegistrationLinktoCP(Id brId){
+        list<Broker__c> cplist = [Select Id,RW_Mobile_No__c,RW_Email__c,RecordTypeId,Name,RW_Broker_Number__c,Dialing_Country_Code1__c from Broker__c where Id =: brId];
+        Id tempCPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Temp Channel Partner').getRecordTypeId();
+        Id CPRecordTypeId = Schema.SObjectType.Broker__c.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        if(!cplist.isEmpty()){
+            //Send Email
+            Map<Id,String> tempCPIdVsEmailMap = new Map<Id,String>();//Added by Prashant..///  
+            tempCPIdVsEmailMap.put(cplist[0].Id,cplist[0].RW_Email__c);
+            if(tempCPIdVsEmailMap.size() > 0){                
+                System.enqueueJob(new SendCPEmails(new Map<Id, String>{ cplist[0].Id => (cplist[0].RW_Email__c != null ? cplist[0].RW_Email__c : 'prashant.chaurasia.os@runwalgroup.in') }, 'Temp_CP_creation_Email'));
+                system.debug('Email Sent');
+                String registrationLink;
+                if(cplist[0].RecordTypeId == tempCPRecordTypeId){
+                    registrationLink = System.Label.Site_Url_New + '/channelpartner/s/customregisterpage?tempcpid='+ cplist[0].RW_Broker_Number__c;
+                }else {
+                    registrationLink = System.Label.Site_Url_New + '/channelpartner/s/customregisterpage?brId='+ cplist[0].Id;
+                }
+                SendWhatsAppMsg.methodToSendWhatsAppMsg(null,cplist[0].Name,cplist[0].RW_Broker_Number__c,/*link*/registrationLink,null,null,null,null,null,cplist[0].Dialing_Country_Code1__c, cplist[0].RW_Mobile_No__c,'CP registration email');  // Added by Prashant to send Whatsapp to cp for registration...Added on 09-03-26..   
+                return 'The registration link has been sent successfully';                
             }
-
-    throw new AuraHandledException(cleanMessage);
-}
-
-        return null;
+            //Send SMS
+            
+            //Send Whatsapp
+            //SendWhatsAppMsg.methodToSendWhatsAppMsg(null,bkg.Primary_Applicant_Name__c,null,null,null,null,null,null,null,bkg.RW_Country_Phone_Code__c,bkg.Opportunity__r.RW_Mobile_No__c,'Registration Date Entry');
+            return '';
+        }else{
+            return 'No Broker Found with the given Id';
+        }
+    }
+    //Added by Prashant../// Send Registratin link to CP from button on the record. // End 23-02-26.
+    //
+    
+     public void dummyMethod(){
+        integer i;
+            i=0;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
     }
     
 

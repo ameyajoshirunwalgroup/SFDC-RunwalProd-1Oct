@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ROC_Modification_Type__c</fullName>
+    <label>ROC Modification Type</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Applicant – Co-applicant Swap</fullName>
+                <default>false</default>
+                <label>Applicant – Co-applicant Swap</label>
+            </value>
+            <value>
+                <fullName>Spelling mistake</fullName>
+                <default>false</default>
+                <label>Spelling mistake</label>
+            </value>
+            <value>
+                <fullName>Additional Co-applicant</fullName>
+                <default>false</default>
+                <label>Additional Co-applicant</label>
+            </value>
+            <value>
+                <fullName>Removal of Co-applicant</fullName>
+                <default>false</default>
+                <label>Removal of Co-applicant</label>
+            </value>
+            <value>
+                <fullName>AV Change</fullName>
+                <default>false</default>
+                <label>AV Change</label>
+            </value>
+            <value>
+                <fullName>ROC Hold Cases</fullName>
+                <default>false</default>
+                <label>ROC Hold Cases</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

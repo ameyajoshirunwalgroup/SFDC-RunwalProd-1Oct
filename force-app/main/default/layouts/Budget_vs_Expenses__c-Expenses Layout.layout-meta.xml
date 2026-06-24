@@ -52,6 +52,10 @@
                 <behavior>Edit</behavior>
                 <field>Actual_Expenses_WRPL__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Remarks__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -76,10 +80,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Budget_in_Cr__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Actual_Expenses_RRPL__c</field>
             </layoutItems>
             <layoutItems>
@@ -97,10 +97,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Actual_Expenses_SIPL__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Remarks__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -152,9 +148,6 @@
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>TASK.LAST_UPDATE</fields>
         <relatedList>RelatedHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedNoteList</relatedList>

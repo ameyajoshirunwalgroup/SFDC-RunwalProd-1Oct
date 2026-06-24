@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Functional_User_Time_Elapsed__c</fullName>
+    <externalId>false</externalId>
+    <formula>TEXT(
+FLOOR( (IF(ISPICKVAL(Status, &quot;Resolved&quot;), Resolved_Timestamp__c, NOW()) - Functional_User_Assignment_Time__c) )
+) &amp; &quot; Days &quot; &amp;
+
+TEXT(
+FLOOR( MOD( (IF(ISPICKVAL(Status, &quot;Resolved&quot;), Resolved_Timestamp__c, NOW()) - Functional_User_Assignment_Time__c) * 24, 24 ) )
+) &amp; &quot; Hrs &quot; &amp;
+
+TEXT(
+FLOOR( MOD( (IF(ISPICKVAL(Status, &quot;Resolved&quot;), Resolved_Timestamp__c, NOW()) - Functional_User_Assignment_Time__c) * 24 * 60, 60 ) )
+) &amp; &quot; Mins&quot;</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Functional User Time Elapsed</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

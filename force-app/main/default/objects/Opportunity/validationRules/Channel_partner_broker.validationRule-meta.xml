@@ -3,7 +3,6 @@
     <fullName>Channel_partner_broker</fullName>
     <active>true</active>
     <errorConditionFormula>And(
-   ISNEW(), /* Added by Vinay */
   CreateDate__c &gt;= DATE(2021,01,01),
 IF(OR( ISPICKVAL(LeadSource , &quot;Channel Partner&quot;), ISPICKVAL( Walkin_Source__c , &quot;Channel Partner&quot;) ),AND(ISBLANK(RW_Broker__c), ISBLANK( RW_Walkin_Channel_Partner__c ) , RW_Apply_Unregistered_Broker__c == false,Walkin_Apply_Unregistered_ChannelPartner__c == false),false),
 $Label.Disable_all_validations_from_opp == &quot;false&quot; /*Added by Prashant to control disabling all validations together*/

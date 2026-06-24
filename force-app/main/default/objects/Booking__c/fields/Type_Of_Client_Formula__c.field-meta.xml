@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Type_Of_Client_Formula__c</fullName>
     <externalId>false</externalId>
-    <formula>IF
+    <formula>/*IF
 	(DATEVALUE(Booking_Date__c) &lt;=  DATE(2024,03,31) ,
 		IF(
 			OR(ISPICKVAL(Type_of_Client__c,&apos;NRI&apos;),ISPICKVAL(Type_of_Client__c,&apos;Outstation&apos;)),&apos;NRI&apos;,
@@ -11,6 +11,24 @@
 			)
 		),
 	&quot;Local&quot;
+)*/
+
+/* Added by Prashant to separate the client source formula for Outstation and NRI */
+IF(
+    ISPICKVAL(Type_of_Client__c, &apos;NRI&apos;),
+    &apos;NRI&apos;,
+    IF(
+        ISPICKVAL(Type_of_Client__c, &apos;Outstation&apos;),
+        &apos;Outstation&apos;,
+        IF(
+            OR(
+                ISPICKVAL(Type_of_Client__c, &apos;Local&apos;),
+                ISPICKVAL(Type_of_Client__c, &apos;Corporate&apos;)
+            ),
+            &apos;Local&apos;,
+            &apos;&apos;
+        )
+    )
 )</formula>
     <label>Type Of Client(brokerage scheme)</label>
     <required>false</required>

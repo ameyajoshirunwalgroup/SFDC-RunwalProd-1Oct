@@ -60,7 +60,7 @@
     <formulas>
         <name>coolingPeriod</name>
         <dataType>Number</dataType>
-        <expression>{!$Record.RW_Project__r.Opportunity_cooling_period_on_assignment__c}</expression>
+        <expression>{!$Record.RW_Project__r.Opportunity_cooling_period_on_assignmen__c}</expression>
         <scale>0</scale>
     </formulas>
     <interviewLabel>Opportunity | Reallocate opportunity to secondary user {!$Flow.CurrentDateTime}</interviewLabel>
@@ -87,12 +87,12 @@
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
-        <filterLogic>(1 OR 2 OR 3 ) AND 4</filterLogic>
+        <filterLogic>(1 OR 2 OR 3 OR 4) AND 5</filterLogic>
         <filters>
             <field>StageName</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Site Visit</stringValue>
+                <stringValue>Visit Done</stringValue>
             </value>
         </filters>
         <filters>
@@ -100,6 +100,13 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Negotiation</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Quote Confirmation</stringValue>
             </value>
         </filters>
         <filters>

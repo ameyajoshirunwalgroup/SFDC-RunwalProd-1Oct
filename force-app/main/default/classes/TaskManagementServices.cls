@@ -472,13 +472,31 @@ public class TaskManagementServices {
                     taskDate = Date.today();
                 
                 String taskDate1 = taskDate.Date().format();
-                taskDate1 = taskDate1 + ' ' + opptyTaskMap.get(o.Id).Call_Time__c;
-                System.Debug('Value of datetime parse function' + taskDate1);
-                o.Sales_Call_Attempt_Date__c = DateTime.Parse(taskDate1);
+                    String rawTime = opptyTaskMap.get(o.Id).Call_Time__c; // e.g., "4:05 PM" or "11:30 PM"
+                    
+                    // 1. Split by space to separate "4:05" from "PM"
+                    String[] timeAndAmPm = rawTime.split(' ');
+                    String timePart = timeAndAmPm[0]; // "4:05"
+                    String amPm = timeAndAmPm[1];    // "PM"
+                    
+                    // 2. Split the time by ":" to get hours and minutes
+                    String[] hoursAndMinutes = timePart.split(':');
+                    Integer hour = Integer.valueOf(hoursAndMinutes[0]);
+                    Integer minute = Integer.valueOf(hoursAndMinutes[1]);
+                    
+                    // 3. Convert to 24-hour format
+                    if (amPm.equalsIgnoreCase('PM') && hour < 12) {
+                        hour += 12;
+                    } else if (amPm.equalsIgnoreCase('AM') && hour == 12) {
+                        hour = 0;
+                    }
+                    taskDate1 = taskDate1 + ' ' + opptyTaskMap.get(o.Id).Call_Time__c;
+                    System.Debug('Value of datetime parse function' + taskDate1);
+                    o.Sales_Call_Attempt_Date__c = DateTime.newInstance(taskDate.year(), taskDate.month(), taskDate.day(), hour, minute, 0);
                 //Added by Payal 02/08/2021
                 if(o.First_Sales_Call_Attempt_Date__c == null){
                     o.First_Sales_Call_Attempt_Status__c = opptyTaskMap.get(o.Id).Call_Attempt_Status__c;
-                    o.First_Sales_Call_Attempt_Date__c = DateTime.Parse(taskDate1);
+                    o.First_Sales_Call_Attempt_Date__c = DateTime.newInstance(taskDate.year(), taskDate.month(), taskDate.day(), hour, minute, 0);
                     o.First_Sales_Call_Description__c	= system.today().format() + ' : ' +CallRating  + ' : '  + Description;	//Added on 6/10/2022
                 }
                 o.Sales_Call_Count__c= oppTaskCountMap.get(o.Id).get('Sales Call');
@@ -604,7 +622,7 @@ o.Next_Action_Date_VDNB__c = opptyTaskMap.get(o.Id).Next_Action_Date__c;
         List < AggregateResult > taskCountAg = new List<AggregateResult>();
         if(!leadTaskMap.isEmpty()){ //Added if condition by Vinay 01-07-2025
             leadList = [select Name, Id, call_proposed_date_of_visit__c, Follow_up_date__c,
-                                  Last_call_attempted_by__c, Last_call_attempt_status__c, Last_call_description__c,
+                                  Last_call_attempted_by__c, Last_call_attempt_status__c, Last_call_description__c,Sales_Call_Description__c,
                                   Call_Rating__c, Last_Call_Rating__c, Presales_Call_counter__c,IsFirstSalesCall__c,Sales_Call_Count__c,last_call_attempt_date__c,First_Call_Attempt_Date__c,First_Sales_Call_Attempt_Date__c, First_Call_Attempt_Status__c, First_Sales_Call_Attempt_Status__c, IsFirstPresalesCall__c from lead
                                   where Id in : leadTaskMap.keySet()
                                  ];
@@ -702,7 +720,7 @@ o.Next_Action_Date_VDNB__c = opptyTaskMap.get(o.Id).Next_Action_Date__c;
                 l.Sales_Call_Follow_Up_Bucket__c = leadTaskMap.get(l.Id).Follow_Up_Status__c;
                 l.Sales_Call_Reason_Not_Interested__c = leadTaskMap.get(l.Id).Sales_Reason_Not_Interested__c;
                 
-                system.debug(''+l.Sales_Call_Description__c);
+                //system.debug(''+l.Sales_Call_Description__c); //Commented by Vinay 26-09-2025
                 if (leadTaskMap.get(l.Id).description != null){
                     system.debug('in Sales call desc IF loop');
                     l.Sales_Call_Description__c += '\n' + system.today().format() + ' : ' + leadTaskMap.get(l.Id).Call_Rating__c + ' : ' +leadTaskMap.get(l.Id).description;
@@ -1016,7 +1034,7 @@ update SCPPDtoadd;
                 String dt = '';
                 //Create an object
                 Communication__c cloneRecord = new Communication__c();
-                cloneRecord.Name = t.Subject;
+                cloneRecord.Name = t.Subject?.trim().left(80);
                 cloneRecord.Status__c = t.Status;
                 //This code is added on 22/9/2015 to insert date and time in communication object date and time field
                 cloneRecord.ActivityDate__c = t.ActivityDate;
@@ -1065,12 +1083,9 @@ update SCPPDtoadd;
                 String ODate = OnlyDate.Date().format();
                 
                 // Here we are concatenating the date and time values to make create a datetime string       
-                if (t.Call_Time__c != null) {
-                    dt = ODate + ' ' + t.Call_Time__c;
-                } else {
+                
                     dt = System.now().format();
-                    
-                }
+                 
                 System.Debug('Value of datetime parse function' + dt);
                 
                 System.Debug('HardCoded Value of datetime parse function' + dt);

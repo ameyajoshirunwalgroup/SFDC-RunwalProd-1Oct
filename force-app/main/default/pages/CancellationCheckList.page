@@ -66,6 +66,9 @@
          <p>
             Customer Name : <b> {!info.Primary_Applicant_Name__c}</b>
          </p>
+          <p>
+            SAP Customer Number : <b> {!info.Opportunity__r.SAP_Customer_Number__c}</b>
+         </p>
          <p>
             <b><u>Booking Details</u></b>
          </p>
@@ -455,6 +458,8 @@
              </tr>
          </table>
           <br/>
+          <!--Commented by Prashant//5-5-26-->
+          <!--
           <table class="tableBorder">
             <th >
                <b>Prepared By (RM)</b>
@@ -509,7 +514,6 @@
                   {!info.Project__r.CRMHead__r.Name} 
                </td>
                <td>
-                 <!-- {!$Label.Accounts_Head} -->
                  {!info.Project__r.Accounts_Head__c}
                </td>
                <td>
@@ -528,6 +532,110 @@
             
             
          </table>
+          -->
+          
+          
+          <!--New Changes-->
+          
+          <table class="tableBorder">
+              <th >
+                  <b>Prepared By (RM)</b>
+              </th>
+              <th>
+                  <b>Back Office Head</b>
+              </th>
+              <th>
+                  <b>CRM Accounts</b>
+              </th>
+              <th>
+                  <b>Sales SM</b>
+              </th>
+              <th>
+                  <b>Sales Head</b>
+              </th>
+              <th>
+                  <b>CRM Project Team Lead</b>
+              </th>
+              <th>
+                  <b>CRM - Project Head</b>
+              </th>
+              <th>
+                  <b>CRM Head</b>
+              </th>
+              <th>
+                  <b>CEO</b>
+              </th>
+              <th>
+                  <b>Snehal Madam / SR Sir</b>
+              </th>
+              <tr style="height:100px;">
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+              </tr>
+              
+              <tr>
+                  <td>
+                      {!info.RM_Name__c}  
+                  </td>
+                  <td>
+                      {!BLANKVALUE(members['Back Office Head'].User__r.Name, '')}
+                  </td>
+                  <td>
+                      <!-- {!$Label.Accounts_Head} -->
+                      {!CRMAccounts}
+                  </td>
+                  <td>
+                      {!salesSM}
+                  </td>
+                  <td>
+                      {!SalesHead}
+                  </td>
+                  <td>
+                      {!CRMProjectTeamLead}
+                  </td>
+                  <td>
+                       {!CRMProjectHead}
+                  </td>
+                   <td>
+                      {!CRMHead} 
+                  </td>
+                   <td>
+                      {!CEO} 
+                  </td>
+                   <td>
+                      {!$Label.RW_Director} 
+                  </td>
+              </tr>            
+          </table>
+          
       </div>
    </body>
 </html>

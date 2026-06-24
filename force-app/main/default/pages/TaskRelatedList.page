@@ -136,13 +136,13 @@
                     html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Description</th><th class="slds-is-sortable"  scope="col">Call Attempt Status</th><th class="slds-is-sortable"  scope="col">Call Attempted By</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th></thead><tbody>';
                     
                 }  else if(tabName.indexOf('Site Visit') != -1 || tabName.indexOf('Re-Visit') != -1) {
-                    html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Subject</th>';
-                    html += '<th scope="col"class="slds-is-sortable"  >Name</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Description</th></tr></thead><tbody>';  
+                    html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th> <th class="slds-is-sortable"  scope="col">Subject</th>';
+                    html += '<th class="slds-is-sortable"  scope="col">Status</th> <th scope="col"class="slds-is-sortable"  >Name</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Description</th></tr></thead><tbody>';  
                 } else if (tabName.indexOf('Sales Call') != -1) {
                     html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Subject</th>';
-                    html += '<th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th><th scope="col"class="slds-is-sortable"  >Description</th></tr></thead><tbody>';  
+                    html += '<th class="slds-is-sortable"  scope="col">Status</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th><th scope="col"class="slds-is-sortable"  >Description</th></tr></thead><tbody>';  
                 }
-                 else {
+ else {
                     html += '<thead><tr><th class="slds-is-sortable"  scope="col">Action</th><th class="slds-is-sortable"  scope="col">Subject</th>';
                     html += '<th scope="col"class="slds-is-sortable"  >Name</th><th scope="col"class="slds-is-sortable"  >Date</th><th scope="col"class="slds-is-sortable">Time</th><th scope="col"class="slds-is-sortable">Call Status</th> <th scope="col"class="slds-is-sortable">Call Recording Link</th></tr></thead><tbody>';  
                 }
@@ -154,13 +154,15 @@
                         html += '<tr><td><a href=\'#\' onclick=\"completeTask(\''+recordList[i].Id+'\',\''+recordList[i].Task_Type__c+'\')\">Edit</a>&nbsp;&nbsp;&nbsp;<a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
                       
                      }
-                     /*else if(test === 2 && recordList[i].Task_Type__c.indexOf('Site Visit') != -1){
+                    /*   else if(test === 1 && recordList[i].Task_Type__c.indexOf('Site Visit') != -1){
                         html += '<tr><td><a href=\'#\' onclick=\"completeTask(\''+recordList[i].Id+'\',\''+recordList[i].Task_Type__c+'\')\">Edit</a>&nbsp;&nbsp;&nbsp;<a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
                       
                      }  */
-                     else {
-                        html += '<tr><td><a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
+                      else {
+                      html += '<tr><td><a href=\'#\' onclick=\"completeTask(\''+recordList[i].Id+'\',\''+recordList[i].Task_Type__c+'\')\">Edit</a>&nbsp;&nbsp;&nbsp;<a href=\'#\' onclick=\"viewTask(\''+recordList[i].Id +'\',\''+recordList[i].Task_Type__c+'\')\">View</a></td>';
                      }
+                     
+                    
                     var d = new Date(recordList[i].ActivityDate);
  
                       //Remove first 4 characters (day), the seconds and the GMT offset
@@ -202,15 +204,17 @@
                       else if (tabName.indexOf('Site Visit') != -1 || tabName.indexOf('Re-Visit') != -1){
                           console.log(dateString);
                           html += '<td>' + recordList[i].Subject + '</td>';
+                           html += '<td>' + recordList[i].Status + '</td>'; // added by digicloud
                           html += '<td>' + recordList[i].What.Name + '</td>';
                           html += '<td>' + dateString + '</td>';
-                          html += '<td>' + recordList[i].Description+ '</td></tr>';  
+                          //   html += '<td>' + recordList[i].Description+ '</td></tr>';  
                       } 
                       else if (tabName.indexOf('Sales Call') != -1){
                           html += '<td>' + recordList[i].Subject + '</td>';
+                          html += '<td>' + recordList[i].Status + '</td>';
                           html += '<td>' + dateString + '</td>';
                           html += '<td>' + recordList[i].Call_Time__c + '</td>';
-                          html += '<td>' + recordList[i].Description + '</td></tr>';  
+                          // html += '<td>' + recordList[i].Description + '</td></tr>';
                       }
                       else {
                           console.log(dateString);

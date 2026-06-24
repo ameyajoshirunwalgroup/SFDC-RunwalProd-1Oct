@@ -7,7 +7,6 @@ global class InspectionAPIServices {
         List<InspectionAndPossession__c> inspPossList = new List<InspectionAndPossession__c>(); 
         Map<String,InspectionAndPossession__c> inspectionMap = new map<String,InspectionAndPossession__c>();
         RestRequest req = RestContext.request; //the RestRequest for the Apex REST method
-        system.debug(req.requestBody);
         String jsonBody = req.requestBody.toString(); //the body of the request
         if (!String.isBlank(jsonBody)) {
             inspPossList = (  List<InspectionAndPossession__c> )JSON.deserialize(jsonBody, List<InspectionAndPossession__c>.class );
@@ -32,16 +31,14 @@ global class InspectionAPIServices {
             }
             
         }
- List<Database.upsertResult> uResults=    Database.upsert(inspectionMap.values(),InspectionAndPossession__c.RW_SAP_Code__c,false) ;
+ List<Database.upsertResult> uResults= Database.upsert(inspectionMap.values(),InspectionAndPossession__c.RW_SAP_Code__c,false) ;
         
         List<Id> listOfbkgs = new List<Id>();
         for(Integer index = 0, size = uResults.size(); index < size; index++) {
             if(uResults[index].isSuccess()) {
-                if(uResults[index].isCreated()) {
-                    System.debug(inspectionMap.values()[index].Booking__c +' was created');
+                if(uResults[index].isCreated()){
                     listOfbkgs.add(inspectionMap.values()[index].Booking__c);
-                } else {
-                    System.debug(inspectionMap.values()[index].Booking__c +' was updated');
+                }else{
                     listOfbkgs.add(inspectionMap.values()[index].Booking__c);
                 }
             }

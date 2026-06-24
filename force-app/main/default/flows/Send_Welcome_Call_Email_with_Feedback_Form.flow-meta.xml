@@ -239,6 +239,53 @@
         <processMetadataValues>
             <name>emailAlertSelection</name>
             <value>
+                <stringValue>Welcome_Call_Email_alert_Runwal_Woods</stringValue>
+            </value>
+        </processMetadataValues>
+        <name>myRule_22_A1</name>
+        <label>Email alert_Runwal Woods</label>
+        <locationX>2200</locationX>
+        <locationY>200</locationY>
+        <actionName>RW_Welcome_Call__c.Welcome_Call_Email_alert_Runwal_Woods</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>myRule_22_A2</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>myVariable_current.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>RW_Welcome_Call__c.Welcome_Call_Email_alert_Runwal_Woods</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <processMetadataValues>
+            <name>emailAlertSelection</name>
+            <value>
+                <stringValue>Welcome_Call_Feedback_Email_Alert</stringValue>
+            </value>
+        </processMetadataValues>
+        <name>myRule_22_A2</name>
+        <label>Welcome_Call_Feedback_Email_Alert</label>
+        <locationX>2200</locationX>
+        <locationY>300</locationY>
+        <actionName>RW_Welcome_Call__c.Welcome_Call_Feedback_Email_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>myVariable_current.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>RW_Welcome_Call__c.Welcome_Call_Feedback_Email_Alert</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <processMetadataValues>
+            <name>emailAlertSelection</name>
+            <value>
                 <stringValue>Welcome_Call_Email_with_Dhamaka</stringValue>
             </value>
         </processMetadataValues>
@@ -329,7 +376,7 @@
         </inputParameters>
         <nameSegment>RW_Welcome_Call__c.Welcome_Call_Feedback_Email_Alert</nameSegment>
     </actionCalls>
-    <apiVersion>53.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>isChangedDecision11_myRule_10_RW_Welcome_Call_Status_c</name>
@@ -433,7 +480,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>myDecision</targetReference>
+            <targetReference>isChangedDecision23_myRule_22_RW_Welcome_Call_Status_c</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
@@ -454,9 +501,41 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>myDecision</targetReference>
+                <targetReference>isChangedDecision23_myRule_22_RW_Welcome_Call_Status_c</targetReference>
             </connector>
             <label>isChangedRule_20_myRule_19_RW_Welcome_Call_Status_c</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>isChangedDecision23_myRule_22_RW_Welcome_Call_Status_c</name>
+        <label>isChangedDecision23_myRule_22_RW_Welcome_Call_Status_c</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myDecision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>default</defaultConnectorLabel>
+        <rules>
+            <name>isChangedRule_23_myRule_22_RW_Welcome_Call_Status_c</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>myVariable_old</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>myVariable_old.RW_Welcome_Call_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>myVariable_current.RW_Welcome_Call_Status__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myDecision</targetReference>
+            </connector>
+            <label>isChangedRule_23_myRule_22_RW_Welcome_Call_Status_c</label>
         </rules>
     </decisions>
     <decisions>
@@ -725,7 +804,7 @@
                 <leftValueReference>myVariable_current.RW_Booking__r.Project__r.Name</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>7 Mahalaxmi, Runwal Woods</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -780,7 +859,7 @@
                 <leftValueReference>myVariable_current.RW_Project__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>7 Mahalaxmi, Runwal Woods</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -1059,13 +1138,13 @@
                 <processMetadataValues>
                     <name>inputDataType</name>
                     <value>
-                        <stringValue>String</stringValue>
+                        <stringValue>ID</stringValue>
                     </value>
                 </processMetadataValues>
                 <processMetadataValues>
                     <name>leftHandSideType</name>
                     <value>
-                        <stringValue>String</stringValue>
+                        <stringValue>ID</stringValue>
                     </value>
                 </processMetadataValues>
                 <processMetadataValues>
@@ -1077,13 +1156,44 @@
                 <processMetadataValues>
                     <name>rightHandSideType</name>
                     <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.RW_Booking__r.Project__r.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a00J40000048nGR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
                         <stringValue>String</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.RW_Project__c</leftValueReference>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.RW_Booking__r.Project__r.Id</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>a009I00000Hd6Op</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -1103,6 +1213,9 @@
         <label>myDecision18</label>
         <locationX>50</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myDecision21</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>myRule_19</name>
@@ -1297,6 +1410,120 @@
                 <processMetadataValues>
                     <name>inputDataType</name>
                     <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>String</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.RW_Booking__r.Project__r.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a00J40000048nGRIAY</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>String</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>ID</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.RW_Booking__r.Project__r.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a009I00000Hd6Op</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_19_A1</targetReference>
+            </connector>
+            <label>Stamp duty &gt; 0 &amp; Dhamaka offer Mumbai</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <processMetadataValues>
+            <name>index</name>
+            <value>
+                <numberValue>7.0</numberValue>
+            </value>
+        </processMetadataValues>
+        <name>myDecision21</name>
+        <label>myDecision21</label>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>default</defaultConnectorLabel>
+        <rules>
+            <name>myRule_22</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.Dhamaka_Offer_to_be_Sent__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
                         <stringValue>String</stringValue>
                     </value>
                 </processMetadataValues>
@@ -1319,15 +1546,77 @@
                     </value>
                 </processMetadataValues>
                 <leftValueReference>myVariable_current.RW_Project__c</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>Runwal Avenue</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>String</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.RW_Welcome_Call_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Accept</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>String</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>Boolean</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>isChangedRule_23_myRule_22_RW_Welcome_Call_Status_c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>myRule_19_A1</targetReference>
+                <targetReference>myRule_22_A1</targetReference>
             </connector>
-            <label>Stamp duty &gt; 0 &amp; Dhamaka offer Mumbai</label>
+            <label>Runwal Avenue</label>
         </rules>
     </decisions>
     <decisions>
@@ -1531,7 +1820,7 @@
                 <leftValueReference>myVariable_current.RW_Project__c</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>7 Mahalaxmi,Runwal Woods</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -1741,7 +2030,7 @@
                 <leftValueReference>myVariable_current.RW_Booking__r.Project__r.Name</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>7 Mahalaxmi,Runwal Woods</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -1982,7 +2271,7 @@
                 <leftValueReference>myVariable_current.RW_Project__c</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>7 Mahalaxmi</stringValue>
+                    <stringValue>7 Mahalaxmi, Runwal Woods</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -1991,7 +2280,9 @@
             <label>Stamp duty &gt; 0 &amp; Dhamaka offer Dombivali</label>
         </rules>
     </decisions>
-    <interviewLabel>Send_Welcome_Call_Email_with_Feedback_Form-9_InterviewLabel</interviewLabel>
+    <description>Adding the Runwal Avenue condition to test Runwal Woods email alert</description>
+    <interviewLabel>Send_Welcome_Call_Email_with_Feedback_Form-10_InterviewLabel</interviewLabel>
+    <isTemplate>true</isTemplate>
     <label>Send Welcome Call Email with Feedback Form</label>
     <processMetadataValues>
         <name>ObjectType</name>
@@ -2019,7 +2310,7 @@
     </processMetadataValues>
     <processType>Workflow</processType>
     <startElementReference>isChangedDecision2_myRule_1_RW_Welcome_Call_Status_c</startElementReference>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>myVariable_current</name>
         <dataType>SObject</dataType>

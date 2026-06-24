@@ -3,42 +3,42 @@
     <apexClass xsi:nil="true"/>
     <attachmentOption>All</attachmentOption>
     <authenticationFailureAction>Bounce</authenticationFailureAction>
-    <authorizationFailureAction>Bounce</authorizationFailureAction>
+    <authorizationFailureAction>Discard</authorizationFailureAction>
     <emailServicesAddresses>
         <developerName>complaints</developerName>
         <isActive>true</isActive>
         <localPart>complaints</localPart>
-        <runAsUser>system.admin@runwal.com</runAsUser>
+        <runAsUser>system.admin@runwal.com.fullcopy</runAsUser>
     </emailServicesAddresses>
     <emailServicesAddresses>
         <developerName>cpcare</developerName>
         <isActive>true</isActive>
         <localPart>cpcare</localPart>
-        <runAsUser>system.admin@runwal.com</runAsUser>
+        <runAsUser>system.admin@runwal.com.fullcopy</runAsUser>
     </emailServicesAddresses>
     <emailServicesAddresses>
         <developerName>crm7mahalaxmi</developerName>
         <isActive>true</isActive>
         <localPart>crm7mahalaxmi</localPart>
-        <runAsUser>system.admin@runwal.com</runAsUser>
-    </emailServicesAddresses>
-    <emailServicesAddresses>
-        <developerName>crmgardens</developerName>
-        <isActive>true</isActive>
-        <localPart>crmgardens</localPart>
-        <runAsUser>system.admin@runwal.com</runAsUser>
+        <runAsUser>system.admin@runwal.com.fullcopy</runAsUser>
     </emailServicesAddresses>
     <emailServicesAddresses>
         <developerName>customer_care</developerName>
         <isActive>true</isActive>
         <localPart>customer.care</localPart>
-        <runAsUser>system.admin@runwal.com</runAsUser>
+        <runAsUser>system.admin@runwal.com.fullcopy</runAsUser>
     </emailServicesAddresses>
     <emailServicesAddresses>
-        <developerName>mycity_customercare</developerName>
+        <developerName>shraddha_shahari</developerName>
         <isActive>true</isActive>
-        <localPart>mycity.customercare</localPart>
-        <runAsUser>system.admin@runwal.com</runAsUser>
+        <localPart>shraddha.shahari</localPart>
+        <runAsUser>system.admin@runwal.com.fullcopy</runAsUser>
+    </emailServicesAddresses>
+    <emailServicesAddresses>
+        <developerName>vinay_kumar_os</developerName>
+        <isActive>true</isActive>
+        <localPart>vinay.kumar.os</localPart>
+        <runAsUser>system.admin@runwal.com.fullcopy</runAsUser>
     </emailServicesAddresses>
     <functionInactiveAction>Bounce</functionInactiveAction>
     <functionName>EmailToCase</functionName>
@@ -47,5 +47,5 @@
     <isErrorRoutingEnabled>false</isErrorRoutingEnabled>
     <isTextAttachmentsAsBinary>true</isTextAttachmentsAsBinary>
     <isTlsRequired>false</isTlsRequired>
-    <overLimitAction>Requeue</overLimitAction>
+    <overLimitAction>Bounce</overLimitAction>
 </EmailServicesFunction>

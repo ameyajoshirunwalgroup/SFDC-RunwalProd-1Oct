@@ -1,0 +1,46 @@
+.green-button {
+    --slds-c-button-brand-color-background: #28a745;   /* Bootstrap green */
+    --slds-c-button-brand-color-border: #28a745;
+    --slds-c-button-brand-color-background-hover: #218838;
+    --slds-c-button-brand-color-border-hover: #218838;
+    --slds-c-button-brand-color-background-active: #1e7e34;
+    --slds-c-button-brand-color-border-active: #1e7e34;
+}
+.big-button {
+    --slds-c-button-font-size: 0.95rem;     /* slightly bigger text */
+    --slds-c-button-spacing-inline-start: 1.5rem; /* more width */
+    --slds-c-button-spacing-inline-end: 1.5rem;
+    --slds-c-button-radius-border: 0.4rem;  /* rounded edges */
+}
+
+.big-Dbutton {
+    /* Works for destructive variant */
+    --slds-c-button-destructive-font-size: 0.95rem;
+    --slds-c-button-destructive-spacing-inline-start: 1.5rem;
+    --slds-c-button-destructive-spacing-inline-end: 1.5rem;
+    --slds-c-button-destructive-radius-border: 0.4rem;
+}
+
+.checklist-text {
+    font-size: 1rem;   /* default ~14px, increase to 16px */
+}
+
+.checklist-text strong {
+    font-size: 1.1rem; /* slightly bigger for the label */
+    font-weight: 600;
+}
+
+.checklist-text span {
+    font-size: 0.95rem; /* a bit smaller than the label */
+    color: #444;        /* optional: make status text darker */
+}
+
+.custom-icon-approval { 
+ --slds-c-icon-color-foreground: #059922;
+ --slds-c-icon-color-background: #ffffff;
+}
+
+.custom-icon-reject { 
+ --slds-c-icon-color-foreground: #f50808;
+ --slds-c-icon-color-background: #ffffff;
+}

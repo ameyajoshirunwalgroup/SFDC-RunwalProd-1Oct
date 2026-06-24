@@ -1,0 +1,16 @@
+<messaging:emailTemplate subject="Demand - {!relatedTo.Name} Ageing Alert"
+                         recipientType="User"
+                         relatedToType="RW_Demand__c">
+    <messaging:plainTextEmailBody >
+Hello {!recipient.Name},
+
+The following Demand record has crossed its ageing threshold:
+
+Demand: {!relatedTo.Name}
+Demand Due Ageing: {!relatedTo.RW_Demand_Aging__c} days
+PTP Ageing: {!relatedTo.PTP_Ageing__c} days
+
+Regards,  
+Salesforce System
+    </messaging:plainTextEmailBody>
+</messaging:emailTemplate>

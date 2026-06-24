@@ -3,6 +3,20 @@
     <label>Payment Due Alert WhatsApp</label>
     <protected>false</protected>
     <values>
+        <field>Message_Content__c</field>
+        <value xsi:type="xsd:string">Dear {{1}} ,
+
+Greetings from the Runwal group!
+
+The outstanding amount towards your purchased unit {{2}} is Rs {{3}} .
+
+Kindly clear your dues before the due date to avoid any additional late payment charges.
+
+Please ignore this message if you already have paid the dues.
+
+Runwal Group</value>
+    </values>
+    <values>
         <field>RW_Type__c</field>
         <value xsi:nil="true"/>
     </values>

@@ -154,7 +154,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.PTP_Date__c</fieldItem>
                 <identifier>RecordPTP_Date_cField</identifier>
@@ -174,7 +174,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.SAP_Slab_Code__c</fieldItem>
                 <identifier>RecordSAP_Slab_Code__cField</identifier>
@@ -184,10 +184,30 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.SAP_Slab_Description__c</fieldItem>
-                <identifier>RecordSAP_Slab_Description__cField</identifier>
+                <fieldItem>Record.Payment_Date__c</fieldItem>
+                <identifier>RecordPayment_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Interest_Waiver_Requested__c</fieldItem>
+                <identifier>RecordInterest_Waiver_Requested__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Total_Interest_Waived_on_Demand_Sum__c</fieldItem>
+                <identifier>RecordTotal_Interest_Waived_on_Demand_Sum_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-ff49297c-756c-4159-9c70-a647c7633d4a</name>
@@ -268,10 +288,20 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Unit_No__c</fieldItem>
                 <identifier>RecordUnit_No__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SAP_Slab_Description__c</fieldItem>
+                <identifier>RecordSAP_Slab_Description__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-aaf3dd97-7091-47ab-8f90-7e923ece6971</name>
@@ -316,7 +346,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Net_Interest_Amount__c</fieldItem>
                 <identifier>RecordNet_Interest_Amount__cField</identifier>
@@ -326,7 +356,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Interest_Days__c</fieldItem>
                 <identifier>RecordInterest_Days__cField</identifier>
@@ -340,7 +370,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Total_Interest_Amount__c</fieldItem>
                 <identifier>RecordTotal_Interest_Amount__cField</identifier>
@@ -350,20 +380,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Previously_Waived_Amount_SAP__c</fieldItem>
                 <identifier>RecordPreviously_Waived_Amount_SAP__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Payment_Date__c</fieldItem>
-                <identifier>RecordPayment_Date_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-672035ab-0be8-4f5d-81b1-04a9f701a5a2</name>

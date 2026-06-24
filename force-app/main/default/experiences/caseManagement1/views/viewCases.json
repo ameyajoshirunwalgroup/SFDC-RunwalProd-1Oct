@@ -1,0 +1,75 @@
+{
+  "appPageId" : "b698cf55-806b-4deb-b2e3-3c2c1b01af5c",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "0986cdd8-974b-4d87-a92f-e1cfe72fc71e",
+  "label" : "View Cases",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "1dce7462-1f2b-48de-8da4-e0dd5f6d4b0d",
+          "columns" : [ {
+            "UUID" : "0c4030e8-f257-4ec0-8c6d-f9623bc2d609",
+            "columnKey" : "col1",
+            "columnName" : "Case List Column",
+            "columnWidth" : "12",
+            "seedComponents" : [ {
+              "attributes" : {
+                "filterName" : "Recent",
+                "scope" : "Case",
+                "sfdc:identifier" : "forceCommunity_objectHome"
+              },
+              "fqn" : "forceCommunity:objectHome"
+            } ]
+          } ]
+        },
+        "sectionHeight" : 32
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "1dce7462-1f2b-48de-8da4-e0dd5f6d4b0d",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "enableInlineEdit" : true,
+            "filterName" : "Recent",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Case",
+            "showActionBar" : true,
+            "showChartsPanel" : true,
+            "showDisplay" : "showall",
+            "showFilterPanel" : true,
+            "showImageIcon" : true,
+            "showManualRefreshButton" : true,
+            "showObjectName" : true,
+            "showPinnedList" : true,
+            "showSearchBar" : true
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "ba603b1a-7aa4-47e3-98de-385178c4d362",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "0c4030e8-f257-4ec0-8c6d-f9623bc2d609",
+        "regionLabel" : "Case List Column",
+        "regionName" : "col1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "fbca132a-6651-4def-9ebd-da2524fb873c",
+    "regionName" : "content",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "case-list"
+}

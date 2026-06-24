@@ -22,6 +22,18 @@
         <senderType>CurrentUser</senderType>
         <template>Account_Temlate/Email_on_Account_Redeem_True</template>
     </alerts>
+    <alerts>
+        <fullName>Mobile_App_Upgrade_Notice</fullName>
+        <description>Mobile App Upgrade Notice</description>
+        <protected>false</protected>
+        <recipients>
+            <field>RW_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>customer.care@runwalgroup.in</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Mobile_App_Upgrade_Notice</template>
+    </alerts>
     <fieldUpdates>
         <fullName>Update_Customer_Portal_Account_Custom_fi</fullName>
         <field>IsCustomerPortal</field>

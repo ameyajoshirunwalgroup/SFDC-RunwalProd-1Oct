@@ -6,7 +6,7 @@ public class RWCaseTriggerHandlerTracker
         //RWTaskTriggerHandlerTracker.unitTest1();
         
         Project_Keywords__c objProjectKeyword = new Project_Keywords__c();
-        objProjectKeyword.name='Runwal Bliss';
+        objProjectKeyword.name='Runwal Bliss';          
         objProjectKeyword.RW_Keyword__c ='Bliss;Runwal Bliss';
         insert objProjectKeyword;
         
@@ -558,5 +558,89 @@ system.debug('After@@@@objCase.RW_Is_Owner_changed__c'+objCase.RW_Is_Owner_chang
          ProjectUnitUpdateOnCaseBatch bw = new  ProjectUnitUpdateOnCaseBatch();
          Database.executeBatch(bw,1);
         Test.stopTest();
+    }
+
+    @isTest
+    static void accIAndOppIdTest(){
+
+        List<Account> accList = new List<Account>();
+        Account acc1 = new Account(LastName = 'Test Customer1',PersonEmail = 'test1@mail.com');
+        accList.add(acc1);
+        Account acc2 = new Account(LastName = 'Test Customer2',PersonEmail = 'test1@mail.com');
+        accList.add(acc2);
+        Account acc3 = new Account(LastName = 'Test Customer3',PersonEmail = 'test3@mail.com');
+        accList.add(acc3);
+        Account acc4 = new Account(LastName = 'Test Customer4',PersonEmail = 'test4@mail.com');
+        accList.add(acc4);
+        Account acc5 = new Account(LastName = 'Test Customer5',PersonEmail = 'test4@mail.com');
+        accList.add(acc5);
+        Account acc6 = new Account(LastName = 'Test Customer6',PersonEmail = 'test5@mail.com');
+        accList.add(acc6);
+        Account acc7 = new Account(LastName = 'Test Customer7',PersonEmail = 'test6@mail.com');
+        accList.add(acc7);
+        Account acc8 = new Account(LastName = 'Test Customer8',PersonEmail = 'test6@mail.com');
+        accList.add(acc8);
+        Account acc9 = new Account(LastName = 'Test Customer9',PersonEmail = 'test7@mail.com');
+        accList.add(acc9);
+        insert accList;
+
+        
+        List<Opportunity> oppList = new List<Opportunity>();
+        Opportunity opp1 = new Opportunity(Name = 'Test Opportunity1',AccountId = acc1.Id, RW_Email__c = 'test1@mail.com',StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp1);
+        Opportunity opp2 = new Opportunity(Name = 'Test Opportunity2',AccountId = acc2.Id, RW_Email__c = 'test2@mail.com',StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp2);
+        Opportunity opp3 = new Opportunity(Name = 'Test Opportunity3',AccountId = acc3.Id, StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp3);
+        Opportunity opp4 = new Opportunity(Name = 'Test Opportunity4',AccountId = acc4.Id, StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp4);
+        Opportunity opp5 = new Opportunity(Name = 'Test Opportunity5',AccountId = acc4.Id, StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp5);
+        Opportunity opp6 = new Opportunity(Name = 'Test Opportunity6',AccountId = acc3.Id, StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp6);
+        Opportunity opp7 = new Opportunity(Name = 'Test Opportunity7',AccountId = acc6.Id, StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp7);
+        Opportunity opp8 = new Opportunity(Name = 'Test Opportunity8',AccountId = acc2.Id, RW_Email__c = 'test8@mail.com',StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp8);
+        Opportunity opp9 = new Opportunity(Name = 'Test Opportunity9',AccountId = acc2.Id, RW_Email__c = 'test8@mail.com',StageName = 'Unit Booked',CloseDate = Date.today().addDays(30));
+        oppList.add(opp9);
+        insert oppList;
+
+        Booking__c bkg = new Booking__c(Opportunity__c = opp1.Id,Customer__c = opp1.Id, RW_Key_handover_date__c = Date.today().addDays(20));
+        insert bkg;
+
+        List<Applicant_Details__c> appList = new List<Applicant_Details__c>();
+        Applicant_Details__c app1 = new Applicant_Details__c(Booking__c = bkg.Id, Applicant_Number__c = 'Primary Applicant', Email_Address__c = 'test1@mail.com');
+        appList.add(app1);
+        Applicant_Details__c app2 = new Applicant_Details__c(Booking__c = bkg.Id, Applicant_Number__c = 'Primary Applicant', Email_Address__c = 'test9@mail.com');
+        appList.add(app2);
+        insert appList;
+
+        List<Case> cases = new List<Case>();
+        
+        Case cs1 = new Case(Subject = 'Test Case1',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test1@mail.com');
+        cases.add(cs1);
+        Case cs2 = new Case(Subject = 'Test Case2',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test2@mail.com');
+        cases.add(cs2);
+        Case cs3 = new Case(Subject = 'Test Case3',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test3@mail.com');
+        cases.add(cs3);
+        Case cs4 = new Case(Subject = 'Test Case4',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test4@mail.com');
+        cases.add(cs4);
+        Case cs5 = new Case(Subject = 'Test Case5',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test5@mail.com');
+        cases.add(cs5);
+        Case cs6 = new Case(Subject = 'Test Case6',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test6@mail.com');
+        cases.add(cs6);
+        Case cs7 = new Case(Subject = 'Test Case7',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test7@mail.com');
+        cases.add(cs7);
+        Case cs8 = new Case(Subject = 'Test Case8',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test8@mail.com');
+        cases.add(cs8);
+        Case cs9 = new Case(Subject = 'Test Case9',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test9@mail.com');
+        cases.add(cs9);
+        Case cs10 = new Case(Subject = 'Test Case10',Status = 'Open',Origin = 'Email',SuppliedEmail = 'test10@mail.com');
+        cases.add(cs10);
+        insert cases;
+
+        
+
     }
 }

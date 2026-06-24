@@ -1,0 +1,141 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-5">
+            <span>
+            </span>
+        </div>
+
+        <div class="slds-col slds-size_3-of-5">
+            <span>
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-col">
+                        <span>
+                            <div class="slds-text-heading_medium slds-float_left slds-p-bottom_medium"> CP Meets Details </div>
+                        </span>
+                    </div>
+                    <div class="slds-col">
+                        <span>
+
+                            <div class="slds-box  slds-box_small">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <div class="slds-col">
+                                        <span>
+                                            <lightning-button variant="base" label="Back To Home" title="Back To Home"
+                                                onclick={goToHomePage} icon-name="utility:back"
+                                                class="slds-p-around_xxx-small  slds-float_left">
+                                            </lightning-button>
+                                        </span>
+                                    </div>
+
+                                    <div class="slds-col">
+                                        <span>
+                                            <div>
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                    <div class="slds-col">
+                                        <span>
+                                            <div class="slds-text-heading_large slds-float_left"> {campaignName}</div>
+                                        </span>
+                                    </div>
+                                    <div class="slds-col">
+    <span>
+        <div class="slds-text-heading_small slds-float_left">
+            <lightning-formatted-date-time value={campaignStartDate}></lightning-formatted-date-time>
+        </div>
+    </span>
+</div>
+<div class="slds-col">
+    <span>
+        <div class="slds-text-body_small slds-float_left">
+            {campaignDescription}
+        </div>
+    </span>
+</div>
+
+                                    <div class="slds-col">
+                                        <span>
+                                            <div>
+                                                <br>
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                    <div class="slds-col">
+                                        <span>
+
+                                            <template if:true={showConference}>
+                                                <div>
+                                                    <template if:true={alreadyMember}>
+                                                        <lightning-button variant="base" label="See You At Event" title="See You At Event"
+                                                         icon-name="utility:success"
+                                                        class="slds-p-around_xxx-small slds-float_left">
+                                                    </lightning-button>
+                                                    </template>
+
+                                                    <template if:false={alreadyMember}> 
+                                                        <lightning-button variant="base" label="Register Here" title="Register Here"
+                                                        onclick={participateInCampaign} icon-name="utility:adduser"
+                                                        class="slds-p-around_xxx-small slds-float_left">
+                                                    </lightning-button> </template>
+
+                                                
+                                                </div>
+                                            </template>
+
+                                            <template if:false={showConference}>
+                                            <lightning-button variant="base" label="Register Here" title="Register Here"
+                                                onclick={participateInCampaign} icon-name="utility:adduser"
+                                                class="slds-p-around_xxx-small slds-float_left">
+                                            </lightning-button>
+                                        </template>
+
+                                        </span>
+
+                                    </div>
+                                    <div class="slds-col">
+                                        <span>
+                                            <div>
+                                                <div class="slds-text-body_small  slds-float_left">{campaignType}
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                    <div class="slds-col">
+                                        <span>
+                                            <div>
+                                                <br> </div>
+                                        </span>
+                                    </div>
+
+                                   <!-- <div class="slds-col">
+                                        <span>
+                                            <div class="slds-text-heading_small slds-float_left">{campaignDescription}
+                                            </div>
+                                        </span>
+                                    </div>-->
+
+                                </div>
+                                <br>
+                            </div>
+
+
+                        </span>
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <div class="slds-col slds-size_1-of-5">
+            <span>
+
+            </span>
+        </div>
+
+    </div>
+
+
+</template>

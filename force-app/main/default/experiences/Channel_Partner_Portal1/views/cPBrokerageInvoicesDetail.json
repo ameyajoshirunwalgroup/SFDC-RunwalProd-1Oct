@@ -1,0 +1,83 @@
+{
+  "appPageId" : "5f3496ad-333d-4427-9210-776490b7cc27",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "3c42201f-240f-4d1e-af71-04ad82bce56d",
+  "label" : "CP Brokerage Invoices Detail",
+  "regions" : [ {
+    "id" : "b1a990a7-80b2-4c5a-b2c5-2c697849ab04",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "06d695d0-cc94-4bca-8caf-b1e698106dd9",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "detailsTabLabel" : "Details",
+        "discussionsTabLabel" : "Feed",
+        "recordId" : "{!recordId}",
+        "relatedTabLabel" : "Related",
+        "showLegacyActivityComposer" : false,
+        "tab1Type" : "details",
+        "tab2Type" : "related",
+        "tab3Type" : "chatter",
+        "tab4Type" : "none",
+        "timelineTabLabel" : "Activity"
+      },
+      "componentName" : "forceCommunity:recordHomeTabs",
+      "id" : "ffc9e521-fbd0-4bec-8deb-d1d4c7613109",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "c81ed866-01ec-4bb7-8ffa-fb48439ff999",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "accept" : ".csv,.doc,.xsl,.pdf,.png,.jpg,.jpeg,.docx,.doc",
+        "recordId" : "{!recordId}",
+        "showDetails" : true,
+        "showFileUpload" : true,
+        "showFilters" : true,
+        "showsync" : true,
+        "title" : "Content Manager",
+        "usedInCommunity" : true
+      },
+      "componentName" : "c:showAttachements",
+      "id" : "a7961073-b860-4881-add1-80b062df88b7",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "e93ce3e0-0f49-4034-9231-989c68fbe167",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "43f891eb-3a5e-4adf-beee-24ac0bd2dd73",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "307d0c13-3f00-441d-90d2-00a88952d2ed",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-a0Q"
+}

@@ -3,10 +3,45 @@
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
+        <name>Check_Booking_Present_Or_Not</name>
+        <label>Check Booking Present Or Notson</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>check_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Booking_Is_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RW_Booking__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Booking__r.Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Greeting_Call_Records</targetReference>
+            </connector>
+            <label>Booking Is Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>check_for_Booking_Id</name>
         <label>check for Booking Id</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Status_Updated_to_Accept</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>is_Present</name>
@@ -29,6 +64,9 @@
         <label>check for Loan Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Status_Updated_to_Accept</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>is_Loan_Record_Present</name>
@@ -76,10 +114,45 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Greeting_Call_Records</name>
+        <label>Check Greeting Call Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>check_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Greeting_Call_Record_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Greeting_Call_Records</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Greeting_Call_Records.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Greeting_Call_Record</targetReference>
+            </connector>
+            <label>Greeting Call Record Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>check_Mode_of_Funding_Status</name>
         <label>check Mode of Funding Status</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Status_Updated_to_Accept</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>is_Updated</name>
@@ -146,6 +219,123 @@
             <label>is Updated</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>check_Status</name>
+        <label>check Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Accepted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RW_Welcome_Call_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Accept</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>NCF_Assign_Applicants_Subflow</targetReference>
+            </connector>
+            <label>is Accepted</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Status_Updated_to_Accept</name>
+        <label>Check Status Updated to Accept</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Accept</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RW_Welcome_Call_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.RW_Welcome_Call_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Accept</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RW_Welcome_Call_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Accept</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_Status</targetReference>
+            </connector>
+            <label>is Accept</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_varNCF</name>
+        <label>check varNCF</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>is_Exisits</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NCF_Assign_Applicants_Subflow</leftValueReference>
+                <operator>HasError</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>cerate_NCF</targetReference>
+            </connector>
+            <label>is Exisits</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>isInserted_IsUpdated</name>
+        <label>isInserted/IsUpdated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isInserted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Booking_Present_Or_Not</targetReference>
+            </connector>
+            <label>isInserted</label>
+        </rules>
+        <rules>
+            <name>isUpdated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_Mode_of_Funding_Status</targetReference>
+            </connector>
+            <label>isUpdated</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>IsNew</name>
@@ -174,10 +364,23 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>cerate_NCF</name>
+        <label>cerate NCF</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>update_Booking_NCF_Status</targetReference>
+        </connector>
+        <inputReference>varNCF</inputReference>
+    </recordCreates>
+    <recordCreates>
         <name>create_Loan</name>
         <label>create Loan</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Status_Updated_to_Accept</targetReference>
+        </connector>
         <inputAssignments>
             <field>RW_Bank_Name__c</field>
             <value>
@@ -224,6 +427,34 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <name>Get_Greeting_Call_Records</name>
+        <label>Get Greeting Call Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Greeting_Call_Records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RW_Booking__r.Opportunity__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Due</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Greeting_Call__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>get_Loan_Record</name>
         <label>get Loan Record</label>
         <locationX>0</locationX>
@@ -244,6 +475,27 @@
         <object>Loan__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>update_Booking_NCF_Status</name>
+        <label>update Booking NCF Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RW_Booking__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>NCF_Status__c</field>
+            <value>
+                <stringValue>Pending</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Booking__c</object>
+    </recordUpdates>
     <recordUpdates>
         <name>update_Booking_Record</name>
         <label>update Booking Record</label>
@@ -267,10 +519,37 @@
         <inputReference>$Record.RW_Booking__r</inputReference>
     </recordUpdates>
     <recordUpdates>
+        <name>Update_Greeting_Call_Record</name>
+        <label>Update Greeting Call Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>check_Status</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Greeting_Call_Records.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Greetings call Cancelled As Welcome Call Is Generated</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Greeting_Call__c</object>
+    </recordUpdates>
+    <recordUpdates>
         <name>update_Loan_Details</name>
         <label>update Loan Details</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Status_Updated_to_Accept</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>RW_Booking__c</field>
@@ -303,11 +582,45 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>check_Mode_of_Funding_Status</targetReference>
+            <targetReference>isInserted_IsUpdated</targetReference>
         </connector>
         <object>RW_Welcome_Call__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>NCF_Assign_Applicants_Subflow</name>
+        <label>NCF Assign Applicants Subflow</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>check_varNCF</targetReference>
+        </connector>
+        <flowName>NCF_Assign_Applicants_Sub_Flow</flowName>
+        <inputAssignments>
+            <name>bokingId</name>
+            <value>
+                <elementReference>$Record.RW_Booking__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varNCF</name>
+            <value>
+                <elementReference>varNCF</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>varNCF</assignToReference>
+            <name>varNCF</name>
+        </outputAssignments>
+    </subflows>
+    <variables>
+        <name>varNCF</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Name_Confirmation_Form__c</objectType>
+    </variables>
 </Flow>

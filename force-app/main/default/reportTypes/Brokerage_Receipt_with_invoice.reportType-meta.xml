@@ -465,6 +465,34 @@
             <field>CP_Mandate_Receipt__c</field>
             <table>Brokerage_Invoice__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Brokerage__c</field>
+            <table>Brokerage_Invoice__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>AOP_Brokerage__c</field>
+            <table>Brokerage_Invoice__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>New_Process__c</field>
+            <table>Brokerage_Invoice__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Created_Date_Formula__c</field>
+            <table>Brokerage_Invoice__c</table>
+        </columns>
         <masterLabel>Brokerage Invoices</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CP_Brokerage__c</field>
+            <table>Brokerage_Invoice__c.Brokerage_Receipts__r</table>
+        </columns>
+        <masterLabel>Brokerage Receipts</masterLabel>
     </sections>
 </ReportType>

@@ -1,0 +1,75 @@
+{
+  "appPageId" : "b698cf55-806b-4deb-b2e3-3c2c1b01af5c",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "4a47e19d-1914-4177-9e54-df8ab735c6e8",
+  "label" : "View Contacts (1)",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "e28709e1-a2ca-468e-b935-fa471663deda",
+          "columns" : [ {
+            "UUID" : "a8a3f0f9-70f4-4ee4-b460-8183521b1eb6",
+            "columnKey" : "col1",
+            "columnName" : "Contact List Column",
+            "columnWidth" : "12",
+            "seedComponents" : [ {
+              "attributes" : {
+                "filterName" : "Recent",
+                "scope" : "Contact",
+                "sfdc:identifier" : "forceCommunity_objectHome_recent"
+              },
+              "fqn" : "forceCommunity:objectHome"
+            } ]
+          } ]
+        },
+        "sectionHeight" : 32
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "e28709e1-a2ca-468e-b935-fa471663deda",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "enableInlineEdit" : true,
+            "filterName" : "Recent",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Contact",
+            "showActionBar" : true,
+            "showChartsPanel" : true,
+            "showDisplay" : "showall",
+            "showFilterPanel" : true,
+            "showImageIcon" : true,
+            "showManualRefreshButton" : true,
+            "showObjectName" : true,
+            "showPinnedList" : true,
+            "showSearchBar" : true
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "c6c2593e-f522-4ea2-861c-fe32c4b627ca",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "a8a3f0f9-70f4-4ee4-b460-8183521b1eb6",
+        "regionLabel" : "Contact List Column",
+        "regionName" : "col1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "3fc9a6a1-81b1-40c1-b540-5cb06eb214ff",
+    "regionName" : "content",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "list-003"
+}

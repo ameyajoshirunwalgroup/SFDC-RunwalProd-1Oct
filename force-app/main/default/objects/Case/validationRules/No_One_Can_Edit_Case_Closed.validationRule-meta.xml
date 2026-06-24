@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_One_Can_Edit_Case_Closed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(PRIORVALUE(Status), &quot;Case Closed&quot;),
+    NOT(ISCHANGED(Status)),
+				NOT(ISCHANGED(Last_Closed_Date__c)),
+				RW_RM_Remarks__c != &apos;Unregistered Customer&apos; /* Added by Vinay 26-03-2026*/
+)</errorConditionFormula>
+    <errorMessage>This case is closed and cannot be edited.</errorMessage>
+</ValidationRule>

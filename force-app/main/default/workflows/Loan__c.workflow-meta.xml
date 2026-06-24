@@ -59,33 +59,6 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <rules>
-        <fullName>Home Loan Call Escalation 24Hrs</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Loan__c.Next_Call_Date__c</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-        <workflowTimeTriggers>
-            <actions>
-                <name>Home_Loan_Call_Escalation_48Hrs</name>
-                <type>Alert</type>
-            </actions>
-            <offsetFromField>Loan__c.Next_Call_Date__c</offsetFromField>
-            <timeLength>48</timeLength>
-            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
-        </workflowTimeTriggers>
-        <workflowTimeTriggers>
-            <actions>
-                <name>Home_Loan_Call_Escalation_24Hrs</name>
-                <type>Alert</type>
-            </actions>
-            <offsetFromField>Loan__c.Next_Call_Date__c</offsetFromField>
-            <timeLength>24</timeLength>
-            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
-        </workflowTimeTriggers>
-    </rules>
-    <rules>
         <fullName>Home Loan RM Escalations</fullName>
         <active>true</active>
         <criteriaItems>

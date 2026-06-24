@@ -33,26 +33,21 @@ public with sharing class RW_BookingStamp_Registration_Charges {
         string recordId = ApexPages.currentPage().getParameters().get('bookingid');
         //system.debug(recordId);
         //string recordId= 'a0s1e0000009QFQAA2';
-        info = [select id,  Quotation__r.Stamp_Duty__c,Name,Unit_No__r.Relationship_Manager__r.Contact_Number__c ,RM_Name__c,Customer__r.Name, Registration_consultant__c ,Consultation_Scanning_charges__c, Quotation__r.Registration_Charges__c ,  Quotation__r.Stamp_Duty_and_Registration_Total__c
-                 ,Unit_No__r.RW_Param4__c, Project__r.Name , Unit_No__r.TowerName__r.Name    from Booking__c Where Id =: recordId]; 
+        info = [select id,Quotation__r.Stamp_Duty__c,Name,Unit_No__r.Relationship_Manager__r.Contact_Number__c,RM_Name__c,Customer__r.Name,Registration_consultant__c ,Consultation_Scanning_charges__c, Quotation__r.Registration_Charges__c ,  Quotation__r.Stamp_Duty_and_Registration_Total__c,Unit_No__r.RW_Param4__c, Project__r.Name , Unit_No__r.TowerName__r.Name    from Booking__c Where Id =: recordId]; 
         if(info.Consultation_Scanning_charges__c !=null){
              integer consultationCharges = Integer.valueof(Math.ceil(info.Consultation_Scanning_charges__c));
         	 scanningCharges =  S_NumberToWord.convertNumbertoWords(consultationCharges);
         }
-        system.debug(scanningCharges);
         if(info.Quotation__r.Registration_Charges__c !=null){
         registrationCharges =  S_NumberToWord.convertNumbertoWords(info.Quotation__r.Registration_Charges__c);
         }
-        system.debug(registrationCharges);
         if(info.Quotation__r.Stamp_Duty__c !=null){
             integer stampCharges = Integer.valueof(Math.ceil(info.Quotation__r.Stamp_Duty__c));
         	stampDuty =  S_NumberToWord.convertNumbertoWords(stampCharges);
         }
-        system.debug(stampDuty);
         if(info.Quotation__r.Stamp_Duty_and_Registration_Total__c !=null){
         totalStampDuty =  S_NumberToWord.convertNumbertoWords(info.Quotation__r.Stamp_Duty_and_Registration_Total__c);
         }
-        system.debug(totalStampDuty);
         consultant = [select Account_Name__c , Account_No__c , Bank_Name__c ,Branch__c , IFSC_Code__c from Registration_consultant__c Where Id =:  info.Registration_consultant__c]; // 'a281e0000008rx2AAA'];  //
     }
     
@@ -62,20 +57,14 @@ public with sharing class RW_BookingStamp_Registration_Charges {
         try{
         list<Registration_consultant__c> masterDataList = [select id,Name from Registration_consultant__c];
         if(masterDataList.size() > 0){
-        system.debug('masterDataList '+masterDataList);
         for(Registration_consultant__c md : masterDataList) {
             consultantList.add(md.Name);
         }
         return consultantList;
-        }
-        else
-        {
+        }else{
             return null;
         }
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
         
@@ -92,18 +81,12 @@ public with sharing class RW_BookingStamp_Registration_Charges {
     public static List<RW_Welcome_Call__c> getWelcomeStatus(string recordId ) {  
         try{
        List<RW_Welcome_Call__c> welcomeCallStatus = [select RW_Welcome_Call_Status__c from RW_Welcome_Call__c Where RW_Booking__c =: recordId Limit 1];                
-       if(welcomeCallStatus.size() > 0)
-       {
+       if(welcomeCallStatus.size() > 0){
         return welcomeCallStatus;
-       }
-       else
-        {
+       }else{
            return  null;
         }
-        }
-        catch(Exception e)
-        {
-            system.debug(e.getMessage());
+        }catch(Exception e){
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -135,13 +118,11 @@ public with sharing class RW_BookingStamp_Registration_Charges {
     }
     
     @AuraEnabled
-    public static void sendEmail(string emailContent , string recordId)
-    {  
+    public static void sendEmail(string emailContent , string recordId){  
      Booking__c bookingRecord = [select id, Primary_Applicant_Email__c from Booking__c where id =:recordId ];        
         List<String> emailsToSend = new List<String>();
         string CustomerEmail = null;
-        if(bookingRecord.Primary_Applicant_Email__c!=null)
-        {   
+        if(bookingRecord.Primary_Applicant_Email__c!=null){   
             CustomerEmail =bookingRecord.Primary_Applicant_Email__c;
             emailsToSend.add(CustomerEmail);
         }   
@@ -161,12 +142,12 @@ public with sharing class RW_BookingStamp_Registration_Charges {
      mails.add(emailMessage);
      Messaging.SendEmailResult[] results = Messaging.sendEmail(mails); 
      system.debug(results);   
-	 if (results[0].success){
-                        System.debug('The email was sent successfully.');
-     }
-    else{
-    	System.debug('The email failed to send: ' + results[0].errors[0].message);
-    }
+        if (results[0].success){
+            System.debug('The email was sent successfully.');
+        }
+        else{
+            System.debug('The email failed to send: ' + results[0].errors[0].message);
+        }
     }
    
 

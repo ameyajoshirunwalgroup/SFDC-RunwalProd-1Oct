@@ -4,13 +4,7 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Channel Partner</label>
     <lookupFilter>
-        <active>true</active>
-        <booleanFilter>1 OR 2</booleanFilter>
-        <filterItems>
-            <field>Broker__c.Unregistered_Channel_Partner__c</field>
-            <operation>equals</operation>
-            <value>False</value>
-        </filterItems>
+        <active>false</active>
         <filterItems>
             <field>Broker__c.Deactivated__c</field>
             <operation>equals</operation>

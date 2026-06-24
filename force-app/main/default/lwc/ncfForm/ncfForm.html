@@ -1,0 +1,251 @@
+<template>
+
+    <template if:true={showSpinner}>
+        <div class="spinner-overlay">
+            <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <div class="page-wrapper">
+
+        <div class="title slds-m-bottom_medium">
+            <b>NAME CONFIRMATION FORM</b>
+        </div>
+
+        <template if:true={tabsData}>
+            <lightning-tabset variant="scoped">
+                
+                <template for:each={tabsData} for:item="tab">
+                    <lightning-tab label={tab.tabLabel} key={tab.bookingId} value={tab.bookingId}>
+                        
+                        <div class="approve-btn-wrapper slds-text-align_right slds-m-bottom_small">
+                            <lightning-button 
+                                label="Approve" 
+                                variant="brand"
+                                onclick={handleApprove} 
+                                disabled={tab.disableApprove}
+                                data-ncfid={tab.ncfId}
+                                data-bookingid={tab.bookingId}
+                                class="slds-m-right_x-small">
+                            </lightning-button>
+
+                            <lightning-button 
+                                label="Raise Case" 
+                                variant="neutral"
+                                onclick={handleRaiseCase} 
+                                disabled={tab.disableRaiseACase}
+                                data-bookingid={tab.bookingId}
+                                data-ncfid={tab.ncfId}
+                                icon-name="utility:case"
+                                class="slds-m-right_x-small">
+                            </lightning-button>
+
+                        </div>
+
+
+                        <template if:true={tab.ncf}>
+                            <div class="form-box slds-box slds-theme_default">
+                                
+                                <lightning-accordion allow-multiple-sections-open active-section-name="primary">
+
+                                    <lightning-accordion-section name="primary" label="Primary Applicant Details">
+                                        <div class="slds-grid slds-wrap slds-gutters">
+                                            
+                                            <div class="slds-col slds-size_1-of-3">
+                                                <lightning-input label="FIRST NAME" value={tab.ncf.RW_Primary_First_Name__c} readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-3">
+                                                <lightning-input label="MIDDLE NAME" value={tab.ncf.RW_Primary_Middle_Name__c} readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-3">
+                                                <lightning-input label="LAST NAME" value={tab.ncf.RW_Primary_Last_Name__c} readonly></lightning-input>
+                                            </div>
+
+                                            <div class="slds-col slds-size_1-of-3 field-top">
+                                                <lightning-input label="DATE OF BIRTH" type="date" value={tab.ncf.RW_Primary_DOB__c} readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-3 field-top">
+                                                <lightning-input label="EMAIL" type="email" value={tab.ncf.RW_Primary_Email__c} readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-3 field-top">
+                                                <lightning-input label="MOBILE" value={tab.ncf.RW_Primary_Mobile_Number__c} readonly></lightning-input>
+                                            </div>
+
+                                            <div class="slds-col slds-size_1-of-3 field-top">
+                                                <lightning-input label="PERMANENT ADDRESS LINE 1" value={tab.ncf.RW_Primary_Permanent_Address_Line_1__c} readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-3 field-top">
+                                                <lightning-input label="COUNTRY" value={tab.ncf.RW_Primary_Country__c} readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-3 field-top">
+                                                <lightning-input label="STATUS" value={tab.ncf.Status__c} readonly></lightning-input>
+                                            </div>
+
+                                        </div>
+                                    </lightning-accordion-section>
+
+                                    <template if:true={tab.ncf.Applicant2_Name__c}>
+                                        <lightning-accordion-section name="app2" label="Applicant 2 Details">
+                                            <div class="slds-grid slds-wrap slds-gutters">
+                                                
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="NAME" value={tab.ncf.Applicant2_Name__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="EMAIL" type="email" value={tab.ncf.Applicant2_Email_Address__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="MOBILE" value={tab.ncf.Applicant2_Mobile_No__c} readonly></lightning-input>
+                                                </div>
+
+                                                <div class="slds-col slds-size_1-of-3 field-top">
+                                                    <lightning-input label="PERMANENT ADDRESS" value={tab.ncf.Applicant2_Permanent_Address__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3 field-top">
+                                                    <lightning-input label="PAN" value={tab.ncf.Applicant2_PAN__c} readonly></lightning-input>
+                                                </div>
+
+                                            </div>
+                                        </lightning-accordion-section>
+                                    </template>
+
+                                    <template if:true={tab.ncf.Applicant3_Name__c}>
+                                        <lightning-accordion-section name="app3" label="Applicant 3 Details">
+                                            <div class="slds-grid slds-wrap slds-gutters">
+                                                
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="NAME" value={tab.ncf.Applicant3_Name__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="EMAIL" type="email" value={tab.ncf.Applicant3_Email_Address__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="MOBILE" value={tab.ncf.Applicant3_Mobile_No__c} readonly></lightning-input>
+                                                </div>
+
+                                                <div class="slds-col slds-size_1-of-3 field-top">
+                                                    <lightning-input label="PERMANENT ADDRESS" value={tab.ncf.Applicant3_Permanent_Address__c} readonly></lightning-input>
+                                                </div>
+
+                                            </div>
+                                        </lightning-accordion-section>
+                                    </template>
+
+                                    <template if:true={tab.ncf.Applicant4_Name__c}>
+                                        <lightning-accordion-section name="app4" label="Applicant 4 Details">
+                                            <div class="slds-grid slds-wrap slds-gutters">
+
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="NAME" value={tab.ncf.Applicant4_Name__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="EMAIL" type="email" value={tab.ncf.Applicant4_Email_Address__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="MOBILE" value={tab.ncf.Applicant4_Mobile_No__c} readonly></lightning-input>
+                                                </div>
+
+                                                <div class="slds-col slds-size_1-of-3 field-top">
+                                                    <lightning-input label="PERMANENT ADDRESS" value={tab.ncf.Applicant4_Permanent_Address__c} readonly></lightning-input>
+                                                </div>
+
+                                            </div>
+                                        </lightning-accordion-section>
+                                    </template>
+
+                                    <template if:true={tab.ncf.Applicant5_Name__c}>
+                                        <lightning-accordion-section name="app5" label="Applicant 5 Details">
+                                            <div class="slds-grid slds-wrap slds-gutters">
+
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="NAME" value={tab.ncf.Applicant5_Name__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="EMAIL" type="email" value={tab.ncf.Applicant5_Email_Address__c} readonly></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-input label="MOBILE" value={tab.ncf.Applicant5_Mobile_No__c} readonly></lightning-input>
+                                                </div>
+
+                                                <div class="slds-col slds-size_1-of-3 field-top">
+                                                    <lightning-input label="PERMANENT ADDRESS" value={tab.ncf.Applicant5_Permanent_Address__c} readonly></lightning-input>
+                                                </div>
+
+                                            </div>
+                                        </lightning-accordion-section>
+                                    </template>
+
+                                </lightning-accordion>
+                            </div>
+                        </template>
+
+                        <template if:false={tab.ncf}>
+                            <div class="no-ncf slds-box slds-theme_shade slds-text-align_center">
+                                NCF record is not created for this booking.
+                            </div>
+                        </template>
+
+                    </lightning-tab>
+                </template>
+
+            </lightning-tabset>
+        </template>
+        
+        <template if:false={tabsData}>
+            <div class="slds-p-around_medium">No Booking Data Found.</div>
+        </template>
+    </div>
+
+    <template if:true={showCaseModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCaseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">Raise Case for Unit {selectedUnitNumber}</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-record-edit-form 
+                        class="case-form"
+                        object-api-name="Case">
+
+                        <lightning-messages></lightning-messages>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="RW_Case_Type__c" value={defaultCaseType} required disabled></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Customer_Lifecycle_Touchpoint__c" value={defaultLifecycle} disabled></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="RW_Complaint_Type__c" value={defaultComplaintType} disabled></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="RW_Complaint_SubType__c" value={defaultComplaintSubType} disabled></lightning-input-field>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input-field field-name="Description"></lightning-input-field>
+                            </div>
+                        </div>
+
+                    </lightning-record-edit-form>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" variant="neutral" onclick={closeCaseModal} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Save Case" variant="brand" onclick={handleSaveCase}></lightning-button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+
+</template>

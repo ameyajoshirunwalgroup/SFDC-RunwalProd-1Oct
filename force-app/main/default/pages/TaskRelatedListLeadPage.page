@@ -305,7 +305,7 @@
             
                 window.open("/apex/VDNBCallEditPage?subject=" + Subject + "&status=Completed&tasktype=" + task + "&origin=" + origin +"&who_id={!lead.Id}&retURL=/{!lead.Id}&saveURL=/{!lead.Id}&cancelURL=/{!lead.Id}", "_parent");
              else 
-                window.open("/apex/CallAttemptEditPage2?subject=" + Subject + "&status=Completed&tasktype=" + task + "&origin=" + origin +"&who_id={!lead.Id}&retURL=/{!lead.Id}&saveURL=/{!lead.Id}&cancelURL=/{!lead.Id}", "_parent");
+                window.open("/apex/CallAttemptEditPage2?subject=" + Subject + "&status=Completed&tasktype=" + task + "&origin=" +origin +"&who_id={!lead.Id}&retURL=/{!lead.Id}&saveURL=/{!lead.Id}&cancelURL=/{!lead.Id}", "_parent");
         }
     </script>
     <!-- / JAVASCRIPT -->

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <classAccesses>
-        <apexClass>TaskManagementServices</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>TaskRelatedListLoanClass</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -55,16 +51,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.Approved_from_account_team__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.Approved_from_tech_team__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Booking__c.Area__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -86,16 +72,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Booking__c.Basic_Booking_Amount__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.BillDesk_Terms_and_Conditions__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.BookingIId__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -160,16 +136,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.Call_Back_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.Call_Disposition_L2__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Booking__c.Call_Disposition__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -190,7 +156,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.Commission_Calculated__c</field>
+        <field>Booking__c.Company__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -239,11 +205,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.Dispatch_Mode__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>Booking__c.Document_Checklist_Link_del__c</field>
         <readable>true</readable>
@@ -256,11 +217,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Booking__c.Emp_Manager_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.Flat_Applicants__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -320,11 +276,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.Last_Call_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Booking__c.Level_One_Approver__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -365,16 +316,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.Name_of_Referer_Customer_Customer_Refer__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.Name_of_Referer_Direct_Corporate_Book__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Booking__c.No_of_Parking__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -410,22 +351,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.Project_of_Referer_Customer_Customer_Re__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Booking__c.Quotation__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Booking__c.RW_Remarks__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.Reason_For_CRM_returns_to_sales__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -510,11 +441,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Booking__c.State__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Booking__c.Status__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -545,6 +471,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Booking__c.Total_Waiver_Amount_Approved_Till_Now__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Booking__c.UnitChange__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -560,17 +491,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Booking__c.Welcome_Call_Done_By__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Booking__c.Wing__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Booking__c.Zone__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Booking__c.isSave__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

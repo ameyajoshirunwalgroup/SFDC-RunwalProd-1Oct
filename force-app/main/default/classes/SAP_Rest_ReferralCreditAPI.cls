@@ -24,11 +24,35 @@ public class SAP_Rest_ReferralCreditAPI {
     Public String ref_text{get;set;}
     @future(Callout = true)
     public static void sendReferrallist(list<Id> referralCreditId) {
-        List<Referral_Credits__c> RcList1 = [Select Id,name,Referral_In_Rs__c,Name_of_New_Customer__c,Reference_Booking__r.Name,Reference_Booking__c,long_text1__c,Reference_Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Code__c,
-                                                     Booking__r.Customer__r.SalesOrder_Number__c  From Referral_Credits__c Where Id IN: referralCreditId]; 
+        /**Added for Referral Credit Changes starts */
+        System.debug('referralCreditId**'+referralCreditId);
+        Id recordId = referralCreditId[0];
+        String sObjectType = recordId.getSObjectType().getDescribe().getName();
+
+        System.debug('Object Name: ' + sObjectType);
+        /**Added for Referral Credit Changes ends */
+
+        // List<Referral_Credits__c> RcList1 = [Select Id,name,Referral_In_Rs__c,Name_of_New_Customer__c,Reference_Booking__r.Name,Reference_Booking__c,long_text1__c,Reference_Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Code__c,
+        //                                              Booking__r.Customer__r.SalesOrder_Number__c  From Referral_Credits__c Where Id IN: referralCreditId and Approval_Status__c = 'Approved']; //Added Approval_Status__c for Referral Credit Changes
+        
+        
+        String query = 'SELECT Id, Name, Referral_In_Rs__c, Reference_Booking__c, long_text1__c, ' +
+                       'Reference_Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Code__c, ' +
+                       'Booking__r.Customer__r.SalesOrder_Number__c, Booking__r.Customer__r.AccountId,'+
+                       'CLR_Document_Number__c, Invoice_Document_Number__c,Booking__r.Referral_Amount__c,'+
+                       'Booking__r.Customer__r.Opt_for_Referral__c ,Booking__r.Customer__r.SAP_Customer_Number__c' +
+                       ' FROM ' + sObjectType + ' ' +
+                       'WHERE Id IN :referralCreditId AND Approval_Status__c = \'Approved by L2\'';
+        
+        List<SObject> RcList1 = Database.query(query);
+        if (RcList1.isEmpty()) return;
+
+        SObject mainRec = RcList1[0];
+        Id Refbookingids = (Id)mainRec.get('Reference_Booking__c');
+
         system.debug('RcList1::'+RcList1);         
         system.debug('RcList1 size::'+RcList1.size()); 
-        Id Refbookingids = RcList1[0].Reference_Booking__c;
+        //Id Refbookingids = RcList1[0].Reference_Booking__c;
         String body = '';
         system.debug('Refbookingids'+Refbookingids);
         List<ERP_Integration_Log__c> APIlogsToInsertList = new List<ERP_Integration_Log__c>();
@@ -44,249 +68,268 @@ public class SAP_Rest_ReferralCreditAPI {
             ERP_Integration_Log__c api = new ERP_Integration_Log__c();
             
             ReferralCreditCreationParser jsonResponse = new ReferralCreditCreationParser();
-            Http http = new Http();
+            //Http http = new Http();
             Http http1 = new Http();
             
             String username = Label.SAP_Username;
             String password = Label.SAP_Password;
-            String endPointURL = Label.SAP_Referral_Credit_API_Endpoint;
+            //String endPointURL = Label.SAP_Referral_Credit_API_Endpoint;
+            String endPointURL = Label.SAP_Referral_API_Endpoint;//Added for Refrral Credit Changes
             Blob headerValue = Blob.valueOf(username + ':' + password);
             String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
             
             String sapdocno = '';
             String sapdocdate = '';
             String VendorNo = '';
+            String financialYear = '';
+            String invDocNumber = '';
+            String clrDocNumber = '';
+            String finYear = '';
             
             /* Calling get method for Authentication */            
             JSONGenerator gen = JSON.createGenerator(true);
-            // Write data to the JSON string.
+
+            /**Added for Referral Credit Changes starts */
+
+            gen.writeStartObject(); 
+            gen.writeFieldName('ADF_CRN');
+            gen.writeStartArray(); 
             gen.writeStartObject();
-            if(lstApplicant[0].Opportunity__r.SAP_Customer_Number__c!= Null && lstApplicant[0].Opportunity__r.SAP_Customer_Number__c !=''){
-                gen.writeStringField('ref_to_cust',lstApplicant[0].Opportunity__r.SAP_Customer_Number__c);
-            }else{
-                gen.writeStringField('ref_to_cust','');
-            }
-            if(lstApplicant[0].Type_Of_Applicant__c!= Null && lstApplicant[0].Type_Of_Applicant__c =='Individual Buyer'){
-                gen.writeStringField('PARTN_CAT','1');
-            }else{
-                gen.writeStringField('PARTN_CAT','');
-            }
-            gen.writeStringField('KTOKK','Z006');
-            /*if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' ){
-gen.writeStringField('TITLE',lstApplicant[0].Salutation__c);
-}else{
-gen.writeStringField('TITLE','');
-}*/
             
-            if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' && lstApplicant[0].Salutation__c == 'Mr.'){
-                gen.writeStringField('TITLE','0002');
+            String apiName = '';
+            String headerText = '';
+            String customerNumber = '';
+            if(sObjectType == 'Referral_Credits__c'){
+                apiName = 'REFERRAL';
+                headerText = 'Referral Credit';
+                if(lstApplicant[0].Opportunity__r.SAP_Customer_Number__c!= Null && lstApplicant[0].Opportunity__r.SAP_Customer_Number__c !=''){
+                    customerNumber = lstApplicant[0].Opportunity__r.SAP_Customer_Number__c;
+                }
             }
-            else if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' && lstApplicant[0].Salutation__c == 'Ms'){
-                gen.writeStringField('TITLE','0001');
+            else if(sObjectType == 'Credit_Note__c'){
+                apiName = 'VOUCHER';
+                headerText = 'Credit Note';
+
+                if(mainRec.getSObject('Booking__r') != null &&
+                mainRec.getSObject('Booking__r').getSObject('Customer__r') != null) {
+
+                    customerNumber = (String) mainRec
+                        .getSObject('Booking__r')
+                        .getSObject('Customer__r')
+                        .get('SAP_Customer_Number__c');
+                }
             }
-            else if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' && lstApplicant[0].Salutation__c == 'M/S'){
-                gen.writeStringField('TITLE','0005');
+            gen.writeStringField('Api_Name', apiName);
+
+            gen.writeStringField('sCurrency', 'INR');
+            gen.writeStringField('Ref_Doc_No', (String)mainRec.get('Name'));
+            gen.writeStringField('Pstng_Date', '');//20260325
+            gen.writeStringField('Item_Text', (String)mainRec.get('long_text1__c'));
+            gen.writeStringField('Header_Txt', headerText);
+            gen.writeStringField('Fisc_Year', '');
+            gen.writeStringField('Doc_Date', '');//20260425
+            gen.writeStringField('Customer', customerNumber != null ? customerNumber : '');
+            // if(lstApplicant[0].Opportunity__r.SAP_Customer_Number__c!= Null && lstApplicant[0].Opportunity__r.SAP_Customer_Number__c !=''){
+            //     gen.writeStringField('Customer',lstApplicant[0].Opportunity__r.SAP_Customer_Number__c!= null ? lstApplicant[0].Opportunity__r.SAP_Customer_Number__c : '');
+            // }
+
+            String companyCode = '';
+            SObject refBooking = mainRec.getSObject('Reference_Booking__r');
+            if(refBooking != null) {
+                SObject tower = refBooking.getSObject('Tower__r');
+                if(tower != null) {
+                    SObject legalEntity = tower.getSObject('Legal_Entity__r');
+                    if(legalEntity != null) companyCode = (String)legalEntity.get('RDS_Company_Code__c');
+                }
             }
-            else if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' && lstApplicant[0].Salutation__c == 'Mrs'){
-                gen.writeStringField('TITLE','0006');
-            } 
-            else if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' && lstApplicant[0].Salutation__c == 'Dr.'){
-                gen.writeStringField('TITLE','0007');
-            } 
-            else if(lstApplicant[0].Salutation__c!= Null && lstApplicant[0].Salutation__c !='' && lstApplicant[0].Salutation__c == 'CAPT.'){
-                gen.writeStringField('TITLE','0008');
-            } 
-            else{
-                gen.writeStringField('TITLE','');
-            } 
-            if(lstApplicant[0].First_Name__c!= Null && lstApplicant[0].First_Name__c !=''){
-                gen.writeStringField('NAME_FIRST',lstApplicant[0].First_Name__c);
-            }else{
-                gen.writeStringField('NAME_FIRST','');
+            gen.writeStringField('Comp_Code', companyCode != null ? companyCode : '');
+
+            // Decimal amount;
+            // if(mainRec.get('Referral_In_Rs__c')!= Null ){
+            //      amount = (Decimal)mainRec.get('Referral_In_Rs__c');
+                
+            // }
+
+            Decimal amount;
+
+            // Boolean optForReferral = (Boolean) mainRec.getSObject('Booking__r.Customer__r')
+            //                                         .get('Opt_for_Referral__c');
+
+
+            SObject booking = mainRec.getSObject('Booking__r');
+            SObject customer = booking != null ? booking.getSObject('Customer__r') : null;
+
+            Boolean optForReferral = customer != null 
+                ? (Boolean) customer.get('Opt_for_Referral__c') 
+                : false;
+                                                    
+            if (optForReferral == true) {
+                if (mainRec.get('Referral_In_Rs__c') != null) {
+                    amount = (Decimal) mainRec.get('Referral_In_Rs__c');
+                }
+            } else {
+                if (mainRec.getSObject('Booking__r') != null &&
+                    mainRec.getSObject('Booking__r').get('Referral_Amount__c') != null) {
+                    
+                    amount = (Decimal) mainRec.getSObject('Booking__r')
+                                            .get('Referral_Amount__c');
+                }
             }
-            if(lstApplicant[0].Middle_Name__c!= Null && lstApplicant[0].Middle_Name__c !=''){
-                gen.writeStringField('NAME_MIDDLE',lstApplicant[0].Middle_Name__c);
-            }else{
-                gen.writeStringField('NAME_MIDDLE','');
-            }
-            if(lstApplicant[0].Last_Name__c!= Null && lstApplicant[0].Last_Name__c !=''){
-                gen.writeStringField('NAME_LAST',lstApplicant[0].Last_Name__c);
-            }else{
-                gen.writeStringField('NAME_LAST','');
-            }
-            if(lstApplicant[0].First_Name__c =='' && lstApplicant[0].Last_Name__c ==''){
-                gen.writeStringField('NAME_ORG1',lstApplicant[0].Name);
-            }else{
-                gen.writeStringField('NAME_ORG1','');
-            }
-            if(lstApplicant[0].Permanent_Address__c!= Null && lstApplicant[0].Permanent_Address__c !=''){
-                gen.writeStringField('STREET',lstApplicant[0].Permanent_Address__c);
-            }else{
-                gen.writeStringField('STREET','');
-            }
-            if(lstApplicant[0].Permanent_Address_Line_1__c!= Null && lstApplicant[0].Permanent_Address_Line_1__c !=''){
-                gen.writeStringField('STR_SUPPL1',lstApplicant[0].Permanent_Address_Line_1__c);
-            }else{
-                gen.writeStringField('STR_SUPPL1','');
-            }
-            if(lstApplicant[0].Permanent_Address_Line_2__c!= Null && lstApplicant[0].Permanent_Address_Line_2__c !=''){
-                gen.writeStringField('STR_SUPPL2',lstApplicant[0].Permanent_Address_Line_2__c);
-            }else{
-                gen.writeStringField('STR_SUPPL2','');
-            }
-            if(lstApplicant[0].Permanent_Address_Line_3__c!= Null && lstApplicant[0].Permanent_Address_Line_3__c !=''){
-                gen.writeStringField('STR_SUPPL3',lstApplicant[0].Permanent_Address_Line_3__c);
-            }else{
-                gen.writeStringField('STR_SUPPL3','');
-            }
-            if(lstApplicant[0].City__c!= Null && lstApplicant[0].City__c !=''){
-                gen.writeStringField('CITY',lstApplicant[0].City__c);
-            }else{
-                gen.writeStringField('CITY','');
-            }
-            if(lstApplicant[0].Pincode__c != Null ){
-                gen.writeNumberField('POST_CODE',lstApplicant[0].Pincode__c);
-            }else{
-                gen.writeNumberField('POST_CODE',0);
-            }
-            if(lstApplicant[0].Country__c!= Null && lstApplicant[0].Country__c !=''){
-                gen.writeStringField('COUNTRY',lstApplicant[0].Country__c);
-            }else{
-                gen.writeStringField('COUNTRY','');
-            }
-            if(lstApplicant[0].State__c!= Null && lstApplicant[0].State__c !=''){
-                gen.writeStringField('REGION',lstApplicant[0].State__c);
-            }else{
-                gen.writeStringField('REGION','');
-            }
-            if(lstApplicant[0].Booking__r.Customer__r.AccountId!= Null){
-                gen.writeStringField('SORT1',lstApplicant[0].Booking__r.Customer__r.AccountId);
-                //gen.writeStringField('SORT1','76666');
-            }else{
-                gen.writeStringField('SORT1','');
-            }
-            if(lstApplicant[0].Mobile_Number__c!= Null && lstApplicant[0].Mobile_Number__c !=''){
-                gen.writeStringField('MOB_NUMBER',lstApplicant[0].Mobile_Number__c);
-            }else{
-                gen.writeStringField('MOB_NUMBER','');
-            }
-            if(lstApplicant[0].Email_Address__c!= Null && lstApplicant[0].Email_Address__c !=''){
-                gen.writeStringField('SMTP_ADDR',lstApplicant[0].Email_Address__c);
-            }else{
-                gen.writeStringField('SMTP_ADDR','');
-            }
-            if(lstApplicant[0].Name!= Null && lstApplicant[0].Name !=''){
-                gen.writeStringField('CONTACT_PERSON',lstApplicant[0].Name);
-            }else{
-                gen.writeStringField('CONTACT_PERSON','');
-            }
-            if(lstApplicant[0].PancardNo__c!= Null && lstApplicant[0].PancardNo__c !=''){
-                gen.writeStringField('PAN',lstApplicant[0].PancardNo__c);
-            }else{
-                gen.writeStringField('PAN','');
-            }
-                                   
-            gen.writeStringField('lifnr','');
-            gen.writeStringField('nature_work','');
-            gen.writeStringField('legal_form','');
-            gen.writeStringField('residential_status','');
-            gen.writeStringField('gst_no','');
-            gen.writeStringField('rera_no','');
-            gen.writeStringField('aadhar_no','');
-            gen.writeStringField('zterms','');
-            //  gen.writeStringField('bukrs','1000');
-            //gen.writeStringField('inv_amt','50000');
-            if(RcList1[0].Referral_In_Rs__c!= Null ){
-                gen.writeNumberField('inv_amt',RcList1[0].Referral_In_Rs__c);
-            }else{
-                gen.writeNumberField('inv_amt',0);
-            }
-            //   gen.writeStringField('inv_no','123456');
-            if(RcList1[0].Booking__r.Customer__r.SalesOrder_Number__c != Null ){
-                gen.writeStringField('inv_no',RcList1[0].Booking__r.Customer__r.SalesOrder_Number__c);
-            }else{
-                gen.writeStringField('inv_no','');
-            }
-            if(RcList1[0].Reference_Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Code__c!= Null ){
-                gen.writeStringField('bukrs',RcList1[0].Reference_Booking__r.Tower__r.Legal_Entity__r.RDS_Company_Code__c);
-            }else{
-                gen.writeStringField('bukrs','');
-            }
-            gen.writeStringField('ref_text',RcList1[0].long_text1__c);
+
+
+            gen.writeNumberField('Amount', amount != null ? amount : 0);
+
+            gen.writeStringField('TDS_Amount', '');
+
             gen.writeEndObject();
+            gen.writeEndArray(); 
+            gen.writeEndObject(); 
+
+            /**Added for Referral Credit Changes ends */
+
             // Get the JSON string.
             body += gen.getAsString();
             system.debug('body:: ' + body);
-            /* Calling Post method to push data */
             
-            Httprequest request = new HttpRequest();                      
+            /**Added for Referral Credit Changes starts */
+            String csrf_token = 'fetch';
+            HttpRequest csrfReq = new HttpRequest();
+            csrfReq.setMethod('HEAD');
+            csrfReq.setEndpoint(endPointURL);
+            csrfReq.setHeader('Authorization', authorizationHeader);
+            csrfReq.setHeader('Content-Type', 'application/json');
+            csrfReq.setHeader('x-csrf-token', csrf_token);
+
+            Http http = new Http();
+            HttpResponse csrfRes = http.send(csrfReq);
+
+            String csrfToken = csrfRes.getHeader('x-csrf-token');
+            String cookie = csrfRes.getHeader('Set-Cookie');
+
+            HttpRequest request = new HttpRequest();
+            request.setEndpoint(endPointURL);
             request.setMethod('POST');
-            request.setEndpoint(endPointURL); 
-            request.setHeader('authorization', authorizationHeader);
-            request.setHeader('content-type', 'text/plain'); /// application/json
-            request.setBody(body);          
+            request.setHeader('Authorization', authorizationHeader);
+            request.setHeader('content-type', 'application/json');
+            request.setHeader('x-csrf-token', csrfToken);
+            request.setHeader('Cookie', cookie);
+            request.setHeader('Connection', 'keep-alive');
+            request.setBody(body);
+            /**Added for Referral Credit Changes ends */
+
             ResponseData responseBody = new ResponseData();
             String failureResponseData = '';
            // if(!Test.isRunningTest()){
                 try{
-                    //Making call to external REST API
                     HttpResponse response = http1.send(request); 
                     System.debug('Response Body: ' + (response.getBody()));                   
-                    //jsonResponse = ReferralCreditCreationParser.parse(responseBody);
                     responseBody = (ResponseData)JSON.deserialize(response.getBody(), ResponseData.class);
-                    if(responseBody.STATUS == 'Failure'){
-                        System.debug('Failure Response');
-                        failureResponseData = response.getBody();
-                    }else if(responseBody.STATUS == 'Success'){
-                        System.debug('Success Response');
-                    }
-                    system.debug('jsonResponse Body :: ' + responseBody);
-                    system.debug('jsonResponse Body Status :: ' + responseBody.STATUS);
-                    system.debug('StatusCode : '+ response.getStatusCode());                  
                     
-                    if(responseBody.DOCUMENT_NO != null)
-                    	sapdocno = String.valueOf(responseBody.DOCUMENT_NO);
-                    if(responseBody.DOCUMENT_DT != null)
-                    	sapdocdate = String.valueOf(responseBody.DOCUMENT_DT);
-                    if(responseBody.LIFNR != null)
-                    	VendorNo = String.valueOf(responseBody.LIFNR);
-                    
-                    if(response.getStatusCode() == 200 && responseBody.STATUS == 'Success'){
-                        Account acc = New Account();
-                        acc.id =lstApplicant[0].Booking__r.Customer__r.AccountId;
-                        if((acc.Vendor_Code__c == Null ||   acc.Vendor_Code__c == '') && VendorNo != ''){
-                            acc.Vendor_Code__c =  VendorNo;
+                    if(responseBody != null && responseBody.FRECORD != null && !responseBody.FRECORD.isEmpty()){
+
+                        FRecord rec = responseBody.FRECORD[0];
+                        System.debug('Record Status :: ' + rec.STATUS);
+
+                        if(rec.STATUS == 'Failure'){
+                            System.debug('Failure Response');
+                            failureResponseData = response.getBody();
+                        } 
+                        else if(rec.STATUS == 'Success'){
+                            System.debug('Success Response');
                         }
-                        update acc;
-                        Referral_Credits__c Rc = New Referral_Credits__c();
-                        List<Referral_Credits__c> RcList = [Select Id,name,Vendor_Code__c,SAP_Document_No__c,SAP_Document_Date__c,Reference_Booking__c,Date_Error_Fixed__c From Referral_Credits__c Where Id =: referralCreditId];
-                        Rc.Reference_Booking__c = Refbookingids;
-                        if( Rc.SAP_Document_No__c== Null && sapdocno != ''){
-                            Rc.SAP_Document_No__c = sapdocno;
-                        }
-                        if( Rc.Vendor_Code__c== Null && VendorNo != ''){
-                            Rc.Vendor_Code__c = VendorNo;
-                        }
-                        if(sapdocdate != '')
-                        	Rc.SAP_Document_Date__c =  Date.valueOf(sapdocdate);
-                        Rc.Id =RcList[0].id;
-                        update Rc;
-                        api.API_Name__c = 'Referral Credit API';
-                        api.Request__c = body;
-                        api.Response__c = String.valueOf(responseBody);
-                        system.debug('API Response : '+api.Response__c);
-                        api.Status__c = 'Success';  
-                        api.Referral_Credit__c = RcList1[0].id;
+
+                        system.debug('jsonResponse Body :: ' + responseBody);
+                        system.debug('jsonResponse Body Status :: ' + responseBody.FRecord[0].STATUS);
+                        system.debug('StatusCode : '+ response.getStatusCode());                  
                         
+                        if(rec.CRN_DOC != null){
+                            sapdocno = rec.CRN_DOC;
+                        }
+
+                        if(rec.DOC_DATE != null && rec.DOC_DATE != '0000-00-00'){
+                            sapdocdate = rec.DOC_DATE;
+                        }
+
+                        if(rec.CUSTOMER != null){
+                           VendorNo = rec.CUSTOMER;
+                        }
+
+                        if(rec.INV_DOC != null){
+                           invDocNumber = rec.INV_DOC;
+                        }
+
+                        if(rec.CLR_DOC != null){
+                           clrDocNumber = rec.CLR_DOC;
+                        }
+
+                        //if(rec.CRN_DOC_MSG != null){
+                        if(!String.isEmpty(rec.CRN_DOC_MSG)){
+                            String msg = rec.CRN_DOC_MSG;
+                            System.debug('msg**'+msg);
+                            List<String> parts = msg.split('/');
+                            System.debug('parts**'+parts);
+                            String yearPart = parts[2].substring(0, 4);  
+
+                            System.debug('Year: ' + yearPart);
+                            finYear = yearPart;
+                        }
+
+
+                        if(response.getStatusCode() == 200 && responseBody.FRECORD != null && !responseBody.FRECORD.isEmpty()&& responseBody.FRECORD[0].STATUS == 'Success'){                         
+
+                            Account acc = New Account();
+                            acc.id = lstApplicant[0].Booking__r.Customer__r.AccountId;
+
+                            if((acc.Vendor_Code__c == null || acc.Vendor_Code__c == '') && VendorNo != ''){
+                                acc.Vendor_Code__c = VendorNo;
+                            }
+                            update acc;
+
+                            /** Referral Credit Changes */
+                            SObject recordToUpdate = Id.valueOf(mainRec.Id).getSObjectType().newSObject(mainRec.Id);
+                            System.debug('recordToUpdate**'+recordToUpdate);
+
+                            if(sObjectType == 'Referral_Credits__c'){
+                                recordToUpdate.put('SAP_Document_No__c', sapdocno);
+                            }
+                        
+                            if(sObjectType =='Credit_Note__c'){
+                                recordToUpdate.put('SAP_Document_Number__c', sapdocno);
+                            }
+
+                            recordToUpdate.put('Vendor_Code__c', VendorNo);
+                            recordToUpdate.put('Invoice_Document_Number__c', invDocNumber);
+                            recordToUpdate.put('CLR_Document_Number__c', clrDocNumber);
+                            recordToUpdate.put('Financial_Year__c', finYear);
+
+                            if(String.isNotBlank(sapdocdate)) {
+                                recordToUpdate.put('SAP_Document_Date__c', Date.valueOf(sapdocdate));
+                            }
+
+                            System.debug('recordToUpdate1**'+recordToUpdate);
+                            update recordToUpdate;
+
+                            api.API_Name__c = 'Referral Credit API';
+                            api.Request__c = body;
+                            api.Response__c = response.getBody(); // better than String.valueOf(responseBody)
+                            System.debug('API Response : '+api.Response__c);
+                            api.Status__c = 'Success';  
+
+                            if(sObjectType == 'Referral_Credits__c') api.Referral_Credit__c = mainRec.Id;
+                            if(sObjectType == 'Credit_Note__c') api.Credit_Note__c = mainRec.Id;
+                        }
+                    
+                        else{
+                            api.API_Name__c = 'Referral Credit API';
+                            api.Request__c = body;
+                            api.Response__c = response.getBody();
+                            system.debug('API Response : '+api.Response__c);
+                            api.Status__c = 'Failure';
+                            if(sObjectType == 'Referral_Credits__c') api.Referral_Credit__c = mainRec.Id;
+                            if(sObjectType == 'Credit_Note__c') api.Credit_Note__c = mainRec.Id;
+                            // api.Referral_Credit__c = RcList1[0].id;                       
+                        }  
                     }
-                    else{
-                        api.API_Name__c = 'Referral Credit API';
-                        api.Request__c = body;
-                        api.Response__c = failureResponseData;
-                        system.debug('API Response : '+api.Response__c);
-                        api.Status__c = 'Failure';
-                        api.Referral_Credit__c = RcList1[0].id;                       
-                    }  
                 }
                 catch(Exception e){
                     system.debug('api request in catch:: ' + e);
@@ -297,7 +340,9 @@ gen.writeStringField('TITLE','');
                     	api.Response__c = failureResponseData;
                     system.debug('API Response : '+api.Response__c);
                     system.debug('Error at Line No:: ' + e.getLineNumber());
-                    api.Referral_Credit__c = RcList1[0].id;
+                    if(sObjectType == 'Referral_Credits__c') api.Referral_Credit__c = mainRec.Id;
+                    if(sObjectType == 'Credit_Note__c') api.Credit_Note__c = mainRec.Id;
+                    // api.Referral_Credit__c = RcList1[0].id;
                 }
                 if(api != null){
                     APIlogsToInsertList.add(api);
@@ -305,20 +350,30 @@ gen.writeStringField('TITLE','');
                 if(APIlogsToInsertList.size()>0){
                     insert APIlogsToInsertList;
                 }
-          //  }
-            
-        }
-        
-        
+          //  } 
+        }  
+    }
+
+    /**Added for Referral Credit Changes starts */
+    public class ResponseData {
+        public String BUSINESSARE;
+        public List<FRecord> FRECORD;
+    }
+
+    public class FRecord {
+        public String CUSTOMER;
+        public String COMP_CODE;
+        public String DOC_DATE;
+        public String PROJ_CODE;
+        public String CRN_DOC;
+        public String CRN_DOC_MSG;
+        public String INV_DOC;
+        public String INV_DOC_MSG;
+        public String CLR_DOC;
+        public String CLR_DOC_MSG;
+        public String STATUS;
     }
     
-    public class ResponseData{
-        public String LIFNR;
-        public String DOCUMENT_NO;
-        public String DOCUMENT_DT;
-        public String ERR_TEXT;
-        public String BROKER_CD;
-        public String STATUS;        
-    } 
+    /**Added for Referral Credit Changes ends */
     
 }

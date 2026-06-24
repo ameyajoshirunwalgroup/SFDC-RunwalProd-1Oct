@@ -171,7 +171,7 @@
                  cifForm.CIFObj.Ethnicity__c  = 'test';
                  //cifForm.CIFObj.BudgetIn_Cr__c=100;
                  cifForm.CIFObj.Configuration__c='test';
-                 cifForm.CIFObj.TimeLine__c= 'Ready Possession';
+                 cifForm.CIFObj.TimeLine__c= 'RTMI';
                  cifForm.CIFObj.Source__c= 'Digital';
                  cifForm.CIFObj.Occupation__c ='test';
              cifForm.CIFObj.CompanyName__c ='test';
@@ -243,7 +243,7 @@
                  cifForm11.CIFObj.BudgetIn_Cr__c = 100;
                  cifForm11.CIFObj.Preferred_Location__c = 'test';
                  cifForm11.CIFObj.Configuration__c = '1.5 BHK';
-                 cifForm11.CIFObj.TimeLine__c = 'Ready Possession';
+                 cifForm11.CIFObj.TimeLine__c = 'RTMI';
                  cifForm11.CIFObj.Source__c = 'Digital';
                  cifForm11.CIFObj.Salutation__c ='Ms';
                  cifForm11.CIFObj.Occupation__c = 'test';
@@ -305,7 +305,7 @@
                  cifForm.CIFObj.Ethnicity__c  = 'test';
                  cifForm.CIFObj.BudgetIn_Cr__c=100;
                 cifForm.CIFObj.Configuration__c='1 BHK';
-                cifForm.CIFObj.TimeLine__c= 'Ready Possession';
+                cifForm.CIFObj.TimeLine__c= 'RTMI';
                  cifForm.CIFObj.Source__c= 'Digital';
                  cifForm.CIFObj.Occupation__c ='test';
                cifForm.CIFObj.CompanyName__c= 'Test';
@@ -379,7 +379,7 @@
                  cifForm11.CIFObj.BudgetIn_Cr__c = 100;
                  cifForm11.CIFObj.Preferred_Location__c = 'test';
                  cifForm11.CIFObj.Configuration__c = '1.5 BHK';
-                 cifForm11.CIFObj.TimeLine__c = 'Ready Possession';
+                 cifForm11.CIFObj.TimeLine__c = 'RTMI';
                  cifForm11.CIFObj.Source__c = 'Digital';
                  cifForm11.CIFObj.Salutation__c ='Mr.';
                  cifForm11.CIFObj.Occupation__c = 'test';
@@ -467,7 +467,7 @@
                 objLead.RW_Budget__c = '< 1Cr';
                 objLead.RW_Configuration__c = '1.5 BHK';
                 objLead.RW_Location__c = 'Airoli';
-                objLead.RW_Time_line__c = 'Ready Possession';
+                objLead.RW_Time_line__c = 'RTMI';
                 objLead.RW_Date_of_Birth__c = System.today().addDays(-10);
                 objLead.RW_Customer_Type__c = 'NRI';
                 objLead.RW_Type_of_Client__c = 'Local';			//Added by Sheetal on 26/04/2022
@@ -505,7 +505,7 @@
                 objopp.RW_Ethnicity__c = 'test';
                 objopp.RW_Location__c = 'Airoli';
                 objopp.RW_Configuration__c = '1.5 BHK';
-                objopp.RW_Time_line__c = 'Ready Possession';
+                objopp.RW_Time_line__c = 'RTMI';
                 objopp.Walkin_Source__c = 'Digital';
                 objopp.Walkin_SubSource__c = 'Facebook';
                 objopp.RW_Type_of_Client__c  = 'Local';			//Added by Sheetal on 26/04/2022
@@ -560,7 +560,7 @@ private static void test_LeadPathCoversObjLead() {
         Email = 'test@example.com',
         RW_Budget__c = '< 1Cr',
         RW_Configuration__c = '2 BHK',
-        RW_Time_line__c = 'Immediate',
+        RW_Time_line__c = 'RTMI',
         RW_Date_of_Birth__c = Date.today().addYears(-30),
         RW_Customer_Type__c = 'Local',
         RW_Type_of_Client__c = 'Local',
@@ -602,7 +602,7 @@ private static void test_LeadPathCoversObjLead() {
     controller.CIFObj.Marital_Status__c = 'Single';
     controller.CIFObj.Budget_In_Lakh__c = 90;
     controller.CIFObj.Configuration__c = '2 BHK';
-    controller.CIFObj.TimeLine__c = 'Immediate';
+    controller.CIFObj.TimeLine__c = 'RTMI';
     controller.CIFObj.Purpose__c = 'Investment';
     controller.CIFObj.No_of_Family_Members__c = 4;
     controller.CIFObj.Industry__c = 'IT';
@@ -674,7 +674,7 @@ private static void cifMainformserachpageTest3() {
     cifForm.CIFObj.Ethnicity__c = 'Test';
     cifForm.CIFObj.BudgetIn_Cr__c = 100;
     cifForm.CIFObj.Configuration__c = '1.5 BHK';
-    cifForm.CIFObj.TimeLine__c = 'Ready Possession';
+    cifForm.CIFObj.TimeLine__c = 'RTMI';
     cifForm.CIFObj.Source__c = 'Digital';
     cifForm.CIFObj.Occupation__c = 'Engineer';
     cifForm.CIFObj.CompanyName__c = 'Test Ltd.';

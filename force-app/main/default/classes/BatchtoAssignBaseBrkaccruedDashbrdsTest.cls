@@ -91,9 +91,17 @@ public class BatchtoAssignBaseBrkaccruedDashbrdsTest {
         cp.Broker_Pan_No__c = 'ADRPI3525F';
         cp.RW_RERA_Registration_Number__c = '123256789012';
         cp.RW_Mobile_No__c = '1234567890';
+        cp.Company_Name_As_per_RERA__c = 'Test Company';
         insert cp;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
+        //Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
+        Account cpaccount = new Account();
+        cpaccount.Name = cp.Company_Name_As_per_RERA__c;
+        cpaccount.CP_Email__c = cp.RW_Email__c;
+        cpaccount.Mobile_No__c = cp.RW_Mobile_No__c;
+        cpaccount.Channel_Partner__c = cp.id;
+        cpaccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        insert cpaccount;
         Opportunity objcustomer= new Opportunity();
         objcustomer.RW_Project__c=objpr.id;
         objcustomer.name='Test 1';
@@ -407,6 +415,7 @@ public class BatchtoAssignBaseBrkaccruedDashbrdsTest {
         cp.RW_Email__c = 'teststetig@stetig.in';
         cp.Individual_CP__c = true;
         cp.RW_CreateFromIRIS__c = true;
+        cp.Company_Name_As_per_RERA__c = 'Test Company';
         cp.RW_IRIS_Sync__c = true;
         cp.Place_of_Supply__c = 'Maharashtra';
         cp.Channel_Partner_From_CP_Portal__c = true;
@@ -421,7 +430,14 @@ public class BatchtoAssignBaseBrkaccruedDashbrdsTest {
         cp.RW_Mobile_No__c = '1234567890';
         insert cp;
         
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
+        //Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
+        Account cpaccount = new Account();
+        cpaccount.Name = cp.Company_Name_As_per_RERA__c;
+        cpaccount.CP_Email__c = cp.RW_Email__c;
+        cpaccount.Mobile_No__c = cp.RW_Mobile_No__c;
+        cpaccount.Channel_Partner__c = cp.id;
+        cpaccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Channel Partner').getRecordTypeId();
+        insert cpaccount;
         Opportunity objcustomer= new Opportunity();
         objcustomer.RW_Project__c=objpr.id;
         objcustomer.name='Test 1';

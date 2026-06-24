@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -26,6 +27,14 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Is_Special_Brokerage_Scheme__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>AOP__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>AOP_Brokerage__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -165,7 +174,7 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Brokerage__c</fields>
+        <fields>Total_Brokerage__c</fields>
         <fields>Brokerage_Amount__c</fields>
         <fields>Channel_Partner__c</fields>
         <fields>Eligible_Slab__c</fields>
@@ -193,6 +202,10 @@
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>TASK.LAST_UPDATE</fields>
         <relatedList>RelatedHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CP_Brokerage__c.Brokerage_Summary__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

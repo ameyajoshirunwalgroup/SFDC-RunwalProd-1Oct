@@ -9,10 +9,12 @@ public class generate_BookingApplication_Controller {
     public Boolean showPriceSheet { get; set; }
     public List<BookingReceiptWrapper> receiptWrapList { get; set; }
     public Decimal grandTotalReceiptAmount { get; set; }
+    public string formatedgrandTotalReceiptAmount {get; set;}
     public String parkingCountDisplay { get; set; }
     public Integer parkingCount { get; set; }
     public String bareShellDisplay { get; set; }
     public String totalAmountinWords { get; set; }
+    
     
     //Image Variables
     public String ImageofQRcode { get; set; }
@@ -50,7 +52,7 @@ public class generate_BookingApplication_Controller {
                                        Unit_No__r.TowerName__r.Legal_Entity__r.RDS_Address1__c, Unit_No__r.Legal_Entity__r.RDS_Address1__c,
                                        Unit_No__r.TowerName__r.Legal_Entity__r.RDS_Address2__c, Unit_No__r.Legal_Entity__r.RDS_Address2__c,
                                        Unit_No__r.TowerName__r.Legal_Entity__r.CIN__c, Unit_No__r.Legal_Entity__r.CIN__c,
-                                       Project__r.Booking_Terms_Conditions__c,
+                                       Project__r.Booking_Terms_Conditions__c,Project__r.Name,
                                        Unit_No__r.TowerName__r.Legal_Entity__r.RERA_Number__c, Unit_No__r.Legal_Entity__r.RERA_Number__c,
                                        Unit_No__r.TowerName__r.Legal_Entity__r.Rera_QR_Code_URL__c,Unit_No__r.Legal_Entity__r.Rera_QR_Code_URL__c,
                                        Project__r.Project_site_URL__c,Project__r.Project_Last_Page_URL__c,Unit_No__r.TowerName__r.Project_Logo_URL__c,
@@ -60,8 +62,9 @@ public class generate_BookingApplication_Controller {
                                        Source_of_Booking__c,Unit_No__r.TowerName__r.ProjectName__r.RDS_Company_Code__r.Name,
                                        Project__r.RW_Address__c,Project__r.RDS_City__c,
                                        (Select id,Parking__c, booking__r.No_of_Parking__c  from Car_Parking__r ),
-                                       (SELECT Id, Mode__c, Cheque_DD__c, Cheque_DD_Date__c,Total_Amount__c FROM Receipts__r)
-                                       From Booking__c Where Id =: recordId];
+                                       (SELECT Id, Mode__c, Cheque_DD__c, Cheque_DD_Date__c,Total_Amount__c,
+                                        Drawee_Bank_If_Others__c, DraweeBank__c FROM Receipts__r)
+                                       From Booking__c Where Id =: recordId]; // Added Project__r.Name by Vinay 12-01-2026
         
        
         
@@ -158,6 +161,7 @@ public class generate_BookingApplication_Controller {
                 bookingWrap.carpetArea = objBook.Carpet_Area__c;
                 bookingWrap.towerName = objBook.Unit_No__r.TowerName__r.Name;
                 bookingWrap.agreementValue = objBook.Allotment_Premium__c;
+                bookingWrap.formatedagreementValue = formatIndianAccounting(bookingWrap.agreementValue);
                 
                 //Convert Amount in words
                 //External class : NumberToWords is call
@@ -252,6 +256,9 @@ public class generate_BookingApplication_Controller {
                 
                 bookingWrap.sourceOfBooking = objbook.Source_of_Booking__c;
                 
+                if(objbook.Project__r.Name == 'Runwal Woods'){ // Added by Vinay 12-01-2026
+                    bookingWrap.runwalWoodsProject = true;
+                }
                 
                 //Below code is user to show max five receipt records agaisnt booking
                 Integer count = 0;
@@ -260,19 +267,26 @@ public class generate_BookingApplication_Controller {
                         if (rcpt.Total_Amount__c != null) {
                             grandTotalReceiptAmount += rcpt.Total_Amount__c;
                         }
-                        
+                        formatedgrandTotalReceiptAmount = formatIndianAccounting(grandTotalReceiptAmount);
                         if (count >= 5) break;
                         BookingReceiptWrapper rw = new BookingReceiptWrapper();
                         rw.modeofInstrument = rcpt.Mode__c;
+                        if(rcpt.DraweeBank__c != null && rcpt.DraweeBank__c != 'Other'){
+                            rw.draweeBankName = rcpt.DraweeBank__c;
+                        }else if(rcpt.Drawee_Bank_If_Others__c != null && rcpt.DraweeBank__c == 'Other'){
+                            rw.draweeBankName = rcpt.Drawee_Bank_If_Others__c;
+                        }
+                        
                         rw.chequeOrDdDate = rcpt.Cheque_DD_Date__c;
                         rw.chequeNo = rcpt.Cheque_DD__c;
                         rw.totalAmount = rcpt.Total_Amount__c;
+                        rw.formatedTotalAmount = formatIndianAccounting(rw.totalAmount);
                         if(rcpt.Total_Amount__c != null){
                             NumberToWord converter = new NumberToWord();
-                            converter.amount = rcpt.Total_Amount__c;
+                            converter.amount = grandTotalReceiptAmount;
                             converter.convertToWords();
                             totalAmountinWords = converter.amountInWords;
-                            System.debug('AMount In words ==>'+ rw.totalAmountinWords);
+                            System.debug('AMount In words ==>'+ totalAmountinWords);
                         }
                         
                         receiptWrapList.add(rw);
@@ -379,6 +393,7 @@ public class generate_BookingApplication_Controller {
         public String towerName {get; set;}
         public Decimal noOfParking {get; set;}
         public Decimal agreementValue {get; set;}
+        public string formatedagreementValue {get; set;}
         public String agreementValueinWords {get; set;}
         public String sapCRNno {get; set;}
         public String salesOrdrNo {get; set;}
@@ -403,6 +418,7 @@ public class generate_BookingApplication_Controller {
         Public string TypeofClient {get; set; }
         Public string existingCustomer {get; set; }
         Public string existingCustomerCRN {get; set; }
+        public Boolean runwalWoodsProject { get; set; } //Added by Vinay 12-01-2026
     }  
     
     public class BookingReceiptWrapper {
@@ -410,8 +426,38 @@ public class generate_BookingApplication_Controller {
         public Date chequeOrDdDate { get; set; }
         public String chequeNo { get; set; }
         public Decimal totalAmount { get; set; }
+        public string formatedTotalAmount {get; set;}
         public String totalAmountinWords { get; set; }
+        public String draweeBankName { get; set; }
         
+    }
+    
+    public static String formatIndianAccounting(Decimal amount) {
+        if (amount == null) return '';
+        String numStr = String.valueOf(amount.setScale(0)); // no decimals
+        
+        String intPart = numStr;
+        String result = '';
+        
+        // Take last 3 digits first
+        if (intPart.length() > 3) {
+            result = intPart.substring(intPart.length() - 3);
+            intPart = intPart.substring(0, intPart.length() - 3);
+        } else {
+            return intPart; // no formatting needed
+        }
+        
+        // Keep adding commas every 2 digits (crore/lakh style)
+        while (intPart.length() > 2) {
+            result = intPart.substring(intPart.length() - 2) + ',' + result;
+            intPart = intPart.substring(0, intPart.length() - 2);
+        }
+        
+        if (!String.isEmpty(intPart)) {
+            result = intPart + ',' + result;
+        }
+        
+        return result;
     }
     
     Public static void fakeMethod(){

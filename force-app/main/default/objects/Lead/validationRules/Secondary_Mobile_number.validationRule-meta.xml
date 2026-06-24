@@ -3,14 +3,14 @@
     <fullName>Secondary_Mobile_number</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-IF(
-AND(
-NOT(REGEX(RW_Secondary_Mobile_No__c, &quot;[0-9]{10}&quot;)),
-ISPICKVAL(Country_Code_2__c, &quot;+91&quot;)
-),
-true,false
-),
-$Label.Disable_all_validations_from_lead = &quot;false&quot;
+    IF(            
+        AND(
+            NOT(REGEX(RW_Secondary_Mobile_No__c, &quot;[0-9]{10}&quot;)),
+            ISPICKVAL(Country_Code_2__c, &quot;+91&quot;)
+        ),
+        true,false
+    ),
+    $Label.Disable_all_validations_from_lead = &quot;false&quot;
 )</errorConditionFormula>
     <errorDisplayField>RW_Secondary_Mobile_No__c</errorDisplayField>
     <errorMessage>Please enter a valid secondary mobile number</errorMessage>

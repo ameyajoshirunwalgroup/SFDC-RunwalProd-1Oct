@@ -1,0 +1,320 @@
+<apex:component controller="CPBrokerageInvoiceDueUploadEmailCtrl" access="global" allowDML="true">
+    <apex:attribute name="CPBrokerageInvoiceId" type="String" description="CP Brokerage Invoice Id" access="global" assignTo="{!cpId}"/>
+    <head>        
+        <style>
+            @page {
+                size: A4;
+                margin: 8mm;
+                @bottom-center {
+                    content: "Page " counter(page) " of " counter(pages);
+                }
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;            
+                font-family: 'cambria', "Google Sans", Roboto, arial, sans-serif;
+            }                
+            .table1 {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .table1 tr th {
+                border: 1px solid #000;
+                text-align: center;
+                font-size: 12px;
+                padding: 3px 5px;
+            }
+            .table1 tr td {
+                text-align: center;
+                font-size: 12px;
+                border: 1px solid #000;
+                padding: 3px 5px;
+            }
+            
+            @page {
+                margin-bottom: 64px;
+                margin-top: 64px;
+                
+                @top-center {
+                    content: element(header,first-except);
+                }
+                @bottom-center {
+                    content: element(footer,first-except);
+                }
+            }            
+            .header {
+                position: running(header);
+            }
+            .footer {
+                display: block;
+                position: running(footer);
+                z-index: -999;
+            }         
+        </style>
+    </head>
+    
+    <body>
+        {!cpupdate}{!booking}
+        
+        <table id="main" border="0" width="90%" style="border-collapse:collapse;">
+            <tr><td>Greeting From Runwal Group !!!.</td></tr>
+            <tr><td> &nbsp; </td></tr>
+            <tr>
+                <td>
+                    Required Your approval for Channel Partner 
+                    (<b><apex:outputText value="{!IF(CPInv != null && CPInv.size > 0, CPInv[0].CP_Name__c, 'N/A')}"/></b>) 
+                    Invoice bill clearance. Below are the details for the same:
+                </td>
+            </tr>
+            <tr><td> &nbsp; </td></tr>
+            <tr><td>Approval Link : {!ApprovalLink}</td></tr>
+            <tr><td>Record Link : {!Recordurl}</td></tr>
+            <tr><td>&nbsp;</td></tr>
+        </table>
+        
+        <br/>
+        <!--<div style="background: #fdf6e3; border: 2px solid #b58900; padding: 10px; margin-bottom: 20px; font-family: monospace;">
+            <strong>--- DEBUG PANEL ---</strong><br/>
+            Brokerage Type: [{!cpBrokerage.Brokerage_Type__c}] <br/>
+            AOP Details Size: [{!IF(aopDetails == null, 'NULL', aopDetails.size)}] <br/>
+            Invoice Wrappers Size: [{!IF(invoiceWrappers == null, 'NULL', invoiceWrappers.size)}] <br/>
+            CPInv Size: [{!IF(CPInv == null, 'NULL', CPInv.size)}] <br/>
+            Is Tax Applicable: [{!istaxapplicable}] <br/>
+            Show GST: [{!showgst}] <br/>
+            Show IGST: [{!showigst}] <br/>
+            <strong>---------------------</strong>
+        </div>-->
+        
+        <apex:outputPanel rendered="{!brokerageScheme != null && brokerageScheme.size > 0 && cpBrokerage != null && cpBrokerage.Brokerage_Type__c != 'AOP Brokerage'}">
+            <table style="width:50%;border-collapse: collapse;border:1px solid black;">
+                <tr>
+                    <td style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">Ladder Scheme</td>
+                    <td style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">{!brokerageScheme[0].Name}</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Start Date</td>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">
+                        <apex:outputText value="{0,date,dd/MM/yy}"> 
+                            <apex:param value="{!brokerageScheme[0].Start_Date__c}" /> 
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">End Date</td>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">
+                        <apex:outputText value="{0,date,dd/MM/yy}"> 
+                            <apex:param value="{!brokerageScheme[0].End_Date__c}" /> 
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Eligible Slab</td>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">
+                        <apex:outputText rendered="{!CPInv != null && CPInv.size > 0}">
+                            {!CPInv[0].RW_Eligible_Slab__c}
+                        </apex:outputText>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!AND(NOT(ISBLANK(cpBrokerage)), cpBrokerage.Brokerage_Type__c == 'AOP Brokerage', NOT(ISNULL(aopDetails)), aopDetails.size > 0)}">
+            <table style="width:50%;border-collapse: collapse;border:1px solid black;">
+                <tr>
+                    <td style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">AOP Name</td>
+                    <td style="text-align:center;background-color:#90EE90;border:1px solid black;width:50%;height:25px;font-size:13px">{!aopDetails[0].Name}</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Start Date</td>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">
+                        <apex:outputText value="{0,date,dd/MM/yy}"> 
+                            <apex:param value="{!aopDetails[0].Start_Date__c}" /> 
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">End Date</td>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">
+                        <apex:outputText value="{0,date,dd/MM/yy}"> 
+                            <apex:param value="{!aopDetails[0].End_Date__c}" /> 
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">Eligible Slab</td>
+                    <td style="text-align:center;border:1px solid black;width:50%;height:25px;font-size:13px">
+                        <apex:outputText rendered="{!CPInv != null && CPInv.size > 0 && cpBrokerage.Brokerage_Type__c == 'AOP Brokerage'}">
+                            {!CPInv[0].Eligible_Slab__c}
+                        </apex:outputText>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!cpBrokerage != null}">
+            <div style="margin-top: 15px; margin-bottom: 10px; font-family: 'cambria'; font-size: 13px;">
+                <table style="width:100%; border: none;">
+                    <tr>
+                        <td style="width:40%;"><strong>Invoice Number:</strong> {!cpBrokerage.Invoice_Number__c}</td>
+                        <td style="width:30%; text-align: center;"><strong>Invoice Date:</strong> 
+                            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                                <apex:param value="{!cpBrokerage.Invoice_Date__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="width:30%; text-align: right;"><strong>GST Applicable:</strong> {!cpBrokerage.If_GST_is_applicable__c}</td>
+                    </tr>
+                </table>
+            </div>
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!showgst && istaxapplicable && invoiceWrappers != null && invoiceWrappers.size > 0}">
+            <table style="width:100%;border-collapse: collapse;">
+                <tr style="background-color:#e6e6ff;">
+                    <th style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:11px">Customer Name</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">Booking Date</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">Tower - Unit No</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">Final AV Value</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">Brokerage %</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">Brokerage Amount</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">CGST @ 9%</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">SGST @ 9%</th>
+                    <th style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:11px">Total Brokerage</th>
+                </tr>
+                
+                <apex:repeat value="{!invoiceWrappers}" var="wrapper">
+                    <tr>
+                        <td style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:13px;">{!wrapper.invoice.Customer_Name__c}</td>
+                        <td style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:13px">
+                            <apex:outputText value="{0,date,dd/MM/yy}"> 
+                                <apex:param value="{!wrapper.invoice.Booking__r.Booking_Date__c}" /> 
+                            </apex:outputText>
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:10%;height:25px;font-size:13px">{!wrapper.invoice.Booking__r.Unit_Number__c}</td>
+                        <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px;">
+                            {!wrapper.invoice.Booking__r.Agreement_Value_for_brokers__c}
+                        </td>
+                        <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">
+                            <apex:outputText value="{!IF(cpBrokerage.Brokerage_Type__c == 'AOP Brokerage', wrapper.invoice.AOP_Brokerage__c, wrapper.invoice.Brokerage__c)}"/>
+                        </td>
+                        <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">{!wrapper.brokerageAmtStr}</td>
+                        <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">{!wrapper.cgstStr}</td>
+                        <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px;">{!wrapper.sgstStr}</td>
+                        <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">{!wrapper.totalWithTaxStr}</td>
+                    </tr>
+                </apex:repeat>
+                
+                <tr style="font-weight: bold; background-color: #f0f0f0;">
+                    <td style="text-align:center;border:1px solid black;width:20%;height:25px;font-size:13px;" colspan="5">TOTAL</td>
+                    <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                    <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">{!CgstStr}</td>
+                    <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px;">{!SgstStr}</td>
+                    <td style="text-align:right;border:1px solid black;width:10%;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                </tr>
+                
+                <tr>
+                    <td style="text-align:center;border:1px solid black;height:30px;font-size:13px" colspan="9">Amount in Words: {!NoToWord} Only</td>
+                </tr>
+            </table> 
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!showigst && istaxapplicable && invoiceWrappers != null && invoiceWrappers.size > 0}">
+            <table style="width:100%;border-collapse: collapse;">
+                <tr style="background-color:#e6e6ff;">
+                    <th style="text-align:center;border:1px solid black;width:23%;height:25px;font-size:11px">Customer Name</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">Booking Date</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">Tower - Unit No</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">Final AV Value</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">Brokerage %</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">Brokerage Amount</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">IGST 18%</th>
+                    <th style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:11px">Total Brokerage</th>
+                </tr>
+                
+                <apex:repeat value="{!invoiceWrappers}" var="wrapper">
+                    <tr>
+                        <td style="text-align:center;border:1px solid black;width:23%;height:25px;font-size:13px;">{!wrapper.invoice.Customer_Name__c}</td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">
+                            <apex:outputText value="{0,date,dd/MM/yy}"> 
+                                <apex:param value="{!wrapper.invoice.Booking__r.Booking_Date__c}" /> 
+                            </apex:outputText>
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!wrapper.invoice.Booking__r.Unit_Number__c}</td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px;">
+                            {!wrapper.invoice.Booking__r.Agreement_Value_for_brokers__c}
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">
+                            <apex:outputText value="{!IF(cpBrokerage.Brokerage_Type__c == 'AOP Brokerage', wrapper.invoice.AOP_Brokerage__c, wrapper.invoice.Brokerage__c)}"/>
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!wrapper.brokerageAmtStr}</td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!wrapper.igstStr}</td>
+                        <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!wrapper.totalWithTaxStr}</td>
+                    </tr>
+                </apex:repeat>
+                
+                <tr style="font-weight: bold; background-color: #f0f0f0;">
+                    <td style="text-align:center;border:1px solid black;width:23%;height:25px;font-size:13px;" colspan="5">TOTAL</td>
+                    <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                    <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!IgstStr}</td>
+                    <td style="text-align:center;border:1px solid black;width:11%;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                </tr>
+                
+                <tr>
+                    <td style="text-align:center;border:1px solid black;height:30px;font-size:13px" colspan="8">Amount in Words: {!NoToWord} Only</td>
+                </tr>
+            </table> 
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!istaxapplicable == false && invoiceWrappers != null && invoiceWrappers.size > 0}">
+            <table style="width:100%;border-collapse: collapse;">
+                <tr style="background-color:#e6e6ff;">
+                    <th style="text-align:center;border:1px solid black;width:22%;height:25px;font-size:11px">Customer Name</th>
+                    <th style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:11px">Booking Date</th>
+                    <th style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:11px">Tower - Unit No</th>
+                    <th style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:11px">Final AV Value</th>
+                    <th style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:11px">Brokerage %</th>
+                    <th style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">Brokerage Amount</th>
+                    <th style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:11px">Total Brokerage</th>
+                </tr>
+                
+                <apex:repeat value="{!invoiceWrappers}" var="wrapper">
+                    <tr>
+                        <td style="text-align:center;border:1px solid black;width:22%;height:25px;font-size:13px;">{!wrapper.invoice.Customer_Name__c}</td>
+                        <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">
+                            <apex:outputText value="{0,date,dd/MM/yy}"> 
+                                <apex:param value="{!wrapper.invoice.Booking__r.Booking_Date__c}" /> 
+                            </apex:outputText>
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">{!wrapper.invoice.Booking__r.Unit_Number__c}</td>
+                        <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px;">
+                            {!wrapper.invoice.Booking__r.Agreement_Value_for_brokers__c}
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">
+                            <apex:outputText value="{!IF(cpBrokerage.Brokerage_Type__c == 'AOP Brokerage', wrapper.invoice.AOP_Brokerage__c, wrapper.invoice.Brokerage__c)}"/>
+                        </td>
+                        <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">{!wrapper.brokerageAmtStr}</td>
+                        <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">{!wrapper.totalWithTaxStr}</td>
+                    </tr>
+                </apex:repeat>
+                
+                <tr style="font-weight: bold; background-color: #f0f0f0;">
+                    <td style="text-align:center;border:1px solid black;width:22%;height:25px;font-size:13px;" colspan="5">TOTAL</td>
+                    <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">{!BrokerageAmtStr}</td>
+                    <td style="text-align:center;border:1px solid black;width:13%;height:25px;font-size:13px">{!TotalwithTaxStr}</td>
+                </tr>
+                
+                <tr>
+                    <td style="text-align:center;border:1px solid black;height:30px;font-size:13px" colspan="7">Amount in Words: {!NoToWord} Only</td>
+                </tr>
+            </table> 
+        </apex:outputPanel>       
+        
+        <br/>
+        <table id="main" border="0" width="50%" style="border-collapse:collapse;">
+            <tr><td>Regards,</td></tr>
+            <tr><td>Runwal Group</td></tr>
+        </table>
+    </body>
+</apex:component>

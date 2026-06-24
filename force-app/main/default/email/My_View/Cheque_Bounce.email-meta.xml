@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Cheque Bounce</name>
+    <style>none</style>
+    <subject>Cheque Bounce/Reversal</subject>
+    <textOnly>Hi Team,
+
+A Cheque has been Reversed/Bounced for the Opportunity - {!OpportunityName} . To check the details, Click on the link to view details - {!Link}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

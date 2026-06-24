@@ -117,10 +117,18 @@
         <type>InternalLink</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <label>Upload Latest CC</label>
+        <defaultListViewId>All</defaultListViewId>
+        <label>CP Brokerage Invoices</label>
         <position>14</position>
         <publiclyAvailable>false</publiclyAvailable>
-        <target>/upload-latest-cc</target>
+        <target>CP_Brokerage__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>CP Event Detail Page</label>
+        <position>15</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/cp-event-detail-page</target>
         <type>InternalLink</type>
     </navigationMenuItem>
 </NavigationMenu>

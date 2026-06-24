@@ -1,0 +1,75 @@
+{
+  "appPageId" : "0c43d153-5533-4587-a9ed-1bb5f1a02d81",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "8aee6488-3334-4cab-8368-37dee9631710",
+  "label" : "View Quotes",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "89671a61-3013-4348-9ab9-8be34ee8ed92",
+          "columns" : [ {
+            "UUID" : "769e6d0d-eb7f-4d2d-9e02-20ff9033b067",
+            "columnKey" : "col1",
+            "columnName" : "Quote List Column",
+            "columnWidth" : "12",
+            "seedComponents" : [ {
+              "attributes" : {
+                "filterName" : "Recent",
+                "scope" : "Quote",
+                "sfdc:identifier" : "forceCommunity_objectHome_quote"
+              },
+              "fqn" : "forceCommunity:objectHome"
+            } ]
+          } ]
+        },
+        "sectionHeight" : 32
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "89671a61-3013-4348-9ab9-8be34ee8ed92",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "enableInlineEdit" : true,
+            "filterName" : "Recent",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Quote",
+            "showActionBar" : true,
+            "showChartsPanel" : true,
+            "showDisplay" : "showall",
+            "showFilterPanel" : true,
+            "showImageIcon" : true,
+            "showManualRefreshButton" : true,
+            "showObjectName" : true,
+            "showPinnedList" : true,
+            "showSearchBar" : true
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "3768beb4-a4af-40a7-adb0-a4e3904e5ea6",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "769e6d0d-eb7f-4d2d-9e02-20ff9033b067",
+        "regionLabel" : "Quote List Column",
+        "regionName" : "col1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "25c42da6-682f-4846-8710-cf4a9bfb3c5d",
+    "regionName" : "content",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "quote-list"
+}

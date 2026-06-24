@@ -46,7 +46,7 @@ public class TestAccountTrigger {
         
         
                 
-        Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
+        //Account cpaccount = [Select Id,Name,Channel_Partner__c from Account where Channel_Partner__c =: cp.Id];
         
         RecordType personAccountRecordType =  [SELECT Id FROM RecordType WHERE Name = 'Person Account' and SObjectType = 'Account'];
         Account a = new Account(lastName='accName', personEmail = 'wc@stetig.in.com', personMobilePhone= '9098777',Mobile_No__c = '9098777',
@@ -55,9 +55,31 @@ public class TestAccountTrigger {
         
         
         
-        
-       
-        
         test.stopTest();
+    }
+    
+    @isTest
+    public static void testAcc1(){
+        
+        RecordType personAccountRecordType =  [SELECT Id FROM RecordType WHERE Name = 'Person Account' and SObjectType = 'Account'];
+        Account a = new Account(lastName='accName', personEmail = 'wc@stetig.in.com', personMobilePhone= '9098777',Mobile_No__c = '9098777',
+                                RecordType = personAccountRecordType, MasterRecord__c = true,Campaign_Code__c = '7575757');
+        insert a;
+        
+        Opportunity opp = new Opportunity();
+        opp.Name = 'Test Opp';
+        opp.StageName = 'Unit Booked';
+        opp.CloseDate = Date.today() + 1;
+        opp.AccountId = a.Id;
+        insert opp;
+        
+        a.Mobile_No__c = '9098778';
+        a.personEmail = 'wc@stetig1.in.com';
+        a.Alternate_Mobile_No__c = '12345';
+        a.Alternate_Email__c = 'test@mail.com';
+       	a.RW_Secondary_Mobile_No__pc = '253654';
+        a.RW_Secondary_Email__pc = 'test1@mail.com';
+        update a;
+        
     }
 }

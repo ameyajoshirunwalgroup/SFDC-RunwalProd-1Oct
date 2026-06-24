@@ -6,7 +6,6 @@
     <excludeButtons>Delete</excludeButtons>
     <excludeButtons>Edit</excludeButtons>
     <excludeButtons>IsotopeSubscription</excludeButtons>
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>PrintableView</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
@@ -245,6 +244,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>RW_Agreement_Value__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>RW_Source_Of_Booking__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

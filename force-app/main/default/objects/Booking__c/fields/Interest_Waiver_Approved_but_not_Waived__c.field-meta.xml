@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interest_Waiver_Approved_but_not_Waived__c</fullName>
+    <label>Interest Waiver Approved but not Waived</label>
+    <summarizedField>RW_Demand__c.Total_Interest_Waiver_Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>RW_Demand__c.Previously_Waived_Amount_SAP__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </summaryFilterItems>
+    <summaryForeignKey>RW_Demand__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

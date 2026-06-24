@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>EOI Payment - Customer</name>
+    <style>none</style>
+    <subject>EOI Payment</subject>
+    <textOnly>Dear {!RW_EOI__c.RW_Primary_First_Name__c} {!RW_EOI__c.RW_Primary_Last_Name__c},
+
+This is with reference to your Payment received in our system. We are glad to inform you that we have received a payment of Rs {!Amount} from your end towards EOI. Thank You for the prompt payment
+
+You may call on {!SMPhoneNumber} for any assistance.  
+
+Regards,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

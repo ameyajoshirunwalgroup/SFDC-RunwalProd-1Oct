@@ -14,7 +14,7 @@ trigger APFCreation on APF__c (after Insert, after update)
     {
     if (trigger.isAfter) {
         if (trigger.isInsert) {
-            APFController.SendEmailOnAPFGeneration(trigger.new);
+            //APFController.SendEmailOnAPFGeneration(trigger.new);
         }
     }}
 }

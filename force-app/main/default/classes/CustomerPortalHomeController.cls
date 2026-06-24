@@ -1,60 +1,45 @@
-public class CustomerPortalHomeController 
-{
-    private static final String base64Chars = '' +
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-        'abcdefghijklmnopqrstuvwxyz' +
-        '0123456789+/';
+public class CustomerPortalHomeController{
+    private static final String base64Chars = '' +'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +'abcdefghijklmnopqrstuvwxyz' +'0123456789+/';
     //changes made by ishu
-    public static String getPrincipalPayableAmount(Decimal totalPrincipal,Decimal totalGST,Decimal totalDemand,Decimal totalOutStanding,Decimal TDSDue)
-    {
+    public static String getPrincipalPayableAmount(Decimal totalPrincipal,Decimal totalGST,Decimal totalDemand,Decimal totalOutStanding,Decimal TDSDue){
        
         Decimal principalAmount=0;
-     Integer BalanceDues;
-         //BalanceDues=Integer.valueOf(totalOutStanding)-Integer.valueOf(TDSDue);// Commented by coServe 12-12-2022
-         //principalAmount=BalanceDues*(totalPrincipal/totalDemand);// Commented by coServe 12-12-2022
-         principalAmount=totalOutStanding*(totalPrincipal/totalDemand);// Added by coServe 12-12-2022
+        Integer BalanceDues;
+        //BalanceDues=Integer.valueOf(totalOutStanding)-Integer.valueOf(TDSDue);// Commented by coServe 12-12-2022
+        //principalAmount=BalanceDues*(totalPrincipal/totalDemand);// Commented by coServe 12-12-2022
+        principalAmount=totalOutStanding*(totalPrincipal/totalDemand);// Added by coServe 12-12-2022
         principalAmount = principalAmount - TDSDue;// Added by coServe 12-12-2022
-        System.debug('****principalAmount****'+principalAmount);
-     principalAmount=   principalAmount.round();
-        System.debug('****principalAmount****'+principalAmount);
-        
+        principalAmount=   principalAmount.round();
         return String.valueOf(principalAmount);
     }
     
     //changes made by Srinivas on 15/07/21
-     public static String getGstPayableAmount(Decimal totalGST,Decimal totalDemand,Decimal totalOutStanding,Decimal TDSDue)
-    {
-        Decimal gstAmount=0;
-        Decimal principalAmount=0;
-     Integer BalanceDues;
+     public static String getGstPayableAmount(Decimal totalGST,Decimal totalDemand,Decimal totalOutStanding,Decimal TDSDue){
+         Decimal gstAmount=0;
+         Decimal principalAmount=0;
+         Integer BalanceDues;
          //BalanceDues=Integer.valueOf(totalOutStanding)-Integer.valueOf(TDSDue);// Commented by coServe 12-12-2022
          //gstAmount=BalanceDues*(totalGST/totalDemand);// Commented by coServe 12-12-2022
          principalAmount=totalOutStanding*((totalDemand - totalOutStanding)/totalDemand);// Added by coServe 12-12-2022
-        gstAmount = Integer.valueOf(totalOutStanding)-Integer.valueOf(principalAmount);// Added by coServe 12-12-2022
-       gstAmount= gstAmount.round();
-        return String.valueOf(gstAmount);
+         gstAmount = Integer.valueOf(totalOutStanding)-Integer.valueOf(principalAmount);// Added by coServe 12-12-2022
+         gstAmount= gstAmount.round();
+         return String.valueOf(gstAmount);
     }
-    public static String getCheckProjectTotalAmount(Decimal totalOutStanding,Decimal TDSDue)
-    {
+    public static String getCheckProjectTotalAmount(Decimal totalOutStanding,Decimal TDSDue){
         Integer BalanceDues;
-         BalanceDues=Integer.valueOf(totalOutStanding)-Integer.valueOf(TDSDue);
+        BalanceDues=Integer.valueOf(totalOutStanding)-Integer.valueOf(TDSDue);
         return String.valueOf(BalanceDues);
     }
    
 
     @AuraEnabled(cacheable=true)
     public static List<User> getLastLoginTime() {        
-        system.debug('current user'+UserInfo.getUserId());
         String userId = UserInfo.getUserId();
-        System.debug('userId :: ' + userId);
-        System.debug('data'+[SELECT AccountId,LastLoginDate FROM User WHERE Id = :userId LIMIT 1]);
         return [SELECT AccountId,LastLoginDate FROM User WHERE Id = :userId LIMIT 1];
     }
     
     @AuraEnabled
-    public static List<HomeRunwalWrapper> getPortalHomeData()
-    {
-        system.debug('current user'+UserInfo.getUserId());
+    public static List<HomeRunwalWrapper> getPortalHomeData(){
         List<String> status = new List<String>{'Booking Confirmed','Booking Registered','Unit Booked','Cancellation Initiated'};
         List<HomeRunwalWrapper> homeRunwalWrapList = new List<HomeRunwalWrapper>();
         HomeRunwalWrapper homeRunwalWrap = new HomeRunwalWrapper();
@@ -97,12 +82,9 @@ public class CustomerPortalHomeController
         
         Map<string,PicklistWrapper> ComplaintDependentPickListMap = getDependentPicklists('Case',complaintfieldMap);
      
-            for(String key : ComplaintDependentPickListMap.keyset() )
-            {
-                for(String picklistkey : ComplaintDependentPickListMap.get(key).pickListMap.keyset())
-                {
-                    if(excludePicklistValues.contains(picklistkey))
-                    {
+            for(String key : ComplaintDependentPickListMap.keyset() ){
+                for(String picklistkey : ComplaintDependentPickListMap.get(key).pickListMap.keyset()){
+                    if(excludePicklistValues.contains(picklistkey)){
                         ComplaintDependentPickListMap.get(key).pickListMap.remove(picklistkey);
                     }
                 }
@@ -111,24 +93,15 @@ public class CustomerPortalHomeController
             //Added by Vinay 28-03-2025 Start
             Map<string,PicklistWrapper> CustLifeDependentPickListMap = getDependentPicklists('Case',custLifefieldMap);
      
-            for(String key : CustLifeDependentPickListMap.keyset() )
-            {
-                for(String picklistkey : CustLifeDependentPickListMap.get(key).pickListMap.keyset())
-                {
-                    if(excludeCaseTypePicklistValues.contains(picklistkey))
-                    {
+            for(String key : CustLifeDependentPickListMap.keyset()){
+                for(String picklistkey : CustLifeDependentPickListMap.get(key).pickListMap.keyset()){
+                    if(excludeCaseTypePicklistValues.contains(picklistkey)){
                         CustLifeDependentPickListMap.get(key).pickListMap.remove(picklistkey);
-                    }
-                    else
-                    {
-                        for(Integer i=0 ; i<CustLifeDependentPickListMap.get(key).pickListMap.get(picklistkey).size(); i++)
-                        {
-                     
-                           if(excludePicklistValues.contains(CustLifeDependentPickListMap.get(key).pickListMap.get(picklistkey)[i]))
-                            {
+                    }else{
+                        for(Integer i=0 ; i<CustLifeDependentPickListMap.get(key).pickListMap.get(picklistkey).size(); i++){
+                            if(excludePicklistValues.contains(CustLifeDependentPickListMap.get(key).pickListMap.get(picklistkey)[i])){
                                 CustLifeDependentPickListMap.get(key).pickListMap.get(picklistkey).remove(i);
                             }
-                                
                         }
                     }
                 }
@@ -136,21 +109,14 @@ public class CustomerPortalHomeController
             //Added by Vinay 28-03-2025 End
         Map<string,PicklistWrapper> CaseTypeDependentPickListMap = getDependentPicklists('Case',caseTypefieldMap);
      
-            for(String key : CaseTypeDependentPickListMap.keyset() )
-            {
-                for(String picklistkey : CaseTypeDependentPickListMap.get(key).pickListMap.keyset())
-                {
-                    if(excludeCaseTypePicklistValues.contains(picklistkey))
-                    {
+            for(String key : CaseTypeDependentPickListMap.keyset()){
+                for(String picklistkey : CaseTypeDependentPickListMap.get(key).pickListMap.keyset()){
+                    if(excludeCaseTypePicklistValues.contains(picklistkey)){
                         CaseTypeDependentPickListMap.get(key).pickListMap.remove(picklistkey);
-                    }
-                    else
-                    {
-                        for(Integer i=0 ; i<CaseTypeDependentPickListMap.get(key).pickListMap.get(picklistkey).size(); i++)
-                        {
+                    }else{
+                        for(Integer i=0 ; i<CaseTypeDependentPickListMap.get(key).pickListMap.get(picklistkey).size(); i++){
                      
-                           if(excludePicklistValues.contains(CaseTypeDependentPickListMap.get(key).pickListMap.get(picklistkey)[i]))
-                            {
+                           if(excludePicklistValues.contains(CaseTypeDependentPickListMap.get(key).pickListMap.get(picklistkey)[i])){
                                 CaseTypeDependentPickListMap.get(key).pickListMap.get(picklistkey).remove(i);
                             }
                                 
@@ -159,40 +125,23 @@ public class CustomerPortalHomeController
                 }
             }
         
-        system.debug('*countryNames*'+CountryNames);
-        try
-        {
-            List<User> u = [SELECT Name, AccountId FROM User WHERE Id = :UserInfo.getUserId()];
-            System.debug('accId = ' + u[0].AccountId);
-            if(!u.isEmpty()) 
-            {
+        try{
+            List<User> u = [SELECT Name,AccountId FROM User WHERE Id = :UserInfo.getUserId()];
+            if(!u.isEmpty()){
                 Id accountId = u[0].AccountId; 
                 Account accRecord = CustomerPortalUtility.getopportunitiesfromAccount(accountId);
-                if(accRecord != null)
-                {
-                    system.debug('opp childs'+accRecord.Opportunities.size());
-                    for(Opportunity opp : accRecord.Opportunities)
-                    {
-                        System.debug('**opp**'+opp);
+                if(accRecord != null){
+                    for(Opportunity opp : accRecord.Opportunities){
                         oppIds.add(opp.Id);
                     }
-                   if(oppIds.size() > 0) 
-                   {
-                       List<Opportunity> oppRecords = CustomerPortalUtility.getOpportunities(oppIds);
-                       if(oppRecords != null && oppRecords.size() >0)
-                       {
-                           System.debug('**opps**'+oppRecords);
-                           
-                           for(Opportunity opps : oppRecords)
-                           {
-                               
-                               for(Booking__c bookrecs : opps.Booking__r)
-                               {
-                                   System.debug('**Pro Name**'+bookrecs.Project__r.Name);
-                                   //if(status.contains(bookrecs.Status__c))
-                                   //{
-                                   System.debug('**bookrecs**'+bookrecs);
-                                   //bookingRecords.add(bookrecs);
+                    if(oppIds.size() > 0){
+                        List<Opportunity> oppRecords = CustomerPortalUtility.getOpportunities(oppIds);
+                        if(oppRecords != null && oppRecords.size() >0){
+                            for(Opportunity opps : oppRecords){
+                                for(Booking__c bookrecs : opps.Booking__r){
+                                    //if(status.contains(bookrecs.Status__c))
+                                    //{
+                                    //bookingRecords.add(bookrecs);
                                    //bookingIds.add(bookrecs.Id);
                                    /*HomeRunwalWrapper wrapper = new HomeRunwalWrapper();
                                    wrapper.BookingId = bookrecs.Id;
@@ -203,44 +152,29 @@ public class CustomerPortalHomeController
                                    
                                }
                                
-                               for(RW_EOI__c eoiRecs : opps.EOI__r)
-                               {
+                               for(RW_EOI__c eoiRecs : opps.EOI__r){
                                    if(eoiRecs.RW_Status__c == 'EOI Confirmed' || eoiRecs.RW_Status__c =='EOI Blocked' ||eoiRecs.RW_Status__c =='EOI Booked')
                                    eoiMap.put(eoiRecs.Opportunity__c,eoiRecs);
                                }
                            }
                            
-                           if(BookingMap.size() >0)
-                           {
-                               System.debug('**inside if first*');
+                           if(BookingMap.size() >0){
                                List<RW_Demand__c> demands = CustomerPortalUtility.getDemandRecords(BookingMap.Keyset());
-                               if(demands != null)
-                               {
-                               for(RW_Demand__c eachdemandRec : demands)
-                               {
-                                   System.debug('**inside demand for 1*');
-                                   if(DemandMap.containsKey(eachdemandRec.Booking__c))
-                                   {
+                               if(demands != null){
+                               for(RW_Demand__c eachdemandRec : demands){
+                                   if(DemandMap.containsKey(eachdemandRec.Booking__c)){
                                        List<RW_Demand__c> existingDemand = DemandMap.get(eachdemandRec.Booking__c);
                                        existingDemand.add(eachdemandRec);
                                        DemandMap.put(eachdemandRec.Booking__c,existingDemand);
-                                   }
-                                   else
-                                   {
-                                       System.debug('**inside demand for else*');
+                                   }else{
                                        DemandMap.put(eachdemandRec.Booking__c,new List<RW_Demand__c>{eachdemandRec});
                                    }
                                }
                                }
                                
-                                System.debug('**inside if of possesion*');
                                List<InspectionAndPossession__c> inspections = CustomerPortalUtility.getInsepectionPossesionRecords(BookingMap.Keyset());
-                               system.debug('inspection-------> ' +  inspections);
-                               if(inspections != null)
-                               {
-                               for(InspectionAndPossession__c eachinspectionRec : inspections)
-                               {
-                                   System.debug('**inside inspection for 1*');
+                               if(inspections != null){
+                               for(InspectionAndPossession__c eachinspectionRec : inspections){
                                   /* if(InspectionMap.containsKey(eachinspectionRec.Booking__c))
                                    {
                                        List<InspectionAndPossession__c> existingInspection = InspectionMap.get(eachinspectionRec.Booking__c);
@@ -249,113 +183,75 @@ public class CustomerPortalHomeController
                                    }
                                    else
                                    {*/
-                                       System.debug('**inside inspection for else*');
                                        InspectionMap.put(eachinspectionRec.Booking__c,eachinspectionRec);
                                   // }
-                                       system.debug('iInspectionMap values -------> '+ InspectionMap);
                                }
                                }
                                
                                
                                List<RW_Payment_Details__c> receipts = CustomerPortalUtility.getPaymentReceipts(BookingMap.Keyset());
-                               system.debug('receipt for the booking' + receipts);
-                                  if(receipts !=null)
-                               {
-                                   for(RW_Payment_Details__c eachreceiptrec : receipts)
-                                   {
-                                    System.debug('**inside receipt for 1*');
-                                   if(receiptsMap.containsKey(eachreceiptrec.RW_Booking__c))
-                                   {
-                                       List<RW_Payment_Details__c> existingReceipts = receiptsMap.get(eachreceiptrec.RW_Booking__c);
-                                       existingReceipts.add(eachreceiptrec);
-                                       receiptsMap.put(eachreceiptrec.RW_Booking__c,existingReceipts);
-                                       System.debug('**inside receipt Map*' + receiptsMap);
-                                   }
-                                   else
-                                   {
-                                       System.debug('**inside receipt for else*');
-                                       receiptsMap.put(eachreceiptrec.RW_Booking__c,new List<RW_Payment_Details__c>{eachreceiptrec});
-                                   }
-                               }  
+                               if(receipts !=null){
+                                   for(RW_Payment_Details__c eachreceiptrec : receipts){
+                                       if(receiptsMap.containsKey(eachreceiptrec.RW_Booking__c)){
+                                           List<RW_Payment_Details__c> existingReceipts = receiptsMap.get(eachreceiptrec.RW_Booking__c);
+                                           existingReceipts.add(eachreceiptrec);
+                                           receiptsMap.put(eachreceiptrec.RW_Booking__c,existingReceipts);
+                                           System.debug('**inside receipt Map*' + receiptsMap);
+                                       }else{
+                                           receiptsMap.put(eachreceiptrec.RW_Booking__c,new List<RW_Payment_Details__c>{eachreceiptrec});
+                                       }
+                                   }  
                                        
                                }
                               Set<Id> appDetailSet = new Set<Id>();
                               List<Applicant_Details__c> appDetailsRecs = CustomerPortalUtility.getApplicantDetailsRecords(BookingMap.Keyset());
-                              if(appDetailsRecs != null)
-                              {
-                               for(Applicant_Details__c appDetail : appDetailsRecs)
-                               {
+                              if(appDetailsRecs != null){
+                               for(Applicant_Details__c appDetail : appDetailsRecs){
                                    appDetailSet.add(appDetail.Id);
-                                   System.debug('**inside demand for 1*');
-                                   if(ApplicantDetailsMap.containsKey(appDetail.Booking__c))
-                                   {
+                                   if(ApplicantDetailsMap.containsKey(appDetail.Booking__c)){
                                        List<Applicant_Details__c> existingappDetails = ApplicantDetailsMap.get(appDetail.Booking__c);
                                        existingappDetails.add(appDetail);
                                        ApplicantDetailsMap.put(appDetail.Booking__c,existingappDetails);
-                                   }
-                                   else
-                                   {
-                                       System.debug('**inside demand for else*');
+                                   }else{
                                        ApplicantDetailsMap.put(appDetail.Booking__c,new List<Applicant_Details__c>{appDetail});
                                    }
                                }
                               }
                                
                                List<Document_Details__c> docDetailsRecs = CustomerPortalUtility.getApplicantKYCDocumentDetailRecords(appDetailSet);
-                               if(docDetailsRecs != null) 
-                               {
-                               for(Document_Details__c docuDetail : docDetailsRecs)
-                               {
-
-                                   System.debug('**inside doc for 1*');
-                                   if(DocumentDetailsMap.containsKey(docuDetail.RW_Applicant_Details__c))
-                                   {
-                                       List<Document_Details__c> existingdocDetails = DocumentDetailsMap.get(docuDetail.RW_Applicant_Details__c);
-                                       existingdocDetails.add(docuDetail);
-                                       DocumentDetailsMap.put(docuDetail.RW_Applicant_Details__c,existingdocDetails);
+                               if(docDetailsRecs != null) {
+                                   for(Document_Details__c docuDetail : docDetailsRecs){
+                                       
+                                       if(DocumentDetailsMap.containsKey(docuDetail.RW_Applicant_Details__c)){
+                                           List<Document_Details__c> existingdocDetails = DocumentDetailsMap.get(docuDetail.RW_Applicant_Details__c);
+                                           existingdocDetails.add(docuDetail);
+                                           DocumentDetailsMap.put(docuDetail.RW_Applicant_Details__c,existingdocDetails);
+                                       }else{
+                                           DocumentDetailsMap.put(docuDetail.RW_Applicant_Details__c,new List<Document_Details__c>{docuDetail});
+                                       }
                                    }
-                                   else
-                                   {
-                                       System.debug('**inside demand for else*');
-                                       DocumentDetailsMap.put(docuDetail.RW_Applicant_Details__c,new List<Document_Details__c>{docuDetail});
-                                   }
-                               }
                                }
                                
                                 List<Loan__c> loanDetailsRecs = CustomerPortalUtility.getloanDetailRecords(BookingMap.Keyset());
-                                if(loanDetailsRecs !=null)
-                                {
-                               for(Loan__c loanDetail : loanDetailsRecs)
-                               {
-                                   System.debug('**inside loan for 1*');
-                                   if(loanDetailsMap.containsKey(loanDetail.RW_Booking__c))
-                                   {
+                                if(loanDetailsRecs !=null){
+                               for(Loan__c loanDetail : loanDetailsRecs){
+                                   if(loanDetailsMap.containsKey(loanDetail.RW_Booking__c)){
                                        List<Loan__c> existingloanDetails = loanDetailsMap.get(loanDetail.RW_Booking__c);
                                        existingloanDetails.add(loanDetail);
                                        loanDetailsMap.put(loanDetail.RW_Booking__c,existingloanDetails);
-                                   }
-                                   else
-                                   {
-                                       System.debug('**inside loan for else*');
+                                   }else{
                                        loanDetailsMap.put(loanDetail.RW_Booking__c,new List<Loan__c>{loanDetail});
                                    }
                                }
                                 }
                                 List<TDS__c> tdsDetailsRecs = CustomerPortalUtility.getTDSDetailRecords(BookingMap.Keyset());
-                              if(tdsDetailsRecs != null)
-                              {
-                               for(TDS__c tdsDetail : tdsDetailsRecs)
-                               {
-                                   System.debug('**inside loan for 1*');
-                                   if(tdsDetailsMap.containsKey(tdsDetail.Booking__c))
-                                   {
+                              if(tdsDetailsRecs != null){
+                               for(TDS__c tdsDetail : tdsDetailsRecs){
+                                   if(tdsDetailsMap.containsKey(tdsDetail.Booking__c)) {
                                        List<TDS__c> existingtdsDetails = tdsDetailsMap.get(tdsDetail.Booking__c);
                                        existingtdsDetails.add(tdsDetail);
                                        tdsDetailsMap.put(tdsDetail.Booking__c,existingtdsDetails);
-                                   }
-                                   else
-                                   {
-                                       System.debug('**inside loan for else*');
+                                   }else{
                                        tdsDetailsMap.put(tdsDetail.Booking__c,new List<TDS__c>{tdsDetail});
                                    }
                                }
@@ -363,34 +259,24 @@ public class CustomerPortalHomeController
                                
                                
                                 Map<String,Name_Confirmation_Form__c> ncfDetailsRecs = CustomerPortalUtility.getNCFRecordDetails(BookingMap.Keyset());
-                              if(ncfDetailsRecs != null)
-                              {
-                               for(String ncfDetail : ncfDetailsRecs.keyset())
-                               {
+                              if(ncfDetailsRecs != null){
+                               for(String ncfDetail : ncfDetailsRecs.keyset()){
                                    ncfDetailsMap.put(ncfDetail,ncfDetailsRecs.get(ncfDetail));
-                                   System.debug('**inside loan for 1*');
                                }
                               
                               }
                                
                                List<RW_Tower_Construction_Update__c> constructiondetails = CustomerPortalUtility.getconstructionDetailRecords(towerIds);
-                               system.debug('constructiondetails*'+constructiondetails);
-                               if(constructiondetails != null && constructiondetails.size() >0)
-                               {
-                                   for(RW_Tower_Construction_Update__c constructionupdates : constructiondetails)
-                                   {
-                                       if(constDetailsMap.containsKey(constructionupdates.RW_Tower__c))
-                                   {
-                                       List<RW_Tower_Construction_Update__c> existingconstDetails = constDetailsMap.get(constructionupdates.RW_Tower__c);
-                                       existingconstDetails.add(constructionupdates);
-                                       constDetailsMap.put(constructionupdates.RW_Tower__c,existingconstDetails);
-                                   }
-                                   else
-                                   {
-                                       System.debug('**inside loan for else*');
-                                       constDetailsMap.put(constructionupdates.RW_Tower__c,new List<RW_Tower_Construction_Update__c>{constructionupdates});
-                                   }
-
+                               if(constructiondetails != null && constructiondetails.size() >0){
+                                   for(RW_Tower_Construction_Update__c constructionupdates : constructiondetails){
+                                       if(constDetailsMap.containsKey(constructionupdates.RW_Tower__c)){
+                                           List<RW_Tower_Construction_Update__c> existingconstDetails = constDetailsMap.get(constructionupdates.RW_Tower__c);
+                                           existingconstDetails.add(constructionupdates);
+                                           constDetailsMap.put(constructionupdates.RW_Tower__c,existingconstDetails);
+                                       }else{
+                                           constDetailsMap.put(constructionupdates.RW_Tower__c,new List<RW_Tower_Construction_Update__c>{constructionupdates});
+                                       }
+                                       
                                    }
                                }
                                
@@ -402,8 +288,7 @@ public class CustomerPortalHomeController
                 }
             }
             
-            for(Id bookingId :BookingMap.keyset())
-            {
+            for(Id bookingId :BookingMap.keyset()){
                 HomeRunwalWrapper homeRunwalWrapper = new HomeRunwalWrapper();
                 homeRunwalWrapper.BookingId = BookingMap.get(bookingId).Id;
                 homeRunwalWrapper.currentUserId = UserInfo.getUserId();
@@ -436,7 +321,10 @@ public class CustomerPortalHomeController
                 homeRunwalWrapper.TotalDiscount = string.valueof(BookingMap.get(bookingId).RW_Total_Receipt_Discount_Recieved__c);
                 if(BookingMap.get(bookingId).RW_Total_Demand_Outstanding__c != null)
               //  homeRunwalWrapper.TotalDemandOutstanding = string.valueof(BookingMap.get(bookingId).RW_Total_Demand_Outstanding__c);
-                homeRunwalWrapper.TotalDemandOutstanding=BookingMap.get(bookingId).RW_Total_Demand_Raised__c - BookingMap.get(bookingId).RW_Total_Receipt_Amount_Received__c - BookingMap.get(bookingId).RW_Total_Receipt_Discount_Recieved__c ;
+                //homeRunwalWrapper.TotalDemandOutstanding=BookingMap.get(bookingId).RW_Total_Demand_Raised__c - BookingMap.get(bookingId).RW_Total_Receipt_Amount_Received__c - BookingMap.get(bookingId).RW_Total_Receipt_Discount_Recieved__c ;
+
+                homeRunwalWrapper.TotalDemandOutstanding = BookingMap.get(bookingId).RW_Total_Demand_Raised__c != null ? BookingMap.get(bookingId).RW_Total_Demand_Raised__c : 0 - BookingMap.get(bookingId).RW_Total_Receipt_Amount_Received__c != null ? BookingMap.get(bookingId).RW_Total_Receipt_Amount_Received__c : 0 - BookingMap.get(bookingId).RW_Total_Receipt_Discount_Recieved__c != null ? BookingMap.get(bookingId).RW_Total_Receipt_Discount_Recieved__c : 0;
+
                 homeRunwalWrapper.NextDemandDate = BookingMap.get(bookingId).RW_Next_Demand_Date__c;
                 homeRunwalWrapper.ExpectedSDRDate = BookingMap.get(bookingId).RW_Expected_SDR_Date__c;
                 if(BookingMap.get(bookingId).RW_Registration_Date__c !=null)
@@ -451,10 +339,6 @@ public class CustomerPortalHomeController
                 if(InspectionMap.get(bookingId).RW_Expected_Possession_dt__c !=null)
                 homeRunwalWrapper.expectedPossesionDate = date.newinstance(InspectionMap.get(bookingId).RW_Expected_Possession_dt__c.year(), InspectionMap.get(bookingId).RW_Expected_Possession_dt__c.month(), InspectionMap.get(bookingId).RW_Expected_Possession_dt__c.day()).format();
                 }     
-                
-                system.debug('Total Demand Raised & Total Demand Paid & SDR Status'+ homeRunwalWrapper.TotalDemandRaised + homeRunwalWrapper.TotalDemandPaid + homeRunwalWrapper.SDRStatus);
-                system.debug('Expected SDR Date & Expected Registration Date'+ homeRunwalWrapper.ExpectedSDRDate + homeRunwalWrapper.ExpectedRegistrationDate);
-                system.debug('Next Demand date & SDR Status & inspection status & possesion date'+ homeRunwalWrapper.NextDemandDate + homeRunwalWrapper.SDRStatus + homeRunwalWrapper.inspectionStatus + homeRunwalWrapper.expectedPossesionDate);
                 
                 
                 homeRunwalWrapper.OverallTDSPaid = String.valueOf(BookingMap.get(bookingId).Total_TDS_Amount_Paid_In_Rs__c);
@@ -472,18 +356,13 @@ public class CustomerPortalHomeController
                     homeRunwalWrapper.Flag=true;
                   String TotalPrincipalPayable=getPrincipalPayableAmount(homeRunwalWrapper.TotalPrincipalDemand,homeRunwalWrapper.TotalGST,homeRunwalWrapper.TotalDemandRaised,homeRunwalWrapper.TotalDemandOutstanding,homeRunwalWrapper.TotalTDSDue);
                 homeRunwalWrapper.TotalAmountPaid = String.valueof(TotalPrincipalPayable);
-                    System.debug('TotalPrincipalPayable'+TotalPrincipalPayable);
-                    System.debug('homeRunwalWrapper.TotalAmountPaid'+homeRunwalWrapper.TotalAmountPaid);
                 //---------------------------------------
                                //homeRunwalWrapper.dependentPicklistMap = new Map<string,PicklistWrapper>();
                 // changes made by Srinivas on 15/07/21
                 String TotalGstPayable=getGstPayableAmount(homeRunwalWrapper.TotalGST,homeRunwalWrapper.TotalDemandRaised,homeRunwalWrapper.TotalDemandOutstanding,homeRunwalWrapper.TotalTDSDue);
                 homeRunwalWrapper.TotalGSTPaid =  String.valueOf(Decimal.valueOf(TotalGstPayable).setScale(0));
                  if(BookingMap.get(bookingId).Project__r.Seperate_payment__c==true){
-                    
                     homeRunwalWrapper.SeperatePay=true;
-                     
-                        
                     String ProjectSpecificTotalAmount=getCheckProjectTotalAmount(homeRunwalWrapper.TotalDemandOutstanding,homeRunwalWrapper.TotalTDSDue);
                     if(ProjectSpecificTotalAmount!=null)
                         homeRunwalWrapper.ProjectSpecificAmount=ProjectSpecificTotalAmount;
@@ -502,8 +381,7 @@ public class CustomerPortalHomeController
                 //ends 
                 homeRunwalWrapper.dependentPicklistMap = new Map<string,homeRunwalWrapper.PicklistWrapper>();
                 homeRunwalWrapper.PicklistWrapper pickWrap = new homeRunwalWrapper.PicklistWrapper();
-                for(String key : DependentPickListMap.keySet())
-                {
+                for(String key : DependentPickListMap.keySet()){
                     pickWrap.pickListMap = DependentPickListMap.get(key).pickListMap;
                     pickWrap.childFieldLabel = DependentPickListMap.get(key).childFieldLabel;
                     pickWrap.parentFieldLabel = DependentPickListMap.get(key).parentFieldLabel;
@@ -515,15 +393,12 @@ public class CustomerPortalHomeController
                 homeRunwalWrapper.PicklistWrapper complaintpickWrap = new homeRunwalWrapper.PicklistWrapper();
                 
                 
-                for(String key : ComplaintDependentPickListMap.keySet())
-                {
-                    system.debug('ComplaintDependentPickListMap.keySet()*'+ComplaintDependentPickListMap.keySet());
+                for(String key : ComplaintDependentPickListMap.keySet()){
                     
                     complaintpickWrap.pickListMap = ComplaintDependentPickListMap.get(key).pickListMap;
                     complaintpickWrap.childFieldLabel = ComplaintDependentPickListMap.get(key).childFieldLabel;
                     complaintpickWrap.parentFieldLabel = ComplaintDependentPickListMap.get(key).parentFieldLabel;
                     homeRunwalWrapper.complaintdependentPicklistMap.put(key,complaintpickWrap);
-                    system.debug('ComplaintDependentPickListMap.keySet() done*'+ComplaintDependentPickListMap.keySet());
                     
                 }
                 
@@ -531,32 +406,22 @@ public class CustomerPortalHomeController
                 homeRunwalWrapper.PicklistWrapper caseTypepickWrap = new homeRunwalWrapper.PicklistWrapper();
                 
                 
-                for(String key : CaseTypeDependentPickListMap.keySet())
-                {
-                    system.debug('ComplaintDependentPickListMap.keySet()*'+CaseTypeDependentPickListMap.keySet());
-                    
+                for(String key : CaseTypeDependentPickListMap.keySet()){
                     caseTypepickWrap.pickListMap = CaseTypeDependentPickListMap.get(key).pickListMap;
                     caseTypepickWrap.childFieldLabel = CaseTypeDependentPickListMap.get(key).childFieldLabel;
                     caseTypepickWrap.parentFieldLabel = CaseTypeDependentPickListMap.get(key).parentFieldLabel;
                     homeRunwalWrapper.caseTypedependentPicklistMap.put(key,caseTypepickWrap);
-                    system.debug('ComplaintDependentPickListMap.keySet() done*'+CaseTypeDependentPickListMap.keySet());
-                    
                 }
                 
                 //Added by Vinay 28-03-2025 Start
                 homeRunwalWrapper.custLifedependentPicklistMap = new Map<string,homeRunwalWrapper.PicklistWrapper>();
                 homeRunwalWrapper.PicklistWrapper custLifepickWrap = new homeRunwalWrapper.PicklistWrapper();
                 
-                for(String key : CustLifeDependentPickListMap.keySet())
-                {
-                    system.debug('CustLifeDependentPickListMap.keySet()*'+CustLifeDependentPickListMap.keySet());
-                    
+                for(String key : CustLifeDependentPickListMap.keySet()){
                     custLifepickWrap.pickListMap = CustLifeDependentPickListMap.get(key).pickListMap;
                     custLifepickWrap.childFieldLabel = CustLifeDependentPickListMap.get(key).childFieldLabel;
                     custLifepickWrap.parentFieldLabel = CustLifeDependentPickListMap.get(key).parentFieldLabel;
                     homeRunwalWrapper.custLifedependentPicklistMap.put(key,custLifepickWrap);
-                    system.debug('CustLifeDependentPickListMap.keySet() done*'+CustLifeDependentPickListMap.keySet());
-                    
                 }
                 //Added by Vinay 28-03-2025 End
                 
@@ -583,7 +448,6 @@ public class CustomerPortalHomeController
                 homeRunwalWrapper.TowerId = BookingMap.get(bookingId).Unit_No__r.TowerName__c;
                 homeRunwalWrapper.TowerName=BookingMap.get(bookingId).Unit_No__r.TowerName__r.Name;
                 }
-                system.debug('*RM*'+BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__c+'RM Name'+BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__r.RM_Name__c);
                 if(BookingMap.get(bookingId).Unit_No__c != null && BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__c !=null && BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__r.RM_Name__c != null)
                 homeRunwalWrapper.RMName =BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__r.RM_Name__c;
                 if(BookingMap.get(bookingId).Unit_No__c != null && BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__c !=null && BookingMap.get(bookingId).Unit_No__r.Relationship_Manager__r.Contact_Number__c != null)
@@ -598,12 +462,12 @@ public class CustomerPortalHomeController
                 homeRunwalWrapper.unitNo=BookingMap.get(bookingId).Unit_No__c;
                 if(BookingMap.get(bookingId).Customer__c != null && BookingMap.get(bookingId).Customer__r.RW_Agreement_Value__c !=null)
                 homeRunwalWrapper.agreementValue=String.valueOf(BookingMap.get(bookingId).Customer__r.RW_Agreement_Value__c);
-                System.debug('*Quot*'+BookingMap.get(bookingId).Quotation__c+'**'+BookingMap.get(bookingId).Quotation__r.Total_No_of_Parking__c);
                 if(BookingMap.get(bookingId).Quotation__c != null && BookingMap.get(bookingId).Quotation__r.Total_No_of_Parking__c !=null){
                     homeRunwalWrapper.numberofCarParking=String.valueOf(BookingMap.get(bookingId).Quotation__r.Total_No_of_Parking__c);
                 }else if(BookingMap.get(bookingId).Quotation__c == null && BookingMap.get(bookingId).No_of_Parking__c != null){ // Added by Vinay 18-07-2025
                     homeRunwalWrapper.numberofCarParking=String.valueOf(BookingMap.get(bookingId).No_of_Parking__c);
                 }
+                
                 
                 if(BookingMap.get(bookingId).Floor__c !=null)
                 homeRunwalWrapper.Floor=String.valueOf(BookingMap.get(bookingId).Floor__c);
@@ -617,8 +481,7 @@ public class CustomerPortalHomeController
                 //System.debug('--Carpet Area--: ' + BookingMap.get(bookingId).Unit_No__r.Total_RERA_Carpet_Area__c);
                 if(BookingMap.get(bookingId).Unit_No__r.Total_RERA_Carpet_Area__c != null)
                     homeRunwalWrapper.CarpetArea=String.valueOf(BookingMap.get(bookingId).Unit_No__r.Total_RERA_Carpet_Area__c);
-                if(BookingMap.get(bookingId).Customer__c != null && eoiMap.containsKey(BookingMap.get(bookingId).Customer__c))
-                {
+                if(BookingMap.get(bookingId).Customer__c != null && eoiMap.containsKey(BookingMap.get(bookingId).Customer__c)){
                  homeRunwalWrapper.encryptedeoiRecordId =CustomerPortalUtility.getEncryptedData(eoiMap.get(BookingMap.get(bookingId).Customer__c).Id);
                 homeRunwalWrapper.eoiId = eoiMap.get(BookingMap.get(bookingId).Customer__c).Id;  
                 }
@@ -626,7 +489,6 @@ public class CustomerPortalHomeController
                 
                 homeRunwalWrapper.domainURL = CustomerPortalUtility.getDomainURL();
                 homeRunwalWrapper.documentdomainURL = CustomerPortalUtility.getDomainURL().substringBefore('.') + '--c.documentforce.com';
-                SYstem.debug('*total interest*'+BookingMap.get(bookingId).RW_Total_Interest__c);
                 if(BookingMap.get(bookingId).RW_Total_Interest__c != null)
                 homeRunwalWrapper.totalInterest = String.valueOf(BookingMap.get(bookingId).RW_Total_Interest__c);
                 if(BookingMap.get(bookingId).RW_Total_Interest_Amount_Waived__c != null)
@@ -640,41 +502,22 @@ public class CustomerPortalHomeController
                 if(BookingMap.get(bookingId).RW_Total_TDS_Due__c != null)
                 homeRunwalWrapper.OverallTDSPayable = String.valueOf(BookingMap.get(bookingId).RW_Total_TDS_Due__c);
                 
-                System.debug('*email*'+BookingMap.get(bookingId).Primary_Applicant_Email__c+'**'+BookingMap.get(bookingId));
-                if(BookingMap.get(bookingId).Primary_Applicant_Email__c != null)
-                {
-                    System.debug('inside email if');
+                if(BookingMap.get(bookingId).Primary_Applicant_Email__c != null){
                 homeRunwalWrapper.PrimaryApplicantEmail = String.valueOf(BookingMap.get(bookingId).Primary_Applicant_Email__c);
-                    System.debug('inside email if'+homeRunwalWrap.PrimaryApplicantEmail);
                 }
                 
-                if(constDetailsMap.containskey(BookingMap.get(bookingId).Unit_No__r.TowerName__c))
-                {
-                    SYstem.debug('inside cons if*****');
-                    for(RW_Tower_Construction_Update__c contructionupdate : constDetailsMap.get(BookingMap.get(bookingId).Unit_No__r.TowerName__c))
-                    {
+                if(constDetailsMap.containskey(BookingMap.get(bookingId).Unit_No__r.TowerName__c)){
+                    for(RW_Tower_Construction_Update__c contructionupdate : constDetailsMap.get(BookingMap.get(bookingId).Unit_No__r.TowerName__c)){
                     
-                    
-                    
-                    
-                    
-                    if(homeRunwalWrapper.towerConstructionDetails.containskey(contructionupdate.RW_Date_Month__c+','+contructionupdate.RW_Date_Year__c))
-                    {
-                        SYstem.debug('inside cons if1*****');
+                    if(homeRunwalWrapper.towerConstructionDetails.containskey(contructionupdate.RW_Date_Month__c+','+contructionupdate.RW_Date_Year__c)){
                         Map<String,String> existingphotodetailsMap = homeRunwalWrapper.towerConstructionDetails.get(contructionupdate.RW_Date_Month__c+','+contructionupdate.RW_Date_Year__c);
                         existingphotodetailsMap.put(contructionupdate.RW_Tower_Construction_Photo_ID__c, contructionupdate.RW_Description__c);
                         homeRunwalWrapper.towerConstructionDetails.put(contructionupdate.RW_Date_Month__c+','+contructionupdate.RW_Date_Year__c,existingphotodetailsMap);
-                        SYstem.debug('inside cons if1 end*****'+homeRunwalWrapper.towerConstructionDetails);
-                    }
-                    else
-                    {
-                        if(homeRunwalWrapper.towerConstructionDetails.size() <= 20)
-                        {
-                        SYstem.debug('inside cons else if1*****');
+                    }else{
+                        if(homeRunwalWrapper.towerConstructionDetails.size() <= 20){
                         Map<String,String> photodetailsMap = new Map<String,String>();
                         photodetailsMap.put(contructionupdate.RW_Tower_Construction_Photo_ID__c, contructionupdate.RW_Description__c);
                         homeRunwalWrapper.towerConstructionDetails.put(contructionupdate.RW_Date_Month__c+','+contructionupdate.RW_Date_Year__c,photodetailsMap);
-                        SYstem.debug('inside cons else if1 end*****'+homeRunwalWrapper.towerConstructionDetails);
                         }
                     }   
                     
@@ -694,7 +537,6 @@ public class CustomerPortalHomeController
                     //homeRunwalWrapper.towerConstructionDetails = constDetailsMap.get(BookingMap.get(bookingId).Unit_No__r.TowerName__c);
                 }
                 
-                SYstem.debug('inside out*****'+homeRunwalWrapper.towerConstructionDetails);
                /* 
                 Set<Id> appDetailIds = new Set<Id>();
                 List<Applicant_Details__c> appDetailsRecords = CustomerPortalUtility.getApplicantDetails(bookingId);
@@ -811,11 +653,8 @@ public class CustomerPortalHomeController
                 
                 
                 
-                if(loanDetailsMap.containsKey(bookingId))
-                {
-                    for(Loan__c loanRecs : loanDetailsMap.get(bookingId))
-                    {
-                        System.debug('inside loan forloop');
+                if(loanDetailsMap.containsKey(bookingId)){
+                    for(Loan__c loanRecs : loanDetailsMap.get(bookingId)){
                         homeRunwalWrapper.loanWrapper loanWrap = new homeRunwalWrapper.loanWrapper();
                         loanWrap.loanId =loanRecs.Id;
                         loanWrap.loanstatus = loanRecs.RW_Loan_Record_Status__c;
@@ -829,11 +668,8 @@ public class CustomerPortalHomeController
                     }
                 }
                 
-                if(tdsDetailsMap.containsKey(bookingId))
-                {
-                    for(TDS__c tdsRecs : tdsDetailsMap.get(bookingId))
-                    {
-                        System.debug('inside loan forloop');
+                if(tdsDetailsMap.containsKey(bookingId)){
+                    for(TDS__c tdsRecs : tdsDetailsMap.get(bookingId)){
                         homeRunwalWrapper.tdsWrapper tdsWrap = new homeRunwalWrapper.tdsWrapper();
                         tdsWrap.tdsId =tdsRecs.Id;
                         tdsWrap.tdscertificateNumber = tdsRecs.RW_TDS_Certificate_Number__c;
@@ -843,13 +679,10 @@ public class CustomerPortalHomeController
                 }
                 
                 
-                if(ApplicantDetailsMap.containsKey(bookingId))
-                {
-                   for(Applicant_Details__c appDetails : ApplicantDetailsMap.get(bookingId))
-                    {
+                if(ApplicantDetailsMap.containsKey(bookingId)){
+                   for(Applicant_Details__c appDetails : ApplicantDetailsMap.get(bookingId)){
                         String addressVal = '';
                     homeRunwalWrapper.appDetailsWrapper appdetwrap = new homeRunwalWrapper.appDetailsWrapper();
-                    SYstem.debug('inside appdet*');
                     if(appDetails.Id != null)
                     appdetwrap.applicantId = appDetails.Id;
                     if(appDetails.First_Name__c != null)
@@ -912,33 +745,22 @@ public class CustomerPortalHomeController
                      appdetwrap.unitNumber =appDetails.Booking__r.Unit_No__r.RW_Param4__c;
                      if(appDetails.Booking__r.RW_Registration_Status__c != null)   
                      appdetwrap.registrationStatus =appDetails.Booking__r.RW_Registration_Status__c;
-                     SYstem.debug('inside appdet end*'+appDetails+'*'+appdetwrap.dateOfBirth);
-                    if(appDetails.Permanent_Address_Line_1__c != null && !String.isEmpty(appDetails.Permanent_Address_Line_1__c))
-                    {
+                    if(appDetails.Permanent_Address_Line_1__c != null && !String.isEmpty(appDetails.Permanent_Address_Line_1__c)){
                         addressVal = appDetails.Permanent_Address_Line_1__c;
                     }
-                    if(appDetails.Permanent_Address_Line_2__c != null && !String.isEmpty(appDetails.Permanent_Address_Line_2__c))
-                    {
+                    if(appDetails.Permanent_Address_Line_2__c != null && !String.isEmpty(appDetails.Permanent_Address_Line_2__c)){
                         addressVal = addressVal + appDetails.Permanent_Address_Line_2__c;
                     }
                     
-                    if(appDetails.Permanent_Address_Line_3__c != null && !String.isEmpty(appDetails.Permanent_Address_Line_3__c))
-                    {
+                    if(appDetails.Permanent_Address_Line_3__c != null && !String.isEmpty(appDetails.Permanent_Address_Line_3__c)){
                         addressVal = addressVal + appDetails.Permanent_Address_Line_3__c;
                     }
                     
                     appdetwrap.address=addressVal;
-                        system.debug('applicant Id**'+appDetails.Id);
-                        system.debug('doc Map**'+DocumentDetailsMap);
-                     if(DocumentDetailsMap.containsKey(appDetails.Id))
-                    {
-                        System.debug('inside contains applicantDocumentMap*'+DocumentDetailsMap);
-                        for(Document_Details__c documentdetailRec : DocumentDetailsMap.get(appDetails.Id))
-                        {
-                            System.debug('inside contains true*'+documentdetailRec.Applicant_Number__c+'**'+appdetwrap.applicantType);
+                     if(DocumentDetailsMap.containsKey(appDetails.Id)){
+                        for(Document_Details__c documentdetailRec : DocumentDetailsMap.get(appDetails.Id)){
                             //if(documentdetailRec.Applicant_Number__c == appdetwrap.appNumber)
                             //{
-                                System.debug('inside files*'+documentdetailRec.RW_Document_Type__c+'**'+documentdetailRec.RW_Document_ID__c);
                                 if(documentdetailRec.RW_Document_Type__c == 'PAN Card' && documentdetailRec.RW_Document_ID__c != null)
                                  appdetwrap.panCardDocumentId =  documentdetailRec.RW_Document_ID__c;
                                 else if(documentdetailRec.RW_Document_Type__c == 'Aadhar Card' && documentdetailRec.RW_Document_ID__c != null)
@@ -960,35 +782,20 @@ public class CustomerPortalHomeController
                     }
                     
                     homeRunwalWrapper.appDetailsWrapperList.add(appdetwrap);   
-                        
-                        
                     } 
                 }
                 
                 
                 
-                if(ncfDetailsMap.containsKey(bookingId))
-                {
-                    system.debug('inside ncfDetailsMap* ');
+                if(ncfDetailsMap.containsKey(bookingId)){
                     homeRunwalWrapper.ncfdata = ncfDetailsMap.get(bookingId);
-                }
-                
-                else
-                {
-                    system.debug('inside else ncfDetailsMap* ');
+                }else{
                     Name_Confirmation_Form__c newNCF = new Name_Confirmation_Form__c();
-                    system.debug('*appdet*'+ApplicantDetailsMap);
-                    system.debug('**'+bookingId);
-                    if(ApplicantDetailsMap.containsKey(bookingId))
-                    {
-                    for(Applicant_Details__c appDetails : ApplicantDetailsMap.get(bookingId))
-                    {
-                         system.debug('*booking for*'+bookingId);
-                        if(appDetails.Applicant_Number__c == 'Primary Applicant')
-                        {
+                    if(ApplicantDetailsMap.containsKey(bookingId)){
+                    for(Applicant_Details__c appDetails : ApplicantDetailsMap.get(bookingId)){
+                        if(appDetails.Applicant_Number__c == 'Primary Applicant'){
                         String addressVal = '';
                     
-                    SYstem.debug('inside appdet*');
                     if(appDetails.First_Name__c != null)
                     newNCF.RW_Primary_First_Name__c = appDetails.First_Name__c;
                     if(appDetails.Middle_Name__c != null)
@@ -1045,18 +852,13 @@ public class CustomerPortalHomeController
                        
                             newNCF.RW_Allow_Customer_to_Update__c=true;
                             homeRunwalWrapper.ncfdata = newNCF;
-                            system.debug('*booking for end*'+bookingId);
                         }
                 }
                 }
                 }
-                if(DemandMap.containsKey(bookingId))
-                {
-                    System.debug('**inside demand if*');
-                    for(RW_Demand__c demandrec : DemandMap.get(bookingId))
-                    {
+                if(DemandMap.containsKey(bookingId)){
+                    for(RW_Demand__c demandrec : DemandMap.get(bookingId)){
                        
-                        System.debug('**inside demand for*');
                         homeRunwalWrapper.DemandWrapper demandwrap = new homeRunwalWrapper.DemandWrapper();
                         
                         demandwrap.demandId = demandrec.id;
@@ -1067,19 +869,15 @@ public class CustomerPortalHomeController
                         demandwrap.CustomerNumber = demandrec.RW_Customer_Number__c;
                         if(demandrec.RW_Demand_Amount__c !=null)
                         demandwrap.DemandAmount = String.valueOf(demandrec.RW_Demand_Amount__c);
-                        if(demandrec.Demand_Date__c !=null)
-                        {
+                        if(demandrec.Demand_Date__c !=null){
                         Date myDate = date.newinstance(demandrec.Demand_Date__c.year(), demandrec.Demand_Date__c.month(), demandrec.Demand_Date__c.day()); 
                         demandwrap.DemandDate = myDate.format();  
                         Date checkdate = Date.newInstance(2018, 8, 1);
-                        if(myDate < checkdate)
-                        {
+                        if(myDate < checkdate){
                           demandwrap.disableDemandDownload =true;  
+                        }else{
+                            demandwrap.disableDemandDownload =false; 
                         }
-                            else
-                            {
-                                demandwrap.disableDemandDownload =false; 
-                            }
                         }                       
                         demandwrap.demandStatus = demandrec.RW_Demand_Status__c;
                         demandwrap.ODNNumber = demandrec.RW_ODN_Number__c;
@@ -1094,14 +892,11 @@ public class CustomerPortalHomeController
                         if(demandrec.RW_Total_Demand_Amount__c !=null)
                         demandwrap.TotalDemandAmountCL = String.valueOf(demandrec.RW_Total_Demand_Amount__c);
                         
-                        system.debug('demands in wrapper --> '+ demandwrap);
                        
                         demandwrap.demandItems  = new List<RW_Demand_Item__c>();
                         homeRunwalWrapper.demandWrapperList.add(demandwrap); 
-                        System.debug('**inside demand for end*');
                         
-                        for(RW_Demand_Item__c demandDetails: demandrec.Demand_Items__r)
-                        {
+                        for(RW_Demand_Item__c demandDetails: demandrec.Demand_Items__r){
                            demandwrap.demandItems.add(demandDetails);   
                           
                         }
@@ -1110,11 +905,8 @@ public class CustomerPortalHomeController
                 }
                 
                 
-                if(receiptsMap.containsKey(bookingId))
-                {
-                    for(RW_Payment_Details__c receiptRecs : receiptsMap.get(bookingId))
-                    {
-                        System.debug('inside forloop of receipt');
+                if(receiptsMap.containsKey(bookingId)){
+                    for(RW_Payment_Details__c receiptRecs : receiptsMap.get(bookingId)){
                         homeRunwalWrapper.receiptWrapper receiptWrap = new homeRunwalWrapper.receiptWrapper();
                        
                         receiptWrap.ReceiptId = receiptRecs.Id;
@@ -1126,16 +918,12 @@ public class CustomerPortalHomeController
                         receiptWrap.CustomerId = receiptRecs.RW_Customer_ID__c;
                         if(receiptRecs.Total_Amount_Paid__c !=null)
                         receiptWrap.ReceiptAmount = string.valueOf(receiptRecs.Total_Amount_Paid__c);
-                        if(receiptRecs.RW_Payment_Date__c !=null)
-                        {
+                        if(receiptRecs.RW_Payment_Date__c !=null){
                         receiptWrap.ReceiptDate = receiptRecs.RW_Payment_Date__c.format();
                         Date checkdate = Date.newInstance(2018, 8, 1);
-                        if(receiptRecs.RW_Payment_Date__c < checkdate)
-                        {
+                        if(receiptRecs.RW_Payment_Date__c < checkdate){
                           receiptWrap.disableReceiptDownload =true;  
-                        }
-                            else
-                            {
+                        }else{
                                 receiptWrap.disableReceiptDownload =false; 
                             }
                         } 
@@ -1146,8 +934,6 @@ public class CustomerPortalHomeController
                         receiptWrap.DocumentType = receiptRecs.RW_Document_Type__c;
                         
                         homeRunwalWrapper.receiptWrapperList.add(receiptWrap);
-                        
-                        system.debug('Wrapper Receipt List' + homeRunwalWrapper.receiptWrapperList);
                     }
                 }
                 
@@ -1169,12 +955,7 @@ public class CustomerPortalHomeController
                         system.debug('Wrapper inspection List' + homeRunwalWrapper.receiptWrapperList);
                     }
                 }*/
-                
-                
-                
                   
-                SYstem.debug('WrapperData1'+homeRunwalWrapper);
-                SYstem.debug('Current user'+homeRunwalWrapper.currentUserId);
                 homeRunwalWrapList.add(homeRunwalWrapper);
             }
             
@@ -1184,13 +965,9 @@ public class CustomerPortalHomeController
                 homeRunwalWrap.Bookings.addAll(bookingRecords);
             }
             return homeRunwalWrap;*/
-            SYstem.debug('WrapperData'+homeRunwalWrapList);
             return homeRunwalWrapList;
             
-        }
-        
-        catch(Exception e)
-        {
+        }catch(Exception e){
             //-----------------changes made by CoServe-------------
             //throw new AurahandledException('An Error Occured. Please contact Administartor.');
             throw new AurahandledException(e.getMessage()); 
@@ -1199,8 +976,7 @@ public class CustomerPortalHomeController
     }
     
     @AuraEnabled
-    public static void insertDocumentData(Map<String,String> DocDetails)
-    {
+    public static void insertDocumentData(Map<String,String> DocDetails){
         Document_Details__c Details = new Document_Details__c();
         if(!'--- None ---'.equals(DocDetails.get('applicantType')))
         Details.RW_Type_Of_Applicant__c = DocDetails.get('applicantType');
@@ -1217,8 +993,7 @@ public class CustomerPortalHomeController
         Details.RW_Document_Status__c = 'Active';
         insert Details;
         
-         if(DocDetails.get('uploadType') == 'KYC')
-        {
+        if(DocDetails.get('uploadType') == 'KYC'){
             
             ContentDocumentLink cdl = new ContentDocumentLink();
             cdl.ContentDocumentId = DocDetails.get('documentId');
@@ -1227,18 +1002,15 @@ public class CustomerPortalHomeController
             cdl.Visibility = 'AllUsers';
             insert cdl;
             
-             List<String> toAddress = new List<String>();
+            List<String> toAddress = new List<String>();
             List<Booking__c> bookingRec =[Select id,Name, Unit_No__r.Relationship_Manager__r.RM_Email__c from Booking__c where id =:DocDetails.get('bookingId')];
-        if(bookingRec != null && bookingRec.size() >0 && bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c != null)
-        {
-            toAddress.add(bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c);
-        }
+            if(bookingRec != null && bookingRec.size() >0 && bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c != null){
+                toAddress.add(bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c);
+            }
         
-        if(toAddress.size() >0)
-        {
+        if(toAddress.size() >0){
             EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='KYC_Notification_Template'];
             String htmlBody = template.HtmlValue; 
-            system.debug('');
             htmlBody = htmlBody.replace('{!bookingNumber}', bookingRec[0].Name);
             if(DocDetails.get('ApplicantNumber') != null)
             htmlBody=htmlBody.replace('{!applicantNumber}', DocDetails.get('ApplicantNumber'));
@@ -1265,57 +1037,42 @@ public class CustomerPortalHomeController
         }
     }
     
-            @AuraEnabled    
-    public static void insertDocumentLoanData(Map<String,String> DocDetails)    
-    {   
-            
-        system.debug('LOan data ----->'+DocDetails);    
+    @AuraEnabled    
+    public static void insertDocumentLoanData(Map<String,String> DocDetails){   
         Document_Details__c DetailsLoan = new Document_Details__c();    
-        system.debug('LOan data1 ----->'+DetailsLoan+'**'+DocDetails.get('oppRecId'));  
         DetailsLoan.Opportunity__c = DocDetails.get('oppRecId');    
-        system.debug('LOan data2 ----->'+DetailsLoan);  
         DetailsLoan.RW_Document_Type__c=DocDetails.get('documentType'); 
-        system.debug('LOan data3 ----->'+DetailsLoan);  
         DetailsLoan.RW_Document_ID__c = DocDetails.get('documentId');   
-        system.debug('LOan data4 ----->'+DetailsLoan);  
         DetailsLoan.Booking__c = DocDetails.get('bookingId');   
-        system.debug('LOan data5 ----->'+DetailsLoan);  
         DetailsLoan.RW_Loan_Name__c = 'For Home Loan';  
-        system.debug('LOan data --before insert--->' + DetailsLoan);    
         insert DetailsLoan; 
-        system.debug('LOan data --after insert--->' + DetailsLoan); 
     }
     
     @AuraEnabled
-    public static String getIntertestLedgerPDF(String customerNumber,String companycode)
-    {
+    public static String getIntertestLedgerPDF(String customerNumber,String companycode){
         return PDFController.getinterestLedgerPdf(customerNumber,companycode);
     }
     
     @AuraEnabled
-    public static String getCustomerLedgerPdf(String customerNumber,String companycode)
-    {
+    public static String getCustomerLedgerPdf(String customerNumber,String companycode){
         return PDFController.getCustomerLedgerPdf(customerNumber,companycode);
     }
     
     @AuraEnabled
-    public static String getAgreementPDF(String salesorderNumber)
-    {
+    public static String getAgreementPDF(String salesorderNumber){
         return PDFController.getagreementPdf(salesorderNumber);
     }
     
     
     @AuraEnabled
-    public static void updateLoanRecord(Map<String,String> DocDetails)
-    {
+    public static void updateLoanRecord(Map<String,String> DocDetails){
         Loan__c loanRec = new Loan__c(id=DocDetails.get('loanId'));
         loanRec.RW_Sanction_Letter_ID__c = DocDetails.get('documentId');
         update loanRec;
     }
     
     @AuraEnabled
-    public static void createTDSRecord(Map<String,String> DocDetails)
-    {
+    public static void createTDSRecord(Map<String,String> DocDetails){
         TDS__c tdsRec = new TDS__c();
         tdsRec.RW_TDS_Document_ID__c = DocDetails.get('tdsdocumentId');
         tdsRec.RW_TDS_Certificate_Number__c = DocDetails.get('tdscertificateNumber');
@@ -1336,9 +1093,7 @@ public class CustomerPortalHomeController
     //public static void createNCFRecord(Name_Confirmation_Form__c NCFDetails,Map<String,HomeRunwalWrapper.appDetailsWrapper> NCFDetails,Map<String,String> NCFOtherDetails,Map<String,HomeRunwalWrapper.appDetailsWrapper> NCFOtherApplicantDetails,List<String> RemovedAppIds,String BookingRecordId)
     //{
     @AuraEnabled
-    public static void createNCFRecord(Name_Confirmation_Form__c NCFDetails,Map<String,HomeRunwalWrapper.appDetailsWrapper> NCFOtherApplicantDetails,List<String> RemovedAppIds,String BookingRecordId)
-    {
-        System.debug('*inside*');
+    public static void createNCFRecord(Name_Confirmation_Form__c NCFDetails,Map<String,HomeRunwalWrapper.appDetailsWrapper> NCFOtherApplicantDetails,List<String> RemovedAppIds,String BookingRecordId){
         List<Name_Confirmation_Form__c> ncfObj = new List<Name_Confirmation_Form__c>();
         List<Applicant_Details__c> appDetailObjList = new List<Applicant_Details__c>();
         //system.debug('*NCF*'+NCFDetails+'**');
@@ -1375,17 +1130,14 @@ public class CustomerPortalHomeController
         NCFDetails.RW_Allow_Customer_to_Update__c = false;
         upsert NCFDetails;
         List<String> toAddress = new List<String>();
-         List<Booking__c> bookingRec =[Select id,Name, Unit_No__r.Relationship_Manager__r.RM_Email__c from Booking__c where id =:NCFDetails.Booking__c];
-        if(bookingRec != null && bookingRec.size() >0 && bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c != null)
-        {
+         List<Booking__c> bookingRec =[Select id,Name,Unit_No__r.Relationship_Manager__r.RM_Email__c from Booking__c where id =:NCFDetails.Booking__c];
+        if(bookingRec != null && bookingRec.size() >0 && bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c != null){
             toAddress.add(bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Email__c);
         }
         
-        if(toAddress.size() >0)
-        {
-            EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='NCF_Template'];
+        if(toAddress.size() >0){
+            EmailTemplate template = [SELECT Id,Name,Subject,HtmlValue,Body,DeveloperName FROM EmailTemplate Where DeveloperName='NCF_Template'];
             String htmlBody = template.HtmlValue; 
-            system.debug('');
             htmlBody = htmlBody.replace('{!bookingNumber}', bookingRec[0].Name);
             htmlBody = htmlBody.replace('{!ncflink}', Url.getOrgDomainUrl().toExternalForm()+'/'+NCFDetails.Id);
 
@@ -1407,26 +1159,20 @@ public class CustomerPortalHomeController
         }
         
         Set<String> newApplicantIds = new Set<String>(); 
-        for(String appNumber : NCFOtherApplicantDetails.keyset())
-        {
+        for(String appNumber : NCFOtherApplicantDetails.keyset()){
             Applicant_Details__c appdet = new Applicant_Details__c();
-            if(NCFOtherApplicantDetails.get(appNumber).applicantId != null)
-            {
+            if(NCFOtherApplicantDetails.get(appNumber).applicantId != null){
                 appdet.Id = NCFOtherApplicantDetails.get(appNumber).applicantId;
-            }
-            
-            else
-            {
-                system.debug('*inside new applicant*');
+            }else{
                 newApplicantIds.add(appNumber);
             }
             
             if (NCFOtherApplicantDetails.get(appNumber).firstName != '' && NCFOtherApplicantDetails.get(appNumber).firstName != null && NCFOtherApplicantDetails.get(appNumber).lastName != '' && NCFOtherApplicantDetails.get(appNumber).lastName != null) {
-                    if (NCFOtherApplicantDetails.get(appNumber).middleName != null) {
-                        appdet.Name = NCFOtherApplicantDetails.get(appNumber).firstName + ' ' + NCFOtherApplicantDetails.get(appNumber).middleName + ' ' + NCFOtherApplicantDetails.get(appNumber).lastName;
-                    } else {
-                        appdet.Name = NCFOtherApplicantDetails.get(appNumber).firstName + ' ' + NCFOtherApplicantDetails.get(appNumber).lastName;
-                    }
+                if (NCFOtherApplicantDetails.get(appNumber).middleName != null) {
+                    appdet.Name = NCFOtherApplicantDetails.get(appNumber).firstName + ' ' + NCFOtherApplicantDetails.get(appNumber).middleName + ' ' + NCFOtherApplicantDetails.get(appNumber).lastName;
+                } else {
+                    appdet.Name = NCFOtherApplicantDetails.get(appNumber).firstName + ' ' + NCFOtherApplicantDetails.get(appNumber).lastName;
+                }
             }
             appdet.First_Name__c = NCFOtherApplicantDetails.get(appNumber).firstName;
             appdet.Last_Name__c = NCFOtherApplicantDetails.get(appNumber).lastName;
@@ -1464,20 +1210,17 @@ public class CustomerPortalHomeController
             appdet.Booking__c =NCFOtherApplicantDetails.get(appNumber).bookingId;
             appdet.Opportunity__c = NCFOtherApplicantDetails.get(appNumber).opportunityId;
             appDetailObjList.add(appdet);
-            system.debug('*added to list*');
         }
         
        List<Applicant_Details__c> appDetailsRec =  [Select Id,Applicant_Status__c from Applicant_Details__c Where Id IN :RemovedAppIds];
-       for(Applicant_Details__c appDetails : appDetailsRec )
-       {
+       for(Applicant_Details__c appDetails : appDetailsRec ){
            appDetails.Applicant_Status__c= 'Inactive';
        }
         
         List<Document_Details__c> existingdocuments = [Select id,RW_Applicant_Details__c,Applicant_Number__c,Booking__c,RW_Document_ID__c,RW_Document_Type__c,RW_Type_Of_Applicant__c from Document_Details__c where RW_Applicant_Details__c =:RemovedAppIds];
-        for(Document_Details__c existingdocs : existingdocuments )
-       {
-           existingdocs.RW_Document_Status__c= 'Inactive';
-       }
+        for(Document_Details__c existingdocs : existingdocuments){
+            existingdocs.RW_Document_Status__c= 'Inactive';
+        }
         
         if(appDetailsRec.size() >0)
         Update appDetailsRec;
@@ -1486,23 +1229,14 @@ public class CustomerPortalHomeController
         Update existingdocuments;
            
            
-        if(appDetailObjList.size() >0)
-        {
-        system.debug('*before upsert appDetailObjList*');
+        if(appDetailObjList.size() >0){
         upsert appDetailObjList;
-        system.debug('*after upsert*');
         }
         
         Map<String,Applicant_Details__c> newlyaddedapplicantDetails = new Map<String,Applicant_Details__c>();
-        if(appDetailObjList.size() >0)
-        {
-            system.debug('**inside if^****'+appDetailObjList);
-        for(Applicant_Details__c appdet : appDetailObjList)
-        {
-            system.debug('**inside for****');
-            if(newApplicantIds.contains(appdet.Applicant_Number__c))
-            {
-                system.debug('**inside for 1****'+appdet.Applicant_Number__c);
+        if(appDetailObjList.size() >0){
+        for(Applicant_Details__c appdet : appDetailObjList){
+            if(newApplicantIds.contains(appdet.Applicant_Number__c)){
                 newlyaddedapplicantDetails.put(appdet.Applicant_Number__c,appdet);
             }
         }
@@ -1511,14 +1245,10 @@ public class CustomerPortalHomeController
         List<ContentDocumentLink> insertList = new List<ContentDocumentLink>();
         List<Document_Details__c> updateDcs = new List<Document_Details__c>();
         List<Document_Details__c> documents = [Select id,RW_Applicant_Details__c,Applicant_Number__c,Booking__c,RW_Document_ID__c,RW_Document_Type__c,RW_Type_Of_Applicant__c from Document_Details__c where Booking__c =:BookingRecordId and RW_Document_Status__c != 'Inactive'];
-        if(newlyaddedapplicantDetails != null && newlyaddedapplicantDetails.size() >0)
-        {
-             system.debug('**inside if doc****'+documents.size());
-            system.debug('*newlyaddedapplicantDetails*'+newlyaddedapplicantDetails);
+        if(newlyaddedapplicantDetails != null && newlyaddedapplicantDetails.size() >0){
         for(Document_Details__c dc : documents){
             if(dc.RW_Applicant_Details__c == null && newlyaddedapplicantDetails.containsKey(dc.Applicant_Number__c)){
                 string appId = newlyaddedapplicantDetails.get(dc.Applicant_Number__c).Id;
-                system.debug(appId);
                 dc.RW_Applicant_Details__c = appId;
                 ContentDocumentLink  cdl = new ContentDocumentLink ();
                 cdl.linkedEntityId = appId;
@@ -1541,9 +1271,8 @@ public class CustomerPortalHomeController
         
     }
     
-     @AuraEnabled  
+    @AuraEnabled  
     public static List<KYCWrapper> getKYCFiles(String bookingId,String applicantNumber){ 
-        system.debug('**id'+bookingId);
         // TO avoid following exception 
         // System.QueryException: Implementation restriction: ContentDocumentLink requires
         // a filter by a single Id on ContentDocumentId or LinkedEntityId using the equals operator or 
@@ -1554,27 +1283,19 @@ public class CustomerPortalHomeController
         Map<Id,Document_Details__c> DocData = new Map<Id,Document_Details__c>();
         Map<Id,ContentDocument> ContentDocData = new Map<Id,ContentDocument>();
         Set<Id> recordIds=new Set<Id>{bookingId};
-            Set<Id> documentIds = new Set<Id>(); 
+        Set<Id> documentIds = new Set<Id>(); 
         List<ContentDocumentLink> cdl=[SELECT id,LinkedEntityId,ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN:recordIds ];  
-        System.debug('*size*'+cdl.size());
-        for(ContentDocumentLink cdLink:cdl)
-        {  
-            System.debug('****'+cdLink);
+        for(ContentDocumentLink cdLink:cdl){  
             documentIds.add(cdLink.ContentDocumentId);  
         }      
         //List<ContentDocument> contDoc = [SELECT Id,Title,FileType FROM ContentDocument WHERE id IN: documentIds];  
         List<Contentversion> contVer = [Select Id,ContentDocumentId,ContentDocument.Title,ContentDocument.FileType,IsLatest from ContentVersion where ContentDocumentId in :documentIds and IsLatest = true];
-        for(Contentversion contVersion :contVer)
-        {
-            System.debug('**inside contVersion**'+contVersion);
+        for(Contentversion contVersion :contVer){
             ContentData.put(contVersion.Id, contVersion);
         }
         
-        
         List<Document_Details__c> docDetails = [Select Id,RW_Type_Of_Applicant__c,RW_Document_Type__c,RW_Residential_Status__c,Opportunity__c,RW_Document_ID__c from Document_Details__c where RW_Document_ID__c in :documentIds and Booking__c =:bookingId and Applicant_Number__c =:applicantNumber];
-        for(Document_Details__c details :docDetails)
-        {
-            System.debug('**inside DocData**'+details);
+        for(Document_Details__c details :docDetails){
             DocData.put(details.Id, details);
         }
         
@@ -1584,13 +1305,9 @@ for(ContentDocument contDocument :contDoc)
 ContentDocData.put(contDocument.Id,contDoc);
 } */ 
         
-        for(Id contVersionId : ContentData.keySet())
-        {
-            for(Id docDataId : DocData.keySet())
-            {
-                if(DocData.get(docDataId).RW_Document_ID__c == ContentData.get(contVersionId).ContentDocumentId)
-                {
-                    System.debug('**inside KYCWrapper**');
+        for(Id contVersionId : ContentData.keySet()){
+            for(Id docDataId : DocData.keySet()){
+                if(DocData.get(docDataId).RW_Document_ID__c == ContentData.get(contVersionId).ContentDocumentId){
                     KYCWrapper kycWrapData= new KYCWrapper();
                     kycWrapData.documentType=DocData.get(docDataId).RW_Document_Type__c;
                     kycWrapData.fileName = ContentData.get(contVersionId).ContentDocument.Title;
@@ -1606,45 +1323,34 @@ ContentDocData.put(contDocument.Id,contDoc);
         return kycWrap;
     } 
     
-     @AuraEnabled
-    public static List<String> getPicklists(String ObjectName, String FieldName)
-    {
+    @AuraEnabled
+    public static List<String> getPicklists(String ObjectName, String FieldName){
         //return Utility.getPicklistValues('Applicant_Details__c', 'Country__c');
         return Utility.getPicklistValues(ObjectName, FieldName);
-        
     }
     
     @AuraEnabled
-    public static String getEOIPdf(String encryptedEoiRecordId)
-    {
-            PageReference pdf = Page.CustomerPortalEOIForm;
-            pdf.getParameters().put('eoiId',encryptedEoiRecordId);
-            if(!Test.isRunningTest())
-            {
-             Blob body= pdf.getContent();
-             return EncodingUtil.base64Encode(body);
-            }
-            else
-            {
-               return '';
-            }
+    public static String getEOIPdf(String encryptedEoiRecordId){
+        PageReference pdf = Page.CustomerPortalEOIForm;
+        pdf.getParameters().put('eoiId',encryptedEoiRecordId);
+        if(!Test.isRunningTest()){
+            Blob body= pdf.getContent();
+            return EncodingUtil.base64Encode(body);
+        }else{
+            return '';
+        }
     }
     
     @AuraEnabled
-    public static String getBookingPdf(String encryptedBookingRecordId)
-    {
-            PageReference pdf = Page.CustomerPortalBookingForm;
-            pdf.getParameters().put('id',encryptedBookingRecordId);
-            if(!Test.isRunningTest())
-            {
-             Blob body= pdf.getContent();
-             return EncodingUtil.base64Encode(body);
-            }
-            else
-            {
-               return '';
-            }
-            
+    public static String getBookingPdf(String encryptedBookingRecordId){
+        PageReference pdf = Page.CustomerPortalBookingForm;
+        pdf.getParameters().put('id',encryptedBookingRecordId);
+        if(!Test.isRunningTest()){
+            Blob body= pdf.getContent();
+            return EncodingUtil.base64Encode(body);
+        }else{
+            return '';
+        }
     }
     
     
@@ -1705,7 +1411,8 @@ ContentDocData.put(contDocument.Id,contDoc);
             newCase.OwnerId =QueueObj[0].Id;
           }
         }
-        //Added by Vinay 07-07-2025 Start
+            
+        //Added by Vinay 12-05-2025 Start
         Date date4MonthsBack = Date.today().addMonths(-4);
         List<String> complaintValues = new List<String>{'Carpentry','Clubhouse & Amenities','Electrical','HVAC','Plumbing'};
         if(bookingRec[0].RW_Key_handover_date__c != null && bookingRec[0].RW_Key_handover_date__c <= date4MonthsBack && complaintValues.contains(newCase.RW_Complaint_Type__c)){
@@ -1716,6 +1423,8 @@ ContentDocData.put(contDocument.Id,contDoc);
             message += 'You can reach our Helpdesk at:\n 📧 Email: ' + fmTeam;
             //message += '📞 Phone: 86557 02566 / 93219 66137 \n';
             return message;
+        }else if(bookingRec[0].RW_Key_handover_date__c == null && newCase.Customer_Lifecycle_Touchpoint__c == 'Post-Possession'){
+            return 'Complaint type selected is for post possession customers.';
         }else{
             Insert newCase;
             
@@ -1728,9 +1437,12 @@ ContentDocData.put(contDocument.Id,contDoc);
             }
         }
         }catch(exception e){
-            return String.valueOf(e);
+            System.debug('Error: ' + String.valueOf(e));
+            System.debug('Stack Trace: ' + e.getStackTraceString());
+            return null;
+            //return String.valueOf(e);
         }
-        //Added by Vinay 07-07-2025 End
+        //Added by Vinay 12-05-2025 End
        /* Insert newCase;
         
         //Added by Vinay 28-03-2025 Start
@@ -1743,9 +1455,8 @@ ContentDocData.put(contDocument.Id,contDoc);
         //Added by Vinay 28-03-2025 End
     }
     
-     @AuraEnabled  
-    public static void insertChangeRequestCase(Case newCase,Map<String,String> Details)
-    { 
+    @AuraEnabled  
+    public static void insertChangeRequestCase(Case newCase,Map<String,String> Details){ 
         List<Booking__c> bookingRec =[Select Unit_No__r.Relationship_Manager__r.RM_Name__c,Unit_No__r.Relationship_Manager__r.User__c from Booking__c Where Id =:Details.get('bookingId')];
         List<User> u = [Select Id,ContactId,AccountId, IsActive, IsPortalEnabled, Email from User  where Id = :UserInfo.getUserId()];
         Id customerRecordId =Schema.SObjectType.Case.getRecordTypeInfosByName().get('Customer').getRecordTypeId();
@@ -1755,20 +1466,12 @@ ContentDocData.put(contDocument.Id,contDoc);
         newCase.RW_Complaint_SubType__c = '';//added by prashant for deployment.
         newCase.Origin ='Portal';
         newCase.Subject ='Request For Change in Applicant Details';
-        if(u.size() >0)
-        {
-            System.debug('inside***');
+        if(u.size() >0){
           //newCase.AccountId = u[0].AccountId;  
           //newCase.ContactId = u[0].ContactId;
         }
         //newCase.OwnerId = '0051e000000jx5VAAQ';
-        if(bookingRec.size() >0 && bookingRec[0].Unit_No__r.Relationship_Manager__c != null )
-        {
-            system.debug('**'+bookingRec[0]);
-            system.debug('*2*'+bookingRec[0].Unit_No__c);
-            system.debug('*3*'+bookingRec[0].Unit_No__r.Relationship_Manager__c);
-            system.debug('*4*'+bookingRec[0].Unit_No__r.Relationship_Manager__r.User__c);
-            system.debug('*5*'+bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Name__c);
+        if(bookingRec.size() >0 && bookingRec[0].Unit_No__r.Relationship_Manager__c != null ){
             newCase.RW_RM_Name__c = bookingRec[0].Unit_No__r.Relationship_Manager__r.RM_Name__c;
             //newCase.RW_RM_Name__c ='Adrian Dsouza';
             newCase.User_Id__c = bookingRec[0].Unit_No__r.Relationship_Manager__r.User__c;
@@ -1776,14 +1479,11 @@ ContentDocData.put(contDocument.Id,contDoc);
            // newCase.OwnerId = bookingRec[0].Unit_No__r.Relationship_Manager__r.User__c;
             //Map<String, RM_Usernames__c> mapOfCustomSetting = RM_Usernames__c.getall();
             
-        }
-        else
-        {
+        }else{
          // system.debug('*entered*'+bookingRec[0]);
            
           List<Group>  QueueObj =[Select Id From Group where Type = 'Queue' and Name =: Label.Generic_Queue_Name];
-          if(QueueObj.size() >0)
-          {
+          if(QueueObj.size() >0){
             newCase.OwnerId =QueueObj[0].Id;
           }
         }
@@ -1796,30 +1496,19 @@ ContentDocData.put(contDocument.Id,contDoc);
         Insert newCase;
     }
     
-     @AuraEnabled  
-    public static Map<String,List<String>> getBankPicklists(string ProjectName)
-    { 
+    @AuraEnabled  
+    public static Map<String,List<String>> getBankPicklists(string ProjectName){ 
         Map<String,List<String>> bankMap = new Map<String,List<String>>();
-        
-        
-        List<RW_Bank_Details__c> bankList = [select id, name, RW_Banker_Name__c, RW_Banks_Name__c, RW_Branch_Name__c, RW_Email_Id__c , RW_Project_Name__c from RW_Bank_Details__c where RW_Project_Name__c =: ProjectName];
-        system.debug('BanklIst -----> ' + bankList);
-        for(RW_Bank_Details__c bank  : bankList)
-        {
+        List<RW_Bank_Details__c> bankList = [select id,name,RW_Banker_Name__c,RW_Banks_Name__c,RW_Branch_Name__c,RW_Email_Id__c,RW_Project_Name__c from RW_Bank_Details__c where RW_Project_Name__c =: ProjectName];
+        for(RW_Bank_Details__c bank  : bankList){
             
-            if(!bankMap.containsKey(bank.RW_Banks_Name__c))
-            {
+            if(!bankMap.containsKey(bank.RW_Banks_Name__c)){
                 List<String> branchName = new List<String>();
                 branchName.add(bank.RW_Branch_Name__c);
                 bankMap.put(bank.RW_Banks_Name__c, branchName);
-                system.debug('Values in the Map----> '+ bankMap);
-            }
-            
-            else
-            {
-             List<String> branchName = bankMap.get(bank.RW_Banks_Name__c);
-                if(!branchName.contains(bank.RW_Branch_Name__c))
-                {
+            }else{
+                List<String> branchName = bankMap.get(bank.RW_Banks_Name__c);
+                if(!branchName.contains(bank.RW_Branch_Name__c)){
                     branchName.add(bank.RW_Branch_Name__c);
                     bankMap.put(bank.RW_Banks_Name__c, branchName);
                 }             
@@ -1829,209 +1518,10 @@ ContentDocData.put(contDocument.Id,contDoc);
     }
     
     
-     @AuraEnabled   
-    public static void createLoanRecord(Map<String,String> DocDetails)  
-    {   
-         Loan__c loanRec = new Loan__c();   
-         if(DocDetails.get('pancardno')!=null)  
-         {  
-           loanRec.RW_Pan_card_Id__c = DocDetails.get('pancardno'); 
-         }  
-         if(DocDetails.get('aadharno')!=null)   
-         {  
-           loanRec.RW_Aadhar_no__c = DocDetails.get('aadharno');    
-         }  
-         if(DocDetails.get('uploadedSalarySlip')!=null) 
-         {  
-           loanRec.RW_Salary_Slip__c = DocDetails.get('uploadedSalarySlip');    
-         }  
-         if(DocDetails.get('uploadedITR')!=null)    
-         {  
-           loanRec.RW_ITR__c = DocDetails.get('uploadedITR');   
-         }
-         
-         if(DocDetails.get('uploadedBankStatement')!=null)  
-         {  
-           loanRec.RW_Bank_Statement__c = DocDetails.get('uploadedBankStatement');  
-         }
-        
-         
-         if(DocDetails.get('oppId')!=null)  
-         {  
-           loanRec.RW_Opportunity__c= DocDetails.get('oppId');  
-         }  
-         if(DocDetails.get('bookingId')!=null)  
-         {  
-           loanRec.RW_Booking__c = DocDetails.get('bookingId'); 
-         }  
-         if(DocDetails.get('Bankname')!=null)   
-         {  
-           loanRec.RW_Bank_Name__c = DocDetails.get('Bankname');    
-           loanRec.RW_Bank_Preference_1__c = DocDetails.get('Bankname');
-         }  
-         if(DocDetails.get('branchname')!=null) 
-         {  
-           loanRec.RW_Bank_Branch__c = DocDetails.get('branchname');    
-         }  
-         if(DocDetails.get('projectID')!=null)  
-         {  
-           loanRec.RW_Project_Name__c = DocDetails.get('projectID');    
-         }  
-            
-         loanRec.RW_Loan_Record_Status__c = 'Loan Process Initiated';   
-        insert loanRec;
-        /*if(!Test.isRunningTest()){
-            insert loanRec;
-        }*/
-         
-        
-         
-            
-         system.debug('loanRec --> ' + loanRec);    
-         if(loanRec != null){
-        List<Id> contentDocumentIds = new List<Id>();
-        if(DocDetails.get('uploadedPANDocumentID') !=null)  
-        {   
-        ContentDocumentLink cdl = new ContentDocumentLink();    
-        cdl.ContentDocumentId = DocDetails.get('uploadedPANDocumentID');    
-        cdl.LinkedEntityId = loanRec.Id;    
-        cdl.ShareType = 'V';    
-        cdl.Visibility = 'AllUsers';    
-        insert cdl;
-            contentDocumentIds.add(DocDetails.get('uploadedPANDocumentID'));
-         system.debug('after loanRec cdl--> ' + cdl);   
-        }   
-            
-            
-         if(DocDetails.get('uploadedAadharCardDocumentID') !=null)  
-        {   
-        ContentDocumentLink cd2 = new ContentDocumentLink();    
-        cd2.ContentDocumentId = DocDetails.get('uploadedAadharCardDocumentID'); 
-        cd2.LinkedEntityId = loanRec.Id;    
-        cd2.ShareType = 'V';    
-        cd2.Visibility = 'AllUsers';    
-        insert cd2; 
-            contentDocumentIds.add(DocDetails.get('uploadedAadharCardDocumentID'));
-        system.debug('after loanRec cd2--> ' + cd2);    
-        }   
-            
-            
-        if(DocDetails.get('uploadedSalarySlipId')!=null)    
-        {   
-        ContentDocumentLink cd3 = new ContentDocumentLink();    
-        cd3.ContentDocumentId = DocDetails.get('uploadedSalarySlipId'); 
-        cd3.LinkedEntityId = loanRec.Id;    
-        cd3.ShareType = 'V';    
-        cd3.Visibility = 'AllUsers';    
-        insert cd3; 
-            
-           contentDocumentIds.add(DocDetails.get('uploadedSalarySlipId'));            
-           system.debug('after loanRec cd3--> ' + cd3); 
-        }   
-            
-            
-         if(DocDetails.get('uploadedITRId')!=null)  
-        {   
-        ContentDocumentLink cd4 = new ContentDocumentLink();    
-        cd4.ContentDocumentId = DocDetails.get('uploadedITRId');    
-        cd4.LinkedEntityId = loanRec.Id;    
-        cd4.ShareType = 'V';    
-        cd4.Visibility = 'AllUsers';    
-        insert cd4; 
-            
-            contentDocumentIds.add(DocDetails.get('uploadedITRId'));
-            system.debug('after loanRec cd4--> ' + cd4);    
-        }
-        
-         if(DocDetails.get('uploadedBankStatementId')!=null)    
-        {   
-        ContentDocumentLink cd5 = new ContentDocumentLink();    
-        cd5.ContentDocumentId = DocDetails.get('uploadedBankStatementId');  
-        cd5.LinkedEntityId = loanRec.Id;    
-        cd5.ShareType = 'V';    
-        cd5.Visibility = 'AllUsers';    
-        insert cd5; 
-            contentDocumentIds.add(DocDetails.get('uploadedBankStatementId'));
-            system.debug('after loanRec cd5--> ' + cd5);    
-        }   
-         sendEmailToBankSPOC(loanRec,contentDocumentIds);  
-    } 
-    }   
-    
-
-       @AuraEnabled
-        public static void sendEmailToBankSPOC(Loan__c loanRec, List<id> contentDocumentIds)
-        {
-        List<Messaging.SingleEmailMessage> mails =  new List<Messaging.SingleEmailMessage>();
-        List<Id> contenversionIds = new List<Id>();
-        
-         List<Loan__c> loan = [select id, name,RW_Booking__r.Primary_Applicant_Name__c from Loan__c where id =: loanRec.Id];
-            system.debug('Loan record for Email --> **** '+ loan);
-          
-         List<RW_Bank_Details__c> bankD = [SELECT Id, RW_Branch_Name__c, RW_Banks_Name__c, RW_Banker_Name__c, CreatedDate, RW_Email_Id__c, RW_Project_Name__c FROM RW_Bank_Details__c where RW_Banks_Name__c = :loanRec.RW_Bank_Name__c AND RW_Branch_Name__c = :loanRec.RW_Bank_Branch__c ];
-          if(bankD.size()>0 &&  bankD[0].RW_Email_Id__c !=null )
-          {
-            List<ContentVersion> ListcontentVersion = [SELECT ContentDocumentId, Id FROM ContentVersion where ContentDocumentId IN :contentDocumentIds];
-              system.debug('ListcontentVersion for loan -->' + ListcontentVersion);
-              for(ContentVersion cv  :ListcontentVersion)
-              {
-                  contenversionIds.add(cv.Id);
-              }
-              system.debug('ContentVersionids for Loan --> '+ contenversionIds);
-            EmailTemplate template = [SELECT Id, Name, Subject, HtmlValue, Body, DeveloperName FROM EmailTemplate Where DeveloperName='Loan_Apply'];
-                
-                String htmlBody = template.HtmlValue; 
-                String plainTextBody = template.Body;
-                system.debug('Email Template -->' + template);
-                system.debug('before replace -->');
-              
-                system.debug('after replace -->' + htmlBody);
-                    system.debug('Applicant Name for the Bank *****' + loan[0].RW_Booking__r.Primary_Applicant_Name__c);
-                    if(loan.size()> 0 && loan[0].RW_Booking__r.Primary_Applicant_Name__c !=null)
-                    {
-                    htmlBody = htmlBody.replace('{!Loan__c.RW_Booking__r.Primary_Applicant_Name__c}', loan[0].RW_Booking__r.Primary_Applicant_Name__c);
-                    plainTextBody = plainTextBody.replace('{!Loan__c.RW_Booking__r.Primary_Applicant_Name__c}', loan[0].RW_Booking__r.Primary_Applicant_Name__c ); 
-                    }
-                    else
-                    {
-                     htmlBody = htmlBody.replace('{!Loan__c.RW_Booking__r.Primary_Applicant_Name__c}', ' ');
-                     plainTextBody = plainTextBody.replace('{!Loan__c.RW_Booking__r.Primary_Applicant_Name__c}', ' ');
-                        
-                    }               
-                    system.debug('Bank Name in loan --->' + bankD[0].RW_Banks_Name__c);
-                    if(bankD.size()>0 && bankD[0].RW_Banks_Name__c !=null)
-                    {
-                    htmlBody = htmlBody.replace('{!Loan__c.RW_Bank_Name__c}', bankD[0].RW_Banks_Name__c) ;
-                    plainTextBody= plainTextBody.replace('{!Loan__c.RW_Bank_Name__c}', bankD[0].RW_Banks_Name__c);
-                    }
-                    else
-                    {
-                     htmlBody = htmlBody.replace('{!Loan__c.RW_Bank_Name__c}', ' ');
-                     plainTextBody = plainTextBody.replace('{!Loan__c.RW_Bank_Name__c}', ' ');
-                    }
-      
-                                   
-                system.debug('after replace   -->' + htmlBody);
-
-                       
-                Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
-                message.toAddresses = new list<String>{string.valueOf(bankD[0].RW_Email_Id__c)};
-                message.subject = template.Subject;
-                message.setTemplateId(template.Id);
-                message.setHtmlBody(htmlBody);   
-                message.setPlainTextBody(plainTextBody);
-                if(contenversionIds.size()>0)
-                message.setEntityAttachments(contenversionIds);
-                message.setOrgWideEmailAddressId(Utility.getOrgWideEmailAddress());
-                Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
-                Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
-          }
-        }
-          
+   
     @AuraEnabled 
     public static Map<string,PicklistWrapper> getDependentPicklists(String ObjectName, Map<String,String> fieldsMap) {
         Map<string,PicklistWrapper> picklistMap = new Map<string, PicklistWrapper>();
-        
         
         for(String s: fieldsMap.keySet()){
             picklistMap.put(s,getDependentPicklist(ObjectName,fieldsMap.get(s),s));
@@ -2126,48 +1616,37 @@ ContentDocData.put(contDocument.Id,contDoc);
     }
     
     @AuraEnabled
-    public static String getBillDeskData(Map<String,String> DetailMap)
-    {
+    public static String getBillDeskData(Map<String,String> DetailMap){
          String billDeskChecksumKey = '';
-        try
-        {
+        try{
         Map<String,String> BillDeskInputMap = new Map<String,String>();
-        System.debug('towerId :' + DetailMap.get('towerId'));
         List<Tower__c> towerData = [Select Name,Id,ProjectName__c,ProjectName__r.Name from Tower__c Where ID =: DetailMap.get('towerId')];
 
             List<Payment_Gateway__mdt> BillDeskDetails = Utility.getBIllDeskPaymentGatewayDetails(towerData[0].ProjectName__r.Name, towerData[0].Name);
-            if(BillDeskDetails != null && BillDeskDetails.size() >0)
-            {
+            if(BillDeskDetails != null && BillDeskDetails.size() >0){
                 
                 Receipt__c receipt = new Receipt__c();
-                 receipt.Opportunity__c = DetailMap.get('OpportunityId');
+                receipt.Opportunity__c = DetailMap.get('OpportunityId');
                 receipt.Project__c = towerData[0].ProjectName__c;
                 receipt.Mode__c = 'Digital';
                 receipt.Payment_Gateway__c = 'BillDesk';
                
                 receipt.Total_Amount__c = Decimal.valueof(DetailMap.get('Amount'));
                 receipt.Booking__c = DetailMap.get('bookingId');
-                System.debug('DetailMap'+DetailMap.get('ProjectUnit'));
-               receipt.Project_Unit__c=DetailMap.get('ProjectUnit');
-                if(DetailMap.get('TypeOfAmount') == 'Normal')
-                {
+                receipt.Project_Unit__c=DetailMap.get('ProjectUnit');
+                if(DetailMap.get('TypeOfAmount') == 'Normal'){
                   receipt.RW_Payment_Collection_Type__c = 'Customer Portal - Flat Cost';  
-                }
-                else if(DetailMap.get('TypeOfAmount') == 'GST')
-                {
+                }else if(DetailMap.get('TypeOfAmount') == 'GST'){
                    receipt.RW_Payment_Collection_Type__c = 'Customer Portal - GST';  
                 }
                 
-                if(DetailMap.containsKey('ButtonType') && DetailMap.get('ButtonType') == 'SinglePayment')
-                {
+                if(DetailMap.containsKey('ButtonType') && DetailMap.get('ButtonType') == 'SinglePayment'){
                     receipt.RW_Payment_Collection_Type__c = 'Customer Portal - Outstanding'; 
                 }
 
                 insert receipt;
                 
-                List<Receipt__c> receiptRecord = [Select Name, Opportunity__r.SalesOrder_Number__c, Opportunity__r.SAP_Customer_Number__c, 
-                                                  Opportunity__r.RW_Mobile_No__c, Opportunity__r.RW_Email__c, Project_Unit__r.RW_Param1__c, 
-                                                  Project_Unit__r.RW_Param4__c from Receipt__c Where Id =:receipt.Id ];
+                List<Receipt__c> receiptRecord = [Select Name,Opportunity__r.SalesOrder_Number__c,Opportunity__r.SAP_Customer_Number__c,Opportunity__r.RW_Mobile_No__c, Opportunity__r.RW_Email__c, Project_Unit__r.RW_Param1__c,Project_Unit__r.RW_Param4__c from Receipt__c Where Id =:receipt.Id ];
                 if(DetailMap.get('TypeOfAmount')=='Normal' || (DetailMap.containsKey('ButtonType') && DetailMap.get('ButtonType') == 'SinglePayment'))
                 BillDeskInputMap.put('MerchantID',BillDeskDetails[0].Bill_Desk_Merchant_ID__c);
                 else if(DetailMap.get('TypeOfAmount')=='GST')
@@ -2195,106 +1674,109 @@ ContentDocData.put(contDocument.Id,contDoc);
                  billDeskChecksumKey = BillDeskDetails[0].Bill_Desk_GST_Checksum_Key__c;
                 return Utility.generateBillDeskMessageString(BillDeskInputMap,billDeskChecksumKey);
                 
-            }
-            else
-            {
+            }else{
                 throw new CommonException('Payment Gateway unavailable right now. Please try later');
             }
-        
-        
-        }
-        catch(Exception e)
-        {
-                throw new CommonException('There was an error -'+e.getMessage()+'. Please try later');
+        }catch(Exception e){
+            throw new CommonException('There was an error -'+e.getMessage()+'. Please try later');
         }
     }
     
     @AuraEnabled
-    public static String saveBillDeskData(Map<String,String> DetailMap )
-    {   System.debug('saveMethodCalled');
+    public static String saveBillDeskData(Map<String,String> DetailMap ){   
         String BillDeskResFormat = 'MerchantID|CustomerID|TxnReferenceNo|BankReferenceNo|TxnAmount|BankID|BankMerchantID|TxnType|CurrencyName|ItemCode|SecurityType|SecurityID|SecurityPassword|TxnDate|AuthStatus|SettlementType|AdditionalInfo1|AdditionalInfo2|AdditionalInfo3|AdditionalInfo4|AdditionalInfo5|AdditionalInfo6|AdditionalInfo7|ErrorStatus|ErrorDescription|CheckSum';
         List<String> BillDeskResFormat1 = BillDeskResFormat.split('\\|');
         List<String> msgList = DetailMap.get('msg').split('\\|');
         String actualinputData = DetailMap.get('msg').substring(0,DetailMap.get('msg').lastIndexOf('|'));
         String checksumValue = DetailMap.get('msg').substring(DetailMap.get('msg').lastIndexOf('|')+1);
-        system.debug('*checksumValue**'+checksumValue);
-        system.debug('*actualinputData**'+actualinputData);
         List<Tower__c> towerData = [Select Name,Id,ProjectName__c,ProjectName__r.Name from Tower__c Where ID =: DetailMap.get('towerId')];
         List<Payment_Gateway__mdt> BillDeskDetails = Utility.getBIllDeskPaymentGatewayDetails(towerData[0].ProjectName__r.Name, towerData[0].Name);
-           
      
-             String ChecksumKey='';
-             String paymentType='';
-             system.debug('*first*'+msgList[BillDeskResFormat1.indexOf('MerchantID')]+'**'+BillDeskDetails[0].Bill_Desk_Merchant_ID__c+'**'+BillDeskDetails[0].Bill_Desk_GST_Merchant_ID__c);
-             if(msgList[BillDeskResFormat1.indexOf('MerchantID')] == BillDeskDetails[0].Bill_Desk_Merchant_ID__c)
-             {
-             ChecksumKey = BillDeskDetails[0].Bill_Desk_Checksum_Key__c;
-             //paymentType = 'Normal';
-             }
-             else if(msgList[BillDeskResFormat1.indexOf('MerchantID')] == BillDeskDetails[0].Bill_Desk_GST_Merchant_ID__c)
-             {
-             ChecksumKey = BillDeskDetails[0].Bill_Desk_GST_Checksum_Key__c; 
-             //paymentType = 'GST';
-             }
-        try
-        { 
-            if(ChecksumKey != '' && checksumValue == Utility.getChecksumKey(actualinputData,ChecksumKey))
-              {
-            System.debug('in saveBillDeskData'+msgList+BillDeskResFormat1);
-            List<Receipt__c> receiptRecord = [Select Name,Mode__c,BillDesk__c,Booking__c,Project__c,Project_Unit__c,Cheque_DD__c,Amount_Rs__c,Receipt_Status__c,RW_Digital_Payment_Mode__c,Cheque_DD_Date__c from Receipt__c Where Name =: msgList[BillDeskResFormat1.indexOf('CustomerID')] ];
-
-         
-         if(receiptRecord != null && receiptRecord.size() >0){
-         
-         receiptRecord[0].Cheque_DD__c = msgList.get(BillDeskResFormat1.indexOf('TxnReferenceNo'));
-             
-         receiptRecord[0].Currency__c = msgList.get(BillDeskResFormat1.indexOf('CurrencyName'));
-       
-         String dateFormat = msgList.get(BillDeskResFormat1.indexOf('TxnDate'));    
-         receiptRecord[0].Cheque_DD_Date__c = Date.valueof(dateFormat.substring(6, 10)+'-'+dateFormat.substring(3, 5)+'-'+dateFormat.substring(0, 2));
-         receiptRecord[0].Receipt_Status__c = msgList.get(BillDeskResFormat1.indexOf('AuthStatus')) == '0300' ? 'Success' : 'Failure';
-        
-         receiptRecord[0].Payment_Gateway_Response_Code__c = msgList.get(BillDeskResFormat1.indexOf('AuthStatus'));
-              switch on (msgList.get(BillDeskResFormat1.indexOf('TxnType'))){
-                    when '01' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Net Banking'; }
-                    when '02' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Credit Card'; }
-                    when '03' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Debit Card'; }
-                    when '04' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Cash Card'; }
-                    when '05' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Mobile Wallet'; }
-                    when '06' { receiptRecord[0].BillDesk_Payment_Mode__c = 'IMPS'; }
-                    when '07' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Reward Points'; }
-                    when '08' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Rupay'; }
-                    when '10' { receiptRecord[0].BillDesk_Payment_Mode__c = 'UPI'; }
-                    when else { receiptRecord[0].BillDesk_Payment_Mode__c = 'Others'; }    
-                }
-             update receiptRecord[0];
+        String ChecksumKey='';
+        String paymentType='';
+        if(msgList[BillDeskResFormat1.indexOf('MerchantID')] == BillDeskDetails[0].Bill_Desk_Merchant_ID__c){
+            ChecksumKey = BillDeskDetails[0].Bill_Desk_Checksum_Key__c;
+            //paymentType = 'Normal';
+        }else if(msgList[BillDeskResFormat1.indexOf('MerchantID')] == BillDeskDetails[0].Bill_Desk_GST_Merchant_ID__c){
+            ChecksumKey = BillDeskDetails[0].Bill_Desk_GST_Checksum_Key__c; 
+            //paymentType = 'GST';
+        }
+        try{ 
+            if(ChecksumKey != '' && checksumValue == Utility.getChecksumKey(actualinputData,ChecksumKey)){
+                List<Receipt__c> receiptRecord = [Select Name,Mode__c,BillDesk__c,Booking__c,Project__c,Project_Unit__c,Cheque_DD__c,Amount_Rs__c,Receipt_Status__c,RW_Digital_Payment_Mode__c,Cheque_DD_Date__c from Receipt__c Where Name =: msgList[BillDeskResFormat1.indexOf('CustomerID')] ];
+                
+                
+                if(receiptRecord != null && receiptRecord.size() >0){
+                    
+                    receiptRecord[0].Cheque_DD__c = msgList.get(BillDeskResFormat1.indexOf('TxnReferenceNo'));
+                    
+                    receiptRecord[0].Currency__c = msgList.get(BillDeskResFormat1.indexOf('CurrencyName'));
+                    
+                    String dateFormat = msgList.get(BillDeskResFormat1.indexOf('TxnDate'));    
+                    receiptRecord[0].Cheque_DD_Date__c = Date.valueof(dateFormat.substring(6, 10)+'-'+dateFormat.substring(3, 5)+'-'+dateFormat.substring(0, 2));
+                    receiptRecord[0].Receipt_Status__c = msgList.get(BillDeskResFormat1.indexOf('AuthStatus')) == '0300' ? 'Success' : 'Failure';
+                    
+                    receiptRecord[0].Payment_Gateway_Response_Code__c = msgList.get(BillDeskResFormat1.indexOf('AuthStatus'));
+                    switch on (msgList.get(BillDeskResFormat1.indexOf('TxnType'))){
+                        when '01' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Net Banking'; }
+                        when '02' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Credit Card'; }
+                        when '03' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Debit Card'; }
+                        when '04' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Cash Card'; }
+                        when '05' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Mobile Wallet'; }
+                        when '06' { receiptRecord[0].BillDesk_Payment_Mode__c = 'IMPS'; }
+                        when '07' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Reward Points'; }
+                        when '08' { receiptRecord[0].BillDesk_Payment_Mode__c = 'Rupay'; }
+                        when '10' { receiptRecord[0].BillDesk_Payment_Mode__c = 'UPI'; }
+                        when else { receiptRecord[0].BillDesk_Payment_Mode__c = 'Others'; }    
+                    }
+                    update receiptRecord[0];
          }
          
-         System.debug('**receipt rec**'+receiptRecord);
 
-         if(msgList.get(BillDeskResFormat1.indexOf('AuthStatus')) == '0300'){
-              return 'Success';   
-            }
-            else{ 
+                if(msgList.get(BillDeskResFormat1.indexOf('AuthStatus')) == '0300'){
+                    return 'Success';   
+                }else{ 
+                    return 'Failure';  
+                }
+                
+            }else{ 
               return 'Failure';  
             }
-          
-        }
-             else{ 
-              return 'Failure';  
-            }
-        }
-        catch(Exception e)
-        {
+        }catch(Exception e){
             throw new CommonException('There was an error -'+e.getMessage()+'. Please try later');
         }
     }
     //Added by coServe 11-04-2023 Start
     @AuraEnabled
     public static List<Customer_Portal_Videos__c> videos(){
-        List<Customer_Portal_Videos__c> vids = [SELECT Id, Name, File_Id__c, Order__c, Video_Link__c FROM Customer_Portal_Videos__c ORDER By Order__c];
-        System.debug('vids: ' + vids);
+        List<Customer_Portal_Videos__c> vids = [SELECT Id,Name,File_Id__c,Order__c,Video_Link__c FROM Customer_Portal_Videos__c ORDER By Order__c];
         return vids;
     }
+    
+    @AuraEnabled
+    public static void approveNCF(Id ncfId) {
+        if (ncfId == null) {
+            throw new AuraHandledException('NCF Id cannot be blank.');
+        }
+    
+        Name_Confirmation_Form__c ncf = new Name_Confirmation_Form__c(
+            Id = ncfId,
+            Status__c = 'Approved',
+            RW_Allow_Customer_to_Update__c = false
+        );
+    
+        update ncf;
+    }
+
     //Added by coServe 11-04-2023 End
+    
+    /*@AuraEnabled
+    public static Boolean disableContactUs(String bookingId){ //Added by Vinay 09-06-2025
+		List<Booking__c> bkg = [SELECT Id, RW_Key_handover_date__c FROM Booking__c WHERE Id =: bookingId];
+        Date date4MonthsBack = Date.today().addMonths(-4);
+        if(bkg[0].RW_Key_handover_date__c != null && bkg[0].RW_Key_handover_date__c <= date4MonthsBack)
+            return true;
+        else
+            return false;
+    }*/
 }

@@ -13,6 +13,12 @@
             if (response.getState() == "SUCCESS") {
                 var allValues = response.getReturnValue(); 
                 component.set("v.bookingInfo", allValues);
+                var reason = allValues.Cancellation_Reason__c;
+                var depMap = component.get("v.parentChildMap");
+                
+                if (reason && depMap && depMap[reason]) {
+                    component.set("v.subReasonOptions", depMap[reason]);
+                }
                 if(spinner) {
                     $A.util.removeClass(spinner,"slds-show");
                     $A.util.addClass(spinner, "slds-hide");
@@ -22,11 +28,14 @@
         $A.enqueueAction(action);
     },
     saveBookingCancellation:function(component , BookingID ){ 
+        debugger;
         var spinner = component.find("mySpinner");
         if(spinner){
             $A.util.removeClass(spinner,"slds-hide");
             $A.util.addClass(spinner, "slds-show");
         }
+        var bookingRec = component.get("v.bookingInfo");
+        console.log('--saveBookingCancellation Booking---->',bookingRec);
         console.log('--saveBookingCancellation');
 				 var cancelReason = component.find('cancellationReason').get('v.value');        
        			 var cancellationdescription = component.find('cancellationdescription').get('v.value');        
@@ -49,11 +58,46 @@
         		 var cancSubType = component.find('cancSubType').get('v.value');
         		 var modeofCanc = component.find('modeofCanc').get('v.value');
                  var payRefAmt = component.find('payRefAmt').get('v.value');
-        		 var ResaleStatus = component.find('ResaleStatus').get('v.value');
-        		 var newRate = component.find('newRate').get('v.value');
-        		 var newFlatAgrVal = component.find('newFlatAgrVal').get('v.value');
-        		 var recvAmt = component.find('recvAmt').get('v.value');
-        		 var referralAmt = component.find('referralAmt').get('v.value');
+        var ResaleStatus = component.find('ResaleStatus') ? component.find('ResaleStatus').get('v.value') : null;
+        var newRate = component.find('newRate') ? component.find('newRate').get('v.value') : null;
+        var newFlatAgrVal = component.find('newFlatAgrVal') ? component.find('newFlatAgrVal').get('v.value') : null;
+        var recvAmt = component.find('recvAmt') ? component.find('recvAmt').get('v.value') : null;
+        var referralAmt = component.find('referralAmt') ? component.find('referralAmt').get('v.value') : null;
+        var meetingSatus = component.find('meetingStatus') ? component.find('meetingStatus').get('v.value') : null;
+        var meetingDate = component.find('meetingDate') ? component.find('meetingDate').get('v.value') : null;
+                 var otherReason = component.find('otherReason') ? component.find('otherReason').get('v.value') : null;
+        var details ={};
+        details['BookingId'] = BookingID;
+        details['cancellationdescription'] = cancellationdescription;
+        details['cancelReason'] = cancelReason;
+        details['cancellationSubReason'] = cancellationSubReason;
+        details['ForfeitureAmount'] = ForfeitureAmount;
+        details['BrokerageAmount'] = BrokerageAmount;
+        details['InterestValue'] = InterestValue;
+        details['Taxesifany'] = Taxesifany;
+        details['ForfeitureAmounttype'] = ForfeitureAmounttype;
+        details['Otherforfeitureamount'] = Otherforfeitureamount;
+        details['ForfeiPercentage'] = ForfeiPercentage;
+        details['TotalForfeitureAmount'] = TotalForfeitureAmount;
+        details['TotalRefundAmount'] = TotalRefundAmount;
+        details['FinalRefundAmount'] = FinalRefundAmount;
+        details['TotalRecievedAmount'] = TotalRecievedAmount;
+        details['TDS'] = TDS;
+        details['MVAT'] = MVAT;
+        details['SGST'] = SGST;
+        details['cancSubType'] = cancSubType;
+        details['modeofCanc'] = modeofCanc;
+        details['payRefAmt'] = payRefAmt;
+        details['ResaleStatus'] = ResaleStatus;
+        details['newRate'] = newRate;
+        details['newFlatAgrVal'] = newFlatAgrVal;
+        details['recvAmt'] = recvAmt;
+        details['referralAmt'] = referralAmt;
+        details['meetingSatus'] = meetingSatus;
+        details['meetingDate'] = meetingDate;
+        details['otherReason'] = otherReason;
+        
+        
         
 		if(ForfeiPercentage == undefined || TotalRecievedAmount == undefined || ForfeitureAmounttype == '--Select--' || BrokerageAmount == undefined || cancellationSubReason == '--None--' || cancellationdescription == undefined ||
            InterestValue == undefined || Taxesifany == undefined || TDS == undefined || MVAT == undefined || TotalForfeitureAmount == undefined || Otherforfeitureamount == undefined || TotalRefundAmount == undefined || FinalRefundAmount == undefined
@@ -72,33 +116,7 @@
         
         var action = component.get("c.bookingcancelled");
             action.setParams({
-                "BookingId" : BookingID ,
-                "cancelReason" : cancelReason,
-                "cancellationSubReason" : cancellationSubReason,
-                "ForfeitureAmount" : ForfeitureAmount,
-                "BrokerageAmount" : BrokerageAmount,
-                "InterestValue" : InterestValue,
-                "Taxesifany" : Taxesifany,
-                "ForfeitureAmounttype" : ForfeitureAmounttype,
-                "Otherforfeitureamount" : Otherforfeitureamount,
-                "ForfeiPercentage" : ForfeiPercentage,
-                "TotalForfeitureAmount" : TotalForfeitureAmount,
-                "TotalRefundAmount" : TotalRefundAmount,
-                "FinalRefundAmount" : FinalRefundAmount,
-                "TDS" : TDS,
-                "MVAT" : MVAT,
-                "cancellationdescription" : cancellationdescription,
-                'CGST' : CGST,
-                'SGST' : SGST,
-                'TotalRecievedAmount' : TotalRecievedAmount,
-                'cancSubType' : cancSubType,
-                'modeofCanc' : modeofCanc,
-                'payRefAmt' : payRefAmt,
-                'ResaleStatus' : ResaleStatus,
-                'newRate' : newRate,
-                'newFlatAgrVal' : newFlatAgrVal,
-                'recvAmt' : recvAmt,
-                'referralAmt' : referralAmt
+                "cancDetails": details
             });  
                 action.setCallback(this, function(response) {  
                 alert(response.getState());
@@ -141,6 +159,7 @@
         
     },   
     saveBookingCancellationUpgrade:function(component , BookingID ){ 
+        debugger;
         var spinner = component.find("mySpinner");
         if(spinner){
             $A.util.removeClass(spinner,"slds-hide");
@@ -150,26 +169,29 @@
 				 var cancelReason = component.find('cancellationReason').get('v.value');        
        			 var cancellationdescription = component.find('cancellationdescription').get('v.value');        
             	 var cancellationSubReason = component.find('cancellationSubReason').get('v.value');
-        		 var BrokerageAmount = component.find('BrokerageAmount1').get('v.value');
-       		     var InterestValue = component.find('InterestValue1').get('v.value');
-       			 var tax = component.find('Taxesifany1').get('v.value');
-       			 var gst = component.find('gst1').get('v.value');
+        		 // var BrokerageAmount = component.find('BrokerageAmount1').get('v.value');
+       		     // var InterestValue = component.find('InterestValue1').get('v.value');
+       			 // var tax = component.find('Taxesifany1').get('v.value');
+       			 // var gst = component.find('gst1').get('v.value');
             	 //var TotalRefundAmount = component.find('TotalRefundAmount1').get('v.value');
-        		 var TotalRecievedAmount = component.find('TotalRecievedAmount1').get('v.value');
-                 var TDS = component.find('TDS1').get('v.value');
-       			 var MVAT = component.find('MVATM1').get('v.value');
-            	 var CGST = component.find('CGST1').get('v.value');
-       			 var SGST = component.find('SGST1').get('v.value');
+        		 // var TotalRecievedAmount = component.find('TotalRecievedAmount1').get('v.value');
+                 // var TDS = component.find('TDS1').get('v.value');
+       			 // var MVAT = component.find('MVATM1').get('v.value');
+            	 // var CGST = component.find('CGST1').get('v.value');
+       			 // var SGST = component.find('SGST1').get('v.value');
         		 var cancSubType = component.find('cancSubType').get('v.value');
         		 var modeofCanc = component.find('modeofCanc').get('v.value');
-        		 var referralAmt = component.find('referralAmt1').get('v.value');
-        		 var swipeCharges = component.find('swipeCharges1').get('v.value');
-        		 var brokeragePaid = component.find('brokeragePaid1').get('v.value');
-        		 var totalAmtToBeTransfrd = component.find('totalAmtToBeTransfrd').get('v.value');
-        		 var note = component.find('note').get('v.value');
-        		 var stmpDutyAmt = component.find('stmpDutyAmt').get('v.value');
+        		 // var referralAmt = component.find('referralAmt1').get('v.value');
+        		 // var swipeCharges = component.find('swipeCharges1').get('v.value');
+        		 // var brokeragePaid = component.find('brokeragePaid1').get('v.value');
+        		 // var totalAmtToBeTransfrd = component.find('totalAmtToBeTransfrd').get('v.value');
+        		 // var note = component.find('note').get('v.value');
+        		 // var stmpDutyAmt = component.find('stmpDutyAmt').get('v.value');
+        var meetingSatus = component.find('meetingStatus') ? component.find('meetingStatus').get('v.value') : null;
+        var meetingDate = component.find('meetingDate') ? component.find('meetingDate').get('v.value') : null;
+                 var otherReason = component.find('otherReason') ? component.find('otherReason').get('v.value') : null;
         
-		if(TotalRecievedAmount == undefined || BrokerageAmount == undefined || InterestValue == undefined || tax == undefined ||
+		/*if(TotalRecievedAmount == undefined || BrokerageAmount == undefined || InterestValue == undefined || tax == undefined ||
            TDS == undefined || MVAT == undefined || gst == undefined || referralAmt == undefined || swipeCharges == undefined ||
            brokeragePaid == undefined || totalAmtToBeTransfrd == undefined || note == undefined || stmpDutyAmt == undefined)    {
             var toastEvent = $A.get("e.force:showToast");
@@ -183,29 +205,32 @@
            				$A.util.addClass(spinner, "slds-hide");
             			return;            
         } 
-        
+        */
         var details ={};
         details['BookingId'] = BookingID;
         details['cancelReason'] = cancelReason;
         details['cancellationSubReason'] = cancellationSubReason;
-        details['BrokerageAmount'] = BrokerageAmount;
-        details['InterestValue'] = InterestValue;
-        details['Taxesifany'] = tax;
-        details['gst'] = gst;
-        details['TDS'] = TDS;
-        details['MVAT'] = MVAT;
+        // details['BrokerageAmount'] = BrokerageAmount;
+        // details['InterestValue'] = InterestValue;
+        // details['Taxesifany'] = tax;
+        // details['gst'] = gst;
+        // details['TDS'] = TDS;
+        // details['MVAT'] = MVAT;
         details['cancellationdescription'] = cancellationdescription;
-        details['CGST'] = CGST;
-        details['SGST'] = SGST;
-        details['TotalRecievedAmount'] = TotalRecievedAmount;
+        // details['CGST'] = CGST;
+        // details['SGST'] = SGST;
+        // details['TotalRecievedAmount'] = TotalRecievedAmount;
         details['cancSubType'] = cancSubType;
         details['modeofCanc'] = modeofCanc;
-        details['referralAmt'] = referralAmt;
-        details['swipeCharges'] = swipeCharges;
-        details['brokeragePaid'] = brokeragePaid;
-        details['totalAmtToBeTransfrd'] = totalAmtToBeTransfrd;
-        details['note'] = note;
-        details['stmpDutyAmt'] = stmpDutyAmt;
+        // details['referralAmt'] = referralAmt;
+        // details['swipeCharges'] = swipeCharges;
+        // details['brokeragePaid'] = brokeragePaid;
+        // details['totalAmtToBeTransfrd'] = totalAmtToBeTransfrd;
+        // details['note'] = note;
+        // details['stmpDutyAmt'] = stmpDutyAmt;
+        details['meetingSatus'] = meetingSatus;
+        details['meetingDate'] = meetingDate;
+        details['otherReason'] = otherReason;
         
         var action = component.get("c.bookingcancelledUpgrade");
         action.setParams({     
@@ -371,4 +396,65 @@
         });
         $A.enqueueAction(action);
     },
+    /*fetchPicklistValues: function(component) {
+        var action = component.get("c.getCancellationReasons");
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                console.log('Reasons fetched: ', response.getReturnValue());
+                component.set("v.reasonOptions", response.getReturnValue());
+            }
+        });
+        $A.enqueueAction(action);
+    },*/
+    fetchPicklistValues: function(component) {
+        var action = component.get("c.getDependentMap"); // Call the new Map method
+        action.setCallback(this, function(response) {
+            if (response.getState() === "SUCCESS") {
+                var result = response.getReturnValue();
+                component.set("v.parentChildMap", result);
+                
+                // Extract keys for the first picklist
+                var keys = Object.keys(result);
+                component.set("v.reasonOptions", keys);
+                
+                // If there's already a value (Edit mode), populate sub-reasons immediately
+                var existingReason = component.get("v.bookingInfo.Cancellation_Reason__c");
+                if(existingReason) {
+                    component.set("v.subReasonOptions", result[existingReason]);
+                }
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    fetchDynamicPicklists: function(component) {
+        var action = component.get("c.getMultiplePicklistOptions");
+        
+        // Pass the list of fields you want to fetch dynamically
+        action.setParams({
+            "fieldNames": ["Mode_of_Cancellation__c", "Cancellation_Subtype__c", "Meeting_Status__c"]
+        });
+
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                var result = response.getReturnValue();
+                component.set("v.picklistMap", result);
+            } else {
+                console.error("Error fetching picklists: " + state);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    fetchSubtypeMapping: function(component) {
+        var action = component.get("c.getSubReasonToTypeMap");
+        action.setCallback(this, function(response) {
+            if (response.getState() === "SUCCESS") {
+                component.set("v.subReasonToTypeMap", response.getReturnValue());
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
 })

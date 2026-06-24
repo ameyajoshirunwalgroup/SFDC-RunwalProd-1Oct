@@ -1,0 +1,14 @@
+<messaging:emailTemplate subject="Birthday Wishes from Runwal Group" recipientType="User" relatedToType="Applicant_Details__c">
+<messaging:plainTextEmailBody >
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody >
+Dear Customer,<br/><br/>
+
+<img src="{!URLFOR($Resource.BirthdayWishes)}" height="570" width="350" alt="Happy Birthday"/><br/><br/><br/>
+Regards, <br/> 
+Runwal Group <br/> <br/> 
+
+</messaging:htmlEmailBody>
+
+</messaging:emailTemplate>

@@ -1,4 +1,4 @@
-trigger trgOnCountOfVisit on Event (after insert, before insert , before update, before delete) 
+trigger trgOnCountOfVisit on Event (after insert, before insert , before update, before delete,after update) 
 {
 	if(trigger.isInsert && trigger.isAfter)
 	{
@@ -22,4 +22,11 @@ trigger trgOnCountOfVisit on Event (after insert, before insert , before update,
         sendEmailOnEsclatationHandler objEventLastSiteVisitUpdate = new sendEmailOnEsclatationHandler();
         objEventLastSiteVisitUpdate.validateDelte(trigger.new, trigger.oldMap);
     }
+    if (Trigger.isbefore && Trigger.isInsert) {
+        EventTriggerHandler.handleBeforeInsert(Trigger.new);
+    }
+    if (Trigger.isAfter && Trigger.isUpdate) {
+        EventTriggerHandler.handleAfterUpdate(Trigger.new, Trigger.oldMap);
+    }
+    
 }

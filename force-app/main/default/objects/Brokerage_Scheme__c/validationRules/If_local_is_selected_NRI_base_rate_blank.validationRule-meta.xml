@@ -4,5 +4,5 @@
     <active>true</active>
     <errorConditionFormula>AND( ISPICKVAL(  Type__c ,&quot;Local&quot; ) , NOT(ISNULL(  Base_Brokerage_for_OS_NRI__c )) )</errorConditionFormula>
     <errorDisplayField>Base_Brokerage_for_OS_NRI__c</errorDisplayField>
-    <errorMessage>Base Brokerage For OS / NRI Should be blank</errorMessage>
+    <errorMessage>Base Brokerage For OS / NRI Should be blank if client type is Local</errorMessage>
 </ValidationRule>

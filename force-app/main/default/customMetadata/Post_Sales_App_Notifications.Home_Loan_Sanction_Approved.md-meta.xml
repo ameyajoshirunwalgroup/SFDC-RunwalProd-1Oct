@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Home Loan Sanction Approved</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Email_Message__c</field>
+        <value xsi:type="xsd:string">Dear {!RW_Booking__r.Primary_Applicant_Name__c},
+
+Greetings from Runwal Enterprises!
+
+We are pleased to inform you that the sanction for your home loan application has been approved and the details have been updated in our system.
+
+Please find the key sanction details below for your reference:
+
+Unit Number: {!RW_Booking__r.Unit_No__r.Name}
+Sanction Bank: {!RW_Bank_Name__c}
+Sanction Amount: {!RW_Sanction_Amount__c}
+Sanction Date: {!RW_Sanction_Date__c}
+Sanction Document Number: {{Sanction_Document_Number}}
+
+You can also view the complete sanction details on your Runwal app: {!$Label.App_Link}
+
+If you require any clarification or assistance, our home loan team will be happy to support you.
+
+Warm regards,
+Runwal Enterprises
+{!$Label.Support_Email} | {!$Label.Support_Phone}</value>
+    </values>
+    <values>
+        <field>Email_Subject__c</field>
+        <value xsi:type="xsd:string">Home Loan Sanction Approved</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Home Loan Sanction Approved 🎉
+
+Great news! Your home loan has been approved. View the details on the app.</value>
+    </values>
+    <values>
+        <field>Notification_Type__c</field>
+        <value xsi:type="xsd:string">my_loan</value>
+    </values>
+    <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">Loan__c</value>
+    </values>
+    <values>
+        <field>Title__c</field>
+        <value xsi:type="xsd:string">Home Loan Sanction Approved</value>
+    </values>
+    <values>
+        <field>Whatsapp_Message__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Whatsapp_Template_Name__c</field>
+        <value xsi:type="xsd:string">Home Loan Sanction Approved</value>
+    </values>
+</CustomMetadata>

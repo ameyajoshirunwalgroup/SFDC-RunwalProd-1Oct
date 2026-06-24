@@ -45,9 +45,9 @@ global class BatchforAOPSchemeTagging implements Database.Batchable<sObject>,Dat
         
         System.debug('Least startDate --> ' + leastStartDate);
         System.debug('At most endDate --> ' + atMostEndDate);
-        list<Booking__c> bookingList = [SELECT Id, Quotation__r.Quote_Status__c, Quotation__r.Discount_9_L__c, Name, Opportunity__c, BrokerIId__c, Agreement_Value_for_brokers__c, Project__c, 
+        list<Booking__c> bookingList = [SELECT Id, Quotation__r.Quote_Status__c, Quotation__r.Discount_9_L__c, Name, Opportunity__c, BrokerIId__c, Agreement_Value_for_brokers__c, Project__c,Project__r.Name, 
                               Booking_Date__c, Tower__c, X5_Received__c, RW_X9_99_Received__c, RW_Registration_Done__c, Brokerage_Scheme__c, Is_Special_Brokerage_Scheme__c, 
-                              Type_Of_Client_Formula__c, CreatedDate, Opportunity__r.RW_Walkin_Channel_Partner__c,Project__r.CP_Invoice_Approver_L1__c,Project__r.CP_Invoice_Approver_L2__c,
+                              Type_Of_Client_Formula__c, CreatedDate, Opportunity__r.RW_Walkin_Channel_Partner__c,
                               Primary_Applicant_Name__c,Unit_Number__c,RW_Project_Name__c,Brokerage_Scheme_Name__c,Brokerage__c,Passback__c,
                               Opportunity__r.SAP_Customer_Number__c,Opportunity__r.SalesOrder_Number__c,Flat_No__c,Broker_Name__c
                        FROM Booking__c 
@@ -205,92 +205,246 @@ global class BatchforAOPSchemeTagging implements Database.Batchable<sObject>,Dat
     
     
     */
-    
+    //Comment By Dolly
+    /*
     global void finish(Database.BatchableContext bc) {
-    System.debug('Inside Finish Method');
+        System.debug('Inside Finish Method');
 
-    System.debug('Total Bookings Retrieved: ' + bookingListToUpdate.size());
+        System.debug('Total Bookings Retrieved: ' + bookingListToUpdate.size());
 
-        if(bookingListToUpdate.size()>0){
-            Map<Id, User> cpUsers_Map = new Map<Id, User>(
-                [SELECT Id, Name, Email, Manager.Email FROM User WHERE Profile.Name IN ('CP Access', 'CP Billing Access')]
-            );
-            system.debug('cpUsers_Map'+cpUsers_Map);
-            Map<Id, List<Booking__c>> approverVsBookings = new Map<Id, List<Booking__c>>();
-            
-            for (Booking__c b : bookingListToUpdate) {
-                if (b.Project__c != null) {
-                    Id approver1 = b.Project__r.CP_Invoice_Approver_L1__c;
-                    Id approver2 = b.Project__r.CP_Invoice_Approver_L2__c;
-                    
-                    List<Id> approvers = new List<Id>();
-                    if (approver1 != null) approvers.add(approver1);
-                    if (approver2 != null) approvers.add(approver2);
-                    
-                    for (Id approver : approvers) {
-                        if (!approverVsBookings.containsKey(approver)) {
-                            approverVsBookings.put(approver, new List<Booking__c>());
+            if(bookingListToUpdate.size()>0){
+                Map<Id, User> cpUsers_Map = new Map<Id, User>(
+                    [SELECT Id, Name, Email, Manager.Email FROM User WHERE Profile.Name IN ('CP Access', 'CP Billing Access')]
+                );
+                system.debug('cpUsers_Map'+cpUsers_Map);
+                Map<Id, List<Booking__c>> approverVsBookings = new Map<Id, List<Booking__c>>();
+                
+                for (Booking__c b : bookingListToUpdate) {
+                    if (b.Project__c != null) {
+                        Id approver1 = b.Project__r.CP_Invoice_Approver_L1__c;
+                        Id approver2 = b.Project__r.CP_Invoice_Approver_L2__c;
+                        
+                        List<Id> approvers = new List<Id>();
+                        if (approver1 != null) approvers.add(approver1);
+                        if (approver2 != null) approvers.add(approver2);
+                        
+                        for (Id approver : approvers) {
+                            if (!approverVsBookings.containsKey(approver)) {
+                                approverVsBookings.put(approver, new List<Booking__c>());
+                            }
+                            approverVsBookings.get(approver).add(b);
                         }
-                        approverVsBookings.get(approver).add(b);
-                    }
-                } 
-            }
-            
-            List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
-            String header = 'Name Of Customer,Booking Date,Unit Number,Project Name,Broker Name,Brokerage Scheme,Brokerage,Passback,SAP Customer Number,SAP Salesorder Id\n';
-            
-            system.debug('approverVsBookings'+approverVsBookings);
-            for (Id approverId : approverVsBookings.keySet()) {
-                List<String> toAddress = new List<String>(); 
-                //List<String> toAddress = (approver.Email != null) ? new List<String>{approver.Email} : new List<String>();
-                if(!Test.isRunningTest()){
-                    if(cpUsers_Map != null && cpUsers_Map.get(approverId).Email != null){
-                        toAddress.add(cpUsers_Map.get(approverId).Email);
-                    }
-                }
-                //toAddress = new List<String>{'prashant.chaurasia.os@runwalgroup.in'}; 
-                list<String> ccAddress = new list<String>();
-                if(!Test.isRunningTest()){
-                    if(cpUsers_Map != null && cpUsers_Map.get(approverId).Manager.Email != null){
-                        ccAddress.add(cpUsers_Map.get(approverId).Manager.Email);
-                    }
-                }
-                List<Booking__c> bookings = approverVsBookings.get(approverId);
-                String body = '';
-                
-                for (Booking__c b : bookings) {
-                    Date bookingDateTemp = b.Booking_Date__c.date();
-                    String bookingDate = bookingDateTemp.format();
-                    System.debug('Booking Date: ' + bookingDate);
-                    body += b.Primary_Applicant_Name__c + ',' + bookingDate + ',' + b.Unit_Number__c + ',' + b.RW_Project_Name__c + ',' + b.Broker_Name__c + ',' + b.Brokerage_Scheme_Name__c + ',' + b.Brokerage__c + ',' + b.Passback__c + ',' + b.Opportunity__r.SAP_Customer_Number__c + ',' + b.Opportunity__r.SalesOrder_Number__c + '\n';
+                    } 
                 }
                 
-                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                email.setOrgWideEmailAddressId('0D25j0000008QPACA2');
-                email.setToAddresses(toAddress);
-                email.setCcAddresses(ccAddress);
-                email.setSubject('List of Customers for Your Projects');
-                email.setPlainTextBody('Please find the attached list of bookings for your approval.');
+                List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
+                String header = 'Name Of Customer,Booking Date,Unit Number,Project Name,Broker Name,Brokerage Scheme,Brokerage,Passback,SAP Customer Number,SAP Salesorder Id\n';
                 
-                String csvContent = header + body;            
-                Blob csvBlob = Blob.valueOf(csvContent);
-                Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
-                if(!Test.isRunningTest()){
-                    attachment.setFileName('Bookings_For_Approver_' + cpUsers_Map.get(approverId).Name.replace(' ', '_') + '.csv');
-                    attachment.setBody(csvBlob);
-                    attachment.setContentType('text/csv');
-                    email.setFileAttachments(new List<Messaging.EmailFileAttachment>{attachment});
+                system.debug('approverVsBookings'+approverVsBookings);
+                for (Id approverId : approverVsBookings.keySet()) {
+                    List<String> toAddress = new List<String>(); 
+                    //List<String> toAddress = (approver.Email != null) ? new List<String>{approver.Email} : new List<String>();
+                    if(!Test.isRunningTest()){
+                        if(cpUsers_Map != null && cpUsers_Map.get(approverId).Email != null){
+                            toAddress.add(cpUsers_Map.get(approverId).Email);
+                        }
+                    }
+                    //toAddress = new List<String>{'prashant.chaurasia.os@runwalgroup.in'}; 
+                    list<String> ccAddress = new list<String>();
+                    if(!Test.isRunningTest()){
+                        if(cpUsers_Map != null && cpUsers_Map.get(approverId).Manager.Email != null){
+                            ccAddress.add(cpUsers_Map.get(approverId).Manager.Email);
+                        }
+                    }
+                    List<Booking__c> bookings = approverVsBookings.get(approverId);
+                    String body = '';
                     
-                    emailList.add(email);
+                    for (Booking__c b : bookings) {
+                        Date bookingDateTemp = b.Booking_Date__c.date();
+                        String bookingDate = bookingDateTemp.format();
+                        System.debug('Booking Date: ' + bookingDate);
+                        body += b.Primary_Applicant_Name__c + ',' + bookingDate + ',' + b.Unit_Number__c + ',' + b.RW_Project_Name__c + ',' + b.Broker_Name__c + ',' + b.Brokerage_Scheme_Name__c + ',' + b.Brokerage__c + ',' + b.Passback__c + ',' + b.Opportunity__r.SAP_Customer_Number__c + ',' + b.Opportunity__r.SalesOrder_Number__c + '\n';
+                    }
+                    
+                    Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                    email.setOrgWideEmailAddressId('0D25j0000008QPACA2');
+                    email.setToAddresses(toAddress);
+                    email.setCcAddresses(ccAddress);
+                    email.setSubject('List of Customers for Your Projects');
+                    email.setPlainTextBody('Please find the attached list of bookings for your approval.');
+                    
+                    String csvContent = header + body;            
+                    Blob csvBlob = Blob.valueOf(csvContent);
+                    Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
+                    if(!Test.isRunningTest()){
+                        attachment.setFileName('Bookings_For_Approver_' + cpUsers_Map.get(approverId).Name.replace(' ', '_') + '.csv');
+                        attachment.setBody(csvBlob);
+                        attachment.setContentType('text/csv');
+                        email.setFileAttachments(new List<Messaging.EmailFileAttachment>{attachment});
+                        
+                        emailList.add(email);
+                    }
                 }
+                
+                if (!emailList.isEmpty()) {
+                    Messaging.sendEmail(emailList);
+                    System.debug('Emails Sent: ' + emailList.size());
+                }
+                
+                
             }
-            
-            if (!emailList.isEmpty()) {
-                Messaging.sendEmail(emailList);
-                System.debug('Emails Sent: ' + emailList.size());
-            }
-            
-            
+    }   
+    */
+
+    //Added by Dolly
+    global void finish(Database.BatchableContext bc) {
+        System.debug('Inside Finish Method');
+        System.debug('Total Bookings Retrieved: ' + bookingListToUpdate.size());
+
+        if (bookingListToUpdate.isEmpty()) {
+            return;
         }
-}    
+
+        // Fetch CP Users (Approvers + Managers)
+        Map<Id, User> cpUsers_Map = new Map<Id, User>(
+            [SELECT Id, Name, Email, Manager.Email 
+            FROM User 
+            WHERE Profile.Name IN ('CP Access', 'CP Billing Access')]
+        );
+
+        // Collect Project IDs
+        Set<Id> projectIds = new Set<Id>();
+        for (Booking__c b : bookingListToUpdate) {
+            if (b.Project__c != null) {
+                system.debug('project name-------->'+b.Project__r.Name);
+                projectIds.add(b.Project__c);
+            }
+        }   
+
+        // Fetch approvers mapped by project
+        Map<Id, Map<String, Team_Members__c>> projectIdToApproversMap =TeamMemberService.getProjectTeamMembers(projectIds, 'CP Approvers Team', new List<String>{ 'CP MIS', 'CP Invoice Approver L1' });
+        Map<Id, List<Booking__c>> approverVsBookings = new Map<Id, List<Booking__c>>();
+        for (Booking__c b : bookingListToUpdate) {
+            if (b.Project__c != null && projectIdToApproversMap.containsKey(b.Project__c)) {
+                Map<String, Team_Members__c> approverMap = projectIdToApproversMap.get(b.Project__c);
+                if(approverMap!=null){
+                    Team_Members__c approverMIS = approverMap.get('CP MIS');
+                    Team_Members__c approverL1  = approverMap.get('CP Invoice Approver L1');
+
+                    //Add MIS User
+                     if (approverMIS != null && approverMIS.User__c != null) {
+                        if (!approverVsBookings.containsKey(approverMIS.User__c)) {
+                            approverVsBookings.put(approverMIS.User__c, new List<Booking__c>());
+                        }
+                        approverVsBookings.get(approverMIS.User__c).add(b);
+                    }
+
+                    // Add L1 Approver
+                    if (approverL1 != null && approverL1.User__c != null) {
+                        if (!approverVsBookings.containsKey(approverL1.User__c)) {
+                            approverVsBookings.put(approverL1.User__c, new List<Booking__c>());
+                        }
+                        approverVsBookings.get(approverL1.User__c).add(b);
+                    }
+                }
+
+            } 
+        }
+        System.debug('approverVsBookings => ' + approverVsBookings);
+
+        // Build & send all emails
+        List<Messaging.SingleEmailMessage> emailList = buildEmailsForApprovers(approverVsBookings, cpUsers_Map);
+
+        if (!emailList.isEmpty()) {
+            Messaging.sendEmail(emailList);
+            System.debug('Emails Sent: ' + emailList.size());
+        }
+    }  
+    
+    //Added by Dolly
+    private OrgWideEmailAddress getOrgWideEmail() {
+        try {
+            return [
+                SELECT Id 
+                FROM OrgWideEmailAddress 
+                WHERE DisplayName = 'CRM Gardens'
+                LIMIT 1
+            ];
+        } catch (Exception ex) {
+            System.debug('OWEA not found: ' + ex.getMessage());
+            return null;
+        }
+    }
+
+    //Added by Dolly
+    private List<Messaging.SingleEmailMessage> buildEmailsForApprovers(Map<Id, List<Booking__c>> approverVsBookings, Map<Id, User> cpUsers_Map) {
+
+        List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
+        // Fetch org-wide email once
+        OrgWideEmailAddress owea = getOrgWideEmail();
+
+        String header = 'Name Of Customer,Booking Date,Unit Number,Project Name,Broker Name,Brokerage Scheme,Brokerage,Passback,SAP Customer Number,SAP Salesorder Id\n';
+
+        for (Id approverId : approverVsBookings.keySet()) {
+            User approverUser = cpUsers_Map.get(approverId);
+            // Skip if no user / no email
+            if (approverUser == null || String.isBlank(approverUser.Email)) {
+                System.debug('Skipping approver with no email: ' + approverId);
+                continue;
+            }
+
+            // Build recipient lists
+            List<String> toAddress = new List<String>();
+            List<String> ccAddress = new List<String>();
+
+            if (cpUsers_Map != null && approverUser.Email != null) {
+                toAddress.add(approverUser.Email);
+            }
+
+            if (cpUsers_Map != null && approverUser.Manager != null && approverUser.Manager.Email != null) {
+                ccAddress.add(approverUser.Manager.Email);
+            }
+            system.debug('toAddress---->'+toAddress);
+            system.debug('ccAddress---->'+ccAddress);
+
+            // Build CSV body
+            String body = '';
+            for (Booking__c b : approverVsBookings.get(approverId)) {
+                String bookingDate = b.Booking_Date__c != null ?
+                                    b.Booking_Date__c.format() : '';
+                
+                body += b.Primary_Applicant_Name__c + ',' +
+                        bookingDate + ',' +
+                        b.Unit_Number__c + ',' +
+                        b.RW_Project_Name__c + ',' +
+                        b.Broker_Name__c + ',' +
+                        b.Brokerage_Scheme_Name__c + ',' +
+                        b.Brokerage__c + ',' +
+                        b.Passback__c + ',' +
+                        b.Opportunity__r.SAP_Customer_Number__c + ',' +
+                        b.Opportunity__r.SalesOrder_Number__c + '\n';
+            }
+
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setOrgWideEmailAddressId(owea.Id);
+            email.setToAddresses(toAddress);
+            email.setCcAddresses(ccAddress);
+            email.setSubject('List of Customers for Your Projects');
+            email.setPlainTextBody('Please find the attached list of bookings for your approval.');
+
+            // CSV Attachment
+            Blob csvBlob = Blob.valueOf(header + body);
+            Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
+
+            attachment.setFileName('Bookings_For_Approver_' + approverUser.Name.replace(' ', '_') + '.csv');
+            attachment.setBody(csvBlob);
+            attachment.setContentType('text/csv');
+
+            email.setFileAttachments(new List<Messaging.EmailFileAttachment>{ attachment });
+
+            emailList.add(email);
+        }
+
+        return emailList;
+    }
 }

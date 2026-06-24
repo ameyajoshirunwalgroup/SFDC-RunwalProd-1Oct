@@ -1,8 +1,9 @@
 public with sharing class QuotationManagementServices {
     
-    public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId) {
-        
+    public static Map<String,List<QuoteUIWrapper>> getQuotationUIFormat(Id unitId, Decimal allotmentCharges, Decimal discountLumpsum, Integer addCarParks, Id subPlanId,Quotation__c q) {
+        System.debug('allotment charges in quotation m ===>'+allotmentCharges );
         Map<String,Decimal> allChargesMap = InventoryCostServices.getAllCharges(unitId, allotmentCharges, discountLumpsum, subPlanId);
+        system.debug('allChargesMap=='+allChargesMap);
         Project_Unit__c u = InventoryCostServices.getUnitDetails(unitId);
         Map<String,List<QuoteUIWrapper>> UIMap = new Map<String,List<QuoteUIWrapper>>();
         Boolean printBreakup = false;
@@ -30,50 +31,80 @@ public with sharing class QuotationManagementServices {
             views = views.substring(0,views.length() -1);
         
         tempList.add(new QuoteUIWrapper('View',views ) );
-        string carpark = '';
-        Integer totalCarParks = addCarParks;
-          if(u.single_car_park_earmarked__c != null) {
-              carpark = string.valueOf(u.single_car_park_earmarked__c) + ' Single Covered,';
-              Integer total = Integer.valueOf(u.single_car_park_earmarked__c);
-              totalCarParks += total;
-          }
-          if(u.tandem_car_park_earmarked__c != null) {
-              carpark += ' '+ string.valueOf(u.tandem_car_park_earmarked__c) + ' Tandem Covered, ';
-              Integer total = Integer.valueOf(2*u.tandem_car_park_earmarked__c);
-              totalCarParks += total;
-          }
-          if(u.single_open_earmarked__c != null) {
-              carpark += ' '+ string.valueOf(u.single_open_earmarked__c) + ' Single Open,';
-              Integer total = Integer.valueOf(u.single_open_earmarked__c);
-              totalCarParks += total;
-          }
-        if(u.tandem_open_earmarked__c != null) {
-            carpark += ' '+ string.valueOf(u.tandem_open_earmarked__c) + ' Tandem Open,';
-            Integer total = Integer.valueOf(2*u.tandem_open_earmarked__c);
-            totalCarParks += total;
-        }
-        if(u.Stack__c != null) {
-            carpark += ' ' + string.valueOf(u.Stack__c) + ' Stilt';
-            Integer total = Integer.valueOf(u.Stack__c);
-            totalCarParks += total;
-        }
-         if(u.MLCP_Earmarked__c!= null) {
-            carpark += ' ' + string.valueOf(u.MLCP_Earmarked__c) + ' MLCP';
-            Integer total = Integer.valueOf(u.MLCP_Earmarked__c);
-            totalCarParks += total;
-        }
-        
+
+        String carpark = '';
+        String additionalCarpark = '';
+
+        List<String> res;
+        res = buildParking(u.single_car_park_earmarked__c, q.Single_car_park_additional__c, 'Single Covered');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.tandem_car_park_earmarked__c, q.Tandem_car_park_additional__c, 'Tandem Covered');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.single_open_earmarked__c, q.Single_Open_Additional__c, 'Single Open');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.tandem_open_earmarked__c, q.Tandem_Open_Additional__c, 'Tandem Open');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.Covered_Stack_Earmarked__c, q.Covered_Stack_Additional__c, 'Covered Stack');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.Stack__c, q.Stack_Additional__c, 'Stilt');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.MLCP_Earmarked__c, q.MLCP_Additional__c, 'MLCP');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.Basement_Earmarked__c, q.Basement_Additional__c, 'Basement');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.Podium_Earmarked__c, q.Podium__c, 'Podium');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.Puzzle_Car_Park_Earmarked__c, q.Puzzle_Car_Park__c, 'Puzzle Car Park');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
+        res = buildParking(u.Stack_Car_Park_Earmarked__c, q.Stack_Additional_1__c, 'Stack Car Park');
+        carpark += res[0];
+        additionalCarpark += res[1];
+
         // remove the last character only if its a comma.
-        if(carpark.length() > 0 && carpark.substring(carpark.length() -1).equals(','))
-            carpark = carpark.substring(0,carpark.length() -1);
-        tempList.add(new QuoteUIWrapper('Car Park', carpark )); 
-        tempList.add(new QuoteUIWrapper('Total Parks', string.valueOf(totalCarParks) )); 
+        if(carpark.length() > 0 && carpark.substring(carpark.length() -1).equals(',')) carpark = carpark.substring(0,carpark.length() -1);
         
+        String carparkStr = carpark;
+        String additionalCarparkStr = additionalCarpark;
+
+        if(carparkStr.endsWith(', ')){
+            carparkStr = carparkStr.substring(0, carparkStr.length()-2);
+        }
+
+        if(additionalCarparkStr.endsWith(', ')){
+            additionalCarparkStr = additionalCarparkStr.substring(0, additionalCarparkStr.length()-2);
+        }
+
+        tempList.add(new QuoteUIWrapper('Car Park(Earmarked)', carparkStr));
+
+        if(String.isNotBlank(additionalCarparkStr)){
+            tempList.add(new QuoteUIWrapper('Car Park(Additional)', additionalCarparkStr));
+        }
+
         leftTopMap.put('LEFTTOP',tempList);
         
         //Data for right top table
         Map<String,List<QuoteUIWrapper>> rightTopMap = new Map<String,List<QuoteUIWrapper>>();
-    List<QuoteUIWrapper> tempList0 = new List<QuoteUIWrapper>();
+        List<QuoteUIWrapper> tempList0 = new List<QuoteUIWrapper>();
         List<QuoteUIWrapper> tempList1 = new List<QuoteUIWrapper>();
         
         Map<String,List<QuoteUIWrapper>> leftBottomMap = new Map<String,List<QuoteUIWrapper>>();
@@ -89,7 +120,7 @@ public with sharing class QuotationManagementServices {
             tempList1.add(new QuoteUIWrapper('Allotment Premium     ( A )', INFormat(allChargesMap.get('AGREEMENTVALUE')), 'bold','aval'));
         }
         
-        
+        system.debug('Allotment Premium( A ) -> ' + INFormat(allChargesMap.get('AGREEMENTVALUE')));
         List<Project_Charges__c> projCharges = InventoryCostServices.getProjectChargesDefined(u.RW_Project__r.Name);
         
         Decimal charge1Sum = 0;
@@ -102,15 +133,18 @@ public with sharing class QuotationManagementServices {
         Integer serviceCount = 0;
         
         for(Project_Charges__c pc : projCharges) {
-            
+            system.debug('pc.S_Charge_Bucket__c->'+pc.S_Charge_Bucket__c);
+            system.debug('pc.Active__c->'+pc.Active__c);
             if(pc.S_Charge_Bucket__c.equals('Stamp Duty and Registration') && pc.Active__c){
+
                 if(stampCount == 0) {
+                    system.debug('stampCount&discountLumpsum->'+stampCount+discountLumpsum);
                     // whenever there is a discount, put some characters, the reason being blank values make the size of the table column
                     // shrink and distorts the table size. The discount values column and the orginal values column should match up
                     if(discountLumpsum != 0) 
-                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'---','bold',''));
+                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'---','bold',''));  //Added --- for discount css
                     else
-                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'','bold',''));
+                        tempList1.add(new QuoteUIWrapper('Stamp Duty and Registration Charges' ,'---','bold',''));
                 }    
                 tempList1.add(new QuoteUIWrapper(pc.Charge_Code__r.Name, INFormat(allChargesMap.get(pc.Charge_Code__r.Name))));
                 charge1Sum = charge1Sum + allChargesMap.get(pc.Charge_Code__r.Name);
@@ -168,8 +202,8 @@ public with sharing class QuotationManagementServices {
                  }
                 serviceCount++;
             }
-            if(pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && !pc.S_Charge_Bucket__c.equals('Agreement Value')) {
-        System.debug('Charge Name:' + pc);
+            if(pc.Service_Tax_Applicable_on_this_charge__c && pc.Active__c  && !pc.S_Charge_Bucket__c.equals('Agreement Value') && !pc.S_Charge_Bucket__c.equals('SD In AV')) {//Added !pc.S_Charge_Bucket__c.equals('SD In AV') for SDR Changes
+                System.debug('Charge Name:' + pc);
                 if(taxSlabMap.containsKey(pc.Service_Tax_Percentage__c)) {
                   for(tax_breakup__c tb : taxSlabMap.get(pc.Service_Tax_Percentage__c)) {
                     tempList4.add(new QuoteUIWrapper(tb.tax_name__c + ' on '+  + pc.Charge_Code__r.Name + ' @ ' + allChargesMap.get(pc.Charge_Code__r.Name + ' '+ tb.tax_name__c +  ' TAX RATE') +'% on ' +  Informat(allChargesMap.get(pc.charge_code__r.Name + ' '+ tb.tax_name__c +  ' TAXABLE AMOUNT')) , 
@@ -207,20 +241,50 @@ public with sharing class QuotationManagementServices {
         UIMap.putAll(leftTopMap);
         UIMap.putAll(rightTopMap);
         UIMap.putAll(leftBottomMap);
-        
+        system.debug('UIMap=='+UIMap);
+        system.debug('rightTopMap=='+rightTopMap);
         return UIMap;
         
         
     }
     
-    public static Map<String,Id> getApprovers(Id projId) {
-        List<Team_Members__c> tmList = [Select User__c,Approver_Type__c, IsActive__c from Team_Members__c where Team__r.name like 'Sales Approvers Team%' and Team__r.Project__c = : projId];
-        Map<String,Id> quoteApproversMap = new Map<String,Id>();
-        for(Team_Members__c tm : tmList) {
-            quoteApproversMap.put(tm.Approver_Type__c, tm.User__c);
+    // public static Map<String,Id> getApprovers(Id projId) {
+    //     List<Team_Members__c> tmList = [Select User__c,Approver_Type__c, IsActive__c from Team_Members__c where Team__r.name like 'Sales Approvers Team%' and Team__r.Project__c = : projId and IsActive__c = true];//Added IsActive__c for Quotation Offer
+    //     Map<String,Id> quoteApproversMap = new Map<String,Id>();
+    //     for(Team_Members__c tm : tmList) {
+    //         quoteApproversMap.put(tm.Approver_Type__c, tm.User__c);
+    //         System.debug('quoteApproversMap1**'+quoteApproversMap);
+    //     }
+    //     System.debug('quoteApproversMap2**'+quoteApproversMap);
+    //     return quoteApproversMap;
+    // }
+
+    /**Added for Quotation Offer Starts */
+    public static Map<String, Map<String, Id>> getApprovers(Id projId) {
+
+    List<Team_Members__c> tmList = [
+        SELECT User__c,
+               Approver_Type__c,
+               Team__r.Name,
+               IsActive__c
+        FROM Team_Members__c
+        WHERE Team__r.Project__c = :projId
+          AND IsActive__c = true
+    ];
+
+    Map<String, Map<String, Id>> teamApproverMap = new Map<String, Map<String, Id>>();
+
+    for (Team_Members__c tm : tmList) {
+        if (!teamApproverMap.containsKey(tm.Team__r.Name)) {
+            teamApproverMap.put(tm.Team__r.Name, new Map<String, Id>());
         }
-        return quoteApproversMap;
+        teamApproverMap.get(tm.Team__r.Name)
+                       .put(tm.Approver_Type__c, tm.User__c);
     }
+
+    return teamApproverMap;
+}
+    /**Added for Quotation Offer ends */
 
     public class QuoteUIWrapper {
         public String colText {get; set;}
@@ -283,5 +347,26 @@ public with sharing class QuotationManagementServices {
         else
             mf = '- Rs ' + mf + '/-';
         return mf;
+    }
+
+    public static List<String> buildParking( Decimal unitQty, Decimal selQty, String label){
+        if(unitQty == null) unitQty = 0;
+        if(selQty == null) selQty = unitQty;
+
+        Decimal earmarked = Math.min(selQty, unitQty);
+        Decimal additional = Math.max(selQty - unitQty, 0);
+
+        String car = '';
+        String add = '';
+
+        if(earmarked > 0){
+            car = earmarked + ' ' + label + ', ';
+        }
+
+        if(additional > 0){
+            add = additional + ' ' + label + ', ';
+        }
+
+        return new List<String>{car, add};
     }
 }

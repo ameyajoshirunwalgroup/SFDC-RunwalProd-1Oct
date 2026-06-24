@@ -62,6 +62,7 @@ public class WelcomeCallChecklistTest {
         oppRec.Sourcing_Manager__c='Aniket Sapre';
         oppRec.RW_Sourcing_Head__c='Adrian Dsouza';
         oppRec.RW_Sales_Associate__c='Karthik Chettiar';
+        oppRec.Sales_Manager_User__c= UserInfo.getUserId(); //Added by Vinay 04-12-2025
         oppRec.RW_Closing_Head__c='Karthik Chettiar';
         oppRec.Walkin_Source__c='Direct';
         insert oppRec;
@@ -417,7 +418,7 @@ public static void testprevCallRemarks() {
             WelcomeCallChecklist.saveCheckList(
                 finalRemarksList, wrpObj, status, addRrmks, modeOfFunding,
                 'Axis Bank', 'Axis Bank', 'Axis Bank',
-                bankPreferenceForLoan, new List<Receipt__c>{r1}, isDhamaka
+                bankPreferenceForLoan,'Hold', new List<Receipt__c>{r1}, isDhamaka
             );
             
             Test.stopTest();

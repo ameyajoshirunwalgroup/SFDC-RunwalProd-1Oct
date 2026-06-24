@@ -1,0 +1,447 @@
+<template>
+    <lightning-card title="Marketing Dashboards">
+        <div class="slds-grid slds-gutters slds-p-around_small slds-grid_vertical-align-end">
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Select Table" value={selectedTable} 
+                    options={tableOptions} onchange={handleTableChange}></lightning-combobox>
+            </div>
+            <template if:true={showLeadSource}>
+                <!--<div class="slds-col slds-size_2-of-12">
+                    <lightning-combobox label="Lead Source" value={selectedSource} 
+                        options={leadSourceOptions} onchange={handleFilterChange}></lightning-combobox>
+                </div>-->
+                <div class="slds-col slds-size_2-of-12">
+                    <div class="multi-select-container">
+                        <label class="slds-form-element__label">Lead Source</label>
+                        <div class="multi-select-box" onclick={toggleLeadSourceDropdown}>
+                            <span>{selectedLeadSourceLabel}</span>
+                            <lightning-icon  icon-name="utility:down" size="xx-small"></lightning-icon>
+                        </div>
+                        <template if:true={showLeadSourceDropdown}>
+                            <div class="dropdown-list">
+                                <template for:each={leadSourceOptions} for:item="leadsource">
+                                    <div key={leadsource.value} class="dropdown-item">
+                                        <lightning-input type="checkbox" label={leadsource.label} value={leadsource.value} checked={leadsource.checked} onchange={handleLeadSourceSelect}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+            <template if:true={isTable1}>
+                <div class="slds-col slds-size_2-of-12">
+                    <lightning-combobox label="Vertical" value={selectedSource} 
+                        options={verticalOptions} onchange={handleFilterChange}></lightning-combobox>
+                </div>
+            </template>
+            <div class="slds-col slds-size_2-of-12">
+                <lightning-combobox label="Project" value={selectedProject} 
+                    options={projectOptions} onchange={handleFilterChange}></lightning-combobox>
+            </div>
+            
+            <template if:true={showFilters}>
+                <template if:true={showDateRange}>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-combobox label="Date Range" value={selectedDateRange} 
+                            options={dateRangeOptions} onchange={handleFilterChange}></lightning-combobox>
+                    </div>
+                </template>
+                <template if:true={showYearMonth}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-combobox label="Year" value={selectedYear} 
+                            options={yearOptions} onchange={handleFilterChange}></lightning-combobox>
+                    </div>
+                    <!--<div class="slds-col slds-size_1-of-12">
+                        <lightning-combobox label="Month" value={selectedMonths} 
+                            options={monthOptions} onchange={handleFilterChange} class="compact-dropdown"></lightning-combobox>
+                    </div>-->
+                    <template if:true="{selectedYear != ''}">
+                        <div class="slds-col slds-size_2-of-12">
+                            <div class="multi-select-container">
+                                <label class="slds-form-element__label">Months</label>
+                                <div class="multi-select-box" onclick={toggleMonthsDropdown}>
+                                    <span>{selectedMonthsLabel}</span>
+                                    <lightning-icon  icon-name="utility:down" size="xx-small"></lightning-icon>
+                                </div>
+                                <template if:true={showMonthsDropdown}>
+                                    <div class="dropdown-list">
+                                        <template for:each={monthOptions} for:item="month">
+                                            <div key={month.value} class="dropdown-item">
+                                                <lightning-input type="checkbox" label={month.label} value={month.value} checked={month.checked} onchange={handleMonthSelect}>
+                                                </lightning-input>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </template>
+            <div class="slds-col slds-size_7-of-12"></div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <template if:true={data.length}>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Export Data" icon-name="utility:download" onclick={handleExport}></lightning-button>
+                </div>
+                <template if:true={isTable1}>
+                    <div class="slds-scrollable_x">
+                        <table class="slds-table slds-table_bordered slds-table_col-bordered custom-table">
+                            <thead>
+                                <tr class="header-row-top">
+                                    <th colspan="1"></th>
+                                    <th colspan="3" class="slds-text-align_center">Leads</th>
+                                    <th colspan="3" class="slds-text-align_center">Walk-ins</th>
+                                    <th colspan="3" class="slds-text-align_center">Bookings/Units</th>
+                                    <th colspan="3" class="slds-text-align_center">Revenue (CR)</th>
+                                    <!--<th colspan="1"></th>-->
+                                </tr>
+                                <tr class="header-row-bottom">
+                                    <th>Project</th>
+                                    <th>Leads Target</th>
+                                    <th>Achieved</th>
+                                    <th>%</th>
+                                    <th>Walk-ins Target</th>
+                                    <th>Achieved</th>
+                                    <th>%</th>
+                                    <th>Booking Target</th>
+                                    <th>Achieved</th>
+                                    <th>%</th>
+                                    <th>Booking Target</th>
+                                    <th>Achieved</th>
+                                    <th>%</th>
+                                    <!--<th>Walk-in to Booking Conversion</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="project-column slds-text-align_left">{row.project}</td>
+                                        <td>{row.leadTarget}</td>
+                                        <td >{row.leadAchieved}</td>
+                                        <td>{row.leadPercentage}%</td>
+                                        <td>{row.walkinTarget}</td>
+                                        <td >{row.walkinAchieved}</td>
+                                        <td>{row.walkinPercentage}%</td>
+                                        <td>{row.bookingUnitTarget}</td>
+                                        <td >{row.bookingUnitAchieved}</td>
+                                        <td>{row.bookingUnitPercentage}%</td>
+                                        <td>{row.bookingRevTarget}</td>
+                                        <td>{row.bookingRevAchieved}</td>
+                                        <td>{row.bookingRevPercentage}%</td>
+                                        <!--<td>{row.conversion}%</td>-->
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isTable2}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="9">Lead Status</th>
+                                </tr>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>New</th>
+                                    <th>Contacted</th>
+                                    <th>Interested</th>
+                                    <th>VCVP</th>
+                                    <th>Visit Done</th>
+                                    <th>Lost</th>
+                                    <th>Junk</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="slds-text-align_left">{row.project}</td>
+                                        <td>{row.New}</td>
+                                        <td>{row.Contacted}</td>
+                                        <td>{row.Interested}</td>
+                                        <td>{row.VCVP}</td>
+                                        <td>{row.VisitDone}</td>
+                                        <td>{row.Lost}</td>
+                                        <td>{row.Junk}</td>
+                                        <td style="font-weight:bold; background-color:#f8f9fa;">{row.Total}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isTable3}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="13">Junk % (Last 12 Months)</th>
+                                </tr>
+                                <tr>
+                                    <th class="project-column">Project</th>
+                                    <template for:each={monthLabels} for:item="month">
+                                        <th key={month}>{month}</th>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="project-column slds-text-align_left">{row.project}</td>
+                                        <td>{row.month0}%</td>
+                                        <td>{row.month1}%</td>
+                                        <td>{row.month2}%</td>
+                                        <td>{row.month3}%</td>
+                                        <td>{row.month4}%</td>
+                                        <td>{row.month5}%</td>
+                                        <td>{row.month6}%</td>
+                                        <td>{row.month7}%</td>
+                                        <td>{row.month8}%</td>
+                                        <td>{row.month9}%</td>
+                                        <td>{row.month10}%</td>
+                                        <td>{row.month11}%</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isTable3_1}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Junk %</th>
+                                </tr>
+                                <tr>
+                                    <th class="project-column">Project</th>
+                                    <th >Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="project-column slds-text-align_left">{row.project}</td>
+                                        <td>{row.month}%</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isTable4}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr><th colspan="13">Walk-in to Booking Conversion %</th></tr>
+                                <tr>
+                                    <th class="project-column">Project</th>
+                                    <template for:each={monthLabels} for:item="month">
+                                        <th key={month}>{month}</th>
+                                    </template>
+                                    <!--<th>Grand Total</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="project-column slds-text-align_left">{row.project}</td>
+                                        <td>{row.month0}%</td>
+                                        <td>{row.month1}%</td>
+                                        <td>{row.month2}%</td>
+                                        <td>{row.month3}%</td>
+                                        <td>{row.month4}%</td>
+                                        <td>{row.month5}%</td>
+                                        <td>{row.month6}%</td>
+                                        <td>{row.month7}%</td>
+                                        <td>{row.month8}%</td>
+                                        <td>{row.month9}%</td>
+                                        <td>{row.month10}%</td>
+                                        <td>{row.month11}%</td>
+                                        <!--<td class="total-column">{row.grandTotal}%</td>-->
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isTable4_1}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Walk-in to Booking Conversion %</th>
+                                </tr>
+                                <tr>
+                                    <th class="project-column">Project</th>
+                                    <th >Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="project-column slds-text-align_left">{row.project}</td>
+                                        <td>{row.month}%</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+
+                <template if:true={isTable5}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">Digital Budget</th>
+                                </tr>
+                                <tr>
+                                    <th class="project-column">Project</th>
+                                    <th>Spends Planned</th>
+                                    <th>Spends Approved</th>
+                                    <th>Actual Spends</th>
+                                    <th>Balance Amount</th>
+                                    <th>Balance Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project} class={row.totalClass}>
+                                        <td class="project-column slds-text-align_left">{row.project}</td>
+                                        <td>{row.planned}</td>
+                                        <td>{row.approved}</td>
+                                        <td>{row.actual}</td>
+                                        <td>{row.balanceAmount}</td>
+                                        <td>{row.balanceDays}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+
+                <template if:true={isTable6}>
+                    <div class="slds-p-around_medium">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Media</th>
+                                    <th>Leads</th>
+                                    <th>Walk-ins</th>
+                                    <th>Bookings</th>
+                                    <th>Total Revenue (Cr.)</th>
+                                    <th>Spends (Cr.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.media}>
+                                        <td class="media-label">{row.media}</td>
+                                        <td>{row.leads}</td>
+                                        <td>{row.walkins}</td>
+                                        <td>{row.bookings}</td>
+                
+                                        <template if:true={row.isFirst}>
+                                            <td rowspan={row.rowSpan} class="merged-cell">
+                                                <div class="big-val">{grandTotalRev}</div>
+                                            </td>
+                                            <td rowspan={row.rowSpan} class="merged-cell">
+                                                <div class="big-val">{totalSpnd} ({spndPct}%)</div>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                                <tr class="grand-total-row">
+                                    <td>Total</td>
+                                    <td>{totals.leads}</td>
+                                    <td>{totals.walkins}</td>
+                                    <td>{totals.bookings}</td>
+                                    <td class="empty-foot"></td>
+                                    <td class="empty-foot"></td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isTable7}>
+                    <div class="slds-p-around_medium">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Spends</th>
+                                    <th>Leads</th>
+                                    <th>CPL</th>
+                                    <th>Walk-ins</th>
+                                    <th>CPW</th>
+                                    <th>Bookings</th>
+                                    <th>CPB</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.project}>
+                                        <td class="media-label">{row.project}</td>
+                                        <td>{row.spends}</td>
+                                        <td>{row.leads}</td>
+                                        <td>{row.cpl}</td>
+                                        <td>{row.walkins}</td>
+                                        <td>{row.cpw}</td>
+                                        <td>{row.bookings}</td>
+                                        <td>{row.cpb}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </template>
+
+                
+
+               
+
+                <!--<template if:false={isTable1}>
+                    <lightning-datatable
+                        key-field="id"
+                        data={data}
+                        columns={columns}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column="true">
+                    </lightning-datatable>
+                </template>-->
+
+                <!--<div class="slds-m-top_medium">
+                    <lightning-button label="Export Data" icon-name="utility:download" onclick={downloadCSV}></lightning-button>
+                </div>-->
+            </template>
+
+            <template if:false={hasData}>
+                <div class="slds-notify slds-notify_alert slds-theme_error">
+                    No data present for the selected year & month.
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

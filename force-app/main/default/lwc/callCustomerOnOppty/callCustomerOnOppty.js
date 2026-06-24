@@ -16,6 +16,7 @@ export default class CallCustomerOnOppty extends LightningElement {
     @api recordId;
     @track mobile1error = false;
     @track mobile2error = false;
+    @track isProcessing = false; //Added by Vinay 30-03-2026
 
     @track oppRec;
 
@@ -71,6 +72,8 @@ export default class CallCustomerOnOppty extends LightningElement {
 
     /* Make call on Mobile 1 */
     callmobile1() {
+        if (this.isProcessing) return;  //Added by Vinay 30-03-2026
+        this.isProcessing = true; //Added by Vinay 30-03-2026
         //  alert('mobile 1 method called');
         this.mobile1error = false;
         //  alert('dialing country 1: ' + this.leadData.data.fields.Dialing_Country_1__c.value);
@@ -160,6 +163,8 @@ export default class CallCustomerOnOppty extends LightningElement {
 
     /* Make call on Mobile 2 */
     callmobile2() {
+        if (this.isProcessing) return; //Added by Vinay 30-03-2026
+        this.isProcessing = true; //Added by Vinay 30-03-2026
         this.mobile2error = false;
         if (this.secondaryMobileNum != null) {
             if(this.optyData.Account.Dialing_Country_2__c == null){

@@ -1,0 +1,832 @@
+<apex:page standardController="Booking__c" renderAs="pdf" applyHtmlTag="false" applyBodyTag="false" contentType="application/pdf" showHeader="false"
+           extensions="generate_BookingApplication_Controller" standardStylesheets="false">
+    <html>
+        <head>
+            <style>
+                .signature-box {
+                width: 100px;
+                height: 120px;
+                border: 1px solid #000;
+                display: inline-block;
+                margin: 0 20px;
+                }
+                
+                .signature-label {
+                text-align: center;
+                font-weight: bold;
+                margin-top: 5px;
+                }
+                
+                .signature-title {
+                text-align: center;
+                margin-top: 5px;
+                }
+                
+                table.signature-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 30px;
+                }
+                
+                table.signature-table td {
+                border: 1px solid black;
+                text-align: center;
+                padding: 20px;
+                }
+                
+                .custom-checkbox {
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                border: 1px solid #000;
+                margin-right: 5px;
+                vertical-align: middle;
+                }
+                
+                @page {
+                size: A4;
+                margin: 20mm;
+                }
+                
+                @page:first {
+                margin: 0;
+                }
+                
+                .full-page-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                }
+                
+                .page-wrapper {
+                page-break-after: always;
+                position: relative;
+                padding: 20mm;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                }
+                
+                .no-margin-padding {
+                margin: 0;
+                padding: 0;
+                }
+            </style>
+        </head>
+        <body class="no-margin-padding">
+            <div class="page-wrapper" style="margin: 0; padding: 0;">
+                <apex:image url="{!URLFOR($Resource.Runwal_Booking_Application_FirstPage)}" styleClass="full-page-image"/>
+            </div>
+            
+            <div class="page-wrapper">
+                
+                <div style="position: relative; text-align: center;">
+                    <!-- Logo on top-right corner of second page -->
+                    <div style="position: absolute; top: 0px; right: 0px;">
+                        <apex:image url="{!$Resource.Runwal_Booking_Application_HeaderLogo}" width="90.70px" height="92.97px"/>
+                    </div>
+                    
+                    <!-- Text Content Centered -->
+                    <h2 style="margin: 0; font-size: 16px; font-family: Arial, sans-serif;">
+                        RUNWAL REAL ESTATES PRIVATE LIMITED
+                    </h2>
+                    
+                    <p style="margin: 5px 0; font-size: 14px; font-family: Arial, sans-serif;">
+                        Regd. Office: Runwal and Omkar Esquare, 4<sup>th</sup> Floor, Off. Eastern Exp. Highway,<br/>
+                        Opp. Sion Chunabhatti Signal, Sion (E), Mumbai 400 022.<br/>
+                        [CIN: U70102MH2015PTC266495]
+                    </p><br/>
+                    <hr style="margin-top: 20px;"/>
+                    <p style="margin: 5px 0; font-size: 12px; font-family: Arial MT, sans-serif;">
+                        MahaRERA registration no.: 7 Mahalaxmi - Tower 2 - P51900079270. 
+                        MahaRERA website: 
+                        <a href="http://maharera.mahaonline.gov.in" target="_blank">
+                            http://maharera.mahaonline.gov.in
+                        </a>
+                    </p>
+                    <hr/>
+                </div><br/><br/>
+                
+                <div style="text-align: center;">
+                    <h2 style="margin: 0; font-size: 18px; font-family: Arial, sans-serif;">APPLICATION FOR BOOKING</h2>
+                </div><br/>
+                
+                <table border="0" cellspacing="0" cellpadding="4" 
+                       style="font-family:Arial MT; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                    <tr style="background-color: #fff;">
+                        <th style="font-size:14px;  border: 0px solid #000;">A. APPLICANT/S DETAILS</th><th></th><th></th>
+                        <th style="font-size:14px; border: 0px solid #000; text-align: right;">Date:
+                            <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                <apex:param value="{!dDate}" />
+                            </apex:outputText>
+                        </th>
+                    </tr></table><br/>
+                <apex:form >
+                    <table border="1" cellspacing="0" cellpadding="4" 
+                           style="font-family:Arial MT; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                        <tr style="background-color: #fff;">
+                            <th style="font-size:14px;  border:  1px solid #000;"></th>
+                            <th style="font-size:14px; border: 1px solid #000; text-align: center;">1<sup>st</sup> Applicant</th>
+                            <th style="font-size:14px; border: 1px solid #000; text-align: center;">2<sup>nd</sup> Applicant</th>
+                            <th style="font-size:14px; border: 1px solid #000; text-align: center;">3<sup>rd</sup> Applicant</th>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Full Name (In Capital)</td>
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isfullName}" />
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isfullName}" />
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isfullName}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Date of Birth</td>
+                            
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                    <apex:param value="{!first_Applicant_Wrapper.isDob}" />
+                                </apex:outputText>
+                            </td>
+                            
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                    <apex:param value="{!second_Applicant_Wrapper.isDob}" />
+                                </apex:outputText>
+                            </td>
+                            
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{0, date, dd/MM/yyyy}">
+                                    <apex:param value="{!third_Applicant_Wrapper.isDob}" />
+                                </apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Nationality</td>
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isNationality}" />
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isNationality}" />
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000; text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isNationality}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Residential Status<br/> (Resident / NRI / Foreign National <br/>Indian Origin)</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isResedentialStatus}" />
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isResedentialStatus}" />
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isResedentialStatus}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">PAN No.</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isPanNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isPanNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isPanNo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Aadhar Card No.</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isAadharNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isAadharNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isAadharNo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">GSTN No.</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;"></td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;"></td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;"></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Permanent Address</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isPerAddress}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isPerAddress}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isPerAddress}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Address for Communication</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isCommunAddress}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isCommunAddress}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isCommunAddress}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Mobile No.</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isMoNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isMoNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isMoNo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Telephone No.</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isTelNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isTelNo}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isTelNo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Email Id</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isemail}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isemail}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isemail}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Company Name</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isCompanyName}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isCompanyName}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isCompanyName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Designation</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isDesignation}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isDesignation}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isDesignation}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Office Address</td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!first_Applicant_Wrapper.isOfficeAddress}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!second_Applicant_Wrapper.isOfficeAddress}"/>
+                            </td>
+                            <td style="font-size:14px; border: 1px solid #000;text-align: center;">
+                                <apex:outputText value="{!third_Applicant_Wrapper.isOfficeAddress}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Bare-shell ( Yes / No )</td>
+                            <td style="font-size:14px; border: 1px solid #000;"></td>
+                            <td style="font-size:14px; border: 1px solid #000;"></td>
+                            <td style="font-size:14px; border: 1px solid #000;"></td>
+                        </tr>               
+                    </table>
+                </apex:form>
+                <div Style ='page-break-before:always;'></div>
+                
+                <div style="margin-top:20px; line-height:1.8; font-size: 14px; font-family:Arial MT;">
+                    I/We, the Applicant/s remit herewith a sum of Rs. ________________________________________________________ /- <br/>
+                    
+                    Rupees __________________________ vide Cheque/Draft no. ____________________ dated ______________________<br/>
+                    
+                    drawn on ____________________________________________ (Not exceeding 10% of the total consideration) favouring <br/>
+                    
+                    _____________________________________ as Earnest Money/Token amount against booking of Flat and also a sum of<br/>
+                    
+                    Rs. ____________________/- Rupees ____________________ vide Cheque / Draft / PO / NEFT no. _________________<br/>
+                    
+                    dated ____________________ drawn on _______________________ towards the applicable Taxes as detailed hereunder. <br/>
+                    
+                    Sum of Rs. ______________________________________ paid under EOI dated __________________________________.<br/>
+                    
+                    Name of the Company / Developer: ______________________________________________________________________
+                </div><br/><br/><br/>
+                
+                <table border="0" cellspacing="0" cellpadding="4" 
+                       style="font-family:Arial MT; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                    <tr style="background-color: #fff;">
+                        <th style="font-size:14px;  border: 0px solid #000;">B. FLAT DETAILS</th><th></th><th></th>
+                    </tr></table><br/>
+                
+                <apex:form >
+                    <table border="1" cellspacing="0" cellpadding="4" 
+                           style="font-family:Arial MT; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Unit No.</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.unitNo}" />
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">Sales Manager’s Name</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.salesManagerName}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Configuration</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.Configuration}" />
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">Flat Carpet Area (sq. ft.)</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.carpetArea}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Tower Name / Unit No.</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.towerName}"/>
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">No. Of Parking/s</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.noOfParking}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Agreement Value (Rs.)</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.agreementValue}"/>
+                            </td>
+                            <td style="font-size:14px;border: 1px solid #000;">Type of Parking</td>
+                            <td style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.parkingType}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Agreement Value (in words)</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;"></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; border: 1px solid #000;">Unit Type</td>
+                            <td colspan="3" style="font-size:14px; border: 1px solid #000; text-align:left;">
+                                <span class="custom-checkbox checked"></span> Single &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span> Jodi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span> Other
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">SAP CRN No.</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.sapCRNno}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Sales Order No.</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.salesOrdrNo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px;border: 1px solid #000;">Other Remarks</td>
+                            <td colspan="3" style="font-size:14px;border: 1px solid #000;">
+                                <apex:outputText value="{!bookingWrap.otherRemark}"/>
+                            </td>
+                        </tr>
+                    </table><br/><br/>
+                </apex:form>
+                <table border="0" cellspacing="0" cellpadding="4" 
+                       style="font-family:Arial MT; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                    <tr style="background-color: #fff;">
+                        <th style="font-size:14px;  border: 0px solid #000;">C. SOURCE OF BOOKING</th><th></th><th></th>
+                    </tr>
+                    <tr>
+                        <td style="font-size:14px;">Direct / Channel Partner (Broker) / Existing Customer Reference / Corporate / NRI / Outstation / HNI / Others</td>
+                    </tr>
+                    <tr><td></td>
+                    </tr>
+                </table><br/>
+                
+                <table border="1" cellspacing="0" cellpadding="4" 
+                       style="font-family:Arial; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                    <tr>
+                        <td style="font-size:14px; border:1px solid #000;">Name of Corporate /<br/>Channel Partner/Referrer</td>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            <apex:outputText value="{!bookingWrap.nameOfCorporate}"/>
+                        </td>
+                        <td style="font-size:14px; border:1px solid #000;">Name of Company</td>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            <apex:outputText value="{!bookingWrap.nameofCompany}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:14px; border:1px solid #000;">Mobile No.</td>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            <apex:outputText value="{!bookingWrap.brokermobile}"/>
+                        </td>
+                        <td style="font-size:14px; border:1px solid #000;">Email Id</td>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            <apex:outputText value="{!bookingWrap.brokeremail}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            RERA certificate number<br/>(In case of channel partner)
+                        </td>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            <apex:outputText value="{!bookingWrap.reraCertNo}"/>
+                        </td>
+                        <td style="font-size:14px; border:1px solid #000;">
+                            Unit No.<br/>(In case of Referrer)
+                        </td>
+                        <td style="font-size:14px; border:1px solid #000;"></td>
+                    </tr><br/>
+                    
+                    <tr>
+                        <td></td></tr>
+                </table><br/>
+                
+                <apex:form >
+                    <table border="1" cellspacing="0" cellpadding="4" 
+                           style="font-family:Arial; width:680px; border-collapse:collapse; border: 1px solid #000;">
+                        <tr>
+                            <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                Existing Customer ( Yes / No )
+                            </td>
+                            <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                                If Yes ( Project / Building No. / Unit No. )
+                            </td>
+                            <td colspan="2" style="font-size:14px; border:1px solid #000;">
+                            </td>
+                        </tr>
+                    </table>
+                </apex:form>
+                
+                
+                
+                <h2 style="font-family:Arial; font-size:12px;">TERMS AND CONDITION AGREED AND ACCEPTED BY AND BETWEEN THE PARTIES</h2>
+                <div style="font-family:Arial MT; font-size:10px; text-align: justify;">
+                    <p>
+                        1. The Applicant/s is aware that the Project is being constructed on a portion of the larger land admeasuring in aggregate 
+                        approximately 22,841.03 square meters (“Larger Land”). The Applicant/s is aware that Project and the said Larger Land is being 
+                        developed by the Company jointly with Shreepati Build Infra Investment Limited under Regulation 33(9) of the Development 
+                        Control and Promotion Regulation 2034 in a phase wise manner. On a portion of the Larger Land, 3 rehab buildings are to be 
+                        constructed to provide permanent alternate accommodation to the tenants of the said Larger Land and on a portion of the Larger Land, 
+                        3 sale towers (including the Project) are to be constructed by exploiting, consuming, and utilizing such FSI as permissible.
+                    </p>
+                    <p>
+                        2. The Applicant/s agrees and undertakes to pay the total cost of the Flat/Unit as per the payment schedule provided along with 
+                        this Application. The Applicant/s shall, in relation to the Apartment, make all payments to the Promoter from his/her/its own 
+                        bank account only and not from and through bank accounts of any third parties. The Applicant/s alone shall be responsible and 
+                        liable in relation to the payments made by any third parties. Notwithstanding the aforesaid, the receipts for the payments made 
+                        in relation to the Flat/Unit will be issued in favour of the Applicant/s only.
+                    </p>
+                    <p>
+                        3. The Applicant/s further agrees to pay, over and above the Flat/Unit cost, the legal charges, share money, society formation charges, 
+                        electrical connection, building common area maintenance charges, federation common area maintenance charges, property/ municipal tax, 
+                        and other charges etc. as may be applicable (“Other Charges”). The Other Charges are tentative and may be revised by the Promoter, 
+                        subject to finalization on or before handing over possession of the Flat/Unit. The changes, if any, in the Other Charges shall be intimated 
+                        by the Promoter to the Applicant/s on or before handing over possession of the Flat/Unit.
+                    </p>
+                    <p>
+                        4. The Applicant/s is aware that the Project is financed by IndusInd Bank Limited.
+                    </p>
+                    <p>
+                        5. It is mutually, unconditionally and irrevocably agreed, accepted and confirmed between the parties as under:
+                    </p>
+                    <ol type="a" style="padding-left:20px;">
+                        <li>
+                            The Applicant/s hereby agrees and declares that the Applicant/s shall pay the sum of Rs. ___ /-
+                            (Rupees ____________ only) on the booking as per the specifications given above (“Booking Amount”).
+                            The balance consideration of Rs. ___ /- (Rupees ____________ only) shall be paid by the Applicant/s as per the
+                            payment schedule agreed between the parties herein. The Booking Amount shall not be more than 10% of
+                            the total consideration towards the Flat/Unit. The Applicant will execute Agreement for Sale with the Promoter
+                            after realisation of the 10% amount of the total consideration by the Promoter.
+                        </li>
+                        <li>
+                            The Applicant/s hereby agrees to pay the applicable taxes by way of a separate Cheque/PO, as and when
+                            the same become due for payment.
+                        </li>
+                        <li>
+                            In case of default by the Applicant/s towards the payment or part payment of the Booking Amount or
+                            non-execution and non-registration of the Agreement for Sale by the Applicant/s within 30 (thirty) days from
+                            the date of the Promoter calling upon the Applicant/s to execute and register the same, the Promoter shall be
+                            entitled to cancel/revoke or withdraw this booking, after giving 15 (fifteen) days written notice to the Applicant/s
+                            calling upon the Applicant/s to make payment/execute and register the Agreement for Sale. On expiry of the
+                            15 (fifteen) days’ period, in case the Applicant/s has failed to make payment/execute and register the Agreement
+                            for Sale, then and without prejudice to the rights and remedies available to the Promoter including the right to
+                            charge interest at the prevailing rate of State Bank of India Highest Marginal Cost of Lending Rate plus 2%
+                            thereon for every month of delay in making payment, the Promoter would be entitled at its sole option and
+                            discretion to terminate this Application for Booking and to forfeit the entire Booking Amount. This clause on
+                            forfeiture shall also apply in the event where the Applicant/s cancels the Booking voluntarily for any reason
+                            whatsoever. Further, before voluntary termination, the Applicant/s will give at least 30 (Thirty) days’ notice of
+                            his/her intention to do so.
+                        </li>
+                    </ol>
+                    
+                    <p>
+                        6.The Applicant/s hereby agrees, declares and undertakes that in the event of any delay in payment of any amount/instalment 
+                        as per the schedule provided along with this Application, the same shall be paid to the Promoter together with interest thereon 
+                        at the prevailing rate of State Bank of India Highest Marginal Cost of Lending Rate plus 2% to be calculated from the due date 
+                        until realization of the cheque/payment. The Promoter will give an opportunity to the Applicant/s to rectify the default in payment, 
+                        failing which, it will be the Promoter's prerogative to either, accept or reject the payment together with interest or take any 
+                        action against Applicant/s as the Promoter may deem fit and proper at its own discretion. The Applicant authorizes the Promoter to 
+                        adjust/appropriate all payments made by him/her under any head(s) of dues against lawful outstanding, if any, in his/her/its name 
+                        as the Promoter may in its sole discretion deem fit and the Applicant/s undertakes not to object/demand/direct the Promoter to adjust 
+                        his/her payments in any manner. 
+                    </p>
+                    <p>7. The payment of sale consideration and other charges, taxes, deposits etc. on its due date as per the schedule or otherwise shall be the essence of the transaction.</p>
+                    
+                    <p>8. This booking is of a tentative nature and final confirmation will be given to the Applicant/s on issuance of Allotment letter of the Flat, subject to the payment of required consideration/amount by the Applicant/s and this Application for Booking does not constitute/confer any right, title claim or interest in favour of the Applicant/s in respect of the Flat/Unit or part thereof.</p>
+                    
+                    <p>9. Documents generally available with the Promoters to enable the Applicant/s to avail of a housing loan shall be made available after execution of Agreement for Sale.</p>
+                    
+                    <p>10. The Applicant/s agrees to abide by the Promoter's terms of allotment and also agrees to execute and register Agreement for Sale as and when called upon by the Promoter. The Applicant/s agrees and undertakes to pay the applicable stamp duty, registration charges, scanning fees and other incidental expenses payable in respect of execution and registration of the Agreement for Sale in respect of the Flat/Unit, as and when demanded by the Promoter.</p>
+                    
+                    <p>11. The Applicant/s assumes the responsibility of lodging the stamped documents/Agreement for Sale for registration in compliance with relevant laws and to forthwith inform the Promoter to enable the Promoter to admit execution thereof. The Applicant/s assures that, the Applicant/s shall comply with the aforesaid and in the meanwhile shall pay to the Promoter all the relevant payment instalments as specified.</p>
+                    
+                    <p>12. In case of cancellation or termination of the Allotment/Agreement for Sale, GST, and other taxes, etc. would be dealt with as per the Applicable Laws.</p>
+                    
+                    <p>13. The Applicant/s agrees to pay the Other Charges on or before the Promoter hands over the said Flat/Unit to the Applicant/s for possession.</p>
+                    
+                    <p>14. Promoter has informed the Applicant/s that this Project will consist of several buildings and same will be constructed and developed in a phased manner and the Applicant/s hereby consents that the Promoter shall be fully entitled to amend / modify / vary / alter / increase / decrease / add / delete / withdraw (as the case may be), the Flat / floor / building / wing / layout / plan / area / design / specifications / brandname / services / facilities / amenities / facade / elevation / layout / RG / common areas / infrastructure / features / construction method of the Project and or merge / amalgamate the Flat with adjoining flat, as may be required by the Promoter towards product improvement including for optimizing the use of the full building potential of the said property including additional Floor Space Index (FSI) / Fungible FSI / Transferable Development Rights (TDR) as available presently and / or in the future and/or as may be required by MCGM or any other Statutory / Governing body.</p>
+                    
+                    <p>15. No changes affecting structure or otherwise, layout of the Flat/Unit, elevations of the building shall be accepted. No two or more Flat/Unit or adjoining flat can be joined either by removing walls/opening doors, amalgamation, construction or staircase, etc. and no subdivision of the Flat/Unit are allowed without prior consent or approval of the Promoter and also of the BMC.</p>
+                    
+                </div>
+                
+                <table style="width:100%; text-align:center; margin-top:20px;">
+                    <tr>
+                        <td style="border:1px solid #000; width:120px; height:50px;"></td>
+                        <td style="border:1px solid #000; width:120px; height:50px;"></td>
+                        <td style="border:1px solid #000; width:120px; height:50px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:10px;">
+                            First Applicant<br/>
+                            <span>Signature</span>
+                        </td>
+                        <td style="font-size:10px;">
+                            Second Applicant<br/>
+                            <span>Signature</span>
+                        </td>
+                        <td style="font-size:10px;">
+                            Third Applicant<br/>
+                            <span>Signature</span>
+                        </td>
+                    </tr>
+                </table>
+                <div Style ='page-break-before:always;'></div>
+                <div style="font-family:Arial MT; font-size:10px;">
+                    <p>16. The Applicant/s hereby understands that his/her/their eligibility to avail subvention plan, if offered, for payments, shall be decided by the bank/financial institution at their sole discretion and in accordance with their policies. The Applicant/s further agree and understand that if the subvention plan is availed by the Applicant/s, then the Applicant/s shall be liable to pay all such amounts which are not covered by the bank funding.</p>
+                    
+                    <p>17. The Applicant/s hereby confirms and declares that Applicant/s has fully understood the entire scope of development to be undertaken by the Promoter in the Project, including the details of carpet area, common areas and facilities being provided in the Project and the Applicant/s is submitting this Application for Booking for allotment of Flat/Unit in the Project without relying on any of the publicity materials/advertisements published in any form or any channel by the Promoter or any third party in the past.</p>
+                    
+                    <p>18. The transfer, sale or assignment of the Flat/Unit including benefit of this booking to a third party is not permitted/allowed and will be subject to the Promoter's prior consent/approval in writing and execution of necessary deeds/or documents by the Promoter.</p>
+                    
+                    <p>19. The Applicant/s further unconditionally and irrevocably agrees and accepts to pay GST*, etc. or any other statutory and / or new charges, levies/Taxes, Property Tax/Municipal Tax, Cess, Surcharge dues, Duties, Fine, Charges, Premium Deposit, Penalty, Interest etc., which may be under any name or terminology, payable and/or may become payable due to change/amendment in the existing laws, rules or due to implementation/enactment of any new laws/rules by the local bodies, State Government, Central Government or by any competent authorities on the Booking or sale of the Flat/Unit and/or any other payment incidental to this transaction, before or after possession of the Flat/Unit cost and other charges and deposits in additions to the Flat cost.</p>
+                    
+                    <p>20. The Applicant/s acknowledges and confirms that the Promoter has provided all information, clarifications and documents in relation to the Project and the Applicant/s is fully satisfied with the same. The Applicant/s further acknowledges that Applicant/s has seen all documents / papers in relation to the Project, including but not limited to the title documents, license, sanctions, approvals etc. obtained from the competent authorities, as are uploaded by the Promoter on the MahaRERA website and the present Application has been made by the Applicant/s after fully satisfied himself/herself/itself about the rights, title and interest possessed by Promoter over the Project Land.</p>
+                    
+                    <p>21. It is agreed between the Promoter and the Applicant/s that in case of any disputes arising out of or in relation to this Application, the courts in Mumbai shall have exclusive jurisdiction.</p>
+                    
+                    <p>22. The Applicant/s hereby confirms and declares that the Applicant/s have read and understood the terms and conditions of the Application for Booking for the reservation of the Flat/Unit as mentioned herein above and agrees and accepts to pay further instalments of the purchase price/consideration and other incidental and associated charges thereto, as stipulated/demanded by the Promoter from time to time. The information and details provided by the Applicant/s herein are true and correct to the best of his/her/their knowledge. The Applicant/s on his/her/its own free will convey his/her/their acceptance to the terms and conditions mentioned in this Application for Booking. The Applicant/s further confirms that the terms and conditions are not arbitrary or one sided.</p>
+                    
+                    <p>23. This Application is subject to the Agreement for Sale to be executed between the parties hereto and shall not survive after execution of the Agreement for Sale.</p>
+                    
+                    <p>24. In case the Applicant/s has/have accepted to book the Flat/Unit under &nbsp;&nbsp;&nbsp;&nbsp; payment scheme, the Applicant/s hereby accepts the payment schedule and the Applicant/s hereby accepts that no further discount will be provided by the Promoter of any form.</p>
+                    
+                    <p>*GST Note: The Agreement value is arrived at mutually as per prevailing market rates and conditions, after considering the benefit of any additional input tax credit accruing to the Promoter under the GST law. Post absorption of the incremental tax impact under GST by the Promoter, to the extent absorbed by it, the customer unconditionally and irrevocably agrees and accepts that the Promoter has no further obligation to pass any additional benefit under the anti-profiteering provisions under Sec 171 of CGST Act, 2017. </p>
+                    
+                    <p>TDS Clause : TDS Payment is the responsibility of the purchaser. Under section 194-IA of the Income tax (IT) Act, a buyer is liable to deduct and deposit 1% of the total consideration including other charges, as applicable, if the property value is above Rs. 50 lakh. Please make the TDS payment at the time of releasing payment to RREPL by logging into IT portal and share the TDS challan, Form 26QB and form 16B with us within 7 days of the payment. On receiving the form 16B a credit will be passed towards your account. Please note that if TDS payment id delayed, penalties will be charged by the government.</p>
+                </div>
+                
+                
+                
+                <!-- First Row: Applicant Signatures -->
+                <div style="text-align:center;">
+                    <div class="signature-box"></div>
+                    <div class="signature-box"></div>
+                    <div class="signature-box"></div>
+                </div>
+                
+                <div style="text-align:center;">
+                    <div style="display:inline-block; width:120px;">
+                        <div class="signature-label" Style="font-size:14px; text-align:left">First Applicant</div><br/><br/><br/><br/>
+                        <div class="signature-title" Style="font-size:14px;">Signature</div>
+                    </div>
+                    <div style="display:inline-block; width:120px;">
+                        <div class="signature-label" Style="font-size:14px;">Second Applicant</div><br/><br/><br/><br/>
+                        <div class="signature-title" Style="font-size:14px;">Signature</div>
+                    </div>
+                    <div style="display:inline-block; width:120px;">
+                        <div class="signature-label" Style="font-size:14px;">Third Applicant</div><br/><br/><br/><br/>
+                        <div class="signature-title" Style="font-size:14px;">Signature</div>
+                    </div>
+                </div>
+                
+                
+                <!-- Second Row: Channel/Sales Signatures in Table -->
+                <table class="signature-table">
+                    <tr>
+                        <td>Channel Partner<br/>Signature</td>
+                        <td>Sales Manager<br/>Signature</td>
+                        <td>Site Sales Head<br/>Signature</td>
+                    </tr>
+                    <tr>
+                        <td style="height:40px;"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <div Style ='page-break-before:always;'></div>
+                
+                <div style="background-color:#BE8A2A; color:white; padding:8px 0; text-align:center; font-weight:bold; 
+                            letter-spacing:2px; font-family:Arial; font-size:18px;">
+                    LOAN INFORMATION
+                </div><br/>
+                
+                <h5 style="font-family: Arial, sans-serif;">Source Of Funding</h5><br/>
+                
+                <apex:form >
+                    <table border="1" style="border:1px solid #000; width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:14px;">
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Funding Status</td>
+                            <td colspan="3" style="border:1px solid #000;">&nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span>Self - Funding &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span>Bank - Funding
+                            </td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border: 1px solid #000;" rowspan="2">Funding%</td>
+                            <td style="border: 1px solid #000;">Self-Funding &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%</td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border: 1px solid #000;">Bank-Funding &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%</td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Preferred Banks</td>
+                            <td style="border:1px solid #000;" colspan="2"></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Scheme</td>
+                            <td colspan="2" style="border:1px solid #000;"></td>
+                        </tr>
+                    </table>
+                    
+                    <br/>
+                    
+                    <h5 style="font-family: Arial, sans-serif;">Applicant Profile</h5>
+                    
+                    <table border="1" style="border:1px solid #000; width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:14px;">
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Applicant Name</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!first_Applicant_Wrapper.isfullName}" style="width:100%;"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Mobile No.</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!first_Applicant_Wrapper.isMoNo}" style="width:100%;"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Company Name / Firm Name</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!first_Applicant_Wrapper.isCompanyName}" style="width:100%;"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Age</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!first_Applicant_Wrapper.age}" style="width:100%;"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Monthly Net Salary / Annual Income</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!first_Applicant_Wrapper.salary}" style="width:100%;"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Occupation</td>
+                            <td style="border:1px solid #000;">&nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span>Salaried &nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span> Self Employed &nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span> Professional
+                            </td>
+                        </tr>
+                    </table>
+                    <h5 style="font-family: Arial, sans-serif;">Co - Applicant Profile</h5>
+                    <table border="1" style="border:1px solid #000; width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:14px;">
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Applicant Name</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!second_Applicant_Wrapper.isfullName}"/>
+                            </td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Mobile No.</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!second_Applicant_Wrapper.isMoNo}"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Company Name / Firm Name</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!second_Applicant_Wrapper.isCompanyName}"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Age</td>
+                            <td style="border:1px solid #000;"><apex:inputText value="{!first_Applicant_Wrapper.coApplicantAge}"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Monthly Net Salary / Annual Income</td>
+                            <td style="border:1px solid #000;"><apex:outputText value="{!second_Applicant_Wrapper.coApplicantSalary}"/></td>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td style="border:1px solid #000;">Occupation</td>
+                            <td style="border:1px solid #000;">&nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span>Salaried &nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span> Self Employed &nbsp;&nbsp;
+                                <span class="custom-checkbox checked"></span> Professional
+                            </td>
+                        </tr>
+                    </table>
+                </apex:form>                
+                <br/>
+                <h5 style="font-family: Arial, sans-serif;">Monthly Ongoing Obligations</h5>
+                <table border="1" style="border:1px solid #000; width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:14px;">
+                    <tr style="border:1px solid #000;">
+                        <td style="border:1px solid #000;">Home Loan</td>
+                        <td style="border:1px solid #000;">Personal Loan</td>
+                        <td style="border:1px solid #000;">Car Loan</td>
+                    </tr>
+                    <tr style="border:1px solid #000;">
+                        <td style="border:1px solid #000;">Business Loan</td>
+                        <td colspan="2" style="border:1px solid #000;">Other</td>
+                    </tr>
+                </table>
+                
+                <br/>
+                <h5 style="font-family: Arial, sans-serif;">Eligibility Rating (Select One)</h5>
+                <table border="1" style="border:1px solid #000; width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:14px;">
+                    <tr style="border:1px solid #000;">
+                        <td colspan="3" style="border:1px solid #000;">&nbsp;&nbsp;
+                            <span class="custom-checkbox checked"></span>85% - 95% &nbsp;&nbsp;
+                            <span class="custom-checkbox checked"></span> 75% - 85% &nbsp;&nbsp;
+                            <span class="custom-checkbox checked"></span> Below 75%
+                        </td>
+                    </tr>
+                </table>
+                
+                <br/>
+                <h5 style="font-family: Arial, sans-serif;">HLA Team Official Purpose Only*</h5>
+                <table border="1" style=" border:1px solid #000; width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:14px;">
+                    <tr style="border:1px solid #000;">
+                        <td style="border:1px solid #000;">Loan Eligibility</td>
+                        <td style="border:1px solid #000;">&nbsp;&nbsp;
+                            <span class="custom-checkbox checked"></span>Yes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="custom-checkbox checked"></span>No
+                        </td>
+                    </tr>
+                    <tr style="border:1px solid #000;">
+                        <td style="border:1px solid #000;">Loan Eligibility Amount</td>
+                        <td style="border:1px solid #000;"></td>
+                    </tr>
+                    <tr style="border:1px solid #000;">
+                        <td style="border:1px solid #000;">Remarks (If any)</td>
+                        <td style="border:1px solid #000;"></td>
+                    </tr>
+                </table>
+                
+                
+            </div>
+            
+            <div class="page-wrapper" style="margin: 0; padding: 0;">
+                <apex:image url="{!URLFOR($Resource.Runwal_Booking_Application_LastPage)}" styleClass="full-page-image"/>
+            </div>
+        </body>
+    </html>
+</apex:page>

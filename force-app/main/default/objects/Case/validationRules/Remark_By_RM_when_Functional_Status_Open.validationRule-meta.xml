@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Remark_By_RM_when_Functional_Status_Open</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Functional_Status__c, &quot;Open&quot;),
+    NOT(ISBLANK(Functional_User__c)),
+    TEXT(Remarks_by_RM__c) == &quot;Closed Satisfactory&quot;,
+				ISCHANGED(Remarks_by_RM__c) 
+)</errorConditionFormula>
+    <errorDisplayField>Remarks_by_RM__c</errorDisplayField>
+    <errorMessage>When the Functional Status is Open and a Functional User is assigned, the Remarks by RM can not be set to &apos;Closed Satisfactory&apos;.</errorMessage>
+</ValidationRule>

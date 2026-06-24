@@ -1,0 +1,32 @@
+<messaging:emailTemplate subject="Registration Schedule" recipientType="User" relatedToType="Registration_Schedule__c">
+<messaging:plainTextEmailBody >
+</messaging:plainTextEmailBody>
+
+<messaging:htmlEmailBody >
+
+<div style="background-color: #000000; color: #ffffff; font-family: Arial, sans-serif;width:800px;">
+<img src="https://runwal--fullcopy.sandbox.my.salesforce.com/servlet/servlet.ImageServer?id=0159I000002gFEP&oid=00D9I000001tHAv&lastMod=1756118226000" style="display: block; margin: 0; padding: 0;" height="500" width="800" alt="Header"/>
+<div style="background-color: #000000; color: #ffffff; font-family: Arial, sans-serif;width:800px;">
+    <div style="background-color: #e7b258; padding:20px; border-radius: 8px;  margin: 0 auto; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); width:500px;height:auto;">
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <tr >
+                <th style="color: black; padding: 10px; text-align: left;text-size:25px;">Date: <apex:outputText value="{0, date, dd-MM-yyyy}">
+                                                                <apex:param value="{!relatedTo.Registration_Schedule_Date__c}" /> 
+                                                                  </apex:outputText></th>
+                <th style="color: black; padding: 10px; text-align: left;text-size:25px;">Time: {!relatedTo.Registration_Schedule_Time__c}</th>
+            </tr>
+            <tr >
+                <th style="color: black; padding: 10px; text-align: left;text-size:25px;" colspan="2">Venue: {!relatedTo.Address__c}</th>
+            </tr>
+            <tr >
+                <th style="color: black; padding: 10px; text-align: left;text-size:25px;" colspan="2">Map Link:
+                <a href="https://www.google.com/maps/search/?api=1&query={!relatedTo.Google_Map_Link__c}">Open Map</a> </th>
+            </tr>
+        </table>
+    </div>
+</div>
+<img src="https://runwal--fullcopy.sandbox.my.salesforce.com/servlet/servlet.ImageServer?id=0159I000002gFHd&oid=00D9I000001tHAv&lastMod=1756118282000" height="500" width="800" alt="Footer"/>
+</div>
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

@@ -92,11 +92,11 @@
     },
     
    handleSubmit: function(component, event, helper) {
-        	
+        	debugger;
             event.preventDefault();       // stop the form from submitting
        		var cancellationRequestDate = component.find('cancellationRequestDate').get('v.value');
         	var today = $A.localizationService.formatDate(new Date(), "YYYY-MM-DD");
-        if(component.find("cancelReason").get("v.value") == 'Unit transfer'){
+        if(component.find("cancelReason").get("v.value") == 'Transfer' || component.find("cancelReason").get("v.value") == 'Upgrade/Downgrade'){
             var transferdate = component.find('transferdate').get('v.value');            
     	    if(transferdate > today || transferdate < cancellationRequestDate)       
        		{        
@@ -111,7 +111,7 @@
     		}
         }
         
-        if(component.find("cancelReason").get("v.value") == 'Unit cancelled'){
+        if(component.find("cancelReason").get("v.value") != 'Transfer' && component.find("cancelReason").get("v.value") != 'Upgrade/Downgrade'){
             
         
         	var checklistdate = component.find('checklistdate').get('v.value');         	
@@ -159,7 +159,7 @@
             var fields = event.getParam('fields');
             if(component.find("approvalStatus").get("v.value") != 'Sent for Approval' && component.find("approvalStatus").get("v.value") != 'Approved' )
             {
-                if(fields.Cancellation_Reason__c == 'Unit cancelled') 
+                if(fields.Cancellation_Reason__c != 'Transfer' && fields.Cancellation_Reason__c != 'Upgrade/Downgrade') 
                 {
              //fields.Cancellation_Deed_Uploaded__c == true  &&       
             if(fields.Cancellation_Checklist_Uploaded__c == true &&  fields.Cancellation_Letter_Uploaded__c ==  true)

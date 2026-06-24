@@ -14,8 +14,8 @@
                 left: 0;
                 top: 0;
                 }
-                
-                .Assigned {
+				
+				.Assigned {
                 position: fixed;
                 background: url('{!URLFOR($Resource.CIFLoading)}');
                 background-size: 50px 50px;
@@ -28,7 +28,6 @@
                 top: 0%;
                 }
             </style>
-            
             <title>Task Edit</title>
             <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -36,13 +35,13 @@
             <script src="/soap/ajax/54.0/connection.js"></script>
         </head>
         <body>
-            
-             <apex:actionstatus id="spinnerStatus">
+                <apex:actionstatus id="spinnerStatus">
                         <apex:facet name="start">
                             <div class="spinnerBg" />
                             <div class="Assigned" />
                         </apex:facet>
                     </apex:actionstatus>
+
             <apex:actionStatus id="status">
                 <apex:facet name="start">
                     <div class="fadeMe">
@@ -107,18 +106,16 @@
                                             <apex:inputField id="scallrating" value="{!Task.Call_Rating__c}" required="true"/>
                                         </apex:pageblockSectionItem> 
                                         <apex:inputField id="reasonsForLost" value="{!Task.Reason_For_Lost__c}" required="false"/>
-                                        <apex:inputField id="ciform" value="{!Task.CI_Form__c}" />
-                                       
+                                        <apex:inputField id="ciform" value="{!Task.CI_Form__c}" />      
                                         <apex:inputField id="contri" value="{!Task.Own_Contribution__c}" required="true"/>
                                         <apex:inputField id="loanEligiblity" value="{!Task.Loan_Eligibility__c}" required="false"/> 
                                       <!--  <apex:inputField id="visitstatus" value="{!Task.Event_Status__c}" required="false"/> -->
                                         
                                         <apex:pageblockSectionItem >
-                                            <apex:outputlabel > Tentative Revisit Date</apex:outputlabel>
-                                            <apex:inputField id="NextActionDate" value="{!Task.Next_Action_Date__c}" required="false" />
+                                       <!--     <apex:outputlabel > Tentative Revisit Date</apex:outputlabel>
+                                            <apex:inputField id="NextActionDate" value="{!Task.Next_Action_Date__c}" required="false" /> -->
                                         </apex:pageblockSectionItem>
-                                            
-                                      <!--     <apex:inputField id="visitedwith" value="{!Task.Visited_With__c}" required="false"/> -->
+                                        <apex:inputField id="visitedwith" value="{!Task.Visited_With__c}" required="false"/>
                                          <apex:inputField id="Budget" value="{!Task.Budget_In_Lakh__c}" required="true"/>
                                           <apex:inputField id="config" value="{!Task.Configuration__c}" required="true"/>
                                            <apex:inputField id="timeline" value="{!Task.Time_Line__c}" required="true"/>
@@ -128,8 +125,8 @@
                                               <apex:inputField id="InventoryPreference" value="{!Task.Inventory_Preference__c}" required="true"/>
                                               <apex:inputField id="AmenitiesCompliance" value="{!Task.Amenities_Compliance_with_Customer_Prefe__c}"/>
                                               <apex:inputField id="EngagedwithCompetition" value="{!Task.Engaged_with_Competition__c}" required="true"/>
-                                              <apex:inputField id="LoanPreApproval" value="{!Task.Loan_Pre_Approval__c}" required="true"/> 
-                                            
+                                              <apex:inputField id="LoanPreApproval" value="{!Task.Loan_Pre_Approval__c}" required="true"/>      
+                                        
                                         <apex:inputField id="floorChoice" value="{!Task.Floor_Choices__c}" required="false"/>
                                         <apex:inputField id="vaastu" value="{!Task.Vaastu_Entry_Towards__c}" required="false"/>
                                         <apex:inputField id="facing" value="{!Task.Facing__c}" required="false"/>
@@ -152,6 +149,10 @@
                                         <apex:pageBlockSection id="test2" title="Channel Partner Details" collapsible="false" columns="2" rendered="{!if(task.Revisit__c == false && Task.Walk_in_Source__c == 'Channel Partner' && Task.Walk_in_Sub_Source__c == 'Channel Partner',true,false)}">
                                             <apex:inputField id="ChannelPartner" value="{!Task.Channel_Partner__c}" required="true"/>
                                         </apex:pageBlockSection>
+                                            <apex:pageBlockSection id="pgBlockSectionNextCall" title="Next Action Details" collapsible="false" columns="2">
+                                         <apex:inputField id="nextCall" value="{!Task.Next_Action_Date__c}" required="true" />
+                                             <apex:OutputField id="duedate" value="{!Task.ActivityDate}"/>
+                                 </apex:pageBlockSection>
                                     </apex:outputPanel>
                                     <!--------------- ****** Revisit Section Starts ****** ----------------------->
                                     <apex:pageBlockSection id="pgBlockSectionRevisitDetails" title="Revisit Details" collapsible="false" columns="2" rendered="{!task.Revisit__c}">

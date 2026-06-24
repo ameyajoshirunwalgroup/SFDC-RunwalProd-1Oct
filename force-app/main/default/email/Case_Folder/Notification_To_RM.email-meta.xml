@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Notification To RM</name>
+    <style>none</style>
+    <subject>Case has been Created</subject>
+    <textOnly>Dear RM, The case has been created. Please check the below link {!Case.CaseNumber}   Thanks</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Referral_Passback__c</fullName>
-    <formula>ROUND(IF(Referral_Passback_Amount__c &gt; 0,Referral_Passback_Amount__c / Allotment_Premium__c, 0),4)</formula>
+    <formula>/*ROUND(IF(Referral_Passback_Amount__c &gt; 0,Referral_Passback_Amount__c / Allotment_Premium__c, 0),4)*/
+/*ROUND(IF(Referral_Passback_Amount__c &gt; 0,Referral_Passback_Amount__c / (Original_Agreement_Value__c -Referral_Discount_Amount__c ), 0),4)*/
+
+ROUND(IF(Referral_Passback_Amount__c &gt; 0,(if((Referral_Passback_Amount__c / (Original_Agreement_Value__c -Referral_Discount_Amount__c ))&gt;0.01,0.01,(Referral_Passback_Amount__c / (Original_Agreement_Value__c -Referral_Discount_Amount__c )))), 0),4)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Referral Passback%</label>
     <precision>18</precision>

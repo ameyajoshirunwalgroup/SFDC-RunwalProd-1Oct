@@ -228,7 +228,7 @@ export default class UploadRERAnCC extends LightningElement {
             return;
         }
         this.showSpinner = true;
-        updatevaluesinCP({ isrera: this.isrera, iscc: this.iscc, brId: this.recordId, reraExpDate: this.reraexpDate, ccExpDate: this.ccexpDate })
+        updatevaluesinCP({ isrera: this.isrera/*, iscc: this.iscc*/, brId: this.recordId, reraExpDate: this.reraexpDate, ccExpDate: this.ccexpDate })
             .then((result) => {
                 this.showSpinner = false;
                 if (this.isrera == true) {

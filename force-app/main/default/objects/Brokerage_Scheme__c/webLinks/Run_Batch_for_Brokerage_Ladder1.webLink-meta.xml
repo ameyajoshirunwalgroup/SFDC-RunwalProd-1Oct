@@ -16,5 +16,5 @@
     <protected>false</protected>
     <showsLocation>false</showsLocation>
     <showsStatus>false</showsStatus>
-    <url>/apex/BatchRunForBrokerageLadderCreation?id={!Brokerage_Scheme__c.Id}</url>
+    <url>/apex/BatchRunForBrokerageLadderCreation?id={!Brokerage_Scheme__c.Id}&amp;LadderCreationManual={!Brokerage_Scheme__c.Ladder_Creation_Manual__c}</url>
 </WebLink>

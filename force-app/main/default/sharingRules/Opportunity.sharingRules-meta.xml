@@ -337,7 +337,7 @@
         <sharedTo>
             <group>Presales_Opp_Sharring_Group</group>
         </sharedTo>
-        <booleanFilter>(1 or (2 and 3)) and 4</booleanFilter>
+        <booleanFilter>1 or (2 and 3)</booleanFilter>
         <criteriaItems>
             <field>Walkin_Source__c</field>
             <operation>equals</operation>
@@ -353,38 +353,7 @@
             <operation>notEqual</operation>
             <value></value>
         </criteriaItems>
-        <criteriaItems>
-            <field>StageName</field>
-            <operation>notEqual</operation>
-            <value>Unit Booked</value>
-        </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Opportunities_with_booked_customers_to_Presales</fullName>
-        <accessLevel>Edit</accessLevel>
-        <description>Opportunities with booked customers to Presales manager</description>
-        <label>Opportunities with booked customers to Presales</label>
-        <sharedTo>
-            <role>Pre_Sales_Head</role>
-        </sharedTo>
-        <booleanFilter>1 or (2 and 3)</booleanFilter>
-        <criteriaItems>
-            <field>Walkin_Source__c</field>
-            <operation>notEqual</operation>
-            <value>Employee / Managemen,Loyalty,Channel Partner,Temp Channel Partner,R Circle Caller,Referral</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Opportunity_Status__c</field>
-            <operation>equals</operation>
-            <value>Active</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Opportunity_Status__c</field>
-            <operation>notEqual</operation>
-            <value></value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>Project_Runwal_Avenues</fullName>
@@ -413,21 +382,6 @@
             <field>Project_Name__c</field>
             <operation>equals</operation>
             <value>Runwal Gardens,Runwal Edge Dombivli</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>Project_Runwal_Pinnacle</fullName>
-        <accessLevel>Edit</accessLevel>
-        <description>Runwal Pinnacle opportunities</description>
-        <label>Project Runwal Pinnacle</label>
-        <sharedTo>
-            <group>Project_Pinnacle</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>Project_Name__c</field>
-            <operation>equals</operation>
-            <value>Runwal Pinnacle</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>BillDesk CustomerPortal Payment</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>BillDesk CustomerPortal MIS Payment</name>
+    <style>none</style>
+    <subject>BillDesk Customer Portal Payment Receipt</subject>
+    <textOnly>Dear Team,
+
+A Receipt with Payment Mode-{!Receipt__c.Mode__c} of Rs {!Receipt__c.Total_Amount__c} has been added for {!Booking__c.Name} for Customer {!Booking__c.Primary_Applicant_Name__c} via {!Receipt__c.Payment_Gateway__c}. To view the Receipt Record , Click on {!Receipt__c.Link}
+
+Customer Details are as below:
+Customer Name : {!Booking__c.Primary_Applicant_Name__c}
+Project : {!ProjectName}
+Amount : {!Receipt__c.Total_Amount__c}
+Date Of Payment : {!DateOfPayment}
+Mode Of Payment : {!Receipt__c.Mode__c}
+SAP Customer Number : {!SAPCustomerNumber}
+Sales Order Number : {!SalesOrderNumber}
+
+Thanks,
+Runwal Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

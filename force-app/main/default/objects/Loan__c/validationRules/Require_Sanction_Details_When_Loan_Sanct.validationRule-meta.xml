@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Sanction_Details_When_Loan_Sanct</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL( RW_Loan_Record_Status__c, &quot;Loan Sanctioned&quot;),
+    OR(
+        ISBLANK(RW_Sanction_Amount__c),
+        ISBLANK(RW_Sanction_Date__c),
+        ISBLANK(TEXT(RW_Sanction_Status__c))
+    )
+)</errorConditionFormula>
+    <errorMessage>From the Sanction Details Section: Please fill in Sanction Amount, Sanction Date, and Sanction Status before marking the loan as Sanctioned.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>KYC Notification Template</name>
+    <style>none</style>
+    <subject>KYC Document</subject>
+    <textOnly>Hi Team,
+
+KYC Document is submitted by customer for Booking {!bookingNumber} for {!applicantNumber} . Please click on below link to view the KYC Record .
+{!kyclink}
+
+Thanks,
+Runwal Group</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

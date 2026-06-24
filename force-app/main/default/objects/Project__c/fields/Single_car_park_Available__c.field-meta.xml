@@ -2,9 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Single_car_park_Available__c</fullName>
     <externalId>false</externalId>
-    <formula>Single_car_park_Total_c__c  - ( Single_car_park_Booked_c__c + Single_car_park_Sold__c)</formula>
+    <formula>Single_car_park_Total_c__c  - ( Single_car_park_Booked_c__c + Single_car_park_Sold__c + Single_Covered_Earmarked_Available__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Single Covered (Available)</label>
+    <label>Single Covered Additional (Available)</label>
     <precision>18</precision>
     <required>false</required>
     <scale>0</scale>

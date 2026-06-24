@@ -2,8 +2,8 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Basement_Available1__c</fullName>
     <externalId>false</externalId>
-    <formula>Basement_Total__c-(Basement_Booked1__c + Basement_Sold1__c )</formula>
-    <label>Basement(Available)</label>
+    <formula>Basement_Total__c-(Basement_Booked1__c + Basement_Sold1__c +Basement_Earmarked_Available__c)</formula>
+    <label>Basement Additional (Available)</label>
     <precision>18</precision>
     <required>false</required>
     <scale>0</scale>

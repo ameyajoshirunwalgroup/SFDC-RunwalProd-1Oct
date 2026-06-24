@@ -57,8 +57,8 @@ leadDuplicateMap.putAll(leadEmailDupMap);
             FROM Project__c
             WHERE Id IN :projectIds
         ]) {
-            if (proj.Segment_Lookup__r != null)
-                projectIdToDev.put(proj.Id, proj.Segment_Lookup__r.Name);
+            /*if (proj.Segment_Lookup__r != null)  //Commented by Vinay 15-01-2026
+                projectIdToDev.put(proj.Id, proj.Segment_Lookup__r.Name);*/
         }
         
         // Step 3: Build composite keys for incoming leads
@@ -495,6 +495,49 @@ return personAccountEmailDup;
                     System.debug('Lead:' + l.lastName + 'lead duplicates are:' + existingPAMobileKeyMap.get(mobile));
                 }
             }
+        }
+        
+        List<Opportunity> oppList = [SELECT Id,RW_Mobile_No__c,RW_Opportunity_Status__c,RW_Project__c FROM Opportunity WHERE RW_Mobile_No__c =: mobileKeyMap.keySet() AND RW_Opportunity_Status__c = 'Active'];
+        Map<String, List<Opportunity>> mobileVsOppMap = new Map<String, List<Opportunity>>();
+        for(Opportunity opp : oppList){
+            if(mobileVsOppMap.get(opp.RW_Mobile_No__c) != null){
+                mobileVsOppMap.get(opp.RW_Mobile_No__c).add(opp);
+            }else{
+                mobileVsOppMap.put(opp.RW_Mobile_No__c, new List<Opportunity>{opp});
+            }
+        }
+        List<Communication__c> communications = new List<Communication__c>();
+        for(Lead ld: leadList){
+            if(mobileVsOppMap.get(ld.RW_Mobile_No__c) != null){
+                for(Opportunity opp : mobileVsOppMap.get(ld.RW_Mobile_No__c)){
+                    if(opp.RW_Project__c != ld.RW_Project__c ){
+                        if (PAMobileDupMap.containsKey(ld)) {
+                            PAMobileDupMap.remove(ld);
+                        }
+                    }
+                    /*if(opp.RW_Project__c == ld.RW_Project__c ){
+                        Communication__c com = new Communication__c();
+                        com.Name = 'New Enquiry Received From:Digital';
+                        com.Customer_Mobile_Phone__c = ld.RW_Mobile_No__c;
+                        com.Customer_Preferred_Email__c = ld.Email;
+                        com.Email_Id__c = ld.Email;
+                        com.Enquiry_Received_Project_Lookup__c = ld.RW_Project__c;
+                        com.OptyName__c = opp.Id;
+                        com.Project_Interested__c = ld.RW_Project__c;
+                        com.sobjectName__c = 'Opportunity';
+                        com.Status__c = 'Completed';
+                        com.Subject__c = 'New Enquiry Received From:Digital';
+                        communications.add(com);
+                    }else{
+                        if (PAMobileDupMap.containsKey(ld)) {
+                            PAMobileDupMap.remove(ld);
+                        }
+                    }*/
+                }
+            }
+        }
+        if(communications.size() > 0){
+            //insert communications;
         }
         return PAMobileDupMap;
     }

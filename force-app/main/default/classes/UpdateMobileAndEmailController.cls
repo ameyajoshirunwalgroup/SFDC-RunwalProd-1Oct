@@ -211,7 +211,7 @@ public without sharing class UpdateMobileAndEmailController {
             accIds.add(opp.AccountId);
         }
         Map<String, Applicant_Details__c> appMap = new Map<String, Applicant_Details__c>();
-        List<Applicant_Details__c> apps = [SELECT Id, Opportunity__c FROM Applicant_Details__c WHERE Opportunity__c =: oppIds AND Applicant_Number__c = 'Primary Applicant'];
+        List<Applicant_Details__c> apps = [SELECT Id, Opportunity__c,/*Added by Prashant.. 14-05-26*/Booking__c ,Booking__r.RW_Registration_Date__c FROM Applicant_Details__c WHERE Opportunity__c =: oppIds AND Applicant_Number__c = 'Primary Applicant'];
         for(Applicant_Details__c app : apps){
             appMap.put(app.Opportunity__c, app);
         }
@@ -232,7 +232,13 @@ public without sharing class UpdateMobileAndEmailController {
                 if(appMap.get(opp.Id) != null){
                     appMap.get(opp.Id).Email_Address__c = opp.Temp_Email__c;
                     appMap.get(opp.Id).Send_Applicant_Update_To_SAP__c = true; //Added by coServe 21-06-2024
-                    updateApplicant = true;
+                    //Added by Prashant, as now the new process is proposed where if the booking has registration date,nothing should be updated on applicant details..//Added on 14-05-26. 
+                    if(appMap.get(opp.Id).Booking__c !=null){
+                        if(appMap.get(opp.Id).Booking__r.RW_Registration_Date__c == null){
+                            updateApplicant = true;
+                        }
+                    }
+                    //Added by Prashant, as now the new process is proposed where if the booking has registration date,nothing should be updated on applicant details..//Added on 14-05-26. 
                 }
                 oppIdVsAccMap.get(opp.Id).RW_Email__c = opp.Temp_Email__c;
                 oppIdVsAccMap.get(opp.Id).PersonEmail = opp.Temp_Email__c;
@@ -245,7 +251,14 @@ public without sharing class UpdateMobileAndEmailController {
                 if(appMap.get(opp.Id) != null){
                     appMap.get(opp.Id).Mobile_Number__c = opp.Temp_Mobile__c;
                     appMap.get(opp.Id).Send_Applicant_Update_To_SAP__c = true; //Added by coServe 21-06-2024
-                    updateApplicant =true;
+                    //Added by Prashant, as now the new process is proposed where if the booking has registration date,nothing should be updated on applicant details..//Added on 14-05-26. 
+                    if(appMap.get(opp.Id).Booking__c !=null){
+                        if(appMap.get(opp.Id).Booking__r.RW_Registration_Date__c == null){
+                            updateApplicant = true;
+                        }
+                    }
+                    //Added by Prashant, as now the new process is proposed where if the booking has registration date,nothing should be updated on applicant details..//Added on 14-05-26. 
+                    //updateApplicant =true;
                 }
                 oppIdVsAccMap.get(opp.Id).Mobile_No__c = opp.Temp_Mobile__c;
                 opp.Temp_Mobile__c = null;
@@ -262,7 +275,14 @@ public without sharing class UpdateMobileAndEmailController {
                 if(appMap.get(opp.Id) != null){
                     appMap.get(opp.Id).Secondary_Mobile_Number__c = opp.Temp_Secondary_Mobile__c;
                     appMap.get(opp.Id).Send_Applicant_Update_To_SAP__c = true; //Added by coServe 21-06-2024
-                    updateApplicant = true;
+                    //Added by Prashant, as now the new process is proposed where if the booking has registration date,nothing should be updated on applicant details..//Added on 14-05-26. 
+                    if(appMap.get(opp.Id).Booking__c !=null){
+                        if(appMap.get(opp.Id).Booking__r.RW_Registration_Date__c == null){
+                            updateApplicant = true;
+                        }
+                    }
+                    //Added by Prashant, as now the new process is proposed where if the booking has registration date,nothing should be updated on applicant details..//Added on 14-05-26. 
+                    //updateApplicant = true;
                 }
                 oppIdVsAccMap.get(opp.Id).RW_Secondary_Mobile_No__pc = opp.Temp_Secondary_Mobile__c;
                 opp.Temp_Secondary_Mobile__c = null;

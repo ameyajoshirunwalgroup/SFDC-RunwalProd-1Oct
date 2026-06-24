@@ -32,8 +32,10 @@ export default class Aadhar_Verification_TrueSigned_LWC extends LightningElement
     }
 
     handleTermsSign() {
+        console.log('--handleTermsSign');
         getSigningURL({ sRrecordId: this.recordId })
             .then(() => {
+                console.log('--getSigningURL');
                 setTimeout(() => {
                     this.dispatchEvent(new CloseActionScreenEvent());
                 }, 2000);
@@ -43,4 +45,13 @@ export default class Aadhar_Verification_TrueSigned_LWC extends LightningElement
                 this.pageDisabled = false;
             });
     }
+
+
+    /*handleTermsSign() {
+        console.log('--handleTermsSign');
+        getSigningURL({ sRrecordId: this.recordId })
+        .then(result => {
+            console.log('result: ',result);
+        })
+    }*/
 }

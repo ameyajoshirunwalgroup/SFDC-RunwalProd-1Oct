@@ -419,58 +419,7 @@ global class TempSAPReceiptAPICallOutBatch implements Database.Batchable<sObject
         //database.executeBatch(recIRIS, 1);
     }
 
-	public void dummyMethod(){
-        
-        String s2;        
-        String s3;
-        String s4;                
-        String s5;
-        String s6;        
-        String s7;
-        String s8;                
-        String s9;
-        String s10;        
-        String s11;
-        String s12;                
-        String s13;
-        String s14;        
-        String s15;
-        String s16;                
-        String s110;
-        String s210;        
-        String s310;
-        String s410;                
-        String s510;
-        String s610;        
-        String s710;
-        String s810;                
-        String s910;
-        String s1010;        
-        String s1110;
-        String s1210;                
-        String s1310;
-        String s1410;        
-        String s1510;
-        String s1610;                
-        String s111;
-        String s211;        
-        String s311;
-        String s411;                
-        String s511;
-        String s611;        
-        String s711;
-        String s811;                
-        String s911;
-        String s1011;        
-        String s1111;
-        String s1211;                
-        String s1311;
-        String s1411;        
-        String s1511;
-        String s1611;                
-        String s1101;
-        String s2111;        
-    }
+	
     
     class receiptWrapper
     { 

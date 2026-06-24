@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
     <alerts>
+        <fullName>Collection_Next_Follow_up_Email</fullName>
+        <ccEmails>vaishnavi.vade@ubsdigicloud.com</ccEmails>
+        <description>Collection Next Follow-up Email</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Collection_Next_Follow_up_Email_Temp</template>
+    </alerts>
+    <alerts>
         <fullName>Send_notification_to_SM_assign_prospect</fullName>
         <description>Send notification to SM assign prospect</description>
         <protected>false</protected>
@@ -9,7 +20,7 @@
             <type>user</type>
         </recipients>
         <senderType>CurrentUser</senderType>
-        <template>unfiled$public/Send_Notification_to_SM_when_task_next_action_is_follow_by_SM</template>
+        <template>My_View/Send_Notification_to_SM_when_task_next_action_is_follow_by_SM</template>
     </alerts>
     <fieldUpdates>
         <fullName>Remarks</fullName>
