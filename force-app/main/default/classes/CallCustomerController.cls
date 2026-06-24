@@ -3,7 +3,7 @@ public class CallCustomerController {
     @AuraEnabled(cacheable=true)
     public static Opportunity oppData(String recId){
         system.debug('recId>>>' +recId);
-        return [SELECT Id, Account.Mobile_No__c, Account.RW_Country__c, Account.Country_Code__c, Account.Dialing_Country_2__c, Account.Country_Code_2__c, Account.RW_Secondary_Mobile_No__pc, Account.Alternate_Mobile_No__c FROM Opportunity WHERE Id =: recId];
+        return [SELECT Id, Account.Mobile_No__c, Account.RW_Country__c, Account.Country_Code__c, Account.Dialing_Country_2__c, Account.Country_Code_2__c, Account.RW_Secondary_Mobile_No__pc, Account.Alternate_Mobile_No__c,Is_DND__c FROM Opportunity WHERE Id =: recId];
     }
 
     @AuraEnabled(cacheable=true)
@@ -86,8 +86,7 @@ public class CallCustomerController {
             }
         }
         
-        List<User> uList = [Select Id, CTI_Agent_ID__c, Campaign_name__c, api_key__c,Ozontel_UserName__c, Schedule_Campaign_Name__c, Profile.Name, Backup_Campaign__c, Tata_CTI_Agent_Number__c, International_Campaign__c From User Where Id = :UserInfo.getUserId()];
-        Boolean agentLogin = false; //Added by Vinay 22-04-2026
+        List<User> uList = [Select Id, CTI_Agent_ID__c, Campaign_name__c, api_key__c,Ozontel_UserName__c, Schedule_Campaign_Name__c, Profile.Name, Backup_Campaign__c, Tata_CTI_Agent_Number__c, International_Campaign__c, DID__c From User Where Id = :UserInfo.getUserId()];
         if(uList != null && !uList.isEmpty()) {
             agentLogin = Ozonetel_AgentLoginCheck.agentLoginCheck(uList[0].CTI_Agent_ID__c); //Added by Vinay 22-04-2026
             if(System.label.Conditional_Campaign_Assignment == 'true'){
@@ -154,7 +153,7 @@ return tempResponse; */
         
         if(uList[0].Tata_CTI_Agent_Number__c != null && uList[0].Tata_CTI_Agent_Number__c != ''){
             System.debug('Tata_CTI_Agent_Number__c: ' + uList[0].Tata_CTI_Agent_Number__c);
-            String resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, recId);
+            String resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, recId, uList[0].DID__c);
             /*String resp;
 if(countryCode != '+91' && countryCode != '91' && countryCode != '0091' && countryCode != '091'){
 resp = tataCallAPI(mobileNum,uList[0].Tata_CTI_Agent_Number__c, recId);
@@ -197,7 +196,7 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
             System.debug(res.getBody());
 
             //Added by Vinay 20-03-2026 Start
-            /*Id objId = recId;
+            Id objId = recId;
             String objName = objId.getSObjectType().getDescribe().getName();
             Task tsk = new Task();
             if(objName == 'Lead'){
@@ -212,7 +211,7 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
             tsk.Communication_Type__c = 'Outbound Call';
             tsk.Campaign_Name_from_CTI__c = campaignName;
             tsk.Status = 'In-Progress';
-            //insert tsk;*/
+            //insert tsk;
             //Added by Vinay 20-03-2026 End
             
             RespData resp = new RespData();
@@ -220,30 +219,12 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
             string tempResponse;
             if(resp.status == 'queued successfully'){
                 tempResponse = resp.status + '!  UCID - ' + resp.UCID;
-                //Added by Vinay 20-03-2026 Start
-                if(agentLogin){ //Added if condition by Vinay 22-04-2026
-                    Id objId = recId;
-                    String objName = objId.getSObjectType().getDescribe().getName();
-                    Task tsk = new Task();
-                    if(objName == 'Lead'){
-                        tsk.WhoId = objId;
-                        tsk.Task_Type__c = 'Presales Call';
-                        tsk.Subject = 'Presales Call';
-                    }else{
-                        tsk.WhatId = objId;
-                        tsk.Task_Type__c = 'CRM Call';
-                        tsk.Subject = 'CRM Call';
-                    }
-                    tsk.Communication_Type__c = 'Outbound Call';
-                    tsk.Campaign_Name_from_CTI__c = campaignName;
-                    tsk.Status = 'In-Progress';
-                    tsk.CallObject = resp.UCID;
-                    insert tsk;  
-                }
-                
+                tsk.CallObject = resp.UCID;
+                insert tsk;
             }else if(resp.status == 'Fail' || resp.status == 'false'){
                 tempResponse = resp.status + ' : ' + resp.message;
             }
+            System.debug('tsk: ' + tsk);
             return tempResponse; 
             //Added by coServe 22-08-2024 End         
         }
@@ -251,12 +232,13 @@ resp = tataCallAPI(mobileNumWithCountryCode,uList[0].Tata_CTI_Agent_Number__c, r
     }
     
     
-    public static String tataCallAPI(String customerPh, String agentNum, String recId){
+    public static String tataCallAPI(String customerPh, String agentNum, String recId, String didNum){
         
         System.debug('tataCallAPI: ');
         
-        String jsonData = '{"agent_number" : "' + agentNum + '", "destination_number" : "' + customerPh + '", "async" : 1, "recordId" : "' + recId + '", "get_call_id" : 1 }';
+        //String jsonData = '{"agent_number" : "' + agentNum + '", "destination_number" : "' + customerPh + '", "async" : 1, "recordId" : "' + recId + '", "get_call_id" : 1 }'; //Commented by Vinay 24-06-2026
         //String jsonData = '{"agent_number" : "' + agentNum + '", "destination_number" : "' + customerPh + '", "async" : 1}';
+        String jsonData = '{"agent_number" : "' + agentNum + '", "destination_number" : "' + customerPh + '", "async" : 1, "caller_id" : "' + didNum + '"}'; //Added by Vinay 24-06-2026
         System.debug('jsonData: ' + jsonData);
         HttpRequest req = new HttpRequest();
         req.setEndpoint('https://api-smartflo.tatateleservices.com/v1/click_to_call');
