@@ -1,5 +1,15 @@
 public without sharing class leadTriggerHandler
 {
+    //Added by Dolly starts 15-06-2026 starts
+    private static Set<Id> duplicateLeadIdsToDeactivate = new Set<Id>();
+    public static Set<Id> duplicateOppIdsToDeactivate = new Set<Id>();
+    private static Map<Id, Id> leadParentMap = new Map<Id, Id>();
+    private static Map<Id,Id> leadOppMap = new Map<Id,Id>();
+    private static Boolean bypassUserCache;
+    private static final String LEAD_TYPE = 'Lead';
+    private static final String OPP_TYPE = 'Opportunity';
+    //Added by Dolly starts 15-06-2026 ends
+
     public void BeforeInsert(List<Lead> lstLead)
     {
         if(lstLead.size() > 0)
@@ -102,14 +112,16 @@ eachLead.RW_Customer_Mobile_Number__c = eachLead.RW_Mobile_No__c;
     
     public void AfterInsert(List<Lead> lstLead)
     {
-       duplicityCheck(lstLead, null); 
+        Boolean allowBypass = isBypassUser();
+        duplicityCheck(lstLead, null,allowBypass);
+        processDuplicateLeadUpdates(); //Added by Dolly starts 15-06-2026
         
         //Added by coServe 20-01-2023 Start
         List<Id> leadIds = new List<Id>();
         List<String> digitalLeadIds = new List<String>(); //Added by Vinay 23-09-2025
         //List<Id> loyaltyLeadIds= new List<Id>();  // Commented by Vinay 28-05-2025 to stop round robin auto assignment
-        List<Lead> referralLeads = new List<Lead>(); //Added by Vinay 15-10-2025
-        List<Id> referralLeadIds = new List<Id>(); //Added by Vinay 15-10-2025
+        List<Lead> referralLeads = new List<Lead>(); //Added by Vinay 28-02-2026
+        List<Id> referralLeadIds = new List<Id>(); //Added by Vinay 28-02-2026
         for(Lead ld : lstLead){
             if(ld.LeadSource == 'Retention' && (ld.Retention_RM_Name__c != null || ld.Retention_Closing_Head_Name__c!= null || ld.Retention_Presales_User__c != null || ld.Retention_Sales_Manager__c != null)){
                 leadIds.add(ld.Id);
@@ -122,7 +134,7 @@ eachLead.RW_Customer_Mobile_Number__c = eachLead.RW_Mobile_No__c;
 if(loyaltyLeadSources.contains(ld.LeadSource)){ //Added by coServe 26-07-2024
 loyaltyLeadIds.add(ld.Id);
 }*/
-            if(ld.LeadSource == 'Referral' && ld.Customer_Reference__c != null){ //Added by Vinay 15-10-2025
+            if(ld.LeadSource == 'Referral' && ld.Customer_Reference__c != null){ //Added by Vinay 28-02-2026
                 referralLeads.add(ld);
                 referralLeadIds.add(ld.Id);
             }
@@ -132,11 +144,10 @@ loyaltyLeadIds.add(ld.Id);
             //system.enqueuejob(new DigitalLeadAssignment(digitalLeadIds));
         }
         System.debug('referralLeads: ' + referralLeads);
-        if(referralLeads.size() > 0){ //Added by Vinay 15-10-2025
-            //ReferralPointsModule.referralFreshLeads(referralLeads);
-            LockatedApp_Notifications.referralLeadCreatedNotification(referralLeads); //Added by Vinay 20-01-2026
+        if(referralLeads.size() > 0){ //Added by Vinay 28-02-2026
+            LockatedApp_Notifications.referralLeadCreatedNotification(referralLeads); //Added by Vinay 28-02-2026
         }
-        if(referralLeadIds.size() > 0){ //Added by Vinay 21-01-2026
+        if(referralLeadIds.size() > 0){ //Added by Vinay 28-02-2026
             LockatedApp_LoyaltyEngine.referralFreshLeads(referralLeadIds); 
         }
         if(leadIds.size()>0){
@@ -145,7 +156,7 @@ loyaltyLeadIds.add(ld.Id);
                                    Retention_Closing_Head_Name__r.UserName,Retention_Closing_Head_Name__c, Retention_Presales_User__r.FirstName,
                                    Retention_Presales_User__r.LastName, Retention_Presales_User__r.UserName, Retention_Sales_Manager__r.FirstName,
                                    Retention_Sales_Manager__r.LastName, Retention_Sales_Manager__r.UserName, Retention_Presales_User__c,
-                                   Retention_Sales_Manager__c FROM Lead WHERE Id =: leadIds];
+                                   Retention_Sales_Manager__c,Generated_OTP_On_Lead__c FROM Lead WHERE Id =: leadIds];
             List<Messaging.SingleEmailMessage> mails = new List<Messaging.SingleEmailMessage>();
             for(Lead ld : leadList){
                 if(ld.Retention_RM_Name__c != null){
@@ -188,7 +199,7 @@ assignToLoyaltysUser(loyaltyLeadIds); // Commented by Vinay 28-05-2025 to stop r
     
     public void AfterUpdate(List<Lead> lstLead, Map<Id,Lead> oldMap)
     {
-        duplicityCheck(lstLead, oldMap);
+        duplicityCheck(lstLead, oldMap,false);
         //Added by coServe 20-01-2023 Start
         List<Id> leadIds = new List<Id>();
         for(Lead ld : lstLead){
@@ -205,7 +216,7 @@ assignToLoyaltysUser(loyaltyLeadIds); // Commented by Vinay 28-05-2025 to stop r
                                    Retention_Closing_Head_Name__r.UserName,Retention_Closing_Head_Name__c, Retention_Presales_User__r.FirstName,
                                    Retention_Presales_User__r.LastName, Retention_Presales_User__r.UserName, Retention_Sales_Manager__r.FirstName,
                                    Retention_Sales_Manager__r.LastName, Retention_Sales_Manager__r.UserName, Retention_Presales_User__c,
-                                   Retention_Sales_Manager__c FROM Lead WHERE Id =: leadIds];
+                                   Retention_Sales_Manager__c,Generated_OTP_On_Lead__c FROM Lead WHERE Id =: leadIds];
             List<Messaging.SingleEmailMessage> mails = new List<Messaging.SingleEmailMessage>();
             for(Lead ld : leadList){
                 if(ld.Retention_RM_Name__c != null && ld.Retention_RM_Name__c != oldMap.get(ld.Id).Retention_RM_Name__c){
@@ -401,7 +412,9 @@ throw new CommonException('There was an error -'+e.getMessage());
              {
                  setOfAgentMail.add(EachLead.RW_Agent_ID__c);
              }
-             
+             if(EachLead.Status == 'Junk' && EachLead.Status != oldMap.get(EachLead.Id).Status){ //Added by Vinay 28-05-2026
+                EachLead.Junk_Date__c = Date.today();
+            }
              //added on 7th July by adarsh for the new CR
              //updation of email id
              /*if(eachLead.RW_Customer_Email__c != null && oldMap.get(eachLead.id).RW_Customer_Email__c != eachLead.RW_Customer_Email__c)
@@ -616,8 +629,9 @@ EachLead.RW_Budget__c = '>3Cr';
 } 
 } */  // 
     
-private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
-        
+    private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap, Boolean allowBypass) {
+        //Boolean allowBypass = isBypassUser();
+
         if (lstLead == null || lstLead.isEmpty()) return;
         
         Set<String> setOfMobileNumbers = new Set<String>();
@@ -669,7 +683,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
         }
         
         List<Lead> lstAllLead = [
-            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, Vertical__c, LeadSource, RW_Broker__c,name,RW_Project__c
+            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, Vertical__c, LeadSource, RW_Broker__c,name,RW_Project__c,Generated_OTP_On_Lead__c
             FROM Lead
             WHERE (Primary_Mobile_No_with_code__c IN :setOfMobileNumbers OR Secondary_Mobile_No_with_code__c IN :setOfMobileNumbers)
             AND Development__c IN :setOfDevelopmentNames
@@ -687,13 +701,13 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
         ];
         
         List<Lead> nriDupLeads = [
-            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, NRI_OS_Sourcing_Manager_LU__c,RW_Project__c
+            SELECT Id, Primary_Mobile_No_with_code__c, Secondary_Mobile_No_with_code__c, Development__c, NRI_OS_Sourcing_Manager__c,RW_Project__c,Generated_OTP_On_Lead__c
             FROM Lead
             WHERE (Primary_Mobile_No_with_code__c IN :setOfMobileNumbers OR Secondary_Mobile_No_with_code__c IN :setOfMobileNumbers)
             AND Development__c IN :setOfDevelopmentNames
-            AND NRI_OS_Sourcing_Manager_LU__c != null
+            AND NRI_OS_Sourcing_Manager__c != null
             AND IsConverted = FALSE
-        ]; // Replaced NRI_OS_Sourcing_Manager__c with NRI_OS_Sourcing_Manager_LU__c by Vinay 25-11-2025
+        ];
         
         Map<String, List<Lead>> mapOfDuplicateLead = new Map<String, List<Lead>>();
         for (Lead dupLead : lstAllLead) {
@@ -711,7 +725,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                 key = mobile + '@@' + dupLead.Development__c + '@@' + dupLead.Vertical__c + '@@' + brokerKey;
                             } else if (dupLead.Vertical__c == 'Channel Partner' && dupLead.LeadSource == 'Temp Channel Partner') {
                                 // New condition for Channel Partner with Temp Channel Partner lead source
-                                String tempChannelPartnerKey = dupLead.RW_Broker__c != null ? dupLead.RW_Broker__c : 'NoTempChannelPartner';
+                                String tempChannelPartnerKey = dupLead.RW_Broker__c != null ? String.valueOf(dupLead.RW_Broker__c) : 'NoTempChannelPartner';  // Added String.valueOf by Vinay 20-01-2026
                                 key = mobile + '@@' + dupLead.Development__c + '@@' + dupLead.Vertical__c + '@@' + dupLead.LeadSource + '@@' + tempChannelPartnerKey;
                             } else if (dupLead.Vertical__c == 'Site Team' && dupLead.LeadSource == 'Channel Partner') {
                                 // Site Team with Channel Partner lead source
@@ -743,6 +757,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                             mapOfDuplicateOpp.get(key).add(opp);
                         }
         }
+        
         for (Lead EachLead : lstLead) {
             if (EachLead.Development__c == null || EachLead.Vertical__c == null) continue;
             
@@ -753,8 +768,8 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                  oldMap.get(EachLead.Id).Vertical__c != EachLead.Vertical__c ||
                                  oldMap.get(EachLead.Id).RW_Broker__c != EachLead.RW_Broker__c ||
                                  /*oldMap.get(EachLead.Id).Temp_Channel_Partner__c != EachLead.Temp_Channel_Partner__c ||*/
-                                 oldMap.get(EachLead.Id).NRI_OS_Sourcing_Manager_LU__c != EachLead.NRI_OS_Sourcing_Manager_LU__c ||
-                                 oldMap.get(EachLead.Id).LeadSource != EachLead.LeadSource);  // Replaced NRI_OS_Sourcing_Manager__c with NRI_OS_Sourcing_Manager_LU__c by Vinay 25-11-2025
+                                 oldMap.get(EachLead.Id).NRI_OS_Sourcing_Manager__c != EachLead.NRI_OS_Sourcing_Manager__c ||
+                                 oldMap.get(EachLead.Id).LeadSource != EachLead.LeadSource);
             
             
             if (!isChanged) continue;
@@ -792,7 +807,7 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                             }
                                             if (mapOfDuplicateLead.containsKey(key)) {
                                                 for (Lead dupLead : mapOfDuplicateLead.get(key)) {
-                                                    if (dupLead.Id != EachLead.Id && dupLead.RW_Project__c == EachLead.RW_Project__c) {  // Added dupLead.RW_Project__c == EachLead.RW_Project__c by Vinay 15-01-2026                                                    
+                                                    if (dupLead.Id != EachLead.Id && dupLead.RW_Project__c == EachLead.RW_Project__c && UserInfo.getUserId() != System.label.Lead_Duplicity_Validation_Skip_User_Id){   // Added dupLead.RW_Project__c == EachLead.RW_Project__c by Vinay 15-01-2026  // Added UserInfo.getUserId() != System.label.System_Administrator_User_Id by Vinay 07-05-2026) {) {                                                    
                                                         // Check mobile number match
                                                         if ((EachLead.Primary_Mobile_No_with_code__c != null &&
                                                              (EachLead.Primary_Mobile_No_with_code__c == dupLead.Primary_Mobile_No_with_code__c ||
@@ -800,17 +815,59 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                                             (EachLead.Secondary_Mobile_No_with_code__c != null &&
                                                              (EachLead.Secondary_Mobile_No_with_code__c == dupLead.Primary_Mobile_No_with_code__c ||
                                                               EachLead.Secondary_Mobile_No_with_code__c == dupLead.Secondary_Mobile_No_with_code__c))) {
-                                                                  EachLead.addError('Lead already exists with the specified mobile number. Lead Id: ' + dupLead.Id);
+
+                                                                //Added by Dolly starts 15-06-2026
+                                                                System.debug('*** DUPLICATE FOUND ***');
+                                                                System.debug('Mobile Match With Lead: ' + dupLead.Id);
+                                                                handleDuplicateRecord(
+                                                                    EachLead,
+                                                                    dupLead.Id,
+                                                                    LEAD_TYPE,
+                                                                    allowBypass,
+                                                                    'Lead already exists with the specified mobile number. Lead Id: ',
+                                                                    'An existing active Lead with the specified mobile number for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                                                    dupLead.Generated_OTP_On_Lead__c
+                                                                );
+
+                                                                //Commented by Dolly 15-06-2026
+                                                               // EachLead.addError('Lead already exists with the specified mobile number. Lead Id: ' + dupLead.Id);
                                                               }
                                                         
                                                         // Check Segment
-                                                        if (EachLead.Development__c == dupLead.Development__c) {
-                                                            EachLead.addError('Lead already exists with the specified Segment. Lead Id: ' + dupLead.Id);
+                                                        if (EachLead.Development__c == dupLead.Development__c) { 
+
+                                                            //Added by Dolly starts 15-06-2026
+                                                            handleDuplicateRecord(
+                                                                EachLead,
+                                                                dupLead.Id,
+                                                                LEAD_TYPE,
+                                                                allowBypass,
+                                                                'Lead already exists with the specified Segment. Lead Id: ',
+                                                                'An existing active Lead with the specifiedSegment for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                                                dupLead.Generated_OTP_On_Lead__c
+                                                            );
+
+                                                            //Commented by Dolly 15-06-2026
+                                                            //EachLead.addError('Lead already exists with the specified Segment. Lead Id: ' + dupLead.Id);
                                                         }
                                                         
                                                         // Check Vertical
-                                                        if (EachLead.Vertical__c == dupLead.Vertical__c && UserInfo.getUserId() != System.label.System_Administrator_User_Id) { // Added UserInfo.getUserId() != System.label.System_Administrator_User_Id by Vinay 07-05-2026
-                                                            EachLead.addError('Lead already exists with the specified Team. Lead Id: ' + dupLead.Id);
+                                                        
+                                                        if (EachLead.Vertical__c == dupLead.Vertical__c) { 
+
+                                                            //Added by Dolly starts 15-06-2026
+                                                            handleDuplicateRecord(
+                                                                EachLead,
+                                                                dupLead.Id,
+                                                                LEAD_TYPE,
+                                                                allowBypass,
+                                                                'Lead already exists with the specified Team. Lead Id: ',
+                                                                'An existing active Lead with the specified Team for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                                                dupLead.Generated_OTP_On_Lead__c
+                                                            );
+
+                                                            //Commented by Dolly 15-06-2026
+                                                            //EachLead.addError('Lead already exists with the specified Team. Lead Id: ' + dupLead.Id);
                                                         }
                                                         
                                                         // Check Channel Partner (Broker) - Original condition
@@ -819,7 +876,20 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                                             dupLead.Vertical__c == 'Channel Partner' &&
                                                             dupLead.LeadSource != 'Temp Channel Partner' &&
                                                             EachLead.RW_Broker__c == dupLead.RW_Broker__c) {
-                                                                EachLead.addError('Lead already exists with the specified Channel Partner. Lead Id: ' + dupLead.Id);
+
+                                                                //Added by Dolly starts 15-06-2026
+                                                                handleDuplicateRecord(
+                                                                    EachLead,
+                                                                    dupLead.Id,
+                                                                    LEAD_TYPE,
+                                                                    allowBypass,
+                                                                    'Lead already exists with the specified Channel Partner. Lead Id: ',
+                                                                    'An existing active Lead with the specified Channel Partner for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                                                    dupLead.Generated_OTP_On_Lead__c
+                                                                );
+
+                                                                //Commented by Dolly 15-06-2026
+                                                                //EachLead.addError('Lead already exists with the specified Channel Partner. Lead Id: ' + dupLead.Id);
                                                             }
                                                         
                                                         // Check Channel Partner with Temp Channel Partner Lead Source (New condition)
@@ -828,7 +898,20 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                                             dupLead.Vertical__c == 'Channel Partner' && 
                                                             dupLead.LeadSource == 'Temp Channel Partner' &&
                                                             EachLead.RW_Broker__c == dupLead.RW_Broker__c) {
-                                                                EachLead.addError('Lead already exists with the specified Temp Channel Partner. Lead Id: ' + dupLead.Id);
+
+                                                                //Added by Dolly starts 15-06-2026
+                                                                handleDuplicateRecord(
+                                                                    EachLead,
+                                                                    dupLead.Id,
+                                                                    LEAD_TYPE,
+                                                                    allowBypass,
+                                                                    'Lead already exists with the specified Temp Channel Partner. Lead Id: ',
+                                                                    'An existing active Lead with the specified Temp Channel Partner for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                                                    dupLead.Generated_OTP_On_Lead__c
+                                                                );
+
+                                                                //Commented by Dolly 15-06-2026
+                                                                //EachLead.addError('Lead already exists with the specified Temp Channel Partner. Lead Id: ' + dupLead.Id);
                                                             }
                                                         
                                                         // Check Site Team with Channel Partner Lead Source
@@ -837,7 +920,20 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                                             dupLead.Vertical__c == 'Site Team' && 
                                                             dupLead.LeadSource == 'Channel Partner' &&
                                                             EachLead.RW_Broker__c == dupLead.RW_Broker__c) {
-                                                                EachLead.addError('Lead already exists with the specified Channel Partner for Site Team. Lead Id: ' + dupLead.Id);
+
+                                                                //Added by Dolly starts 15-06-2026
+                                                                handleDuplicateRecord(
+                                                                    EachLead,
+                                                                    dupLead.Id,
+                                                                    LEAD_TYPE,
+                                                                    allowBypass,
+                                                                    'Lead already exists with the specified Channel Partner for Site Team. Lead Id: ',
+                                                                    'An existing active Lead with the specified Channel Partner for Site Team for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                                                    dupLead.Generated_OTP_On_Lead__c
+                                                                );
+
+                                                                //Commented by Dolly 15-06-2026
+                                                                //EachLead.addError('Lead already exists with the specified Channel Partner for Site Team. Lead Id: ' + dupLead.Id);
                                                             }
                                                         
                                                         
@@ -854,13 +950,26 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                                 for (Opportunity dupOpp : mapOfDuplicateOpp.get(oppKey)) {
                                     //EachLead.addError('An opportunity already exists with the specified mobile number. Opp Id: ' + dupOpp.Id); //Commented by Vinay 16-01-2026
                                     if(dupOpp.RW_Project__c == EachLead.RW_Project__c){ //Added by Vinay 16-01-2026
-                                        EachLead.addError('An opportunity already exists with the specified mobile number. Opp Id: ' + dupOpp.Id);
+
+                                    //Added by Dolly starts 15-06-2026
+                                    handleDuplicateRecord(
+                                        EachLead,
+                                        dupOpp.id,
+                                        OPP_TYPE,
+                                        allowBypass,
+                                        'An opportunity already exists with the specified mobile number. Opp Id: ',
+                                        'An existing active opportunity with the specified mobile number for this Project already exists. Existing Opp Id: ' + dupOpp.Id +'. Upon creation of this new Lead, the existing Opportunity will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                                        ''
+                                    );
+
+                                    //Commented by Dolly 15-06-2026
+                                    //EachLead.addError('An opportunity already exists with the specified mobile number. Opp Id: ' + dupOpp.Id);
                                     }
                                 }
                             }
                         }
             
-            if (EachLead.Vertical__c == 'NRI' || EachLead.NRI_OS_Sourcing_Manager_LU__c != null) { // Replaced NRI_OS_Sourcing_Manager__c with NRI_OS_Sourcing_Manager_LU__c by Vinay 25-11-2025
+            if (EachLead.Vertical__c == 'NRI' || EachLead.NRI_OS_Sourcing_Manager__c != null) {
                 for (Lead dupLead : nriDupLeads) {
                     if (dupLead.Id == EachLead.Id) continue;
                     
@@ -875,14 +984,228 @@ private void duplicityCheck(List<Lead> lstLead, Map<Id, Lead> oldMap) {
                           }
                     
                     if (match && EachLead.Development__c == dupLead.Development__c) {
-                        EachLead.addError('A lead already exists with the specified NRI Sourcing Manager. Lead Id: ' + dupLead.Id);
+
+                        //Added by Dolly starts 15-06-2026
+                        handleDuplicateRecord(
+                            EachLead,
+                            dupLead.Id,
+                            LEAD_TYPE,
+                            allowBypass,
+                            'Lead already exists with the specified NRI Sourcing Manager. Lead Id: ',
+                            'An existing active Lead with the specified NRI Sourcing Manager for this Project already exists. Existing Lead Id: ' + dupLead.Id +'. Upon creation of this new Lead, the existing Lead will be marked as Inactive. Please select "Bypass Duplicate Validation" and save again to continue.',
+                            dupLead.Generated_OTP_On_Lead__c
+                        );
+
+                        ///Commented by Dolly 15-06-2026
+                       // EachLead.addError('A lead already exists with the specified NRI Sourcing Manager. Lead Id: ' + dupLead.Id);
                     }
                 }
             }
         }
-    }
+        
     
- public static void dummyMethod(){
+        
+    }
+ 
+
+    /**
+    * Enhanced by Dolly | 15-06-2026
+    *
+    * Added metadata-driven duplicate validation bypass.
+    *
+    * Existing duplicate validations remain unchanged:
+    * - Mobile Number
+    * - Development
+    * - Vertical / Team
+    * - Channel Partner
+    * - Temp Channel Partner
+    * - Site Team + Channel Partner
+    * - NRI
+    * - Active Opportunity
+    *
+    * New Functionality:
+    * - Allows eligible users to bypass duplicate validation
+    * - Existing duplicate Lead/Opportunity is marked Inactive
+    * - Audit fields are populated on newly created Lead
+    */
+    private static Boolean isBypassUser() {
+
+        if(bypassUserCache != null){
+            return bypassUserCache;
+        }
+
+        User usr = [
+            SELECT Profile.Name, Team__c, Division__c
+            FROM User
+            WHERE Id = :UserInfo.getUserId()
+        ];
+
+        List<Duplicate_Validation_Bypass_Config__mdt> configs = [
+            SELECT Profile_Name__c,
+                Team__c,
+                Division__c,
+                Enable_Bypass__c
+            FROM Duplicate_Validation_Bypass_Config__mdt
+        ];
+
+        bypassUserCache = false;
+
+        for(Duplicate_Validation_Bypass_Config__mdt cfg : configs){
+
+            if(cfg.Enable_Bypass__c &&
+            cfg.Profile_Name__c == usr.Profile.Name &&
+            cfg.Team__c == usr.Team__c &&
+            cfg.Division__c == usr.Division__c){
+
+                bypassUserCache = true;
+                break;
+            }
+        }
+
+        return bypassUserCache;
+    }
+
+    /**
+    * Added by Dolly | 15-06-2026
+    *
+    * Handles duplicate Lead and Opportunity validations.
+    *
+    * Scenarios:
+    * 1. Duplicate Lead found with OTP generated
+    *    and user eligible for bypass.
+    *
+    * 2. Duplicate Opportunity found and user
+    *    eligible for bypass.
+    *
+    * 3. User must explicitly select
+    *    Bypass Duplicate Validation checkbox
+    *    before proceeding.
+    *
+    * 4. Existing duplicate records are queued
+    *    for deactivation and audit tracking.
+    */
+    private static void handleDuplicateRecord(
+            Lead eachLead,
+            Id duplicateRecordId,
+            String ObjectTypeName,
+            Boolean allowBypass,
+            String errorMessage,
+            String byPassErrorMessage,
+            String generatedOtp
+        ){
+            System.debug('allowBypass => ' + allowBypass);
+            System.debug('generatedOtp => ' + generatedOtp);
+            System.debug('ObjectTypeName => ' + ObjectTypeName);
+            System.debug('Comparison => ' + (ObjectTypeName == LEAD_TYPE));
+        if(
+            (ObjectTypeName == LEAD_TYPE && String.isNotBlank(generatedOtp) && allowBypass) ||
+            (ObjectTypeName == OPP_TYPE && allowBypass)
+            ){
+            if(!eachLead.Bypass_Duplicate_Validation__c){
+
+                eachLead.addError(
+                    byPassErrorMessage
+                );
+
+            }else{
+                if(ObjectTypeName ==  LEAD_TYPE){
+                    duplicateLeadIdsToDeactivate.add(duplicateRecordId);
+                    leadParentMap.put(eachLead.Id, duplicateRecordId);
+                }
+                else if(ObjectTypeName == OPP_TYPE){
+                  
+                    duplicateOppIdsToDeactivate.add(duplicateRecordId);
+                    leadOppMap.put(eachLead.Id, duplicateRecordId);
+                }
+            }
+
+        }else{
+            eachLead.addError(
+                errorMessage
+                + duplicateRecordId
+            );
+        }
+    }
+
+    /**
+    * Added by Dolly | 15-06-2026
+    *
+    * Post-processing method executed after
+    * duplicate validation bypass.
+    *
+    * Activities:
+    * - Marks existing duplicate Leads as Inactive
+    * - Marks existing duplicate Opportunities as Inactive
+    * - Populates Duplicate Lead lookup field
+    * - Populates Duplicate Opportunity lookup field
+    * - Maintains audit trail between old and new records
+    */
+    private static void processDuplicateLeadUpdates(){
+
+        if(!duplicateLeadIdsToDeactivate.isEmpty()){
+
+            List<Lead> oldLeads = [
+                SELECT Id, IsActive__c,Generated_OTP_On_Lead__c
+                FROM Lead
+                WHERE Id IN :duplicateLeadIdsToDeactivate
+            ];
+
+            for(Lead oldLead : oldLeads){
+                oldLead.IsActive__c = false;
+            }
+
+            update oldLeads;
+        }
+
+        if(!duplicateOppIdsToDeactivate.isEmpty()){
+
+            List<Opportunity> oppsToUpdate = [
+                SELECT Id, Inactive__c
+                FROM Opportunity
+                WHERE Id IN :duplicateOppIdsToDeactivate
+            ];
+
+            for(Opportunity opp : oppsToUpdate){
+                opp.Inactive__c =true;
+            }
+
+            update oppsToUpdate;
+        }
+
+        Map<Id, Lead> leadsToUpdateMap = new Map<Id, Lead>();
+
+        for(Id leadId : leadParentMap.keySet()){
+
+            if(!leadsToUpdateMap.containsKey(leadId)){
+                leadsToUpdateMap.put(
+                    leadId,
+                    new Lead(Id = leadId)
+                );
+            }
+
+            leadsToUpdateMap.get(leadId).Duplicate_Lead__c =
+                leadParentMap.get(leadId);
+        }
+
+        for(Id leadId : leadOppMap.keySet()){
+
+            if(!leadsToUpdateMap.containsKey(leadId)){
+                leadsToUpdateMap.put(
+                    leadId,
+                    new Lead(Id = leadId)
+                );
+            }
+
+            leadsToUpdateMap.get(leadId).Duplicate_Opportunity__c =
+                leadOppMap.get(leadId);
+        }
+
+        if(!leadsToUpdateMap.isEmpty()){
+            update leadsToUpdateMap.values();
+        }
+        
+    }
+    public static void dummyMethod(){
 
 String s2;        
 String s3;
