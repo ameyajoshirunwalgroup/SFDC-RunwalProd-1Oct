@@ -3,10 +3,13 @@
     <fullName>RW_Opportunity_Status__c</fullName>
     <externalId>false</externalId>
     <formula>IF(ISPICKVAL(StageName, &quot;Unit Booked&quot;), &quot;Booked&quot;, 
+     IF(
+        Inactive__c = TRUE,
+        &quot;Inactive&quot;,
 	IF(CloseDate  + 135 &lt;= TODAY(), &quot;Deactivated&quot;,
 		IF(CloseDate &lt;= TODAY(), &quot;Inactive&quot;, &quot;Active&quot;)
 	)
-)</formula>
+))</formula>
     <label>Opportunity Status</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
