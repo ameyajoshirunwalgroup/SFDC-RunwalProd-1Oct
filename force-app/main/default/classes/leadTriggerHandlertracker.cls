@@ -41,7 +41,7 @@ public class leadTriggerHandlertracker
         b1.Name = 'Test 2';
         b1.Unregistered_Channel_Partner__c = true;
         b1.AOP_Type__c = 'AOP';
-        b1.Broker_Pan_No__c = 'AASSZ3456T';
+        b1.Broker_Pan_No__c = 'AASSZ3456D';
         insert b1; 
         
         CP_Category__c pl = new CP_Category__c();
@@ -125,13 +125,12 @@ public class leadTriggerHandlertracker
         autoUsers.Name = 'test';
         autoUsers.Primary_User_Ids__c = objUser1.Id;
         autoUsers.Secondary_User_Ids__c = objUser2.Id;
-        autoUsers.User_Ids__c = objUser1.Id;
         autoUsers.Project_Id__c = objProject.Id;
+        autoUsers.User_Ids__c = objUser1.Id;
         insert autoUsers;
         
 
         GetCurrentLoggedInAgents.getAgentsDetailsForBatch(new List<Id>{ld1.Id});
-        //GetCurrentLoggedInAgents.projectWiseAgentAssignment(new List<Id>{ld1.Id});
         GetCurrentLoggedInAgents.assignAgent(new List<Id>{ld1.Id});
         
         objLead.Retention_RM_Name__c = objUser2.Id;
