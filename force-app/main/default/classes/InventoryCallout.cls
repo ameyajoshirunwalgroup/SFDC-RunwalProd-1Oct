@@ -5,7 +5,7 @@ public without sharing class InventoryCallout
     public static void sendinventory(set<Id> projectUnitIds)
     {
         System.debug('*After insert*'+ projectUnitIds);
-        List<Project_Unit__c> objrecords = [select id,Saleable_Area__c , New_Floor__c,New_Type__c,New_View__c ,RW_Param4__c,TowerName__r.Property_Type__c,
+        List<Project_Unit__c> objrecords = [select id,Saleable_Area__c , New_Floor__c,New_Type__c,New_View__c ,RW_Param4__c,TowerName__r.Property_Type__c,Terrace_Area__c,
                                             RW_Unit_Status__c , TowerName__r.SAP_Plant_Code__c ,RW_Project__r.Project_Property_Type__c ,RW_Project__r.SAPMaterial_Code__c
                                             ,Unit_SAP_Code__c,Carpet_Area__c,Deck_Area__c,Utility_Area__c, RW_Project__r.Unit_of_Area_for_SAP__c  from Project_Unit__c Where id IN :projectUnitIds];
         
@@ -86,6 +86,7 @@ public without sharing class InventoryCallout
             // materialDetails.TAXCLASS3 = Not found
             materialItem1.DECK_A = string.valueof(pUnitInput.Deck_Area__c);
             materialItem1.UTIL_A = string.valueof(pUnitInput.Utility_Area__c);
+            materialItem1.TERR_A = string.valueof(pUnitInput.Terrace_Area__c); //Added by Vinay 23-09-2026
             if(pUnitInput.Carpet_Area__c != null){
             if((pUnitInput.Carpet_Area__c)/10.764 < 60)
             {

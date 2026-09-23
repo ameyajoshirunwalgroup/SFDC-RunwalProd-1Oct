@@ -49,6 +49,7 @@ public class SAPInventoryCallout {
         public String LENGTH;
         public String BREADTH;
         public String HEIGHT;
+        public String TERR_A; //Added by Vinay 23-09-2026
         private String[] MATNR_type_info = new String[]{'MATNR','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'};
         private String[] MTART_type_info = new String[]{'MTART','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'};
         private String[] MFRGR_type_info = new String[]{'MFRGR','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'};
@@ -74,8 +75,9 @@ public class SAPInventoryCallout {
         private String[] LENGTH_type_info = new String[]{'LENGTH','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'};
         private String[] BREADTH_type_info = new String[]{'BREADTH','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'};
         private String[] HEIGHT_type_info = new String[]{'HEIGHT','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'};
+        private String[] TERR_A_type_info = new String[]{'TERR_A','urn:sap-com:document:sap:rfc:functions',null,'1','1','false'}; //Added by Vinay 23-09-2026
         private String[] apex_schema_type_info = new String[]{'urn:sap-com:document:sap:rfc:functions','false','true'};
-        private String[] field_order_type_info = new String[]{'MATNR','MTART','MFRGR','BISMT','BRGEW','NTGEW','MEINS','MSTAV','WERKS','MAKTX','VKORG','MVGR1','MVGR2','MVGR3','MVGR4','MVGR5','VTWEG','KONDM','KTGRM','TAXCLASS3','DECK_A','UTIL_A','LENGTH','BREADTH','HEIGHT'};
+        private String[] field_order_type_info = new String[]{'MATNR','MTART','MFRGR','BISMT','BRGEW','NTGEW','MEINS','MSTAV','WERKS','MAKTX','VKORG','MVGR1','MVGR2','MVGR3','MVGR4','MVGR5','VTWEG','KONDM','KTGRM','TAXCLASS3','DECK_A','UTIL_A','LENGTH','BREADTH','HEIGHT','TERR_A'}; //Added TERR_A by Vinay 23-09-2026
     }
     public class ZSD_SFDC_MATERIAL_DETAILS_TT {
         public SAPInventoryCallout.ZSD_SFDC_MATERIAL_DETAILS[] item;
